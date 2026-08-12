@@ -1,4 +1,19 @@
-import type { WordEtymology } from '@/types'
+import type { WordEtymology, WordItem } from '@/types'
+
+export type MorphemeRole = 'prefix' | 'root' | 'suffix' | 'syllable'
+
+export interface WordMorpheme {
+  text: string
+  role: MorphemeRole
+  meaning?: string
+}
+
+export const MORPHEME_ROLE_LABEL: Record<MorphemeRole, string> = {
+  prefix: '前缀',
+  root: '词根',
+  suffix: '后缀',
+  syllable: '音节',
+}
 
 /** 常见英语前缀字典库 */
 const PREFIXES: Record<string, string> = {
@@ -209,6 +224,48 @@ export function splitIntoSyllables(word: string): string[] {
   }
 
   return syllables.length > 0 ? syllables : [cleanWord]
+}
+
+/**
+ * 按构词法把单词切成「前缀 + 词根 + 后缀」，让学习者看到词义是怎么拼出来的。
+ *
+ * 词根库里的 form 是规范形式（perspective 的词根记作 spect），不保证和单词字面一致，
+ * 所以这里只用词缀去对齐首尾，中间剩下的字母整段作为词根，确保各段拼接后仍等于原词，
+ * 跟打进度才能按段高亮。一个词缀都对不上时退回音节切分。
+ */
+export function splitIntoMorphemes(word: WordItem): WordMorpheme[] {
+  const name = word.name.trim().toLowerCase()
+  const letters = (form?: string) => (form ? form.replace(/-/g, '').toLowerCase() : '')
+
+  const prefix = letters(word.etymology?.prefix?.form)
+  const suffix = letters(word.etymology?.suffix?.form)
+
+  let start = 0
+  let end = name.length
+
+  if (prefix && name.startsWith(prefix) && prefix.length < name.length) {
+    start = prefix.length
+  }
+  if (suffix && name.endsWith(suffix) && end - suffix.length > start) {
+    end -= suffix.length
+  }
+
+  const middle = name.slice(start, end)
+
+  if (!middle || (start === 0 && end === name.length)) {
+    const fallback = word.syllables?.length ? word.syllables : splitIntoSyllables(name)
+    return fallback.map((text) => ({ text, role: 'syllable' as const }))
+  }
+
+  const morphemes: WordMorpheme[] = []
+  if (start > 0) {
+    morphemes.push({ text: name.slice(0, start), role: 'prefix', meaning: word.etymology?.prefix?.meaning })
+  }
+  morphemes.push({ text: middle, role: 'root', meaning: word.etymology?.root?.meaning })
+  if (end < name.length) {
+    morphemes.push({ text: name.slice(end), role: 'suffix', meaning: word.etymology?.suffix?.meaning })
+  }
+  return morphemes
 }
 
 /**

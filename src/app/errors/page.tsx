@@ -94,7 +94,7 @@ export default function ErrorBookPage() {
 
         <button
           onClick={handleStartAnnihilation}
-          className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-primary text-[#0B0C0E] font-bold text-sm btn-neon-glow hover:bg-[#3aff9f] transition-all"
+          className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-primary text-[#0B0C0E] font-bold text-sm btn-neon-glow hover:bg-primary-hover transition-all"
         >
           <span>🚀 开始错词歼灭战</span>
         </button>
@@ -140,8 +140,8 @@ export default function ErrorBookPage() {
                   </td>
                   <td className="py-3.5 px-4 text-center">
                     <div className="flex items-center justify-center gap-1.5">
-                      <div className={`size-2.5 rounded-full ${streak >= 1 ? 'bg-primary shadow-[0_0_8px_rgba(0,255,136,0.6)]' : 'bg-white/10'}`} />
-                      <div className={`size-2.5 rounded-full ${streak >= 2 ? 'bg-primary shadow-[0_0_8px_rgba(0,255,136,0.6)]' : 'bg-white/10'}`} />
+                      <div className={`size-2.5 rounded-full ${streak >= 1 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
+                      <div className={`size-2.5 rounded-full ${streak >= 2 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
                     </div>
                   </td>
                   <td className="py-3.5 px-4 text-right">

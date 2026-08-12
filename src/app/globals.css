@@ -1,25 +1,49 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: #0B0C0E;
-    --foreground: #F3F4F6;
-    --card: rgba(255, 255, 255, 0.05);
-    --card-foreground: #FFFFFF;
-    --primary: #00FF88;
-    --primary-foreground: #0B0C0E;
-    --secondary: #1F242E;
-    --secondary-foreground: #F3F4F6;
-    --muted: rgba(255, 255, 255, 0.08);
-    --muted-foreground: #9CA3AF;
-    --accent: #FEBC2E;
-    --accent-foreground: #0B0C0E;
-    --destructive: #FF5F57;
-    --destructive-foreground: #FFFFFF;
-    --border: rgba(255, 255, 255, 0.1);
-    --ring: #00FF88;
-  }
+:root {
+  --background: #0B0C0E;
+  --foreground: #F3F4F6;
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #FFFFFF;
+  --primary: #34D399;
+  --primary-foreground: #0B0C0E;
+  --primary-hover: #6EE7B7;
+  /* 供 rgb(var(--primary-rgb) / <alpha>) 拼光晕用，改主色时这里要一起改 */
+  --primary-rgb: 52 211 153;
+  --secondary: #1F242E;
+  --secondary-foreground: #F3F4F6;
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: #9CA3AF;
+  --accent: #FEBC2E;
+  --accent-foreground: #0B0C0E;
+  --destructive: #FF5F57;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.1);
+  --ring: #34D399;
+}
 
+/* Tailwind v4 只认 @theme 里注册的令牌，缺了这层 bg-primary / text-accent 等工具类不会被生成 */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+
+@layer base {
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -29,37 +53,48 @@
   }
 }
 
-/* EasyBuild.pro 风格背景氛围光晕与玻璃质感 */
-.bg-easybuild-radial {
-  background: 
-    radial-gradient(circle at 50% 0%, rgba(0, 255, 136, 0.08) 0%, transparent 35%),
-    radial-gradient(circle at 80% 20%, rgba(254, 188, 46, 0.05) 0%, transparent 25%),
-    linear-gradient(180deg, #0B0C0E 0%, #0D1117 50%, #0B0C0E 100%);
-}
+/* 放进 components 层，才能被 border-primary/30 这类工具类覆盖 */
+@layer components {
+  /* EasyBuild.pro 风格背景氛围光晕与玻璃质感 */
+  .bg-easybuild-radial {
+    background:
+      radial-gradient(circle at 50% 0%, rgb(var(--primary-rgb) / 0.08) 0%, transparent 35%),
+      radial-gradient(circle at 80% 20%, rgba(254, 188, 46, 0.05) 0%, transparent 25%),
+      linear-gradient(180deg, #0B0C0E 0%, #0D1117 50%, #0B0C0E 100%);
+  }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
 
-.glass-panel {
-  background: rgba(18, 20, 26, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
+  .glass-panel {
+    background: rgba(18, 20, 26, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 
-/* 3D 轮播视效基础容器 */
-.perspective-container {
-  perspective: 1200px;
-  transform-style: preserve-3d;
-}
+  .animate-shake {
+    animation: shake-animation 0.22s ease-in-out;
+  }
 
-.preserve-3d {
-  transform-style: preserve-3d;
+  .animate-cursor {
+    animation: cursor-blink 0.9s infinite;
+  }
+
+  /* 霓虹按钮光晕效果 */
+  .btn-neon-glow {
+    box-shadow: 0 0 24px rgb(var(--primary-rgb) / 0.25);
+    transition: all 0.2s ease;
+  }
+
+  .btn-neon-glow:hover {
+    box-shadow: 0 0 32px rgb(var(--primary-rgb) / 0.4);
+  }
 }
 
 /* 错误震动动画 */
@@ -69,28 +104,10 @@
   40%, 80% { transform: translateX(8px); }
 }
 
-.animate-shake {
-  animation: shake-animation 0.22s ease-in-out;
-}
-
 /* 呼吸光标动画 */
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
-}
-
-.animate-cursor {
-  animation: cursor-blink 0.9s infinite;
-}
-
-/* 霓虹按钮光晕效果 */
-.btn-neon-glow {
-  box-shadow: 0 0 24px rgba(0, 255, 136, 0.35);
-  transition: all 0.2s ease;
-}
-
-.btn-neon-glow:hover {
-  box-shadow: 0 0 32px rgba(0, 255, 136, 0.55);
 }
 
 /* 自定义极简暗黑滚动条 */

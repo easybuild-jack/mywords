@@ -68,7 +68,7 @@ export function HeaderToolbar() {
             onClick={() => setMode('learn')}
             className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
               mode === 'learn'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-muted-foreground hover:text-white'
             }`}
           >
@@ -78,7 +78,7 @@ export function HeaderToolbar() {
             onClick={() => setMode('dictation')}
             className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
               mode === 'dictation'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-muted-foreground hover:text-white'
             }`}
           >
@@ -150,7 +150,7 @@ export function HeaderToolbar() {
         ) : (
           <button
             onClick={replayAudio}
-            className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-[#3aff9f] transition-all"
+            className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all"
           >
             <Play className="size-3.5 fill-current" />
             <span>Start</span>

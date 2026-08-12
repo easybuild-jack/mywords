@@ -3,35 +3,45 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, AlertCircle, Star, Settings, UploadCloud, Sparkles, Home } from 'lucide-react'
+import {
+  BookOpen,
+  AlertCircle,
+  Star,
+  Settings,
+  Sparkles,
+  Home,
+  Sprout,
+  Quote,
+  SpellCheck,
+  Languages,
+} from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { setImportModalOpen, setSettingsModalOpen } = useWorkspaceStore()
+  const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
     { label: '主页', icon: Home, href: '/' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
     { label: '生词本', icon: Star, href: '/starred' },
+    { label: '词根导图', icon: Sprout, href: '/roots', comingSoon: true },
+    { label: '常用短语', icon: Quote, href: '/phrases', comingSoon: true },
+    { label: '语法时态', icon: SpellCheck, href: '/grammar', comingSoon: true },
+    { label: '翻译练习', icon: Languages, href: '/translate', comingSoon: true },
   ]
 
   return (
-    <aside className="w-64 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-[#0B0C0E]/90 backdrop-blur-2xl z-40">
+    <aside className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-[#0B0C0E]/90 backdrop-blur-2xl z-40">
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="size-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-105 transition-all shadow-[0_0_20px_rgba(0,255,136,0.2)]">
+          <div className="size-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-105 transition-all shadow-[0_0_20px_rgb(var(--primary-rgb)/0.2)]">
             <Sparkles className="size-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
-              MyWords
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary border border-primary/30">
-                PRO
-              </span>
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">MyWords</h1>
             <p className="text-xs text-muted-foreground">3D 音节与肌肉记忆</p>
           </div>
         </Link>
@@ -42,13 +52,30 @@ export function Sidebar() {
             const Icon = item.icon
             const isActive = pathname === item.href
 
+            if (item.comingSoon) {
+              return (
+                <div
+                  key={item.href}
+                  aria-disabled
+                  title="功能开发中，敬请期待"
+                  className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium text-[#9CA3AF]/40 cursor-not-allowed"
+                >
+                  <Icon className="size-4.5" />
+                  <span>{item.label}</span>
+                  <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded border border-white/10 text-gray-600">
+                    待开放
+                  </span>
+                </div>
+              )
+            }
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgba(0,255,136,0.3)]'
+                    ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]'
                     : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
                 }`}
               >
@@ -60,16 +87,8 @@ export function Sidebar() {
         </nav>
       </div>
 
-      {/* 底部功能按钮 */}
+      {/* 底部功能按钮（单词导入入口在词库页，此处不再重复） */}
       <div className="space-y-2 pt-6 border-t border-white/10">
-        <button
-          onClick={() => setImportModalOpen(true)}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"
-        >
-          <UploadCloud className="size-4.5 text-accent" />
-          <span>导入单词</span>
-        </button>
-
         <button
           onClick={() => setSettingsModalOpen(true)}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"

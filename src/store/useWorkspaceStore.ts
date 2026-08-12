@@ -24,6 +24,7 @@ interface WorkspaceState {
   currentInput: string
   hasTypo: boolean
   isTypingActive: boolean
+  isPeeking: boolean
   isUnitFinished: boolean
   
   // 本章错词闭环重考队列 (In-Chapter Retry Queue)
@@ -92,6 +93,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       currentInput: '',
       hasTypo: false,
       isTypingActive: false,
+      isPeeking: false,
       isUnitFinished: false,
       retryWordQueue: [],
       
@@ -283,10 +285,20 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       peekHint: (show: boolean) => {
+        const { mode, currentBookId, isPeeking } = get()
+
+        if (!show) {
+          if (isPeeking) set({ isPeeking: false })
+          return
+        }
+
+        // 按住 Tab 会持续触发 keydown，只在首次按下时亮起并计错
+        if (isPeeking) return
+        set({ isPeeking: true })
+
         // 偷看提示 (使用 Tab 的词在默写模式下被标记为重考)
-        const { mode, currentBookId } = get()
         const currentWord = get().getCurrentWord()
-        if (show && mode === 'dictation' && currentWord) {
+        if (mode === 'dictation' && currentWord) {
           recordWordAttempt(currentWord.id, currentBookId, false, mode)
           set((state) => {
             const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
@@ -320,6 +332,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: nextIndex,
             currentInput: '',
             hasTypo: false,
+            isPeeking: false,
             currentWordRemainingLoops: loopCountSetting,
           })
 
@@ -346,6 +359,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: activeWordIndex - 1,
             currentInput: '',
             hasTypo: false,
+            isPeeking: false,
             currentWordRemainingLoops: loopCountSetting,
           })
         }
@@ -356,6 +370,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           activeWordIndex: 0,
           currentInput: '',
           hasTypo: false,
+          isPeeking: false,
           isUnitFinished: false,
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,

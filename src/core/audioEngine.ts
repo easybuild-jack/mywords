@@ -19,11 +19,17 @@ export const MECHANICAL_SWITCHES: KeySoundOption[] = [
   { id: 'Buckling Spring', name: 'Buckling Spring (屈服弹簧)', filename: 'Buckling Spring.mp3', switchType: '经典IBM机械声' },
 ]
 
+/** 同一个词的发音节流窗口：首次立即出声，其后 3 秒内的重复触发直接丢弃 */
+const PRONUNCIATION_THROTTLE_MS = 3000
+
 class AudioEngine {
   private keySoundCache: Map<string, Howl> = new Map()
   private beepSound: Howl | null = null
   private correctSound: Howl | null = null
   private prefetchedAudio: HTMLAudioElement | null = null
+  private currentPronunciation: HTMLAudioElement | null = null
+  private lastPronunciationKey = ''
+  private lastPronunciationAt = 0
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -106,12 +112,32 @@ class AudioEngine {
     return `https://dict.youdao.com/dictvoice?audio=${clean}&type=${type}`
   }
 
-  /** 播放单词真人发音 */
+  /**
+   * 播放单词真人发音。
+   *
+   * 节流按「单词 + 口音」计，而不是全局计时：狂点喇叭不会重复发起请求，
+   * 但切到下一个词时自动发音仍要立刻响，短单词几秒内打完是常态。
+   */
   public playPronunciation(word: string, accent: 'us' | 'uk' = 'us', rate: number = 1.0) {
     if (typeof window === 'undefined' || !word) return
-    const url = this.getPronunciationUrl(word, accent)
-    const audio = new Audio(url)
+
+    const key = `${word.trim().toLowerCase()}|${accent}`
+    const now = Date.now()
+    if (key === this.lastPronunciationKey && now - this.lastPronunciationAt < PRONUNCIATION_THROTTLE_MS) {
+      return
+    }
+    this.lastPronunciationKey = key
+    this.lastPronunciationAt = now
+
+    // 快速切词时打断上一条，避免两个词的发音叠在一起
+    if (this.currentPronunciation) {
+      this.currentPronunciation.pause()
+      this.currentPronunciation.src = ''
+    }
+
+    const audio = new Audio(this.getPronunciationUrl(word, accent))
     audio.playbackRate = rate
+    this.currentPronunciation = audio
     audio.play().catch((err) => {
       console.warn('Online audio play failed, falling back to speech synthesis', err)
       this.playSpeechSynthesis(word, accent)

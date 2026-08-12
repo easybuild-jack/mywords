@@ -80,7 +80,7 @@ understand v. 理解，领会`
           <button
             onClick={() => { setActiveTab('text'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-              activeTab === 'text' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
+              activeTab === 'text' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
             快捷文本粘贴 (Text Paste)
@@ -88,7 +88,7 @@ understand v. 理解，领会`
           <button
             onClick={() => { setActiveTab('file'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-              activeTab === 'file' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
+              activeTab === 'file' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
             表格模板导入 (CSV / Excel)
@@ -96,7 +96,7 @@ understand v. 理解，领会`
           <button
             onClick={() => { setActiveTab('article'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-              activeTab === 'article' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
+              activeTab === 'article' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
             文章生词提取 (Article)

@@ -52,7 +52,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('official')}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'official'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -62,7 +62,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('custom')}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'custom'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -124,7 +124,7 @@ export default function BooksHubPage() {
 
         {/* 右侧 45% 进度环 */}
         <div className="flex items-center gap-4">
-          <div className="size-28 rounded-full border-4 border-white/10 border-t-primary border-r-primary flex items-center justify-center relative shadow-[0_0_24px_rgba(0,255,136,0.15)]">
+          <div className="size-28 rounded-full border-4 border-white/10 border-t-primary border-r-primary flex items-center justify-center relative shadow-[0_0_24px_rgb(var(--primary-rgb)/0.15)]">
             <div className="text-center">
               <span className="text-2xl font-extrabold font-mono text-primary">45%</span>
               <p className="text-[10px] text-muted-foreground uppercase">总掌握度</p>
@@ -174,7 +174,7 @@ export default function BooksHubPage() {
                   </div>
 
                   {isCurrent ? (
-                    <button className="w-full py-1.5 rounded-lg bg-primary text-[#0B0C0E] text-xs font-bold flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(0,255,136,0.3)]">
+                    <button className="w-full py-1.5 rounded-lg bg-primary text-[#0B0C0E] text-xs font-bold flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]">
                       <Play className="size-3 fill-current" />
                       <span>Continue</span>
                     </button>

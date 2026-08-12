@@ -7,11 +7,12 @@ import { CheckCircle2, RotateCcw, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { WordCardContent } from '@/components/typing/WordCardContent'
 
-export function Card3DCarousel() {
+export function WordStage() {
   const {
     getSurrounding5Words,
     currentInput,
     hasTypo,
+    isPeeking,
     mode,
     isTranslationVisible,
     phoneticPreference,
@@ -28,8 +29,7 @@ export function Card3DCarousel() {
     currentUnitIndex,
   } = useWorkspaceStore()
 
-  const words = getSurrounding5Words()
-  const currentWord = words[2]
+  const currentWord = getSurrounding5Words()[2]
 
   // 单元通关烟花庆祝
   useEffect(() => {
@@ -38,7 +38,7 @@ export function Card3DCarousel() {
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#00FF88', '#FEBC2E', '#3aff9f', '#ffffff'],
+        colors: ['#34D399', '#FEBC2E', '#6EE7B7', '#ffffff'],
       })
     }
   }, [isUnitFinished])
@@ -97,35 +97,33 @@ export function Card3DCarousel() {
     [handleCharacterInput, handleBackspace, peekHint, replayAudio, starCurrentWord, nextWord, prevWord]
   )
 
+  // 松开 Tab 收起提示，实现「按住偷看」
+  const handleKeyUp = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Tab') peekHint(false)
+    },
+    [peekHint]
+  )
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [handleKeyDown])
-
-  // 5 张卡片 3D 透视参数配置
-  const cardTransforms = [
-    // Left 2 (已学前前词)
-    { x: -440, z: -240, rotateY: 42, scale: 0.74, blur: 'blur(5px)', opacity: 0.35, zIndex: 10 },
-    // Left 1 (已学前一词)
-    { x: -230, z: -120, rotateY: 26, scale: 0.88, blur: 'blur(2.5px)', opacity: 0.7, zIndex: 20 },
-    // Center (当前活跃中心词)
-    { x: 0, z: 0, rotateY: 0, scale: 1.0, blur: 'blur(0px)', opacity: 1.0, zIndex: 30 },
-    // Right 1 (即将到来的下一词)
-    { x: 230, z: -120, rotateY: -26, scale: 0.88, blur: 'blur(2.5px)', opacity: 0.7, zIndex: 20 },
-    // Right 2 (后后词)
-    { x: 440, z: -240, rotateY: -42, scale: 0.74, blur: 'blur(5px)', opacity: 0.35, zIndex: 10 },
-  ]
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [handleKeyDown, handleKeyUp])
 
   return (
-    <div className="relative w-full max-w-5xl h-[460px] flex items-center justify-center perspective-container overflow-visible my-auto">
+    <div className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-6">
       {/* 单元通关完成结算卡片 */}
       {isUnitFinished ? (
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="glass-card w-[480px] p-8 rounded-3xl text-center space-y-6 z-40 border-primary/40 shadow-[0_0_50px_rgba(0,255,136,0.25)]"
+          className="glass-card w-[480px] p-8 rounded-3xl text-center space-y-6 z-40 border-primary/40 shadow-[0_0_50px_rgb(var(--primary-rgb)/0.25)]"
         >
-          <div className="size-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(0,255,136,0.4)]">
+          <div className="size-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mx-auto shadow-[0_0_24px_rgb(var(--primary-rgb)/0.4)]">
             <CheckCircle2 className="size-10" />
           </div>
 
@@ -157,76 +155,51 @@ export function Card3DCarousel() {
           </div>
         </motion.div>
       ) : (
-        /* 3D 5 张卡片空间层叠展示 */
-        <div className="relative w-[440px] h-[390px] flex items-center justify-center preserve-3d">
-          {words.map((word, index) => {
-            if (!word) return null
-            const transform = cardTransforms[index]
-            const isCenter = index === 2
+        /* 单张活跃词卡 + 两侧切词按钮 */
+        <>
+          <button
+            onClick={prevWord}
+            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
+            title="上一词 (Ctrl+←)"
+          >
+            <ArrowLeft className="size-5" />
+          </button>
 
-            return (
-              <motion.div
-                key={`${word.id}-${index}`}
-                layout
-                initial={false}
-                animate={{
-                  x: transform.x,
-                  z: transform.z,
-                  rotateY: transform.rotateY,
-                  scale: transform.scale,
-                  opacity: transform.opacity,
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 280,
-                  damping: 28,
-                }}
-                style={{
-                  filter: transform.blur,
-                  zIndex: transform.zIndex,
-                }}
-                className={`absolute inset-0 w-full h-full rounded-3xl transition-colors duration-200 cursor-pointer ${
-                  isCenter
-                    ? 'glass-card border-primary/30 shadow-[0_0_40px_rgba(0,255,136,0.15)] ring-1 ring-primary/20'
-                    : 'glass-panel border-white/5 opacity-80'
-                }`}
-                onClick={() => {
-                  if (index < 2) prevWord()
-                  if (index > 2) nextWord()
-                }}
-              >
-                <WordCardContent
-                  word={word}
-                  isCenter={isCenter}
-                  mode={mode}
-                  currentInput={isCenter ? currentInput : ''}
-                  hasTypo={isCenter ? hasTypo : false}
-                  isTranslationVisible={isTranslationVisible}
-                  phoneticPreference={phoneticPreference}
-                  remainingLoops={isCenter ? currentWordRemainingLoops : 1}
-                />
-              </motion.div>
-            )
-          })}
-        </div>
+          <div className="relative w-[640px] h-[520px]">
+            <AnimatePresence mode="wait">
+              {currentWord && (
+                <motion.div
+                  key={currentWord.id}
+                  initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -12, scale: 0.97 }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
+                  className="absolute inset-0 overflow-hidden rounded-3xl glass-card border-transparent shadow-[0_0_40px_rgba(0,0,0,0.45)]"
+                >
+                  <WordCardContent
+                    word={currentWord}
+                    mode={mode}
+                    currentInput={currentInput}
+                    hasTypo={hasTypo}
+                    isPeeking={isPeeking}
+                    isTranslationVisible={isTranslationVisible}
+                    phoneticPreference={phoneticPreference}
+                    remainingLoops={currentWordRemainingLoops}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button
+            onClick={nextWord}
+            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
+            title="下一词 (Ctrl+→)"
+          >
+            <ArrowRight className="size-5" />
+          </button>
+        </>
       )}
-
-      {/* 左右切词快捷按钮 */}
-      <button
-        onClick={prevWord}
-        className="absolute -left-12 top-1/2 -translate-y-1/2 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all z-40"
-        title="上一词 (Ctrl+←)"
-      >
-        <ArrowLeft className="size-5" />
-      </button>
-
-      <button
-        onClick={nextWord}
-        className="absolute -right-12 top-1/2 -translate-y-1/2 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all z-40"
-        title="下一词 (Ctrl+→)"
-      >
-        <ArrowRight className="size-5" />
-      </button>
     </div>
   )
 }

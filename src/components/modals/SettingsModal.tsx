@@ -51,7 +51,7 @@ export function SettingsModal() {
             <button
               onClick={() => setActiveTab('audio')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'audio' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
+                activeTab === 'audio' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Volume2 className="size-4" />
@@ -61,7 +61,7 @@ export function SettingsModal() {
             <button
               onClick={() => setActiveTab('voice')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'voice' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
+                activeTab === 'voice' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Mic className="size-4" />
@@ -71,7 +71,7 @@ export function SettingsModal() {
             <button
               onClick={() => setActiveTab('learn')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'learn' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
+                activeTab === 'learn' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Sliders className="size-4" />
@@ -81,7 +81,7 @@ export function SettingsModal() {
             <button
               onClick={() => setActiveTab('backup')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'backup' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
+                activeTab === 'backup' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
               <Database className="size-4" />
@@ -122,7 +122,7 @@ export function SettingsModal() {
                         }}
                         className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? 'border-primary bg-primary/10 shadow-[0_0_16px_rgba(0,255,136,0.2)]'
+                            ? 'border-primary bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
                             : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                         }`}
                       >
