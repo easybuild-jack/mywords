@@ -4,17 +4,10 @@ import React from 'react'
 import { HeaderToolbar } from '@/components/layout/HeaderToolbar'
 import { WordStage } from '@/components/typing/WordStage'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { Star, Keyboard } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 export default function HomePage() {
-  const {
-    currentBook,
-    currentUnitIndex,
-    activeWordIndex,
-    getUnitWords,
-    keySoundPack,
-    starCurrentWord,
-  } = useWorkspaceStore()
+  const { activeWordIndex, getUnitWords, starCurrentWord } = useWorkspaceStore()
 
   const unitWords = getUnitWords()
   const totalInUnit = unitWords.length || 20
@@ -32,7 +25,7 @@ export default function HomePage() {
 
       {/* 3. 底部极简状态与快捷键提示栏 */}
       <footer className="w-full p-4 flex items-center justify-center pointer-events-auto z-30">
-        <div className="glass-card rounded-2xl px-7 py-3 flex items-center gap-7 text-sm text-[#9CA3AF] border border-white/10 shadow-lg">
+        <div className="glass-card rounded-2xl px-6 py-3 flex items-center gap-5 text-sm text-[#9CA3AF] border border-white/10 shadow-lg">
           {/* 当前单元进度 */}
           <div className="flex items-center gap-2">
             <span className="font-mono text-primary font-bold">
@@ -64,14 +57,6 @@ export default function HomePage() {
                 <Star className="size-3.5 text-accent fill-accent" /> 收藏
               </span>
             </button>
-          </div>
-
-          <div className="h-4 w-px bg-white/10" />
-
-          {/* 当前轴体指示 */}
-          <div className="flex items-center gap-1.5 text-accent font-medium">
-            <Keyboard className="size-4" />
-            <span className="font-mono">{keySoundPack}</span>
           </div>
         </div>
       </footer>

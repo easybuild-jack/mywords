@@ -46,9 +46,14 @@ export function WordStage() {
   // 全局键盘击键监听
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      // 忽略输入框/模态框中的按键
+      // 忽略输入框/下拉框/模态框中的按键，否则方向键会同时改选项和切词
       const target = e.target as HTMLElement
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable
+      ) {
         return
       }
 
@@ -70,13 +75,14 @@ export function WordStage() {
         return
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') {
+      // 方向键切词，带不带 Ctrl 都生效
+      if (e.key === 'ArrowRight') {
         e.preventDefault()
         nextWord()
         return
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') {
+      if (e.key === 'ArrowLeft') {
         e.preventDefault()
         prevWord()
         return
@@ -160,7 +166,7 @@ export function WordStage() {
           <button
             onClick={prevWord}
             className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
-            title="上一词 (Ctrl+←)"
+            title="上一词 (←)"
           >
             <ArrowLeft className="size-5" />
           </button>
@@ -194,7 +200,7 @@ export function WordStage() {
           <button
             onClick={nextWord}
             className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
-            title="下一词 (Ctrl+→)"
+            title="下一词 (→)"
           >
             <ArrowRight className="size-5" />
           </button>
