@@ -10,6 +10,7 @@ export function HeaderToolbar() {
     currentBook,
     currentUnitIndex,
     isErrorPracticeActive,
+    conqueredErrorWordIds,
     currentLoadedWords,
     exitErrorPractice,
     mode,
@@ -34,9 +35,11 @@ export function HeaderToolbar() {
         {isErrorPracticeActive ? (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-destructive/15 border border-destructive/30 text-white font-medium">
             <Flame className="size-4 text-destructive animate-pulse" />
-            <span className="text-destructive font-bold text-xs">错词本 (攻坚模式)</span>
+            <span className="text-destructive font-bold text-xs">错词攻坚</span>
             <span className="text-muted-foreground">·</span>
-            <span className="text-xs text-gray-300 font-mono">共 {currentLoadedWords.length} 词</span>
+            <span className="text-xs text-gray-300 font-mono">
+              已消灭 {conqueredErrorWordIds?.length || 0} / {currentLoadedWords.length} 词
+            </span>
             <button
               onClick={exitErrorPractice}
               className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all cursor-pointer"

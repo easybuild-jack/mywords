@@ -15,6 +15,8 @@ export default function HomePage() {
     nextWord,
     shortcuts,
     loadCurrentUnitWords,
+    isErrorPracticeActive,
+    conqueredErrorWordIds,
   } = useWorkspaceStore()
 
   React.useEffect(() => {
@@ -38,12 +40,12 @@ export default function HomePage() {
       {/* 3. 底部极简状态与快捷键提示栏 */}
       <footer className="w-full p-4 flex items-center justify-center pointer-events-auto z-30">
         <div className="glass-card rounded-2xl px-6 py-3 flex items-center gap-5 text-sm text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center">
-          {/* 当前单元进度 */}
+          {/* 当前单元/错词进度 */}
           <div className="flex items-center gap-2">
             <span className="font-mono text-primary font-bold">
-              {currentNum} / {totalInUnit}
+              {isErrorPracticeActive ? `${conqueredErrorWordIds?.length || 0} / ${totalInUnit}` : `${currentNum} / ${totalInUnit}`}
             </span>
-            <span className="text-gray-500">单词</span>
+            <span className="text-gray-500">{isErrorPracticeActive ? '已消灭' : '单词'}</span>
           </div>
 
           <div className="h-4 w-px bg-white/10" />

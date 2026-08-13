@@ -48,6 +48,7 @@ interface WorkspaceState {
 
   // 错词攻坚专项模式
   isErrorPracticeActive: boolean
+  conqueredErrorWordIds: string[]
 
   // 弹窗状态
   isImportModalOpen: boolean
@@ -126,6 +127,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isImportModalOpen: false,
       isSettingsModalOpen: false,
       isErrorPracticeActive: false,
+      conqueredErrorWordIds: [],
 
       loadCurrentUnitWords: async () => {
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
@@ -175,6 +177,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           mode: 'dictation',
           loopCountSetting: 3,
           currentLoadedWords: words,
+          conqueredErrorWordIds: [],
           activeWordIndex: Math.min(startIndex, words.length - 1),
           currentInput: '',
           hasTypo: false,
@@ -187,6 +190,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       exitErrorPractice: async () => {
         set({
           isErrorPracticeActive: false,
+          conqueredErrorWordIds: [],
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
@@ -353,6 +357,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               }
               if (isErrorPracticeActive) {
                 eliminateErrorWord(currentWord.id)
+                const updatedConquered = Array.from(new Set([...get().conqueredErrorWordIds, currentWord.id]))
+                set({ conqueredErrorWordIds: updatedConquered })
               }
               setTimeout(() => {
                 get().nextWord()
@@ -376,11 +382,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }
 
           setTimeout(() => {
+            const { isErrorPracticeActive, conqueredErrorWordIds } = get()
             set({
               currentInput: '',
               hasTypo: false,
               // 错词攻坚模式下，一旦输错立刻重置回 3 次连对循环
               currentWordRemainingLoops: isErrorPracticeActive ? 3 : get().loopCountSetting,
+              conqueredErrorWordIds: isErrorPracticeActive && currentWord
+                ? conqueredErrorWordIds.filter((id) => id !== currentWord.id)
+                : conqueredErrorWordIds,
             })
           }, 220)
         }
@@ -394,13 +404,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       peekHint: (show: boolean) => {
-        const { mode, currentBookId, isErrorPracticeActive } = get()
+        const { mode, currentBookId, isErrorPracticeActive, conqueredErrorWordIds } = get()
         const currentWord = get().getCurrentWord()
         set({ isPeeking: show })
         if (show && currentWord) {
           if (isErrorPracticeActive) {
-            // 偷看提示同样重置 3 次连对循环
-            set({ currentWordRemainingLoops: 3 })
+            // 偷看提示同样重置 3 次连对循环，并取消消灭标记
+            set({
+              currentWordRemainingLoops: 3,
+              conqueredErrorWordIds: conqueredErrorWordIds.filter((id) => id !== currentWord.id),
+            })
           }
           if (mode === 'dictation') {
             recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
@@ -429,8 +442,71 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       nextWord: () => {
         const unitWords = get().getUnitWords()
-        const { activeWordIndex, loopCountSetting, isAutoPlayAudio, phoneticPreference } = get()
+        const {
+          activeWordIndex,
+          loopCountSetting,
+          isAutoPlayAudio,
+          phoneticPreference,
+          isErrorPracticeActive,
+          conqueredErrorWordIds,
+        } = get()
 
+        if (!unitWords.length) {
+          set({ isUnitFinished: true })
+          return
+        }
+
+        // ==========================================
+        // 错词攻坚专项模式逻辑
+        // ==========================================
+        if (isErrorPracticeActive) {
+          // 检查是否所有错词均已攻克消灭
+          const allConquered = unitWords.every((w) => conqueredErrorWordIds.includes(w.id))
+          if (allConquered) {
+            set({ isUnitFinished: true })
+            return
+          }
+
+          // 优先向后查找下一个未消灭的错词
+          let nextIndex = -1
+          for (let i = activeWordIndex + 1; i < unitWords.length; i++) {
+            if (!conqueredErrorWordIds.includes(unitWords[i].id)) {
+              nextIndex = i
+              break
+            }
+          }
+
+          // 若向后未找到（如刚刚攻克最后一个词），则从第 0 个循环向前找未消灭的词
+          if (nextIndex === -1) {
+            for (let i = 0; i <= activeWordIndex; i++) {
+              if (!conqueredErrorWordIds.includes(unitWords[i].id)) {
+                nextIndex = i
+                break
+              }
+            }
+          }
+
+          if (nextIndex !== -1) {
+            set({
+              activeWordIndex: nextIndex,
+              currentInput: '',
+              hasTypo: false,
+              currentWordRemainingLoops: 3,
+            })
+
+            const nextWord = unitWords[nextIndex]
+            if (nextWord && isAutoPlayAudio) {
+              audioEngine.playPronunciation(nextWord.name, phoneticPreference)
+            }
+          } else {
+            set({ isUnitFinished: true })
+          }
+          return
+        }
+
+        // ==========================================
+        // 常规章节学习逻辑
+        // ==========================================
         if (activeWordIndex < unitWords.length - 1) {
           const nextIndex = activeWordIndex + 1
           set({
@@ -455,13 +531,22 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       prevWord: () => {
-        const { activeWordIndex, loopCountSetting } = get()
+        const unitWords = get().getUnitWords()
+        const { activeWordIndex, loopCountSetting, isErrorPracticeActive } = get()
         if (activeWordIndex > 0) {
           set({
             activeWordIndex: activeWordIndex - 1,
             currentInput: '',
             hasTypo: false,
-            currentWordRemainingLoops: loopCountSetting,
+            currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
+          })
+        } else if (isErrorPracticeActive && unitWords.length > 1) {
+          // 错词模式下在第 0 个往前按，循环回到最后一个
+          set({
+            activeWordIndex: unitWords.length - 1,
+            currentInput: '',
+            hasTypo: false,
+            currentWordRemainingLoops: 3,
           })
         }
       },
@@ -473,7 +558,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().loopCountSetting,
+          currentWordRemainingLoops: get().isErrorPracticeActive ? 3 : get().loopCountSetting,
+          conqueredErrorWordIds: [],
         })
       },
     }),
