@@ -4,6 +4,7 @@ import type { PracticeMode, WordItem, VocabularyBook } from '@/types'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { db, recordWordAttempt, toggleStarWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
+import { dictionaryLoader } from '@/core/dictionaryLoader'
 
 interface WorkspaceState {
   // 核心书籍与单元选择
@@ -12,6 +13,7 @@ interface WorkspaceState {
   currentUnitIndex: number
   unitSize: number
   activeWordIndex: number
+  currentLoadedWords: WordItem[]
   
   // 模式与做题控制
   mode: PracticeMode
@@ -46,7 +48,8 @@ interface WorkspaceState {
 
   // 方法定义
   setBookId: (bookId: string) => Promise<void>
-  setUnitIndex: (unitIndex: number) => void
+  setUnitIndex: (unitIndex: number) => Promise<void>
+  loadCurrentUnitWords: () => Promise<void>
   setMode: (mode: PracticeMode) => void
   setLoopCountSetting: (count: 1 | 2 | 3 | 5) => void
   toggleTranslation: () => void
@@ -83,6 +86,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       currentUnitIndex: 0,
       unitSize: 20,
       activeWordIndex: 0,
+      currentLoadedWords: INITIAL_SAMPLE_WORDS,
       
       mode: 'learn',
       loopCountSetting: 1,
@@ -109,11 +113,26 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isImportModalOpen: false,
       isSettingsModalOpen: false,
 
+      loadCurrentUnitWords: async () => {
+        const { currentBookId, currentBook, currentUnitIndex, unitSize } = get()
+        if (currentBook?.isCustom && currentBook.words?.length) {
+          const start = currentUnitIndex * unitSize
+          const slice = currentBook.words.slice(start, start + unitSize)
+          set({ currentLoadedWords: slice.length ? slice : currentBook.words })
+        } else {
+          // 官方大词库动态加载
+          const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, currentUnitIndex, unitSize)
+          if (loaded.length > 0) {
+            set({ currentLoadedWords: loaded })
+          } else {
+            set({ currentLoadedWords: INITIAL_SAMPLE_WORDS })
+          }
+        }
+      },
+
       getUnitWords: () => {
-        const { currentBook, currentUnitIndex, unitSize, retryWordQueue } = get()
-        const words = currentBook?.words?.length ? currentBook.words : INITIAL_SAMPLE_WORDS
-        const start = currentUnitIndex * unitSize
-        const baseWords = words.slice(start, start + unitSize)
+        const { currentLoadedWords, retryWordQueue } = get()
+        const baseWords = currentLoadedWords?.length ? currentLoadedWords : INITIAL_SAMPLE_WORDS
         return [...baseWords, ...retryWordQueue]
       },
 
@@ -153,9 +172,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,
         })
+        await get().loadCurrentUnitWords()
       },
 
-      setUnitIndex: (unitIndex: number) => {
+      setUnitIndex: async (unitIndex: number) => {
         set({
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
@@ -165,6 +185,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,
         })
+        await get().loadCurrentUnitWords()
       },
 
       setMode: (mode: PracticeMode) => {
@@ -203,13 +224,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           mode,
           currentBookId,
           currentWordRemainingLoops,
-          loopCountSetting,
           isCorrectSoundEnabled,
-          isAutoPlayAudio,
-          phoneticPreference,
         } = get()
 
-        if (hasTypo) return // 错误锁定中，不接收输入
+        if (hasTypo) return
 
         const currentWord = get().getCurrentWord()
         if (!currentWord) return
@@ -222,17 +240,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           audioEngine.playKeySound(keySoundPack, keySoundVolume)
         }
 
-        // 校验输入前缀是否正确 (不区分大小写)
+        // 校验输入前缀是否正确
         if (targetWord.toLowerCase().startsWith(nextInput.toLowerCase())) {
           set({ currentInput: nextInput })
 
           // 如果打完整个单词
           if (nextInput.length === targetWord.length) {
-            // 记录单词掌握成功
             recordWordAttempt(currentWord.id, currentBookId, true, mode)
 
             if (currentWordRemainingLoops > 1) {
-              // 仍需单词循环
               if (isCorrectSoundEnabled) {
                 audioEngine.playCorrectSound(feedbackVolume)
               }
@@ -243,7 +259,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                 })
               }, 150)
             } else {
-              // 完成单词
               if (isCorrectSoundEnabled) {
                 audioEngine.playCorrectSound(feedbackVolume)
               }
@@ -260,7 +275,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
           set({ hasTypo: true })
 
-          // 默写模式下输错，自动加入本单元重考队列
           if (mode === 'dictation') {
             recordWordAttempt(currentWord.id, currentBookId, false, mode)
             set((state) => {
@@ -269,7 +283,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             })
           }
 
-          // 200ms 后清空已输入字符重来
           setTimeout(() => {
             set({ currentInput: '', hasTypo: false })
           }, 220)
@@ -277,7 +290,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       handleBackspace: () => {
-        // 允许退格 (若没有处于输错锁定)
         const { currentInput, hasTypo } = get()
         if (!hasTypo && currentInput.length > 0) {
           set({ currentInput: currentInput.slice(0, -1) })
@@ -285,20 +297,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       peekHint: (show: boolean) => {
-        const { mode, currentBookId, isPeeking } = get()
-
-        if (!show) {
-          if (isPeeking) set({ isPeeking: false })
-          return
-        }
-
-        // 按住 Tab 会持续触发 keydown，只在首次按下时亮起并计错
-        if (isPeeking) return
-        set({ isPeeking: true })
-
-        // 偷看提示 (使用 Tab 的词在默写模式下被标记为重考)
+        const { mode, currentBookId } = get()
         const currentWord = get().getCurrentWord()
-        if (mode === 'dictation' && currentWord) {
+        set({ isPeeking: show })
+        if (show && mode === 'dictation' && currentWord) {
           recordWordAttempt(currentWord.id, currentBookId, false, mode)
           set((state) => {
             const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
@@ -332,7 +334,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: nextIndex,
             currentInput: '',
             hasTypo: false,
-            isPeeking: false,
             currentWordRemainingLoops: loopCountSetting,
           })
 
@@ -341,13 +342,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             audioEngine.playPronunciation(nextWord.name, phoneticPreference)
           }
 
-          // 预载下下个词的音频
           const prefetchTarget = unitWords[nextIndex + 1]
           if (prefetchTarget) {
             audioEngine.prefetchWordAudio(prefetchTarget.name, phoneticPreference)
           }
         } else {
-          // 本单元通关
           set({ isUnitFinished: true })
         }
       },
@@ -359,7 +358,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: activeWordIndex - 1,
             currentInput: '',
             hasTypo: false,
-            isPeeking: false,
             currentWordRemainingLoops: loopCountSetting,
           })
         }
@@ -370,7 +368,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           activeWordIndex: 0,
           currentInput: '',
           hasTypo: false,
-          isPeeking: false,
           isUnitFinished: false,
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,

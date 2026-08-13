@@ -2,9 +2,8 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Volume2, VolumeX, Eye, EyeOff, Settings, Keyboard, Play, RotateCcw } from 'lucide-react'
+import { Volume2, VolumeX, Eye, EyeOff, Settings, RotateCcw } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { audioEngine } from '@/core/audioEngine'
 
 export function HeaderToolbar() {
   const {
@@ -23,7 +22,6 @@ export function HeaderToolbar() {
     setSettingsModalOpen,
     replayAudio,
     restartUnit,
-    isUnitFinished,
   } = useWorkspaceStore()
 
   return (
@@ -138,24 +136,15 @@ export function HeaderToolbar() {
           </button>
         </div>
 
-        {/* 7. Start / 重来 主按钮 */}
-        {isUnitFinished ? (
-          <button
-            onClick={restartUnit}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-accent text-[#0B0C0E] font-bold text-xs shadow-[0_0_16px_rgba(254,188,46,0.4)] hover:brightness-110 transition-all"
-          >
-            <RotateCcw className="size-3.5" />
-            <span>重新开始</span>
-          </button>
-        ) : (
-          <button
-            onClick={replayAudio}
-            className="flex items-center gap-1.5 px-5 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all"
-          >
-            <Play className="size-3.5 fill-current" />
-            <span>Start</span>
-          </button>
-        )}
+        {/* 7. Restart 按钮 */}
+        <button
+          onClick={restartUnit}
+          className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer whitespace-nowrap"
+          title="Restart (回到第一个单词)"
+        >
+          <RotateCcw className="size-3.5" />
+          <span>Restart</span>
+        </button>
       </div>
     </header>
   )

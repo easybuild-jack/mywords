@@ -14,7 +14,12 @@ export default function HomePage() {
     replayAudio,
     prevWord,
     nextWord,
+    loadCurrentUnitWords,
   } = useWorkspaceStore()
+
+  React.useEffect(() => {
+    loadCurrentUnitWords()
+  }, [loadCurrentUnitWords])
 
   const unitWords = getUnitWords()
   const totalInUnit = unitWords.length || 20
