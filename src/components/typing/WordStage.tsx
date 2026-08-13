@@ -7,6 +7,7 @@ import confetti from 'canvas-confetti'
 import { CheckCircle2, RotateCcw, ArrowRight, ArrowLeft, Flame } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { WordCardContent } from '@/components/typing/WordCardContent'
+import { isShortcutMatch } from '@/lib/shortcuts'
 
 export function WordStage() {
   const router = useRouter()
@@ -16,9 +17,12 @@ export function WordStage() {
     hasTypo,
     isPeeking,
     mode,
+    setMode,
     isTranslationVisible,
+    toggleTranslation,
     phoneticPreference,
     currentWordRemainingLoops,
+    shortcuts,
     handleCharacterInput,
     handleBackspace,
     peekHint,
@@ -61,31 +65,58 @@ export function WordStage() {
         return
       }
 
-      if (e.key === 'Tab') {
+      // 1. 偷看提示
+      if (isShortcutMatch(e, shortcuts.peekHint)) {
         e.preventDefault()
         peekHint(true)
         return
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
+      // 2. 发音朗读
+      if (isShortcutMatch(e, shortcuts.replayAudio)) {
         e.preventDefault()
         replayAudio()
         return
       }
 
-      // 方向键切词，带不带 Ctrl 都生效
-      if (e.key === 'ArrowRight') {
-        e.preventDefault()
-        nextWord()
-        return
-      }
-
-      if (e.key === 'ArrowLeft') {
+      // 3. 上一个词
+      if (isShortcutMatch(e, shortcuts.prevWord)) {
         e.preventDefault()
         prevWord()
         return
       }
 
+      // 4. 下一个词
+      if (isShortcutMatch(e, shortcuts.nextWord)) {
+        e.preventDefault()
+        nextWord()
+        return
+      }
+
+      // 5. 切换中文释义显隐
+      if (isShortcutMatch(e, shortcuts.toggleTranslation)) {
+        e.preventDefault()
+        toggleTranslation()
+        return
+      }
+
+      // 6. 切换跟学/默写模式
+      if (isShortcutMatch(e, shortcuts.toggleMode)) {
+        e.preventDefault()
+        if (!isErrorPracticeActive) {
+          setMode(mode === 'learn' ? 'dictation' : 'learn')
+        }
+        return
+      }
+
+      // 7. 重做本单元
+      if (isShortcutMatch(e, shortcuts.restartUnit)) {
+        e.preventDefault()
+        restartUnit()
+        return
+      }
+
+      // 退格删除
       if (e.key === 'Backspace') {
         e.preventDefault()
         handleBackspace()
@@ -98,15 +129,31 @@ export function WordStage() {
         handleCharacterInput(e.key)
       }
     },
-    [handleCharacterInput, handleBackspace, peekHint, replayAudio, nextWord, prevWord, isUnitFinished]
+    [
+      handleCharacterInput,
+      handleBackspace,
+      peekHint,
+      replayAudio,
+      nextWord,
+      prevWord,
+      toggleTranslation,
+      setMode,
+      mode,
+      restartUnit,
+      shortcuts,
+      isErrorPracticeActive,
+      isUnitFinished,
+    ]
   )
 
-  // 松开 Tab 收起提示，实现「按住偷看」
+  // 松开按键收起提示，实现「按住偷看」
   const handleKeyUp = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Tab') peekHint(false)
+      if (isShortcutMatch(e, shortcuts.peekHint)) {
+        peekHint(false)
+      }
     },
-    [peekHint]
+    [peekHint, shortcuts.peekHint]
   )
 
   useEffect(() => {

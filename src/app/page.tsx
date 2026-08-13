@@ -4,6 +4,7 @@ import React from 'react'
 import { HeaderToolbar } from '@/components/layout/HeaderToolbar'
 import { WordStage } from '@/components/typing/WordStage'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { formatShortcutDisplay } from '@/lib/shortcuts'
 
 export default function HomePage() {
   const {
@@ -12,6 +13,7 @@ export default function HomePage() {
     replayAudio,
     prevWord,
     nextWord,
+    shortcuts,
     loadCurrentUnitWords,
   } = useWorkspaceStore()
 
@@ -49,7 +51,9 @@ export default function HomePage() {
           {/* 快捷键提示胶囊 */}
           <div className="flex items-center gap-5 font-mono text-xs flex-wrap justify-center">
             <span className="flex items-center gap-1.5">
-              <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Tab</kbd>
+              <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+                {formatShortcutDisplay(shortcuts.peekHint)}
+              </kbd>
               <span>偷看提示</span>
             </span>
 
@@ -58,7 +62,9 @@ export default function HomePage() {
               onClick={replayAudio}
               className="flex items-center gap-1.5 hover:text-white transition-colors"
             >
-              <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Ctrl+J</kbd>
+              <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+                {formatShortcutDisplay(shortcuts.replayAudio)}
+              </kbd>
               <span>发音</span>
             </button>
 
@@ -67,18 +73,18 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={prevWord}
-                  title="上一个单词 (←)"
+                  title={`上一个单词 (${formatShortcutDisplay(shortcuts.prevWord)})`}
                   className="px-1.5 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
                 >
-                  ←
+                  {formatShortcutDisplay(shortcuts.prevWord)}
                 </button>
                 <button
                   type="button"
                   onClick={nextWord}
-                  title="下一个单词 (→)"
+                  title={`下一个单词 (${formatShortcutDisplay(shortcuts.nextWord)})`}
                   className="px-1.5 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
                 >
-                  →
+                  {formatShortcutDisplay(shortcuts.nextWord)}
                 </button>
               </div>
               <span>切换单词</span>

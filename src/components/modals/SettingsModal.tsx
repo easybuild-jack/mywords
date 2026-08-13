@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import { X, Volume2, Mic, Sliders, Database, Play, Check } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { X, Volume2, Mic, Sliders, Database, Keyboard, RotateCcw } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { MECHANICAL_SWITCHES, audioEngine } from '@/core/audioEngine'
+import { SHORTCUT_DEFINITIONS, eventToShortcutString, formatShortcutDisplay } from '@/lib/shortcuts'
+import type { ShortcutConfig } from '@/types'
 
 export function SettingsModal() {
   const {
@@ -17,11 +19,40 @@ export function SettingsModal() {
     toggleKeySound,
     phoneticPreference,
     setPhoneticPreference,
-    isAutoPlayAudio,
-    feedbackVolume,
+    shortcuts,
+    setShortcut,
+    resetShortcuts,
   } = useWorkspaceStore()
 
-  const [activeTab, setActiveTab] = useState<'audio' | 'voice' | 'learn' | 'backup'>('audio')
+  const [activeTab, setActiveTab] = useState<'audio' | 'voice' | 'shortcuts' | 'learn' | 'backup'>('audio')
+  const [recordingAction, setRecordingAction] = useState<keyof ShortcutConfig | null>(null)
+
+  // 监听录制新快捷键
+  useEffect(() => {
+    if (!recordingAction) return
+
+    const handleKeyCapture = (e: KeyboardEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      // 按 ESC 取消录制
+      if (e.key === 'Escape') {
+        setRecordingAction(null)
+        return
+      }
+
+      const keyStr = eventToShortcutString(e)
+      if (keyStr) {
+        setShortcut(recordingAction, keyStr)
+        setRecordingAction(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyCapture, { capture: true })
+    return () => {
+      window.removeEventListener('keydown', handleKeyCapture, { capture: true })
+    }
+  }, [recordingAction, setShortcut])
 
   if (!isSettingsModalOpen) return null
 
@@ -37,8 +68,11 @@ export function SettingsModal() {
             <h2 className="text-lg font-bold text-white">偏好设置 (Preferences & Sound Studio)</h2>
           </div>
           <button
-            onClick={() => setSettingsModalOpen(false)}
-            className="p-1.5 rounded-lg hover:bg-white/[0.08] text-[#9CA3AF] hover:text-white transition-all"
+            onClick={() => {
+              setRecordingAction(null)
+              setSettingsModalOpen(false)
+            }}
+            className="p-1.5 rounded-lg hover:bg-white/[0.08] text-[#9CA3AF] hover:text-white transition-all cursor-pointer"
           >
             <X className="size-5" />
           </button>
@@ -49,8 +83,8 @@ export function SettingsModal() {
           {/* 左侧竖向导航 */}
           <div className="col-span-4 space-y-1.5 border-r border-white/10 pr-4">
             <button
-              onClick={() => setActiveTab('audio')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              onClick={() => { setRecordingAction(null); setActiveTab('audio') }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'audio' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
@@ -59,8 +93,8 @@ export function SettingsModal() {
             </button>
 
             <button
-              onClick={() => setActiveTab('voice')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              onClick={() => { setRecordingAction(null); setActiveTab('voice') }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'voice' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
@@ -69,8 +103,18 @@ export function SettingsModal() {
             </button>
 
             <button
-              onClick={() => setActiveTab('learn')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              onClick={() => { setRecordingAction(null); setActiveTab('shortcuts') }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                activeTab === 'shortcuts' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
+              }`}
+            >
+              <Keyboard className="size-4" />
+              <span>快捷键设置</span>
+            </button>
+
+            <button
+              onClick={() => { setRecordingAction(null); setActiveTab('learn') }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'learn' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
@@ -79,8 +123,8 @@ export function SettingsModal() {
             </button>
 
             <button
-              onClick={() => setActiveTab('backup')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              onClick={() => { setRecordingAction(null); setActiveTab('backup') }}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'backup' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.04]'
               }`}
             >
@@ -108,7 +152,6 @@ export function SettingsModal() {
                   </label>
                 </div>
 
-                {/* 轴体卡片选择网格 */}
                 <div className="grid grid-cols-2 gap-2.5">
                   {MECHANICAL_SWITCHES.map((sw) => {
                     const isSelected = keySoundPack === sw.id
@@ -128,7 +171,7 @@ export function SettingsModal() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-white truncate max-w-[120px]">{sw.name}</span>
-                          {isSelected && <Check className="size-3.5 text-primary" />}
+                          {isSelected && <div className="size-3.5 rounded-full bg-primary/20 flex items-center justify-center"><div className="size-2 rounded-full bg-primary"></div></div>}
                         </div>
                         <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5 text-[11px] text-muted-foreground">
                           <span>{sw.switchType}</span>
@@ -139,7 +182,7 @@ export function SettingsModal() {
                             }}
                             className="text-primary hover:underline flex items-center gap-0.5 text-[10px]"
                           >
-                            <Play className="size-2.5 fill-current" /> 试听
+                            试听
                           </button>
                         </div>
                       </div>
@@ -147,7 +190,6 @@ export function SettingsModal() {
                   })}
                 </div>
 
-                {/* 音量调节滑块 */}
                 <div className="space-y-3 pt-2">
                   <div className="space-y-1.5">
                     <div className="flex justify-between text-xs text-[#9CA3AF]">
@@ -209,6 +251,63 @@ export function SettingsModal() {
               </div>
             )}
 
+            {activeTab === 'shortcuts' && (
+              <div className="space-y-4 text-xs">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-white uppercase tracking-wider">全局快捷键自定义</h3>
+                    <p className="text-[11px] text-muted-foreground">
+                      点击对应按键即可进入录制状态，按下任意新按键或组合键即可绑定。
+                    </p>
+                  </div>
+                  <button
+                    onClick={resetShortcuts}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-primary/40 bg-white/[0.04] text-[#9CA3AF] hover:text-primary transition-all cursor-pointer"
+                    title="恢复为全部默认初始快捷键"
+                  >
+                    <RotateCcw className="size-3.5" />
+                    <span>恢复默认</span>
+                  </button>
+                </div>
+
+                <div className="divide-y divide-white/5 rounded-2xl bg-white/[0.02] border border-white/10 overflow-hidden">
+                  {SHORTCUT_DEFINITIONS.map((def) => {
+                    const currentKey = shortcuts[def.key] || def.defaultKey
+                    const isRecording = recordingAction === def.key
+
+                    return (
+                      <div key={def.key} className="flex items-center justify-between p-3.5 hover:bg-white/[0.02] transition-colors">
+                        <div className="space-y-0.5">
+                          <div className="font-bold text-white flex items-center gap-2">
+                            <span>{def.label}</span>
+                            <span className="text-[10px] text-muted-foreground font-mono font-normal">
+                              (默认: {formatShortcutDisplay(def.defaultKey)})
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-muted-foreground">{def.desc}</div>
+                        </div>
+                        <button
+                          onClick={() => setRecordingAction(def.key)}
+                          className={`px-3 py-1.5 rounded-lg font-mono font-bold text-xs transition-all cursor-pointer ${
+                            isRecording 
+                              ? 'bg-primary text-[#0B0C0E] shadow-[0_0_15px_rgb(var(--primary-rgb)/0.5)] animate-pulse' 
+                              : 'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 hover:border-primary/50'
+                          }`}
+                          title="点击录制新快捷键"
+                        >
+                          {isRecording ? '录制中... (ESC取消)' : formatShortcutDisplay(currentKey)}
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <div className="p-3 rounded-xl bg-primary/5 border border-primary/20 text-[11px] text-[#9CA3AF] leading-relaxed">
+                  💡 支持单键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Tab</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Space</kbd>、方向键）及组合键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Ctrl+J</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Alt+K</kbd>），修改后即刻生效并持久化保存。
+                </div>
+              </div>
+            )}
+
             {activeTab === 'learn' && (
               <div className="space-y-4 text-xs">
                 <h3 className="font-bold text-muted-foreground uppercase tracking-wider">单元与学习设置</h3>
@@ -231,7 +330,7 @@ export function SettingsModal() {
                   <p className="text-[11px] text-muted-foreground">
                     所有做题进度与错词本数据均离线安全保存在你的本地 IndexedDB 中。
                   </p>
-                  <button className="px-4 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white font-medium transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white font-medium transition-all cursor-pointer">
                     导出全部数据 (JSON 备份)
                   </button>
                 </div>
@@ -243,8 +342,11 @@ export function SettingsModal() {
         {/* 底部完成按钮 */}
         <div className="flex justify-end pt-4 border-t border-white/10">
           <button
-            onClick={() => setSettingsModalOpen(false)}
-            className="px-6 py-2 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all"
+            onClick={() => {
+              setRecordingAction(null)
+              setSettingsModalOpen(false)
+            }}
+            className="px-6 py-2 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all cursor-pointer"
           >
             完成并保存
           </button>

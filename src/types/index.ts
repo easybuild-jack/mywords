@@ -92,3 +92,14 @@ export interface UserSettings {
   feedbackVolume: number;                       // 提示音量
   defaultUnitSize: number;                      // 默认单元容量
 }
+
+export interface ShortcutConfig {
+  peekHint: string;            // 偷看提示 (默认 Tab)
+  replayAudio: string;         // 发音朗读 (默认 Ctrl+J)
+  prevWord: string;            // 上一个词 (默认 ArrowLeft)
+  nextWord: string;            // 下一个词 (默认 ArrowRight)
+  toggleTranslation: string;   // 切换中文释义 (默认 Ctrl+T)
+  toggleMode: string;          // 切换模式 (默认 Ctrl+M)
+  restartUnit: string;         // 重做本单元 (默认 Ctrl+R)
+}
+

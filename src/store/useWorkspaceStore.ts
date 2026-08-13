@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { PracticeMode, WordItem, VocabularyBook } from '@/types'
+import type { PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
+import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 
 interface WorkspaceState {
   // 核心书籍与单元选择
@@ -21,6 +22,9 @@ interface WorkspaceState {
   currentWordRemainingLoops: number
   isTranslationVisible: boolean
   phoneticPreference: 'us' | 'uk'
+  
+  // 自定义快捷键配置
+  shortcuts: ShortcutConfig
   
   // 击键输入状态
   currentInput: string
@@ -61,6 +65,8 @@ interface WorkspaceState {
   setPhoneticPreference: (pref: 'us' | 'uk') => void
   setInput: (input: string) => void
   setTypo: (typo: boolean) => void
+  setShortcut: (action: keyof ShortcutConfig, keyStr: string) => void
+  resetShortcuts: () => void
   setImportModalOpen: (open: boolean) => void
   setSettingsModalOpen: (open: boolean) => void
   setKeySoundPack: (pack: string) => void
@@ -98,6 +104,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       currentWordRemainingLoops: 1,
       isTranslationVisible: true,
       phoneticPreference: 'us',
+      
+      shortcuts: DEFAULT_SHORTCUTS,
       
       currentInput: '',
       hasTypo: false,
@@ -251,6 +259,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       setInput: (input: string) => set({ currentInput: input }),
       setTypo: (typo: boolean) => set({ hasTypo: typo }),
+      setShortcut: (action: keyof ShortcutConfig, keyStr: string) => {
+        set((state) => ({
+          shortcuts: {
+            ...state.shortcuts,
+            [action]: keyStr,
+          },
+        }))
+      },
+      resetShortcuts: () => set({ shortcuts: DEFAULT_SHORTCUTS }),
       setImportModalOpen: (open: boolean) => set({ isImportModalOpen: open }),
       setSettingsModalOpen: (open: boolean) => set({ isSettingsModalOpen: open }),
       setKeySoundPack: (pack: string) => set({ keySoundPack: pack }),
@@ -452,6 +469,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         isWrongBeepEnabled: state.isWrongBeepEnabled,
         isCorrectSoundEnabled: state.isCorrectSoundEnabled,
         feedbackVolume: state.feedbackVolume,
+        shortcuts: state.shortcuts,
       }),
     }
   )
