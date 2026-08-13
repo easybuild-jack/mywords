@@ -22,6 +22,9 @@ export const MECHANICAL_SWITCHES: KeySoundOption[] = [
 /** 同一个词的发音节流窗口：首次立即出声，其后 3 秒内的重复触发直接丢弃 */
 const PRONUNCIATION_THROTTLE_MS = 3000
 
+/** 正音最长等待时间：网络异常或音频卡住时不能把切词流程永久卡死 */
+const PRONUNCIATION_MAX_WAIT_MS = 2500
+
 class AudioEngine {
   private keySoundCache: Map<string, Howl> = new Map()
   private beepSound: Howl | null = null
@@ -141,6 +144,44 @@ class AudioEngine {
     audio.play().catch((err) => {
       console.warn('Online audio play failed, falling back to speech synthesis', err)
       this.playSpeechSynthesis(word, accent)
+    })
+  }
+
+  /**
+   * 播放一遍发音，并在播完（或失败）后 resolve，用于「正音后再切词」。
+   *
+   * 刻意绕开节流：刚默写完的词往往几秒前才作为听写线索响过，
+   * 走 playPronunciation 会被节流直接丢弃，正音就永远听不到。
+   */
+  public playPronunciationOnce(word: string, accent: 'us' | 'uk' = 'us', rate: number = 1.0): Promise<void> {
+    if (typeof window === 'undefined' || !word) return Promise.resolve()
+
+    if (this.currentPronunciation) {
+      this.currentPronunciation.pause()
+      this.currentPronunciation.src = ''
+    }
+
+    const audio = new Audio(this.getPronunciationUrl(word, accent))
+    audio.playbackRate = rate
+    this.currentPronunciation = audio
+
+    return new Promise<void>((resolve) => {
+      let isSettled = false
+      const settle = () => {
+        if (isSettled) return
+        isSettled = true
+        clearTimeout(guardTimer)
+        resolve()
+      }
+      const guardTimer = setTimeout(settle, PRONUNCIATION_MAX_WAIT_MS)
+
+      audio.addEventListener('ended', settle, { once: true })
+      audio.addEventListener('error', settle, { once: true })
+
+      audio.play().catch(() => {
+        this.playSpeechSynthesis(word, accent)
+        settle()
+      })
     })
   }
 

@@ -5,8 +5,6 @@ export const DEFAULT_SHORTCUTS: ShortcutConfig = {
   replayAudio: 'Ctrl+J',
   prevWord: 'ArrowLeft',
   nextWord: 'ArrowRight',
-  toggleTranslation: 'Ctrl+T',
-  toggleMode: 'Ctrl+M',
   restartUnit: 'Ctrl+R',
 }
 
@@ -20,8 +18,6 @@ export const SHORTCUT_DEFINITIONS: {
   { key: 'replayAudio', label: '发音朗读', desc: '重播当前单词真人原声发音', defaultKey: 'Ctrl+J' },
   { key: 'prevWord', label: '上一个单词', desc: '切换至当前单元的上一个单词', defaultKey: 'ArrowLeft' },
   { key: 'nextWord', label: '下一个单词', desc: '切换至当前单元的下一个单词', defaultKey: 'ArrowRight' },
-  { key: 'toggleTranslation', label: '切换中文释义', desc: '一键显示或隐藏中文核心释义', defaultKey: 'Ctrl+T' },
-  { key: 'toggleMode', label: '切换跟学/默写', desc: '快速切换跟学拼读与盲打默写模式', defaultKey: 'Ctrl+M' },
   { key: 'restartUnit', label: '重学本单元', desc: '重新开始当前单元从头练习', defaultKey: 'Ctrl+R' },
 ]
 

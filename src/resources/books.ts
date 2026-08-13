@@ -1,5 +1,6 @@
 import type { VocabularyBook, WordItem } from '@/types'
 import { splitIntoSyllables, analyzeEtymology } from '@/lib/syllables'
+import { buildWordId } from '@/lib/wordId'
 
 export const INITIAL_SAMPLE_WORDS: WordItem[] = [
   {
@@ -377,7 +378,7 @@ export function buildWordItem(name: string, meaning: string = '', phonetic?: str
   const etymology = analyzeEtymology(name)
 
   return {
-    id: `word_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${Date.now()}`,
+    id: buildWordId(name),
     name: name.trim(),
     syllables,
     phoneticUs: phonetic || `/ ${name.toLowerCase()} /`,

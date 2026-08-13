@@ -1,5 +1,6 @@
 import type { WordItem } from '@/types'
 import { splitIntoSyllables, analyzeEtymology } from '@/lib/syllables'
+import { buildWordId } from '@/lib/wordId'
 
 interface RawDictEntry {
   name: string
@@ -182,7 +183,7 @@ class DictionaryLoader {
     const posList = this.parsePosAndMeans(transList)
 
     return {
-      id: `word_${lowerName.replace(/[^a-z0-9]/g, '_')}_${Math.random().toString(36).slice(2, 7)}`,
+      id: buildWordId(cleanName),
       name: cleanName,
       syllables,
       phoneticUs: usPhone,
@@ -234,7 +235,7 @@ class DictionaryLoader {
       const posList = this.parsePosAndMeans(rawTrans)
 
       return {
-        id: `word_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${unitIndex}_${Math.random().toString(36).slice(2, 6)}`,
+        id: buildWordId(name),
         name,
         syllables,
         phoneticUs: usphone,

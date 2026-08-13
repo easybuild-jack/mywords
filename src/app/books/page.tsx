@@ -85,7 +85,8 @@ export default function BooksHubPage() {
 
   const handleSelectUnit = async (idx: number) => {
     await setUnitIndex(idx)
-    router.push('/')
+    // 选完单元先去学习页，检验记忆再由用户自己切到默写页
+    router.push('/learn')
   }
 
   const handleSelectBook = async (bookId: string) => {

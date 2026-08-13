@@ -8,7 +8,8 @@ import {
   AlertCircle,
   Settings,
   Sparkles,
-  Home,
+  GraduationCap,
+  PenLine,
   Sprout,
   Quote,
   SpellCheck,
@@ -21,7 +22,8 @@ export function Sidebar() {
   const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
-    { label: '主页', icon: Home, href: '/' },
+    { label: '单词学习', icon: GraduationCap, href: '/learn' },
+    { label: '单词默写', icon: PenLine, href: '/dictation' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
     { label: '词根导图', icon: Sprout, href: '/roots', comingSoon: true },
@@ -34,13 +36,13 @@ export function Sidebar() {
     <aside className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-[#0B0C0E]/90 backdrop-blur-2xl z-40">
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/learn" className="flex items-center gap-3 group">
           <div className="size-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-105 transition-all shadow-[0_0_20px_rgb(var(--primary-rgb)/0.2)]">
             <Sparkles className="size-5 text-primary" />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white">MyWords</h1>
-            <p className="text-xs text-muted-foreground">3D 音节与肌肉记忆</p>
+            <p className="text-xs text-muted-foreground">音节拼读与肌肉记忆</p>
           </div>
         </Link>
 

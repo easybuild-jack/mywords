@@ -2,8 +2,9 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Volume2, VolumeX, Eye, EyeOff, Settings, RotateCcw, Flame, X } from 'lucide-react'
+import { Volume2, VolumeX, Settings, RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { isAudioMuted } from '@/lib/dictationCue'
 
 export function HeaderToolbar() {
   const {
@@ -13,12 +14,11 @@ export function HeaderToolbar() {
     conqueredErrorWordIds,
     currentLoadedWords,
     exitErrorPractice,
-    mode,
-    setMode,
     loopCountSetting,
     setLoopCountSetting,
-    isTranslationVisible,
-    toggleTranslation,
+    mode,
+    dictationCueMode,
+    setDictationCueMode,
     phoneticPreference,
     setPhoneticPreference,
     isKeySoundEnabled,
@@ -27,6 +27,8 @@ export function HeaderToolbar() {
     replayAudio,
     restartUnit,
   } = useWorkspaceStore()
+
+  const isMuted = isAudioMuted(mode, dictationCueMode)
 
   return (
     <header className="w-full flex items-center justify-center p-4 sticky top-0 z-30 pointer-events-auto">
@@ -70,47 +72,22 @@ export function HeaderToolbar() {
             <option value="uk" className="bg-[#12141A] text-white">英音 (UK)</option>
           </select>
 
-          <button
-            onClick={replayAudio}
-            className="p-1.5 rounded-lg hover:bg-white/[0.08] text-primary transition-all"
-            title="发音 (Ctrl+J)"
-          >
-            <Volume2 className="size-4" />
-          </button>
+          {/* 看译文模式全程静音，重播入口一并收起 */}
+          {!isMuted && (
+            <button
+              onClick={replayAudio}
+              className="p-1.5 rounded-lg hover:bg-white/[0.08] text-primary transition-all"
+              title="发音 (Ctrl+J)"
+            >
+              <Volume2 className="size-4" />
+            </button>
+          )}
         </div>
 
         {/* 分隔线 */}
         <div className="h-4 w-px bg-white/10" />
 
-        {/* 3. 跟学模式 vs 默写模式切换 (错词攻坚锁定默写) */}
-        <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/10">
-          <button
-            disabled={isErrorPracticeActive}
-            onClick={() => !isErrorPracticeActive && setMode('learn')}
-            title={isErrorPracticeActive ? '错词攻坚必须纯盲打默写，不可切换为跟学模式' : undefined}
-            className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-              isErrorPracticeActive
-                ? 'opacity-30 cursor-not-allowed text-muted-foreground'
-                : mode === 'learn'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
-                : 'text-muted-foreground hover:text-white'
-            }`}
-          >
-            跟学
-          </button>
-          <button
-            onClick={() => setMode('dictation')}
-            className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-              mode === 'dictation' || isErrorPracticeActive
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
-                : 'text-muted-foreground hover:text-white'
-            }`}
-          >
-            默写
-          </button>
-        </div>
-
-        {/* 4. 单个单词循环次数配置 */}
+        {/* 3. 单个单词循环次数配置 */}
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           {isErrorPracticeActive ? (
             <div
@@ -133,24 +110,40 @@ export function HeaderToolbar() {
           )}
         </div>
 
-        {/* 5. 译文显隐切换 */}
-        <button
-          onClick={toggleTranslation}
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all border ${
-            isTranslationVisible
-              ? 'bg-accent/15 border-accent/40 text-accent font-medium'
-              : 'bg-white/[0.04] border-white/10 text-muted-foreground hover:text-white'
-          }`}
-          title="切换中文释义显示/隐藏"
-        >
-          {isTranslationVisible ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
-          <span>{isTranslationVisible ? '译文开' : '译文关'}</span>
-        </button>
+        {/* 4. 默写线索来源二选一，学习页不出现 */}
+        {mode === 'dictation' && (
+          <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/10">
+            <button
+              onClick={() => setDictationCueMode('listen')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                dictationCueMode === 'listen'
+                  ? 'bg-primary/20 text-primary font-bold'
+                  : 'text-muted-foreground hover:text-white'
+              }`}
+              title="只给发音，需要写出中文释义与拼写"
+            >
+              <Headphones className="size-3.5" />
+              <span>听音默写</span>
+            </button>
+            <button
+              onClick={() => setDictationCueMode('meaning')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-all cursor-pointer ${
+                dictationCueMode === 'meaning'
+                  ? 'bg-accent/20 text-accent font-bold'
+                  : 'text-muted-foreground hover:text-white'
+              }`}
+              title="只给中文释义，全程静音，需要写出拼写"
+            >
+              <Languages className="size-3.5" />
+              <span>看译文默写</span>
+            </button>
+          </div>
+        )}
 
         {/* 分隔线 */}
         <div className="h-4 w-px bg-white/10" />
 
-        {/* 6. 按键音效与设置快捷图标 */}
+        {/* 5. 按键音效与设置快捷图标 */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => toggleKeySound()}
@@ -171,7 +164,7 @@ export function HeaderToolbar() {
           </button>
         </div>
 
-        {/* 7. Restart 按钮 */}
+        {/* 6. Restart 按钮 */}
         <button
           onClick={restartUnit}
           className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer whitespace-nowrap"

@@ -46,6 +46,13 @@ export interface VocabularyBook {
 
 export type PracticeMode = 'learn' | 'dictation';
 
+/**
+ * 默写页的线索来源：
+ * - listen  听音模式：只给发音，不显示中文释义，需要写出释义与拼写
+ * - meaning 看译文模式：只给中文释义，全程静音，需要写出拼写
+ */
+export type DictationCueMode = 'listen' | 'meaning';
+
 export interface WordMasteryRecord {
   wordId: string;
   bookId: string;
@@ -98,8 +105,6 @@ export interface ShortcutConfig {
   replayAudio: string;         // 发音朗读 (默认 Ctrl+J)
   prevWord: string;            // 上一个词 (默认 ArrowLeft)
   nextWord: string;            // 下一个词 (默认 ArrowRight)
-  toggleTranslation: string;   // 切换中文释义 (默认 Ctrl+T)
-  toggleMode: string;          // 切换模式 (默认 Ctrl+M)
   restartUnit: string;         // 重做本单元 (默认 Ctrl+R)
 }
 

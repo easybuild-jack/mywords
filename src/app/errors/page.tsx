@@ -43,7 +43,8 @@ export default function ErrorBookPage() {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
     startErrorPractice(list, startIdx)
-    router.push('/')
+    // 错词攻坚是默写页的一种词源，复用默写页的全套逻辑
+    router.push('/dictation')
   }
 
   return (
@@ -102,10 +103,10 @@ export default function ErrorBookPage() {
           </div>
           <div className="pt-2">
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/dictation')}
               className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow transition-all cursor-pointer"
             >
-              返回主页继续练习 →
+              返回默写页继续练习 →
             </button>
           </div>
         </div>

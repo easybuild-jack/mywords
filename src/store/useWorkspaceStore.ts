@@ -1,12 +1,55 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
+import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
+import { isAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
+
+/**
+ * 学习页与默写页各自维护一份练习进度，错词攻坚再单独占一份。
+ * activeWordIndex / isUnitFinished 始终代表「当前页面」的实时进度，
+ * cursors 只是另外两个页面的存档位，在切页的瞬间做一次存取。
+ */
+export type PracticeCursorKey = 'learn' | 'dictation' | 'error'
+
+interface PracticeCursor {
+  activeWordIndex: number
+  isUnitFinished: boolean
+}
+
+const EMPTY_CURSOR: PracticeCursor = { activeWordIndex: 0, isUnitFinished: false }
+
+function createFreshCursors(): Record<PracticeCursorKey, PracticeCursor> {
+  return {
+    learn: { ...EMPTY_CURSOR },
+    dictation: { ...EMPTY_CURSOR },
+    error: { ...EMPTY_CURSOR },
+  }
+}
+
+/** 跟学时单词就在眼前，抄一遍即可；默写要靠三连对建立肌肉记忆 */
+const DEFAULT_LOOP_COUNTS: Record<PracticeMode, 1 | 2 | 3 | 5> = {
+  learn: 1,
+  dictation: 3,
+}
+
+/** 校验失败的抖动提示持续时长 */
+const VALIDATION_ERROR_FLASH_MS = 900
+
+/** 切词与切页时都要清掉的默写闯关中间态 */
+const DICTATION_STEP_RESET = {
+  dictationPhoneticInput: '',
+  dictationMeaningInput: '',
+  isPhoneticPassed: false,
+  isMeaningPassed: false,
+  isPhoneticFocused: false,
+  isPhoneticError: false,
+  isMeaningError: false,
+}
 
 interface WorkspaceState {
   // 核心书籍与单元选择
@@ -16,12 +59,16 @@ interface WorkspaceState {
   unitSize: number
   activeWordIndex: number
   currentLoadedWords: WordItem[]
+  cursors: Record<PracticeCursorKey, PracticeCursor>
   
   // 模式与做题控制
   mode: PracticeMode
+  /** 当前页面生效的循环次数，切页时与 loopCounts 互相存取 */
   loopCountSetting: 1 | 2 | 3 | 5
+  /** 学习页与默写页各自记住自己的循环次数：跟学一遍即可，默写默认三连对 */
+  loopCounts: Record<PracticeMode, 1 | 2 | 3 | 5>
   currentWordRemainingLoops: number
-  isTranslationVisible: boolean
+  dictationCueMode: DictationCueMode
   phoneticPreference: 'us' | 'uk'
 
   // 默写模式音标与译文输入增强
@@ -32,6 +79,12 @@ interface WorkspaceState {
   isPhoneticPassed: boolean
   isMeaningPassed: boolean
   isPhoneticFocused: boolean
+  /**
+   * 校验失败的抖动提示。放在 store 而不是卡片局部 state，
+   * 因为浮动 IPA 键盘上的「校验」按钮在卡片之外，否则那条路径永远没有失败反馈。
+   */
+  isPhoneticError: boolean
+  isMeaningError: boolean
   
   // 自定义快捷键配置
   shortcuts: ShortcutConfig
@@ -39,7 +92,6 @@ interface WorkspaceState {
   // 击键输入状态
   currentInput: string
   hasTypo: boolean
-  isTypingActive: boolean
   isPeeking: boolean
   isUnitFinished: boolean
   
@@ -59,6 +111,8 @@ interface WorkspaceState {
   // 错词攻坚专项模式
   isErrorPracticeActive: boolean
   conqueredErrorWordIds: string[]
+  // 攻坚强制 3 连对，退出后要还原用户自己的循环次数
+  loopCountBeforeErrorPractice: 1 | 2 | 3 | 5 | null
 
   // 弹窗状态
   isImportModalOpen: boolean
@@ -70,9 +124,11 @@ interface WorkspaceState {
   loadCurrentUnitWords: () => Promise<void>
   startErrorPractice: (words: WordItem[], startIndex?: number) => void
   exitErrorPractice: () => Promise<void>
-  setMode: (mode: PracticeMode) => void
+  enterMode: (mode: PracticeMode) => Promise<void>
   setLoopCountSetting: (count: 1 | 2 | 3 | 5) => void
-  toggleTranslation: () => void
+  setDictationCueMode: (cueMode: DictationCueMode) => void
+  /** 听音模式下主动播一遍当前词，用于进入默写页与切换线索模式时补线索 */
+  playDictationCue: () => void
   setPhoneticPreference: (pref: 'us' | 'uk') => void
   toggleDictationPhonetic: (enabled?: boolean) => void
   toggleDictationMeaning: (enabled?: boolean) => void
@@ -102,10 +158,47 @@ interface WorkspaceState {
   prevWord: () => void
   restartUnit: () => void
   
-  // 3D 轮播卡片数据计算
   getUnitWords: () => WordItem[]
   getCurrentWord: () => WordItem | undefined
-  getSurrounding5Words: () => (WordItem | null)[]
+}
+
+/** 错词攻坚借用默写页的全部逻辑，但进度单独存档，退出后默写页回到原来的位置 */
+function activeCursorKey(get: () => WorkspaceState): PracticeCursorKey {
+  return get().isErrorPracticeActive ? 'error' : get().mode
+}
+
+/** 把某一页的循环次数写回存档位 */
+function withLoopCount(
+  counts: Record<PracticeMode, 1 | 2 | 3 | 5>,
+  mode: PracticeMode,
+  count: 1 | 2 | 3 | 5
+): Record<PracticeMode, 1 | 2 | 3 | 5> {
+  return {
+    learn: mode === 'learn' ? count : counts.learn,
+    dictation: mode === 'dictation' ? count : counts.dictation,
+  }
+}
+
+/** 退出攻坚时把被强制改成 3 的循环次数还原成用户自己的设置 */
+function restoreLoopCount(get: () => WorkspaceState) {
+  const restored = get().loopCountBeforeErrorPractice ?? get().loopCountSetting
+  return {
+    loopCountSetting: restored,
+    loopCounts: withLoopCount(get().loopCounts, get().mode, restored),
+    loopCountBeforeErrorPractice: null,
+    currentWordRemainingLoops: restored,
+  }
+}
+
+/** 把当前页面的实时进度写回存档位，供离开前调用 */
+function saveActiveCursor(get: () => WorkspaceState): Record<PracticeCursorKey, PracticeCursor> {
+  return {
+    ...get().cursors,
+    [activeCursorKey(get)]: {
+      activeWordIndex: get().activeWordIndex,
+      isUnitFinished: get().isUnitFinished,
+    },
+  }
 }
 
 export const useWorkspaceStore = create<WorkspaceState>()(
@@ -117,18 +210,19 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       unitSize: 20,
       activeWordIndex: 0,
       currentLoadedWords: INITIAL_SAMPLE_WORDS,
+      cursors: createFreshCursors(),
       
       mode: 'learn',
-      loopCountSetting: 1,
-      currentWordRemainingLoops: 1,
-      isTranslationVisible: true,
+      loopCountSetting: DEFAULT_LOOP_COUNTS.learn,
+      loopCounts: { ...DEFAULT_LOOP_COUNTS },
+      currentWordRemainingLoops: DEFAULT_LOOP_COUNTS.learn,
+      dictationCueMode: 'listen',
       phoneticPreference: 'us',
       
       shortcuts: DEFAULT_SHORTCUTS,
       
       currentInput: '',
       hasTypo: false,
-      isTypingActive: false,
       isPeeking: false,
       isUnitFinished: false,
       retryWordQueue: [],
@@ -146,14 +240,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isSettingsModalOpen: false,
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
+      loopCountBeforeErrorPractice: null,
 
       isDictationPhoneticEnabled: true,
       isDictationMeaningEnabled: true,
-      dictationPhoneticInput: '',
-      dictationMeaningInput: '',
-      isPhoneticPassed: false,
-      isMeaningPassed: false,
-      isPhoneticFocused: false,
+      ...DICTATION_STEP_RESET,
 
       loadCurrentUnitWords: async () => {
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
@@ -198,32 +289,64 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       startErrorPractice: (words: WordItem[], startIndex: number = 0) => {
         if (!words.length) return
+        const entryIndex = Math.min(Math.max(startIndex, 0), words.length - 1)
+
+        const wasActive = get().isErrorPracticeActive
+        // 攻坚一律以默写形式进行：先把离开页面的循环次数存档，再从默写页那一档取用户设置。
+        // 重复发起攻坚时当前的 3 是被强制的值，不能当成用户设置存回去。
+        const loopCounts = wasActive
+          ? get().loopCounts
+          : withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
+
         set({
+          cursors: {
+            ...saveActiveCursor(get),
+            error: { activeWordIndex: entryIndex, isUnitFinished: false },
+          },
           isErrorPracticeActive: true,
           mode: 'dictation',
+          loopCounts,
           loopCountSetting: 3,
+          // 从「从学习页直接发起攻坚」的场景也能还原出默写页自己的设置
+          loopCountBeforeErrorPractice: wasActive
+            ? get().loopCountBeforeErrorPractice
+            : loopCounts.dictation,
           currentLoadedWords: words,
           conqueredErrorWordIds: [],
-          activeWordIndex: Math.min(startIndex, words.length - 1),
+          activeWordIndex: entryIndex,
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
           currentWordRemainingLoops: 3,
+          ...DICTATION_STEP_RESET,
         })
       },
 
       exitErrorPractice: async () => {
+        // 攻坚结束回到默写页原来的位置与原来的循环次数，攻坚存档位清空
+        const restored = get().cursors.dictation
+
         set({
           isErrorPracticeActive: false,
           conqueredErrorWordIds: [],
+          cursors: { ...get().cursors, error: { ...EMPTY_CURSOR } },
+          activeWordIndex: restored.activeWordIndex,
+          isUnitFinished: restored.isUnitFinished,
           currentInput: '',
           hasTypo: false,
-          isUnitFinished: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().loopCountSetting,
+          ...restoreLoopCount(get),
+          ...DICTATION_STEP_RESET,
         })
+
         await get().loadCurrentUnitWords()
+
+        // 章节词数可能少于存档下来的位置，越界就退回最后一个词
+        const total = get().currentLoadedWords.length
+        if (get().activeWordIndex > total - 1) {
+          set({ activeWordIndex: Math.max(0, total - 1) })
+        }
       },
 
       getUnitWords: () => {
@@ -233,20 +356,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       getCurrentWord: () => {
         const { currentLoadedWords, activeWordIndex } = get()
         return currentLoadedWords[activeWordIndex]
-      },
-
-      getSurrounding5Words: () => {
-        const { currentLoadedWords, activeWordIndex } = get()
-        const unitWords = currentLoadedWords
-        if (!unitWords.length) return [null, null, null, null, null]
-
-        const left2 = activeWordIndex - 2 >= 0 ? unitWords[activeWordIndex - 2] : null
-        const left1 = activeWordIndex - 1 >= 0 ? unitWords[activeWordIndex - 1] : null
-        const center = unitWords[activeWordIndex] || unitWords[0]
-        const right1 = activeWordIndex + 1 < unitWords.length ? unitWords[activeWordIndex + 1] : null
-        const right2 = activeWordIndex + 2 < unitWords.length ? unitWords[activeWordIndex + 2] : null
-
-        return [left2, left1, center, right1, right2]
       },
 
       setBookId: async (bookId: string) => {
@@ -268,12 +377,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentBook: book,
           currentUnitIndex: 0,
           activeWordIndex: 0,
+          // 换书意味着两个页面的进度都失效
+          cursors: createFreshCursors(),
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          // 换书直接中断攻坚，循环次数一并还原
           isErrorPracticeActive: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().loopCountSetting,
+          ...restoreLoopCount(get),
+          ...DICTATION_STEP_RESET,
         })
         await get().loadCurrentUnitWords()
       },
@@ -282,30 +395,82 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
+          cursors: createFreshCursors(),
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
           isErrorPracticeActive: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().loopCountSetting,
+          ...restoreLoopCount(get),
+          ...DICTATION_STEP_RESET,
         })
         await get().loadCurrentUnitWords()
       },
 
-      setMode: (mode: PracticeMode) => {
-        // 错词攻坚模式下强制锁定为默写模式，不允许切换为跟学
-        if (get().isErrorPracticeActive) return
-        set({ mode, currentInput: '', hasTypo: false, currentWordRemainingLoops: get().loopCountSetting })
+      /**
+       * 由路由驱动的模式切换：学习页与默写页各自在挂载时声明自己的模式。
+       * 两个页面的练习进度互相独立，切页时存档并载入对应的游标。
+       */
+      enterMode: async (nextMode: PracticeMode) => {
+        if (get().isErrorPracticeActive) {
+          // 停在默写页就保留攻坚现场；去学习页则视为放弃本次攻坚
+          if (nextMode !== 'learn') return
+          await get().exitErrorPractice()
+        }
+
+        if (get().mode === nextMode) return
+
+        const cursors = saveActiveCursor(get)
+        const target = cursors[nextMode]
+        // 循环次数与游标一样按页面存档：默写页的三连对不该跟着跑到学习页
+        const loopCounts = withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
+        const nextLoopCount = loopCounts[nextMode]
+
+        set({
+          mode: nextMode,
+          cursors,
+          loopCounts,
+          loopCountSetting: nextLoopCount,
+          activeWordIndex: target.activeWordIndex,
+          isUnitFinished: target.isUnitFinished,
+          currentInput: '',
+          hasTypo: false,
+          isPeeking: false,
+          retryWordQueue: [],
+          currentWordRemainingLoops: nextLoopCount,
+          ...DICTATION_STEP_RESET,
+        })
+
+        const total = get().currentLoadedWords.length
+        if (get().activeWordIndex > total - 1) {
+          set({ activeWordIndex: Math.max(0, total - 1) })
+        }
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {
         // 错词攻坚模式下锁定为 3 次
         if (get().isErrorPracticeActive) return
-        set({ loopCountSetting: count, currentWordRemainingLoops: count })
+        set({
+          loopCountSetting: count,
+          loopCounts: withLoopCount(get().loopCounts, get().mode, count),
+          currentWordRemainingLoops: count,
+        })
       },
 
-      toggleTranslation: () => {
-        set((state) => ({ isTranslationVisible: !state.isTranslationVisible }))
+      setDictationCueMode: (cueMode: DictationCueMode) => {
+        if (get().dictationCueMode === cueMode) return
+        // 两个模式的译文环节要求不同，切换时把当前词的闯关进度归零重来
+        set({ dictationCueMode: cueMode, currentInput: '', hasTypo: false, ...DICTATION_STEP_RESET })
+        // 译文刚被藏起来、发音又还没响的话，屏幕上会无从下手
+        get().playDictationCue()
+      },
+
+      playDictationCue: () => {
+        const { mode, dictationCueMode, isAutoPlayAudio, phoneticPreference, audioRate } = get()
+        const currentWord = get().getCurrentWord()
+        if (!currentWord || !isAutoPlayAudio) return
+        if (mode !== 'dictation' || dictationCueMode !== 'listen') return
+        audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
       },
 
       setPhoneticPreference: (pref: 'us' | 'uk') => {
@@ -320,6 +485,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       toggleDictationMeaning: (enabled?: boolean) => {
+        // 看译文模式下该环节已被强制关闭，开关不接受操作
+        if (get().dictationCueMode === 'meaning') return
         set((s) => ({
           isDictationMeaningEnabled: enabled !== undefined ? enabled : !s.isDictationMeaningEnabled,
         }))
@@ -335,9 +502,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (!currentWord) return false
         const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
         if (isValid) {
-          set({ isPhoneticPassed: true, isPhoneticFocused: false })
+          set({ isPhoneticPassed: true, isPhoneticFocused: false, isPhoneticError: false })
           return true
         }
+        set({ isPhoneticError: true })
+        setTimeout(() => set({ isPhoneticError: false }), VALIDATION_ERROR_FLASH_MS)
         return false
       },
 
@@ -347,20 +516,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (!currentWord) return false
         const isValid = validateMeaning(dictationMeaningInput, currentWord)
         if (isValid) {
-          set({ isMeaningPassed: true })
+          set({ isMeaningPassed: true, isMeaningError: false })
           return true
         }
+        set({ isMeaningError: true })
+        setTimeout(() => set({ isMeaningError: false }), VALIDATION_ERROR_FLASH_MS)
         return false
       },
 
       resetDictationStepStates: () => {
-        set({
-          dictationPhoneticInput: '',
-          dictationMeaningInput: '',
-          isPhoneticPassed: false,
-          isMeaningPassed: false,
-          isPhoneticFocused: false,
-        })
+        set({ ...DICTATION_STEP_RESET })
       },
 
       setInput: (input: string) => set({ currentInput: input }),
@@ -398,6 +563,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isPhoneticPassed,
           isDictationMeaningEnabled,
           isMeaningPassed,
+          dictationCueMode,
         } = get()
 
         if (hasTypo) return
@@ -405,13 +571,18 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         // 默写模式下前置校验拦截
         if (mode === 'dictation') {
           if (isDictationPhoneticEnabled && !isPhoneticPassed) return
-          if (isDictationMeaningEnabled && !isMeaningPassed) return
+          if (isMeaningStepActive(dictationCueMode, isDictationMeaningEnabled) && !isMeaningPassed) return
         }
 
         const currentWord = get().getCurrentWord()
         if (!currentWord) return
 
         const targetWord = currentWord.name
+
+        // 打满的词正在等待正音与切词，这段空窗期的多余击键要直接吞掉。
+        // 否则会被当成拼错，白扣一次记录并重置循环次数。
+        if (currentInput.length >= targetWord.length) return
+
         const nextInput = currentInput + char
 
         // 播放机械键盘敲击音
@@ -438,7 +609,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                 })
               }, 150)
             } else {
-              // 达到消灭标准 (连续 3 次默写正确)
+              // 达到消灭标准（打满当前循环次数）
               if (isCorrectSoundEnabled) {
                 audioEngine.playCorrectSound(feedbackVolume)
               }
@@ -447,8 +618,22 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                 const updatedConquered = Array.from(new Set([...get().conqueredErrorWordIds, currentWord.id]))
                 set({ conqueredErrorWordIds: updatedConquered })
               }
-              setTimeout(() => {
-                get().nextWord()
+
+              // 默写通关后先把刚写对的词念一遍做正音，念完才切下一个词。
+              // 看译文模式全程静音，直接沿用原来的短延迟。
+              const needsConfirmAudio = mode === 'dictation' && !isAudioMuted(mode, dictationCueMode)
+              const completedIndex = get().activeWordIndex
+              const completedId = currentWord.id
+
+              setTimeout(async () => {
+                if (needsConfirmAudio) {
+                  await audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
+                }
+                // 正音期间用户可能已经手动切词，此时不能再多跳一个
+                const latest = get()
+                if (latest.activeWordIndex === completedIndex && latest.getCurrentWord()?.id === completedId) {
+                  latest.nextWord()
+                }
               }, 200)
             }
           }
@@ -514,10 +699,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       replayAudio: () => {
         const currentWord = get().getCurrentWord()
-        const { phoneticPreference, audioRate } = get()
-        if (currentWord) {
-          audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
-        }
+        const { phoneticPreference, audioRate, mode, dictationCueMode } = get()
+        // 看译文模式靠中文写英文，放出发音等于送答案
+        if (!currentWord || isAudioMuted(mode, dictationCueMode)) return
+        audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
       },
 
       starCurrentWord: async () => {
@@ -536,12 +721,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           phoneticPreference,
           isErrorPracticeActive,
           conqueredErrorWordIds,
+          mode,
+          dictationCueMode,
         } = get()
 
         if (!unitWords.length) {
           set({ isUnitFinished: true })
           return
         }
+
+        // 听音模式靠这一声作为听写线索，看译文模式则必须保持静音
+        const canPlayAudio = isAutoPlayAudio && !isAudioMuted(mode, dictationCueMode)
 
         // ==========================================
         // 错词攻坚专项模式逻辑
@@ -579,15 +769,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               currentInput: '',
               hasTypo: false,
               currentWordRemainingLoops: 3,
-              dictationPhoneticInput: '',
-              dictationMeaningInput: '',
-              isPhoneticPassed: false,
-              isMeaningPassed: false,
-              isPhoneticFocused: false,
+              ...DICTATION_STEP_RESET,
             })
 
             const nextWord = unitWords[nextIndex]
-            if (nextWord && isAutoPlayAudio) {
+            if (nextWord && canPlayAudio) {
               audioEngine.playPronunciation(nextWord.name, phoneticPreference)
             }
           } else {
@@ -606,20 +792,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: loopCountSetting,
-            dictationPhoneticInput: '',
-            dictationMeaningInput: '',
-            isPhoneticPassed: false,
-            isMeaningPassed: false,
-            isPhoneticFocused: false,
+            ...DICTATION_STEP_RESET,
           })
 
           const nextWord = unitWords[nextIndex]
-          if (nextWord && isAutoPlayAudio) {
+          if (nextWord && canPlayAudio) {
             audioEngine.playPronunciation(nextWord.name, phoneticPreference)
           }
 
           const prefetchTarget = unitWords[nextIndex + 1]
-          if (prefetchTarget) {
+          if (prefetchTarget && !isAudioMuted(mode, dictationCueMode)) {
             audioEngine.prefetchWordAudio(prefetchTarget.name, phoneticPreference)
           }
         } else {
@@ -636,11 +818,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
-            dictationPhoneticInput: '',
-            dictationMeaningInput: '',
-            isPhoneticPassed: false,
-            isMeaningPassed: false,
-            isPhoneticFocused: false,
+            ...DICTATION_STEP_RESET,
           })
         } else if (isErrorPracticeActive && unitWords.length > 1) {
           // 错词模式下在第 0 个往前按，循环回到最后一个
@@ -649,11 +827,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: 3,
-            dictationPhoneticInput: '',
-            dictationMeaningInput: '',
-            isPhoneticPassed: false,
-            isMeaningPassed: false,
-            isPhoneticFocused: false,
+            ...DICTATION_STEP_RESET,
           })
         }
       },
@@ -667,11 +841,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           retryWordQueue: [],
           currentWordRemainingLoops: get().isErrorPracticeActive ? 3 : get().loopCountSetting,
           conqueredErrorWordIds: [],
-          dictationPhoneticInput: '',
-          dictationMeaningInput: '',
-          isPhoneticPassed: false,
-          isMeaningPassed: false,
-          isPhoneticFocused: false,
+          ...DICTATION_STEP_RESET,
         })
       },
     }),
@@ -680,28 +850,34 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       storage: createJSONStorage(() => localStorage),
       merge: (persistedState, currentState) => {
         const persisted = (persistedState as Partial<WorkspaceState>) || {}
-        const loopCount = persisted.isErrorPracticeActive
-          ? 3
-          : (persisted.loopCountSetting ?? currentState.loopCountSetting ?? 1)
+        // 旧版本只有一个全局 loopCountSetting，把它接到学习页那一档，
+        // 默写页则直接采用新的三连对默认值
+        const loopCounts = {
+          ...DEFAULT_LOOP_COUNTS,
+          ...(persisted.loopCountSetting ? { learn: persisted.loopCountSetting } : {}),
+          ...(persisted.loopCounts ?? {}),
+        }
+        // 刷新后一律从学习页起步，生效的循环次数取学习页那一档
+        const loopCount = loopCounts.learn
         return {
           ...currentState,
           ...persisted,
+          loopCounts,
+          loopCountSetting: loopCount,
           currentWordRemainingLoops: loopCount,
           currentInput: '',
           hasTypo: false,
-          dictationPhoneticInput: '',
-          dictationMeaningInput: '',
-          isPhoneticPassed: false,
-          isMeaningPassed: false,
-          isPhoneticFocused: false,
+          // 模式由路由决定，不接受任何持久化值（含旧版本残留的 mode）
+          mode: currentState.mode,
+          cursors: createFreshCursors(),
+          ...DICTATION_STEP_RESET,
         }
       },
       partialize: (state) => ({
         currentBookId: state.currentBookId,
         currentUnitIndex: state.currentUnitIndex,
-        mode: state.mode,
-        loopCountSetting: state.loopCountSetting,
-        isTranslationVisible: state.isTranslationVisible,
+        loopCounts: state.loopCounts,
+        dictationCueMode: state.dictationCueMode,
         phoneticPreference: state.phoneticPreference,
         isAutoPlayAudio: state.isAutoPlayAudio,
         keySoundPack: state.keySoundPack,
