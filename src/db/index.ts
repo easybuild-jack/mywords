@@ -17,9 +17,11 @@ export class MyWordsDatabase extends Dexie {
   }
 
   async initializeDefaults() {
-    const existingCount = await this.books.count()
-    if (existingCount === 0) {
-      await this.books.bulkPut(BUILTIN_BOOKS)
+    for (const book of BUILTIN_BOOKS) {
+      const existing = await this.books.get(book.id)
+      if (!existing || !existing.isCustom) {
+        await this.books.put(book)
+      }
     }
   }
 }

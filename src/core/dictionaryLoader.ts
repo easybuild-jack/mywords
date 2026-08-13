@@ -14,7 +14,7 @@ interface RawDictEntry {
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
   'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
-  'book_coder': { path: '/dicts/ai_machine_learning.json', totalWords: 1500, name: 'IT计算机编程词汇' },
+  'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: 'Coder Dict (通用 IT 编程词库)' },
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
 }
 
@@ -24,14 +24,18 @@ class DictionaryLoader {
   private isIndexInitialized = false
 
   /**
-   * 预热初始化基础词典索引（在浏览器后台静默建立 4000+ 核心词索引）
+   * 预热初始化基础词典索引（在浏览器后台静默建立 4000+ 核心词索引与 IT 编程词库索引）
    */
   public async ensureLexiconIndex() {
     if (this.isIndexInitialized || typeof window === 'undefined') return
     try {
-      const res = await fetch('/dicts/CET4_T.json')
-      if (res.ok) {
-        const data: RawDictEntry[] = await res.json()
+      const [resCet4, resIt] = await Promise.all([
+        fetch('/dicts/CET4_T.json').catch(() => null),
+        fetch('/dicts/it-words.json').catch(() => null),
+      ])
+
+      if (resCet4 && resCet4.ok) {
+        const data: RawDictEntry[] = await resCet4.json()
         for (const item of data) {
           if (item.name) {
             this.localLexiconMap.set(item.name.toLowerCase().trim(), {
@@ -42,6 +46,20 @@ class DictionaryLoader {
           }
         }
       }
+
+      if (resIt && resIt.ok) {
+        const data: RawDictEntry[] = await resIt.json()
+        for (const item of data) {
+          if (item.name && !this.localLexiconMap.has(item.name.toLowerCase().trim())) {
+            this.localLexiconMap.set(item.name.toLowerCase().trim(), {
+              trans: item.trans || (item.translation ? [item.translation] : []),
+              usphone: item.usphone ? `/${item.usphone}/` : undefined,
+              ukphone: item.ukphone ? `/${item.ukphone}/` : undefined,
+            })
+          }
+        }
+      }
+
       this.isIndexInitialized = true
     } catch (err) {
       console.warn('Silent dictionary index init skipped:', err)
