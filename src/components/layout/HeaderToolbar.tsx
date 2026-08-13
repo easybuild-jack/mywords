@@ -132,7 +132,7 @@ export function HeaderToolbar() {
                   ? 'bg-accent/20 text-accent font-bold'
                   : 'text-muted-foreground hover:text-white'
               }`}
-              title="只给中文释义，全程静音，需要写出拼写"
+              title="只给中文释义，音标通过后才发音，需要写出拼写"
             >
               <Languages className="size-3.5" />
               <span>看译文默写</span>

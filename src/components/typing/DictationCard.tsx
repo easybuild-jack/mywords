@@ -110,7 +110,7 @@ export function DictationCard({
         {/* 模式提示：常驻自己这一行，只有文案变化，位置与高度都不动 */}
         <div className="h-6 shrink-0 flex items-center justify-center px-4">
           <span className="text-xs text-muted-foreground/80 font-mono">
-            {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 全程静音 ]'}
+            {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 音标通过后才发音 ]'}
           </span>
         </div>
 

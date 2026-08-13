@@ -503,6 +503,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
         if (isValid) {
           set({ isPhoneticPassed: true, isPhoneticFocused: false, isPhoneticError: false })
+          // 音标能写对，说明读音已经掌握，这一遍不算送答案。
+          // 刻意不受看译文模式的静音约束：那是该模式下唯一的听音机会，也是写对音标的奖励。
+          audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
           return true
         }
         set({ isPhoneticError: true })

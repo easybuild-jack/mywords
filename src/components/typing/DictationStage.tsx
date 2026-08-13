@@ -61,7 +61,8 @@ export function DictationStage() {
             )}
           </PracticeStageFrame>
 
-          {/* 浮动 IPA 音标键盘：固定在工具栏正下方，与卡片水平对齐 */}
+          {/* 浮动 IPA 音标键盘：固定在工具栏正下方，与卡片水平对齐。
+              top 值按 HeaderToolbar 的实际高度写死，工具栏改尺寸时这里要一起改 */}
           {isPhoneticFocused && (
             <div
               className="fixed top-[64px] z-50 pt-2"
