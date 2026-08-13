@@ -93,8 +93,9 @@ export function DictationCard({
         {/*
           顶部线索槽：高度固定，听音模式留空也不塌陷，两个模式下方的排版才完全一致。
           偷看出来的单词也占这一格，避免它把下面的输入阶梯顶下去。
+          pt-8 是为了让长释义避开左上角那枚绝对定位的 Again 角标。
         */}
-        <div className="h-24 shrink-0 flex items-center justify-center px-6">
+        <div className="h-32 shrink-0 flex items-center justify-center px-6 pt-8">
           {isPeeking ? (
             <span className="font-mono text-2xl font-bold tracking-widest text-accent px-4 py-0.5 rounded-lg bg-accent/10 border border-accent/30">
               {word.name}

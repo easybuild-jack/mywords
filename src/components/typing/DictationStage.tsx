@@ -26,6 +26,7 @@ export function DictationStage() {
   const dictationPhoneticInput = useWorkspaceStore((s) => s.dictationPhoneticInput)
   const setDictationPhoneticInput = useWorkspaceStore((s) => s.setDictationPhoneticInput)
   const submitPhonetic = useWorkspaceStore((s) => s.submitPhonetic)
+  const isPhoneticError = useWorkspaceStore((s) => s.isPhoneticError)
 
   useTypingKeyboard({ enablePeek: true })
 
@@ -67,6 +68,8 @@ export function DictationStage() {
               style={{ left: 'calc(50% + 128px)', transform: 'translateX(-50%)' }}
             >
               <IpaKeyboard
+                value={dictationPhoneticInput}
+                hasError={isPhoneticError}
                 onSelectSymbol={(sym) => setDictationPhoneticInput(dictationPhoneticInput + sym)}
                 onBackspace={() => setDictationPhoneticInput(dictationPhoneticInput.slice(0, -1))}
                 onClear={() => setDictationPhoneticInput('')}

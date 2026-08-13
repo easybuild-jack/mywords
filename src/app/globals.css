@@ -86,6 +86,11 @@
     animation: cursor-blink 0.9s infinite;
   }
 
+  /* 校验失败时整块边框红闪两下，用于音标键盘这类没有输入焦点的浮层 */
+  .animate-border-flash {
+    animation: border-flash-animation 0.9s ease-in-out;
+  }
+
   /* 霓虹按钮光晕效果 */
   .btn-neon-glow {
     box-shadow: 0 0 24px rgb(var(--primary-rgb) / 0.25);
@@ -102,6 +107,18 @@
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-8px); }
   40%, 80% { transform: translateX(8px); }
+}
+
+/* 校验失败：边框与光晕红闪两下 */
+@keyframes border-flash-animation {
+  0%, 50%, 100% {
+    border-color: var(--destructive);
+    box-shadow: 0 0 24px rgba(255, 95, 87, 0.55);
+  }
+  25%, 75% {
+    border-color: rgba(255, 95, 87, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
 }
 
 /* 呼吸光标动画 */
