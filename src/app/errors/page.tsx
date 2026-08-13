@@ -56,7 +56,7 @@ export default function ErrorBookPage() {
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-white">错词攻坚本 (Error Annihilator)</h1>
-            <p className="text-xs text-[#9CA3AF]">高频错误肌肉记忆重塑，死磕直到连续 3 次无提示盲打正确</p>
+            <p className="text-xs text-[#9CA3AF]">高频错误肌肉记忆重塑，单个单词只要连续 3 次无提示默写正确即自动消除</p>
           </div>
         </div>
 
@@ -97,7 +97,7 @@ export default function ErrorBookPage() {
           <div className="space-y-1">
             <h3 className="text-xl font-bold text-white">太棒了！当前没有待攻克的错词 🎉</h3>
             <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
-              在常规章节练习中，如果遇到默写错误或按 Tab 偷看的单词，系统会自动将其收录至此开展专项攻坚。
+              在常规章节默写中，如果遇到拼写错误或按 Tab 偷看的单词，系统会自动将其收录至此开展专项攻坚。
             </p>
           </div>
           <div className="pt-2">
@@ -122,7 +122,7 @@ export default function ErrorBookPage() {
                 当前共有 <span className="text-destructive font-extrabold font-mono text-2xl">{filteredList.length}</span> 个错词待彻底攻克
               </h2>
               <p className="text-xs text-[#9CA3AF]">
-                消除规则：在默写攻坚模式下连续正确 3 次，错词即可从攻坚列表中消除归档。
+                消除规则：只要该单词在默写模式下连续正确 3 次，系统立即自动删除该词的错词记录。
               </p>
             </div>
 

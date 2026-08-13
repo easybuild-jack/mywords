@@ -46,6 +46,7 @@ export async function recordWordAttempt(
     const now = Date.now()
 
     if (!existing) {
+      const isDictationError = !isCorrect && mode === 'dictation'
       const newRecord: WordMasteryRecord = {
         wordId,
         bookId,
@@ -53,20 +54,30 @@ export async function recordWordAttempt(
         wordItem,
         isMastered: isCorrect && mode === 'dictation',
         isStarred: false,
-        isError: !isCorrect,
+        isError: isDictationError,
         totalPracticeCount: 1,
-        dictationErrorCount: isCorrect ? 0 : 1,
-        consecutiveCorrectCount: isCorrect ? 1 : 0,
+        dictationErrorCount: isDictationError ? 1 : 0,
+        consecutiveCorrectCount: isCorrect && mode === 'dictation' ? 1 : 0,
         lastPracticedAt: now,
       }
       await db.wordRecords.put(newRecord)
       return newRecord
     }
 
-    const consecutive = isCorrect ? existing.consecutiveCorrectCount + 1 : 0
-    const dictationErrors = !isCorrect ? existing.dictationErrorCount + 1 : existing.dictationErrorCount
+    const consecutive = isCorrect && mode === 'dictation' ? existing.consecutiveCorrectCount + 1 : 0
+    const dictationErrors = !isCorrect && mode === 'dictation' ? existing.dictationErrorCount + 1 : existing.dictationErrorCount
+
+    // 只有在【默写模式】下出现错误或偷看提示才加入错词本；
+    // 在【跟学模式】下的输入错误完全不记录为错词；
     // 连续正确 3 次且在默写模式下，自动移出错词本
-    const isError = !isCorrect ? true : (consecutive >= 3 ? false : existing.isError)
+    let isError = existing.isError
+    if (mode === 'dictation') {
+      if (!isCorrect) {
+        isError = true
+      } else if (consecutive >= 3) {
+        isError = false
+      }
+    }
     const isMastered = consecutive >= 3 || (isCorrect && mode === 'dictation')
 
     const updated: WordMasteryRecord = {
