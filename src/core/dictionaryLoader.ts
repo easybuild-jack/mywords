@@ -220,6 +220,29 @@ class DictionaryLoader {
 
     return enrichedList
   }
+
+  /**
+   * 动态读取官方词库 JSON 文件的实际单词总量
+   */
+  public async getBookTotalWords(bookId: string): Promise<number> {
+    const config = OFFICIAL_BOOK_FILE_MAP[bookId]
+    if (!config) return 0
+    let allRawWords = this.bookJsonCache.get(config.path)
+    if (!allRawWords && typeof window !== 'undefined') {
+      try {
+        const res = await fetch(config.path)
+        if (res.ok) {
+          allRawWords = await res.json()
+          if (allRawWords) {
+            this.bookJsonCache.set(config.path, allRawWords)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load book json file:', config.path, err)
+      }
+    }
+    return allRawWords?.length || config.totalWords
+  }
 }
 
 export const dictionaryLoader = new DictionaryLoader()

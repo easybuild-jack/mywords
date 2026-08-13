@@ -122,6 +122,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         } else {
           // 官方大词库动态加载
           const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, currentUnitIndex, unitSize)
+          const dynamicTotal = await dictionaryLoader.getBookTotalWords(currentBookId)
+          if (currentBook && currentBook.totalWords !== dynamicTotal && dynamicTotal > 0) {
+            set({ currentBook: { ...currentBook, totalWords: dynamicTotal } })
+          }
           if (loaded.length > 0) {
             set({ currentLoadedWords: loaded })
           } else {
@@ -131,21 +135,18 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       getUnitWords: () => {
-        const { currentLoadedWords, retryWordQueue } = get()
-        const baseWords = currentLoadedWords?.length ? currentLoadedWords : INITIAL_SAMPLE_WORDS
-        return [...baseWords, ...retryWordQueue]
+        return get().currentLoadedWords
       },
 
       getCurrentWord: () => {
-        const unitWords = get().getUnitWords()
-        const { activeWordIndex } = get()
-        return unitWords[activeWordIndex] || unitWords[0] || INITIAL_SAMPLE_WORDS[0]
+        const { currentLoadedWords, activeWordIndex } = get()
+        return currentLoadedWords[activeWordIndex]
       },
 
       getSurrounding5Words: () => {
-        const unitWords = get().getUnitWords()
-        const { activeWordIndex } = get()
-        if (!unitWords.length) return [null, null, INITIAL_SAMPLE_WORDS[0], null, null]
+        const { currentLoadedWords, activeWordIndex } = get()
+        const unitWords = currentLoadedWords
+        if (!unitWords.length) return [null, null, null, null, null]
 
         const left2 = activeWordIndex - 2 >= 0 ? unitWords[activeWordIndex - 2] : null
         const left1 = activeWordIndex - 1 >= 0 ? unitWords[activeWordIndex - 1] : null
@@ -159,7 +160,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       setBookId: async (bookId: string) => {
         let book = await db.books.get(bookId)
         if (!book) {
-          book = BUILTIN_BOOKS.find((b) => b.id === bookId) || BUILTIN_BOOKS[0]
+          const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId) || BUILTIN_BOOKS[0]
+          const dynamicTotal = await dictionaryLoader.getBookTotalWords(builtin.id)
+          book = { ...builtin, totalWords: dynamicTotal }
         }
         set({
           currentBookId: bookId,
