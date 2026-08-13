@@ -32,9 +32,15 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * 记录单词练习结果
+ * 记录单词练习结果 (支持存储完整 wordItem 保证错词本跨词库独立展示与练习)
  */
-export async function recordWordAttempt(wordId: string, bookId: string, isCorrect: boolean, mode: 'learn' | 'dictation') {
+export async function recordWordAttempt(
+  wordId: string,
+  bookId: string,
+  isCorrect: boolean,
+  mode: 'learn' | 'dictation',
+  wordItem?: WordItem
+) {
   try {
     const existing = await db.wordRecords.get(wordId)
     const now = Date.now()
@@ -43,6 +49,8 @@ export async function recordWordAttempt(wordId: string, bookId: string, isCorrec
       const newRecord: WordMasteryRecord = {
         wordId,
         bookId,
+        wordName: wordItem?.name,
+        wordItem,
         isMastered: isCorrect && mode === 'dictation',
         isStarred: false,
         isError: !isCorrect,
@@ -63,6 +71,8 @@ export async function recordWordAttempt(wordId: string, bookId: string, isCorrec
 
     const updated: WordMasteryRecord = {
       ...existing,
+      wordItem: wordItem || existing.wordItem,
+      wordName: wordItem?.name || existing.wordName,
       totalPracticeCount: existing.totalPracticeCount + 1,
       dictationErrorCount: dictationErrors,
       consecutiveCorrectCount: consecutive,
@@ -75,6 +85,27 @@ export async function recordWordAttempt(wordId: string, bookId: string, isCorrec
     return updated
   } catch (err) {
     console.error('Failed to record word attempt:', err)
+  }
+}
+
+/**
+ * 获取所有活跃待消灭的真实错词及完整信息
+ */
+export async function getActiveErrorWords(): Promise<{ word: WordItem; record: WordMasteryRecord }[]> {
+  try {
+    const records = await db.wordRecords.toArray()
+    const errorRecords = records.filter((r) => r.isError)
+    const result: { word: WordItem; record: WordMasteryRecord }[] = []
+
+    for (const r of errorRecords) {
+      if (r.wordItem) {
+        result.push({ word: r.wordItem, record: r })
+      }
+    }
+    return result
+  } catch (err) {
+    console.error('Failed to get active error words:', err)
+    return []
   }
 }
 

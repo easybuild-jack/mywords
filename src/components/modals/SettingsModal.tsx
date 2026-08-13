@@ -229,7 +229,7 @@ export function SettingsModal() {
                 <h3 className="font-bold text-muted-foreground uppercase tracking-wider">数据导出与多端迁移</h3>
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-3">
                   <p className="text-[11px] text-muted-foreground">
-                    所有做题进度、生词本与错词本数据均离线安全保存在你的本地 IndexedDB 中。
+                    所有做题进度与错词本数据均离线安全保存在你的本地 IndexedDB 中。
                   </p>
                   <button className="px-4 py-2 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-white font-medium transition-all">
                     导出全部数据 (JSON 备份)

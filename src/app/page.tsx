@@ -4,13 +4,11 @@ import React from 'react'
 import { HeaderToolbar } from '@/components/layout/HeaderToolbar'
 import { WordStage } from '@/components/typing/WordStage'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { Star } from 'lucide-react'
 
 export default function HomePage() {
   const {
     activeWordIndex,
     getUnitWords,
-    starCurrentWord,
     replayAudio,
     prevWord,
     nextWord,
@@ -62,17 +60,6 @@ export default function HomePage() {
             >
               <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Ctrl+J</kbd>
               <span>发音</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={starCurrentWord}
-              className="flex items-center gap-1.5 hover:text-accent transition-colors"
-            >
-              <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Ctrl+S</kbd>
-              <span className="flex items-center gap-1">
-                <Star className="size-3.5 text-accent fill-accent" /> 收藏
-              </span>
             </button>
 
             <div className="flex items-center gap-1.5">

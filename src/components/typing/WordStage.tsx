@@ -21,7 +21,6 @@ export function WordStage() {
     handleBackspace,
     peekHint,
     replayAudio,
-    starCurrentWord,
     nextWord,
     prevWord,
     isUnitFinished,
@@ -33,19 +32,20 @@ export function WordStage() {
 
   // 单元通关烟花庆祝
   useEffect(() => {
-    if (isUnitFinished) {
+    if (isUnitFinished && typeof window !== 'undefined') {
       confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#34D399', '#FEBC2E', '#6EE7B7', '#ffffff'],
       })
     }
   }, [isUnitFinished])
 
-  // 全局键盘击键监听
+  // 全局键盘监听中心
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
+      if (isUnitFinished) return
+
       // 忽略输入框/下拉框/模态框中的按键，否则方向键会同时改选项和切词
       const target = e.target as HTMLElement
       if (
@@ -66,12 +66,6 @@ export function WordStage() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
         e.preventDefault()
         replayAudio()
-        return
-      }
-
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        e.preventDefault()
-        starCurrentWord()
         return
       }
 
@@ -100,7 +94,7 @@ export function WordStage() {
         handleCharacterInput(e.key)
       }
     },
-    [handleCharacterInput, handleBackspace, peekHint, replayAudio, starCurrentWord, nextWord, prevWord]
+    [handleCharacterInput, handleBackspace, peekHint, replayAudio, nextWord, prevWord]
   )
 
   // 松开 Tab 收起提示，实现「按住偷看」

@@ -42,6 +42,9 @@ interface WorkspaceState {
   isCorrectSoundEnabled: boolean
   feedbackVolume: number
 
+  // 错词攻坚专项模式
+  isErrorPracticeActive: boolean
+
   // 弹窗状态
   isImportModalOpen: boolean
   isSettingsModalOpen: boolean
@@ -50,6 +53,8 @@ interface WorkspaceState {
   setBookId: (bookId: string) => Promise<void>
   setUnitIndex: (unitIndex: number) => Promise<void>
   loadCurrentUnitWords: () => Promise<void>
+  startErrorPractice: (words: WordItem[], startIndex?: number) => void
+  exitErrorPractice: () => Promise<void>
   setMode: (mode: PracticeMode) => void
   setLoopCountSetting: (count: 1 | 2 | 3 | 5) => void
   toggleTranslation: () => void
@@ -112,9 +117,13 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       isImportModalOpen: false,
       isSettingsModalOpen: false,
+      isErrorPracticeActive: false,
 
       loadCurrentUnitWords: async () => {
-        const { currentBookId, currentBook, currentUnitIndex, unitSize } = get()
+        const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize } = get()
+        // 错词攻坚模式下不被常规章节覆盖
+        if (isErrorPracticeActive) return
+
         if (currentBook?.isCustom && currentBook.words?.length) {
           const start = currentUnitIndex * unitSize
           const slice = currentBook.words.slice(start, start + unitSize)
@@ -132,6 +141,32 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             set({ currentLoadedWords: INITIAL_SAMPLE_WORDS })
           }
         }
+      },
+
+      startErrorPractice: (words: WordItem[], startIndex: number = 0) => {
+        if (!words.length) return
+        set({
+          isErrorPracticeActive: true,
+          mode: 'dictation',
+          currentLoadedWords: words,
+          activeWordIndex: Math.min(startIndex, words.length - 1),
+          currentInput: '',
+          hasTypo: false,
+          isUnitFinished: false,
+          retryWordQueue: [],
+          currentWordRemainingLoops: get().loopCountSetting,
+        })
+      },
+
+      exitErrorPractice: async () => {
+        set({
+          isErrorPracticeActive: false,
+          currentInput: '',
+          hasTypo: false,
+          isUnitFinished: false,
+          retryWordQueue: [],
+        })
+        await get().loadCurrentUnitWords()
       },
 
       getUnitWords: () => {
@@ -172,6 +207,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          isErrorPracticeActive: false,
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,
         })
@@ -185,6 +221,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          isErrorPracticeActive: false,
           retryWordQueue: [],
           currentWordRemainingLoops: get().loopCountSetting,
         })
@@ -249,7 +286,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
           // 如果打完整个单词
           if (nextInput.length === targetWord.length) {
-            recordWordAttempt(currentWord.id, currentBookId, true, mode)
+            recordWordAttempt(currentWord.id, currentBookId, true, mode, currentWord)
 
             if (currentWordRemainingLoops > 1) {
               if (isCorrectSoundEnabled) {
@@ -279,7 +316,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           set({ hasTypo: true })
 
           if (mode === 'dictation') {
-            recordWordAttempt(currentWord.id, currentBookId, false, mode)
+            recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
             set((state) => {
               const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
               return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
@@ -304,7 +341,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const currentWord = get().getCurrentWord()
         set({ isPeeking: show })
         if (show && mode === 'dictation' && currentWord) {
-          recordWordAttempt(currentWord.id, currentBookId, false, mode)
+          recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
           set((state) => {
             const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
             return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }

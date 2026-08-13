@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 import {
   BookOpen,
   AlertCircle,
-  Star,
   Settings,
   Sparkles,
   Home,
@@ -25,7 +24,6 @@ export function Sidebar() {
     { label: '主页', icon: Home, href: '/' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
-    { label: '生词本', icon: Star, href: '/starred' },
     { label: '词根导图', icon: Sprout, href: '/roots', comingSoon: true },
     { label: '常用短语', icon: Quote, href: '/phrases', comingSoon: true },
     { label: '语法时态', icon: SpellCheck, href: '/grammar', comingSoon: true },

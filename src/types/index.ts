@@ -49,6 +49,8 @@ export type PracticeMode = 'learn' | 'dictation';
 export interface WordMasteryRecord {
   wordId: string;
   bookId: string;
+  wordName?: string;
+  wordItem?: WordItem;                          // 完整单词结构体 (便于错词本离线与跨书直接渲染)
   isMastered: boolean;                          // 是否已彻底掌握
   isStarred: boolean;                           // 是否在生词本
   isError: boolean;                             // 是否在错词本中 (活跃状态)

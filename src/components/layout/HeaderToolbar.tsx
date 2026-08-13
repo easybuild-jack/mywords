@@ -2,13 +2,16 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Volume2, VolumeX, Eye, EyeOff, Settings, RotateCcw } from 'lucide-react'
+import { Volume2, VolumeX, Eye, EyeOff, Settings, RotateCcw, Flame, X } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 export function HeaderToolbar() {
   const {
     currentBook,
     currentUnitIndex,
+    isErrorPracticeActive,
+    currentLoadedWords,
+    exitErrorPractice,
     mode,
     setMode,
     loopCountSetting,
@@ -27,15 +30,31 @@ export function HeaderToolbar() {
   return (
     <header className="w-full flex items-center justify-center p-4 sticky top-0 z-30 pointer-events-auto">
       <div className="glass-card rounded-2xl px-5 py-2.5 flex items-center gap-4 text-sm max-w-5xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10">
-        {/* 1. 词书与章节快速入口 */}
-        <Link
-          href="/books"
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium transition-all"
-        >
-          <span className="text-primary font-bold">{currentBook?.name || 'CET-4'}</span>
-          <span className="text-muted-foreground">·</span>
-          <span>第 {currentUnitIndex + 1} 章</span>
-        </Link>
+        {/* 1. 词书与章节快速入口 / 错词歼灭模式指示 */}
+        {isErrorPracticeActive ? (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-destructive/15 border border-destructive/30 text-white font-medium">
+            <Flame className="size-4 text-destructive animate-pulse" />
+            <span className="text-destructive font-bold text-xs">错词歼灭战</span>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-xs text-gray-300 font-mono">共 {currentLoadedWords.length} 词</span>
+            <button
+              onClick={exitErrorPractice}
+              className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all"
+              title="退出错词攻坚，返回常规章节"
+            >
+              <X className="size-3.5" />
+            </button>
+          </div>
+        ) : (
+          <Link
+            href="/books"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium transition-all"
+          >
+            <span className="text-primary font-bold">{currentBook?.name || 'CET-4'}</span>
+            <span className="text-muted-foreground">·</span>
+            <span>第 {currentUnitIndex + 1} 章</span>
+          </Link>
+        )}
 
         {/* 2. 发音口音下拉切换 */}
         <div className="flex items-center gap-1.5">
