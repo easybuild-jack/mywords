@@ -1,16 +1,19 @@
 'use client'
 
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
-import { CheckCircle2, RotateCcw, ArrowRight, ArrowLeft, Flame } from 'lucide-react'
+import { CheckCircle2, RotateCcw, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { WordCardContent } from '@/components/typing/WordCardContent'
+import { IpaKeyboard } from '@/components/typing/IpaKeyboard'
 import { isShortcutMatch } from '@/lib/shortcuts'
 
 export function WordStage() {
   const router = useRouter()
+  const stageRef = useRef<HTMLDivElement>(null)
+
   const {
     getSurrounding5Words,
     currentInput,
@@ -34,6 +37,11 @@ export function WordStage() {
     currentUnitIndex,
     isErrorPracticeActive,
     exitErrorPractice,
+    isPhoneticFocused,
+    setIsPhoneticFocused,
+    dictationPhoneticInput,
+    setDictationPhoneticInput,
+    submitPhonetic,
   } = useWorkspaceStore()
 
   const currentWord = getSurrounding5Words()[2]
@@ -48,6 +56,17 @@ export function WordStage() {
       })
     }
   }, [isUnitFinished])
+
+  // 点击外部收起音标键盘
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (isPhoneticFocused && stageRef.current && !stageRef.current.contains(e.target as Node)) {
+        setIsPhoneticFocused(false)
+      }
+    }
+    document.addEventListener('click', handleOutsideClick)
+    return () => document.removeEventListener('click', handleOutsideClick)
+  }, [isPhoneticFocused, setIsPhoneticFocused])
 
   // 全局键盘监听中心
   const handleKeyDown = useCallback(
@@ -166,7 +185,7 @@ export function WordStage() {
   }, [handleKeyDown, handleKeyUp])
 
   return (
-    <div className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-6">
+    <div ref={stageRef} className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-6">
       {/* 通关完成结算卡片 */}
       {isUnitFinished ? (
         <motion.div
@@ -241,7 +260,7 @@ export function WordStage() {
           </div>
         </motion.div>
       ) : (
-        /* 单张活跃词卡 + 两侧切词按钮 */
+        /* 单张活跃词卡 + 两侧切词按钮 + 外部浮动音标键盘 */
         <>
           <button
             onClick={prevWord}
@@ -251,18 +270,33 @@ export function WordStage() {
             <ArrowLeft className="size-5" />
           </button>
 
-          <div className="relative w-[640px] h-[520px] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-            {currentWord && (
-              <WordCardContent
-                word={currentWord}
-                mode={mode}
-                currentInput={currentInput}
-                hasTypo={hasTypo}
-                isPeeking={isPeeking}
-                isTranslationVisible={isTranslationVisible}
-                phoneticPreference={phoneticPreference}
-                remainingLoops={currentWordRemainingLoops}
-              />
+          <div className="relative flex flex-col items-center">
+            <div className="relative w-[640px] h-[520px] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+              {currentWord && (
+                <WordCardContent
+                  word={currentWord}
+                  mode={mode}
+                  currentInput={currentInput}
+                  hasTypo={hasTypo}
+                  isPeeking={isPeeking}
+                  isTranslationVisible={isTranslationVisible}
+                  phoneticPreference={phoneticPreference}
+                  remainingLoops={currentWordRemainingLoops}
+                />
+              )}
+            </div>
+
+            {/* 外部独立浮动 IPA 音标键盘（仅在聚焦音标输入框时从卡片正下方浮现） */}
+            {mode === 'dictation' && isPhoneticFocused && (
+              <div className="absolute top-[102%] left-1/2 -translate-x-1/2 z-50 pt-1">
+                <IpaKeyboard
+                  onSelectSymbol={(sym) => setDictationPhoneticInput(dictationPhoneticInput + sym)}
+                  onBackspace={() => setDictationPhoneticInput(dictationPhoneticInput.slice(0, -1))}
+                  onClear={() => setDictationPhoneticInput('')}
+                  onSubmit={() => submitPhonetic()}
+                  onClose={() => setIsPhoneticFocused(false)}
+                />
+              </div>
             )}
           </div>
 

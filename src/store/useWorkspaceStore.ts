@@ -6,6 +6,7 @@ import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
+import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
 
 interface WorkspaceState {
   // 核心书籍与单元选择
@@ -22,6 +23,15 @@ interface WorkspaceState {
   currentWordRemainingLoops: number
   isTranslationVisible: boolean
   phoneticPreference: 'us' | 'uk'
+
+  // 默写模式音标与译文输入增强
+  isDictationPhoneticEnabled: boolean
+  isDictationMeaningEnabled: boolean
+  dictationPhoneticInput: string
+  dictationMeaningInput: string
+  isPhoneticPassed: boolean
+  isMeaningPassed: boolean
+  isPhoneticFocused: boolean
   
   // 自定义快捷键配置
   shortcuts: ShortcutConfig
@@ -64,6 +74,14 @@ interface WorkspaceState {
   setLoopCountSetting: (count: 1 | 2 | 3 | 5) => void
   toggleTranslation: () => void
   setPhoneticPreference: (pref: 'us' | 'uk') => void
+  toggleDictationPhonetic: (enabled?: boolean) => void
+  toggleDictationMeaning: (enabled?: boolean) => void
+  setDictationPhoneticInput: (input: string) => void
+  setDictationMeaningInput: (input: string) => void
+  setIsPhoneticFocused: (focused: boolean) => void
+  submitPhonetic: () => boolean
+  submitMeaning: () => boolean
+  resetDictationStepStates: () => void
   setInput: (input: string) => void
   setTypo: (typo: boolean) => void
   setShortcut: (action: keyof ShortcutConfig, keyStr: string) => void
@@ -128,6 +146,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isSettingsModalOpen: false,
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
+
+      isDictationPhoneticEnabled: true,
+      isDictationMeaningEnabled: true,
+      dictationPhoneticInput: '',
+      dictationMeaningInput: '',
+      isPhoneticPassed: false,
+      isMeaningPassed: false,
+      isPhoneticFocused: false,
 
       loadCurrentUnitWords: async () => {
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
@@ -286,6 +312,57 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({ phoneticPreference: pref })
       },
 
+      toggleDictationPhonetic: (enabled?: boolean) => {
+        set((s) => {
+          const nextVal = enabled !== undefined ? enabled : !s.isDictationPhoneticEnabled
+          return { isDictationPhoneticEnabled: nextVal, isPhoneticFocused: false }
+        })
+      },
+
+      toggleDictationMeaning: (enabled?: boolean) => {
+        set((s) => ({
+          isDictationMeaningEnabled: enabled !== undefined ? enabled : !s.isDictationMeaningEnabled,
+        }))
+      },
+
+      setDictationPhoneticInput: (input: string) => set({ dictationPhoneticInput: input }),
+      setDictationMeaningInput: (input: string) => set({ dictationMeaningInput: input }),
+      setIsPhoneticFocused: (focused: boolean) => set({ isPhoneticFocused: focused }),
+
+      submitPhonetic: () => {
+        const currentWord = get().getCurrentWord()
+        const { dictationPhoneticInput } = get()
+        if (!currentWord) return false
+        const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
+        if (isValid) {
+          set({ isPhoneticPassed: true, isPhoneticFocused: false })
+          return true
+        }
+        return false
+      },
+
+      submitMeaning: () => {
+        const currentWord = get().getCurrentWord()
+        const { dictationMeaningInput } = get()
+        if (!currentWord) return false
+        const isValid = validateMeaning(dictationMeaningInput, currentWord)
+        if (isValid) {
+          set({ isMeaningPassed: true })
+          return true
+        }
+        return false
+      },
+
+      resetDictationStepStates: () => {
+        set({
+          dictationPhoneticInput: '',
+          dictationMeaningInput: '',
+          isPhoneticPassed: false,
+          isMeaningPassed: false,
+          isPhoneticFocused: false,
+        })
+      },
+
       setInput: (input: string) => set({ currentInput: input }),
       setTypo: (typo: boolean) => set({ hasTypo: typo }),
       setShortcut: (action: keyof ShortcutConfig, keyStr: string) => {
@@ -317,9 +394,19 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentWordRemainingLoops,
           isCorrectSoundEnabled,
           isErrorPracticeActive,
+          isDictationPhoneticEnabled,
+          isPhoneticPassed,
+          isDictationMeaningEnabled,
+          isMeaningPassed,
         } = get()
 
         if (hasTypo) return
+
+        // 默写模式下前置校验拦截
+        if (mode === 'dictation') {
+          if (isDictationPhoneticEnabled && !isPhoneticPassed) return
+          if (isDictationMeaningEnabled && !isMeaningPassed) return
+        }
 
         const currentWord = get().getCurrentWord()
         if (!currentWord) return
@@ -492,6 +579,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               currentInput: '',
               hasTypo: false,
               currentWordRemainingLoops: 3,
+              dictationPhoneticInput: '',
+              dictationMeaningInput: '',
+              isPhoneticPassed: false,
+              isMeaningPassed: false,
+              isPhoneticFocused: false,
             })
 
             const nextWord = unitWords[nextIndex]
@@ -514,6 +606,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: loopCountSetting,
+            dictationPhoneticInput: '',
+            dictationMeaningInput: '',
+            isPhoneticPassed: false,
+            isMeaningPassed: false,
+            isPhoneticFocused: false,
           })
 
           const nextWord = unitWords[nextIndex]
@@ -539,6 +636,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
+            dictationPhoneticInput: '',
+            dictationMeaningInput: '',
+            isPhoneticPassed: false,
+            isMeaningPassed: false,
+            isPhoneticFocused: false,
           })
         } else if (isErrorPracticeActive && unitWords.length > 1) {
           // 错词模式下在第 0 个往前按，循环回到最后一个
@@ -547,6 +649,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: 3,
+            dictationPhoneticInput: '',
+            dictationMeaningInput: '',
+            isPhoneticPassed: false,
+            isMeaningPassed: false,
+            isPhoneticFocused: false,
           })
         }
       },
@@ -560,6 +667,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           retryWordQueue: [],
           currentWordRemainingLoops: get().isErrorPracticeActive ? 3 : get().loopCountSetting,
           conqueredErrorWordIds: [],
+          dictationPhoneticInput: '',
+          dictationMeaningInput: '',
+          isPhoneticPassed: false,
+          isMeaningPassed: false,
+          isPhoneticFocused: false,
         })
       },
     }),
@@ -577,6 +689,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentWordRemainingLoops: loopCount,
           currentInput: '',
           hasTypo: false,
+          dictationPhoneticInput: '',
+          dictationMeaningInput: '',
+          isPhoneticPassed: false,
+          isMeaningPassed: false,
+          isPhoneticFocused: false,
         }
       },
       partialize: (state) => ({
@@ -594,6 +711,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         isCorrectSoundEnabled: state.isCorrectSoundEnabled,
         feedbackVolume: state.feedbackVolume,
         shortcuts: state.shortcuts,
+        isDictationPhoneticEnabled: state.isDictationPhoneticEnabled,
+        isDictationMeaningEnabled: state.isDictationMeaningEnabled,
       }),
     }
   )
