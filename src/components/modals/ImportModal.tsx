@@ -1,16 +1,45 @@
 'use client'
 
-import React, { useState } from 'react'
-import { X, Upload, Sparkles, Loader2, CheckCircle2, Trash2, Edit3 } from 'lucide-react'
+import React, { useState, useRef } from 'react'
+import {
+  X,
+  Upload,
+  Sparkles,
+  Loader2,
+  CheckCircle2,
+  Trash2,
+  FileSpreadsheet,
+  FileText,
+  Download,
+  BookOpen,
+  ArrowRight
+} from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { saveCustomVocabularyBook } from '@/db'
 import type { WordItem } from '@/types'
 
+// 常见基础停用词表（用于文章生词提取时自动过滤）
+const COMMON_STOP_WORDS = new Set([
+  'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
+  'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
+  'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
+  'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
+  'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
+  'when', 'make', 'can', 'like', 'time', 'no', 'just', 'him', 'know', 'take',
+  'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other',
+  'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also',
+  'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way',
+  'even', 'new', 'want', 'because', 'any', 'these', 'give', 'day', 'most', 'us',
+  'is', 'are', 'was', 'were', 'been', 'has', 'had', 'did', 'does'
+])
+
 export function ImportModal() {
   const { isImportModalOpen, setImportModalOpen, setBookId } = useWorkspaceStore()
   const [activeTab, setActiveTab] = useState<'text' | 'file' | 'article'>('text')
   const [bookName, setBookName] = useState('我的自定义生词本')
+  
+  // Tab 1: 文本粘贴
   const [rawText, setRawText] = useState(
     `resilient
 perspective n. 视角，观点；透视画法
@@ -20,24 +49,38 @@ kubernetes
 extraordinary
 compile v. 编译；编纂`
   )
+
+  // Tab 3: 文章提取输入
+  const [articleText, setArticleText] = useState(
+    `Kubernetes is an open-source container orchestration system for automating software deployment, scaling, and management. It provides resilient infrastructure and simplifies modern developer operations.`
+  )
+
+  // 文件上传 Ref
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [uploadedFileName, setUploadedFileName] = useState<string>('')
+
+  // 解析与补全状态
   const [parsedWords, setParsedWords] = useState<WordItem[]>([])
   const [isParsing, setIsParsing] = useState(false)
   const [isParsed, setIsParsed] = useState(false)
-  const [autoEnrichWithAi, setAutoEnrichWithAi] = useState(true)
+  const [autoDeduplicate, setAutoDeduplicate] = useState(true)
 
   if (!isImportModalOpen) return null
 
-  // 批量调用智能补全流水线解析文本
+  // 1. 解析文本粘贴 (Tab 1)
   const handleParseText = async () => {
     setIsParsing(true)
     const lines = rawText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0)
     const items: WordItem[] = []
+    const seen = new Set<string>()
 
     for (const line of lines) {
       const parts = line.split(/[\t\s]+/)
-      const wordName = parts[0]
+      const wordName = parts[0].replace(/[^a-zA-Z-]/g, '')
+      if (!wordName || (autoDeduplicate && seen.has(wordName.toLowerCase()))) continue
+      seen.add(wordName.toLowerCase())
+
       const customMeaning = parts.length > 1 ? parts.slice(1).join(' ') : undefined
-      
       const enriched = await dictionaryLoader.enrichWord(wordName, customMeaning)
       items.push(enriched)
     }
@@ -47,28 +90,143 @@ compile v. 编译；编纂`
     setIsParsed(true)
   }
 
+  // 2. 解析上传的文件 (CSV, TXT, JSON) (Tab 2)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadedFileName(file.name)
+    setIsParsing(true)
+
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      const content = event.target?.result as string
+      if (!content) {
+        setIsParsing(false)
+        return
+      }
+
+      const items: WordItem[] = []
+      const seen = new Set<string>()
+
+      if (file.name.endsWith('.json')) {
+        try {
+          const json = JSON.parse(content)
+          const list = Array.isArray(json) ? json : [json]
+          for (const entry of list) {
+            const name = entry.name || entry.word || ''
+            if (!name || seen.has(name.toLowerCase())) continue
+            seen.add(name.toLowerCase())
+            const meaning = entry.trans?.join(' ') || entry.meaning || entry.translation
+            const enriched = await dictionaryLoader.enrichWord(name, meaning, entry.usphone || entry.phonetic)
+            items.push(enriched)
+          }
+        } catch (err) {
+          alert('JSON 解析失败，请检查文件格式')
+        }
+      } else {
+        // CSV 或 TXT 解析
+        const lines = content.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
+        const isCsv = file.name.endsWith('.csv') || lines[0].includes(',')
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i]
+          if (i === 0 && isCsv && (line.toLowerCase().includes('word') || line.includes('单词'))) {
+            continue // 跳过表头
+          }
+
+          let wordName = ''
+          let meaning: string | undefined
+
+          if (isCsv) {
+            const cols = line.split(',').map((c) => c.trim().replace(/^["']|["']$/g, ''))
+            wordName = cols[0]
+            meaning = cols[1] || undefined
+          } else {
+            const parts = line.split(/[\t\s]+/)
+            wordName = parts[0]
+            meaning = parts.length > 1 ? parts.slice(1).join(' ') : undefined
+          }
+
+          wordName = wordName.replace(/[^a-zA-Z-]/g, '')
+          if (!wordName || (autoDeduplicate && seen.has(wordName.toLowerCase()))) continue
+          seen.add(wordName.toLowerCase())
+
+          const enriched = await dictionaryLoader.enrichWord(wordName, meaning)
+          items.push(enriched)
+        }
+      }
+
+      setParsedWords(items)
+      setIsParsing(false)
+      setIsParsed(true)
+    }
+
+    reader.readAsText(file)
+  }
+
+  // 3. 从长文章提取生词 (Tab 3)
+  const handleExtractFromArticle = async () => {
+    setIsParsing(true)
+    const matches = articleText.match(/[a-zA-Z]{3,}/g) || []
+    const uniqueWords: string[] = []
+    const seen = new Set<string>()
+
+    for (const raw of matches) {
+      const lower = raw.toLowerCase()
+      if (!COMMON_STOP_WORDS.has(lower) && !seen.has(lower)) {
+        seen.add(lower)
+        uniqueWords.push(raw)
+      }
+    }
+
+    const items: WordItem[] = []
+    for (const word of uniqueWords.slice(0, 50)) { // 单次提取前 50 个高价值生词
+      const enriched = await dictionaryLoader.enrichWord(word)
+      items.push(enriched)
+    }
+
+    setParsedWords(items)
+    setIsParsing(false)
+    setIsParsed(true)
+  }
+
+  // 下载 CSV 模板
+  const handleDownloadCsvTemplate = () => {
+    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' +
+      '单词,中文释义(选填),音标(选填)\n' +
+      'perspective,视角；观点,/pərˈspektɪv/\n' +
+      'resilient,有弹性的,/rɪˈzɪliənt/\n' +
+      'kubernetes,容器自动化编排引擎,\n' +
+      'compile,编译；编纂,\n'
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement('a')
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', 'MyWords_导入模板.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   // 确认导入并持久化至 IndexedDB
   const handleConfirmImport = async () => {
     let finalWords = parsedWords
     if (!finalWords.length) {
-      setIsParsing(true)
-      const lines = rawText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0)
-      const items: WordItem[] = []
-      for (const line of lines) {
-        const parts = line.split(/[\t\s]+/)
-        const wordName = parts[0]
-        const customMeaning = parts.length > 1 ? parts.slice(1).join(' ') : undefined
-        const enriched = await dictionaryLoader.enrichWord(wordName, customMeaning)
-        items.push(enriched)
-      }
-      finalWords = items
-      setIsParsing(false)
+      if (activeTab === 'text') await handleParseText()
+      else if (activeTab === 'article') await handleExtractFromArticle()
+      finalWords = parsedWords
     }
 
-    const newBook = await saveCustomVocabularyBook(bookName, '用户自定义生词本', finalWords)
+    if (!finalWords.length) {
+      alert('未检测到有效单词，请检查输入或上传内容')
+      return
+    }
+
+    const newBook = await saveCustomVocabularyBook(bookName, '用户自定义导入词库', finalWords)
     await setBookId(newBook.id)
     setImportModalOpen(false)
     setIsParsed(false)
+    setUploadedFileName('')
   }
 
   const handleDeleteWord = (index: number) => {
@@ -80,18 +238,20 @@ compile v. 编译；编纂`
       <div className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 p-6 space-y-6 shadow-[0_0_50px_rgba(0,0,0,0.7)] text-white">
         {/* 顶部标题与关闭 */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30 shadow-[0_0_16px_rgba(0,255,136,0.2)]">
+          <div className="flex items-center gap-3">
+            <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30 shadow-[0_0_16px_rgba(0,255,136,0.2)]">
               <Upload className="size-5" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                单词批量导入与智能自动补全
+                单词批量导入中心
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/15 text-primary border border-primary/30">
-                  50,000+ 离线词库直连
+                  三模态智能解析
                 </span>
               </h2>
-              <p className="text-xs text-muted-foreground">只输单词也可 100% 自动匹配英美音标、权威词性、中文释义与音节拆解</p>
+              <p className="text-xs text-muted-foreground">
+                支持纯文本粘贴、CSV/Excel/JSON 文件上传以及英文文章生词自动提取
+              </p>
             </div>
           </div>
           <button
@@ -106,33 +266,36 @@ compile v. 编译；编纂`
         <div className="flex gap-2 p-1 bg-white/[0.04] rounded-xl border border-white/10">
           <button
             onClick={() => { setActiveTab('text'); setIsParsed(false) }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
               activeTab === 'text' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
-            快捷文本粘贴 (Text Paste)
+            <FileText className="size-3.5" />
+            <span>快捷文本粘贴 (Text Paste)</span>
           </button>
           <button
             onClick={() => { setActiveTab('file'); setIsParsed(false) }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
               activeTab === 'file' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
-            表格模板导入 (CSV / Excel)
+            <FileSpreadsheet className="size-3.5" />
+            <span>文件模板导入 (CSV / Excel / JSON)</span>
           </button>
           <button
             onClick={() => { setActiveTab('article'); setIsParsed(false) }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
               activeTab === 'article' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
-            文章生词提取 (Article)
+            <BookOpen className="size-3.5" />
+            <span>文章生词提取 (Article Extract)</span>
           </button>
         </div>
 
         {/* 词库名称输入 */}
         <div className="space-y-1.5">
-          <label className="text-xs text-[#9CA3AF] font-medium">自定义词库名称</label>
+          <label className="text-xs text-[#9CA3AF] font-medium">新词库名称</label>
           <input
             type="text"
             value={bookName}
@@ -142,36 +305,114 @@ compile v. 编译；编纂`
           />
         </div>
 
-        {/* 文本输入或解析表格预览 */}
+        {/* 对应 Tab 的内容区 */}
         {!isParsed ? (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
-              <span>支持仅粘贴纯英文单词（每行一个），系统将自动从 5 万词库中秒级检索释义</span>
-              <button
-                onClick={handleParseText}
-                disabled={isParsing}
-                className="text-primary hover:underline font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-50"
-              >
-                {isParsing ? (
-                  <>
-                    <Loader2 className="size-3.5 animate-spin" />
-                    <span>正在检索与自动补齐中...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="size-3.5" />
-                    <span>一键智能补全并预览结构 →</span>
-                  </>
-                )}
-              </button>
-            </div>
-            <textarea
-              value={rawText}
-              onChange={(e) => setRawText(e.target.value)}
-              rows={6}
-              className="w-full p-4 rounded-xl bg-white/[0.04] border border-white/10 text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
-              placeholder={`resilient\nperspective n. 视角，观点\nkubernetes\ncompile`}
-            />
+          <div className="space-y-3">
+            {/* Tab 1: 文本粘贴 */}
+            {activeTab === 'text' && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+                  <span>每行一个单词（可只给英文，系统将自动从 5 万词库中秒级检索释义）</span>
+                  <button
+                    onClick={handleParseText}
+                    disabled={isParsing}
+                    className="text-primary hover:underline font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                  >
+                    {isParsing ? (
+                      <>
+                        <Loader2 className="size-3.5 animate-spin" />
+                        <span>正在检索与自动补齐中...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="size-3.5" />
+                        <span>一键智能补全并预览结构 →</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <textarea
+                  value={rawText}
+                  onChange={(e) => setRawText(e.target.value)}
+                  rows={6}
+                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-white/10 text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
+                  placeholder={`resilient\nperspective n. 视角，观点\nkubernetes\ncompile`}
+                />
+              </div>
+            )}
+
+            {/* Tab 2: 文件上传 */}
+            {activeTab === 'file' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#9CA3AF]">支持上传 `.csv`、`.txt` 或 `.json` 文件</span>
+                  <button
+                    onClick={handleDownloadCsvTemplate}
+                    className="text-xs text-accent hover:underline flex items-center gap-1 font-mono font-medium"
+                  >
+                    <Download className="size-3.5" />
+                    <span>下载标准 CSV 模板</span>
+                  </button>
+                </div>
+
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-white/15 hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl p-8 text-center cursor-pointer transition-all space-y-2 group"
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".csv,.txt,.json"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <div className="size-12 rounded-2xl bg-white/[0.06] group-hover:bg-primary/20 text-muted-foreground group-hover:text-primary flex items-center justify-center mx-auto transition-all">
+                    {isParsing ? <Loader2 className="size-6 animate-spin text-primary" /> : <Upload className="size-6" />}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-bold text-white">
+                      {uploadedFileName ? `已选择: ${uploadedFileName}` : '点击选择文件 或 将文件拖拽至此处'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {isParsing ? '正在从 50,000+ 离线词库检索并自动生成音节与词根...' : '支持 CSV 表格、纯文本词单与 JSON 数据'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 3: 文章提取 */}
+            {activeTab === 'article' && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+                  <span>粘贴整篇英文技术文档/论文，系统将自动过滤常用虚词并提取核心生词：</span>
+                  <button
+                    onClick={handleExtractFromArticle}
+                    disabled={isParsing}
+                    className="text-primary hover:underline font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                  >
+                    {isParsing ? (
+                      <>
+                        <Loader2 className="size-3.5 animate-spin" />
+                        <span>正在分词与智能补齐中...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="size-3.5" />
+                        <span>提取生词并自动补全 →</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <textarea
+                  value={articleText}
+                  onChange={(e) => setArticleText(e.target.value)}
+                  rows={6}
+                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-white/10 text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
+                  placeholder="在此粘贴长篇英文文章内容..."
+                />
+              </div>
+            )}
           </div>
         ) : (
           /* 结构化智能补全预览表格 */
@@ -179,10 +420,10 @@ compile v. 编译；编纂`
             <div className="flex items-center justify-between text-xs">
               <span className="text-primary font-semibold flex items-center gap-1.5">
                 <CheckCircle2 className="size-4" />
-                已成功智能补全 {parsedWords.length} 个单词（含音标、音节与词根）
+                已成功智能解析并补全 {parsedWords.length} 个单词（含权威音标、音节与词根）
               </span>
               <button onClick={() => setIsParsed(false)} className="text-muted-foreground hover:underline text-xs">
-                返回修改文本
+                返回重新输入
               </button>
             </div>
             <table className="w-full text-xs text-left border-collapse">
@@ -230,11 +471,11 @@ compile v. 编译；编纂`
           <label className="flex items-center gap-2 text-xs text-[#9CA3AF] cursor-pointer">
             <input
               type="checkbox"
-              checked={autoEnrichWithAi}
-              onChange={(e) => setAutoEnrichWithAi(e.target.checked)}
+              checked={autoDeduplicate}
+              onChange={(e) => setAutoDeduplicate(e.target.checked)}
               className="accent-primary rounded"
             />
-            <span>自动优先命中本地 50,000+ 权威词库并提取词根公式</span>
+            <span>自动去除重复单词并过滤常见虚词</span>
           </label>
 
           <div className="flex items-center gap-3">
@@ -247,7 +488,7 @@ compile v. 编译；编纂`
             <button
               onClick={handleConfirmImport}
               disabled={isParsing}
-              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all disabled:opacity-50 flex items-center gap-1.5"
+              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
             >
               {isParsing ? (
                 <>
@@ -255,7 +496,10 @@ compile v. 编译；编纂`
                   <span>正在导入...</span>
                 </>
               ) : (
-                <span>确认导入并开始练习</span>
+                <>
+                  <span>确认导入并开始练习</span>
+                  <ArrowRight className="size-3.5" />
+                </>
               )}
             </button>
           </div>
