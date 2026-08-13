@@ -50,7 +50,7 @@ export default function ErrorBookPage() {
           </div>
           <div>
             <h1 className="text-2xl font-extrabold text-white">错词攻坚本 (Error Annihilator)</h1>
-            <p className="text-xs text-[#9CA3AF]">高频错误肌肉记忆重塑，死磕直到连续 2 次无提示盲打正确</p>
+            <p className="text-xs text-[#9CA3AF]">高频错误肌肉记忆重塑，死磕直到连续 3 次无提示盲打正确</p>
           </div>
         </div>
 
@@ -97,7 +97,7 @@ export default function ErrorBookPage() {
           <div className="pt-2">
             <button
               onClick={() => router.push('/')}
-              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow transition-all"
+              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow transition-all cursor-pointer"
             >
               返回主页继续练习 →
             </button>
@@ -110,13 +110,13 @@ export default function ErrorBookPage() {
             <div className="space-y-1">
               <span className="text-xs text-destructive font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <Swords className="size-3.5" />
-                错词消灭机制 (2-Streak Rule)
+                错词消灭机制 (3-Streak Rule)
               </span>
               <h2 className="text-xl font-bold text-white">
                 当前共有 <span className="text-destructive font-extrabold font-mono text-2xl">{filteredList.length}</span> 个错词待彻底攻克
               </h2>
               <p className="text-xs text-[#9CA3AF]">
-                消除规则：在默写攻坚模式下连续正确 2 次，错词即可从攻坚列表中消除归档。
+                消除规则：在默写攻坚模式下连续正确 3 次，错词即可从攻坚列表中消除归档。
               </p>
             </div>
 
@@ -164,9 +164,10 @@ export default function ErrorBookPage() {
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
-                        <div className="flex items-center justify-center gap-1.5" title={`连续正确 ${streak}/2 次`}>
+                        <div className="flex items-center justify-center gap-1.5" title={`连续正确 ${streak}/3 次`}>
                           <div className={`size-2.5 rounded-full ${streak >= 1 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
                           <div className={`size-2.5 rounded-full ${streak >= 2 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
+                          <div className={`size-2.5 rounded-full ${streak >= 3 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
                         </div>
                       </td>
                       <td className="py-3.5 px-4 text-right">

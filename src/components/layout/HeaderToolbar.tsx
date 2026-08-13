@@ -30,16 +30,16 @@ export function HeaderToolbar() {
   return (
     <header className="w-full flex items-center justify-center p-4 sticky top-0 z-30 pointer-events-auto">
       <div className="glass-card rounded-2xl px-5 py-2.5 flex items-center gap-4 text-sm max-w-5xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10">
-        {/* 1. 词书与章节快速入口 / 错词歼灭模式指示 */}
+        {/* 1. 词书与章节快速入口 / 错词本攻坚模式指示 */}
         {isErrorPracticeActive ? (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-destructive/15 border border-destructive/30 text-white font-medium">
             <Flame className="size-4 text-destructive animate-pulse" />
-            <span className="text-destructive font-bold text-xs">错词歼灭战</span>
+            <span className="text-destructive font-bold text-xs">错词本 (攻坚模式)</span>
             <span className="text-muted-foreground">·</span>
             <span className="text-xs text-gray-300 font-mono">共 {currentLoadedWords.length} 词</span>
             <button
               onClick={exitErrorPractice}
-              className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all"
+              className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all cursor-pointer"
               title="退出错词攻坚，返回常规章节"
             >
               <X className="size-3.5" />
@@ -79,12 +79,16 @@ export function HeaderToolbar() {
         {/* 分隔线 */}
         <div className="h-4 w-px bg-white/10" />
 
-        {/* 3. 跟学模式 vs 默写模式切换 */}
+        {/* 3. 跟学模式 vs 默写模式切换 (错词攻坚锁定默写) */}
         <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/10">
           <button
-            onClick={() => setMode('learn')}
+            disabled={isErrorPracticeActive}
+            onClick={() => !isErrorPracticeActive && setMode('learn')}
+            title={isErrorPracticeActive ? '错词攻坚必须纯盲打默写，不可切换为跟学模式' : undefined}
             className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-              mode === 'learn'
+              isErrorPracticeActive
+                ? 'opacity-30 cursor-not-allowed text-muted-foreground'
+                : mode === 'learn'
                 ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-muted-foreground hover:text-white'
             }`}
@@ -94,7 +98,7 @@ export function HeaderToolbar() {
           <button
             onClick={() => setMode('dictation')}
             className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
-              mode === 'dictation'
+              mode === 'dictation' || isErrorPracticeActive
                 ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-muted-foreground hover:text-white'
             }`}
@@ -105,16 +109,25 @@ export function HeaderToolbar() {
 
         {/* 4. 单个单词循环次数配置 */}
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <select
-            value={loopCountSetting}
-            onChange={(e) => setLoopCountSetting(Number(e.target.value) as 1 | 2 | 3 | 5)}
-            className="bg-white/[0.06] border border-white/10 text-white rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-primary/50 cursor-pointer"
-          >
-            <option value={1} className="bg-[#12141A] text-white">循环 1次</option>
-            <option value={2} className="bg-[#12141A] text-white">循环 2次</option>
-            <option value={3} className="bg-[#12141A] text-white">循环 3次</option>
-            <option value={5} className="bg-[#12141A] text-white">循环 5次</option>
-          </select>
+          {isErrorPracticeActive ? (
+            <div
+              className="bg-destructive/10 border border-destructive/30 text-destructive rounded-lg px-2.5 py-1 text-xs font-mono font-bold"
+              title="错词攻坚强制连续 3 次无误默写"
+            >
+              循环 3次 (3-Streak)
+            </div>
+          ) : (
+            <select
+              value={loopCountSetting}
+              onChange={(e) => setLoopCountSetting(Number(e.target.value) as 1 | 2 | 3 | 5)}
+              className="bg-white/[0.06] border border-white/10 text-white rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-primary/50 cursor-pointer"
+            >
+              <option value={1} className="bg-[#12141A] text-white">循环 1次</option>
+              <option value={2} className="bg-[#12141A] text-white">循环 2次</option>
+              <option value={3} className="bg-[#12141A] text-white">循环 3次</option>
+              <option value={5} className="bg-[#12141A] text-white">循环 5次</option>
+            </select>
+          )}
         </div>
 
         {/* 5. 译文显隐切换 */}

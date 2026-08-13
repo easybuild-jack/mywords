@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { PracticeMode, WordItem, VocabularyBook } from '@/types'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
-import { db, recordWordAttempt, toggleStarWord } from '@/db'
+import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 
@@ -148,13 +148,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           isErrorPracticeActive: true,
           mode: 'dictation',
+          loopCountSetting: 3,
           currentLoadedWords: words,
           activeWordIndex: Math.min(startIndex, words.length - 1),
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().loopCountSetting,
+          currentWordRemainingLoops: 3,
         })
       },
 
@@ -229,10 +230,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setMode: (mode: PracticeMode) => {
+        // 错词攻坚模式下强制锁定为默写模式，不允许切换为跟学
+        if (get().isErrorPracticeActive) return
         set({ mode, currentInput: '', hasTypo: false })
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {
+        // 错词攻坚模式下锁定为 3 次
+        if (get().isErrorPracticeActive) return
         set({ loopCountSetting: count, currentWordRemainingLoops: count })
       },
 
@@ -265,6 +270,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentBookId,
           currentWordRemainingLoops,
           isCorrectSoundEnabled,
+          isErrorPracticeActive,
         } = get()
 
         if (hasTypo) return
@@ -299,8 +305,12 @@ export const useWorkspaceStore = create<WorkspaceState>()(
                 })
               }, 150)
             } else {
+              // 达到消灭标准 (连续 3 次默写正确)
               if (isCorrectSoundEnabled) {
                 audioEngine.playCorrectSound(feedbackVolume)
+              }
+              if (isErrorPracticeActive) {
+                eliminateErrorWord(currentWord.id)
               }
               setTimeout(() => {
                 get().nextWord()
@@ -324,7 +334,12 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }
 
           setTimeout(() => {
-            set({ currentInput: '', hasTypo: false })
+            set({
+              currentInput: '',
+              hasTypo: false,
+              // 错词攻坚模式下，一旦输错立刻重置回 3 次连对循环
+              currentWordRemainingLoops: isErrorPracticeActive ? 3 : get().loopCountSetting,
+            })
           }, 220)
         }
       },
@@ -337,15 +352,21 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       peekHint: (show: boolean) => {
-        const { mode, currentBookId } = get()
+        const { mode, currentBookId, isErrorPracticeActive } = get()
         const currentWord = get().getCurrentWord()
         set({ isPeeking: show })
-        if (show && mode === 'dictation' && currentWord) {
-          recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
-          set((state) => {
-            const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
-            return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
-          })
+        if (show && currentWord) {
+          if (isErrorPracticeActive) {
+            // 偷看提示同样重置 3 次连对循环
+            set({ currentWordRemainingLoops: 3 })
+          }
+          if (mode === 'dictation') {
+            recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
+            set((state) => {
+              const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
+              return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
+            })
+          }
         }
       },
 

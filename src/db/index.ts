@@ -65,9 +65,9 @@ export async function recordWordAttempt(
 
     const consecutive = isCorrect ? existing.consecutiveCorrectCount + 1 : 0
     const dictationErrors = !isCorrect ? existing.dictationErrorCount + 1 : existing.dictationErrorCount
-    // 连续正确 2 次且在默写模式下，自动移出错词本
-    const isError = !isCorrect ? true : (consecutive >= 2 ? false : existing.isError)
-    const isMastered = consecutive >= 2 || (isCorrect && mode === 'dictation')
+    // 连续正确 3 次且在默写模式下，自动移出错词本
+    const isError = !isCorrect ? true : (consecutive >= 3 ? false : existing.isError)
+    const isMastered = consecutive >= 3 || (isCorrect && mode === 'dictation')
 
     const updated: WordMasteryRecord = {
       ...existing,
@@ -85,6 +85,25 @@ export async function recordWordAttempt(
     return updated
   } catch (err) {
     console.error('Failed to record word attempt:', err)
+  }
+}
+
+/**
+ * 彻底消除单个错词记录 (连续 3 次无误默写通关后调用)
+ */
+export async function eliminateErrorWord(wordId: string) {
+  try {
+    const existing = await db.wordRecords.get(wordId)
+    if (existing) {
+      await db.wordRecords.update(wordId, {
+        isError: false,
+        isMastered: true,
+        consecutiveCorrectCount: 3,
+        lastPracticedAt: Date.now(),
+      })
+    }
+  } catch (err) {
+    console.error('Failed to eliminate error word:', err)
   }
 }
 
