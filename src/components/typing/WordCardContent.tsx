@@ -96,28 +96,50 @@ export function WordCardContent({
 
               return (
                 <React.Fragment key={index}>
-                  {index > 0 && <span className="pb-4 text-lg text-gray-600 font-mono">+</span>}
+                  {index > 0 && <span className="pb-4 text-xl text-gray-400 font-mono font-bold">+</span>}
                   <div
-                    className={`px-4 py-2 rounded-2xl border transition-all duration-200 min-w-20 ${
+                    className={`px-4 py-2.5 rounded-2xl border transition-all duration-200 min-w-20 ${
                       isCurrent
-                        ? 'border-accent bg-accent/10 shadow-[0_0_16px_rgba(254,188,46,0.3)] scale-105'
+                        ? 'border-[#F05F5A] bg-[#F05F5A]/25 shadow-[0_0_20px_rgba(240,95,90,0.4)] scale-105'
                         : isCompleted
-                        ? 'border-primary bg-primary/15 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
-                        : 'border-white/10 bg-white/[0.04]'
+                        ? 'border-primary bg-primary/20 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
+                        : 'border-white/20 bg-white/[0.08]'
                     }`}
                   >
-                    <div className="text-[10px] uppercase tracking-widest text-gray-500">
+                    <div
+                      className={`text-[11px] font-semibold uppercase tracking-wider ${
+                        isCurrent
+                          ? 'text-[#FFA8A3]'
+                          : isCompleted
+                          ? 'text-primary'
+                          : 'text-gray-300'
+                      }`}
+                    >
                       {MORPHEME_ROLE_LABEL[morpheme.role]}
                     </div>
                     <div
-                      className={`font-mono text-2xl font-bold ${
-                        isCurrent ? 'text-accent' : isCompleted ? 'text-primary' : 'text-gray-200'
+                      className={`font-mono text-2xl font-bold my-0.5 ${
+                        isCurrent
+                          ? 'text-white'
+                          : isCompleted
+                          ? 'text-primary'
+                          : 'text-white'
                       }`}
                     >
                       {morpheme.text}
                     </div>
                     {morpheme.meaning && (
-                      <div className="text-[11px] text-gray-400 max-w-32 leading-snug">{morpheme.meaning}</div>
+                      <div
+                        className={`text-xs font-medium max-w-32 leading-snug ${
+                          isCurrent
+                            ? 'text-white font-bold'
+                            : isCompleted
+                            ? 'text-emerald-100'
+                            : 'text-gray-200'
+                        }`}
+                      >
+                        {morpheme.meaning}
+                      </div>
                     )}
                   </div>
                 </React.Fragment>
@@ -126,11 +148,11 @@ export function WordCardContent({
           </div>
 
           {/* 3. 语义推导：说明这样切分是为了推出词义 */}
-          <div className="h-6 flex items-center justify-center gap-1.5 text-sm text-gray-400 font-mono">
+          <div className="h-6 flex items-center justify-center gap-1.5 text-sm text-gray-200 font-medium">
             {word.etymology?.derivation && (
               <>
-                <ArrowRight className="size-4 text-accent shrink-0" />
-                <span className="min-w-0 truncate">{word.etymology.derivation}</span>
+                <ArrowRight className="size-4 text-[#F05F5A] shrink-0" />
+                <span className="min-w-0 truncate text-gray-200">{word.etymology.derivation}</span>
               </>
             )}
           </div>
