@@ -22,14 +22,14 @@ export function Sidebar() {
   const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
-    { label: '单词学习', icon: GraduationCap, href: '/learn' },
-    { label: '单词默写', icon: PenLine, href: '/dictation' },
+    { label: '学习', icon: GraduationCap, href: '/learn' },
+    { label: '默写', icon: PenLine, href: '/dictation' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
-    { label: '词根导图', icon: Sprout, href: '/roots', comingSoon: true },
-    { label: '常用短语', icon: Quote, href: '/phrases', comingSoon: true },
-    { label: '语法时态', icon: SpellCheck, href: '/grammar', comingSoon: true },
-    { label: '翻译练习', icon: Languages, href: '/translate', comingSoon: true },
+    { label: '词根', icon: Sprout, href: '/roots', comingSoon: true },
+    { label: '短语', icon: Quote, href: '/phrases', comingSoon: true },
+    { label: '语法', icon: SpellCheck, href: '/grammar', comingSoon: true },
+    { label: '翻译', icon: Languages, href: '/translate', comingSoon: true },
   ]
 
   return (
@@ -73,11 +73,10 @@ export function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]'
-                    : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
-                }`}
+                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive
+                  ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]'
+                  : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
+                  }`}
               >
                 <Icon className={`size-4.5 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
                 <span>{item.label}</span>

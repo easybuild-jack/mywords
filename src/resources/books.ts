@@ -334,7 +334,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_kaoyan',
-    name: '考研英语 2024 高频词',
+    name: '考研英语2025',
     description: '研究生入学考试英语（一/二）历年真题高频核心考点词单',
     category: 'exam',
     isCustom: false,
