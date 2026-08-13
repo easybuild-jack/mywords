@@ -18,6 +18,12 @@ export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: 
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
 }
 
+function formatPhonetic(rawPhone?: string): string | undefined {
+  if (!rawPhone) return undefined
+  const cleaned = rawPhone.replace(/^\/+|\/+$/g, '').trim()
+  return cleaned ? `/${cleaned}/` : undefined
+}
+
 class DictionaryLoader {
   private localLexiconMap: Map<string, { trans: string[]; usphone?: string; ukphone?: string }> = new Map()
   private bookJsonCache: Map<string, RawDictEntry[]> = new Map()
@@ -40,8 +46,8 @@ class DictionaryLoader {
           if (item.name) {
             this.localLexiconMap.set(item.name.toLowerCase().trim(), {
               trans: item.trans || (item.translation ? [item.translation] : []),
-              usphone: item.usphone ? `/${item.usphone}/` : undefined,
-              ukphone: item.ukphone ? `/${item.ukphone}/` : undefined,
+              usphone: formatPhonetic(item.usphone) || formatPhonetic(item.phone),
+              ukphone: formatPhonetic(item.ukphone) || formatPhonetic(item.phone),
             })
           }
         }
@@ -53,8 +59,8 @@ class DictionaryLoader {
           if (item.name && !this.localLexiconMap.has(item.name.toLowerCase().trim())) {
             this.localLexiconMap.set(item.name.toLowerCase().trim(), {
               trans: item.trans || (item.translation ? [item.translation] : []),
-              usphone: item.usphone ? `/${item.usphone}/` : undefined,
-              ukphone: item.ukphone ? `/${item.ukphone}/` : undefined,
+              usphone: formatPhonetic(item.usphone) || formatPhonetic(item.phone),
+              ukphone: formatPhonetic(item.ukphone) || formatPhonetic(item.phone),
             })
           }
         }
@@ -218,8 +224,10 @@ class DictionaryLoader {
     const enrichedList: WordItem[] = rawSlice.map((entry) => {
       const name = entry.name || ''
       const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
-      const usphone = entry.usphone ? `/${entry.usphone}/` : entry.phone ? `/${entry.phone}/` : `/ ${name.toLowerCase()} /`
-      const ukphone = entry.ukphone ? `/${entry.ukphone}/` : usphone
+      const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)
+      const rawUk = formatPhonetic(entry.ukphone) || formatPhonetic(entry.phone) || rawUs
+      const usphone = rawUs || `/ ${name.toLowerCase()} /`
+      const ukphone = rawUk || usphone
 
       const syllables = splitIntoSyllables(name)
       const etymology = analyzeEtymology(name)
