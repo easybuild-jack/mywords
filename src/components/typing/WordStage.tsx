@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { CheckCircle2, RotateCcw, ArrowRight, ArrowLeft } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
@@ -165,41 +165,30 @@ export function WordStage() {
         <>
           <button
             onClick={prevWord}
-            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
+            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 transition-all"
             title="上一词 (←)"
           >
             <ArrowLeft className="size-5" />
           </button>
 
-          <div className="relative w-[640px] h-[520px]">
-            <AnimatePresence mode="wait">
-              {currentWord && (
-                <motion.div
-                  key={currentWord.id}
-                  initial={{ opacity: 0, y: 12, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -12, scale: 0.97 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                  className="absolute inset-0 overflow-hidden rounded-3xl glass-card border-transparent shadow-[0_0_40px_rgba(0,0,0,0.45)]"
-                >
-                  <WordCardContent
-                    word={currentWord}
-                    mode={mode}
-                    currentInput={currentInput}
-                    hasTypo={hasTypo}
-                    isPeeking={isPeeking}
-                    isTranslationVisible={isTranslationVisible}
-                    phoneticPreference={phoneticPreference}
-                    remainingLoops={currentWordRemainingLoops}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="relative w-[640px] h-[520px] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            {currentWord && (
+              <WordCardContent
+                word={currentWord}
+                mode={mode}
+                currentInput={currentInput}
+                hasTypo={hasTypo}
+                isPeeking={isPeeking}
+                isTranslationVisible={isTranslationVisible}
+                phoneticPreference={phoneticPreference}
+                remainingLoops={currentWordRemainingLoops}
+              />
+            )}
           </div>
 
           <button
             onClick={nextWord}
-            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 transition-all"
+            className="shrink-0 size-10 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 transition-all"
             title="下一词 (→)"
           >
             <ArrowRight className="size-5" />
