@@ -128,14 +128,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isErrorPracticeActive: false,
 
       loadCurrentUnitWords: async () => {
-        const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize } = get()
+        const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
         // 错词攻坚模式下不被常规章节覆盖
         if (isErrorPracticeActive) return
 
         if (currentBook?.isCustom && currentBook.words?.length) {
           const start = currentUnitIndex * unitSize
           const slice = currentBook.words.slice(start, start + unitSize)
-          set({ currentLoadedWords: slice.length ? slice : currentBook.words })
+          set({
+            currentLoadedWords: slice.length ? slice : currentBook.words,
+            currentWordRemainingLoops: loopCountSetting,
+          })
         } else {
           // 官方大词库动态加载
           const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, currentUnitIndex, unitSize)
@@ -152,9 +155,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             })
           }
           if (loaded.length > 0) {
-            set({ currentLoadedWords: loaded })
+            set({
+              currentLoadedWords: loaded,
+              currentWordRemainingLoops: loopCountSetting,
+            })
           } else {
-            set({ currentLoadedWords: INITIAL_SAMPLE_WORDS })
+            set({
+              currentLoadedWords: INITIAL_SAMPLE_WORDS,
+              currentWordRemainingLoops: loopCountSetting,
+            })
           }
         }
       },
@@ -182,6 +191,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
+          currentWordRemainingLoops: get().loopCountSetting,
         })
         await get().loadCurrentUnitWords()
       },
@@ -255,7 +265,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       setMode: (mode: PracticeMode) => {
         // 错词攻坚模式下强制锁定为默写模式，不允许切换为跟学
         if (get().isErrorPracticeActive) return
-        set({ mode, currentInput: '', hasTypo: false })
+        set({ mode, currentInput: '', hasTypo: false, currentWordRemainingLoops: get().loopCountSetting })
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {
@@ -470,6 +480,19 @@ export const useWorkspaceStore = create<WorkspaceState>()(
     {
       name: 'mywords-workspace-storage',
       storage: createJSONStorage(() => localStorage),
+      merge: (persistedState, currentState) => {
+        const persisted = (persistedState as Partial<WorkspaceState>) || {}
+        const loopCount = persisted.isErrorPracticeActive
+          ? 3
+          : (persisted.loopCountSetting ?? currentState.loopCountSetting ?? 1)
+        return {
+          ...currentState,
+          ...persisted,
+          currentWordRemainingLoops: loopCount,
+          currentInput: '',
+          hasTypo: false,
+        }
+      },
       partialize: (state) => ({
         currentBookId: state.currentBookId,
         currentUnitIndex: state.currentUnitIndex,
