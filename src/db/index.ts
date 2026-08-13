@@ -108,6 +108,24 @@ export async function eliminateErrorWord(wordId: string) {
 }
 
 /**
+ * 手动从错词本移除/删除单个错词
+ */
+export async function removeErrorWord(wordId: string) {
+  try {
+    const existing = await db.wordRecords.get(wordId)
+    if (existing) {
+      await db.wordRecords.update(wordId, {
+        isError: false,
+        consecutiveCorrectCount: 0,
+        lastPracticedAt: Date.now(),
+      })
+    }
+  } catch (err) {
+    console.error('Failed to remove error word:', err)
+  }
+}
+
+/**
  * 获取所有活跃待消灭的真实错词及完整信息
  */
 export async function getActiveErrorWords(): Promise<{ word: WordItem; record: WordMasteryRecord }[]> {

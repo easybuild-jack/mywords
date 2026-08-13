@@ -33,9 +33,19 @@ export default function BooksHubPage() {
           return { ...b, totalWords: actualTotal }
         })
       )
-      // 过滤掉与官方词库 ID 重复的缓存条目，避免下方重复出现
-      const customOnly = stored.filter((s) => !updatedBuiltins.some((b) => b.id === s.id))
-      setAllBooks([...updatedBuiltins, ...customOnly])
+      // 过滤掉所有非用户自定义或与官方词库冲突的旧条目
+      const customOnly = stored.filter((s) => s.isCustom && !updatedBuiltins.some((b) => b.id === s.id))
+      const combined = [...updatedBuiltins, ...customOnly]
+      setAllBooks(combined)
+
+      // 同步更新当前在学词书的最新名称与词数
+      const currentId = useWorkspaceStore.getState().currentBookId || useWorkspaceStore.getState().currentBook?.id
+      if (currentId) {
+        const found = combined.find((b) => b.id === currentId)
+        if (found) {
+          useWorkspaceStore.setState({ currentBook: found })
+        }
+      }
     }
     loadBooks()
   }, [])

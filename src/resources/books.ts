@@ -345,7 +345,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_coder',
-    name: '程序员核心 API 词库',
+    name: 'IT计算机编程词汇',
     description: 'Web 开发、后端架构、Linux、Docker、Kubernetes 及常见算法核心术语',
     category: 'developer',
     isCustom: false,

@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AlertCircle, Flame, CheckCircle, Volume2, ArrowRight, Play, Swords } from 'lucide-react'
+import { AlertCircle, Flame, CheckCircle, Volume2, ArrowRight, Play, Swords, Trash2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { getActiveErrorWords } from '@/db'
+import { getActiveErrorWords, removeErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import type { WordMasteryRecord, WordItem } from '@/types'
 
@@ -31,6 +31,12 @@ export default function ErrorBookPage() {
     }
     return true
   })
+
+  // 从错词本删除单个错词
+  const handleDeleteError = async (wordId: string) => {
+    await removeErrorWord(wordId)
+    setErrorList((prev) => prev.filter((item) => item.word.id !== wordId))
+  }
 
   // 启动错词歼灭战
   const handleStartAnnihilation = (wordsToPractice?: WordItem[], startIdx: number = 0) => {
@@ -174,7 +180,7 @@ export default function ErrorBookPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => audioEngine.playPronunciation(w.name)}
-                            className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors"
+                            className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                             title="发音"
                           >
                             <Volume2 className="size-4" />
@@ -185,6 +191,13 @@ export default function ErrorBookPage() {
                             title="从该词开始专项攻坚"
                           >
                             攻坚 →
+                          </button>
+                          <button
+                            onClick={() => handleDeleteError(w.id)}
+                            className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all cursor-pointer"
+                            title="从错词本中移除该词"
+                          >
+                            <Trash2 className="size-4" />
                           </button>
                         </div>
                       </td>

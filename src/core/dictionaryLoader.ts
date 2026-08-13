@@ -14,7 +14,7 @@ interface RawDictEntry {
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
   'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
-  'book_coder': { path: '/dicts/ai_machine_learning.json', totalWords: 1500, name: '程序员核心 API 词库' },
+  'book_coder': { path: '/dicts/ai_machine_learning.json', totalWords: 1500, name: 'IT计算机编程词汇' },
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
 }
 

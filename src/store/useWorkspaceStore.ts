@@ -140,8 +140,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           // 官方大词库动态加载
           const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, currentUnitIndex, unitSize)
           const dynamicTotal = await dictionaryLoader.getBookTotalWords(currentBookId)
-          if (currentBook && currentBook.totalWords !== dynamicTotal && dynamicTotal > 0) {
-            set({ currentBook: { ...currentBook, totalWords: dynamicTotal } })
+          const builtin = BUILTIN_BOOKS.find((b) => b.id === currentBookId)
+          if (currentBook) {
+            set({
+              currentBook: {
+                ...currentBook,
+                name: builtin ? builtin.name : currentBook.name,
+                description: builtin ? builtin.description : currentBook.description,
+                totalWords: dynamicTotal > 0 ? dynamicTotal : currentBook.totalWords,
+              },
+            })
           }
           if (loaded.length > 0) {
             set({ currentLoadedWords: loaded })
@@ -202,14 +210,21 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setBookId: async (bookId: string) => {
-        let book = await db.books.get(bookId)
-        if (!book) {
-          const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId) || BUILTIN_BOOKS[0]
+        const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId)
+        let book: VocabularyBook
+        if (builtin) {
           const dynamicTotal = await dictionaryLoader.getBookTotalWords(builtin.id)
-          book = { ...builtin, totalWords: dynamicTotal }
+          book = { ...builtin, totalWords: dynamicTotal > 0 ? dynamicTotal : builtin.totalWords }
+          try {
+            await db.books.delete(bookId)
+          } catch {}
+        } else {
+          const custom = await db.books.get(bookId)
+          book = custom || BUILTIN_BOOKS[0]
         }
+
         set({
-          currentBookId: bookId,
+          currentBookId: book.id,
           currentBook: book,
           currentUnitIndex: 0,
           activeWordIndex: 0,
