@@ -75,11 +75,13 @@ export function DictationCard({
     }
   }
 
+  // 音标环节关闭或已通过时这一格是纯展示，点它不该唤出键盘
+  const isPhoneticSlotClickable = isDictationPhoneticEnabled && !isPhoneticPassed
+
   const handlePhoneticSlotClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (!isPhoneticPassed) {
-      setIsPhoneticFocused(true)
-    }
+    if (!isPhoneticSlotClickable) return
+    setIsPhoneticFocused(true)
   }
 
   return (
@@ -119,15 +121,20 @@ export function DictationCard({
           <div className="flex items-center gap-2.5">
             <div
               onClick={handlePhoneticSlotClick}
-              className={`flex-1 h-12 rounded-2xl border px-3.5 flex items-center justify-between transition-all duration-200 cursor-pointer ${!isDictationPhoneticEnabled
-                ? 'border-white/5 bg-white/[0.02] opacity-40 cursor-not-allowed'
-                : isPhoneticPassed
-                  ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
-                  : isPhoneticError
-                    ? 'border-destructive bg-destructive/15 animate-shake'
-                    : isPhoneticFocused
-                      ? 'border-primary bg-white/[0.06] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.25)] ring-1 ring-primary/50'
-                      : 'border-white/15 bg-white/[0.04] hover:border-white/30'
+              className={`flex-1 h-12 rounded-2xl border px-3.5 flex items-center justify-between transition-all duration-200 ${isPhoneticSlotClickable
+                ? 'cursor-pointer'
+                : isDictationPhoneticEnabled
+                  ? 'cursor-default'
+                  : 'cursor-not-allowed'
+                } ${!isDictationPhoneticEnabled
+                  ? 'border-white/5 bg-white/[0.02] opacity-40'
+                  : isPhoneticPassed
+                    ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
+                    : isPhoneticError
+                      ? 'border-destructive bg-destructive/15 animate-shake'
+                      : isPhoneticFocused
+                        ? 'border-primary bg-white/[0.06] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.25)] ring-1 ring-primary/50'
+                        : 'border-white/15 bg-white/[0.04] hover:border-white/30'
                 }`}
             >
               <div className="flex items-center gap-2 min-w-0">
