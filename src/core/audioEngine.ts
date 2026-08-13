@@ -25,6 +25,17 @@ const PRONUNCIATION_THROTTLE_MS = 3000
 /** 正音最长等待时间：网络异常或音频卡住时不能把切词流程永久卡死 */
 const PRONUNCIATION_MAX_WAIT_MS = 2500
 
+/** 被拦下的自动播放最多挂多久等用户手势：超时说明人早已翻到别的词，补播只会念错 */
+const PENDING_PLAYBACK_TTL_MS = 15000
+
+/**
+ * 首次交互前的自动播放会被浏览器拒绝，这是策略限制而不是音源坏了。
+ * 必须和网络/解码失败区分开：后者才值得退化到语音合成。
+ */
+function isAutoplayBlocked(err: unknown): boolean {
+  return err instanceof DOMException && err.name === 'NotAllowedError'
+}
+
 class AudioEngine {
   private keySoundCache: Map<string, Howl> = new Map()
   private beepSound: Howl | null = null
@@ -33,6 +44,9 @@ class AudioEngine {
   private currentPronunciation: HTMLAudioElement | null = null
   private lastPronunciationKey = ''
   private lastPronunciationAt = 0
+  /** 被自动播放策略拦下的那次请求，挂在这里等第一次用户手势 */
+  private pendingPlayback: { word: string; accent: 'us' | 'uk'; rate: number; at: number } | null = null
+  private isWaitingForGesture = false
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -142,9 +156,42 @@ class AudioEngine {
     audio.playbackRate = rate
     this.currentPronunciation = audio
     audio.play().catch((err) => {
+      if (isAutoplayBlocked(err)) {
+        this.deferUntilUserGesture(word, accent, rate)
+        return
+      }
       console.warn('Online audio play failed, falling back to speech synthesis', err)
       this.playSpeechSynthesis(word, accent)
     })
+  }
+
+  /**
+   * 把被拦下的自动播放挂起，等用户第一次敲键或点击时补上。
+   *
+   * 默写页「进页面就该响一声」的听音线索必然撞上这条策略：此时页面刚挂载，
+   * 用户还没碰过任何东西。语音合成兜底在这里同样会被拦，所以只能等手势。
+   * 期间若又请求了新的词，后者覆盖前者，补播的始终是最后要听的那个。
+   */
+  private deferUntilUserGesture(word: string, accent: 'us' | 'uk', rate: number) {
+    this.pendingPlayback = { word, accent, rate, at: Date.now() }
+    if (this.isWaitingForGesture) return
+    this.isWaitingForGesture = true
+
+    const onGesture = () => {
+      this.isWaitingForGesture = false
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('keydown', onGesture)
+
+      const pending = this.pendingPlayback
+      this.pendingPlayback = null
+      if (!pending || Date.now() - pending.at > PENDING_PLAYBACK_TTL_MS) return
+      // 补播不能被拦下那一刻自己写下的节流键挡掉
+      this.lastPronunciationKey = ''
+      this.playPronunciation(pending.word, pending.accent, pending.rate)
+    }
+
+    window.addEventListener('pointerdown', onGesture, { once: true })
+    window.addEventListener('keydown', onGesture, { once: true })
   }
 
   /**
@@ -178,8 +225,13 @@ class AudioEngine {
       audio.addEventListener('ended', settle, { once: true })
       audio.addEventListener('error', settle, { once: true })
 
-      audio.play().catch(() => {
-        this.playSpeechSynthesis(word, accent)
+      audio.play().catch((err) => {
+        if (isAutoplayBlocked(err)) {
+          this.deferUntilUserGesture(word, accent, rate)
+        } else {
+          this.playSpeechSynthesis(word, accent)
+        }
+        // 无论哪种失败都要立刻放行，正音不能把切词流程堵住
         settle()
       })
     })
