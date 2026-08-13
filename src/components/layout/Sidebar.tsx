@@ -58,11 +58,11 @@ export function Sidebar() {
                   key={item.href}
                   aria-disabled
                   title="功能开发中，敬请期待"
-                  className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium text-[#9CA3AF]/40 cursor-not-allowed"
+                  className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium text-[#9CA3AF]/40 cursor-not-allowed"
                 >
-                  <Icon className="size-4.5" />
+                  <Icon className="size-5" />
                   <span>{item.label}</span>
-                  <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded border border-white/10 text-gray-600">
+                  <span className="ml-auto text-[11px] font-mono px-1.5 py-0.5 rounded border border-white/10 text-gray-600">
                     待开放
                   </span>
                 </div>
@@ -73,12 +73,12 @@ export function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive
+                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive
                   ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]'
                   : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
                   }`}
               >
-                <Icon className={`size-4.5 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
+                <Icon className={`size-5 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
                 <span>{item.label}</span>
               </Link>
             )
@@ -90,9 +90,9 @@ export function Sidebar() {
       <div className="space-y-2 pt-6 border-t border-white/10">
         <button
           onClick={() => setSettingsModalOpen(true)}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-base text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"
         >
-          <Settings className="size-4.5 text-muted-foreground" />
+          <Settings className="size-5 text-muted-foreground" />
           <span>偏好设置</span>
         </button>
       </div>

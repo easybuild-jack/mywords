@@ -52,7 +52,7 @@ export function LearnCard({
       </div>
 
       {/* 2. 构词法切分：前缀 + 词根 + 后缀，跟打进度按段点亮 */}
-      <div className="flex items-end justify-center gap-2 flex-wrap">
+      <div className="flex items-end justify-center gap-3 flex-wrap">
         {morphemes.map((morpheme, index) => {
           const startIdx = morphemes.slice(0, index).reduce((sum, m) => sum + m.text.length, 0)
           const endIdx = startIdx + morpheme.text.length
@@ -61,9 +61,14 @@ export function LearnCard({
 
           return (
             <React.Fragment key={index}>
-              {index > 0 && <span className="pb-3 text-lg text-gray-400 font-mono font-bold">+</span>}
+              {/* 撑满整行再居中：色块高度随有无释义变化，写死的边距会让 + 忽高忽低 */}
+              {index > 0 && (
+                <span className="self-stretch flex items-center text-2xl text-gray-400 font-mono font-bold">
+                  +
+                </span>
+              )}
               <div
-                className={`px-3.5 py-2 rounded-2xl border transition-all duration-200 min-w-18 ${
+                className={`px-4 py-3 rounded-2xl border transition-all duration-200 min-w-22 ${
                   isCurrent
                     ? 'border-[#F05F5A] bg-[#F05F5A]/25 shadow-[0_0_20px_rgba(240,95,90,0.4)] scale-105'
                     : isCompleted
@@ -72,14 +77,14 @@ export function LearnCard({
                 }`}
               >
                 <div
-                  className={`text-[10px] font-semibold uppercase tracking-wider ${
+                  className={`text-xs font-semibold uppercase tracking-wider ${
                     isCurrent ? 'text-[#FFA8A3]' : isCompleted ? 'text-primary' : 'text-gray-300'
                   }`}
                 >
                   {MORPHEME_ROLE_LABEL[morpheme.role]}
                 </div>
                 <div
-                  className={`font-mono text-xl font-bold my-0.5 ${
+                  className={`font-mono text-3xl font-bold my-1 ${
                     isCurrent ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'
                   }`}
                 >
@@ -87,7 +92,7 @@ export function LearnCard({
                 </div>
                 {morpheme.meaning && (
                   <div
-                    className={`text-xs font-medium max-w-32 leading-tight ${
+                    className={`text-sm font-medium max-w-32 leading-tight ${
                       isCurrent
                         ? 'text-white font-bold'
                         : isCompleted
