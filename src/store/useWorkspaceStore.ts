@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
-import { isAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
+import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
@@ -503,8 +503,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
         if (isValid) {
           set({ isPhoneticPassed: true, isPhoneticFocused: false, isPhoneticError: false })
-          // 音标能写对，说明读音已经掌握，这一遍不算送答案。
-          // 刻意不受看译文模式的静音约束：那是该模式下唯一的听音机会，也是写对音标的奖励。
+          // 音标能写对，说明读音已经掌握，这一遍不算送答案，当作过关奖励直接念出来。
           audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
           return true
         }
@@ -623,8 +622,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               }
 
               // 默写通关后先把刚写对的词念一遍做正音，念完才切下一个词。
-              // 看译文模式全程静音，直接沿用原来的短延迟。
-              const needsConfirmAudio = mode === 'dictation' && !isAudioMuted(mode, dictationCueMode)
+              // 看译文模式不自动出声，直接沿用原来的短延迟。
+              const needsConfirmAudio = mode === 'dictation' && !isAutoAudioMuted(mode, dictationCueMode)
               const completedIndex = get().activeWordIndex
               const completedId = currentWord.id
 
@@ -702,9 +701,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       replayAudio: () => {
         const currentWord = get().getCurrentWord()
-        const { phoneticPreference, audioRate, mode, dictationCueMode } = get()
-        // 看译文模式靠中文写英文，放出发音等于送答案
-        if (!currentWord || isAudioMuted(mode, dictationCueMode)) return
+        const { phoneticPreference, audioRate } = get()
+        // 手动发音不分模式：看译文模式也允许随时听，只是不会自动响
+        if (!currentWord) return
         audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
       },
 
@@ -733,8 +732,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           return
         }
 
-        // 听音模式靠这一声作为听写线索，看译文模式则必须保持静音
-        const canPlayAudio = isAutoPlayAudio && !isAudioMuted(mode, dictationCueMode)
+        // 听音模式靠这一声作为听写线索；看译文模式要听得由用户自己点，不自动送
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
 
         // ==========================================
         // 错词攻坚专项模式逻辑
@@ -803,8 +802,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             audioEngine.playPronunciation(nextWord.name, phoneticPreference)
           }
 
+          // 任何模式都可能手动点发音，音频提前备好，不再按模式挑
           const prefetchTarget = unitWords[nextIndex + 1]
-          if (prefetchTarget && !isAudioMuted(mode, dictationCueMode)) {
+          if (prefetchTarget) {
             audioEngine.prefetchWordAudio(prefetchTarget.name, phoneticPreference)
           }
         } else {

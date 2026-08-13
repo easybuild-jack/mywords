@@ -30,7 +30,7 @@ interface DictationCardProps {
  * 默写卡片：英文全部遮蔽，按「音标 → 译文 → 拼写」三级闯关推进。
  *
  * 顶部线索由 cueMode 决定：听音模式只给发音、隐藏中文；
- * 看译文模式只给中文、全程静音，并且撤掉译文输入这一级（写它等于照抄）。
+ * 看译文模式只给中文、不自动发音（想听得自己点），并且撤掉译文输入这一级（写它等于照抄）。
  */
 export function DictationCard({
   word,
@@ -87,7 +87,6 @@ export function DictationCard({
       word={word}
       phoneticPreference={phoneticPreference}
       remainingLoops={remainingLoops}
-      allowAudio={cueMode === 'listen'}
     >
       <div className="flex flex-col h-full py-1">
         {/*
@@ -110,7 +109,7 @@ export function DictationCard({
         {/* 模式提示：常驻自己这一行，只有文案变化，位置与高度都不动 */}
         <div className="h-6 shrink-0 flex items-center justify-center px-4">
           <span className="text-xs text-muted-foreground/80 font-mono">
-            {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 音标通过后才发音 ]'}
+            {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 发音需手动触发 ]'}
           </span>
         </div>
 

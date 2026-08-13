@@ -4,7 +4,6 @@ import React from 'react'
 import Link from 'next/link'
 import { Volume2, VolumeX, Settings, RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { isAudioMuted } from '@/lib/dictationCue'
 
 export function HeaderToolbar() {
   const {
@@ -27,8 +26,6 @@ export function HeaderToolbar() {
     replayAudio,
     restartUnit,
   } = useWorkspaceStore()
-
-  const isMuted = isAudioMuted(mode, dictationCueMode)
 
   return (
     <header className="w-full flex items-center justify-center p-4 sticky top-0 z-30 pointer-events-auto">
@@ -72,16 +69,13 @@ export function HeaderToolbar() {
             <option value="uk" className="bg-[#12141A] text-white">英音 (UK)</option>
           </select>
 
-          {/* 看译文模式全程静音，重播入口一并收起 */}
-          {!isMuted && (
-            <button
-              onClick={replayAudio}
-              className="p-1.5 rounded-lg hover:bg-white/[0.08] text-primary transition-all"
-              title="发音 (Ctrl+J)"
-            >
-              <Volume2 className="size-4" />
-            </button>
-          )}
+          <button
+            onClick={replayAudio}
+            className="p-1.5 rounded-lg hover:bg-white/[0.08] text-primary transition-all"
+            title="发音 (Ctrl+J)"
+          >
+            <Volume2 className="size-4" />
+          </button>
         </div>
 
         {/* 分隔线 */}
@@ -132,7 +126,7 @@ export function HeaderToolbar() {
                   ? 'bg-accent/20 text-accent font-bold'
                   : 'text-muted-foreground hover:text-white'
               }`}
-              title="只给中文释义，音标通过后才发音，需要写出拼写"
+              title="只给中文释义，不自动发音（可手动点或按 Ctrl+J 听），需要写出拼写"
             >
               <Languages className="size-3.5" />
               <span>看译文默写</span>

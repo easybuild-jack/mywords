@@ -49,7 +49,7 @@ export type PracticeMode = 'learn' | 'dictation';
 /**
  * 默写页的线索来源：
  * - listen  听音模式：只给发音，不显示中文释义，需要写出释义与拼写
- * - meaning 看译文模式：只给中文释义，全程静音，需要写出拼写
+ * - meaning 看译文模式：只给中文释义，不自动发音（可手动触发），需要写出拼写
  */
 export type DictationCueMode = 'listen' | 'meaning';
 

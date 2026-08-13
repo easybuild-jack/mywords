@@ -1,10 +1,11 @@
 import type { DictationCueMode, PracticeMode } from '@/types'
 
 /**
- * 看译文模式全程静音：中文释义已经摆在眼前，再给发音就失去了「由中文写出英文」的意义。
- * 静音是彻底的——自动发音、手动重播、完成后的正音一律不响。
+ * 看译文模式下自动发音一律关闭：中文释义已经摆在眼前，不请自来的读音会顺手把拼写也送出去。
+ * 压制范围只限自动触发——切词自动播、进页面补线索、通关正音。
+ * 手动发音（点卡片喇叭、工具栏按钮、快捷键）始终可用，什么时候听由用户自己决定。
  */
-export function isAudioMuted(mode: PracticeMode, cueMode: DictationCueMode): boolean {
+export function isAutoAudioMuted(mode: PracticeMode, cueMode: DictationCueMode): boolean {
   return mode === 'dictation' && cueMode === 'meaning'
 }
 
