@@ -7,7 +7,14 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { Star } from 'lucide-react'
 
 export default function HomePage() {
-  const { activeWordIndex, getUnitWords, starCurrentWord } = useWorkspaceStore()
+  const {
+    activeWordIndex,
+    getUnitWords,
+    starCurrentWord,
+    replayAudio,
+    prevWord,
+    nextWord,
+  } = useWorkspaceStore()
 
   const unitWords = getUnitWords()
   const totalInUnit = unitWords.length || 20
@@ -25,7 +32,7 @@ export default function HomePage() {
 
       {/* 3. 底部极简状态与快捷键提示栏 */}
       <footer className="w-full p-4 flex items-center justify-center pointer-events-auto z-30">
-        <div className="glass-card rounded-2xl px-6 py-3 flex items-center gap-5 text-sm text-[#9CA3AF] border border-white/10 shadow-lg">
+        <div className="glass-card rounded-2xl px-6 py-3 flex items-center gap-5 text-sm text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center">
           {/* 当前单元进度 */}
           <div className="flex items-center gap-2">
             <span className="font-mono text-primary font-bold">
@@ -37,18 +44,23 @@ export default function HomePage() {
           <div className="h-4 w-px bg-white/10" />
 
           {/* 快捷键提示胶囊 */}
-          <div className="flex items-center gap-5 font-mono text-xs">
+          <div className="flex items-center gap-5 font-mono text-xs flex-wrap justify-center">
             <span className="flex items-center gap-1.5">
               <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Tab</kbd>
               <span>偷看提示</span>
             </span>
 
-            <span className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={replayAudio}
+              className="flex items-center gap-1.5 hover:text-white transition-colors"
+            >
               <kbd className="px-2 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold">Ctrl+J</kbd>
               <span>发音</span>
-            </span>
+            </button>
 
             <button
+              type="button"
               onClick={starCurrentWord}
               className="flex items-center gap-1.5 hover:text-accent transition-colors"
             >
@@ -57,6 +69,28 @@ export default function HomePage() {
                 <Star className="size-3.5 text-accent fill-accent" /> 收藏
               </span>
             </button>
+
+            <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={prevWord}
+                  title="上一个单词 (←)"
+                  className="px-1.5 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={nextWord}
+                  title="下一个单词 (→)"
+                  className="px-1.5 py-1 rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
+                >
+                  →
+                </button>
+              </div>
+              <span>切换单词</span>
+            </div>
           </div>
         </div>
       </footer>
