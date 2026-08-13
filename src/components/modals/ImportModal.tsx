@@ -11,7 +11,6 @@ import {
   FileSpreadsheet,
   FileText,
   Download,
-  BookOpen,
   ArrowRight
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
@@ -19,24 +18,9 @@ import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { saveCustomVocabularyBook } from '@/db'
 import type { WordItem } from '@/types'
 
-// 常见基础停用词表（用于文章生词提取时自动过滤）
-const COMMON_STOP_WORDS = new Set([
-  'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
-  'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
-  'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
-  'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
-  'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
-  'when', 'make', 'can', 'like', 'time', 'no', 'just', 'him', 'know', 'take',
-  'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other',
-  'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also',
-  'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way',
-  'even', 'new', 'want', 'because', 'any', 'these', 'give', 'day', 'most', 'us',
-  'is', 'are', 'was', 'were', 'been', 'has', 'had', 'did', 'does'
-])
-
 export function ImportModal() {
   const { isImportModalOpen, setImportModalOpen, setBookId } = useWorkspaceStore()
-  const [activeTab, setActiveTab] = useState<'text' | 'file' | 'article'>('text')
+  const [activeTab, setActiveTab] = useState<'text' | 'file'>('text')
   const [bookName, setBookName] = useState('我的自定义生词本')
   
   // Tab 1: 文本粘贴
@@ -48,11 +32,6 @@ developer n. 开发者，开拓者
 kubernetes
 extraordinary
 compile v. 编译；编纂`
-  )
-
-  // Tab 3: 文章提取输入
-  const [articleText, setArticleText] = useState(
-    `Kubernetes is an open-source container orchestration system for automating software deployment, scaling, and management. It provides resilient infrastructure and simplifies modern developer operations.`
   )
 
   // 文件上传 Ref
@@ -165,32 +144,6 @@ compile v. 编译；编纂`
     reader.readAsText(file)
   }
 
-  // 3. 从长文章提取生词 (Tab 3)
-  const handleExtractFromArticle = async () => {
-    setIsParsing(true)
-    const matches = articleText.match(/[a-zA-Z]{3,}/g) || []
-    const uniqueWords: string[] = []
-    const seen = new Set<string>()
-
-    for (const raw of matches) {
-      const lower = raw.toLowerCase()
-      if (!COMMON_STOP_WORDS.has(lower) && !seen.has(lower)) {
-        seen.add(lower)
-        uniqueWords.push(raw)
-      }
-    }
-
-    const items: WordItem[] = []
-    for (const word of uniqueWords.slice(0, 50)) { // 单次提取前 50 个高价值生词
-      const enriched = await dictionaryLoader.enrichWord(word)
-      items.push(enriched)
-    }
-
-    setParsedWords(items)
-    setIsParsing(false)
-    setIsParsed(true)
-  }
-
   // 下载 CSV 模板
   const handleDownloadCsvTemplate = () => {
     const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' +
@@ -213,7 +166,6 @@ compile v. 编译；编纂`
     let finalWords = parsedWords
     if (!finalWords.length) {
       if (activeTab === 'text') await handleParseText()
-      else if (activeTab === 'article') await handleExtractFromArticle()
       finalWords = parsedWords
     }
 
@@ -246,11 +198,11 @@ compile v. 编译；编纂`
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 单词批量导入中心
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/15 text-primary border border-primary/30">
-                  三模态智能解析
+                  智能解析补全
                 </span>
               </h2>
               <p className="text-xs text-muted-foreground">
-                支持纯文本粘贴、CSV/Excel/JSON 文件上传以及英文文章生词自动提取
+                支持纯文本快速粘贴与 CSV / TXT / JSON 文件批量模板导入
               </p>
             </div>
           </div>
@@ -281,15 +233,6 @@ compile v. 编译；编纂`
           >
             <FileSpreadsheet className="size-3.5" />
             <span>文件模板导入 (CSV / Excel / JSON)</span>
-          </button>
-          <button
-            onClick={() => { setActiveTab('article'); setIsParsed(false) }}
-            className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'article' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
-            }`}
-          >
-            <BookOpen className="size-3.5" />
-            <span>文章生词提取 (Article Extract)</span>
           </button>
         </div>
 
@@ -378,39 +321,6 @@ compile v. 编译；编纂`
                     </p>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Tab 3: 文章提取 */}
-            {activeTab === 'article' && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
-                  <span>粘贴整篇英文技术文档/论文，系统将自动过滤常用虚词并提取核心生词：</span>
-                  <button
-                    onClick={handleExtractFromArticle}
-                    disabled={isParsing}
-                    className="text-primary hover:underline font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-50"
-                  >
-                    {isParsing ? (
-                      <>
-                        <Loader2 className="size-3.5 animate-spin" />
-                        <span>正在分词与智能补齐中...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="size-3.5" />
-                        <span>提取生词并自动补全 →</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-                <textarea
-                  value={articleText}
-                  onChange={(e) => setArticleText(e.target.value)}
-                  rows={6}
-                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-white/10 text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
-                  placeholder="在此粘贴长篇英文文章内容..."
-                />
               </div>
             )}
           </div>
