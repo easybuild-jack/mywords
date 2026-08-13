@@ -285,19 +285,6 @@ export function WordStage() {
                 />
               )}
             </div>
-
-            {/* 外部独立浮动 IPA 音标键盘（仅在聚焦音标输入框时从卡片正下方浮现） */}
-            {mode === 'dictation' && isPhoneticFocused && (
-              <div className="absolute top-[102%] left-1/2 -translate-x-1/2 z-50 pt-1">
-                <IpaKeyboard
-                  onSelectSymbol={(sym) => setDictationPhoneticInput(dictationPhoneticInput + sym)}
-                  onBackspace={() => setDictationPhoneticInput(dictationPhoneticInput.slice(0, -1))}
-                  onClear={() => setDictationPhoneticInput('')}
-                  onSubmit={() => submitPhonetic()}
-                  onClose={() => setIsPhoneticFocused(false)}
-                />
-              </div>
-            )}
           </div>
 
           <button
@@ -307,6 +294,19 @@ export function WordStage() {
           >
             <ArrowRight className="size-5" />
           </button>
+
+          {/* 外部独立浮动 IPA 音标键盘 — 固定定位在工具栏正下方，与卡片水平对齐 */}
+          {mode === 'dictation' && isPhoneticFocused && (
+            <div className="fixed top-[64px] z-50 pt-2" style={{ left: 'calc(50% + 128px)', transform: 'translateX(-50%)' }}>
+              <IpaKeyboard
+                onSelectSymbol={(sym) => setDictationPhoneticInput(dictationPhoneticInput + sym)}
+                onBackspace={() => setDictationPhoneticInput(dictationPhoneticInput.slice(0, -1))}
+                onClear={() => setDictationPhoneticInput('')}
+                onSubmit={() => submitPhonetic()}
+                onClose={() => setIsPhoneticFocused(false)}
+              />
+            </div>
+          )}
         </>
       )}
     </div>

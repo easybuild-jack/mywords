@@ -229,15 +229,26 @@ export function WordCardContent({
         /* ========================================================= */
         /* B. 模式 2：纯盲打默写模式 (Blind Dictation Mode) - 3 层布局 */
         /* ========================================================= */
-        <div className="flex flex-col justify-between h-full py-1 space-y-4">
-          {/* 顶部：偷看提示或发音提示区域 */}
-          <div className="h-8 flex items-center justify-center">
+        <div className="flex flex-col h-full py-1">
+          {/* 顶部：巨型发音喇叭 */}
+          <div className="flex items-center justify-center pt-6 pb-2">
+            <button
+              onClick={speak}
+              className="size-16 rounded-3xl bg-primary/15 border border-primary/40 flex items-center justify-center text-primary hover:scale-105 transition-all shadow-[0_0_24px_rgb(var(--primary-rgb)/0.3)] group cursor-pointer"
+              title="发音 (Ctrl+J)"
+            >
+              <Volume2 className="size-8 group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
+
+          {/* 释义/偷看提示区域 */}
+          <div className="min-h-10 flex items-center justify-center px-4">
             {isPeeking ? (
               <span className="font-mono text-2xl font-bold tracking-widest text-accent px-4 py-0.5 rounded-lg bg-accent/10 border border-accent/30">
                 {word.name}
               </span>
             ) : isTranslationVisible ? (
-              <p className="text-sm font-semibold text-gray-300 max-w-lg truncate leading-relaxed">
+              <p className="text-sm font-semibold text-gray-300 max-w-lg line-clamp-2 leading-relaxed text-center">
                 {meaningText}
               </p>
             ) : (
