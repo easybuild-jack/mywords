@@ -90,25 +90,23 @@ export function DictationCard({
       phoneticPreference={phoneticPreference}
       remainingLoops={remainingLoops}
     >
-      <div className="flex flex-col h-full py-1">
-        {/*
-          顶部线索槽：高度固定，听音模式留空也不塌陷，两个模式下方的排版才完全一致。
-          偷看出来的单词也占这一格，避免它把下面的输入阶梯顶下去。
-          pt-8 是为了让长释义避开左上角那枚绝对定位的 Again 角标。
-        */}
-        <div className="h-32 shrink-0 flex items-center justify-center px-6 pt-8">
-          {isPeeking ? (
-            <span className="font-mono text-2xl font-bold tracking-widest text-accent px-4 py-0.5 rounded-lg bg-accent/10 border border-accent/30">
-              {word.name}
-            </span>
-          ) : cueMode === 'meaning' ? (
+      {/*
+        卡片里从上到下四块：顶部线索、模式提示、输入阶梯、底部偷看槽。
+        gap-4 只作用在这四块之间，阶梯内部的 space-y-3.5 不受影响——三个输入行是一个整体。
+        不给听音模式留空线索槽：看译文模式本来就会整行撤掉译文输入，
+        两个模式的阶梯高度天生不等，留空槽换不来排版一致，只会把内容压到卡片下半部分。
+      */}
+      <div className="flex flex-col h-full py-1 justify-center gap-4">
+        {/* 顶部线索槽：只在看译文模式出现，h-20 刚好装三行释义 */}
+        {cueMode === 'meaning' && (
+          <div className="h-20 shrink-0 flex items-center justify-center px-6">
             <p className="max-w-lg text-base font-bold text-white line-clamp-3 leading-relaxed text-center">
               {meaningText}
             </p>
-          ) : null}
-        </div>
+          </div>
+        )}
 
-        {/* 模式提示：常驻自己这一行，只有文案变化，位置与高度都不动 */}
+        {/* 模式提示：常驻自己这一行，只有文案变化，高度不动 */}
         <div className="h-6 shrink-0 flex items-center justify-center px-4">
           <span className="text-xs text-muted-foreground/80 font-mono">
             {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 发音需手动触发 ]'}
@@ -116,7 +114,7 @@ export function DictationCard({
         </div>
 
         {/* 中间主要输入阶梯区 */}
-        <div className="w-full max-w-lg mx-auto space-y-3.5 flex-1 flex flex-col justify-center">
+        <div className="w-full max-w-lg mx-auto space-y-3.5">
           {/* 第一级：音标点选输入行 */}
           <div className="flex items-center gap-2.5">
             <div
@@ -266,14 +264,16 @@ export function DictationCard({
             </div>
           )}
 
-          {/* 第三级：单词拼写盲打槽，前置完成后激活 */}
+          {/* 第三级：单词拼写盲打槽，前置完成后激活。
+              样式与学习页的跟打槽保持一致（霓虹绿描边 + 48px 字号 + 剩余字母下划线），
+              只多一个未解锁态，改动要两边同步 */}
           <div className="relative w-full">
             <div
-              className={`h-16 flex items-center justify-center tracking-widest font-mono text-3xl font-bold rounded-2xl border px-5 transition-all shadow-inner ${!isSpellingUnlocked
+              className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${!isSpellingUnlocked
                 ? 'border-white/10 bg-white/[0.02] text-muted-foreground/50 opacity-60'
                 : hasTypo
-                  ? 'border-destructive bg-destructive/15 text-destructive animate-shake'
-                  : 'border-primary/40 bg-white/[0.04] text-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]'
+                  ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
+                  : 'border-[#00FF88]/45 bg-[#00FF88]/[0.05] text-primary shadow-[0_0_24px_rgba(0,255,136,0.16)]'
                 }`}
             >
               {!isSpellingUnlocked ? (
@@ -291,13 +291,20 @@ export function DictationCard({
                 </div>
               ) : (
                 <>
-                  {currentInput && <span className="mr-2">{currentInput}</span>}
-                  <span className="inline-block w-0.5 h-8 bg-primary animate-cursor shrink-0" />
-                  {!currentInput && (
-                    <span className="ml-2 text-muted-foreground/60 text-xl tracking-widest font-normal font-mono">
-                      {Array(word.name.length).fill('_').join(' ')}
-                    </span>
-                  )}
+                  {currentInput && <span className="mr-1">{currentInput}</span>}
+                  <span
+                    className={`inline-block w-0.5 h-11 animate-cursor shrink-0 ${
+                      hasTypo ? 'bg-destructive' : 'bg-primary'
+                    }`}
+                  />
+                  {/* 下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不会消失 */}
+                  <span
+                    className={`ml-1 font-normal ${
+                      hasTypo ? 'text-destructive/40' : 'text-[#00FF88]/35'
+                    }`}
+                  >
+                    {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
+                  </span>
                 </>
               )}
             </div>
@@ -311,6 +318,15 @@ export function DictationCard({
               )}
             </div>
           </div>
+        </div>
+
+        {/* 底部偷看槽：始终占位并参与整体居中，所以偷看出现与消失都不会挤动上面的输入阶梯 */}
+        <div className="h-10 shrink-0 flex items-center justify-center">
+          {isPeeking && (
+            <span className="font-mono text-2xl font-bold tracking-widest text-accent px-4 py-0.5 rounded-lg bg-accent/10 border border-accent/30">
+              {word.name}
+            </span>
+          )}
         </div>
       </div>
     </WordCardShell>

@@ -137,9 +137,10 @@ export function LearnCard({
         {/* 跟打输入槽：外框用霓虹绿 #00FF88。它和输入文字的主色 #34D399 同色相，
             靠更高的饱和度与明度拉开层次，所以透明度要压住，否则框会比字还抢眼。
             框内下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不消失。
-            overflow-hidden 兜住超长词：48px 字号下约 15 个字母就到边，宁可裁掉尾巴也别撑破框。
-            槽位仍是 h-16，字号变化不会动到输入框的纵向位置 */}
-        <div className="relative w-full max-w-lg mx-auto pt-6">
+            overflow-hidden 兜住超长词：48px 字号下约 17 个字母就到边，宁可裁掉尾巴也别撑破框。
+            槽位仍是 h-16，字号变化不会动到输入框的纵向位置。
+            这一整套样式与默写页的拼写槽保持一致，改动要两边同步 */}
+        <div className="relative w-full pt-6">
           <div
             className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
               hasTypo
