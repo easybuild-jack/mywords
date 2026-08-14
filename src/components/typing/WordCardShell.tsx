@@ -34,8 +34,10 @@ export function WordCardShell({
         <Volume2 className="size-4.5" />
       </button>
 
+      {/* 剩余遍数角标跟右上角发音按钮共用一套主色描边：两者都是卡片上的附属控件，
+          用同一套配色能和正文里的琥珀（字母组合）、珊瑚红（当前词根）区分开 */}
       {remainingLoops > 1 && (
-        <span className="absolute top-4 left-4 text-xs font-mono px-2.5 py-1 rounded-lg bg-accent/15 text-accent border border-accent/30 z-10 font-bold tracking-wider">
+        <span className="absolute top-4 left-4 text-xs font-mono px-2.5 py-1 rounded-lg bg-primary/10 text-primary border border-primary/30 z-10 font-bold tracking-wider">
           Again x{remainingLoops}
         </span>
       )}
