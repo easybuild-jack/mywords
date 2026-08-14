@@ -3,7 +3,8 @@
 import React from 'react'
 import { ArrowRight } from 'lucide-react'
 import type { WordItem } from '@/types'
-import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, isVowelAt } from '@/lib/syllables'
+import { splitIntoMorphemes, MORPHEME_ROLE_LABEL } from '@/lib/syllables'
+import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { pickPhonetic, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 
@@ -22,15 +23,55 @@ function wordSizeClass(length: number) {
   return 'text-4xl'
 }
 
-/** 逐字母渲染单词，元音用主题绿字色标出，辅音沿用外层的白色 */
-function VowelMarkedWord({ name }: { name: string }) {
-  const lower = name.toLowerCase()
+/** 四类字母组合在界面上共用一套黄色，不按类别再分色 */
+const COMBO_KINDS = new Set<GraphemeKind>([
+  'vowel-team',
+  'r-controlled',
+  'consonant-digraph',
+  'suffix-chunk',
+])
+
+/**
+ * 相邻的组合交替取这两档黄，靠深浅区分边界。shorts 的 sh 和 or 紧挨着，
+ * 同色会连成一片、看不出是两个单位还是一个 shor；这样字距不用动。
+ * 第二档取更浅而不是更暗，避免看着像被禁用、地位低一等。
+ */
+const COMBO_TONES = ['text-accent', 'text-[#FDE68A]']
+
+function isCombo(segment: GraphemeSegment | undefined): boolean {
+  return segment !== undefined && COMBO_KINDS.has(segment.kind)
+}
+
+/**
+ * 往左数连续相邻的组合个数来决定取哪一档。
+ * 孤立的组合数到 0，一律取第一档，所以 with 这类只有一个组合的词配色始终稳定。
+ */
+function comboToneIndex(segments: GraphemeSegment[], index: number): number {
+  let run = 0
+  for (let i = index - 1; i >= 0 && isCombo(segments[i]); i--) run++
+
+  return run % COMBO_TONES.length
+}
+
+function segmentClass(segments: GraphemeSegment[], index: number): string | undefined {
+  const segment = segments[index]
+
+  if (!isCombo(segment)) {
+    return segment.kind === 'vowel' ? 'text-primary' : undefined
+  }
+
+  return COMBO_TONES[comboToneIndex(segments, index)]
+}
+
+/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色 */
+function MarkedWord({ name }: { name: string }) {
+  const segments = splitIntoGraphemes(name)
 
   return (
     <>
-      {[...name].map((char, index) => (
-        <span key={index} className={isVowelAt(lower, index) ? 'text-primary' : undefined}>
-          {char}
+      {segments.map((segment, index) => (
+        <span key={index} className={segmentClass(segments, index)}>
+          {segment.text}
         </span>
       ))}
     </>
@@ -57,7 +98,7 @@ export function LearnCard({
         <h2
           className={`${wordSizeClass(word.name.length)} font-extrabold tracking-tight text-white font-mono leading-tight`}
         >
-          <VowelMarkedWord name={word.name} />
+          <MarkedWord name={word.name} />
         </h2>
         <div className="h-10 flex items-center justify-center">
           <p className="text-sm sm:text-base text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">
