@@ -93,7 +93,7 @@ export function LearnCard({
   return (
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
       {/*
-        上半区（音标 + 单词 + 释义 + 输入槽）四行高度全部写死：h-9 / h-20 / h-14 / h-16。
+        上半区（音标 + 单词 + 释义 + 输入槽）四行高度全部写死：h-9 / h-20 / h-16 / h-16。
         外壳是 justify-between，只要这一块总高恒定，输入框就钉在同一个纵向位置上，
         既不会因为单词长短换字号而移动，也不会被下方色块的高低挤上挤下。
       */}
@@ -124,31 +124,42 @@ export function LearnCard({
               <MarkedWord word={word} />
             </h2>
           </div>
-          {/* 按两行译文预留高度（h-14 ≈ 2 × leading-relaxed 行高），并统一从顶部起排：
-              一行、两行的释义都落在同一个位置，输入框既不会被行数顶动，也不会紧贴单词 */}
-          <div className="h-14 flex items-start justify-center">
-            <p className="text-sm sm:text-base text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">
+          {/* 按两行译文预留高度（text-lg 配 leading-relaxed 单行约 29px，h-16 刚好装两行），
+              并统一从顶部起排：一行、两行的释义都落在同一个位置，
+              输入框既不会被行数顶动，也不会紧贴单词 */}
+          <div className="h-16 flex items-start justify-center">
+            <p className="text-base sm:text-lg text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">
               {meaningText}
             </p>
           </div>
         </div>
 
-        {/* 跟打输入槽：字号、字距与占位下划线都跟默写页的拼写槽保持一致 */}
-        <div className="relative w-full max-w-md mx-auto pt-6">
+        {/* 跟打输入槽：外框用霓虹绿 #00FF88。它和输入文字的主色 #34D399 同色相，
+            靠更高的饱和度与明度拉开层次，所以透明度要压住，否则框会比字还抢眼。
+            框内下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不消失。
+            overflow-hidden 兜住超长词：48px 字号下约 15 个字母就到边，宁可裁掉尾巴也别撑破框。
+            槽位仍是 h-16，字号变化不会动到输入框的纵向位置 */}
+        <div className="relative w-full max-w-lg mx-auto pt-6">
           <div
-            className={`h-16 flex items-center justify-center tracking-widest font-mono text-3xl font-bold rounded-2xl border px-5 transition-all shadow-inner ${
+            className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
               hasTypo
-                ? 'border-destructive bg-destructive/15 text-destructive animate-shake'
-                : 'border-primary/40 bg-white/[0.04] text-primary shadow-[0_0_20px_rgba(0,0,0,0.2)]'
+                ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
+                : 'border-[#00FF88]/45 bg-[#00FF88]/[0.05] text-primary shadow-[0_0_24px_rgba(0,255,136,0.16)]'
             }`}
           >
-            {currentInput && <span className="mr-2">{currentInput}</span>}
-            <span className="inline-block w-0.5 h-8 bg-primary animate-cursor shrink-0" />
-            {!currentInput && (
-              <span className="ml-2 text-xl tracking-widest text-muted-foreground/60 font-normal font-mono">
-                {Array(word.name.length).fill('_').join(' ')}
-              </span>
-            )}
+            {currentInput && <span className="mr-1">{currentInput}</span>}
+            <span
+              className={`inline-block w-0.5 h-11 animate-cursor shrink-0 ${
+                hasTypo ? 'bg-destructive' : 'bg-primary'
+              }`}
+            />
+            <span
+              className={`ml-1 font-normal ${
+                hasTypo ? 'text-destructive/40' : 'text-[#00FF88]/35'
+              }`}
+            >
+              {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
+            </span>
           </div>
         </div>
       </div>
