@@ -204,7 +204,8 @@ function saveActiveCursor(get: () => WorkspaceState): Record<PracticeCursorKey, 
 export const useWorkspaceStore = create<WorkspaceState>()(
   persist(
     (set, get) => ({
-      currentBookId: 'book_cet4',
+      // 新用户默认落在列表第一本「基础词汇」上，id 与对象必须取自同一本，否则加载的词和显示的词库名会对不上
+      currentBookId: BUILTIN_BOOKS[0].id,
       currentBook: BUILTIN_BOOKS[0],
       currentUnitIndex: 0,
       unitSize: 20,

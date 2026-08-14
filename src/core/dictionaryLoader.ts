@@ -1,5 +1,5 @@
 import type { WordEtymology, WordItem } from '@/types'
-import { splitIntoSyllables, analyzeEtymology } from '@/lib/syllables'
+import { splitIntoSyllables, analyzeEtymology, isUsableSyllableSplit } from '@/lib/syllables'
 import { buildWordId } from '@/lib/wordId'
 
 /** 导入时由用户提供的字段，填了就跳过对应的自动推导 */
@@ -17,10 +17,14 @@ interface RawDictEntry {
   ukphone?: string
   phone?: string
   translation?: string
+  /** 人工校订过的音节拆分与构词法，只有基础词汇这类精编词表会带，缺省时走自动推导 */
+  syllables?: string[]
+  etymology?: WordEtymology
 }
 
 // 官方内置大词库文件映射关系
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
+  'book_basewords': { path: '/dicts/basewords.json', totalWords: 1195, name: '基础词汇' },
   'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
   'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: 'Coder Dict (通用 IT 编程词库)' },
@@ -238,8 +242,13 @@ class DictionaryLoader {
       const usphone = rawUs || `/ ${name.toLowerCase()} /`
       const ukphone = rawUk || usphone
 
-      const syllables = splitIntoSyllables(name)
-      const etymology = analyzeEtymology(name)
+      // 词表自带的拆解优先，但音节仍要过一遍校验：拼不回原词的分段会让学习卡高亮错位
+      const curatedSyllables = entry.syllables
+      const syllables =
+        curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
+          ? curatedSyllables
+          : splitIntoSyllables(name)
+      const etymology = entry.etymology ?? analyzeEtymology(name)
       const posList = this.parsePosAndMeans(rawTrans)
 
       return {

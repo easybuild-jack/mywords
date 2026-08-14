@@ -321,6 +321,18 @@ export const INITIAL_SAMPLE_WORDS: WordItem[] = [
 
 export const BUILTIN_BOOKS: VocabularyBook[] = [
   {
+    id: 'book_basewords',
+    name: '基础词汇',
+    description: '中小学阶段基础词汇 1195 词，按主题成组编排，音节拆分与词根词缀为人工校订',
+    category: 'daily',
+    isCustom: false,
+    unitSize: 20,
+    totalWords: 1195,
+    words: INITIAL_SAMPLE_WORDS,
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  },
+  {
     id: 'book_cet4',
     name: 'CET-4 核心词库',
     description: '全国大学英语四级核心高频词汇精选，覆盖核心词根词缀与经典考题',
@@ -346,7 +358,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_coder',
-    name: 'Coder Dict (通用 IT 编程词库)',
+    name: 'Coder Dict',
     description: '程序员常见高频英语词汇、计算机基础术语、开发与系统运维核心词库 (来自 Qwerty Learner Coder Dict 通用)',
     category: 'developer',
     isCustom: false,
@@ -358,7 +370,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_ielts',
-    name: '雅思 (IELTS) 核心 8000',
+    name: '雅思词汇',
     description: '剑桥雅思官方听说读写核心必考词库',
     category: 'exam',
     isCustom: false,
