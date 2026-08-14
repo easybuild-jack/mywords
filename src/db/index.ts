@@ -247,6 +247,65 @@ export async function toggleStarWord(wordId: string, bookId: string): Promise<bo
 }
 
 /**
+ * 取出全部自定义词库，供导入时选择目标。
+ *
+ * 只返回自定义词库：官方词库的词是从 /dicts 下的 JSON 按需加载的，
+ * db.books 里那条只是占位（setBookId 还会主动删掉它），写进去也不会被读出来。
+ */
+export async function getCustomBooks(): Promise<VocabularyBook[]> {
+  try {
+    const all = await db.books.toArray()
+    return all.filter((b) => b.isCustom).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+  } catch (err) {
+    console.error('Failed to load custom books:', err)
+    return []
+  }
+}
+
+/**
+ * 把导入的单词并进已有词库：同名单词覆盖原条目，新词追加到末尾。
+ *
+ * 同名的判断直接用 id，它由拼写派生（见 buildWordId），所以"已存在"就是"拼写相同"。
+ * 覆盖时保留原有位置，否则重新导入一遍会打乱整本书的顺序，章节划分跟着全变。
+ */
+export async function mergeWordsIntoBook(bookId: string, words: WordItem[]) {
+  try {
+    const book = await db.books.get(bookId)
+    if (!book) return null
+
+    const merged = [...(book.words || [])]
+    const indexById = new Map(merged.map((word, index) => [word.id, index]))
+    let updated = 0
+    let added = 0
+
+    for (const word of words) {
+      const at = indexById.get(word.id)
+      if (at === undefined) {
+        indexById.set(word.id, merged.length)
+        merged.push(word)
+        added++
+      } else {
+        merged[at] = word
+        updated++
+      }
+    }
+
+    const nextBook: VocabularyBook = {
+      ...book,
+      words: merged,
+      totalWords: merged.length,
+      updatedAt: Date.now(),
+    }
+
+    await db.books.put(nextBook)
+    return { book: nextBook, updated, added }
+  } catch (err) {
+    console.error('Failed to merge words into book:', err)
+    return null
+  }
+}
+
+/**
  * 保存自定义新词库
  */
 export async function saveCustomVocabularyBook(name: string, description: string, words: WordItem[]) {

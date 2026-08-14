@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   X,
   Upload,
@@ -15,13 +15,30 @@ import {
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
-import { saveCustomVocabularyBook } from '@/db'
-import type { WordItem } from '@/types'
+import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook } from '@/db'
+import {
+  buildCsvTemplate,
+  parseEtymologyCell,
+  parseSyllablesCell,
+  splitCsvLine,
+} from '@/lib/importFormat'
+import type { VocabularyBook, WordItem } from '@/types'
+
+/** 预览表里回显词素构成，如 dis- + cover + -y */
+function describeMorphemes(word: WordItem): string {
+  const { prefix, root, suffix } = word.etymology || {}
+  return [prefix?.form, root?.form, suffix?.form].filter(Boolean).join(' + ')
+}
 
 export function ImportModal() {
   const { isImportModalOpen, setImportModalOpen, setBookId } = useWorkspaceStore()
   const [activeTab, setActiveTab] = useState<'text' | 'file'>('text')
   const [bookName, setBookName] = useState('我的自定义生词本')
+
+  // 导入目标：新建一本，或并入已有的自定义词库
+  const [targetMode, setTargetMode] = useState<'new' | 'existing'>('new')
+  const [targetBookId, setTargetBookId] = useState('')
+  const [customBooks, setCustomBooks] = useState<VocabularyBook[]>([])
   
   // Tab 1: 文本粘贴
   const [rawText, setRawText] = useState(
@@ -44,7 +61,28 @@ compile v. 编译；编纂`
   const [isParsed, setIsParsed] = useState(false)
   const [autoDeduplicate, setAutoDeduplicate] = useState(true)
 
+  // 每次打开都重新拉一遍：期间可能在词库页删过或新建过词库
+  useEffect(() => {
+    if (!isImportModalOpen) return
+    getCustomBooks().then((books) => {
+      setCustomBooks(books)
+      if (!books.length) {
+        setTargetMode('new')
+        setTargetBookId('')
+        return
+      }
+      setTargetBookId((prev) => (books.some((b) => b.id === prev) ? prev : books[0].id))
+    })
+  }, [isImportModalOpen])
+
   if (!isImportModalOpen) return null
+
+  const targetBook = customBooks.find((b) => b.id === targetBookId)
+
+  // 提前告知会覆盖多少词，别让用户在不知情的情况下改掉已有数据
+  const existingIds = new Set((targetBook?.words || []).map((w) => w.id))
+  const overwriteCount =
+    targetMode === 'existing' ? parsedWords.filter((w) => existingIds.has(w.id)).length : 0
 
   // 1. 解析文本粘贴 (Tab 1)
   const handleParseText = async () => {
@@ -60,7 +98,7 @@ compile v. 编译；编纂`
       seen.add(wordName.toLowerCase())
 
       const customMeaning = parts.length > 1 ? parts.slice(1).join(' ') : undefined
-      const enriched = await dictionaryLoader.enrichWord(wordName, customMeaning)
+      const enriched = await dictionaryLoader.enrichWord(wordName, { meaning: customMeaning })
       items.push(enriched)
     }
 
@@ -97,7 +135,15 @@ compile v. 编译；编纂`
             if (!name || seen.has(name.toLowerCase())) continue
             seen.add(name.toLowerCase())
             const meaning = entry.trans?.join(' ') || entry.meaning || entry.translation
-            const enriched = await dictionaryLoader.enrichWord(name, meaning, entry.usphone || entry.phonetic)
+            const enriched = await dictionaryLoader.enrichWord(name, {
+              meaning,
+              phonetic: entry.usphone || entry.phonetic,
+              // JSON 里可以直接给结构化拆解，也允许沿用 CSV 那套字符串写法
+              syllables: Array.isArray(entry.syllables)
+                ? entry.syllables
+                : parseSyllablesCell(entry.syllables, name),
+              etymology: entry.etymology ?? parseEtymologyCell(entry.morphemes, entry.derivation),
+            })
             items.push(enriched)
           }
         } catch (err) {
@@ -116,11 +162,20 @@ compile v. 编译；编纂`
 
           let wordName = ''
           let meaning: string | undefined
+          let phonetic: string | undefined
+          let rawSyllables: string | undefined
+          let rawMorphemes: string | undefined
+          let rawDerivation: string | undefined
 
           if (isCsv) {
-            const cols = line.split(',').map((c) => c.trim().replace(/^["']|["']$/g, ''))
-            wordName = cols[0]
+            // 列序见 CSV_COLUMNS：单词、释义、音标、音节拆分、词根词缀、语义推导
+            const cols = splitCsvLine(line)
+            wordName = cols[0] || ''
             meaning = cols[1] || undefined
+            phonetic = cols[2] || undefined
+            rawSyllables = cols[3] || undefined
+            rawMorphemes = cols[4] || undefined
+            rawDerivation = cols[5] || undefined
           } else {
             const parts = line.split(/[\t\s]+/)
             wordName = parts[0]
@@ -131,7 +186,12 @@ compile v. 编译；编纂`
           if (!wordName || (autoDeduplicate && seen.has(wordName.toLowerCase()))) continue
           seen.add(wordName.toLowerCase())
 
-          const enriched = await dictionaryLoader.enrichWord(wordName, meaning)
+          const enriched = await dictionaryLoader.enrichWord(wordName, {
+            meaning,
+            phonetic,
+            syllables: parseSyllablesCell(rawSyllables, wordName),
+            etymology: parseEtymologyCell(rawMorphemes, rawDerivation),
+          })
           items.push(enriched)
         }
       }
@@ -144,21 +204,20 @@ compile v. 编译；编纂`
     reader.readAsText(file)
   }
 
-  // 下载 CSV 模板
+  // 下载 CSV 模板。
+  // 用 Blob 而不是 data: URI：模板带上拆解列后长度可观，data: URI 有长度上限，
+  // 且部分浏览器对 data: 链接的 download 属性支持并不一致。
+  // 开头的 BOM 是给 Excel 认 UTF-8 用的，否则中文列会显示成乱码。
   const handleDownloadCsvTemplate = () => {
-    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' +
-      '单词,中文释义(选填),音标(选填)\n' +
-      'perspective,视角；观点,/pərˈspektɪv/\n' +
-      'resilient,有弹性的,/rɪˈzɪliənt/\n' +
-      'kubernetes,容器自动化编排引擎,\n' +
-      'compile,编译；编纂,\n'
-    const encodedUri = encodeURI(csvContent)
+    const blob = new Blob(['\uFEFF' + buildCsvTemplate()], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
-    link.setAttribute('href', encodedUri)
-    link.setAttribute('download', 'MyWords_导入模板.csv')
+    link.href = url
+    link.download = 'MyWords_导入模板.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   // 确认导入并持久化至 IndexedDB
@@ -174,8 +233,18 @@ compile v. 编译；编纂`
       return
     }
 
-    const newBook = await saveCustomVocabularyBook(bookName, '用户自定义导入词库', finalWords)
-    await setBookId(newBook.id)
+    if (targetMode === 'existing') {
+      const result = await mergeWordsIntoBook(targetBookId, finalWords)
+      if (!result) {
+        alert('目标词库不存在或已被删除，请重新选择')
+        return
+      }
+      await setBookId(result.book.id)
+    } else {
+      const newBook = await saveCustomVocabularyBook(bookName, '用户自定义导入词库', finalWords)
+      await setBookId(newBook.id)
+    }
+
     setImportModalOpen(false)
     setIsParsed(false)
     setUploadedFileName('')
@@ -232,20 +301,85 @@ compile v. 编译；编纂`
             }`}
           >
             <FileSpreadsheet className="size-3.5" />
-            <span>文件模板导入 (CSV / Excel / JSON)</span>
+            <span>文件模板导入 (CSV / TXT / JSON)</span>
           </button>
         </div>
 
-        {/* 词库名称输入 */}
+        {/* 导入目标：新建词库 或 并入已有词库 */}
         <div className="space-y-1.5">
-          <label className="text-xs text-[#9CA3AF] font-medium">新词库名称</label>
-          <input
-            type="text"
-            value={bookName}
-            onChange={(e) => setBookName(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-primary/50"
-            placeholder="例如: 我的考研阅读高频难词"
-          />
+          <div className="flex items-center justify-between">
+            <label className="text-xs text-[#9CA3AF] font-medium">导入目标</label>
+            <div className="flex items-center gap-1 bg-white/[0.04] p-0.5 rounded-lg border border-white/10 text-xs">
+              <button
+                onClick={() => setTargetMode('new')}
+                className={`px-3 py-1 rounded transition-all cursor-pointer ${
+                  targetMode === 'new' ? 'bg-primary text-[#0B0C0E] font-bold' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                新建词库
+              </button>
+              {/* 禁用态不写 title：disabled 元素不接收指针事件，原生提示基本不会弹，
+                  没有自定义词库的原因改在下方说明文字里明说 */}
+              <button
+                onClick={() => setTargetMode('existing')}
+                disabled={!customBooks.length}
+                className={`px-3 py-1 rounded transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                  targetMode === 'existing'
+                    ? 'bg-primary text-[#0B0C0E] font-bold'
+                    : 'text-gray-400 hover:text-white cursor-pointer'
+                }`}
+              >
+                并入已有词库
+              </button>
+            </div>
+          </div>
+
+          {targetMode === 'new' ? (
+            <input
+              type="text"
+              value={bookName}
+              onChange={(e) => setBookName(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-primary/50"
+              placeholder="例如: 我的考研阅读高频难词"
+            />
+          ) : (
+            <select
+              value={targetBookId}
+              onChange={(e) => setTargetBookId(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-primary/50 cursor-pointer"
+            >
+              {customBooks.map((book) => (
+                <option key={book.id} value={book.id} className="bg-[#12141A] text-white">
+                  {book.name}（{book.totalWords} 词）
+                </option>
+              ))}
+            </select>
+          )}
+
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            {targetMode === 'existing' ? (
+              <>
+                拼写相同的单词会被本次导入的内容<span className="text-accent font-semibold">覆盖更新</span>
+                （保留原有位置），其余追加到末尾。
+                {overwriteCount > 0 && (
+                  <span className="text-accent font-semibold">
+                    {' '}
+                    当前预览中有 {overwriteCount} 词已存在，将被覆盖。
+                  </span>
+                )}
+              </>
+            ) : customBooks.length ? (
+              <>
+                可选「并入已有词库」把单词追加进 {customBooks.length} 个自定义词库之一。
+                官方词库无法作为目标，它的内容是从词库文件按需加载的。
+              </>
+            ) : (
+              <>
+                <span className="text-gray-300">「并入已有词库」暂不可选：你还没有自定义词库。</span>
+                本次先新建一本，之后再导入就能选择并入了。官方词库无法作为目标，它的内容是从词库文件按需加载的。
+              </>
+            )}
+          </p>
         </div>
 
         {/* 对应 Tab 的内容区 */}
@@ -298,6 +432,25 @@ compile v. 编译；编纂`
                   </button>
                 </div>
 
+                {/* 拆解两列的写法不说明用户猜不到，尤其是靠连字符位置区分前后缀这条 */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                  <p className="text-xs font-semibold text-gray-300">
+                    列顺序：单词 → 释义 → 音标 → 音节拆分 → 词根词缀 → 语义推导（后五列均可留空，留空则自动推导）
+                  </p>
+                  <p>
+                    <span className="text-accent font-mono">音节拆分</span>
+                    ：用连字符连接，如 <span className="font-mono text-gray-300">dis-cov-er</span>
+                    。拼接后必须还原成原词，否则忽略并改用自动切分。
+                  </p>
+                  <p>
+                    <span className="text-accent font-mono">词根词缀</span>
+                    ：每段写作 <span className="font-mono text-gray-300">形式|含义</span>，段间用加号连接，如{' '}
+                    <span className="font-mono text-gray-300">dis-|否定/相反 + cover|覆盖 + -y|名词后缀</span>
+                    。角色看连字符位置：结尾带连字符是前缀，开头带的是后缀，都不带是词根。
+                  </p>
+                  <p>释义或推导里如需使用半角逗号，请给整格加上双引号。</p>
+                </div>
+
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   className="border-2 border-dashed border-white/15 hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl p-8 text-center cursor-pointer transition-all space-y-2 group"
@@ -340,7 +493,7 @@ compile v. 编译；编纂`
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02] text-muted-foreground font-mono">
                   <th className="py-2.5 px-3">单词</th>
-                  <th className="py-2.5 px-3">自然拼读音节</th>
+                  <th className="py-2.5 px-3">音节拆分</th>
                   <th className="py-2.5 px-3">音标 (US)</th>
                   <th className="py-2.5 px-3">智能匹配释义</th>
                   <th className="py-2.5 px-3">构词法推导</th>
@@ -357,8 +510,12 @@ compile v. 编译；编纂`
                       <span className="text-accent mr-1 font-mono font-bold">{w.posList[0]?.pos}</span>
                       {w.posList[0]?.means.join('； ')}
                     </td>
-                    <td className="py-2.5 px-3 text-gray-400 font-sans truncate max-w-[170px]" title={w.etymology?.derivation}>
-                      {w.etymology?.derivation}
+                    {/* 只填了词根词缀、没填语义推导时也要有回显，否则会被误认为没导入成功 */}
+                    <td
+                      className="py-2.5 px-3 text-gray-400 font-sans truncate max-w-[170px]"
+                      title={w.etymology?.derivation || describeMorphemes(w)}
+                    >
+                      {w.etymology?.derivation || describeMorphemes(w)}
                     </td>
                     <td className="py-2.5 px-2 text-right">
                       <button

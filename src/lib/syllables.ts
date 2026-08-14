@@ -306,9 +306,105 @@ const ROOTS: Record<string, string> = {
   'auto': '自己 / 自动',
 }
 
+const VOWEL_LETTERS = 'aeiou'
+
+/** 双字母组合只发一个音素，切分时不能从中间拆开 */
+const DIGRAPHS = new Set(['th', 'sh', 'ch', 'ph', 'wh', 'ck', 'ng', 'gh', 'qu'])
+
+/** 元音核：一段连续元音字母，闭区间 */
+interface VowelNucleus {
+  start: number
+  end: number
+}
+
+/**
+ * 判断某一位是不是元音字母。两个特例：
+ * - y 只在词首且后接元音时是辅音（yes、young），其余位置算元音（happy、rhythm、day）
+ * - qu 里的 u 不独立成核，它属于辅音簇（quick、queen）
+ *
+ * 学习卡给元音上色也用这个判断，保证配色和音节切分对「元音」的认定是同一套。
+ * 注意只识别小写字母，调用方需要先把单词转成小写。
+ */
+export function isVowelAt(word: string, index: number): boolean {
+  const char = word[index]
+  if (char === 'u' && index > 0 && word[index - 1] === 'q') return false
+  if (VOWEL_LETTERS.includes(char)) return true
+  if (char !== 'y') return false
+  return !(index === 0 && word[1] !== undefined && VOWEL_LETTERS.includes(word[1]))
+}
+
+/** 找出所有元音核，连续的元音字母合并为一个（beau、rain 各算一个核） */
+function findVowelNuclei(word: string): VowelNucleus[] {
+  const nuclei: VowelNucleus[] = []
+  let i = 0
+  while (i < word.length) {
+    if (!isVowelAt(word, i)) {
+      i++
+      continue
+    }
+    const start = i
+    while (i + 1 < word.length && isVowelAt(word, i + 1)) i++
+    nuclei.push({ start, end: i })
+    i++
+  }
+  return nuclei
+}
+
+/**
+ * 摘掉不发音的元音核，否则会多切出一个音节。
+ * 词尾哑 e：cake 是一个音节而不是 ca-ke；
+ * -ed 结尾：前一个字母不是 t/d 时 e 不发音，hoped 一个音节，wanted 两个。
+ */
+function dropSilentNuclei(word: string, nuclei: VowelNucleus[]): VowelNucleus[] {
+  if (nuclei.length < 2) return nuclei
+  const last = nuclei[nuclei.length - 1]
+  const isSingleLetter = last.start === last.end
+
+  if (isSingleLetter && last.end === word.length - 1 && word.endsWith('e')) {
+    return nuclei.slice(0, -1)
+  }
+
+  if (isSingleLetter && last.end === word.length - 2 && word.endsWith('ed')) {
+    const before = word[word.length - 3]
+    if (before && !'td'.includes(before)) return nuclei.slice(0, -1)
+  }
+
+  return nuclei
+}
+
+/**
+ * 在相邻元音核之间选一个切点，切点即下一音节的起始下标。
+ *
+ * 单辅音归后一个音节（V-CV：o-pen、ba-by），这是教材默认规则；
+ * 两个以上辅音则从第一个之后切开（VC-CV：let-ter、mon-ster），
+ * 但双字母一音必须整体留给后一个音节（mo-ther、tea-cher）。
+ */
+function findCutPoints(word: string, nuclei: VowelNucleus[]): number[] {
+  const cuts: number[] = []
+
+  for (let n = 0; n < nuclei.length - 1; n++) {
+    // 元音核是极大连续段，两核之间必然夹着至少一个辅音
+    const clusterStart = nuclei[n].end + 1
+    const clusterSize = nuclei[n + 1].start - clusterStart
+
+    if (clusterSize === 1) {
+      cuts.push(clusterStart)
+      continue
+    }
+
+    const firstPair = word.slice(clusterStart, clusterStart + 2)
+    cuts.push(DIGRAPHS.has(firstPair) ? clusterStart : clusterStart + 1)
+  }
+
+  return cuts
+}
+
 /**
  * 单词音节划分启发式算法 (Syllable Splitter)
- * 将英文单词根据元音和辅音规则切分成音节数组
+ *
+ * 先定位元音核，再在核之间分配辅音，因此每个音节必然含且仅含一个元音核——
+ * 旧实现是顺序扫字母遇到辅音就切，会产出 ht、pt 这类无元音、读不出来的碎片。
+ * 无法判断时一律少切（整词返回），错在保守总比给出读不出的音节好。
  */
 export function splitIntoSyllables(word: string): string[] {
   const cleanWord = word.trim().toLowerCase()
@@ -339,48 +435,44 @@ export function splitIntoSyllables(word: string): string[] {
     return knownOverrides[cleanWord]
   }
 
-  // 基础音节切分规则
-  const vowels = 'aeiouy'
+  // 「辅音 + le」结尾自成一个音节（ta-ble、lit-tle、a-ble）。
+  // 先把它摘走再切前半部分，否则 table 会被切成 tab-le。
+  // 前面是元音时不算（whole、while 的 le 不独立成节）
+  if (cleanWord.endsWith('le') && cleanWord.length >= 4 && !isVowelAt(cleanWord, cleanWord.length - 3)) {
+    const head = cleanWord.slice(0, cleanWord.length - 3)
+    return [...splitIntoSyllables(head), cleanWord.slice(cleanWord.length - 3)]
+  }
+
+  const nuclei = dropSilentNuclei(cleanWord, findVowelNuclei(cleanWord))
+  const bounds = [0, ...findCutPoints(cleanWord, nuclei), cleanWord.length]
+
   const syllables: string[] = []
-  let currentSyllable = ''
-
-  for (let i = 0; i < cleanWord.length; i++) {
-    const char = cleanWord[i]
-    currentSyllable += char
-
-    const isVowel = vowels.includes(char)
-    const nextChar = cleanWord[i + 1]
-    const nextNextChar = cleanWord[i + 2]
-
-    if (isVowel && nextChar && !vowels.includes(nextChar)) {
-      // 遇到元音 + 辅音，判断是否切分
-      if (nextNextChar && vowels.includes(nextNextChar)) {
-        // V-C-V 结构切分 (如 e-du)
-        if (i < cleanWord.length - 2 && currentSyllable.length >= 2) {
-          syllables.push(currentSyllable)
-          currentSyllable = ''
-        }
-      } else if (nextNextChar && !vowels.includes(nextNextChar) && i < cleanWord.length - 3) {
-        // V-C-C-V 结构在辅音之间切分 (如 in-ter)
-        currentSyllable += nextChar
-        i++
-        if (currentSyllable.length >= 2) {
-          syllables.push(currentSyllable)
-          currentSyllable = ''
-        }
-      }
-    }
+  for (let i = 0; i < bounds.length - 1; i++) {
+    syllables.push(cleanWord.slice(bounds[i], bounds[i + 1]))
   }
 
-  if (currentSyllable) {
-    if (syllables.length > 0 && currentSyllable.length <= 1) {
-      syllables[syllables.length - 1] += currentSyllable
-    } else {
-      syllables.push(currentSyllable)
-    }
-  }
+  // 跟打进度要按段高亮，各段拼接必须还原成原词。
+  // 切点算错时宁可整词返回，也不能给出对不上原词的分段
+  if (syllables.join('') !== cleanWord) return [cleanWord]
 
-  return syllables.length > 0 ? syllables : [cleanWord]
+  return syllables.filter(Boolean)
+}
+
+/**
+ * 判断一份现成的音节切分能不能直接用。两条硬性要求：
+ * 拼接必须还原成单词（学习卡按段高亮跟打进度），且每段都要含元音字母。
+ *
+ * 导入时人工填写的拆分照此放行；而错词本在 IndexedDB 里存的旧快照会被挡下来——
+ * 旧切分算法会产出 ht 这类无元音碎片，它拼接得回原词，只能靠元音这一条拦住。
+ * 代价是 rhythm 这种含成音节辅音的词（rhy-thm）也会被拒，退回自动切分，属于可接受的误伤。
+ */
+export function isUsableSyllableSplit(name: string, syllables?: string[]): boolean {
+  if (!syllables?.length) return false
+
+  const clean = name.trim().toLowerCase()
+  if (syllables.join('').toLowerCase() !== clean) return false
+
+  return syllables.every((part) => [...part.toLowerCase()].some((char) => 'aeiouy'.includes(char)))
 }
 
 /**
@@ -410,7 +502,10 @@ export function splitIntoMorphemes(word: WordItem): WordMorpheme[] {
   const middle = name.slice(start, end)
 
   if (!middle || (start === 0 && end === name.length)) {
-    const fallback = word.syllables?.length ? word.syllables : splitIntoSyllables(name)
+    // 导入时人工填的拆分优先，但必须先过校验，否则旧快照里切错的分段会一直显示下去
+    const fallback = isUsableSyllableSplit(name, word.syllables)
+      ? word.syllables
+      : splitIntoSyllables(name)
     return fallback.map((text) => ({ text, role: 'syllable' as const }))
   }
 

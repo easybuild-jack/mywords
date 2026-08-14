@@ -1,6 +1,14 @@
-import type { WordItem } from '@/types'
+import type { WordEtymology, WordItem } from '@/types'
 import { splitIntoSyllables, analyzeEtymology } from '@/lib/syllables'
 import { buildWordId } from '@/lib/wordId'
+
+/** 导入时由用户提供的字段，填了就跳过对应的自动推导 */
+export interface WordEnrichOverrides {
+  meaning?: string
+  phonetic?: string
+  syllables?: string[]
+  etymology?: WordEtymology
+}
 
 interface RawDictEntry {
   name: string
@@ -135,12 +143,12 @@ class DictionaryLoader {
   /**
    * 核心三级自动补全函数 (Enrich Word)
    * 自动为单词填充音标、词性、中文释义、音节切分与构词法拆解
+   *
+   * overrides 里的每一项都是「用户填了就不再自动推导」，导入模板的选填列直接对应到这里。
    */
-  public async enrichWord(
-    name: string,
-    customMeaning?: string,
-    customPhonetic?: string
-  ): Promise<WordItem> {
+  public async enrichWord(name: string, overrides: WordEnrichOverrides = {}): Promise<WordItem> {
+    const { meaning: customMeaning, phonetic: customPhonetic, syllables: customSyllables, etymology: customEtymology } = overrides
+
     const cleanName = name.trim()
     const lowerName = cleanName.toLowerCase()
 
@@ -177,9 +185,9 @@ class DictionaryLoader {
     if (!usPhone) usPhone = `/ ${lowerName} /`
     if (!ukPhone) ukPhone = `/ ${lowerName} /`
 
-    // 4. 运行自然拼读音节切分算法与词根词缀构词法分析
-    const syllables = splitIntoSyllables(cleanName)
-    const etymology = analyzeEtymology(cleanName)
+    // 4. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
+    const syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
+    const etymology = customEtymology ?? analyzeEtymology(cleanName)
     const posList = this.parsePosAndMeans(transList)
 
     return {

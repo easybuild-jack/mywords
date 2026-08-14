@@ -3,7 +3,7 @@
 import React from 'react'
 import { ArrowRight } from 'lucide-react'
 import type { WordItem } from '@/types'
-import { splitIntoMorphemes, MORPHEME_ROLE_LABEL } from '@/lib/syllables'
+import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, isVowelAt } from '@/lib/syllables'
 import { pickPhonetic, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 
@@ -20,6 +20,21 @@ function wordSizeClass(length: number) {
   if (length <= 8) return 'text-6xl'
   if (length <= 12) return 'text-5xl'
   return 'text-4xl'
+}
+
+/** 逐字母渲染单词，元音用主题绿字色标出，辅音沿用外层的白色 */
+function VowelMarkedWord({ name }: { name: string }) {
+  const lower = name.toLowerCase()
+
+  return (
+    <>
+      {[...name].map((char, index) => (
+        <span key={index} className={isVowelAt(lower, index) ? 'text-primary' : undefined}>
+          {char}
+        </span>
+      ))}
+    </>
+  )
 }
 
 /** 跟学卡片：单词、音标、释义、构词法拆解与跟打输入槽全部常驻可见 */
@@ -42,7 +57,7 @@ export function LearnCard({
         <h2
           className={`${wordSizeClass(word.name.length)} font-extrabold tracking-tight text-white font-mono leading-tight`}
         >
-          {word.name}
+          <VowelMarkedWord name={word.name} />
         </h2>
         <div className="h-10 flex items-center justify-center">
           <p className="text-sm sm:text-base text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">
