@@ -3,9 +3,9 @@
 import React from 'react'
 import { ArrowRight } from 'lucide-react'
 import type { WordItem } from '@/types'
-import { splitIntoMorphemes, MORPHEME_ROLE_LABEL } from '@/lib/syllables'
+import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
-import { pickPhonetic, formatMeaningText } from '@/lib/wordDisplay'
+import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 
 interface LearnCardProps {
@@ -64,8 +64,8 @@ function segmentClass(segments: GraphemeSegment[], index: number): string | unde
 }
 
 /** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色 */
-function MarkedWord({ name }: { name: string }) {
-  const segments = splitIntoGraphemes(name)
+function MarkedWord({ word }: { word: WordItem }) {
+  const segments = splitIntoGraphemes(word.name, resolveSyllables(word))
 
   return (
     <>
@@ -86,7 +86,7 @@ export function LearnCard({
   phoneticPreference,
   remainingLoops = 1,
 }: LearnCardProps) {
-  const phonetic = pickPhonetic(word, phoneticPreference)
+  const phonetics = listPhonetics(word)
   const meaningText = formatMeaningText(word)
   const morphemes = splitIntoMorphemes(word)
 
@@ -94,11 +94,27 @@ export function LearnCard({
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
       {/* 1. 音标 + 单词 + 释义 */}
       <div className="space-y-1 pt-0">
-        <p className="font-mono text-2xl tracking-wide text-gray-300">{phonetic}</p>
+        {/* 固定行高：并列两条时字号降一档，不锁死高度会让下面的单词随词上下跳 */}
+        <div className="h-9 flex items-center justify-center gap-x-5">
+          {phonetics.map((entry) => (
+            <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
+              {entry.label && (
+                <span className="font-sans text-xs font-semibold text-[#6B7280]">{entry.label}</span>
+              )}
+              <span
+                className={`font-mono tracking-wide text-gray-300 ${
+                  phonetics.length > 1 ? 'text-xl' : 'text-2xl'
+                }`}
+              >
+                {entry.text}
+              </span>
+            </span>
+          ))}
+        </div>
         <h2
           className={`${wordSizeClass(word.name.length)} font-extrabold tracking-tight text-white font-mono leading-tight`}
         >
-          <MarkedWord name={word.name} />
+          <MarkedWord word={word} />
         </h2>
         <div className="h-10 flex items-center justify-center">
           <p className="text-sm sm:text-base text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">

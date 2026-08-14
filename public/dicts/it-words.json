@@ -253,7 +253,7 @@
       "n. 记录,纪录,唱片 vt. 记录,(将声音等)录下，表明 adj. 关于"
     ],
     "usphone": "ˈrekərd",
-    "ukphone": "(for v.)rɪˈkɔːd /  (for n.) ˈrekɔːd"
+    "ukphone": "rɪˈkɔːd"
   },
   {
     "name": "box",
@@ -493,7 +493,7 @@
       "n. 榜样,例子 vt. 把...作为例子"
     ],
     "usphone": "ɪgˈzæmpl",
-    "ukphone": "ɪg'zɑːmp(ə)l /  eg-"
+    "ukphone": "ɪg'zɑːmp(ə)l"
   },
   {
     "name": "create",
@@ -693,7 +693,7 @@
       "n. 钮扣,徽章,像纽扣的东西,未成熟的蘑菇,按钮 vt. 用纽扣装饰,钉纽扣,闭嘴 vi. 扣上"
     ],
     "usphone": "ˈbʌtn",
-    "ukphone": "[ˈbʌtn]"
+    "ukphone": "ˈbʌtn"
   },
   {
     "name": "index",
@@ -708,7 +708,7 @@
     "trans": [
       "adv.在外部； 户外； 缺少； 没有或不显示某事物 prep.没有，缺乏； 在外面 conj.除非，如果不"
     ],
-    "usphone": "wɪðˈaʊt, wɪθ-",
+    "usphone": "wɪðˈaʊt",
     "ukphone": "wɪˈðaʊt"
   },
   {
@@ -925,7 +925,7 @@
       "prep. 到...里"
     ],
     "usphone": "ˈɪntu",
-    "ukphone": "'ɪntʊ /  'ɪntə"
+    "ukphone": "'ɪntʊ "
   },
   {
     "name": "path",
@@ -965,7 +965,7 @@
       "vt. 使...能够,使可行 [计算机] 使能"
     ],
     "usphone": "ɛˈnebəl",
-    "ukphone": "ɪn'eɪb(ə)l /  en-"
+    "ukphone": "ɪn'eɪb(ə)l"
   },
   {
     "name": "operation",
@@ -1236,7 +1236,7 @@
     "trans": [
       "vt. 恢复,归还,翻新"
     ],
-    "usphone": "rɪˈstɔr, -ˈstor",
+    "usphone": "rɪˈstɔr",
     "ukphone": "rɪ'stɔːr"
   },
   {
@@ -1397,7 +1397,7 @@
       "vt.（使）发生联系； （使）联合； 结交； 联想 vi.联盟； 陪伴同事 n.合伙人； 伴侣，同志； 非正式会员 adj.联合的； 合伙的； 非正式的； （性质上）有密切联系的"
     ],
     "usphone": "əˈsoʊʃieɪt",
-    "ukphone": "ə'səʊʃɪeɪt /  -sɪeɪt"
+    "ukphone": "ə'səʊʃɪeɪt"
   },
   {
     "name": "attribute",
@@ -1420,7 +1420,7 @@
     "trans": [
       "prep.在…之前； 先于，优于； 当着…的面； 与其… conj.在…之前； 在…以前； 比…早些； 与其… adv.先前，从前； 在前，在前方"
     ],
-    "usphone": "bɪˈfɔr,-ˈfor",
+    "usphone": "bɪˈfɔr",
     "ukphone": "bɪ'fɔː"
   },
   {
@@ -1524,8 +1524,8 @@
     "trans": [
       "pron. 任一的 conj. 或, 也 adj. 任一, 两方的 adv. 也"
     ],
-    "usphone": "ˈiðɚ, ˈaɪðɚ",
-    "ukphone": "'aɪðə /  'iː-"
+    "usphone": "ˈiðɚ",
+    "ukphone": "'aɪðə"
   },
   {
     "name": "OK",
@@ -1557,7 +1557,7 @@
       "v. 存在"
     ],
     "usphone": "ɪɡˈzɪst",
-    "ukphone": "ɪg'zɪst /  eg-"
+    "ukphone": "ɪg'zɪst"
   },
   {
     "name": "scope",
@@ -1597,7 +1597,7 @@
       "n. 出口,退场,离去 vi. 退出,死亡 vt. 离开"
     ],
     "usphone": "ˈɛɡzɪt, ˈɛksɪt",
-    "ukphone": "'eksɪt /  'egzɪt"
+    "ukphone": "'eksɪt"
   },
   {
     "name": "report",
@@ -1685,7 +1685,7 @@
       "verb auxiliary. 应该,竟然,可能"
     ],
     "usphone": "ʃʊd",
-    "ukphone": "ʃəd /  strong form ʃʊd"
+    "ukphone": "ʃəd"
   },
   {
     "name": "single",
@@ -1789,7 +1789,7 @@
       "adv. 仅仅,只 conj. 但是 prep. 除...以外 pron. 只有"
     ],
     "usphone": "bʌt,bət",
-    "ukphone": "bʌt /  bət"
+    "ukphone": "bʌt/bət"
   },
   {
     "name": "device",
@@ -2069,7 +2069,7 @@
       "adj. 全部的,完整的，同性质的，纯正的，全面的"
     ],
     "usphone": "ɛnˈtaɪr",
-    "ukphone": "ɪn'taɪə /  en-"
+    "ukphone": "ɪn'taɪə"
   },
   {
     "name": "leave",

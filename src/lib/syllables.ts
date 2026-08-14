@@ -476,6 +476,16 @@ export function isUsableSyllableSplit(name: string, syllables?: string[]): boole
 }
 
 /**
+ * 音节的统一取用口径：人工拆分过了校验就用它，否则现算。
+ *
+ * 音节拆分模块和主词的字母组合上色都要按同一份音节来，
+ * 各自算一套的话会出现「拆分显示 di-rec-to-ry，上色却把 ir 当成一个单位」这种自相矛盾。
+ */
+export function resolveSyllables(word: WordItem): string[] {
+  return isUsableSyllableSplit(word.name, word.syllables) ? word.syllables : splitIntoSyllables(word.name)
+}
+
+/**
  * 按构词法把单词切成「前缀 + 词根 + 后缀」，让学习者看到词义是怎么拼出来的。
  *
  * 词根库里的 form 是规范形式（perspective 的词根记作 spect），不保证和单词字面一致，
@@ -502,11 +512,7 @@ export function splitIntoMorphemes(word: WordItem): WordMorpheme[] {
   const middle = name.slice(start, end)
 
   if (!middle || (start === 0 && end === name.length)) {
-    // 导入时人工填的拆分优先，但必须先过校验，否则旧快照里切错的分段会一直显示下去
-    const fallback = isUsableSyllableSplit(name, word.syllables)
-      ? word.syllables
-      : splitIntoSyllables(name)
-    return fallback.map((text) => ({ text, role: 'syllable' as const }))
+    return resolveSyllables(word).map((text) => ({ text, role: 'syllable' as const }))
   }
 
   const morphemes: WordMorpheme[] = []

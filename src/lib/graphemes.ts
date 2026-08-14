@@ -97,15 +97,42 @@ const GRAPHEME_PATTERNS: GraphemePattern[] = [
 /** 最长优先：our 要盖过 ou，ear 要盖过 ea，否则三字母组合永远轮不到 */
 const SORTED_PATTERNS = [...GRAPHEME_PATTERNS].sort((a, b) => b.letters.length - a.letters.length)
 
-function matchPatternAt(lower: string, index: number): GraphemePattern | undefined {
+/** 由各音节长度累加出音节边界的下标集合 */
+function buildBoundaries(syllables?: string[]): Set<number> {
+  const boundaries = new Set<number>()
+  if (!syllables || syllables.length < 2) return boundaries
+
+  let offset = 0
+  for (const syllable of syllables.slice(0, -1)) {
+    offset += syllable.length
+    boundaries.add(offset)
+  }
+
+  return boundaries
+}
+
+/** 组合内部夹着音节边界，说明它横跨了两个音节 */
+function crossesBoundary(boundaries: Set<number>, start: number, end: number): boolean {
+  for (let i = start + 1; i < end; i++) {
+    if (boundaries.has(i)) return true
+  }
+
+  return false
+}
+
+function matchPatternAt(lower: string, index: number, boundaries: Set<number>): GraphemePattern | undefined {
   for (const pattern of SORTED_PATTERNS) {
     const end = index + pattern.letters.length
     if (end > lower.length) continue
     if (lower.slice(index, end) !== pattern.letters) continue
     if (pattern.at === 'end' && end !== lower.length) continue
     if (pattern.at === 'not-start' && index === 0) continue
+    // 跨音节的不算发音单位。这里只跳过当前模式继续试更短的，
+    // tourist 切成 tou-rist 后 our 被否掉，还能退到 ou（确实读 /ʊə/）
+    if (crossesBoundary(boundaries, index, end)) continue
     return pattern
   }
+
   return undefined
 }
 
@@ -116,17 +143,21 @@ function matchPatternAt(lower: string, index: number): GraphemePattern | undefin
  * ow 整组算组合，里面的 o 不会再被单独标成元音。
  * 各段拼接后必然还原成原词——渲染要逐段套样式，对不上就会漏字母。
  *
- * 只做拼写层面的匹配，不声称每组读什么音，因此不需要音素词典。
- * 代价是存在假阳性：react（re-act）的 ea 跨了音节边界、hothouse 的 th 跨了词素边界，
- * 都会被误标成组合。想消掉这类需要额外的例外表。
+ * 传入 syllables 时会拿它当护栏：发音单位不可能跨音节，跨了就不标。
+ * directory 切成 di-rec-to-ry，里面的 ir 分属 di 和 rec（读 /ɪ/ + /r/ 而不是 /ɜː/），
+ * 只看字母是分不出它和 bird 里那个 ir 的，靠音节边界才能否掉。
+ * 音节切错时后果是漏标而非错标，比标错一个读音安全得多。
+ *
+ * 仍然只做拼写层面的匹配，不声称每组读什么音，因此不需要音素词典。
  */
-export function splitIntoGraphemes(word: string): GraphemeSegment[] {
+export function splitIntoGraphemes(word: string, syllables?: string[]): GraphemeSegment[] {
   const lower = word.toLowerCase()
+  const boundaries = buildBoundaries(syllables)
   const segments: GraphemeSegment[] = []
   let index = 0
 
   while (index < word.length) {
-    const pattern = matchPatternAt(lower, index)
+    const pattern = matchPatternAt(lower, index, boundaries)
 
     if (pattern) {
       segments.push({
