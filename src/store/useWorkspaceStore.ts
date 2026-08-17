@@ -820,24 +820,45 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       prevWord: () => {
         const unitWords = get().getUnitWords()
-        const { activeWordIndex, loopCountSetting, isErrorPracticeActive } = get()
+        const {
+          activeWordIndex,
+          loopCountSetting,
+          isErrorPracticeActive,
+          isAutoPlayAudio,
+          mode,
+          dictationCueMode,
+          phoneticPreference,
+        } = get()
+
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+
+        let targetIndex = -1
+
         if (activeWordIndex > 0) {
+          targetIndex = activeWordIndex - 1
+        } else if (isErrorPracticeActive && unitWords.length > 1) {
+          // 错词模式下在第 0 个往前按，循环回到最后一个
+          targetIndex = unitWords.length - 1
+        }
+
+        if (targetIndex !== -1) {
           set({
-            activeWordIndex: activeWordIndex - 1,
+            activeWordIndex: targetIndex,
             currentInput: '',
             hasTypo: false,
             currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
             ...DICTATION_STEP_RESET,
           })
-        } else if (isErrorPracticeActive && unitWords.length > 1) {
-          // 错词模式下在第 0 个往前按，循环回到最后一个
-          set({
-            activeWordIndex: unitWords.length - 1,
-            currentInput: '',
-            hasTypo: false,
-            currentWordRemainingLoops: 3,
-            ...DICTATION_STEP_RESET,
-          })
+
+          const targetWord = unitWords[targetIndex]
+          if (targetWord && canPlayAudio) {
+            audioEngine.playPronunciation(targetWord.name, phoneticPreference)
+          }
+
+          const prefetchTarget = unitWords[targetIndex - 1]
+          if (prefetchTarget) {
+            audioEngine.prefetchWordAudio(prefetchTarget.name, phoneticPreference)
+          }
         }
       },
 
