@@ -129,6 +129,8 @@ interface WorkspaceState {
   setDictationCueMode: (cueMode: DictationCueMode) => void
   /** 听音模式下主动播一遍当前词，用于进入默写页与切换线索模式时补线索 */
   playDictationCue: () => void
+  /** 主动播放当前词读音（遵循自动播放与静音规则） */
+  playCurrentWordAudio: () => void
   setPhoneticPreference: (pref: 'us' | 'uk') => void
   toggleDictationPhonetic: (enabled?: boolean) => void
   toggleDictationMeaning: (enabled?: boolean) => void
@@ -390,6 +392,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...DICTATION_STEP_RESET,
         })
         await get().loadCurrentUnitWords()
+
+        const { isAutoPlayAudio, mode, dictationCueMode, phoneticPreference, audioRate } = get()
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+        const firstWord = get().getCurrentWord()
+        if (firstWord && canPlayAudio) {
+          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+        }
+        const nextWord = get().currentLoadedWords[1]
+        if (nextWord) {
+          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+        }
       },
 
       setUnitIndex: async (unitIndex: number) => {
@@ -406,6 +419,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...DICTATION_STEP_RESET,
         })
         await get().loadCurrentUnitWords()
+
+        const { isAutoPlayAudio, mode, dictationCueMode, phoneticPreference, audioRate } = get()
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+        const firstWord = get().getCurrentWord()
+        if (firstWord && canPlayAudio) {
+          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+        }
+        const nextWord = get().currentLoadedWords[1]
+        if (nextWord) {
+          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+        }
       },
 
       /**
@@ -471,6 +495,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const currentWord = get().getCurrentWord()
         if (!currentWord || !isAutoPlayAudio) return
         if (mode !== 'dictation' || dictationCueMode !== 'listen') return
+        audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
+      },
+
+      playCurrentWordAudio: () => {
+        const { mode, dictationCueMode, isAutoPlayAudio, phoneticPreference, audioRate } = get()
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+        const currentWord = get().getCurrentWord()
+        if (!currentWord || !canPlayAudio) return
         audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
       },
 
@@ -873,6 +905,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           conqueredErrorWordIds: [],
           ...DICTATION_STEP_RESET,
         })
+
+        const { isAutoPlayAudio, mode, dictationCueMode, phoneticPreference, audioRate } = get()
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+        const firstWord = get().getCurrentWord()
+        if (firstWord && canPlayAudio) {
+          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+        }
+        const nextWord = get().currentLoadedWords[1]
+        if (nextWord) {
+          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+        }
       },
     }),
     {
