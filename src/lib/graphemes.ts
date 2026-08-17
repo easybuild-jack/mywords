@@ -10,6 +10,7 @@ export type GraphemeKind =
   | 'consonant-digraph' // 辅音双字母，如 sh、ck
   | 'suffix-chunk' // 固定后缀音块，如 tion、ture
   | 'vowel' // 未参与组合的单个元音字母
+  | 'silent-e' // 词尾不发音的哑音 e
   | 'plain' // 其余辅音字母
 
 export interface GraphemeSegment {
@@ -46,8 +47,9 @@ const GRAPHEME_PATTERNS: GraphemePattern[] = [
   { letters: 'ew', kind: 'vowel-team' },
   { letters: 'ey', kind: 'vowel-team' },
   { letters: 'ie', kind: 'vowel-team' },
-  // igh/eigh/ough/augh 这几个要整组收进来。少了它们，thought 会被切成 ou + gh，
-  // 把本该一起看的字母拆散，而且落单的 gh 在这些词里其实不发音。
+  // aigh/igh/eigh/ough/augh 这几个要整组收进来。少了它们，thought 会被切成 ou + gh，
+  // straight 会被切成 ai + gh，把本该一起看的字母拆散，而且落单的 gh 在这些词里其实不发音。
+  { letters: 'aigh', kind: 'vowel-team' },
   { letters: 'igh', kind: 'vowel-team' },
   { letters: 'eigh', kind: 'vowel-team' },
   { letters: 'ough', kind: 'vowel-team' },
@@ -136,6 +138,28 @@ function matchPatternAt(lower: string, index: number, boundaries: Set<number>): 
   return undefined
 }
 
+/** 判断某个位置之前是否已有其他发音元音 */
+function hasVowelBefore(word: string, index: number): boolean {
+  for (let i = 0; i < index; i++) {
+    if (isVowelAt(word, i)) return true
+  }
+  return false
+}
+
+/**
+ * 判断词尾的 e 是否为不发音的哑音 e（如 white、cake、purple、table、dance）
+ * 1. 位于词尾（index === word.length - 1 且字母为 e）
+ * 2. 前面已有其他元音（如 white 里的 i、purple 里的 u、cake 里的 a）
+ *    或以辅音 + le 结尾（如 ple、ble）
+ * 3. 不是单词中唯一的元音（排除 he、she、we、me、be、the）
+ */
+function isSilentEAtEnd(word: string, index: number): boolean {
+  if (index !== word.length - 1 || word[index] !== 'e') return false
+  if (hasVowelBefore(word, index)) return true
+  if (word.endsWith('le') && word.length >= 3 && !isVowelAt(word, word.length - 3)) return true
+  return false
+}
+
 /**
  * 把单词切成「固定发音的字母组合 + 单个字母」的分段序列。
  *
@@ -168,9 +192,16 @@ export function splitIntoGraphemes(word: string, syllables?: string[]): Grapheme
       continue
     }
 
+    let kind: GraphemeKind = 'plain'
+    if (isSilentEAtEnd(lower, index)) {
+      kind = 'silent-e'
+    } else if (isVowelAt(lower, index)) {
+      kind = 'vowel'
+    }
+
     segments.push({
       text: word[index],
-      kind: isVowelAt(lower, index) ? 'vowel' : 'plain',
+      kind,
     })
     index++
   }

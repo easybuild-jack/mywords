@@ -191,7 +191,7 @@ class DictionaryLoader {
 
     // 4. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
     const syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
-    const etymology = customEtymology ?? analyzeEtymology(cleanName)
+    const etymology = customEtymology ?? undefined
     const posList = this.parsePosAndMeans(transList)
 
     return {
@@ -248,7 +248,7 @@ class DictionaryLoader {
         curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
           ? curatedSyllables
           : splitIntoSyllables(name)
-      const etymology = entry.etymology ?? analyzeEtymology(name)
+      const etymology = entry.etymology
       const posList = this.parsePosAndMeans(rawTrans)
 
       return {

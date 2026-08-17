@@ -493,6 +493,8 @@ export function resolveSyllables(word: WordItem): string[] {
  * 跟打进度才能按段高亮。一个词缀都对不上时退回音节切分。
  */
 export function splitIntoMorphemes(word: WordItem): WordMorpheme[] {
+  if (!word.etymology) return []
+
   const name = word.name.trim().toLowerCase()
   const letters = (form?: string) => (form ? form.replace(/-/g, '').toLowerCase() : '')
 
@@ -505,21 +507,21 @@ export function splitIntoMorphemes(word: WordItem): WordMorpheme[] {
   if (prefix && name.startsWith(prefix) && prefix.length < name.length) {
     start = prefix.length
   }
-  if (suffix && name.endsWith(suffix) && end - suffix.length > start) {
+  if (suffix && name.endsWith(suffix) && end - suffix.length >= start) {
     end -= suffix.length
   }
 
   const middle = name.slice(start, end)
-
-  if (!middle || (start === 0 && end === name.length)) {
-    return resolveSyllables(word).map((text) => ({ text, role: 'syllable' as const }))
-  }
-
   const morphemes: WordMorpheme[] = []
+
   if (start > 0) {
     morphemes.push({ text: name.slice(0, start), role: 'prefix', meaning: word.etymology?.prefix?.meaning })
   }
-  morphemes.push({ text: middle, role: 'root', meaning: word.etymology?.root?.meaning })
+  if (middle) {
+    morphemes.push({ text: middle, role: 'root', meaning: word.etymology?.root?.meaning })
+  } else if (word.etymology?.root?.form && morphemes.length === 0) {
+    morphemes.push({ text: word.etymology.root.form, role: 'root', meaning: word.etymology.root.meaning })
+  }
   if (end < name.length) {
     morphemes.push({ text: name.slice(end), role: 'suffix', meaning: word.etymology?.suffix?.meaning })
   }
