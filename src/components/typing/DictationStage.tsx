@@ -28,9 +28,19 @@ export function DictationStage() {
   const submitPhonetic = useWorkspaceStore((s) => s.submitPhonetic)
   const isPhoneticError = useWorkspaceStore((s) => s.isPhoneticError)
 
+  // 键盘内部的草稿状态：在未点击确认前不修改卡片上的实际输入框
+  const [draftPhonetic, setDraftPhonetic] = React.useState(dictationPhoneticInput)
+
+  // 当打开键盘时，将草稿重置为当前卡片上已有的音标值
+  useEffect(() => {
+    if (isPhoneticFocused) {
+      setDraftPhonetic(dictationPhoneticInput)
+    }
+  }, [isPhoneticFocused, dictationPhoneticInput])
+
   useTypingKeyboard({ enablePeek: true })
 
-  // 点击卡片外部收起音标键盘
+  // 点击卡片外部收起音标键盘（不提交草稿）
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (isPhoneticFocused && stageRef.current && !stageRef.current.contains(e.target as Node)) {
@@ -53,9 +63,9 @@ export function DictationStage() {
                 word={currentWord}
                 currentInput={currentInput}
                 hasTypo={hasTypo}
-                        isPeeking={isPeeking}
-                        cueMode={dictationCueMode}
-                        phoneticPreference={phoneticPreference}
+                isPeeking={isPeeking}
+                cueMode={dictationCueMode}
+                phoneticPreference={phoneticPreference}
                 remainingLoops={currentWordRemainingLoops}
               />
             )}
@@ -69,13 +79,17 @@ export function DictationStage() {
               style={{ left: 'calc(50% + 128px)', transform: 'translateX(-50%)' }}
             >
               <IpaKeyboard
-                value={dictationPhoneticInput}
+                value={draftPhonetic}
                 hasError={isPhoneticError}
-                onSelectSymbol={(sym) => setDictationPhoneticInput(dictationPhoneticInput + sym)}
-                onBackspace={() => setDictationPhoneticInput(dictationPhoneticInput.slice(0, -1))}
-                onClear={() => setDictationPhoneticInput('')}
-                onSubmit={() => submitPhonetic()}
-                onClose={() => setIsPhoneticFocused(false)}
+                onSelectSymbol={(sym) => setDraftPhonetic((prev) => prev + sym)}
+                onBackspace={() => setDraftPhonetic((prev) => prev.slice(0, -1))}
+                onClear={() => setDraftPhonetic('')}
+                onSubmit={() => {
+                  submitPhonetic(draftPhonetic)
+                }}
+                onClose={() => {
+                  setIsPhoneticFocused(false)
+                }}
               />
             </div>
           )}

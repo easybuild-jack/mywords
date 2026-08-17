@@ -135,7 +135,7 @@ interface WorkspaceState {
   setDictationPhoneticInput: (input: string) => void
   setDictationMeaningInput: (input: string) => void
   setIsPhoneticFocused: (focused: boolean) => void
-  submitPhonetic: () => boolean
+  submitPhonetic: (overrideInput?: string) => boolean
   submitMeaning: () => boolean
   resetDictationStepStates: () => void
   setInput: (input: string) => void
@@ -497,13 +497,18 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       setDictationMeaningInput: (input: string) => set({ dictationMeaningInput: input }),
       setIsPhoneticFocused: (focused: boolean) => set({ isPhoneticFocused: focused }),
 
-      submitPhonetic: () => {
+      submitPhonetic: (overrideInput?: string) => {
         const currentWord = get().getCurrentWord()
-        const { dictationPhoneticInput } = get()
+        const inputToValidate = overrideInput !== undefined ? overrideInput : get().dictationPhoneticInput
         if (!currentWord) return false
-        const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
+        const isValid = validatePhonetic(inputToValidate, currentWord.phoneticUs, currentWord.phoneticUk)
         if (isValid) {
-          set({ isPhoneticPassed: true, isPhoneticFocused: false, isPhoneticError: false })
+          set({
+            dictationPhoneticInput: inputToValidate,
+            isPhoneticPassed: true,
+            isPhoneticFocused: false,
+            isPhoneticError: false,
+          })
           // 音标能写对，说明读音已经掌握，这一遍不算送答案，当作过关奖励直接念出来。
           audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
           return true
