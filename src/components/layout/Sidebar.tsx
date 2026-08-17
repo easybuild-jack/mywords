@@ -22,7 +22,7 @@ export function Sidebar() {
   const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
-    { label: '学习', icon: GraduationCap, href: '/learn' },
+    { label: '单词', icon: GraduationCap, href: '/learn' },
     { label: '默写', icon: PenLine, href: '/dictation' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
