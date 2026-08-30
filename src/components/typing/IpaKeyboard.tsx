@@ -28,25 +28,25 @@ export function IpaKeyboard({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`w-[1000px] max-w-[calc(100vw-300px)] bg-[#12141A] rounded-2xl p-5 border shadow-[0_12px_40px_rgba(0,0,0,0.75)] space-y-4 select-none animate-in fade-in slide-in-from-top-2 duration-200 z-50 pointer-events-auto ${
+      className={`w-[860px] max-w-[calc(100vw-300px)] bg-[#12141A] rounded-2xl p-4 border shadow-[0_12px_40px_rgba(0,0,0,0.75)] space-y-3 select-none animate-in fade-in slide-in-from-top-2 duration-200 z-50 pointer-events-auto ${
         hasError ? 'border-destructive animate-border-flash' : 'border-primary/30'
       }`}
     >
       {/* 音标符号网格 */}
-      <div className="space-y-3.5 max-h-[58vh] overflow-y-auto pr-1">
+      <div className="space-y-2.5 max-h-[58vh] overflow-y-auto pr-1">
         {IPA_KEYBOARD_GROUPS.map((group) => (
-          <div key={group.category} className="space-y-1.5">
+          <div key={group.category} className="space-y-1">
             <div className="text-xs text-gray-400 font-medium px-1 flex items-center gap-1.5">
               <span className="inline-block size-1.5 rounded-full bg-primary/60" />
               <span>{group.category}</span>
             </div>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2">
               {group.symbols.map((sym) => (
                 <button
                   key={sym}
                   type="button"
                   onClick={() => onSelectSymbol(sym)}
-                  className="min-w-14 h-14 px-3 rounded-xl bg-white/[0.04] hover:bg-primary/20 hover:border-primary/50 hover:text-primary border border-white/10 font-mono text-2xl font-bold text-white transition-all active:scale-90 flex items-center justify-center cursor-pointer shadow-sm"
+                  className="min-w-12 h-12 px-2.5 rounded-lg bg-white/[0.04] hover:bg-primary/20 hover:border-primary/50 hover:text-primary border border-white/10 font-mono text-xl font-bold text-white transition-all active:scale-90 flex items-center justify-center cursor-pointer shadow-sm"
                 >
                   {sym}
                 </button>
@@ -57,16 +57,16 @@ export function IpaKeyboard({
       </div>
 
       {/* 底部操作与回显栏：已选回显框 + 退格 + 清空 + 关闭 + 确认 */}
-      <div className="flex items-center gap-2.5 border-t border-white/10 pt-3.5">
+      <div className="flex items-center gap-2 border-t border-white/10 pt-3">
         <span className="text-xs font-bold text-gray-400 uppercase tracking-wider shrink-0">已选</span>
 
         <div
-          className={`flex-1 min-w-0 h-14 rounded-xl border px-4 flex items-center transition-all ${
+          className={`flex-1 min-w-0 h-12 rounded-lg border px-3 flex items-center transition-all ${
             hasError ? 'border-destructive/60 bg-destructive/10' : 'border-white/15 bg-white/[0.04]'
           }`}
         >
           {value ? (
-            <span className="font-mono text-2xl font-bold text-primary tracking-wider truncate">
+            <span className="font-mono text-xl font-bold text-primary tracking-wider truncate">
               /{value}/
             </span>
           ) : (
@@ -77,7 +77,7 @@ export function IpaKeyboard({
         <button
           type="button"
           onClick={onBackspace}
-          className="flex items-center gap-1.5 h-14 px-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-sm font-medium text-gray-200 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0"
+          className="flex items-center gap-1.5 h-12 px-3.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-sm font-medium text-gray-200 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0"
           title="退格"
         >
           <Delete className="size-4" />
@@ -87,7 +87,7 @@ export function IpaKeyboard({
         <button
           type="button"
           onClick={onClear}
-          className="h-14 w-12 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-400 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
+          className="h-12 w-10 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-400 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
           title="清空已选音标"
         >
           <RotateCcw className="size-4" />
@@ -96,7 +96,7 @@ export function IpaKeyboard({
         <button
           type="button"
           onClick={onClose}
-          className="h-14 w-12 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-400 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
+          className="h-12 w-10 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-400 hover:text-white transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
           title="收起键盘"
         >
           <X className="size-5" />
@@ -105,7 +105,7 @@ export function IpaKeyboard({
         <button
           type="button"
           onClick={onSubmit}
-          className="flex items-center gap-1.5 h-14 px-6 rounded-xl bg-primary hover:bg-primary/90 text-[#0B0C0E] text-base font-bold transition-all active:scale-95 shadow-sm cursor-pointer shrink-0"
+          className="flex items-center gap-1.5 h-12 px-5 rounded-lg bg-primary hover:bg-primary/90 text-[#0B0C0E] text-sm font-bold transition-all active:scale-95 shadow-sm cursor-pointer shrink-0"
           title="确认并校验音标"
         >
           <Check className="size-5" />

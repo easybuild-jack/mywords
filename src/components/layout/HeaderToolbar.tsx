@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Settings, RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
+import { RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 export function HeaderToolbar() {
@@ -20,7 +20,6 @@ export function HeaderToolbar() {
     setDictationCueMode,
     phoneticPreference,
     setPhoneticPreference,
-    setSettingsModalOpen,
     restartUnit,
   } = useWorkspaceStore()
 
@@ -123,21 +122,7 @@ export function HeaderToolbar() {
           </div>
         )}
 
-        {/* 分隔线 */}
-        <div className="h-4 w-px bg-white/10" />
-
-        {/* 5. 设置快捷图标 */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setSettingsModalOpen(true)}
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all"
-            title="偏好设置"
-          >
-            <Settings className="size-4" />
-          </button>
-        </div>
-
-        {/* 6. Restart 按钮 */}
+        {/* 5. Restart 按钮 */}
         <button
           onClick={restartUnit}
           className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer whitespace-nowrap"
