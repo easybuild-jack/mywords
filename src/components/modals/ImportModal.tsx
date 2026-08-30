@@ -260,7 +260,7 @@ compile v. 编译；编纂`
         {/* 顶部标题与关闭 */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30 shadow-[0_0_16px_rgba(0,255,136,0.2)]">
+            <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]">
               <Upload className="size-5" />
             </div>
             <div>
@@ -288,7 +288,7 @@ compile v. 编译；编纂`
           <button
             onClick={() => { setActiveTab('text'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'text' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
+              activeTab === 'text' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
             <FileText className="size-3.5" />
@@ -297,7 +297,7 @@ compile v. 编译；编纂`
           <button
             onClick={() => { setActiveTab('file'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
-              activeTab === 'file' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgba(0,255,136,0.3)]' : 'text-[#9CA3AF] hover:text-white'
+              activeTab === 'file' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_12px_rgb(var(--primary-rgb)/0.3)]' : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
             <FileSpreadsheet className="size-3.5" />

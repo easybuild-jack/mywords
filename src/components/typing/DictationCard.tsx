@@ -125,14 +125,14 @@ export function DictationCard({
                   ? 'cursor-default'
                   : 'cursor-not-allowed'
                 } ${!isDictationPhoneticEnabled
-                  ? 'border-white/5 bg-white/[0.02] opacity-40'
+                  ? 'border-primary/10 bg-primary/[0.02] opacity-40'
                   : isPhoneticPassed
                     ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
                     : isPhoneticError
                       ? 'border-destructive bg-destructive/15 animate-shake'
                       : isPhoneticFocused
-                        ? 'border-primary bg-white/[0.06] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.25)] ring-1 ring-primary/50'
-                        : 'border-white/15 bg-white/[0.04] hover:border-white/30'
+                        ? 'border-primary bg-primary/[0.07] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.22)] ring-1 ring-primary/40'
+                        : 'border-primary/20 bg-primary/[0.03] hover:border-primary/45 hover:bg-primary/[0.06]'
                 }`}
             >
               <div className="flex items-center gap-2 min-w-0">
@@ -195,12 +195,12 @@ export function DictationCard({
             <div className="flex items-center gap-2.5">
               <div
                 className={`flex-1 h-24 rounded-2xl border px-3.5 py-2.5 flex items-start justify-between transition-all duration-200 ${!isDictationMeaningEnabled
-                  ? 'border-white/5 bg-white/[0.02] opacity-40 cursor-not-allowed'
+                  ? 'border-primary/10 bg-primary/[0.02] opacity-40 cursor-not-allowed'
                   : isMeaningPassed
                     ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
                     : isMeaningError
                       ? 'border-destructive bg-destructive/15 animate-shake'
-                      : 'border-white/15 bg-white/[0.04] focus-within:border-primary focus-within:bg-white/[0.06] focus-within:shadow-[0_0_20px_rgb(var(--primary-rgb)/0.25)]'
+                      : 'border-primary/20 bg-primary/[0.03] focus-within:border-primary focus-within:bg-primary/[0.06] focus-within:shadow-[0_0_20px_rgb(var(--primary-rgb)/0.22)]'
                   }`}
               >
                 <div className="flex items-start gap-2 flex-1 min-w-0 mr-2 h-full">
@@ -270,10 +270,10 @@ export function DictationCard({
           <div className="relative w-full">
             <div
               className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${!isSpellingUnlocked
-                ? 'border-white/10 bg-white/[0.02] text-muted-foreground/50 opacity-60'
+                ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60'
                 : hasTypo
                   ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
-                  : 'border-[#00FF88]/45 bg-[#00FF88]/[0.05] text-primary shadow-[0_0_24px_rgba(0,255,136,0.16)]'
+                  : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
                 }`}
             >
               {!isSpellingUnlocked ? (
@@ -300,7 +300,7 @@ export function DictationCard({
                   {/* 下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不会消失 */}
                   <span
                     className={`ml-1 font-normal ${
-                      hasTypo ? 'text-destructive/40' : 'text-[#00FF88]/35'
+                      hasTypo ? 'text-destructive/40' : 'text-primary/35'
                     }`}
                   >
                     {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}

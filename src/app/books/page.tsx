@@ -104,7 +104,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('official')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'official'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -114,7 +114,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('custom')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'custom'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgba(0,255,136,0.3)]'
+                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -193,14 +193,14 @@ export default function BooksHubPage() {
                 cy="48"
                 r={strokeRadius}
                 fill="transparent"
-                stroke="#34D399"
+                stroke="var(--primary)"
                 strokeWidth="6"
                 strokeDasharray={strokeCircumference}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 className="transition-all duration-700 ease-out"
                 style={{
-                  filter: progressPercent > 0 ? 'drop-shadow(0 0 6px rgba(52, 211, 153, 0.5))' : 'none'
+                  filter: progressPercent > 0 ? 'drop-shadow(0 0 6px rgb(var(--primary-rgb) / 0.5))' : 'none'
                 }}
               />
             </svg>

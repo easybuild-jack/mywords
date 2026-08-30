@@ -137,7 +137,8 @@ export function LearnCard({
   const morphemes = splitIntoMorphemes(word)
 
   const hasMultipleSyllables = Array.isArray(word.syllables) && word.syllables.length > 1
-  const displayLength = isSplit && hasMultipleSyllables ? word.syllables.join('·').length : word.name.length
+  // 切分模式只插入 · 视觉分隔符，不计入长度 —— 否则单词一切分就掉一档字号，与原词不一致
+  const displayLength = word.name.length
 
   const hasEtymology = Boolean(
     word.etymology && (
@@ -192,7 +193,7 @@ export function LearnCard({
                 onClick={() => setIsSplit((prev) => !prev)}
                 className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
                   isSplit
-                    ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgba(0,255,136,0.2)]'
+                    ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
                     : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
                 }`}
                 title={isSplit ? '合并单词' : '音节切分'}
@@ -212,7 +213,7 @@ export function LearnCard({
           </div>
         </div>
 
-        {/* 跟打输入槽：外框用霓虹绿 #00FF88。它和输入文字的主色 #34D399 同色相，
+        {/* 跟打输入槽：外框用 primary 色（响应皮肤），光晕颜色由 var(--primary-rgb) 拼出，
             靠更高的饱和度与明度拉开层次，所以透明度要压住，否则框会比字还抢眼。
             框内下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不消失。
             overflow-hidden 兜住超长词：48px 字号下约 17 个字母就到边，宁可裁掉尾巴也别撑破框。
@@ -223,7 +224,7 @@ export function LearnCard({
             className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
               hasTypo
                 ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
-                : 'border-[#00FF88]/45 bg-[#00FF88]/[0.05] text-primary shadow-[0_0_24px_rgba(0,255,136,0.16)]'
+                : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
             }`}
           >
             {currentInput && <span className="mr-1">{currentInput}</span>}
@@ -234,7 +235,7 @@ export function LearnCard({
             />
             <span
               className={`ml-1 font-normal ${
-                hasTypo ? 'text-destructive/40' : 'text-[#00FF88]/35'
+                hasTypo ? 'text-destructive/40' : 'text-primary/35'
               }`}
             >
               {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
