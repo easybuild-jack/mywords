@@ -4,7 +4,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
-import { CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react'
+import { CheckCircle2, RotateCcw, ArrowRight, BookOpen } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 /** 学习页与默写页共用的通关结算卡片，文案按当前场景切换 */
@@ -13,6 +13,8 @@ export function UnitCompleteCard() {
 
   const {
     mode,
+    currentBook,
+    unitSize,
     currentUnitIndex,
     isErrorPracticeActive,
     restartUnit,
@@ -20,10 +22,43 @@ export function UnitCompleteCard() {
     setUnitIndex,
   } = useWorkspaceStore()
 
+  const totalWords = currentBook?.words?.length || currentBook?.totalWords || 0
+  const effectiveUnitSize = unitSize || currentBook?.unitSize || 20
+  const totalUnits = Math.max(1, Math.ceil(totalWords / effectiveUnitSize))
+  const hasNextUnit = !isErrorPracticeActive && currentUnitIndex + 1 < totalUnits
+
   React.useEffect(() => {
     if (typeof window === 'undefined') return
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
   }, [])
+
+  // 监听确认键 (Enter)，直接进入下一单元
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 避免在弹窗或其他输入框存在时触发
+      const target = e.target as HTMLElement
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable
+      ) {
+        return
+      }
+
+      if (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter') {
+        e.preventDefault()
+        if (isErrorPracticeActive) {
+          exitErrorPractice().then(() => router.push('/dictation'))
+        } else if (hasNextUnit) {
+          setUnitIndex(currentUnitIndex + 1)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isErrorPracticeActive, hasNextUnit, currentUnitIndex, exitErrorPractice, router, setUnitIndex])
 
   return (
     <motion.div
@@ -47,8 +82,8 @@ export function UnitCompleteCard() {
           <h2 className="text-2xl font-bold text-white">🎉 恭喜完成第 {currentUnitIndex + 1} 单元！</h2>
           <p className="text-sm text-[#9CA3AF]">
             {mode === 'learn'
-              ? '本单元所有单词均已跟学拼读完成，接下来可以到默写页检验记忆。'
-              : '所有单词均已在默写模式下 100% 正确击键通过，肌肉记忆已牢固建立。'}
+              ? (hasNextUnit ? '本单元所有单词均已跟学拼读完成，按 Enter 键可直接进入下一单元。' : '恭喜！本词书所有单元已全部学习完毕。')
+              : (hasNextUnit ? '所有单词均已在默写模式下 100% 正确击键通过，按 Enter 键可直接进入下一单元。' : '恭喜！本词书所有单元已全部默写通关。')}
           </p>
         </div>
       )}
@@ -73,6 +108,7 @@ export function UnitCompleteCard() {
               className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
             >
               <span>继续常规章节默写</span>
+              <span className="text-[10px] opacity-75 font-mono bg-black/20 px-1.5 py-0.5 rounded">Enter ↵</span>
               <ArrowRight className="size-4" />
             </button>
           </>
@@ -95,13 +131,24 @@ export function UnitCompleteCard() {
               </button>
             )}
 
-            <button
-              onClick={() => setUnitIndex(currentUnitIndex + 1)}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
-            >
-              <span>下一单元</span>
-              <ArrowRight className="size-4" />
-            </button>
+            {hasNextUnit ? (
+              <button
+                onClick={() => setUnitIndex(currentUnitIndex + 1)}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+              >
+                <span>下一单元</span>
+                <span className="text-[10px] opacity-75 font-mono bg-black/20 px-1.5 py-0.5 rounded">Enter ↵</span>
+                <ArrowRight className="size-4" />
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push('/books')}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+              >
+                <BookOpen className="size-4" />
+                <span>返回词书</span>
+              </button>
+            )}
           </>
         )}
       </div>
