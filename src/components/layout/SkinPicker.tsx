@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Palette, Check } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { SKINS } from '@/lib/skins'
+import { Tooltip } from '@/components/ui/Tooltip'
 
 /**
  * 头部工具栏的皮肤切换按钮 + 下拉浮层。
@@ -30,15 +31,16 @@ export function SkinPicker() {
 
   return (
     <div ref={containerRef} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all"
-        title="切换皮肤（仅配色）"
-        aria-label="切换皮肤"
-      >
-        <Palette className="size-4" />
-      </button>
+      <Tooltip content="切换皮肤（仅配色）" side="bottom">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+          aria-label="切换皮肤"
+        >
+          <Palette className="size-4" />
+        </button>
+      </Tooltip>
 
       {open && (
         <div
