@@ -118,6 +118,10 @@ interface WorkspaceState {
   isImportModalOpen: boolean
   isSettingsModalOpen: boolean
 
+  // 当前皮肤（仅配色，皮肤选择会被持久化）
+  skinId: string
+  setSkinId: (skinId: string) => void
+
   // 方法定义
   setBookId: (bookId: string) => Promise<void>
   setUnitIndex: (unitIndex: number) => Promise<void>
@@ -241,6 +245,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       isImportModalOpen: false,
       isSettingsModalOpen: false,
+      skinId: 'slate-mint',
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
       loopCountBeforeErrorPractice: null,
@@ -581,6 +586,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       resetShortcuts: () => set({ shortcuts: DEFAULT_SHORTCUTS }),
       setImportModalOpen: (open: boolean) => set({ isImportModalOpen: open }),
       setSettingsModalOpen: (open: boolean) => set({ isSettingsModalOpen: open }),
+      setSkinId: (skinId: string) => set({ skinId }),
       setKeySoundPack: (pack: string) => set({ keySoundPack: pack }),
       setKeySoundVolume: (vol: number) => set({ keySoundVolume: vol }),
       toggleKeySound: (enabled?: boolean) => set((s) => ({ isKeySoundEnabled: enabled !== undefined ? enabled : !s.isKeySoundEnabled })),
@@ -947,6 +953,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
       },
       partialize: (state) => ({
+        skinId: state.skinId,
         currentBookId: state.currentBookId,
         currentUnitIndex: state.currentUnitIndex,
         loopCounts: state.loopCounts,

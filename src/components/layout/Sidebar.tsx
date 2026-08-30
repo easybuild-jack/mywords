@@ -33,7 +33,7 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-[#0B0C0E]/90 backdrop-blur-2xl z-40">
+    <aside className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-sidebar/90 backdrop-blur-2xl z-40">
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">

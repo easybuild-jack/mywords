@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 
 export function HeaderToolbar() {
   const {
@@ -122,7 +123,10 @@ export function HeaderToolbar() {
           </div>
         )}
 
-        {/* 5. Restart 按钮 */}
+        {/* 5. 皮肤切换（仅配色） */}
+        <SkinPicker />
+
+        {/* 6. Restart 按钮 */}
         <button
           onClick={restartUnit}
           className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer whitespace-nowrap"

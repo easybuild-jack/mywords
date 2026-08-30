@@ -1,31 +1,78 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   配色变量默认值 = slate-mint（沉静薄荷）
+   SkinApplier 会在客户端挂载 / 切换皮肤时把对应的 token 写到
+   documentElement 的 inline style 上；下面的 [data-skin=...] 块是首屏
+   兜底，避免刷新后闪色。
+   --------------------------------------------------------------------------- */
 :root {
-  --background: #0B0C0E;
+  --background: #0E1216;
   --foreground: #F3F4F6;
-  --card: rgba(255, 255, 255, 0.05);
+  --sidebar-bg: #161B22;
+  --card: rgba(255, 255, 255, 0.045);
   --card-foreground: #FFFFFF;
-  --primary: #34D399;
+  --primary: #5EEAD4;
   --primary-foreground: #0B0C0E;
-  --primary-hover: #6EE7B7;
+  --primary-hover: #99F6E4;
   /* 供 rgb(var(--primary-rgb) / <alpha>) 拼光晕用，改主色时这里要一起改 */
-  --primary-rgb: 52 211 153;
+  --primary-rgb: 94 234 212;
   --secondary: #1F242E;
   --secondary-foreground: #F3F4F6;
-  --muted: rgba(255, 255, 255, 0.08);
-  --muted-foreground: #9CA3AF;
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #94A3B8;
   --accent: #FEBC2E;
   --accent-foreground: #0B0C0E;
   --destructive: #FF5F57;
   --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.07);
+  --ring: #5EEAD4;
+}
+
+:root[data-skin="classic-emerald"] {
+  --background: #0B0C0E;
+  --sidebar-bg: #0B0C0E;
+  --card: rgba(255, 255, 255, 0.05);
+  --primary: #34D399;
+  --primary-hover: #6EE7B7;
+  --primary-rgb: 52 211 153;
   --border: rgba(255, 255, 255, 0.1);
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: #9CA3AF;
   --ring: #34D399;
+}
+
+:root[data-skin="midnight-cyan"] {
+  --background: #0A0E1A;
+  --sidebar-bg: #11172A;
+  --card: rgba(255, 255, 255, 0.04);
+  --primary: #7DD3FC;
+  --primary-hover: #BAE6FD;
+  --primary-rgb: 125 211 252;
+  --border: rgba(125, 211, 252, 0.10);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #94A3B8;
+  --ring: #7DD3FC;
+}
+
+:root[data-skin="warm-amber"] {
+  --background: #0F0E0E;
+  --sidebar-bg: #1A1717;
+  --card: rgba(255, 255, 255, 0.04);
+  --primary: #FEBC2E;
+  --primary-hover: #FCD34D;
+  --primary-rgb: 254 188 46;
+  --border: rgba(254, 188, 46, 0.10);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #94A3B8;
+  --ring: #FEBC2E;
 }
 
 /* Tailwind v4 只认 @theme 里注册的令牌，缺了这层 bg-primary / text-accent 等工具类不会被生成 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-sidebar: var(--sidebar-bg);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-primary: var(--primary);
@@ -60,14 +107,14 @@
     background:
       radial-gradient(circle at 50% 0%, rgb(var(--primary-rgb) / 0.08) 0%, transparent 35%),
       radial-gradient(circle at 80% 20%, rgba(254, 188, 46, 0.05) 0%, transparent 25%),
-      linear-gradient(180deg, #0B0C0E 0%, #0D1117 50%, #0B0C0E 100%);
+      linear-gradient(180deg, var(--background) 0%, var(--background) 50%, var(--background) 100%);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
