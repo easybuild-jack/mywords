@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Volume2, VolumeX, Settings, RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
+import { Settings, RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 export function HeaderToolbar() {
@@ -20,10 +20,7 @@ export function HeaderToolbar() {
     setDictationCueMode,
     phoneticPreference,
     setPhoneticPreference,
-    isKeySoundEnabled,
-    toggleKeySound,
     setSettingsModalOpen,
-    replayAudio,
     restartUnit,
   } = useWorkspaceStore()
 
@@ -68,14 +65,6 @@ export function HeaderToolbar() {
             <option value="us" className="bg-[#12141A] text-white">美音 (US)</option>
             <option value="uk" className="bg-[#12141A] text-white">英音 (UK)</option>
           </select>
-
-          <button
-            onClick={replayAudio}
-            className="p-1.5 rounded-lg hover:bg-white/[0.08] text-primary transition-all"
-            title="发音 (Ctrl+J)"
-          >
-            <Volume2 className="size-4" />
-          </button>
         </div>
 
         {/* 分隔线 */}
@@ -137,18 +126,8 @@ export function HeaderToolbar() {
         {/* 分隔线 */}
         <div className="h-4 w-px bg-white/10" />
 
-        {/* 5. 按键音效与设置快捷图标 */}
+        {/* 5. 设置快捷图标 */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => toggleKeySound()}
-            className={`p-1.5 rounded-lg transition-all ${
-              isKeySoundEnabled ? 'text-primary hover:bg-white/[0.08]' : 'text-muted-foreground/50 hover:bg-white/[0.04]'
-            }`}
-            title="机械键盘敲击音开关"
-          >
-            {isKeySoundEnabled ? <Volume2 className="size-4" /> : <VolumeX className="size-4" />}
-          </button>
-
           <button
             onClick={() => setSettingsModalOpen(true)}
             className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all"
