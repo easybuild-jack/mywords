@@ -10,6 +10,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 /** 学习页与默写页共用的通关结算卡片，文案按当前场景切换 */
 export function UnitCompleteCard() {
   const router = useRouter()
+  const primaryActionRef = React.useRef<HTMLButtonElement>(null)
 
   const {
     mode,
@@ -32,7 +33,15 @@ export function UnitCompleteCard() {
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
   }, [])
 
-  // 监听确认键 (Enter)，直接进入下一单元
+  // 单元完成后自动聚焦主动作按钮（有下一单元则聚焦“下一单元”，最后一单元则聚焦“返回词库”）
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      primaryActionRef.current?.focus()
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [hasNextUnit, isErrorPracticeActive])
+
+  // 监听确认键 (Enter)，直接执行主动作
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // 避免在弹窗或其他输入框存在时触发
@@ -52,6 +61,8 @@ export function UnitCompleteCard() {
           exitErrorPractice().then(() => router.push('/dictation'))
         } else if (hasNextUnit) {
           setUnitIndex(currentUnitIndex + 1)
+        } else {
+          router.push('/books')
         }
       }
     }
@@ -101,11 +112,12 @@ export function UnitCompleteCard() {
               <span>返回错词本</span>
             </button>
             <button
+              ref={primaryActionRef}
               onClick={async () => {
                 await exitErrorPractice()
                 router.push('/dictation')
               }}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
             >
               <span>继续常规章节默写</span>
               <span className="text-[10px] opacity-75 font-mono bg-black/20 px-1.5 py-0.5 rounded">Enter ↵</span>
@@ -133,8 +145,9 @@ export function UnitCompleteCard() {
 
             {hasNextUnit ? (
               <button
+                ref={primaryActionRef}
                 onClick={() => setUnitIndex(currentUnitIndex + 1)}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
               >
                 <span>下一单元</span>
                 <span className="text-[10px] opacity-75 font-mono bg-black/20 px-1.5 py-0.5 rounded">Enter ↵</span>
@@ -142,11 +155,13 @@ export function UnitCompleteCard() {
               </button>
             ) : (
               <button
+                ref={primaryActionRef}
                 onClick={() => router.push('/books')}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
               >
                 <BookOpen className="size-4" />
-                <span>返回词书</span>
+                <span>返回词库</span>
+                <span className="text-[10px] opacity-75 font-mono bg-black/20 px-1.5 py-0.5 rounded">Enter ↵</span>
               </button>
             )}
           </>
