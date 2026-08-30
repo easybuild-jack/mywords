@@ -10,7 +10,11 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 /** 学习页与默写页共用的通关结算卡片，文案按当前场景切换 */
 export function UnitCompleteCard() {
   const router = useRouter()
+
+  const restartButtonRef = React.useRef<HTMLButtonElement>(null)
+  const dictationButtonRef = React.useRef<HTMLButtonElement>(null)
   const nextButtonRef = React.useRef<HTMLButtonElement>(null)
+  const exitToErrorsButtonRef = React.useRef<HTMLButtonElement>(null)
 
   const {
     mode,
@@ -26,15 +30,30 @@ export function UnitCompleteCard() {
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
   }, [])
 
+  // 按当前模式组装按钮引用数组，供键盘左右切换时定位
+  const buttonRefs = React.useMemo(() => {
+    if (isErrorPracticeActive) {
+      return [exitToErrorsButtonRef, nextButtonRef]
+    }
+    const refs: React.RefObject<HTMLButtonElement | null>[] = [restartButtonRef]
+    if (mode === 'learn') refs.push(dictationButtonRef)
+    refs.push(nextButtonRef)
+    return refs
+  }, [isErrorPracticeActive, mode])
+
   // 单元完成后自动聚焦主按钮（下一单元 / 继续常规章节默写）
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      nextButtonRef.current?.focus()
+      // 默认聚焦最后一个（主按钮）；左右键后续会从这里开始切换
+      const lastRef = buttonRefs[buttonRefs.length - 1]
+      lastRef?.current?.focus()
     }, 50)
     return () => clearTimeout(timer)
-  }, [isErrorPracticeActive])
+    // buttonRefs 由 mode/error 派生，挂载时聚焦即可
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isErrorPracticeActive, mode])
 
-  // 监听确认键 (Enter)，直接进入下一单元
+  // 左右键在按钮组里循环切换焦点；Enter 走原生按钮 onClick，所以这里不重复绑 Enter
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement
@@ -47,19 +66,28 @@ export function UnitCompleteCard() {
         return
       }
 
-      if (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter') {
-        e.preventDefault()
-        if (isErrorPracticeActive) {
-          exitErrorPractice().then(() => router.push('/dictation'))
-        } else {
-          setUnitIndex(currentUnitIndex + 1)
-        }
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+
+      e.preventDefault()
+      const active = document.activeElement as HTMLElement | null
+      const currentIndex = buttonRefs.findIndex((ref) => ref.current === active)
+      // 没有按钮处于焦点（例如刚打开结算卡）→ 把焦点放到最后一个（主按钮）
+      if (currentIndex === -1) {
+        buttonRefs[buttonRefs.length - 1]?.current?.focus()
+        return
       }
+      const delta = e.key === 'ArrowRight' ? 1 : -1
+      const newIndex = (currentIndex + delta + buttonRefs.length) % buttonRefs.length
+      buttonRefs[newIndex]?.current?.focus()
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isErrorPracticeActive, currentUnitIndex, exitErrorPractice, router, setUnitIndex])
+  }, [buttonRefs])
+
+  // 几个按钮共用的 focus 描边样式 —— 让左右键切换时每个按钮都能看见焦点
+  const baseFocusRing =
+    'focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background'
 
   return (
     <motion.div
@@ -93,11 +121,12 @@ export function UnitCompleteCard() {
         {isErrorPracticeActive ? (
           <>
             <button
+              ref={exitToErrorsButtonRef}
               onClick={async () => {
                 await exitErrorPractice()
                 router.push('/errors')
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer"
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
             >
               <span>返回错词本</span>
             </button>
@@ -107,7 +136,7 @@ export function UnitCompleteCard() {
                 await exitErrorPractice()
                 router.push('/dictation')
               }}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
             >
               <span>继续常规章节默写</span>
               <ArrowRight className="size-4" />
@@ -116,8 +145,9 @@ export function UnitCompleteCard() {
         ) : (
           <>
             <button
+              ref={restartButtonRef}
               onClick={restartUnit}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer"
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
             >
               <RotateCcw className="size-4 text-accent" />
               <span>重做本单元</span>
@@ -125,8 +155,9 @@ export function UnitCompleteCard() {
 
             {mode === 'learn' && (
               <button
+                ref={dictationButtonRef}
                 onClick={() => router.push('/dictation')}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer"
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
               >
                 <span>去默写检验</span>
               </button>
@@ -135,7 +166,7 @@ export function UnitCompleteCard() {
             <button
               ref={nextButtonRef}
               onClick={() => setUnitIndex(currentUnitIndex + 1)}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
             >
               <span>下一单元</span>
               <ArrowRight className="size-4" />
