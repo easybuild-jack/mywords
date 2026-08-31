@@ -20,7 +20,7 @@ export function PracticeStageFrame({ children }: { children: React.ReactNode }) 
       </button>
 
       <div className="relative flex flex-col items-center">
-        <div className="relative w-[640px] h-[520px] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div className="relative w-[800px] h-[580px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
           {children}
         </div>
       </div>

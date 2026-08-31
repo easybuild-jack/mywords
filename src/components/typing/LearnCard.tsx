@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine } from 'lucide-react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Lightbulb } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
+import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 
 interface LearnCardProps {
   word: WordItem
@@ -18,9 +19,9 @@ interface LearnCardProps {
 
 /** 长单词按字数降档，避免撑破卡片 */
 function wordSizeClass(length: number) {
-  if (length <= 8) return 'text-6xl'
-  if (length <= 12) return 'text-5xl'
-  return 'text-4xl'
+  if (length <= 8) return 'text-5xl sm:text-6xl'
+  if (length <= 12) return 'text-4xl sm:text-5xl'
+  return 'text-3xl sm:text-4xl'
 }
 
 /** 四类字母组合在界面上共用一套黄色，不按类别再分色 */
@@ -31,46 +32,32 @@ const COMBO_KINDS = new Set<GraphemeKind>([
   'suffix-chunk',
 ])
 
-/**
- * 相邻的组合交替取这两档黄，靠深浅区分边界。shorts 的 sh 和 or 紧挨着，
- * 同色会连成一片、看不出是两个单位还是一个 shor；这样字距不用动。
- * 第二档取更浅而不是更暗，避免看着像被禁用、地位低一等。
- */
 const COMBO_TONES = ['text-accent', 'text-[#FDE68A]']
 
 function isCombo(segment: GraphemeSegment | undefined): boolean {
   return segment !== undefined && COMBO_KINDS.has(segment.kind)
 }
 
-/**
- * 往左数连续相邻的组合个数来决定取哪一档。
- * 孤立的组合数到 0，一律取第一档，所以 with 这类只有一个组合的词配色始终稳定。
- */
 function comboToneIndex(segments: GraphemeSegment[], index: number): number {
   let run = 0
   for (let i = index - 1; i >= 0 && isCombo(segments[i]); i--) run++
-
   return run % COMBO_TONES.length
 }
 
 function segmentClass(segments: GraphemeSegment[], index: number): string | undefined {
   const segment = segments[index]
-
   if (segment?.kind === 'silent-e') {
     return 'text-gray-400'
   }
-
   if (!isCombo(segment)) {
     return segment.kind === 'vowel' ? 'text-primary' : undefined
   }
-
   return COMBO_TONES[comboToneIndex(segments, index)]
 }
 
 /** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色，不发音的词尾哑音e标灰 */
 function MarkedWord({ word }: { word: WordItem }) {
   const segments = splitIntoGraphemes(word.name, resolveSyllables(word))
-
   return (
     <>
       {segments.map((segment, index) => (
@@ -85,7 +72,6 @@ function MarkedWord({ word }: { word: WordItem }) {
 /** 按音节切分逐段渲染单词 */
 function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: string[] }) {
   const allSegments = splitIntoGraphemes(word.name, resolveSyllables(word))
-
   let currentOffset = 0
   const syllableGroups: GraphemeSegment[][] = []
 
@@ -123,7 +109,36 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
   )
 }
 
-/** 跟学卡片：单词、音标、释义、构词法拆解与跟打输入槽全部常驻可见 */
+/** 例句中的目标单词高亮渲染 */
+function HighlightSentence({ sentence, wordName }: { sentence: string; wordName: string }) {
+  const cleanWord = wordName.trim()
+  if (!cleanWord) return <span>{sentence}</span>
+
+  // 匹配单词本身或复数/过去式等变形词干
+  const escaped = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(\\b${escaped}[a-zA-Z]*\\b)`, 'gi')
+  const parts = sentence.split(regex)
+
+  return (
+    <span className="text-sm text-gray-100 leading-relaxed font-sans">
+      {parts.map((part, i) => {
+        if (part.toLowerCase().startsWith(cleanWord.toLowerCase())) {
+          return (
+            <span
+              key={i}
+              className="text-primary font-bold px-0.5 underline decoration-primary/60 decoration-2 underline-offset-2"
+            >
+              {part}
+            </span>
+          )
+        }
+        return <span key={i}>{part}</span>
+      })}
+    </span>
+  )
+}
+
+/** 跟学卡片：上半区专注跟打，下半区分栏展示词根词源与2条精选双语例句 */
 export function LearnCard({
   word,
   currentInput,
@@ -137,91 +152,73 @@ export function LearnCard({
   const morphemes = splitIntoMorphemes(word)
 
   const hasMultipleSyllables = Array.isArray(word.syllables) && word.syllables.length > 1
-  // 切分模式只插入 · 视觉分隔符，不计入长度 —— 否则单词一切分就掉一档字号，与原词不一致
   const displayLength = word.name.length
 
-  const hasEtymology = Boolean(
-    word.etymology && (
-      morphemes.length > 0 ||
-      word.etymology.prefix ||
-      word.etymology.root ||
-      word.etymology.suffix ||
-      word.etymology.derivation
-    )
-  )
+  // 获取例句与词源扩展数据（2 条）
+  const examples = getWordExamples(word)
+  const { origin, memoryHook, derivation } = getWordEtymologyExtras(word)
 
   return (
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
-      {/*
-        上半区（音标 + 单词 + 释义 + 输入槽）四行高度全部写死：h-9 / h-20 / h-16 / h-16。
-        外壳是 justify-between，只要这一块总高恒定，输入框就钉在同一个纵向位置上，
-        既不会因为单词长短换字号而移动，也不会被下方色块的高低挤上挤下。
-      */}
-      <div>
-        <div className="space-y-1">
-          {/* 并列两条音标时字号降一档，不锁死高度会让下面的单词随词上下跳 */}
-          <div className="h-9 flex items-center justify-center gap-x-5">
-            {phonetics.map((entry) => (
-              <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
-                {entry.label && (
-                  <span className="font-sans text-xs font-semibold text-[#6B7280]">{entry.label}</span>
-                )}
-                <span
-                  className={`font-mono tracking-wide text-gray-300 ${
-                    phonetics.length > 1 ? 'text-xl' : 'text-2xl'
-                  }`}
-                >
-                  {entry.text}
-                </span>
-              </span>
-            ))}
-          </div>
-          {/* 长单词会降字号，套一层定高容器再居中，字号变化就不会顶动下面的输入框 */}
-          <div className="h-20 flex items-center justify-center relative">
-            <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
-              <h2
-                className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
-              >
-                {isSplit && hasMultipleSyllables ? (
-                  <MarkedSplitWord word={word} syllables={word.syllables} />
-                ) : (
-                  <MarkedWord word={word} />
-                )}
-              </h2>
-              <button
-                type="button"
-                onClick={() => setIsSplit((prev) => !prev)}
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
-                  isSplit
-                    ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
-                    : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
+      {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
+      <div className="space-y-1">
+        {/* 音标栏 */}
+        <div className="h-8 flex items-center justify-center gap-x-5">
+          {phonetics.map((entry) => (
+            <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
+              {entry.label && (
+                <span className="font-sans text-xs font-semibold text-[#6B7280]">{entry.label}</span>
+              )}
+              <span
+                className={`font-mono tracking-wide text-gray-300 ${
+                  phonetics.length > 1 ? 'text-lg' : 'text-xl'
                 }`}
-                title={isSplit ? '合并单词' : '音节切分'}
-                aria-label={isSplit ? '合并单词' : '音节切分'}
               >
-                {isSplit ? <Combine className="size-4 sm:size-5" /> : <Scissors className="size-4 sm:size-5" />}
-              </button>
-            </div>
-          </div>
-          {/* 按两行译文预留高度（text-lg 配 leading-relaxed 单行约 29px，h-16 刚好装两行），
-              并统一从顶部起排：一行、两行的释义都落在同一个位置，
-              输入框既不会被行数顶动，也不会紧贴单词 */}
-          <div className="h-16 flex items-start justify-center">
-            <p className="text-base sm:text-lg text-[#9CA3AF] line-clamp-2 font-medium leading-relaxed">
-              {meaningText}
-            </p>
+                {entry.text}
+              </span>
+            </span>
+          ))}
+        </div>
+
+        {/* 单词主体展示与音节切分切换 */}
+        <div className="h-16 flex items-center justify-center relative">
+          <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
+            <h2
+              className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
+            >
+              {isSplit && hasMultipleSyllables ? (
+                <MarkedSplitWord word={word} syllables={word.syllables} />
+              ) : (
+                <MarkedWord word={word} />
+              )}
+            </h2>
+            <button
+              type="button"
+              onClick={() => setIsSplit((prev) => !prev)}
+              className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                isSplit
+                  ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
+                  : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
+              }`}
+              title={isSplit ? '合并单词' : '音节切分'}
+              aria-label={isSplit ? '合并单词' : '音节切分'}
+            >
+              {isSplit ? <Combine className="size-4" /> : <Scissors className="size-4" />}
+            </button>
           </div>
         </div>
 
-        {/* 跟打输入槽：外框用 primary 色（响应皮肤），光晕颜色由 var(--primary-rgb) 拼出，
-            靠更高的饱和度与明度拉开层次，所以透明度要压住，否则框会比字还抢眼。
-            框内下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不消失。
-            overflow-hidden 兜住超长词：48px 字号下约 17 个字母就到边，宁可裁掉尾巴也别撑破框。
-            槽位仍是 h-16，字号变化不会动到输入框的纵向位置。
-            这一整套样式与默写页的拼写槽保持一致，改动要两边同步 */}
-        <div className="relative w-full pt-6">
+        {/* 单词释义 */}
+        <div className="h-9 flex items-center justify-center px-4">
+          <p className="text-sm sm:text-base text-gray-300 font-medium line-clamp-1">
+            {meaningText}
+          </p>
+        </div>
+
+        {/* 跟打输入槽 */}
+        <div className="relative w-full pt-1">
           <div
-            className={`h-16 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
+            className={`h-14 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl font-bold rounded-2xl border-2 px-6 transition-all ${
               hasTypo
                 ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
                 : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
@@ -229,7 +226,7 @@ export function LearnCard({
           >
             {currentInput && <span className="mr-1">{currentInput}</span>}
             <span
-              className={`inline-block w-0.5 h-11 animate-cursor shrink-0 ${
+              className={`inline-block w-0.5 h-9 animate-cursor shrink-0 ${
                 hasTypo ? 'bg-destructive' : 'bg-primary'
               }`}
             />
@@ -244,90 +241,142 @@ export function LearnCard({
         </div>
       </div>
 
-      {/* 下半区：构词法拆解讲解 / 基础单词 */}
-      <div className="space-y-3 mb-4 min-h-[104px] flex flex-col justify-center">
-        {hasEtymology ? (
-          <>
-            {morphemes.length > 0 && (
-              <div className="flex items-stretch justify-center gap-3 flex-wrap">
-                {morphemes.map((morpheme, index) => {
-                  const startIdx = morphemes.slice(0, index).reduce((sum, m) => sum + m.text.length, 0)
-                  const endIdx = startIdx + morpheme.text.length
-                  const isCompleted = currentInput.length >= endIdx
-                  const isCurrent = currentInput.length >= startIdx && currentInput.length < endIdx
-
-                  return (
-                    <React.Fragment key={index}>
-                      {/* 撑满整行再居中：色块高度随有无释义变化，写死的边距会让 + 忽高忽低 */}
-                      {index > 0 && (
-                        <span className="self-stretch flex items-center text-2xl text-gray-400 font-mono font-bold">
-                          +
-                        </span>
-                      )}
-                      <div
-                        className={`px-4 py-3 rounded-2xl border transition-all duration-200 min-w-22 ${
-                          isCurrent
-                            ? 'border-[#F05F5A] bg-[#F05F5A]/25 shadow-[0_0_20px_rgba(240,95,90,0.4)] scale-105'
-                            : isCompleted
-                            ? 'border-primary bg-primary/20 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
-                            : 'border-white/20 bg-white/[0.08]'
-                        }`}
-                      >
-                        <div
-                          className={`text-xs font-semibold uppercase tracking-wider ${
-                            isCurrent ? 'text-[#FFA8A3]' : isCompleted ? 'text-primary' : 'text-gray-300'
-                          }`}
-                        >
-                          {MORPHEME_ROLE_LABEL[morpheme.role]}
-                        </div>
-                        <div
-                          className={`font-mono text-3xl font-bold my-1 ${
-                            isCurrent ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'
-                          }`}
-                        >
-                          {morpheme.text}
-                        </div>
-                        {morpheme.meaning && (
-                          <div
-                            className={`text-sm font-medium max-w-32 leading-tight ${
-                              isCurrent
-                                ? 'text-white font-bold'
-                                : isCompleted
-                                ? 'text-primary/90'
-                                : 'text-[#9CA3AF]'
-                            }`}
-                          >
-                            {morpheme.meaning}
-                          </div>
-                        )}
-                      </div>
-                    </React.Fragment>
-                  )
-                })}
+      {/* 下半区：左右分栏排版（左侧占 8/12 宽幅双语例句；右侧占 4/12 词根词源/助记） */}
+      <div className="grid grid-cols-12 gap-3.5 pt-3 flex-1 min-h-0 text-left">
+        {/* 左栏：2 条精选双语例句（col-span-8，宽幅排版，文字舒展） */}
+        <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between overflow-hidden shadow-inner">
+          <div className="space-y-2.5">
+            {/* 顶栏小标题 */}
+            <div className="flex items-center justify-between pb-1.5 border-b border-white/5">
+              <div className="flex items-center gap-1.5">
+                <Quote className="size-3.5 text-accent" />
+                <span className="text-xs font-bold text-white/90">语境双语例句</span>
               </div>
-            )}
-
-            {/* 词根语义推导说明：跟在拆分色块后面，一起构成最下方的拆分讲解 */}
-            <div className="h-7 flex items-center justify-center gap-2 text-sm sm:text-base text-[#9CA3AF] font-medium leading-relaxed">
-              {word.etymology?.derivation && (
-                <>
-                  <ArrowRight className="size-4 text-[#F05F5A]/80 shrink-0" />
-                  <span className="min-w-0 truncate text-[#9CA3AF] font-medium">
-                    {word.etymology.derivation}
-                  </span>
-                </>
-              )}
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
+                2 EXAMPLES
+              </span>
             </div>
-          </>
-        ) : (
-          <div className="h-[104px] flex flex-col items-center justify-center">
-            <div className="px-6 py-2.5 rounded-2xl border border-white/10 bg-white/[0.04] text-gray-400 font-medium text-sm sm:text-base flex items-center gap-2 select-none">
-              <span className="size-2 rounded-full bg-primary/40 inline-block" />
-              <span>基础单词</span>
+
+            {/* 2 示例句列表（宽幅排版，文字舒展） */}
+            <div className="space-y-2.5">
+              {examples.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-xl bg-white/[0.025] border border-white/5 hover:bg-white/[0.05] transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="size-5 rounded-lg bg-accent/15 text-accent text-xs font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
+                      0{idx + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <HighlightSentence sentence={item.en} wordName={word.name} />
+                      <div className="text-xs text-gray-400 leading-relaxed mt-1">
+                        {item.cn}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        )}
+        </div>
+
+        {/* 右栏：词根词源与构词助记（col-span-4） */}
+        <div className="col-span-4 rounded-2xl bg-white/[0.03] border border-white/10 p-4 flex flex-col justify-between overflow-hidden shadow-inner">
+          <div className="space-y-3">
+            {/* 顶栏小标题 */}
+            <div className="flex items-center justify-between pb-2 border-b border-white/5">
+              <div className="flex items-center gap-2 min-w-0">
+                <BookOpen className="size-4 text-primary shrink-0" />
+                <span className="text-sm font-bold text-white/90 truncate">词根 · 助记</span>
+              </div>
+              <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold shrink-0">
+                ROOTS
+              </span>
+            </div>
+
+            {/* 词根拆解块或词源探究（字号全面放大） */}
+            {morphemes.length > 0 ? (
+              <div className="space-y-3">
+                <div className="flex items-stretch justify-start gap-2 flex-wrap">
+                  {morphemes.map((morpheme, index) => {
+                    const startIdx = morphemes.slice(0, index).reduce((sum, m) => sum + m.text.length, 0)
+                    const endIdx = startIdx + morpheme.text.length
+                    const isCompleted = currentInput.length >= endIdx
+                    const isCurrent = currentInput.length >= startIdx && currentInput.length < endIdx
+
+                    return (
+                      <React.Fragment key={index}>
+                        {index > 0 && (
+                          <span className="self-center text-sm text-gray-500 font-mono font-bold">+</span>
+                        )}
+                        <div
+                          className={`px-2.5 py-1.5 rounded-xl border transition-all duration-200 ${
+                            isCurrent
+                              ? 'border-[#F05F5A] bg-[#F05F5A]/25 shadow-[0_0_12px_rgba(240,95,90,0.4)] scale-105'
+                              : isCompleted
+                              ? 'border-primary bg-primary/20 shadow-[0_0_10px_rgb(var(--primary-rgb)/0.2)]'
+                              : 'border-white/10 bg-white/[0.05]'
+                          }`}
+                        >
+                          <div
+                            className={`text-xs font-semibold uppercase tracking-wider ${
+                              isCurrent ? 'text-[#FFA8A3]' : isCompleted ? 'text-primary' : 'text-gray-400'
+                            }`}
+                          >
+                            {MORPHEME_ROLE_LABEL[morpheme.role]}
+                          </div>
+                          <div
+                            className={`font-mono text-base font-bold my-0.5 ${
+                              isCurrent ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'
+                            }`}
+                          >
+                            {morpheme.text}
+                          </div>
+                          {morpheme.meaning && (
+                            <div className="text-xs text-gray-300 truncate max-w-28">
+                              {morpheme.meaning}
+                            </div>
+                          )}
+                        </div>
+                      </React.Fragment>
+                    )
+                  })}
+                </div>
+
+                {derivation && (
+                  <div className="flex items-start gap-2 text-sm text-gray-200 font-normal leading-relaxed pt-1">
+                    <ArrowRight className="size-4 text-primary shrink-0 mt-0.5" />
+                    <span>{derivation}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-2 text-left">
+                {origin && (
+                  <p className="text-sm text-gray-200 leading-relaxed">{origin}</p>
+                )}
+
+                {derivation && (
+                  <div className="flex items-start gap-2 text-sm text-gray-200 font-normal leading-relaxed pt-1">
+                    <ArrowRight className="size-4 text-primary shrink-0 mt-0.5" />
+                    <span>{derivation}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* 联想助记口诀提示条（字号放大） */}
+          {memoryHook && (
+            <div className="mt-2 text-sm text-accent/95 bg-accent/[0.06] p-3 rounded-xl border border-accent/20 flex items-start gap-2.5">
+              <Lightbulb className="size-4.5 text-accent shrink-0 mt-0.5" />
+              <span className="leading-relaxed font-medium">{memoryHook}</span>
+            </div>
+          )}
+        </div>
       </div>
     </WordCardShell>
   )
 }
+

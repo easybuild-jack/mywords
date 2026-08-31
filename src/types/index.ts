@@ -2,11 +2,18 @@
 // 1. 单词与词根结构化模型
 // ==========================================
 
+export interface WordExample {
+  en: string;                                   // 英文例句 (如 "Fresh cabbage is rich in vitamin C.")
+  cn: string;                                   // 中文翻译 (如 "新鲜的卷心菜富含维生素C。")
+}
+
 export interface WordEtymology {
   prefix?: { form: string; meaning: string };   // 前缀 (如 { form: "dis-", meaning: "否定/相反" })
   root?: { form: string; meaning: string };     // 词根 (如 { form: "cover", meaning: "遮盖" })
   suffix?: { form: string; meaning: string };   // 后缀 (如 { form: "-y", meaning: "名词/形容词后缀" })
-  derivation: string;                           // 语义推导 (如 "揭开覆盖 = 发现")
+  derivation?: string;                          // 语义推导 (如 "揭开覆盖 = 发现")
+  origin?: string;                              // 词源溯源 (如 "源自古法语 caboche (头)")
+  memoryHook?: string;                          // 联想助记口诀
 }
 
 export interface WordItem {
@@ -20,6 +27,7 @@ export interface WordItem {
     means: string[];                            // 如 ["发现", "发掘"]
   }[];
   etymology?: WordEtymology;                    // 前缀/词根/后缀结构化拆解
+  examples?: WordExample[];                     // 3条左右经典例句
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
 }
 
