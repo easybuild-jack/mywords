@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
+import { BUILTIN_ROOTS } from '@/resources/roots'
 import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
@@ -163,7 +164,22 @@ interface WorkspaceState {
   nextWord: () => void
   prevWord: () => void
   restartUnit: () => void
+
+  // 词根学习状态 (Roots Module)
+  activeRootIndex: number
+  learnedRootIds: string[]
+  rootSearchQuery: string
+  isRootSearchModalOpen: boolean
   
+  // 词根方法
+  setRootIndex: (index: number) => void
+  prevRoot: () => void
+  nextRoot: () => void
+  toggleRootLearned: (rootId?: string) => void
+  setRootSearchQuery: (query: string) => void
+  setRootSearchModalOpen: (open: boolean) => void
+  restartRoots: () => void
+
   getUnitWords: () => WordItem[]
   getCurrentWord: () => WordItem | undefined
 }
@@ -249,6 +265,12 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
       loopCountBeforeErrorPractice: null,
+
+      // 词根学习状态初始值
+      activeRootIndex: 0,
+      learnedRootIds: [],
+      rootSearchQuery: '',
+      isRootSearchModalOpen: false,
 
       isDictationPhoneticEnabled: true,
       isDictationMeaningEnabled: true,
@@ -923,6 +945,44 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
         }
       },
+
+      // 词根模块专属操作
+      setRootIndex: (index: number) => {
+        const total = BUILTIN_ROOTS.length
+        if (total === 0) return
+        const safeIndex = Math.max(0, Math.min(index, total - 1))
+        set({ activeRootIndex: safeIndex })
+      },
+
+      prevRoot: () => {
+        const { activeRootIndex } = get()
+        if (activeRootIndex > 0) {
+          set({ activeRootIndex: activeRootIndex - 1 })
+        }
+      },
+
+      nextRoot: () => {
+        const { activeRootIndex } = get()
+        if (activeRootIndex < BUILTIN_ROOTS.length - 1) {
+          set({ activeRootIndex: activeRootIndex + 1 })
+        }
+      },
+
+      toggleRootLearned: (rootId?: string) => {
+        const currentRoot = BUILTIN_ROOTS[get().activeRootIndex]
+        const targetId = rootId || currentRoot?.id
+        if (!targetId) return
+        const { learnedRootIds } = get()
+        const isLearned = learnedRootIds.includes(targetId)
+        const updated = isLearned
+          ? learnedRootIds.filter((id) => id !== targetId)
+          : [...learnedRootIds, targetId]
+        set({ learnedRootIds: updated })
+      },
+
+      setRootSearchQuery: (query: string) => set({ rootSearchQuery: query }),
+      setRootSearchModalOpen: (open: boolean) => set({ isRootSearchModalOpen: open }),
+      restartRoots: () => set({ activeRootIndex: 0 }),
     }),
     {
       name: 'mywords-workspace-storage',
@@ -969,6 +1029,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         shortcuts: state.shortcuts,
         isDictationPhoneticEnabled: state.isDictationPhoneticEnabled,
         isDictationMeaningEnabled: state.isDictationMeaningEnabled,
+        activeRootIndex: state.activeRootIndex,
+        learnedRootIds: state.learnedRootIds,
       }),
     }
   )

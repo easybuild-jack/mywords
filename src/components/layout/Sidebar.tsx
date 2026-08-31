@@ -26,7 +26,7 @@ export function Sidebar() {
     { label: '默写', icon: PenLine, href: '/dictation' },
     { label: '词库', icon: BookOpen, href: '/books' },
     { label: '错词本', icon: AlertCircle, href: '/errors' },
-    { label: '词根', icon: Sprout, href: '/roots', comingSoon: true },
+    { label: '词根', icon: Sprout, href: '/roots' },
     { label: '短语', icon: Quote, href: '/phrases', comingSoon: true },
     { label: '语法', icon: SpellCheck, href: '/grammar', comingSoon: true },
     { label: '翻译', icon: Languages, href: '/translate', comingSoon: true },

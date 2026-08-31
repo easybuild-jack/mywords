@@ -31,6 +31,26 @@ export interface WordItem {
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
 }
 
+export interface RootWordItem {
+  name: string;                                 // 派生单词拼写 (如 "inspect")
+  phonetic?: string;                            // 音标 (如 "/ɪnˈspekt/")
+  breakdown: string;                            // 词缀拆解公式 (如 "in- (向内) + spect (看)")
+  meaning: string;                              // 中文释义 (如 "v. 检查；视察；审阅")
+  example?: { en: string; cn: string };         // 语境示例
+}
+
+export interface RootItem {
+  id: string;                                   // 唯一ID (如 "root_spect")
+  form: string;                                 // 词根形态 (如 "spect / spic")
+  phonetic?: string;                            // 词根读音/音标 (如 "/spekt/")
+  meaning: string;                              // 核心释义 (如 "看 / 观察 / 视角")
+  category: 'latin' | 'greek' | 'core';         // 词根源流类别
+  categoryLabel: string;                        // 分类标签 (如 "拉丁核心词根")
+  origin: string;                               // 词源追溯与演变故事
+  derivationNote?: string;                      // 构词衍生要领
+  words: RootWordItem[];                        // 派生核心词族列表
+}
+
 // ==========================================
 // 2. 词库与单元模型
 // ==========================================
