@@ -50,7 +50,7 @@ export function SkinPicker() {
           <div className="px-3 py-2 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
             选择皮肤 · 仅配色
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1 max-h-[420px] overflow-y-auto pr-1">
             {SKINS.map((skin) => {
               const isActive = skin.id === skinId
               return (

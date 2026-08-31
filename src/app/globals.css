@@ -68,6 +68,71 @@
   --ring: #FEBC2E;
 }
 
+:root[data-skin="sakura-pink"] {
+  --background: #140E15;
+  --sidebar-bg: #1E1420;
+  --card: rgba(255, 255, 255, 0.045);
+  --primary: #F472B6;
+  --primary-hover: #FBCFE8;
+  --primary-rgb: 244 114 182;
+  --border: rgba(244, 114, 182, 0.12);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #BFA3C4;
+  --ring: #F472B6;
+}
+
+:root[data-skin="lavender-dream"] {
+  --background: #110E1C;
+  --sidebar-bg: #19142A;
+  --card: rgba(255, 255, 255, 0.045);
+  --primary: #C084FC;
+  --primary-hover: #E9D5FF;
+  --primary-rgb: 192 132 252;
+  --border: rgba(192, 132, 252, 0.12);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #B8A8D8;
+  --ring: #C084FC;
+}
+
+:root[data-skin="peach-oolong"] {
+  --background: #150F0F;
+  --sidebar-bg: #211717;
+  --card: rgba(255, 255, 255, 0.045);
+  --primary: #FB923C;
+  --primary-hover: #FDBA74;
+  --primary-rgb: 251 146 60;
+  --border: rgba(251, 146, 60, 0.12);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #C7AFA8;
+  --ring: #FB923C;
+}
+
+:root[data-skin="matcha-chiffon"] {
+  --background: #0E1511;
+  --sidebar-bg: #14211A;
+  --card: rgba(255, 255, 255, 0.045);
+  --primary: #86EFAC;
+  --primary-hover: #BBF7D0;
+  --primary-rgb: 134 239 172;
+  --border: rgba(134, 239, 172, 0.12);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #A1B8A9;
+  --ring: #86EFAC;
+}
+
+:root[data-skin="starry-iris"] {
+  --background: #0E111C;
+  --sidebar-bg: #151A2C;
+  --card: rgba(255, 255, 255, 0.045);
+  --primary: #A5B4FC;
+  --primary-hover: #C7D2FE;
+  --primary-rgb: 165 180 252;
+  --border: rgba(165, 180, 252, 0.12);
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #A4AFC6;
+  --ring: #A5B4FC;
+}
+
 /* Tailwind v4 只认 @theme 里注册的令牌，缺了这层 bg-primary / text-accent 等工具类不会被生成 */
 @theme inline {
   --color-background: var(--background);
