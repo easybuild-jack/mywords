@@ -1086,11 +1086,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...(persisted.loopCountSetting ? { learn: persisted.loopCountSetting } : {}),
           ...(persisted.loopCounts ?? {}),
         }
+        const shortcuts = {
+          ...DEFAULT_SHORTCUTS,
+          ...(persisted.shortcuts ?? {}),
+        }
         // 刷新后一律从学习页起步，生效的循环次数取学习页那一档
         const loopCount = loopCounts.learn
         return {
           ...currentState,
           ...persisted,
+          shortcuts,
           loopCounts,
           loopCountSetting: loopCount,
           currentWordRemainingLoops: loopCount,

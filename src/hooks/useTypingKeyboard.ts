@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { isShortcutMatch } from '@/lib/shortcuts'
+import { isShortcutMatch, DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 
 interface UseTypingKeyboardOptions {
   /** 学习页的单词本来就摆在眼前，偷看没有意义，只有默写页需要 */
@@ -26,7 +26,6 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
   const prevWord = useWorkspaceStore((s) => s.prevWord)
   const restartUnit = useWorkspaceStore((s) => s.restartUnit)
   const toggleCurrentWordSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
-  const setEditWordSplitModalOpen = useWorkspaceStore((s) => s.setEditWordSplitModalOpen)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -43,19 +42,19 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
         return
       }
 
-      if (enablePeek && isShortcutMatch(e, shortcuts.peekHint)) {
+      if (enablePeek && isShortcutMatch(e, shortcuts?.peekHint || DEFAULT_SHORTCUTS.peekHint)) {
         e.preventDefault()
         peekHint(true)
         return
       }
 
-      if (isShortcutMatch(e, shortcuts.replayAudio)) {
+      if (isShortcutMatch(e, shortcuts?.replayAudio || DEFAULT_SHORTCUTS.replayAudio)) {
         e.preventDefault()
         replayAudio()
         return
       }
 
-      if (isShortcutMatch(e, shortcuts.toggleSplit)) {
+      if (isShortcutMatch(e, shortcuts?.toggleSplit || DEFAULT_SHORTCUTS.toggleSplit)) {
         e.preventDefault()
         toggleCurrentWordSplit()
         return

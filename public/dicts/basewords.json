@@ -3949,15 +3949,19 @@
         "usphone": "ˈhedeɪk",
         "ukphone": "ˈhedeɪk",
         "syllables": [
-            "hea",
-            "dache"
+            "head",
+            "ache"
         ],
         "etymology": {
-            "derivation": "头的疼痛 → 头疼",
+            "prefix": {
+                "form": "head",
+                "meaning": "头"
+            },
             "root": {
                 "form": "ache",
                 "meaning": "疼痛"
-            }
+            },
+            "derivation": "头的疼痛 → 头疼"
         }
     },
     {

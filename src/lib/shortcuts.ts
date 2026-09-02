@@ -48,7 +48,7 @@ export function eventToShortcutString(e: KeyboardEvent): string | null {
 /**
  * 判断键盘事件是否匹配配置的快捷键字符串
  */
-export function isShortcutMatch(e: KeyboardEvent, shortcutStr: string): boolean {
+export function isShortcutMatch(e: KeyboardEvent, shortcutStr?: string): boolean {
   if (!shortcutStr) return false
   const parts = shortcutStr.split('+')
   const baseKey = parts[parts.length - 1]
@@ -56,23 +56,29 @@ export function isShortcutMatch(e: KeyboardEvent, shortcutStr: string): boolean 
   const hasAlt = parts.includes('Alt')
   const hasShift = parts.includes('Shift')
 
-  const ctrlMatches = hasCtrl ? e.ctrlKey || e.metaKey : !e.ctrlKey && !e.metaKey
+  const ctrlMatches = hasCtrl ? (e.ctrlKey || e.metaKey) : (!e.ctrlKey && !e.metaKey)
   const altMatches = hasAlt ? e.altKey : !e.altKey
   const shiftMatches = hasShift ? e.shiftKey : !e.shiftKey
 
   let keyMatches = false
-  if (baseKey === 'Space') {
+  const lowerBase = baseKey.toLowerCase()
+  if (lowerBase === 'space') {
     keyMatches = e.key === ' ' || e.code === 'Space'
-  } else if (baseKey.toLowerCase() === 'arrowleft') {
-    keyMatches = e.key === 'ArrowLeft'
-  } else if (baseKey.toLowerCase() === 'arrowright') {
-    keyMatches = e.key === 'ArrowRight'
-  } else if (baseKey.toLowerCase() === 'arrowup') {
-    keyMatches = e.key === 'ArrowUp'
-  } else if (baseKey.toLowerCase() === 'arrowdown') {
-    keyMatches = e.key === 'ArrowDown'
+  } else if (lowerBase === 'arrowleft') {
+    keyMatches = e.key === 'ArrowLeft' || e.code === 'ArrowLeft'
+  } else if (lowerBase === 'arrowright') {
+    keyMatches = e.key === 'ArrowRight' || e.code === 'ArrowRight'
+  } else if (lowerBase === 'arrowup') {
+    keyMatches = e.key === 'ArrowUp' || e.code === 'ArrowUp'
+  } else if (lowerBase === 'arrowdown') {
+    keyMatches = e.key === 'ArrowDown' || e.code === 'ArrowDown'
+  } else if (lowerBase === 'tab') {
+    keyMatches = e.key === 'Tab' || e.code === 'Tab'
   } else {
-    keyMatches = e.key.toLowerCase() === baseKey.toLowerCase()
+    keyMatches =
+      e.key.toLowerCase() === lowerBase ||
+      e.code.toLowerCase() === `key${lowerBase}` ||
+      e.code.toLowerCase() === lowerBase
   }
 
   return ctrlMatches && altMatches && shiftMatches && keyMatches
