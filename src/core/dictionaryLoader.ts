@@ -9,6 +9,7 @@ export interface WordEnrichOverrides {
   phonetic?: string
   syllables?: string[]
   etymology?: WordEtymology
+  silentIndices?: number[]
 }
 
 interface RawDictEntry {
@@ -21,6 +22,7 @@ interface RawDictEntry {
   /** 人工校订过的音节拆分与构词法，只有基础词汇这类精编词表会带，缺省时走自动推导 */
   syllables?: string[]
   etymology?: WordEtymology
+  silentIndices?: number[]
 }
 
 // 官方内置大词库文件映射关系
@@ -62,8 +64,9 @@ class DictionaryLoader {
         const data: RawDictEntry[] = await resCet4.json()
         for (const item of data) {
           if (item.name) {
-            this.localLexiconMap.set(item.name.toLowerCase().trim(), {
-              trans: item.trans || (item.translation ? [item.translation] : []),
+            const rawTrans = item.trans || (item.translation ? [item.translation] : [])
+            this.localLexiconMap.set(item.name.toLowerCase(), {
+              trans: rawTrans,
               usphone: formatPhonetic(item.usphone) || formatPhonetic(item.phone),
               ukphone: formatPhonetic(item.ukphone) || formatPhonetic(item.phone),
             })
@@ -72,50 +75,26 @@ class DictionaryLoader {
       }
 
       if (resIt && resIt.ok) {
-        const data: RawDictEntry[] = await resIt.json()
-        for (const item of data) {
-          if (item.name && !this.localLexiconMap.has(item.name.toLowerCase().trim())) {
-            this.localLexiconMap.set(item.name.toLowerCase().trim(), {
-              trans: item.trans || (item.translation ? [item.translation] : []),
-              usphone: formatPhonetic(item.usphone) || formatPhonetic(item.phone),
-              ukphone: formatPhonetic(item.ukphone) || formatPhonetic(item.phone),
-            })
+        const itData: RawDictEntry[] = await resIt.json()
+        for (const item of itData) {
+          if (item.name) {
+            const rawTrans = item.trans || (item.translation ? [item.translation] : [])
+            const existing = this.localLexiconMap.get(item.name.toLowerCase())
+            if (!existing) {
+              this.localLexiconMap.set(item.name.toLowerCase(), {
+                trans: rawTrans,
+                usphone: formatPhonetic(item.usphone) || formatPhonetic(item.phone),
+                ukphone: formatPhonetic(item.ukphone) || formatPhonetic(item.phone),
+              })
+            }
           }
         }
       }
 
       this.isIndexInitialized = true
     } catch (err) {
-      console.warn('Silent dictionary index init skipped:', err)
+      console.warn('Failed to preheat lexicon index:', err)
     }
-  }
-
-  /**
-   * 异步在线查词兜底 (Online Dictionary Fallback)
-   */
-  public async fetchOnlineWordInfo(word: string): Promise<{ trans: string[]; usphone?: string; ukphone?: string } | null> {
-    if (typeof window === 'undefined' || !word) return null
-    const cleanWord = encodeURIComponent(word.trim().toLowerCase())
-
-    try {
-      // 优先请求有道开放词典 Suggest API
-      const res = await fetch(`https://dict.youdao.com/suggest?q=${cleanWord}&num=1&doctype=json`)
-      if (res.ok) {
-        const data = await res.json()
-        const entry = data?.data?.entries?.[0]
-        if (entry && entry.explain) {
-          return {
-            trans: [entry.explain],
-            usphone: `/${word.toLowerCase()}/`,
-            ukphone: `/${word.toLowerCase()}/`,
-          }
-        }
-      }
-    } catch (e) {
-      // 忽略在线请求网络异常
-    }
-
-    return null
   }
 
   /**
@@ -140,13 +119,57 @@ class DictionaryLoader {
       } else {
         const means = line.split(/[；;,，]/).map((m) => m.trim()).filter(Boolean)
         result.push({
-          pos: 'n.',
+          pos: 'other',
           means: means.length > 0 ? means : [line],
         })
       }
     }
 
-    return result.length > 0 ? result : [{ pos: 'n.', means: ['核心词义'] }]
+    return result.length > 0 ? result : [{ pos: 'other', means: ['核心词义'] }]
+  }
+
+  /**
+   * 在线查词兜底接口（查不到时由外部免费词典 API 补全）
+   */
+  private async fetchOnlineWordInfo(word: string): Promise<{ trans: string[]; usphone?: string; ukphone?: string } | null> {
+    try {
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`)
+      if (!res.ok) return null
+      const data = await res.json()
+      if (!Array.isArray(data) || !data[0]) return null
+
+      const first = data[0]
+      const trans: string[] = []
+      let usphone: string | undefined
+      let ukphone: string | undefined
+
+      if (first.phonetics && Array.isArray(first.phonetics)) {
+        for (const p of first.phonetics) {
+          if (p.text) {
+            if (p.audio && p.audio.includes('-us.')) usphone = formatPhonetic(p.text)
+            else if (p.audio && p.audio.includes('-uk.')) ukphone = formatPhonetic(p.text)
+            else if (!usphone) usphone = formatPhonetic(p.text)
+          }
+        }
+      }
+
+      if (first.meanings && Array.isArray(first.meanings)) {
+        for (const m of first.meanings) {
+          const partOfSpeech = m.partOfSpeech ? `${m.partOfSpeech}.` : 'def.'
+          if (m.definitions && m.definitions[0]?.definition) {
+            trans.push(`${partOfSpeech} ${m.definitions[0].definition}`)
+          }
+        }
+      }
+
+      return {
+        trans: trans.length ? trans : ['核心词义'],
+        usphone,
+        ukphone,
+      }
+    } catch {
+      return null
+    }
   }
 
   /**
@@ -156,7 +179,13 @@ class DictionaryLoader {
    * overrides 里的每一项都是「用户填了就不再自动推导」，导入模板的选填列直接对应到这里。
    */
   public async enrichWord(name: string, overrides: WordEnrichOverrides = {}): Promise<WordItem> {
-    const { meaning: customMeaning, phonetic: customPhonetic, syllables: customSyllables, etymology: customEtymology } = overrides
+    const {
+      meaning: customMeaning,
+      phonetic: customPhonetic,
+      syllables: customSyllables,
+      etymology: customEtymology,
+      silentIndices: customSilentIndices,
+    } = overrides
 
     const cleanName = name.trim()
     const lowerName = cleanName.toLowerCase()
@@ -198,7 +227,7 @@ class DictionaryLoader {
     // 4. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
     let syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
     let etymology = customEtymology ?? undefined
-    let silentIndices: number[] | undefined
+    let silentIndices: number[] | undefined = customSilentIndices
 
     // 5. 检查本地 DB 中的用户修改覆盖
     if (typeof window !== 'undefined' && !customSyllables && !customEtymology) {
@@ -270,6 +299,7 @@ class DictionaryLoader {
           ? curatedSyllables
           : splitIntoSyllables(name)
       const etymology = entry.etymology
+      const silentIndices = entry.silentIndices
       const posList = this.parsePosAndMeans(rawTrans)
 
       return {
@@ -280,6 +310,7 @@ class DictionaryLoader {
         phoneticUk: ukphone,
         posList,
         etymology,
+        silentIndices,
       }
     })
 
