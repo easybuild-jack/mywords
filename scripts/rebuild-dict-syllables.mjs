@@ -56,7 +56,7 @@ function normalizePhone(phone) {
 
 /** 复合词尾白名单（与 rebuild-basewords-syllables.mjs 一致） */
 const COMPOUND_TAILS = [
-  'day', 'work', 'book', 'man', 'ball', 'room', 'shop', 'store', 'town', 'side',
+  'ache', 'day', 'work', 'book', 'man', 'ball', 'room', 'shop', 'store', 'town', 'side',
   'thing', 'self', 'noon', 'night', 'walk', 'port', 'cake', 'mate', 'board',
   'ground', 'time', 'where', 'way', 'stand',
 ]
@@ -361,8 +361,9 @@ function splitByUserRule(word, { dropEd = true } = {}) {
       continue
     }
 
+    // 双字母一音（teacher 的 ch、father 的 th）：整簇归后
     const firstPair = cleanWord.slice(clusterStart, clusterStart + 2)
-    if (firstPair[0] === firstPair[1] || DIGRAPHS.has(firstPair)) {
+    if (DIGRAPHS.has(firstPair)) {
       cuts.push(clusterStart)
       continue
     }
@@ -373,6 +374,8 @@ function splitByUserRule(word, { dropEd = true } = {}) {
       continue
     }
 
+    // 双写辅音（command 的 mm、yellow 的 ll）及其他多辅音簇：
+    // 第一个辅音归前、其余归后（VC-CV：com-mand、yel-low、sep-tem-ber、oc-to-ber）
     cuts.push(clusterStart + 1)
   }
 

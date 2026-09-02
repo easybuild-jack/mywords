@@ -52,8 +52,8 @@
         "usphone": "ˈjeləʊ",
         "ukphone": "ˈjeləʊ",
         "syllables": [
-            "ye",
-            "llow"
+            "yel",
+            "low"
         ]
     },
     {
@@ -431,8 +431,8 @@
         "usphone": "ˈɡlɑːsɪz",
         "ukphone": "ˈɡlɑːsɪz",
         "syllables": [
-            "gla",
-            "sses"
+            "glas",
+            "ses"
         ]
     },
     {
@@ -498,8 +498,8 @@
         "usphone": "ˈdɒlər",
         "ukphone": "ˈdɒlər",
         "syllables": [
-            "do",
-            "llar"
+            "dol",
+            "lar"
         ]
     },
     {
@@ -657,8 +657,8 @@
         "usphone": "ˈdɪnər",
         "ukphone": "ˈdɪnər",
         "syllables": [
-            "di",
-            "nner"
+            "din",
+            "ner"
         ]
     },
     {
@@ -758,8 +758,8 @@
         "usphone": "ˈpiːtsə",
         "ukphone": "ˈpiːtsə",
         "syllables": [
-            "pi",
-            "zza"
+            "piz",
+            "za"
         ]
     },
     {
@@ -983,8 +983,8 @@
         "usphone": "ˈkæbɪdʒ",
         "ukphone": "ˈkæbɪdʒ",
         "syllables": [
-            "ca",
-            "bbage"
+            "cab",
+            "bage"
         ]
     },
     {
@@ -1167,8 +1167,8 @@
         "usphone": "ˈkɒfi",
         "ukphone": "ˈkɒfi",
         "syllables": [
-            "co",
-            "ffee"
+            "cof",
+            "fee"
         ]
     },
     {
@@ -2128,8 +2128,8 @@
         "usphone": "ˈmɪljən",
         "ukphone": "ˈmɪljən",
         "syllables": [
-            "mi",
-            "llion"
+            "mil",
+            "lion"
         ]
     },
     {
@@ -3110,8 +3110,8 @@
         "ukphone": "ʌmˈbrelə",
         "syllables": [
             "um",
-            "bre",
-            "lla"
+            "brel",
+            "la"
         ],
         "etymology": {
             "derivation": "小阴影 → 伞",
@@ -3262,8 +3262,8 @@
         "usphone": "ˈsɪstər",
         "ukphone": "ˈsɪstər",
         "syllables": [
-            "sis",
-            "ter"
+            "si",
+            "ster"
         ]
     },
     {
@@ -3275,7 +3275,8 @@
         "ukphone": "ˈɡrænpeərənt",
         "syllables": [
             "grand",
-            "parent"
+            "pa",
+            "rent"
         ],
         "etymology": {
             "prefix": {
@@ -3301,7 +3302,8 @@
         "ukphone": "ˈɡrændfɑːðə",
         "syllables": [
             "grand",
-            "father"
+            "fa",
+            "ther"
         ],
         "etymology": {
             "prefix": {
@@ -3339,7 +3341,8 @@
         "ukphone": "ˈɡrænmʌðər",
         "syllables": [
             "grand",
-            "mother"
+            "mo",
+            "ther"
         ],
         "etymology": {
             "prefix": {
@@ -3736,8 +3739,8 @@
         "usphone": "ˈfɪŋɡər",
         "ukphone": "ˈfɪŋɡər",
         "syllables": [
-            "fin",
-            "ger"
+            "fi",
+            "nger"
         ]
     },
     {
@@ -4549,8 +4552,8 @@
         "usphone": "ˈhæpi",
         "ukphone": "ˈhæpi",
         "syllables": [
-            "ha",
-            "ppy"
+            "hap",
+            "py"
         ]
     },
     {
@@ -4762,8 +4765,8 @@
         "usphone": "ˈfʌni",
         "ukphone": "ˈfʌni",
         "syllables": [
-            "fu",
-            "nny"
+            "fun",
+            "ny"
         ]
     },
     {
@@ -5297,8 +5300,8 @@
         "usphone": "ˈtræfɪk",
         "ukphone": "ˈtræfɪk",
         "syllables": [
-            "tra",
-            "ffic"
+            "traf",
+            "fic"
         ]
     },
     {
@@ -5800,8 +5803,8 @@
         "usphone": "ˈhɒbi",
         "ukphone": "ˈhɒbi",
         "syllables": [
-            "ho",
-            "bby"
+            "hob",
+            "by"
         ]
     },
     {
@@ -5834,8 +5837,8 @@
         "usphone": "həˈləʊ",
         "ukphone": "həˈləʊ",
         "syllables": [
-            "he",
-            "llo"
+            "hel",
+            "lo"
         ]
     },
     {
@@ -6091,8 +6094,8 @@
         "usphone": "əˈdres",
         "ukphone": "əˈdres",
         "syllables": [
-            "a",
-            "ddress"
+            "ad",
+            "dress"
         ]
     },
     {
@@ -6103,8 +6106,8 @@
         "usphone": "ˈletər",
         "ukphone": "ˈletər",
         "syllables": [
-            "le",
-            "tter"
+            "let",
+            "ter"
         ]
     },
     {
@@ -6192,8 +6195,8 @@
         "usphone": "ˈmesɪdʒ",
         "ukphone": "ˈmesɪdʒ",
         "syllables": [
-            "me",
-            "ssage"
+            "mes",
+            "sage"
         ]
     },
     {
@@ -6867,8 +6870,8 @@
         "usphone": "ˈlesn",
         "ukphone": "ˈlesn",
         "syllables": [
-            "le",
-            "sson"
+            "les",
+            "son"
         ]
     },
     {
@@ -7305,8 +7308,8 @@
         "usphone": "ˈsʌmər",
         "ukphone": "ˈsʌmər",
         "syllables": [
-            "su",
-            "mmer"
+            "sum",
+            "mer"
         ]
     },
     {
@@ -7364,8 +7367,8 @@
             }
         },
         "syllables": [
-            "su",
-            "nny"
+            "sun",
+            "ny"
         ]
     },
     {
@@ -7479,8 +7482,8 @@
             }
         },
         "syllables": [
-            "fo",
-            "ggy"
+            "fog",
+            "gy"
         ]
     },
     {
@@ -7970,8 +7973,8 @@
         "usphone": "ˈræbɪt",
         "ukphone": "ˈræbɪt",
         "syllables": [
-            "ra",
-            "bbit"
+            "rab",
+            "bit"
         ]
     },
     {
@@ -8234,8 +8237,8 @@
         "usphone": "ˈbʌtəflaɪ",
         "ukphone": "ˈbʌtəflaɪ",
         "syllables": [
-            "bu",
-            "tter",
+            "but",
+            "ter",
             "fly"
         ],
         "etymology": {
@@ -8565,8 +8568,8 @@
         "usphone": "ˈɒfɪs",
         "ukphone": "ˈɒfɪs",
         "syllables": [
-            "o",
-            "ffice"
+            "of",
+            "fice"
         ]
     },
     {
@@ -8742,8 +8745,8 @@
         "usphone": "ˈkrɒsɪŋ",
         "ukphone": "ˈkrɒsɪŋ",
         "syllables": [
-            "cro",
-            "ssing"
+            "cros",
+            "sing"
         ]
     },
     {
@@ -9342,8 +9345,8 @@
         "usphone": "ˈvɪlɪdʒ",
         "ukphone": "ˈvɪlɪdʒ",
         "syllables": [
-            "vi",
-            "llage"
+            "vil",
+            "lage"
         ]
     },
     {
@@ -10477,8 +10480,8 @@
         "usphone": "ˈmætər",
         "ukphone": "ˈmætər",
         "syllables": [
-            "ma",
-            "tter"
+            "mat",
+            "ter"
         ]
     },
     {
@@ -11210,8 +11213,8 @@
         "usphone": "kəˈlekt",
         "ukphone": "kəˈlekt",
         "syllables": [
-            "co",
-            "llect"
+            "col",
+            "lect"
         ]
     },
     {
@@ -11322,8 +11325,8 @@
         "usphone": "ˈfɒləʊ",
         "ukphone": "ˈfɒləʊ",
         "syllables": [
-            "fo",
-            "llow"
+            "fol",
+            "low"
         ]
     },
     {
@@ -11368,8 +11371,8 @@
         "usphone": "ˈhæpən",
         "ukphone": "ˈhæpən",
         "syllables": [
-            "ha",
-            "ppen"
+            "hap",
+            "pen"
         ]
     },
     {
@@ -11538,8 +11541,8 @@
         "usphone": "ˈprɪti",
         "ukphone": "ˈprɪti",
         "syllables": [
-            "pre",
-            "tty"
+            "pret",
+            "ty"
         ]
     },
     {
@@ -11997,8 +12000,8 @@
         "usphone": "ˈdɪfɪkəlt",
         "ukphone": "ˈdɪfɪkəlt",
         "syllables": [
-            "di",
-            "ffi",
+            "dif",
+            "fi",
             "cult"
         ],
         "etymology": {
@@ -12593,8 +12596,8 @@
         "usphone": "əˈpɪər",
         "ukphone": "əˈpɪər",
         "syllables": [
-            "a",
-            "ppear"
+            "ap",
+            "pear"
         ]
     },
     {
@@ -12628,8 +12631,8 @@
         "usphone": "əˈtenʃn",
         "ukphone": "əˈtenʃn",
         "syllables": [
-            "a",
-            "tten",
+            "at",
+            "ten",
             "tion"
         ],
         "etymology": {
@@ -12664,8 +12667,8 @@
         "usphone": "bəˈluːn",
         "ukphone": "bəˈluːn",
         "syllables": [
-            "ba",
-            "lloon"
+            "bal",
+            "loon"
         ]
     },
     {
@@ -13228,8 +13231,8 @@
         "ukphone": "ˈfaɪnəli",
         "syllables": [
             "fi",
-            "na",
-            "lly"
+            "nal",
+            "ly"
         ]
     },
     {
@@ -13559,8 +13562,8 @@
         "usphone": "ˈlɪtər",
         "ukphone": "ˈlɪtər",
         "syllables": [
-            "li",
-            "tter"
+            "lit",
+            "ter"
         ]
     },
     {
@@ -14327,8 +14330,8 @@
         "usphone": "ˈrʌbər",
         "ukphone": "ˈrʌbər",
         "syllables": [
-            "ru",
-            "bber"
+            "rub",
+            "ber"
         ],
         "etymology": {
             "derivation": "用来擦的东西 → 橡皮",
@@ -14350,8 +14353,8 @@
         "usphone": "ˈrʌbɪʃ",
         "ukphone": "ˈrʌbɪʃ",
         "syllables": [
-            "ru",
-            "bbish"
+            "rub",
+            "bish"
         ],
         "etymology": {
             "derivation": "碎碎的东西 → 垃圾",
@@ -14460,8 +14463,8 @@
         "usphone": "ˈsɪzəz",
         "ukphone": "ˈsɪzəz",
         "syllables": [
-            "sci",
-            "ssors"
+            "scis",
+            "sors"
         ],
         "etymology": {
             "derivation": "切割工具 → 剪刀",
@@ -14723,8 +14726,8 @@
         "usphone": "ˈslɪpər",
         "ukphone": "ˈslɪpər",
         "syllables": [
-            "sli",
-            "pper"
+            "slip",
+            "per"
         ],
         "etymology": {
             "derivation": "容易滑的鞋 → 拖鞋",
@@ -14801,8 +14804,8 @@
         "usphone": "səˈdʒest",
         "ukphone": "səˈdʒest",
         "syllables": [
-            "su",
-            "ggest"
+            "sug",
+            "gest"
         ],
         "etymology": {
             "derivation": "在下面带出 → 建议",
@@ -14853,8 +14856,8 @@
         "usphone": "ˈsʌməri",
         "ukphone": "ˈsʌməri",
         "syllables": [
-            "su",
-            "mma",
+            "sum",
+            "ma",
             "ry"
         ],
         "etymology": {
@@ -15017,8 +15020,8 @@
         "ukphone": "ˈtrævələr",
         "syllables": [
             "tra",
-            "ve",
-            "ller"
+            "vel",
+            "ler"
         ],
         "etymology": {
             "derivation": "旅行者",
@@ -15210,8 +15213,8 @@
         "usphone": "ˈwɪnər",
         "ukphone": "ˈwɪnər",
         "syllables": [
-            "wi",
-            "nner"
+            "win",
+            "ner"
         ],
         "etymology": {
             "derivation": "赢的人 → 获胜者",

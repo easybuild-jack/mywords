@@ -51,7 +51,7 @@
 
 ## 3. 字母层切分规则（一元一辅）
 
-在字母层面把单词切成音节，遵循 **V-CV（元音-辅音-元音）贪心规则**：
+在字母层面把单词切成音节，遵循 **「一元一辅，从后往前切」** 规则：
 
 ### 3.1 元音核（Vowel Nucleus）判定
 - 元音字母：`a e i o u`；
@@ -60,18 +60,23 @@
 - 连续元音字母合并为一个核（`ou`、`ea`、`ow` 等整体是一个核）。
 
 ### 3.2 辅音归属（一元一辅，从后往前切）
-相邻两个元音核之间的辅音簇，**从后往前**分配：单辅音归后一个音节，多辅音簇按下表处理：
+
+**核心算法**：从单词末尾往前扫描，找到一个元音后再找到一个辅音，在辅音前切开。每个音节从词尾方向拿「一个元音 + 一个辅音」，剩余辅音留归前一个音节。
+
+以 `command` 为例：从后往前扫描 → `d` 辅音跳过 → `n` 辅音跳过 → `a` **元音找到** → `m` **辅音找到，切！** → 得到 `mand`。继续往前 → `m` 辅音跳过 → `o` 元音 → 到达词首 → 得到 `com`。结果：**`com-mand`**。
+
+相邻两个元音核之间的辅音簇，按以下优先级处理：
 
 | 辅音簇类型 | 处理 | 例词 |
 |---|---|---|
 | 单辅音 | 归后一个音节（V-CV）| colour→co-lour、orange→o-range、banana→ba-na-na |
 | **簇首 r 控制**（r 前是元音、r 后是辅音/词尾）| r 归属前一个音节 | curly→cur-ly、carrot→car-rot、thirteen→thir-teen |
-| 双写辅音（ll、tt、ss）| 整簇归后 | yellow→ye-llow |
-| 双字母一音（th、sh、ch、ph、wh、ck、ng、gh、qu）| 整簇归后 | teacher→tea-cher |
+| 双字母一音（th、sh、ch、ph、wh、ck、ng、gh、qu）| 整簇归后（它们只发一个音，不能拆）| teacher→tea-cher、father→fa-ther |
 | **可作词首的辅音簇**（br、gr、pr、sk 等 onset）| 整簇归后 | library→li-bra-ry、kilogram→ki-lo-gram、April→a-pril |
-| **其他多辅音簇** | **第一个辅音归前、其余归后**（VC-CV，从后往前切）| September→sep-tem-ber、October→oc-to-ber、November→no-vem-ber |
+| **双写辅音**（ll、mm、tt、ss、pp、ff 等）| **第一个归前、第二个归后**（VC-CV）| command→com-mand、yellow→yel-low、happy→hap-py、coffee→cof-fee |
+| **其他多辅音簇** | **第一个辅音归前、其余归后**（VC-CV）| September→sep-tem-ber、October→oc-to-ber、November→no-vem-ber |
 
-> 关键：一元一辅不是"辅音簇全部归后"，而是**从后往前切**——每个音节从词尾方向拿"一个元音 + 一个辅音（簇尾）"，剩余辅音留归前一个音节。
+> 关键：一元一辅不是「辅音簇全部归后」，而是**从后往前切**——每个音节从词尾方向拿「一个元音 + 一个辅音（簇尾）」，剩余辅音留归前一个音节。双写辅音本质上也是两个辅音字母，按 VC-CV 规则自然拆开。
 >
 > onset 表（可作词首的辅音簇）：`bl br cl cr dr dw fl fr gl gr pl pr sc sk sl sm sn sp st sw tr tw` + 三字母 `scr shr spl spr squ str thr`。
 
@@ -290,7 +295,7 @@
 | curly | cu-rly | **cur-ly** | §4 r 控制元音 |
 | colour | col-our | co-lour | §3.2 一元一辅 |
 | orange | or-ange | o-range | §4（r 后元音，拆开）|
-| yellow | yel-low | ye-llow | §3.2 双写辅音归后 |
+| yellow | ye-llow | **yel-low** | §3.2 双写辅音拆开（VC-CV）|
 | thirteen | thi-rteen | thir-teen | §4 r 控制元音 |
 | morning | mo-rning | mor-ning | §4 |
 | garden | ga-rden | gar-den | §4 |

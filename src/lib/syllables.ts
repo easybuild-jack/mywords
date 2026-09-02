@@ -428,11 +428,26 @@ function dropSilentNuclei(word: string, nuclei: VowelNucleus[]): VowelNucleus[] 
 }
 
 /**
+ * 英语可作词首的辅音簇（onset）：br、gr、pr、sk 等整体归后一个音节
+ * （li-bra-ry、ki-lo-gram、a-pril），除非前一个音节需要闭（由 r 控制/双写规则先处理）。
+ */
+const ONSET_CLUSTERS = new Set([
+  'bl', 'br', 'cl', 'cr', 'dr', 'dw', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr',
+  'sc', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw', 'tr', 'tw',
+  'scr', 'shr', 'spl', 'spr', 'squ', 'str', 'thr',
+])
+
+/**
  * 在相邻元音核之间选一个切点，切点即下一音节的起始下标。
  *
- * 单辅音归后一个音节（V-CV：o-pen、ba-by），这是教材默认规则；
- * 两个以上辅音则从第一个之后切开（VC-CV：let-ter、mon-ster），
- * 但双字母一音必须整体留给后一个音节（mo-ther、tea-cher）。
+ * 辅音簇处理（两个元音核之间，一元一辅从后往前切）：
+ * - 簇长 1：归后一个音节（co-lour）；
+ * - 簇首 r 控制（r 前是元音、r 后是辅音/词尾）：r 归前（cur-ly、car-rot、thir-teen）；
+ * - 不发音 gh 组合（eigh/igh/augh/ough）：gh 归前（eigh-teen、daugh-ter）；
+ * - 双字母一音（ch、th）：整簇归后（tea-cher、fa-ther）；
+ * - 可作词首的辅音簇（br、gr 等 onset）：整簇归后（li-bra-ry）；
+ * - 双写辅音（ll、mm、tt）：第一个归前、第二个归后（com-mand、yel-low、hap-py）；
+ * - 其他多辅音簇：第一个辅音归前、其余归后（sep-tem-ber、oc-to-ber）。
  */
 function findCutPoints(word: string, nuclei: VowelNucleus[]): number[] {
   const cuts: number[] = []
@@ -442,13 +457,46 @@ function findCutPoints(word: string, nuclei: VowelNucleus[]): number[] {
     const clusterStart = nuclei[n].end + 1
     const clusterSize = nuclei[n + 1].start - clusterStart
 
+    // 单辅音：归后一个音节（co-lour、o-range、ba-na-na）
     if (clusterSize === 1) {
       cuts.push(clusterStart)
       continue
     }
 
+    // 簇首 r 控制：r 前是元音、r 后是辅音或词尾 → r 归属前一个音节（cur-ly、car-rot、thir-teen）
+    if (word[clusterStart] === 'r' && isVowelAt(word, clusterStart - 1)) {
+      const afterR = word[clusterStart + 1]
+      if (afterR === undefined || !isVowelAt(word, clusterStart + 1)) {
+        cuts.push(clusterStart + 1)
+        continue
+      }
+    }
+
+    // 不发音 gh 组合（eigh/igh/augh/ough，如 eigh-teen、daugh-ter、naugh-ty）：
+    // 元音后的 gh 归属前一个音节，组合整体保留
+    if (word.slice(clusterStart, clusterStart + 2) === 'gh' && isVowelAt(word, clusterStart - 1)) {
+      cuts.push(clusterStart + 2)
+      continue
+    }
+
     const firstPair = word.slice(clusterStart, clusterStart + 2)
-    cuts.push(DIGRAPHS.has(firstPair) ? clusterStart : clusterStart + 1)
+
+    // 双字母一音（teacher 的 ch、father 的 th）：整簇归后
+    if (DIGRAPHS.has(firstPair)) {
+      cuts.push(clusterStart)
+      continue
+    }
+
+    // 可作词首的辅音簇（li-bra-ry 的 br、ki-lo-gram 的 gr）：整体归后
+    const upToThree = word.slice(clusterStart, clusterStart + 3)
+    if (ONSET_CLUSTERS.has(upToThree) || ONSET_CLUSTERS.has(firstPair)) {
+      cuts.push(clusterStart)
+      continue
+    }
+
+    // 双写辅音（command 的 mm、yellow 的 ll、happy 的 pp）及其他多辅音簇：
+    // 第一个辅音归前、其余归后（VC-CV：com-mand、yel-low、sep-tem-ber）
+    cuts.push(clusterStart + 1)
   }
 
   return cuts

@@ -350,7 +350,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-xl bg-[#131720] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-3xl bg-[#131720] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 顶栏 Header */}
@@ -413,20 +413,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
           {activeTab === 'syllables' ? (
             <div className="space-y-5">
               {/* 实时切分渲染预览 */}
-              <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-center space-y-2">
-                <div className="flex items-center justify-between text-xs text-gray-400 pb-1 border-b border-white/5">
-                  <span>实时拆分与配色预览 (Live Preview)</span>
-                  <div className="flex items-center gap-3">
-                    {silentIndices.size > 0 && (
-                      <span className="text-gray-400 font-sans text-xs">
-                        已设 {silentIndices.size} 个不发音字母
-                      </span>
-                    )}
-                    <span className="font-mono text-primary font-semibold">
-                      {currentSyllables.length} 个音节
-                    </span>
-                  </div>
-                </div>
+              <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-center">
                 <SyllablePreview
                   wordName={word.name}
                   syllables={currentSyllables}

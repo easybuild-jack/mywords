@@ -36,7 +36,7 @@ const isVowelChar = (c) => SINGLE_SYMBOLS.includes(c) || c === 'ː' || MULTI_SYM
  * end/one/body/melon/berry 等易误伤（spend、stone、everybody）不走此规则，由特例表处理。
  */
 const COMPOUND_TAILS = [
-  'day', 'work', 'book', 'man', 'ball', 'room', 'shop', 'store', 'town', 'side',
+  'ache', 'day', 'work', 'book', 'man', 'ball', 'room', 'shop', 'store', 'town', 'side',
   'thing', 'self', 'noon', 'night', 'walk', 'port', 'cake', 'mate', 'board',
   'ground', 'time', 'where', 'way', 'stand',
 ]
@@ -145,7 +145,7 @@ const ONSET_CLUSTERS = new Set([
  * 辅音簇处理（两个元音核之间，从后往前切）：
  * - 簇长 1：归后一个音节（co-lour）；
  * - 簇首 r 控制（r 前是元音、r 后是辅音/词尾）：r 归前（cur-ly、car-rot、thir-teen）；
- * - 双写辅音（ll）或双字母一音（ch、th）：整簇归后（ye-llow、tea-cher）；
+ * - 双写辅音（ll、mm）：第一个归前、第二个归后（com-mand、yel-low）；
  * - 其他多辅音簇：第一个辅音归前、其余归后（sep-tem-ber、oc-to-ber、no-vem-ber）。
  */
 function splitByUserRule(word, { dropEd = true } = {}) {
@@ -215,9 +215,9 @@ function splitByUserRule(word, { dropEd = true } = {}) {
       continue
     }
 
-    // 双写辅音（yellow 的 ll）或双字母一音（teacher 的 ch）：整簇归后
+    // 双字母一音（teacher 的 ch、father 的 th）：整簇归后
     const firstPair = cleanWord.slice(clusterStart, clusterStart + 2)
-    if (firstPair[0] === firstPair[1] || DIGRAPHS.has(firstPair)) {
+    if (DIGRAPHS.has(firstPair)) {
       cuts.push(clusterStart)
       continue
     }
@@ -229,7 +229,8 @@ function splitByUserRule(word, { dropEd = true } = {}) {
       continue
     }
 
-    // 其他多辅音簇：第一个辅音归前、其余归后（从后往前切，sep-tem-ber、oc-to-ber）
+    // 双写辅音（command 的 mm、yellow 的 ll）及其他多辅音簇：
+    // 第一个辅音归前、其余归后（VC-CV：com-mand、yel-low、sep-tem-ber、oc-to-ber）
     cuts.push(clusterStart + 1)
   }
   const bounds = [0, ...cuts, cleanWord.length]
