@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig } from '@/types'
+import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig, WordEtymology } from '@/types'
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { BUILTIN_ROOTS } from '@/resources/roots'
-import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord } from '@/db'
+import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
@@ -180,6 +180,14 @@ interface WorkspaceState {
   setRootSearchModalOpen: (open: boolean) => void
   restartRoots: () => void
 
+  // 音节切分展示与弹窗控制 (仅当前单词有效，切词自动重置)
+  isCurrentWordSplit: boolean
+  isEditWordSplitModalOpen: boolean
+  toggleCurrentWordSplit: () => void
+  setEditWordSplitModalOpen: (open: boolean) => void
+
+  updateWordSplit: (wordId: string, updates: { syllables: string[]; etymology?: WordEtymology; silentIndices?: number[] }) => Promise<void>
+
   getUnitWords: () => WordItem[]
   getCurrentWord: () => WordItem | undefined
 }
@@ -265,6 +273,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
       loopCountBeforeErrorPractice: null,
+
+      // 音节切分与编辑弹窗（仅作用于当前单词）
+      isCurrentWordSplit: false,
+      isEditWordSplitModalOpen: false,
 
       // 词根学习状态初始值
       activeRootIndex: 0,
@@ -412,6 +424,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          isCurrentWordSplit: false,
+          isEditWordSplitModalOpen: false,
           // 换书直接中断攻坚，循环次数一并还原
           isErrorPracticeActive: false,
           retryWordQueue: [],
@@ -440,6 +454,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          isCurrentWordSplit: false,
+          isEditWordSplitModalOpen: false,
           isErrorPracticeActive: false,
           retryWordQueue: [],
           ...restoreLoopCount(get),
@@ -859,6 +875,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: nextIndex,
             currentInput: '',
             hasTypo: false,
+            isCurrentWordSplit: false,
+            isEditWordSplitModalOpen: false,
             currentWordRemainingLoops: loopCountSetting,
             ...DICTATION_STEP_RESET,
           })
@@ -906,6 +924,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: targetIndex,
             currentInput: '',
             hasTypo: false,
+            isCurrentWordSplit: false,
+            isEditWordSplitModalOpen: false,
             currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
             ...DICTATION_STEP_RESET,
           })
@@ -928,6 +948,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
+          isCurrentWordSplit: false,
+          isEditWordSplitModalOpen: false,
           retryWordQueue: [],
           currentWordRemainingLoops: get().isErrorPracticeActive ? 3 : get().loopCountSetting,
           conqueredErrorWordIds: [],
@@ -983,6 +1005,74 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       setRootSearchQuery: (query: string) => set({ rootSearchQuery: query }),
       setRootSearchModalOpen: (open: boolean) => set({ isRootSearchModalOpen: open }),
       restartRoots: () => set({ activeRootIndex: 0 }),
+
+      toggleCurrentWordSplit: () => set((s) => ({ isCurrentWordSplit: !s.isCurrentWordSplit })),
+      setEditWordSplitModalOpen: (open: boolean) => set({ isEditWordSplitModalOpen: open }),
+
+      updateWordSplit: async (wordId: string, updates: { syllables: string[]; etymology?: WordEtymology; silentIndices?: number[] }) => {
+        const { currentLoadedWords, currentBook, currentBookId } = get()
+        const targetWord = currentLoadedWords.find((w) => w.id === wordId)
+        if (!targetWord) return
+
+        const updatedWords = currentLoadedWords.map((w) => {
+          if (w.id === wordId) {
+            return {
+              ...w,
+              syllables: updates.syllables,
+              etymology: updates.etymology !== undefined ? updates.etymology : w.etymology,
+              silentIndices: updates.silentIndices !== undefined ? updates.silentIndices : w.silentIndices,
+            }
+          }
+          return w
+        })
+
+        let updatedBook = currentBook
+        const isCustomBook = Boolean(currentBook?.isCustom)
+
+        if (isCustomBook && currentBook?.words) {
+          const updatedBookWords = currentBook.words.map((w) => {
+            if (w.id === wordId) {
+              return {
+                ...w,
+                syllables: updates.syllables,
+                etymology: updates.etymology !== undefined ? updates.etymology : w.etymology,
+                silentIndices: updates.silentIndices !== undefined ? updates.silentIndices : w.silentIndices,
+              }
+            }
+            return w
+          })
+          updatedBook = { ...currentBook, words: updatedBookWords }
+        }
+
+        set({
+          currentLoadedWords: updatedWords,
+          currentBook: updatedBook,
+        })
+
+        if (isCustomBook) {
+          // 自定义词库：持久化保存到本地 IndexedDB
+          await saveWordOverride(wordId, targetWord.name, updates)
+        } else {
+          // 自带官方词库：直接通过 API 更新并写回 public/dicts/*.json 文件！
+          try {
+            await fetch('/api/dict/update-word', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                bookId: currentBookId,
+                wordName: targetWord.name,
+                syllables: updates.syllables,
+                silentIndices: updates.silentIndices,
+                etymology: updates.etymology,
+              }),
+            })
+            dictionaryLoader.clearCache()
+          } catch (err) {
+            console.warn('Failed to update dict JSON via API, fallback to local override:', err)
+            await saveWordOverride(wordId, targetWord.name, updates)
+          }
+        }
+      },
     }),
     {
       name: 'mywords-workspace-storage',

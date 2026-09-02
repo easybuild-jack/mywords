@@ -475,7 +475,7 @@ export function isUsableSyllableSplit(name: string, syllables?: string[]): boole
   const clean = name.trim().toLowerCase()
   if (syllables.join('').toLowerCase() !== clean) return false
 
-  return syllables.every((part) => [...part.toLowerCase()].some((char) => 'aeiouy'.includes(char)))
+  return true
 }
 
 /**

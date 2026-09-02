@@ -3262,8 +3262,8 @@
         "usphone": "ˈsɪstər",
         "ukphone": "ˈsɪstər",
         "syllables": [
-            "si",
-            "ster"
+            "sis",
+            "ter"
         ]
     },
     {
@@ -3275,11 +3275,9 @@
         "ukphone": "ˈɡrænpeərənt",
         "syllables": [
             "grand",
-            "pa",
-            "rent"
+            "parent"
         ],
         "etymology": {
-            "derivation": "大父母 → 祖父母",
             "prefix": {
                 "form": "grand-",
                 "meaning": "大"
@@ -3287,8 +3285,12 @@
             "root": {
                 "form": "parent",
                 "meaning": "父母"
-            }
-        }
+            },
+            "derivation": "大父母 → 祖父母"
+        },
+        "silentIndices": [
+            4
+        ]
     },
     {
         "name": "grandfather",
@@ -3299,11 +3301,9 @@
         "ukphone": "ˈɡrændfɑːðə",
         "syllables": [
             "grand",
-            "fa",
-            "ther"
+            "father"
         ],
         "etymology": {
-            "derivation": "大父亲 → 祖父/外公",
             "prefix": {
                 "form": "grand-",
                 "meaning": "大"
@@ -3311,8 +3311,12 @@
             "root": {
                 "form": "father",
                 "meaning": "父亲"
-            }
-        }
+            },
+            "derivation": "大父亲 → 祖父/外公"
+        },
+        "silentIndices": [
+            4
+        ]
     },
     {
         "name": "grandpa",
@@ -3335,11 +3339,9 @@
         "ukphone": "ˈɡrænmʌðər",
         "syllables": [
             "grand",
-            "mo",
-            "ther"
+            "mother"
         ],
         "etymology": {
-            "derivation": "大母亲 → 祖母/外婆",
             "prefix": {
                 "form": "grand-",
                 "meaning": "大"
@@ -3347,8 +3349,12 @@
             "root": {
                 "form": "mother",
                 "meaning": "母亲"
-            }
-        }
+            },
+            "derivation": "大母亲 → 祖母/外婆"
+        },
+        "silentIndices": [
+            4
+        ]
     },
     {
         "name": "grandma",
@@ -3360,6 +3366,9 @@
         "syllables": [
             "grand",
             "ma"
+        ],
+        "silentIndices": [
+            4
         ]
     },
     {
@@ -3668,6 +3677,10 @@
         "ukphone": "tʌŋ",
         "syllables": [
             "tongue"
+        ],
+        "silentIndices": [
+            4,
+            5
         ]
     },
     {
@@ -3723,8 +3736,8 @@
         "usphone": "ˈfɪŋɡər",
         "ukphone": "ˈfɪŋɡər",
         "syllables": [
-            "fi",
-            "nger"
+            "fin",
+            "ger"
         ]
     },
     {

@@ -1,6 +1,7 @@
 import type { WordEtymology, WordItem } from '@/types'
 import { splitIntoSyllables, analyzeEtymology, isUsableSyllableSplit } from '@/lib/syllables'
 import { buildWordId } from '@/lib/wordId'
+import { db } from '@/db'
 
 /** 导入时由用户提供的字段，填了就跳过对应的自动推导 */
 export interface WordEnrichOverrides {
@@ -41,6 +42,10 @@ class DictionaryLoader {
   private localLexiconMap: Map<string, { trans: string[]; usphone?: string; ukphone?: string }> = new Map()
   private bookJsonCache: Map<string, RawDictEntry[]> = new Map()
   private isIndexInitialized = false
+
+  public clearCache() {
+    this.bookJsonCache.clear()
+  }
 
   /**
    * 预热初始化基础词典索引（在浏览器后台静默建立 4000+ 核心词索引与 IT 编程词库索引）
@@ -155,6 +160,7 @@ class DictionaryLoader {
 
     const cleanName = name.trim()
     const lowerName = cleanName.toLowerCase()
+    const wordId = buildWordId(cleanName)
 
     await this.ensureLexiconIndex()
 
@@ -190,18 +196,33 @@ class DictionaryLoader {
     if (!ukPhone) ukPhone = `/ ${lowerName} /`
 
     // 4. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
-    const syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
-    const etymology = customEtymology ?? undefined
+    let syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
+    let etymology = customEtymology ?? undefined
+    let silentIndices: number[] | undefined
+
+    // 5. 检查本地 DB 中的用户修改覆盖
+    if (typeof window !== 'undefined' && !customSyllables && !customEtymology) {
+      try {
+        const savedOverride = await db.wordOverrides.get(wordId)
+        if (savedOverride) {
+          if (savedOverride.syllables?.length) syllables = savedOverride.syllables
+          if (savedOverride.etymology !== undefined) etymology = savedOverride.etymology
+          if (savedOverride.silentIndices !== undefined) silentIndices = savedOverride.silentIndices
+        }
+      } catch {}
+    }
+
     const posList = this.parsePosAndMeans(transList)
 
     return {
-      id: buildWordId(cleanName),
+      id: wordId,
       name: cleanName,
       syllables,
       phoneticUs: usPhone,
       phoneticUk: ukPhone,
       posList,
       etymology,
+      silentIndices,
     }
   }
 
@@ -261,6 +282,30 @@ class DictionaryLoader {
         etymology,
       }
     })
+
+    // 应用用户自定义覆盖
+    if (typeof window !== 'undefined' && enrichedList.length > 0) {
+      try {
+        const ids = enrichedList.map((w) => w.id)
+        const overrides = await db.wordOverrides.bulkGet(ids)
+        for (let i = 0; i < enrichedList.length; i++) {
+          const override = overrides[i]
+          if (override) {
+            if (override.syllables && override.syllables.length) {
+              enrichedList[i].syllables = override.syllables
+            }
+            if (override.etymology !== undefined) {
+              enrichedList[i].etymology = override.etymology
+            }
+            if (override.silentIndices !== undefined) {
+              enrichedList[i].silentIndices = override.silentIndices
+            }
+          }
+        }
+      } catch (err) {
+        // 容错处理
+      }
+    }
 
     return enrichedList
   }

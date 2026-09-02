@@ -36256,6 +36256,10 @@
         "ukphone": "tʌŋ",
         "syllables": [
             "tongue"
+        ],
+        "silentIndices": [
+            4,
+            5
         ]
     },
     {
@@ -59700,9 +59704,13 @@
         "usphone": "ˈdaɪəlɔːɡ",
         "ukphone": "ˈdaɪəlɒɡ",
         "syllables": [
-            "di",
-            "a",
-            "log"
+            "dia",
+            "lo",
+            "g"
+        ],
+        "silentIndices": [
+            4,
+            5
         ]
     },
     {
@@ -60574,8 +60582,8 @@
         "usphone": "ˈfɪŋɡər",
         "ukphone": "ˈfɪŋɡər",
         "syllables": [
-            "fi",
-            "nger"
+            "fin",
+            "ger"
         ]
     },
     {
@@ -67196,9 +67204,22 @@
         "ukphone": "ˈɡrænmʌðər",
         "syllables": [
             "grand",
-            "mo",
-            "ther"
-        ]
+            "mother"
+        ],
+        "silentIndices": [
+            4
+        ],
+        "etymology": {
+            "prefix": {
+                "form": "grand-",
+                "meaning": "大"
+            },
+            "root": {
+                "form": "mother",
+                "meaning": "母亲"
+            },
+            "derivation": "大母亲 → 祖母/外婆"
+        }
     },
     {
         "name": "grape",

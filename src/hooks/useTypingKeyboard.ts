@@ -25,6 +25,8 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
   const nextWord = useWorkspaceStore((s) => s.nextWord)
   const prevWord = useWorkspaceStore((s) => s.prevWord)
   const restartUnit = useWorkspaceStore((s) => s.restartUnit)
+  const toggleCurrentWordSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
+  const setEditWordSplitModalOpen = useWorkspaceStore((s) => s.setEditWordSplitModalOpen)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -50,6 +52,12 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
       if (isShortcutMatch(e, shortcuts.replayAudio)) {
         e.preventDefault()
         replayAudio()
+        return
+      }
+
+      if (isShortcutMatch(e, shortcuts.toggleSplit)) {
+        e.preventDefault()
+        toggleCurrentWordSplit()
         return
       }
 
@@ -92,6 +100,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
       prevWord,
       nextWord,
       restartUnit,
+      toggleCurrentWordSplit,
       handleBackspace,
       handleCharacterInput,
     ]

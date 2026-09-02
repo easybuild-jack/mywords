@@ -1,12 +1,17 @@
 import Dexie, { type Table } from 'dexie'
-import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem } from '@/types'
+import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology } from '@/types'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { buildWordId } from '@/lib/wordId'
 
-const STORE_SCHEMA: Record<string, string> = {
+const STORE_SCHEMA_V1: Record<string, string> = {
   books: 'id, name, category, isCustom, updatedAt',
   wordRecords: 'wordId, bookId, isMastered, isStarred, isError, lastPracticedAt',
   unitProgress: '[bookId+unitIndex], bookId, isFinished',
+}
+
+const STORE_SCHEMA_V3: Record<string, string> = {
+  ...STORE_SCHEMA_V1,
+  wordOverrides: 'wordId, name, updatedAt',
 }
 
 /**
@@ -31,15 +36,16 @@ export class MyWordsDatabase extends Dexie {
   books!: Table<VocabularyBook, string>
   wordRecords!: Table<WordMasteryRecord, string>
   unitProgress!: Table<UnitProgressRecord, string>
+  wordOverrides!: Table<WordOverrideRecord, string>
 
   constructor() {
     super('MyWordsDB')
-    this.version(1).stores(STORE_SCHEMA)
+    this.version(1).stores(STORE_SCHEMA_V1)
 
     // v1 的 wordId 掺了随机数与时间戳，同一个单词每次加载都会写成一条新记录。
     // 改用拼写派生的确定性 id 后，把历史数据按拼写归并回同一条，避免错词本重复与进度归零。
     this.version(2)
-      .stores(STORE_SCHEMA)
+      .stores(STORE_SCHEMA_V1)
       .upgrade(async (tx) => {
         const booksTable = tx.table<VocabularyBook, string>('books')
         const customBooks = await booksTable.toArray()
@@ -71,6 +77,9 @@ export class MyWordsDatabase extends Dexie {
         if (consumedIds.length) await recordsTable.bulkDelete(consumedIds)
         if (mergedById.size) await recordsTable.bulkPut(Array.from(mergedById.values()))
       })
+
+    // v3: 增加用户自定义单词拆分与构词覆盖表
+    this.version(3).stores(STORE_SCHEMA_V3)
   }
 
   async initializeDefaults() {
@@ -325,3 +334,93 @@ export async function saveCustomVocabularyBook(name: string, description: string
   await db.books.put(newBook)
   return newBook
 }
+
+/**
+ * 保存单个单词的用户自定义切分与构词覆盖
+ * 1. 写入 wordOverrides 表
+ * 2. 同步更新 wordRecords 中已有的离线快照
+ * 3. 同步更新自定义词库中该词条的持久化数据
+ */
+export async function saveWordOverride(
+  wordId: string,
+  name: string,
+  overrides: { syllables?: string[]; etymology?: WordEtymology; silentIndices?: number[] }
+): Promise<WordOverrideRecord> {
+  const cleanName = name.trim()
+  const record: WordOverrideRecord = {
+    wordId,
+    name: cleanName,
+    syllables: overrides.syllables,
+    etymology: overrides.etymology,
+    silentIndices: overrides.silentIndices,
+    updatedAt: Date.now(),
+  }
+
+  try {
+    await db.wordOverrides.put(record)
+
+    // 1. 同步更新 wordRecords 快照
+    const existingWordRecord = await db.wordRecords.get(wordId)
+    if (existingWordRecord?.wordItem) {
+      await db.wordRecords.update(wordId, {
+        wordItem: {
+          ...existingWordRecord.wordItem,
+          syllables: overrides.syllables || existingWordRecord.wordItem.syllables,
+          etymology: overrides.etymology !== undefined ? overrides.etymology : existingWordRecord.wordItem.etymology,
+          silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : existingWordRecord.wordItem.silentIndices,
+        },
+      })
+    }
+
+    // 2. 同步更新自定义词库中的条目
+    const customBooks = await db.books.filter((b) => Boolean(b.isCustom)).toArray()
+    for (const book of customBooks) {
+      if (book.words?.some((w) => w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase())) {
+        const updatedWords = book.words.map((w) => {
+          if (w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase()) {
+            return {
+              ...w,
+              syllables: overrides.syllables || w.syllables,
+              etymology: overrides.etymology !== undefined ? overrides.etymology : w.etymology,
+              silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : w.silentIndices,
+            }
+          }
+          return w
+        })
+        await db.books.update(book.id, {
+          words: updatedWords,
+          updatedAt: Date.now(),
+        })
+      }
+    }
+  } catch (err) {
+    console.error('Failed to save word override:', err)
+  }
+
+  return record
+}
+
+/**
+ * 查询单个单词的自定义覆盖
+ */
+export async function getWordOverride(wordId: string): Promise<WordOverrideRecord | undefined> {
+  try {
+    return await db.wordOverrides.get(wordId)
+  } catch (err) {
+    console.error('Failed to get word override:', err)
+    return undefined
+  }
+}
+
+/**
+ * 查询全部单词覆盖
+ */
+export async function getAllWordOverrides(): Promise<WordOverrideRecord[]> {
+  try {
+    return await db.wordOverrides.toArray()
+  } catch (err) {
+    console.error('Failed to get all word overrides:', err)
+    return []
+  }
+}
+

@@ -6,6 +6,7 @@ export const DEFAULT_SHORTCUTS: ShortcutConfig = {
   prevWord: 'ArrowLeft',
   nextWord: 'ArrowRight',
   restartUnit: 'Ctrl+R',
+  toggleSplit: 'Alt+S',
 }
 
 export const SHORTCUT_DEFINITIONS: {
@@ -19,6 +20,7 @@ export const SHORTCUT_DEFINITIONS: {
   { key: 'prevWord', label: '上一个单词', desc: '切换至当前单元的上一个单词', defaultKey: 'ArrowLeft' },
   { key: 'nextWord', label: '下一个单词', desc: '切换至当前单元的下一个单词', defaultKey: 'ArrowRight' },
   { key: 'restartUnit', label: '重学本单元', desc: '重新开始当前单元从头练习', defaultKey: 'Ctrl+R' },
+  { key: 'toggleSplit', label: '切换音节切分', desc: '切换当前单词的音节拆分显示', defaultKey: 'Alt+S' },
 ]
 
 /**

@@ -1,13 +1,16 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Lightbulb } from 'lucide-react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Lightbulb, Pencil } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
+import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
+import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { formatShortcutDisplay } from '@/lib/shortcuts'
 
 interface LearnCardProps {
   word: WordItem
@@ -46,7 +49,7 @@ function comboToneIndex(segments: GraphemeSegment[], index: number): number {
 
 function segmentClass(segments: GraphemeSegment[], index: number): string | undefined {
   const segment = segments[index]
-  if (segment?.kind === 'silent-e') {
+  if (segment?.kind === 'silent-e' || segment?.kind === 'silent') {
     return 'text-gray-400'
   }
   if (!isCombo(segment)) {
@@ -55,9 +58,9 @@ function segmentClass(segments: GraphemeSegment[], index: number): string | unde
   return COMBO_TONES[comboToneIndex(segments, index)]
 }
 
-/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色，不发音的词尾哑音e标灰 */
+/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色，不发音的哑音e及自定义哑音标灰 */
 function MarkedWord({ word }: { word: WordItem }) {
-  const segments = splitIntoGraphemes(word.name, resolveSyllables(word))
+  const segments = splitIntoGraphemes(word.name, resolveSyllables(word), word.silentIndices)
   return (
     <>
       {segments.map((segment, index) => (
@@ -71,7 +74,7 @@ function MarkedWord({ word }: { word: WordItem }) {
 
 /** 按音节切分逐段渲染单词 */
 function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: string[] }) {
-  const allSegments = splitIntoGraphemes(word.name, resolveSyllables(word))
+  const allSegments = splitIntoGraphemes(word.name, syllables, word.silentIndices)
   let currentOffset = 0
   const syllableGroups: GraphemeSegment[][] = []
 
@@ -146,17 +149,24 @@ export function LearnCard({
   phoneticPreference,
   remainingLoops = 1,
 }: LearnCardProps) {
-  const [isSplit, setIsSplit] = useState(false)
+  const isSplit = useWorkspaceStore((s) => s.isCurrentWordSplit)
+  const toggleSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
+  const isEditModalOpen = useWorkspaceStore((s) => s.isEditWordSplitModalOpen)
+  const setEditModalOpen = useWorkspaceStore((s) => s.setEditWordSplitModalOpen)
+  const shortcuts = useWorkspaceStore((s) => s.shortcuts)
+
   const phonetics = listPhonetics(word)
   const meaningText = formatMeaningText(word)
   const morphemes = splitIntoMorphemes(word)
+  const syllables = resolveSyllables(word)
 
-  const hasMultipleSyllables = Array.isArray(word.syllables) && word.syllables.length > 1
   const displayLength = word.name.length
 
   // 获取例句与词源扩展数据（2 条）
   const examples = getWordExamples(word)
   const { origin, memoryHook, derivation } = getWordEtymologyExtras(word)
+
+  const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
 
   return (
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
@@ -186,25 +196,36 @@ export function LearnCard({
             <h2
               className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
             >
-              {isSplit && hasMultipleSyllables ? (
-                <MarkedSplitWord word={word} syllables={word.syllables} />
+              {isSplit ? (
+                <MarkedSplitWord word={word} syllables={syllables} />
               ) : (
                 <MarkedWord word={word} />
               )}
             </h2>
-            <button
-              type="button"
-              onClick={() => setIsSplit((prev) => !prev)}
-              className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
-                isSplit
-                  ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
-                  : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
-              }`}
-              title={isSplit ? '合并单词' : '音节切分'}
-              aria-label={isSplit ? '合并单词' : '音节切分'}
-            >
-              {isSplit ? <Combine className="size-4" /> : <Scissors className="size-4" />}
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={toggleSplit}
+                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                  isSplit
+                    ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
+                    : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
+                }`}
+                title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
+                aria-label={isSplit ? '合并单词' : '音节切分'}
+              >
+                {isSplit ? <Combine className="size-4" /> : <Scissors className="size-4" />}
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditModalOpen(true)}
+                className="p-1.5 sm:p-2 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
+                title="修改单词切分与构词"
+                aria-label="修改单词切分与构词"
+              >
+                <Pencil className="size-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -290,9 +311,19 @@ export function LearnCard({
                 <BookOpen className="size-4 text-primary shrink-0" />
                 <span className="text-sm font-bold text-white/90 truncate">词根 · 助记</span>
               </div>
-              <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold shrink-0">
-                ROOTS
-              </span>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setEditModalOpen(true)}
+                  className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  title="修改构词与词根"
+                >
+                  <Pencil className="size-3.5" />
+                </button>
+                <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
+                  ROOTS
+                </span>
+              </div>
             </div>
 
             {/* 词根拆解块或词源探究（字号全面放大） */}
@@ -376,7 +407,15 @@ export function LearnCard({
           )}
         </div>
       </div>
+
+      {/* 修改单词切分与构词弹窗 */}
+      <EditWordSplitModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        word={word}
+      />
     </WordCardShell>
   )
 }
+
 

@@ -20,6 +20,8 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
     nextWord,
     isErrorPracticeActive,
     conqueredErrorWordIds,
+    toggleCurrentWordSplit,
+    setEditWordSplitModalOpen,
   } = useWorkspaceStore()
 
   const total = currentLoadedWords.length || 20
@@ -52,8 +54,21 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
 
           <button
             type="button"
+            onClick={toggleCurrentWordSplit}
+            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+            title={`音节拆分/合并 (${formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')})`}
+          >
+            <kbd className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+              {formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')}
+            </kbd>
+            <span>音节切分</span>
+          </button>
+
+          <button
+            type="button"
             onClick={replayAudio}
-            className="flex items-center gap-1.5 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+            title={`发音朗读 (${formatShortcutDisplay(shortcuts.replayAudio)})`}
           >
             <kbd className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold">
               {formatShortcutDisplay(shortcuts.replayAudio)}
@@ -67,7 +82,7 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
                 type="button"
                 onClick={prevWord}
                 title={`上一个单词 (${formatShortcutDisplay(shortcuts.prevWord)})`}
-                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
+                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
               >
                 {formatShortcutDisplay(shortcuts.prevWord)}
               </button>
@@ -75,7 +90,7 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
                 type="button"
                 onClick={nextWord}
                 title={`下一个单词 (${formatShortcutDisplay(shortcuts.nextWord)})`}
-                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all"
+                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
               >
                 {formatShortcutDisplay(shortcuts.nextWord)}
               </button>

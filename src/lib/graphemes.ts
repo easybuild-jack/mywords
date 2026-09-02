@@ -11,6 +11,7 @@ export type GraphemeKind =
   | 'suffix-chunk' // 固定后缀音块，如 tion、ture
   | 'vowel' // 未参与组合的单个元音字母
   | 'silent-e' // 词尾不发音的哑音 e
+  | 'silent' // 自定义不发音的哑音字母
   | 'plain' // 其余辅音字母
 
 export interface GraphemeSegment {
@@ -168,22 +169,31 @@ function isSilentEAtEnd(word: string, index: number): boolean {
  * 各段拼接后必然还原成原词——渲染要逐段套样式，对不上就会漏字母。
  *
  * 传入 syllables 时会拿它当护栏：发音单位不可能跨音节，跨了就不标。
- * directory 切成 di-rec-to-ry，里面的 ir 分属 di 和 rec（读 /ɪ/ + /r/ 而不是 /ɜː/），
- * 只看字母是分不出它和 bird 里那个 ir 的，靠音节边界才能否掉。
- * 音节切错时后果是漏标而非错标，比标错一个读音安全得多。
- *
- * 仍然只做拼写层面的匹配，不声称每组读什么音，因此不需要音素词典。
+ * 传入 silentIndices 时会将指定的字母强制标为哑音（灰化）。
  */
-export function splitIntoGraphemes(word: string, syllables?: string[]): GraphemeSegment[] {
+export function splitIntoGraphemes(word: string, syllables?: string[], silentIndices?: number[]): GraphemeSegment[] {
   const lower = word.toLowerCase()
   const boundaries = buildBoundaries(syllables)
+  const silentSet = new Set(silentIndices || [])
   const segments: GraphemeSegment[] = []
   let index = 0
 
   while (index < word.length) {
-    const pattern = matchPatternAt(lower, index, boundaries)
+    if (silentSet.has(index)) {
+      segments.push({
+        text: word[index],
+        kind: 'silent',
+      })
+      index++
+      continue
+    }
 
-    if (pattern) {
+    const pattern = matchPatternAt(lower, index, boundaries)
+    const hasSilentInPattern =
+      pattern &&
+      Array.from({ length: pattern.letters.length }, (_, k) => index + k).some((idx) => silentSet.has(idx))
+
+    if (pattern && !hasSilentInPattern) {
       segments.push({
         text: word.slice(index, index + pattern.letters.length),
         kind: pattern.kind,
@@ -208,3 +218,4 @@ export function splitIntoGraphemes(word: string, syllables?: string[]): Grapheme
 
   return segments
 }
+

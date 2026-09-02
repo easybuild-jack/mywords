@@ -704,9 +704,13 @@
         "usphone": "ˈdaɪəˌlɒg",
         "ukphone": "ˈdaɪəlɒɡ",
         "syllables": [
-            "di",
-            "a",
-            "log"
+            "dia",
+            "lo",
+            "g"
+        ],
+        "silentIndices": [
+            4,
+            5
         ]
     },
     {

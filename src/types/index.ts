@@ -27,6 +27,7 @@ export interface WordItem {
     means: string[];                            // 如 ["发现", "发掘"]
   }[];
   etymology?: WordEtymology;                    // 前缀/词根/后缀结构化拆解
+  silentIndices?: number[];                     // 自定义不发音/哑音字母下标 (如 bottle 中的第一个t [2])
   examples?: WordExample[];                     // 3条左右经典例句
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
 }
@@ -103,6 +104,15 @@ export interface UnitProgressRecord {
   activeRetryWordIds: string[];                 // 本单元当前仍待重考的错词 ID 队列
 }
 
+export interface WordOverrideRecord {
+  wordId: string;                               // 单词 ID
+  name: string;                                 // 单词拼写
+  syllables?: string[];                         // 自定义音节拆分 (如 ["dis", "cov", "er"])
+  etymology?: WordEtymology;                    // 自定义构词/词根词缀
+  silentIndices?: number[];                     // 自定义不发音/哑音字母下标
+  updatedAt: number;                            // 修改时间戳
+}
+
 // ==========================================
 // 4. 用户偏好与设置模型 (Zustand 持久化)
 // ==========================================
@@ -134,5 +144,6 @@ export interface ShortcutConfig {
   prevWord: string;            // 上一个词 (默认 ArrowLeft)
   nextWord: string;            // 下一个词 (默认 ArrowRight)
   restartUnit: string;         // 重做本单元 (默认 Ctrl+R)
+  toggleSplit: string;         // 切换音节切分 (默认 Alt+S)
 }
 
