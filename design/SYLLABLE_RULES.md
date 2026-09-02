@@ -75,33 +75,41 @@
 >
 > onset 表（可作词首的辅音簇）：`bl br cl cr dr dw fl fr gl gr pl pr sc sk sl sm sn sp st sw tr tw` + 三字母 `scr shr spl spr squ str thr`。
 
-### 3.3 复合词尾优先（独立词整体保留）⚠️ 优先于 3.2
+### 3.3 复合词黄金切分规则（Compound Words Decomposer）⚠️ 最高优先级
 
-以**单音节独立词**结尾的单词，切分点优先放在词边界，词尾整体保留为一段——不能把独立词拆散（一元一辅会误拆，如 Sunday → su-nday 把 day 拆了）：
+在自然拼读与音节学中，首要原则是：**"Divide between compound words"（复合词优先在子词边界切分）**。
 
-| 例词 | 词尾 | 错误（一元一辅） | 正确 |
-|---|---|---|---|
-| Sunday | day | su-nday | **sun-day** |
-| Monday | day | mo-nday | mon-day |
-| weekend | end（特例）| wee-kend | week-end |
-| homework | work | home-work ✓ | home-work |
-| bedroom | room | be-droom | bed-room |
-| inside | side | i-nside | in-side |
-| policeman | man | poli-ce-man | po-lice-man |
-| mooncake | cake | moo-ncake | moon-cake |
+由两个或多个独立词拼合而成的复合词，**严禁使用普通辅音规则跨词界切分**，否则会产生严重的语音与语义错误：
 
-**复合词尾白名单**（只收录"作为词尾时几乎总是复合词素"且不易误伤的单音节词）：
+| 复合单词 | 复合成分 | 错误切分（普通辅音规则） | 正确切分（复合词规则） | 错误原因分析 |
+|---|---|---|---|---|
+| **`headache`** | head + ache | hea-dache | **head-ache** | 普通单辅音规则（V-CV）会将 d 归后，破坏 head 与 ache 词界 |
+| **`toothache`** | tooth + ache | too-thache | **tooth-ache** | 普通双辅音规则将 th 整体归后，破坏 tooth 词界 |
+| **`grandfather`**| grand + father| gran-dfa-ther | **grand-fa-ther** | ndf 辅音簇错切，应先分解为 grand + father 再递归切分 |
+| **`grandmother`**| grand + mother| gran-dmo-ther | **grand-mo-ther** | ndm 辅音簇错切，分解为 grand + mother 再递归切分 |
+| **`pancake`** | pan + cake | pan-ca-ke / pa-ncake | **pan-cake** | 保护 pan 与 cake 独立词完整性 |
+| **`sunflower`** | sun + flower | su-nflow-er | **sun-flow-er** | 保护 sun 词界，flower 进一步切为 flow-er |
+| **`keyboard`** | key + board | key-bo-ard | **key-board** | 保护 key 与 board 词界 |
+| **`password`** | pass + word | pa-ssword | **pass-word** | 保护 pass 与 word 词界 |
+| **`playground`** | play + ground | pla-yground | **play-ground** | 保护 play 与 ground 词界 |
+| **`watermelon`** | water + melon | wa-ter-me-lon | **wa-ter-mel-on** | 分解为 water (wa-ter) + melon (mel-on) |
+| **`butterfly`** | butter + fly | bu-tter-fly | **but-ter-fly** | 分解为 butter (but-ter) + fly |
+| **`blackboard`** | black + board | bla-ckboard | **black-board** | 保护 black 与 board 词界 |
+| **`bedroom`** | bed + room | be-droom | **bed-room** | 保护 bed 与 room 词界 |
+| **`classroom`** | class + room | cla-ssroom | **class-room** | 保护 class 与 room 词界 |
+| **`inside`** | in + side | i-nside | **in-side** | 保护 in 与 side 词界 |
+| **`outside`** | out + side | ou-tside | **out-side** | 保护 out 与 side 词界 |
+| **`sometimes`** | some + times | so-metimes | **some-times** | 保护 some 与 times 词界 |
+| **`everyone`** | every + one | eve-ry-one | **ev-ery-one** | 分解为 every (ev-ery) + one |
+| **`without`** | with + out | wi-thout | **with-out** | 保护 with 与 out 词界 |
 
-```
-day work book man ball room shop store town side
-thing self noon night walk port cake mate board
-ground time where way stand
-```
-
-**豁免与排除**：
-- `mushroom`（词尾 room 但整体词）不参与；
-- `end`（spend/friend 误伤）、`one`（stone/phone 误伤）、`body`（双音节）、`melon`/`berry`（双音节）等易误伤词尾**不走此规则**，由特例表处理（weekend → week-end）。
-- 前缀部分继续按 3.1-3.2 规则递归切分（afternoon → a-fter-noon）。
+#### 算法实现机制（分治递归）：
+1. **复合词探测器 (`detectCompoundSplit`)**：
+   - 扫描高频复合词前半部集合（`COMPOUND_HEADS`：`head`, `tooth`, `grand`, `sun`, `key`, `pass`, `play`, `water`, `black`, `butter`, `bed`, `class`, `some`, `every`, `with` 等）；
+   - 扫描高频复合词后半部集合（`COMPOUND_TAILS`：`ache`, `father`, `mother`, `cake`, `flower`, `board`, `word`, `ground`, `melon`, `fly`, `room`, `side`, `time`, `one` 等）；
+   - 当 `left` 与 `right` 命中复合词分界点时，优先在此切开；
+2. **递归子切分**：
+   $$\text{Syllables}(word) = [\dots\text{Syllables}(left), \dots\text{Syllables}(right)]$$
 
 ---
 
@@ -130,7 +138,7 @@ ground time where way stand
 
 ---
 
-## 5. 特殊拼写规则
+## 5. 特殊拼写与不发音字母规则
 
 ### 5.1 词尾哑 e（Silent e）
 - 词尾 `e` 不发音、不产生音节：cake → `cake`（1 音节），不是 ca-ke；
@@ -162,6 +170,13 @@ ground time where way stand
   - naughty → **naugh**-ty
   - neighbour → **neigh**-bour
 - 实现（字母层）：元音后的 `gh` 归属前一个音节（`ei` 是核、`gh` 是尾随辅音字母，划给前音节 = 组合整体保留）。
+
+### 5.6 不发音字母标记与灰化规范（`silentIndices`）
+对于单词中存在的不发音辅音或哑音字母（如 `bottle` 中第 1 个 `t`、`listen` 中的 `t`、`doubt` 中的 `b`、`autumn` 中的 `n`）：
+- 采用 **`silentIndices: number[]`** 数组记录不发音字母在单词中的 0-based 下标；
+  - 例：`"bottle"` 的第 1 个 `t` 下标为 `2`，记录为 `"silentIndices": [2]`；
+- 渲染层在 `splitIntoGraphemes` 中将对应字母标记为 `kind: 'silent'`，样式统一应用 `text-gray-400`（灰化色呈现）；
+- 官方内置词库直接写回 JSON 文件持久化，用户自定义词库写入本地 IndexedDB。
 
 ---
 
@@ -279,7 +294,11 @@ ground time where way stand
 | thirteen | thi-rteen | thir-teen | §4 r 控制元音 |
 | morning | mo-rning | mor-ning | §4 |
 | garden | ga-rden | gar-den | §4 |
-| Sunday | su-nday | **sun-day** | §3.3 复合词尾（day 整体）|
+| Sunday | su-nday | **sun-day** | §3.3 复合词黄金规则（day 整体）|
+| headache | hea-dache | **head-ache** | §3.3 复合词黄金规则（head + ache）|
+| toothache | too-thache | **tooth-ache** | §3.3 复合词黄金规则（tooth + ache）|
+| grandfather | gran-dfa-ther | **grand-fa-ther** | §3.3 复合词黄金规则（grand + father）|
+| grandmother | gran-dmo-ther | **grand-mo-ther** | §3.3 复合词黄金规则（grand + mother）|
 | February | feb-ru-a-ry | **fe-bru-a-ry** | §3.2 一元一辅（br 归后）|
 | September | se-pte-mber | **sep-tem-ber** | §3.2 多辅音簇从后往前切（pt、mb）|
 | October | o-cto-ber | **oc-to-ber** | §3.2（ct 簇）|

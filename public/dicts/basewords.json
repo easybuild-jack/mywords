@@ -3980,15 +3980,15 @@
         "usphone": "ˈtuːθeɪk",
         "ukphone": "ˈtuːθeɪk",
         "syllables": [
-            "too",
-            "thache"
+            "tooth",
+            "ache"
         ],
         "etymology": {
-            "derivation": "牙齿的疼痛 → 牙疼",
             "root": {
                 "form": "ache",
                 "meaning": "疼痛"
-            }
+            },
+            "derivation": "牙齿的疼痛 → 牙疼"
         }
     },
     {
@@ -4058,6 +4058,9 @@
         "syllables": [
             "li",
             "sten"
+        ],
+        "silentIndices": [
+            3
         ]
     },
     {

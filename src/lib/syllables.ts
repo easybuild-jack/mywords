@@ -314,6 +314,58 @@ const VOWEL_LETTERS = 'aeiou'
 /** 双字母组合只发一个音素，切分时不能从中间拆开 */
 const DIGRAPHS = new Set(['th', 'sh', 'ch', 'ph', 'wh', 'ck', 'ng', 'gh', 'qu'])
 
+/**
+ * 常见英语复合词常用构词前半部 (Compound Head Bases)
+ */
+const COMPOUND_HEADS = new Set([
+  'head', 'tooth', 'teeth', 'back', 'foot', 'feet', 'hand', 'eye', 'ear', 'arm', 'heart', 'brain',
+  'grand', 'step', 'boy', 'girl', 'play', 'class', 'bed', 'bath', 'living', 'sun', 'moon',
+  'star', 'rain', 'snow', 'wind', 'fire', 'wood', 'water', 'sea', 'air', 'land', 'rail',
+  'road', 'path', 'pass', 'key', 'cross', 'life', 'day', 'night', 'noon', 'week', 'birth',
+  'some', 'every', 'any', 'no', 'out', 'in', 'under', 'over', 'super', 'after', 'with',
+  'black', 'white', 'blue', 'red', 'green', 'gold', 'butter', 'pan', 'tea', 'cup', 'book',
+  'note', 'news', 'down', 'up', 'off', 'high', 'low', 'near', 'far', 'soft', 'hard',
+  'short', 'long', 'broad', 'bare', 'safe', 'sweet', 'honey', 'dragon', 'jelly', 'straw',
+])
+
+/**
+ * 常见英语复合词常用构词后半部 (Compound Tail Bases)
+ */
+const COMPOUND_TAILS = new Set([
+  'ache', 'father', 'mother', 'parent', 'parents', 'child', 'children', 'son', 'daughter',
+  'brother', 'sister', 'room', 'house', 'home', 'ground', 'field', 'park', 'yard', 'board',
+  'book', 'paper', 'card', 'ball', 'man', 'men', 'woman', 'women', 'mate', 'work', 'worker',
+  'time', 'times', 'day', 'days', 'side', 'sides', 'way', 'ways', 'port', 'plane', 'ship',
+  'boat', 'craft', 'print', 'line', 'lines', 'word', 'words', 'cake', 'berry', 'berries',
+  'melon', 'flower', 'flowers', 'fly', 'fall', 'falls', 'bow', 'storm', 'quake', 'light',
+  'shine', 'set', 'rise', 'site', 'wear', 'ware', 'bag', 'bags', 'box', 'boxes',
+  'suit', 'case', 'cases', 'coat', 'cloth', 'holder', 'stand', 'table', 'chair', 'stool',
+  'one', 'body', 'thing', 'where', 'how', 'self', 'selves',
+])
+
+/**
+ * 复合词拆解探测器 (Compound Word Splitter)
+ * 将形如 headache -> head + ache, grandfather -> grand + father 的复合词在词界优先切开
+ */
+function detectCompoundSplit(word: string): [string, string] | null {
+  if (word.length < 5) return null
+
+  // 扫描所有可能的切点，优先匹配最合理的复合词界
+  for (let i = 2; i <= word.length - 3; i++) {
+    const left = word.slice(0, i)
+    const right = word.slice(i)
+
+    const isLeftHead = COMPOUND_HEADS.has(left)
+    const isRightTail = COMPOUND_TAILS.has(right)
+
+    if (isLeftHead && isRightTail) {
+      return [left, right]
+    }
+  }
+
+  return null
+}
+
 /** 元音核：一段连续元音字母，闭区间 */
 interface VowelNucleus {
   start: number
@@ -438,7 +490,20 @@ export function splitIntoSyllables(word: string): string[] {
     return knownOverrides[cleanWord]
   }
 
-  // 「辅音 + le」结尾自成一个音节（ta-ble、lit-tle、a-ble）。
+  // 1. 复合词黄金切分法则：复合词优先在子词边界切分 (Divide between compound words)
+  // 例如：headache -> head + ache, grandfather -> grand + fa-ther, toothache -> tooth + ache
+  const compoundPair = detectCompoundSplit(cleanWord)
+  if (compoundPair) {
+    const [left, right] = compoundPair
+    const leftSyls = splitIntoSyllables(left)
+    const rightSyls = splitIntoSyllables(right)
+    const combined = [...leftSyls, ...rightSyls]
+    if (combined.join('') === cleanWord) {
+      return combined
+    }
+  }
+
+  // 2. 「辅音 + le」结尾自成一个音节（ta-ble、lit-tle、a-ble）。
   // 先把它摘走再切前半部分，否则 table 会被切成 tab-le。
   // 前面是元音时不算（whole、while 的 le 不独立成节）
   if (cleanWord.endsWith('le') && cleanWord.length >= 4 && !isVowelAt(cleanWord, cleanWord.length - 3)) {
