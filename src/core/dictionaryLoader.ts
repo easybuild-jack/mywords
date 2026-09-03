@@ -1,4 +1,4 @@
-import type { WordEtymology, WordItem } from '@/types'
+import type { WordEtymology, WordExample, WordItem } from '@/types'
 import { splitIntoSyllables, analyzeEtymology, isUsableSyllableSplit } from '@/lib/syllables'
 import { buildWordId } from '@/lib/wordId'
 import { db } from '@/db'
@@ -23,6 +23,8 @@ interface RawDictEntry {
   syllables?: string[]
   etymology?: WordEtymology
   silentIndices?: number[]
+  examples?: WordExample[]
+  phrases?: { en: string; cn: string }[]
 }
 
 // 官方内置大词库文件映射关系
@@ -311,6 +313,8 @@ class DictionaryLoader {
         posList,
         etymology,
         silentIndices,
+        examples: entry.examples,
+        phrases: entry.phrases,
       }
     })
 

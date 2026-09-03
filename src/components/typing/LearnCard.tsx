@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { ArrowRight, Scissors, Combine, BookOpen, Quote, Lightbulb, Pencil } from 'lucide-react'
 import type { WordItem } from '@/types'
-import { splitIntoMorphemes, MORPHEME_ROLE_LABEL, resolveSyllables } from '@/lib/syllables'
+import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
@@ -329,50 +329,26 @@ export function LearnCard({
             {/* 词根拆解块或词源探究（字号全面放大） */}
             {morphemes.length > 0 ? (
               <div className="space-y-3">
-                <div className="flex items-stretch justify-start gap-2 flex-wrap">
-                  {morphemes.map((morpheme, index) => {
-                    const startIdx = morphemes.slice(0, index).reduce((sum, m) => sum + m.text.length, 0)
-                    const endIdx = startIdx + morpheme.text.length
-                    const isCompleted = currentInput.length >= endIdx
-                    const isCurrent = currentInput.length >= startIdx && currentInput.length < endIdx
-
-                    return (
-                      <React.Fragment key={index}>
-                        {index > 0 && (
-                          <span className="self-center text-sm text-gray-500 font-mono font-bold">+</span>
-                        )}
-                        <div
-                          className={`px-2.5 py-1.5 rounded-xl border transition-all duration-200 ${
-                            isCurrent
-                              ? 'border-[#F05F5A] bg-[#F05F5A]/25 shadow-[0_0_12px_rgba(240,95,90,0.4)] scale-105'
-                              : isCompleted
-                              ? 'border-primary bg-primary/20 shadow-[0_0_10px_rgb(var(--primary-rgb)/0.2)]'
-                              : 'border-white/10 bg-white/[0.05]'
+                <div className="text-sm leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+                  {morphemes.map((morpheme, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && (
+                        <span className="text-gray-500 font-mono font-bold">+</span>
+                      )}
+                      <span className="whitespace-nowrap">
+                        <span
+                          className={`font-mono text-base font-bold ${
+                            morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
                           }`}
                         >
-                          <div
-                            className={`text-xs font-semibold uppercase tracking-wider ${
-                              isCurrent ? 'text-[#FFA8A3]' : isCompleted ? 'text-primary' : 'text-gray-400'
-                            }`}
-                          >
-                            {MORPHEME_ROLE_LABEL[morpheme.role]}
-                          </div>
-                          <div
-                            className={`font-mono text-base font-bold my-0.5 ${
-                              isCurrent ? 'text-white' : isCompleted ? 'text-primary' : 'text-white'
-                            }`}
-                          >
-                            {morpheme.text}
-                          </div>
-                          {morpheme.meaning && (
-                            <div className="text-xs text-gray-300 truncate max-w-28">
-                              {morpheme.meaning}
-                            </div>
-                          )}
-                        </div>
-                      </React.Fragment>
-                    )
-                  })}
+                          {morpheme.text}
+                        </span>
+                        {morpheme.meaning && (
+                          <span className="text-sm text-gray-400">（{morpheme.meaning}）</span>
+                        )}
+                      </span>
+                    </React.Fragment>
+                  ))}
                 </div>
 
                 {derivation && (
