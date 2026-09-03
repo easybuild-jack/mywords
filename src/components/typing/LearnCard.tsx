@@ -21,11 +21,11 @@ interface LearnCardProps {
   remainingLoops?: number
 }
 
-/** 长单词按字数降档，避免撑破卡片 */
+/** 长单词按字数降档，避免撑破卡片，大屏下按比例自适应放大 */
 function wordSizeClass(length: number) {
-  if (length <= 8) return 'text-5xl sm:text-6xl'
-  if (length <= 12) return 'text-4xl sm:text-5xl'
-  return 'text-3xl sm:text-4xl'
+  if (length <= 8) return 'text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5rem]'
+  if (length <= 12) return 'text-4xl sm:text-5xl xl:text-6xl 2xl:text-[4rem]'
+  return 'text-3xl sm:text-4xl xl:text-5xl 2xl:text-[3.25rem]'
 }
 
 /** 四类字母组合在界面上共用一套黄色，不按类别再分色 */
@@ -129,7 +129,7 @@ function HighlightSentence({ sentence, wordName }: { sentence: string; wordName:
   const parts = sentence.split(regex)
 
   return (
-    <span className="text-sm text-gray-100 leading-relaxed font-sans">
+    <span className="text-sm xl:text-base 2xl:text-[1.05rem] text-gray-100 leading-relaxed font-sans">
       {parts.map((part, i) => {
         if (part.toLowerCase().startsWith(cleanWord.toLowerCase())) {
           return (
@@ -186,16 +186,16 @@ export function LearnCard({
   return (
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
       {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
-      <div className="space-y-1">
+      <div className="space-y-1 xl:space-y-2">
         {/* 音标栏 */}
-        <div className="h-8 flex items-center justify-center gap-x-5">
+        <div className="h-8 xl:h-9 flex items-center justify-center gap-x-5">
           {phonetics.map((entry) => (
             <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
               {entry.label && (
-                <span className="font-sans text-xs font-semibold text-[#6B7280]">{entry.label}</span>
+                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280]">{entry.label}</span>
               )}
               <span
-                className={`font-mono tracking-wide text-gray-300 ${phonetics.length > 1 ? 'text-lg' : 'text-xl'
+                className={`font-mono tracking-wide text-gray-300 ${phonetics.length > 1 ? 'text-lg xl:text-xl' : 'text-xl xl:text-2xl'
                   }`}
               >
                 {entry.text}
@@ -205,8 +205,8 @@ export function LearnCard({
         </div>
 
         {/* 单词主体展示与音节切分切换 */}
-        <div className="h-16 flex items-center justify-center relative">
-          <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
+        <div className="h-16 xl:h-20 2xl:h-24 flex items-center justify-center relative">
+          <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3 xl:gap-4">
             <h2
               className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
             >
@@ -216,35 +216,35 @@ export function LearnCard({
                 <MarkedWord word={word} />
               )}
             </h2>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 xl:gap-2">
               <button
                 type="button"
                 onClick={toggleSplit}
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
+                className={`p-1.5 sm:p-2 xl:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
                     ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
                     : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
                   }`}
                 title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
                 aria-label={isSplit ? '合并单词' : '音节切分'}
               >
-                {isSplit ? <Combine className="size-4" /> : <Scissors className="size-4" />}
+                {isSplit ? <Combine className="size-4 xl:size-5" /> : <Scissors className="size-4 xl:size-5" />}
               </button>
               <button
                 type="button"
                 onClick={() => setEditModalOpen(true)}
-                className="p-1.5 sm:p-2 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
+                className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
                 title="修改单词切分与构词"
                 aria-label="修改单词切分与构词"
               >
-                <Pencil className="size-4" />
+                <Pencil className="size-4 xl:size-5" />
               </button>
             </div>
           </div>
         </div>
 
         {/* 单词释义 */}
-        <div className="h-9 flex items-center justify-center px-4">
-          <p className="text-sm sm:text-base text-gray-300 font-medium line-clamp-1">
+        <div className="h-9 xl:h-10 flex items-center justify-center px-4">
+          <p className="text-sm sm:text-base xl:text-lg 2xl:text-xl text-gray-300 font-medium line-clamp-1">
             {meaningText}
           </p>
         </div>
@@ -252,14 +252,14 @@ export function LearnCard({
         {/* 跟打输入槽 */}
         <div className="relative w-full pt-1">
           <div
-            className={`h-14 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl font-bold rounded-2xl border-2 px-6 transition-all ${hasTypo
+            className={`h-14 xl:h-16 2xl:h-18 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl xl:text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${hasTypo
                 ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
                 : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
               }`}
           >
             {currentInput && <span className="mr-1">{currentInput}</span>}
             <span
-              className={`inline-block w-0.5 h-9 animate-cursor shrink-0 ${hasTypo ? 'bg-destructive' : 'bg-primary'
+              className={`inline-block w-0.5 h-9 xl:h-10 animate-cursor shrink-0 ${hasTypo ? 'bg-destructive' : 'bg-primary'
                 }`}
             />
             <span
@@ -273,36 +273,36 @@ export function LearnCard({
       </div>
 
       {/* 下半区：左右分栏排版（左侧占 8/12 宽幅双语例句；右侧占 4/12 词根词源/助记） */}
-      <div className="grid grid-cols-12 gap-3.5 pt-3 flex-1 min-h-0 text-left">
+      <div className="grid grid-cols-12 gap-3.5 xl:gap-5 pt-3 xl:pt-4 flex-1 min-h-0 text-left">
         {/* 左栏：2 条精选双语例句（col-span-8，宽幅排版，文字舒展） */}
-        <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 flex flex-col justify-between overflow-hidden shadow-inner">
-          <div className="space-y-2.5">
+        <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 xl:p-4 2xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
+          <div className="space-y-2.5 xl:space-y-3.5">
             {/* 顶栏小标题 */}
-            <div className="flex items-center justify-between pb-1.5 border-b border-white/5">
-              <div className="flex items-center gap-1.5">
-                <Quote className="size-3.5 text-accent" />
-                <span className="text-xs font-bold text-white/90">语境双语例句</span>
+            <div className="flex items-center justify-between pb-1.5 xl:pb-2 border-b border-white/5">
+              <div className="flex items-center gap-1.5 xl:gap-2">
+                <Quote className="size-3.5 xl:size-4 text-accent" />
+                <span className="text-xs xl:text-sm font-bold text-white/90">语境双语例句</span>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
+              <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
                 2 EXAMPLES
               </span>
             </div>
 
             {/* 2 示例句列表（宽幅排版，文字舒展） */}
-            <div className="space-y-2.5">
+            <div className="space-y-2.5 xl:space-y-3.5">
               {examples.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx
                 return (
                   <div
                     key={idx}
-                    className={`p-3 rounded-xl bg-white/[0.025] border transition-all duration-200 group ${
+                    className={`p-3 xl:p-3.5 2xl:p-4 rounded-xl bg-white/[0.025] border transition-all duration-200 group ${
                       isPlaying
                         ? 'border-primary/40 bg-primary/[0.04] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.1)]'
                         : 'border-white/5 hover:bg-white/[0.05] hover:border-white/10'
                     }`}
                   >
-                    <div className="flex items-start gap-3">
-                      <span className="size-5 rounded-lg bg-accent/15 text-accent text-xs font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
+                    <div className="flex items-start gap-3 xl:gap-3.5">
+                      <span className="size-5 xl:size-6 rounded-lg bg-accent/15 text-accent text-xs xl:text-sm font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
                         0{idx + 1}
                       </span>
                       <div className="min-w-0 flex-1">
@@ -322,10 +322,10 @@ export function LearnCard({
                             title="朗读例句"
                             aria-label="朗读例句"
                           >
-                            <Volume2 className="size-3.5" />
+                            <Volume2 className="size-3.5 xl:size-4" />
                           </button>
                         </div>
-                        <div className="text-xs text-gray-400 leading-relaxed mt-1">
+                        <div className="text-xs xl:text-sm text-gray-400 leading-relaxed mt-1 xl:mt-1.5">
                           {item.cn}
                         </div>
                       </div>
@@ -338,13 +338,13 @@ export function LearnCard({
         </div>
 
         {/* 右栏：词根词源与构词助记（col-span-4） */}
-        <div className="col-span-4 rounded-2xl bg-white/[0.03] border border-white/10 p-4 flex flex-col justify-between overflow-hidden shadow-inner">
-          <div className="space-y-3">
+        <div className="col-span-4 rounded-2xl bg-white/[0.03] border border-white/10 p-4 xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
+          <div className="space-y-3 xl:space-y-4">
             {/* 顶栏小标题 */}
             <div className="flex items-center justify-between pb-2 border-b border-white/5">
               <div className="flex items-center gap-2 min-w-0">
-                <BookOpen className="size-4 text-primary shrink-0" />
-                <span className="text-sm font-bold text-white/90 truncate">词根 · 助记</span>
+                <BookOpen className="size-4 xl:size-4.5 text-primary shrink-0" />
+                <span className="text-sm xl:text-base font-bold text-white/90 truncate">词根 · 助记</span>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
@@ -353,9 +353,9 @@ export function LearnCard({
                   className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   title="修改构词与词根"
                 >
-                  <Pencil className="size-3.5" />
+                  <Pencil className="size-3.5 xl:size-4" />
                 </button>
-                <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
+                <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
                   ROOTS
                 </span>
               </div>
@@ -363,8 +363,8 @@ export function LearnCard({
 
             {/* 词根拆解块或词源探究（字号全面放大） */}
             {morphemes.length > 0 ? (
-              <div className="space-y-3">
-                <div className="text-sm leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+              <div className="space-y-3 xl:space-y-4">
+                <div className="text-sm xl:text-base leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
                   {morphemes.map((morpheme, index) => (
                     <React.Fragment key={index}>
                       {index > 0 && (
@@ -372,13 +372,13 @@ export function LearnCard({
                       )}
                       <span className="whitespace-nowrap">
                         <span
-                          className={`font-mono text-base font-bold ${morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
+                          className={`font-mono text-base xl:text-lg font-bold ${morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
                             }`}
                         >
                           {morpheme.text}
                         </span>
                         {morpheme.meaning && (
-                          <span className="text-sm text-gray-400">（{morpheme.meaning}）</span>
+                          <span className="text-sm xl:text-base text-gray-400">（{morpheme.meaning}）</span>
                         )}
                       </span>
                     </React.Fragment>
@@ -386,21 +386,21 @@ export function LearnCard({
                 </div>
 
                 {derivation && (
-                  <div className="flex items-start gap-2 text-sm text-gray-200 font-normal leading-relaxed pt-1">
-                    <ArrowRight className="size-4 text-primary shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2 text-sm xl:text-base text-gray-200 font-normal leading-relaxed pt-1">
+                    <ArrowRight className="size-4 xl:size-4.5 text-primary shrink-0 mt-0.5" />
                     <span>{derivation}</span>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="space-y-2 text-left">
+              <div className="space-y-2 xl:space-y-3 text-left">
                 {origin && (
-                  <p className="text-sm text-gray-200 leading-relaxed">{origin}</p>
+                  <p className="text-sm xl:text-base text-gray-200 leading-relaxed">{origin}</p>
                 )}
 
                 {derivation && (
-                  <div className="flex items-start gap-2 text-sm text-gray-200 font-normal leading-relaxed pt-1">
-                    <ArrowRight className="size-4 text-primary shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2 text-sm xl:text-base text-gray-200 font-normal leading-relaxed pt-1">
+                    <ArrowRight className="size-4 xl:size-4.5 text-primary shrink-0 mt-0.5" />
                     <span>{derivation}</span>
                   </div>
                 )}

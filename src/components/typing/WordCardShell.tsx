@@ -25,13 +25,13 @@ export function WordCardShell({
   }
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between pt-5 pb-6 px-8 text-center select-none">
+    <div className="relative w-full h-full flex flex-col justify-between pt-5 pb-6 px-7 xl:pt-6 xl:pb-7 xl:px-10 2xl:pt-8 2xl:pb-8 2xl:px-12 text-center select-none">
       <button
         onClick={speak}
-        className="absolute top-4 right-4 size-10 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center hover:bg-primary/20 transition-all z-10 cursor-pointer"
+        className="absolute top-4 right-4 xl:top-5 xl:right-5 2xl:top-6 2xl:right-6 size-10 xl:size-11 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center hover:bg-primary/20 transition-all z-10 cursor-pointer"
         title="发音 (Ctrl+J)"
       >
-        <Volume2 className="size-4.5" />
+        <Volume2 className="size-4.5 xl:size-5" />
       </button>
 
       {/* 剩余遍数角标跟右上角发音按钮共用一套主色描边：两者都是卡片上的附属控件，

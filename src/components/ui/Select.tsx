@@ -53,11 +53,11 @@ export function Select<T extends string | number>({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="group inline-flex items-center gap-1.5 h-8 pl-3 pr-2 rounded-md border border-white/10 bg-white/[0.04] text-xs text-white/90 hover:bg-white/[0.08] hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background cursor-pointer"
+        className="group inline-flex items-center gap-1.5 h-8 xl:h-9 pl-3 xl:pl-3.5 pr-2 xl:pr-2.5 rounded-md xl:rounded-lg border border-white/10 bg-white/[0.04] text-xs xl:text-sm text-white/90 hover:bg-white/[0.08] hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background cursor-pointer"
       >
         <span className="truncate">{current?.label ?? '—'}</span>
         <ChevronDown
-          className={`size-3.5 opacity-60 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`size-3.5 xl:size-4 opacity-60 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
 

@@ -28,24 +28,24 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
   const currentNum = Math.min(activeWordIndex + 1, total)
 
   return (
-    <footer className="w-full p-4 flex items-center justify-center pointer-events-auto z-30">
-      {/* 尺寸以 HeaderToolbar 为准：同样的 px-5 py-2.5 与 28px 内容行高，两条工具栏等高 */}
-      <div className="glass-card rounded-2xl px-5 py-2.5 flex items-center gap-4 text-sm text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center">
+    <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30">
+      {/* 尺寸以 HeaderToolbar 为准：同样的 px-5 py-2.5 到 xl:px-7 xl:py-3.5，两条工具栏等高并同步放大 */}
+      <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-primary font-bold">
+          <span className="font-mono text-primary font-bold text-sm xl:text-base">
             {isErrorPracticeActive
               ? `${conqueredErrorWordIds?.length || 0} / ${total}`
               : `${currentNum} / ${total}`}
           </span>
-          <span className="text-gray-500">{isErrorPracticeActive ? '已消灭' : '单词'}</span>
+          <span className="text-gray-500 text-xs xl:text-sm">{isErrorPracticeActive ? '已消灭' : '单词'}</span>
         </div>
 
-        <div className="h-4 w-px bg-white/10" />
+        <div className="h-4 xl:h-5 w-px bg-white/10" />
 
-        <div className="flex items-center gap-4 font-mono text-xs flex-wrap justify-center">
+        <div className="flex items-center gap-4 xl:gap-5 font-mono text-xs xl:text-sm flex-wrap justify-center">
           {showPeekHint && (
-            <span className="flex items-center gap-1.5">
-              <kbd className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+            <span className="flex items-center gap-1.5 xl:gap-2">
+              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
                 {formatShortcutDisplay(shortcuts.peekHint)}
               </kbd>
               <span>偷看提示</span>
@@ -55,10 +55,10 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
           <button
             type="button"
             onClick={toggleCurrentWordSplit}
-            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
             title={`音节拆分/合并 (${formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')})`}
           >
-            <kbd className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+            <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
               {formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')}
             </kbd>
             <span>音节切分</span>
@@ -67,22 +67,22 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
           <button
             type="button"
             onClick={replayAudio}
-            className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
             title={`发音朗读 (${formatShortcutDisplay(shortcuts.replayAudio)})`}
           >
-            <kbd className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold">
+            <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
               {formatShortcutDisplay(shortcuts.replayAudio)}
             </kbd>
             <span>发音</span>
           </button>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 xl:gap-2">
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={prevWord}
                 title={`上一个单词 (${formatShortcutDisplay(shortcuts.prevWord)})`}
-                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
               >
                 {formatShortcutDisplay(shortcuts.prevWord)}
               </button>
@@ -90,7 +90,7 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
                 type="button"
                 onClick={nextWord}
                 title={`下一个单词 (${formatShortcutDisplay(shortcuts.nextWord)})`}
-                className="h-7 px-2 inline-flex items-center rounded bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
               >
                 {formatShortcutDisplay(shortcuts.nextWord)}
               </button>

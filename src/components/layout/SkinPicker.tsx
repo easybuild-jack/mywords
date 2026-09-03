@@ -35,10 +35,10 @@ export function SkinPicker() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="p-1.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+          className="p-1.5 xl:p-2 rounded-lg xl:rounded-xl text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
           aria-label="切换皮肤"
         >
-          <Palette className="size-4" />
+          <Palette className="size-4 xl:size-4.5" />
         </button>
       </Tooltip>
 

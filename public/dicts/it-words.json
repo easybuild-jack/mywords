@@ -808,7 +808,7 @@
       "n. 选项；选择；期权",
       "v. 获得……的选择权"
     ],
-    "usphone": "ˈɑːpʃn",
+    "usphone": "ˈɑːpʃən",
     "ukphone": "ˈɒpʃn",
     "syllables": [
       "op",
@@ -872,9 +872,7 @@
       "derivation": "雕刻铭印在媒介上的符号或特性 → 字符、品质",
       "origin": "源自希腊语 kharakter（雕刻的印记、特征），经拉丁语 character 进入英语。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The string contains both alphanumeric characters and special symbols.",
@@ -1409,7 +1407,8 @@
     "usphone": "ˈdeɪtəbeɪs",
     "ukphone": "ˈdeɪtəbeɪs",
     "syllables": [
-      "data",
+      "da",
+      "ta",
       "base"
     ],
     "etymology": {
@@ -2622,7 +2621,7 @@
       "n. 示例；范例；榜样",
       "v. 举例说明"
     ],
-    "usphone": "ɪɡˈzæmpl",
+    "usphone": "ɪɡˈzæmpəl",
     "ukphone": "ɪɡˈzɑːmpl",
     "syllables": [
       "ex",
@@ -3092,7 +3091,7 @@
       "n. 变量；可变因素",
       "adj. 易变的；可变的"
     ],
-    "usphone": "ˈveriəbl",
+    "usphone": "ˈveriəbəl",
     "ukphone": "ˈveəriəbl",
     "syllables": [
       "var",
@@ -3481,7 +3480,7 @@
     "trans": [
       "n. 选择；选集；被选中的内容"
     ],
-    "usphone": "sɪˈlekʃn",
+    "usphone": "sɪˈlekʃən",
     "ukphone": "sɪˈlekʃn",
     "syllables": [
       "se",
@@ -3535,7 +3534,7 @@
       "n. 函数；功能；职责",
       "v. 运行；发挥作用"
     ],
-    "usphone": "ˈfʌŋkʃn",
+    "usphone": "ˈfʌŋkʃən",
     "ukphone": "ˈfʌŋkʃn",
     "syllables": [
       "func",
@@ -3752,7 +3751,7 @@
       "n. 按钮；按键；纽扣",
       "v. 扣上纽扣"
     ],
-    "usphone": "ˈbʌtn",
+    "usphone": "ˈbʌtən",
     "ukphone": "ˈbʌtn",
     "syllables": [
       "but",
@@ -4274,9 +4273,7 @@
       },
       "derivation": "使用系统或产品的人 → 用户、使用者"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "User experience design focuses on providing intuitive workflows and responsive interactions.",
@@ -4674,7 +4671,7 @@
       "n. 位置；职位；方位；立场",
       "v. 安置；定位"
     ],
-    "usphone": "pəˈzɪʃn",
+    "usphone": "pəˈzɪʃən",
     "ukphone": "pəˈzɪʃn",
     "syllables": [
       "po",
@@ -4851,9 +4848,7 @@
     "syllables": [
       "switch"
     ],
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The switch statement executes code branches matching the target evaluated expression.",
@@ -5297,8 +5292,7 @@
     "ukphone": "ɪnˈeɪbl",
     "syllables": [
       "en",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -5639,7 +5633,6 @@
       "origin": "源自古法语 colomne，来自拉丁语 columna（圆柱、立柱）。"
     },
     "silentIndices": [
-      2,
       5
     ],
     "examples": [
@@ -5777,9 +5770,7 @@
     "syllables": [
       "two"
     ],
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Two-factor authentication adds an extra layer of defense against account theft.",
@@ -6065,7 +6056,7 @@
     "trans": [
       "n. 扩展；扩展名；延伸；分机"
     ],
-    "usphone": "ɪkˈstenʃn",
+    "usphone": "ɪkˈstenʃən",
     "ukphone": "ɪkˈstenʃn",
     "syllables": [
       "ex",
@@ -6261,9 +6252,7 @@
       "derivation": "用来论证的事物 → 在数学与计算机中引申为传给函数的输入值（实参）",
       "origin": "源自拉丁语 argumentum，来自 arguere（使明晰、证明）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "This function takes two arguments: an input string and a callback handler.",
@@ -7074,9 +7063,7 @@
     "syllables": [
       "block"
     ],
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Variables declared with let or const are scoped to the nearest enclosing block.",
@@ -7108,7 +7095,7 @@
       "adj. 十进制的；小数的",
       "n. 小数；十进制"
     ],
-    "usphone": "ˈdesɪml",
+    "usphone": "ˈdesɪməl",
     "ukphone": "ˈdesɪml",
     "syllables": [
       "dec",
@@ -7193,7 +7180,7 @@
     "trans": [
       "n. 定义；清晰度；解释"
     ],
-    "usphone": "ˌdefɪˈnɪʃn",
+    "usphone": "ˌdefɪˈnɪʃən",
     "ukphone": "ˌdefɪˈnɪʃn",
     "syllables": [
       "def",
@@ -7292,7 +7279,7 @@
     "trans": [
       "adj. 可选的；随意的；非强制的"
     ],
-    "usphone": "ˈɑːpʃənl",
+    "usphone": "ˈɑːpʃənəl",
     "ukphone": "ˈɒpʃənl",
     "syllables": [
       "op",
@@ -7439,9 +7426,7 @@
       "ar",
       "row"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "ES6 arrow functions do not bind their own this value.",
@@ -7598,7 +7583,7 @@
     "trans": [
       "adj. 不同的；有差异的；各种的"
     ],
-    "usphone": "ˈdɪfrənt",
+    "usphone": "ˈdɪfərənt",
     "ukphone": "ˈdɪfrənt",
     "syllables": [
       "dif",
@@ -7655,8 +7640,7 @@
     "syllables": [
       "a",
       "vail",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -8512,7 +8496,8 @@
     "usphone": "oʊˈkeɪ",
     "ukphone": "əʊˈkeɪ",
     "syllables": [
-      "OK"
+      "O",
+      "K"
     ],
     "examples": [
       {
@@ -8948,7 +8933,7 @@
     "trans": [
       "n. 执行；运行；实行"
     ],
-    "usphone": "ˌeksɪˈkjuːʃn",
+    "usphone": "ˌeksɪˈkjuːʃən",
     "ukphone": "ˌeksɪˈkjuːʃn",
     "syllables": [
       "ex",
@@ -9018,9 +9003,7 @@
       "derivation": "留作后援支撑的事物 → 备份、后备",
       "origin": "由动词短语 back up 复合而成。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Automated daily snapshot backups protect enterprise data from catastrophic loss.",
@@ -9052,7 +9035,7 @@
       "n. 版本；译本；说法",
       "v. 设定版本"
     ],
-    "usphone": "ˈvɜːrʒn",
+    "usphone": "ˈvɜːrʒən",
     "ukphone": "ˈvɜːʃn",
     "syllables": [
       "ver",
@@ -9323,9 +9306,7 @@
     "syllables": [
       "check"
     ],
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "TypeScript performs static type checking before compiling code into plain JavaScript.",
@@ -9361,9 +9342,7 @@
     "syllables": [
       "should"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Unit test assertions typically describe what behavior a component should exhibit.",
@@ -9392,7 +9371,7 @@
       "n. 单个事物；单精度",
       "v. 挑选"
     ],
-    "usphone": "ˈsɪŋɡl",
+    "usphone": "ˈsɪŋɡəl",
     "ukphone": "ˈsɪŋɡl",
     "syllables": [
       "sin",
@@ -9528,7 +9507,7 @@
     "trans": [
       "n. 表达式；表达；表示"
     ],
-    "usphone": "ɪkˈspreʃn",
+    "usphone": "ɪkˈspreʃən",
     "ukphone": "ɪkˈspreʃn",
     "syllables": [
       "ex",
@@ -9623,7 +9602,7 @@
       "v. 切换；触发开关",
       "n. 开关；切换键；双向开关"
     ],
-    "usphone": "ˈtɑːɡl",
+    "usphone": "ˈtɑːɡəl",
     "ukphone": "ˈtɒɡl",
     "syllables": [
       "tog",
@@ -9756,9 +9735,7 @@
       },
       "derivation": "开始的动作或阶段 → 起点、开头"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The file pointer resets to the beginning of the file when opened in read mode.",
@@ -10774,9 +10751,7 @@
     "syllables": [
       "back"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Clicking browser back triggers the popstate event to navigate previous history entries.",
@@ -10843,7 +10818,7 @@
       "n. 部分；章节；节；区块",
       "v. 把……切片；划分"
     ],
-    "usphone": "ˈsekʃn",
+    "usphone": "ˈsekʃən",
     "ukphone": "ˈsekʃn",
     "syllables": [
       "sec",
@@ -11052,7 +11027,7 @@
     "trans": [
       "adj. 额外的；附加的；另加的"
     ],
-    "usphone": "əˈdɪʃənl",
+    "usphone": "əˈdɪʃənəl",
     "ukphone": "əˈdɪʃənl",
     "syllables": [
       "ad",
@@ -11106,7 +11081,7 @@
       "v. 取消；作废；注销",
       "n. 取消；撤销"
     ],
-    "usphone": "ˈkænsl",
+    "usphone": "ˈkænsəl",
     "ukphone": "ˈkænsl",
     "syllables": [
       "can",
@@ -11952,9 +11927,7 @@
       "derivation": "在下方承受托举 → 支持、支援",
       "origin": "源自拉丁语 supportare，来自 sub- + portare（搬运、携带）。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Modern Web APIs support asynchronous streams to handle large file payloads efficiently.",
@@ -12416,9 +12389,7 @@
     "syllables": [
       "click"
     ],
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Add an onClick event listener to the submit button to handle form submissions.",
@@ -13286,7 +13257,7 @@
       "adj. 原始的；原版的；最初的",
       "n. 原件；原版"
     ],
-    "usphone": "əˈrɪdʒənl",
+    "usphone": "əˈrɪdʒənəl",
     "ukphone": "əˈrɪdʒənl",
     "syllables": [
       "o",
@@ -13434,7 +13405,7 @@
       "adj. 几个的；若干的；各自的",
       "pron. 几个；数个"
     ],
-    "usphone": "ˈsevrəl",
+    "usphone": "ˈsevərəl",
     "ukphone": "ˈsevrəl",
     "syllables": [
       "sev",
@@ -13559,9 +13530,7 @@
       "brack",
       "et"
     ],
-    "silentIndices": [
-      4
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Square bracket notation allows accessing object properties using dynamic string keys.",
@@ -13654,9 +13623,7 @@
       },
       "derivation": "处于运行运转过程中的 → 运行中的"
     },
-    "silentIndices": [
-      4
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Use the docker ps command to view a list of all currently running containers.",
@@ -13694,7 +13661,6 @@
       "edge"
     ],
     "silentIndices": [
-      1,
       3
     ],
     "examples": [
@@ -13766,7 +13732,7 @@
     "trans": [
       "n. 指令；机器指令；说明；教学"
     ],
-    "usphone": "ɪnˈstrʌkʃn",
+    "usphone": "ɪnˈstrʌkʃən",
     "ukphone": "ɪnˈstrʌkʃn",
     "syllables": [
       "in",
@@ -13973,8 +13939,7 @@
       "origin": "源自拉丁语 occurrentia，来自 occurrere（遇见、发生）。"
     },
     "silentIndices": [
-      1,
-      6
+      1
     ],
     "examples": [
       {
@@ -14008,9 +13973,7 @@
     "syllables": [
       "lock"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Package managers use a lock file like package-lock.json to pin exact dependency versions.",
@@ -14351,7 +14314,7 @@
     "trans": [
       "adj. 有用的；实用的；有益的"
     ],
-    "usphone": "ˈjuːsfl",
+    "usphone": "ˈjuːsfəl",
     "ukphone": "ˈjuːsfl",
     "syllables": [
       "use",
@@ -14655,9 +14618,7 @@
       "derivation": "协同主处理器一起处理特殊任务的芯片 → 协处理器",
       "origin": "由前缀 co- 加上 processor 构成。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Early personal computers utilized an Intel 8087 numeric coprocessor to accelerate mathematical computations.",
@@ -14836,7 +14797,7 @@
     "trans": [
       "adv. 自动地；自发地；机械地"
     ],
-    "usphone": "ˌɔːtəˈmætɪkli",
+    "usphone": "ˌɔːtəˈmætɪkəli",
     "ukphone": "ˌɔːtəˈmætɪkli",
     "syllables": [
       "au",
@@ -15214,7 +15175,7 @@
       "adj. 内部的；内在的；国内的",
       "n. 内部构件"
     ],
-    "usphone": "ɪnˈtɜːrnl",
+    "usphone": "ɪnˈtɜːrnəl",
     "ukphone": "ɪnˈtɜːnl",
     "syllables": [
       "in",
@@ -15657,7 +15618,7 @@
       "n. 动作；Action 对象（状态管理/自动化）；行动",
       "v. 对……采取行动"
     ],
-    "usphone": "ˈækʃn",
+    "usphone": "ˈækʃən",
     "ukphone": "ˈækʃn",
     "syllables": [
       "ac",
@@ -15706,7 +15667,7 @@
       "n. 条件；状态；环境",
       "v. 适应；训练"
     ],
-    "usphone": "kənˈdɪʃn",
+    "usphone": "kənˈdɪʃən",
     "ukphone": "kənˈdɪʃn",
     "syllables": [
       "con",
@@ -15765,9 +15726,7 @@
     "syllables": [
       "quick"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "QuickSort achieves average-case O(n log n) runtime performance using divide-and-conquer partitioning.",
@@ -15938,9 +15897,7 @@
       "derivation": "执行综合复杂数值运算的机器 → 计算机、电脑",
       "origin": "源自 compute 加上名词后缀 -er。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Computer science studies algorithms, computational complexity, and information systems.",
@@ -16062,9 +16019,7 @@
     "syllables": [
       "match"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The regex test method returns true whenever the target string matches specified patterns.",
@@ -16508,7 +16463,7 @@
     "trans": [
       "n. 删除；删改；被删除部分"
     ],
-    "usphone": "dɪˈliːʃn",
+    "usphone": "dɪˈliːʃən",
     "ukphone": "dɪˈliːʃn",
     "syllables": [
       "de",
@@ -17752,9 +17707,7 @@
       },
       "derivation": "进行配对相符比对的过程 → 匹配的、匹配"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Pattern matching simplifies complex conditional branching in modern languages like Rust and Scala.",
@@ -17867,7 +17820,7 @@
       "adj. 平的；水平的",
       "v. 使平坦"
     ],
-    "usphone": "ˈlevl",
+    "usphone": "ˈlevəl",
     "ukphone": "ˈlevl",
     "syllables": [
       "lev",
@@ -18440,9 +18393,7 @@
       "derivation": "在下面填补空缺不足 → 供应、补充",
       "origin": "源自拉丁语 supplere，来自 sub- + plere（填满）。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "An uninterruptible power supply UPS protects server racks from sudden grid electricity drops.",
@@ -18510,7 +18461,7 @@
       "adj. 正常的；标准的；规范化的（数据库范式）",
       "n. 正常状态；标准；法线"
     ],
-    "usphone": "ˈnɔːrml",
+    "usphone": "ˈnɔːrməl",
     "ukphone": "ˈnɔːml",
     "syllables": [
       "nor",
@@ -18938,9 +18889,7 @@
     "etymology": {
       "origin": "源自古诺斯语 stakkr（草堆、堆）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "A stack data structure enforces last-in, first-out LIFO ordering for push and pop.",
@@ -18973,7 +18922,7 @@
       "adv. 甚至；更加",
       "v. 使平坦"
     ],
-    "usphone": "ˈiːvn",
+    "usphone": "ˈiːvən",
     "ukphone": "ˈiːvn",
     "syllables": [
       "e",
@@ -19192,7 +19141,7 @@
     "trans": [
       "adj. 逻辑的；逻辑学的；符合逻辑的"
     ],
-    "usphone": "ˈlɑːdʒɪkl",
+    "usphone": "ˈlɑːdʒɪkəl",
     "ukphone": "ˈlɒdʒɪkl",
     "syllables": [
       "log",
@@ -19443,7 +19392,6 @@
       "origin": "由 there 与 fore 复合而成。"
     },
     "silentIndices": [
-      4,
       8
     ],
     "examples": [
@@ -19664,9 +19612,7 @@
       "derivation": "向前推进的步骤程序 → 过程、操作系统进程",
       "origin": "源自拉丁语 processus，来自 procedere（向前进）。"
     },
-    "silentIndices": [
-      6
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Operating systems allocate an isolated virtual memory space for each running process.",
@@ -19745,7 +19691,7 @@
       "adj. 每一个的；所有的",
       "pron. 每个"
     ],
-    "usphone": "ˈevri",
+    "usphone": "ˈevəri",
     "ukphone": "ˈevri",
     "syllables": [
       "ev",
@@ -19826,7 +19772,7 @@
       "adj. 可能的；合理的",
       "n. 可能性"
     ],
-    "usphone": "ˈpɑːsəbl",
+    "usphone": "ˈpɑːsəbəl",
     "ukphone": "ˈpɒsəbl",
     "syllables": [
       "pos",
@@ -20123,7 +20069,8 @@
     "usphone": "ˈbaɪoʊs",
     "ukphone": "ˈbaɪɒs",
     "syllables": [
-      "BIOS"
+      "BI",
+      "OS"
     ],
     "examples": [
       {
@@ -20152,7 +20099,7 @@
       "adj. 隐藏的；秘密的",
       "v. 隐藏（hide 的过去分词）"
     ],
-    "usphone": "ˈhɪdn",
+    "usphone": "ˈhɪdən",
     "ukphone": "ˈhɪdn",
     "syllables": [
       "hid",
@@ -20512,9 +20459,7 @@
     "syllables": [
       "pack"
     ],
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Webpack analyzes module dependency trees to pack client-side scripts into minified bundles.",
@@ -20788,7 +20733,7 @@
       "v. 展现；呈现；提出",
       "n. 现在；礼物"
     ],
-    "usphone": "ˈpreznt",
+    "usphone": "ˈprezənt",
     "ukphone": "ˈpreznt",
     "syllables": [
       "pres",
@@ -21015,7 +20960,7 @@
       "adj. 特殊的；专用的；专门的",
       "n. 特色菜；专车"
     ],
-    "usphone": "ˈspeʃl",
+    "usphone": "ˈspeʃəl",
     "ukphone": "ˈspeʃl",
     "syllables": [
       "spe",
@@ -21196,8 +21141,7 @@
     "ukphone": "dɪsˈeɪbl",
     "syllables": [
       "dis",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -21241,7 +21185,7 @@
     "trans": [
       "adj. 兼容的；相容的；合得来的"
     ],
-    "usphone": "kəmˈpætəbl",
+    "usphone": "kəmˈpætəbəl",
     "ukphone": "kəmˈpætəbl",
     "syllables": [
       "com",
@@ -21383,7 +21327,7 @@
     "trans": [
       "adj. 按字母表顺序的；字母的"
     ],
-    "usphone": "ˌælfəˈbetɪkl",
+    "usphone": "ˌælfəˈbetɪkəl",
     "ukphone": "ˌælfəˈbetɪkl",
     "syllables": [
       "al",
@@ -21518,7 +21462,7 @@
       "adj. 多个的；复合的；多种多样的",
       "n. 倍数"
     ],
-    "usphone": "ˈmʌltɪpl",
+    "usphone": "ˈmʌltɪpəl",
     "ukphone": "ˈmʌltɪpl",
     "syllables": [
       "mul",
@@ -21753,9 +21697,7 @@
       },
       "derivation": "作为不可或缺的硬性条件的 → 必需的、必填的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "HTML form inputs marked with the required attribute block form submission if left blank.",
@@ -21833,9 +21775,7 @@
     "etymology": {
       "origin": "源自古英语 los（失去、破败）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "UDP transports streaming media without retransmissions, tolerating minor network packet loss.",
@@ -22575,7 +22515,7 @@
       "n. 双倍；双精度浮点型（double precision）",
       "v. 加倍"
     ],
-    "usphone": "ˈdʌbl",
+    "usphone": "ˈdʌbəl",
     "ukphone": "ˈdʌbl",
     "syllables": [
       "dou",
@@ -23095,9 +23035,7 @@
       "derivation": "无法退让不可避免的 → 必要的、必需的",
       "origin": "源自拉丁语 necessarius，来自 ne- + cedere（退让）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Install only necessary production dependencies to keep Docker container images lean and secure.",
@@ -23127,8 +23065,7 @@
     "usphone": "ˈeɪbl",
     "ukphone": "ˈeɪbl",
     "syllables": [
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -23543,7 +23480,7 @@
     ]
   },
   {
-    "name": "on-line",
+    "name": "online",
     "trans": [
       "adj. 在线的；联机的；网络上的",
       "adv. 在线地；连线地"
@@ -23567,7 +23504,7 @@
       "origin": "由 on 与 line 复合而成。"
     },
     "silentIndices": [
-      6
+      5
     ],
     "examples": [
       {
@@ -24016,9 +23953,7 @@
       },
       "derivation": "进行软件程序编写设计的工作活动 → 编程"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Object-oriented programming structures complex systems around encapsulated data objects and behaviors.",
@@ -24068,9 +24003,7 @@
       "derivation": "处于较靠上位置的 → 上层的、上面的",
       "origin": "源自 up 加上比较级后缀 -er。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The upper bound on binary search algorithm computational complexity is logarithmic O(log n).",
@@ -24401,7 +24334,7 @@
       "n. 维度；尺寸；数组维度",
       "v. 标出尺寸"
     ],
-    "usphone": "dɪˈmenʃn",
+    "usphone": "dɪˈmenʃən",
     "ukphone": "daɪˈmenʃn",
     "syllables": [
       "di",
@@ -24593,7 +24526,7 @@
       "adj. 个人的；私人的；个性化的",
       "n. 个人启示"
     ],
-    "usphone": "ˈpɜːrsənl",
+    "usphone": "ˈpɜːrsənəl",
     "ukphone": "ˈpɜːsənl",
     "syllables": [
       "per",
@@ -24747,8 +24680,7 @@
       "know"
     ],
     "silentIndices": [
-      0,
-      3
+      0
     ],
     "examples": [
       {
@@ -25552,9 +25484,7 @@
       "derivation": "朝向后方发展或关联的 → 向后的、向后兼容的",
       "origin": "由 back 与 ward 复合而成。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Maintain backward compatibility in public API releases so existing client SDKs continue functioning.",
@@ -25789,9 +25719,7 @@
       "derivation": "按照正规规律标准地 → 正常地、通常地",
       "origin": "源自 normal 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      6
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The daemon process terminates normally with an exit status code of zero upon task completion.",
@@ -25889,8 +25817,7 @@
       "origin": "源自 immediate 加上副词后缀 -ly。"
     },
     "silentIndices": [
-      1,
-      9
+      1
     ],
     "examples": [
       {
@@ -26972,7 +26899,7 @@
     "trans": [
       "n. 扩展；膨胀；扩展槽（expansion slot）；展开"
     ],
-    "usphone": "ɪkˈspænʃn",
+    "usphone": "ɪkˈspænʃən",
     "ukphone": "ɪkˈspænʃn",
     "syllables": [
       "ex",
@@ -27025,7 +26952,7 @@
     "trans": [
       "adj. 不兼容的；不相容的；互斥的"
     ],
-    "usphone": "ˌɪnkəmˈpætəbl",
+    "usphone": "ˌɪnkəmˈpætəbəl",
     "ukphone": "ˌɪnkəmˈpætəbl",
     "syllables": [
       "in",
@@ -27254,7 +27181,7 @@
     "trans": [
       "adj. 可移植的；可移动的；易搬运的"
     ],
-    "usphone": "trænˈspɔːrtəbl",
+    "usphone": "trænˈspɔːrtəbəl",
     "ukphone": "trænˈspɔːtəbl",
     "syllables": [
       "trans",
@@ -27566,7 +27493,7 @@
     "trans": [
       "n. 会话；会话期（session storage/cookie）；会议"
     ],
-    "usphone": "ˈseʃn",
+    "usphone": "ˈseʃən",
     "ukphone": "ˈseʃn",
     "syllables": [
       "ses",
@@ -27825,7 +27752,7 @@
     "trans": [
       "n. 矩形；长方形；盒模型矩形"
     ],
-    "usphone": "ˈrektæŋɡl",
+    "usphone": "ˈrektæŋɡəl",
     "ukphone": "ˈrektæŋɡl",
     "syllables": [
       "rec",
@@ -28080,7 +28007,7 @@
     "trans": [
       "n. 描述；说明；元描述（meta description）；描述符"
     ],
-    "usphone": "dɪˈskrɪpʃn",
+    "usphone": "dɪˈskrɪpʃən",
     "ukphone": "dɪˈskrɪpʃn",
     "syllables": [
       "de",
@@ -28309,7 +28236,7 @@
     "trans": [
       "n. 异常；例外；异常处理（try-catch exception）"
     ],
-    "usphone": "ɪkˈsepʃn",
+    "usphone": "ɪkˈsepʃən",
     "ukphone": "ɪkˈsepʃn",
     "syllables": [
       "ex",
@@ -28520,10 +28447,7 @@
     "etymology": {
       "origin": "源自古英语 genog（充足的、足够的）。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Ensure cluster worker instances possess enough available RAM before initiating bulk data imports.",
@@ -28569,7 +28493,6 @@
       "origin": "由 all 与 though 复合而成。"
     },
     "silentIndices": [
-      5,
       6,
       7
     ],
@@ -28751,9 +28674,7 @@
     "syllables": [
       "small"
     ],
-    "silentIndices": [
-      4
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Microservices emphasize small single-purpose services communicating through lightweight protocols.",
@@ -29028,9 +28949,7 @@
       },
       "derivation": "尚未被明确声明或赋值的 → 未定义的、undefined"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In JavaScript, declaring a variable without an initialization assignment defaults its value to undefined.",
@@ -29416,9 +29335,7 @@
       "derivation": "指引指向确切物理或虚拟目标位置的编号 → 地址、定址",
       "origin": "源自古法语 adrecier，来自拉丁语 addirectiare（直接指向）。"
     },
-    "silentIndices": [
-      6
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Every network interface controller is assigned a unique hardware MAC address at manufacture.",
@@ -29856,7 +29773,7 @@
     "trans": [
       "n. 符号；标志；Symbol 数据类型（ES6 基本类型）；调试符号"
     ],
-    "usphone": "ˈsɪmbl",
+    "usphone": "ˈsɪmbəl",
     "ukphone": "ˈsɪmbl",
     "syllables": [
       "sym",
@@ -30033,7 +29950,7 @@
       "n. 警告；小心；谨慎",
       "v. 警告；提醒"
     ],
-    "usphone": "ˈkɔːʃn",
+    "usphone": "ˈkɔːʃən",
     "ukphone": "ˈkɔːʃn",
     "syllables": [
       "cau",
@@ -30164,7 +30081,7 @@
       "adj. 通用的；一般的；普遍的",
       "n. 将军；常规"
     ],
-    "usphone": "ˈdʒenrəl",
+    "usphone": "ˈdʒenərəl",
     "ukphone": "ˈdʒenrəl",
     "syllables": [
       "gen",
@@ -30362,7 +30279,7 @@
       "n. 分区；磁盘分区；Kafka 主题分区；划分",
       "v. 分区；分割；划分"
     ],
-    "usphone": "pɑːrˈtɪʃn",
+    "usphone": "pɑːrˈtɪʃən",
     "ukphone": "pɑːˈtɪʃn",
     "syllables": [
       "par",
@@ -30412,7 +30329,7 @@
       "adj. 十六进制的",
       "n. 十六进制；十六进制记数法"
     ],
-    "usphone": "ˌheksəˈdesɪml",
+    "usphone": "ˌheksəˈdesɪməl",
     "ukphone": "ˌheksəˈdesɪml",
     "syllables": [
       "hex",
@@ -30743,7 +30660,7 @@
     "trans": [
       "n. 压缩；数据压缩；压榨"
     ],
-    "usphone": "kəmˈpreʃn",
+    "usphone": "kəmˈpreʃən",
     "ukphone": "kəmˈpreʃn",
     "syllables": [
       "com",
@@ -30800,8 +30717,7 @@
     "ukphone": "ʌnˈeɪbl",
     "syllables": [
       "un",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -31176,7 +31092,6 @@
       "origin": "由 back 与 space 复合而成。"
     },
     "silentIndices": [
-      2,
       8
     ],
     "examples": [
@@ -31258,7 +31173,7 @@
       "n. 人们；大众；用户群",
       "v. 居住于"
     ],
-    "usphone": "ˈpiːpl",
+    "usphone": "ˈpiːpəl",
     "ukphone": "ˈpiːpl",
     "syllables": [
       "peo",
@@ -31521,9 +31436,7 @@
       "derivation": "在最开端的时间点地 → 最初、首先",
       "origin": "源自 initial 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "React state variables are initially populated with arguments passed into the useState call.",
@@ -31952,7 +31865,7 @@
     "trans": [
       "n. 介绍；入门；导论；引进"
     ],
-    "usphone": "ˌɪntrəˈdʌkʃn",
+    "usphone": "ˌɪntrəˈdʌkʃən",
     "ukphone": "ˌɪntrəˈdʌkʃn",
     "syllables": [
       "in",
@@ -32363,7 +32276,7 @@
       "v. 建模；做模型",
       "adj. 模范的"
     ],
-    "usphone": "ˈmɑːdl",
+    "usphone": "ˈmɑːdəl",
     "ukphone": "ˈmɒdl",
     "syllables": [
       "mod",
@@ -32411,7 +32324,7 @@
     "trans": [
       "n. 改正；纠正；校准；纠错（error correction）"
     ],
-    "usphone": "kəˈrekʃn",
+    "usphone": "kəˈrekʃən",
     "ukphone": "kəˈrekʃn",
     "syllables": [
       "cor",
@@ -32683,7 +32596,7 @@
       "n. 原因；理由；理性；关闭原因（CloseEvent.reason）",
       "v. 推理；思考"
     ],
-    "usphone": "ˈriːzn",
+    "usphone": "ˈriːzən",
     "ukphone": "ˈriːzn",
     "syllables": [
       "rea",
@@ -33038,7 +32951,7 @@
     "trans": [
       "n. 方向；指导；趋势；排布方向（flex-direction）"
     ],
-    "usphone": "dəˈrekʃn",
+    "usphone": "dəˈrekʃən",
     "ukphone": "dəˈrekʃn",
     "syllables": [
       "di",
@@ -33088,7 +33001,7 @@
       "n. 一部分；份额；切片部分",
       "v. 分配"
     ],
-    "usphone": "ˈpɔːrʃn",
+    "usphone": "ˈpɔːrʃən",
     "ukphone": "ˈpɔːʃn",
     "syllables": [
       "por",
@@ -33178,7 +33091,7 @@
     "trans": [
       "adj. 成功的；获得成功的；顺利的"
     ],
-    "usphone": "səkˈsesfl",
+    "usphone": "səkˈsesfəl",
     "ukphone": "səkˈsesfl",
     "syllables": [
       "suc",
@@ -33250,8 +33163,7 @@
       "derivation": "被贴附使用到具体场景中的 → 应用的、已应用的"
     },
     "silentIndices": [
-      1,
-      6
+      1
     ],
     "examples": [
       {
@@ -33824,7 +33736,7 @@
     "trans": [
       "n. 内核（操作系统核心 Kernel）；核心；果仁"
     ],
-    "usphone": "ˈkɜːrnl",
+    "usphone": "ˈkɜːrnəl",
     "ukphone": "ˈkɜːnl",
     "syllables": [
       "ker",
@@ -34329,9 +34241,7 @@
       "derivation": "不按统一固定时钟锁步进行、各自独立推进的 → 异步的",
       "origin": "源自希腊语 asynchronos，来自 a- + syn- + chronos（时间）。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Asynchronous JavaScript and XML AJAX enabled webpages to update dynamic content without full page reloads.",
@@ -35290,7 +35200,7 @@
       "adj. 确定的；某种；必然的",
       "pron. 某些"
     ],
-    "usphone": "ˈsɜːrtn",
+    "usphone": "ˈsɜːrtən",
     "ukphone": "ˈsɜːtn",
     "syllables": [
       "cer",
@@ -35560,7 +35470,7 @@
     "trans": [
       "adv. 经常；常常"
     ],
-    "usphone": "ˈɔːfn",
+    "usphone": "ˈɔːfən",
     "ukphone": "ˈɒfn",
     "syllables": [
       "of",
@@ -35569,9 +35479,7 @@
     "etymology": {
       "origin": "源自中古英语 oft 加上副词后缀 -en。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Database queries that are executed often should be cached inside fast Redis key-value stores.",
@@ -35647,7 +35555,9 @@
     "usphone": "ˌsiː piː ˈjuː",
     "ukphone": "ˌsiː piː ˈjuː",
     "syllables": [
-      "CPU"
+      "C",
+      "P",
+      "U"
     ],
     "examples": [
       {
@@ -35839,9 +35749,7 @@
       "derivation": "以格外突出特别的方式 → 特别、尤其",
       "origin": "源自古法语 especiel 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Memory profiling is critical in long-running services, especially when handling concurrent WebSocket connections.",
@@ -35997,7 +35905,7 @@
       "adj. 重要的；重大影响的；!important 规则",
       "n. 重要事项"
     ],
-    "usphone": "ɪmˈpɔːrtnt",
+    "usphone": "ɪmˈpɔːrtənt",
     "ukphone": "ɪmˈpɔːtnt",
     "syllables": [
       "im",
@@ -36092,7 +36000,7 @@
       "n. 加法；加号运算；增加物",
       "prep. 加上"
     ],
-    "usphone": "əˈdɪʃn",
+    "usphone": "əˈdɪʃən",
     "ukphone": "əˈdɪʃn",
     "syllables": [
       "ad",
@@ -36115,9 +36023,7 @@
       "derivation": "将两项相加合并放到一起的算术运算 → 加法、增加",
       "origin": "源自拉丁语 additio，来自 addere（增加）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Arithmetic Logic Units ALU execute binary integer addition in a single clock processor cycle.",
@@ -36285,9 +36191,7 @@
     "syllables": [
       "black"
     ],
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Black-box testing validates software input-output functionality without knowledge of internal code implementations.",
@@ -36805,7 +36709,7 @@
       "n. 首字母",
       "v. 签首字母"
     ],
-    "usphone": "ɪˈnɪʃl",
+    "usphone": "ɪˈnɪʃəl",
     "ukphone": "ɪˈnɪʃl",
     "syllables": [
       "in",
@@ -36912,9 +36816,7 @@
     "syllables": [
       "buy"
     ],
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The e-commerce checkout page allows authenticated customers to buy digital subscriptions with one click.",
@@ -37026,7 +36928,7 @@
       "v. 取样；采样",
       "adj. 示例的"
     ],
-    "usphone": "ˈsæmpl",
+    "usphone": "ˈsæmpəl",
     "ukphone": "ˈsɑːmpl",
     "syllables": [
       "sam",
@@ -37859,9 +37761,7 @@
       },
       "derivation": "留作专门用途不挪作他用的 → 保留的、预留的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Programming languages designate reserved keywords like class and return that cannot serve as identifier names.",
@@ -37939,7 +37839,7 @@
       "n. 句柄（文件句柄/对象句柄）；把手",
       "v. 处理；应付；操纵"
     ],
-    "usphone": "ˈhændl",
+    "usphone": "ˈhændəl",
     "ukphone": "ˈhændl",
     "syllables": [
       "han",
@@ -38392,9 +38292,7 @@
       "derivation": "解除锁定状态释放控制权 → 解锁",
       "origin": "由否定前缀 un- 加上 lock 构成。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Concurrent threads must unlock mutex semaphores inside finally blocks to avoid deadlocking other threads.",
@@ -38521,7 +38419,7 @@
     "trans": [
       "n. 集合；收集；垃圾回收（garbage collection）；MongoDB 文档集合"
     ],
-    "usphone": "kəˈlekʃn",
+    "usphone": "kəˈlekʃən",
     "ukphone": "kəˈlekʃn",
     "syllables": [
       "col",
@@ -38887,9 +38785,7 @@
     "etymology": {
       "origin": "源自古法语 trac（足迹、小路）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Disk drive heads move radially across spinning platters to locate targeted concentric data tracks.",
@@ -38973,7 +38869,7 @@
       "n. 骨架；框架；骨架屏（skeleton screen）；骨骼",
       "adj. 骨干的；基本的"
     ],
-    "usphone": "ˈskelɪtn",
+    "usphone": "ˈskelɪtən",
     "ukphone": "ˈskelɪtn",
     "syllables": [
       "skel",
@@ -39135,8 +39031,7 @@
     "syllables": [
       "re",
       "place",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -39180,7 +39075,7 @@
     "trans": [
       "adj. 可访问的；易接近的；支持无障碍访问的（a11y）"
     ],
-    "usphone": "əkˈsesəbl",
+    "usphone": "əkˈsesəbəl",
     "ukphone": "əkˈsesəbl",
     "syllables": [
       "ac",
@@ -39450,7 +39345,7 @@
     "trans": [
       "adj. 有帮助的；有益的；有用的"
     ],
-    "usphone": "ˈhelpfl",
+    "usphone": "ˈhelpfəl",
     "ukphone": "ˈhelpfl",
     "syllables": [
       "help",
@@ -39496,7 +39391,7 @@
       "n. 中间；中部",
       "v. 放在中间"
     ],
-    "usphone": "ˈmɪdl",
+    "usphone": "ˈmɪdəl",
     "ukphone": "ˈmɪdl",
     "syllables": [
       "mid",
@@ -39565,9 +39460,7 @@
       },
       "derivation": "已在源码中清楚告知编译器其存在与类型的 → 声明的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "TypeScript strict mode raises errors when accessing variables that have not been declared in scope.",
@@ -39639,7 +39532,7 @@
     "trans": [
       "adv. 图形化地；生动地；用图表表示地"
     ],
-    "usphone": "ˈɡræfɪkli",
+    "usphone": "ˈɡræfɪkəli",
     "ukphone": "ˈɡræfɪkli",
     "syllables": [
       "graph",
@@ -39822,7 +39715,7 @@
       "n. 终端；终端仿真器；控制台终端；终点站",
       "adj. 末端的；终点的"
     ],
-    "usphone": "ˈtɜːrmɪnl",
+    "usphone": "ˈtɜːrmɪnəl",
     "ukphone": "ˈtɜːmɪnl",
     "syllables": [
       "ter",
@@ -39952,7 +39845,7 @@
     "trans": [
       "n. 分辨率；解析（DNS resolution）；解决；决心"
     ],
-    "usphone": "ˌrezəˈluːʃn",
+    "usphone": "ˌrezəˈluːʃən",
     "ukphone": "ˌrezəˈluːʃn",
     "syllables": [
       "res",
@@ -40197,7 +40090,7 @@
       "adj. 关键的；严重的（严重告警）；临界的；关键渲染路径（critical path）",
       "n. 严重故障"
     ],
-    "usphone": "ˈkrɪtɪkl",
+    "usphone": "ˈkrɪtɪkəl",
     "ukphone": "ˈkrɪtɪkl",
     "syllables": [
       "crit",
@@ -40562,9 +40455,7 @@
       "derivation": "以极高速度迅速响应地 → 快速地",
       "origin": "源自 quick 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In-memory Redis caches return responses quickly to prevent backend database query overload.",
@@ -40606,9 +40497,7 @@
       "derivation": "以高速率将硬盘文件备份到软盘的经典实用软件 → 快速备份程序",
       "origin": "由 fast 与 backup 复合而成的著名软件商标与术语。"
     },
-    "silentIndices": [
-      6
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In the MS-DOS era, Fastback was a famous high-speed utility software for backing up hard drives to diskettes.",
@@ -40642,9 +40531,7 @@
       "derivation": "面对提议给予确认回报的信号 → 回答、应答",
       "origin": "源自古英语 andswaru（and- 反对 + swaru 誓言、言语）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In WebRTC peer-to-peer handshakes, the receiving client responds with an SDP answer packet.",
@@ -40716,7 +40603,7 @@
     "trans": [
       "n. 差异；差额；Git 差异（git diff）；不同之处"
     ],
-    "usphone": "ˈdɪfrəns",
+    "usphone": "ˈdɪfərəns",
     "ukphone": "ˈdɪfrəns",
     "syllables": [
       "dif",
@@ -40818,7 +40705,7 @@
       "adj. 物理的；物质的；物理内存（physical memory）",
       "n. 体检"
     ],
-    "usphone": "ˈfɪzɪkl",
+    "usphone": "ˈfɪzɪkəl",
     "ukphone": "ˈfɪzɪkl",
     "syllables": [
       "phys",
@@ -41127,8 +41014,7 @@
     "ukphone": "dɪsˈeɪbld",
     "syllables": [
       "dis",
-      "a",
-      "bled"
+      "abled"
     ],
     "etymology": {
       "prefix": {
@@ -41145,9 +41031,7 @@
       },
       "derivation": "被剥夺运行资格处于停用状态的 → 禁用的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "HTML form buttons set with the disabled attribute reject mouse click events and appear visually dimmed.",
@@ -41178,7 +41062,7 @@
     "trans": [
       "adj. 最近的；新近的；近来的"
     ],
-    "usphone": "ˈriːsnt",
+    "usphone": "ˈriːsənt",
     "ukphone": "ˈriːsnt",
     "syllables": [
       "re",
@@ -41522,7 +41406,6 @@
       "origin": "源自古英语 þeah（尽管、然而）。"
     },
     "silentIndices": [
-      3,
       4,
       5
     ],
@@ -41747,7 +41630,7 @@
       "prep. 朝向；向；对于；为了",
       "adj. 即将来到的"
     ],
-    "usphone": "tɔːrd",
+    "usphone": "təˈwɔːrd",
     "ukphone": "təˈwɔːd",
     "syllables": [
       "to",
@@ -41807,8 +41690,8 @@
       "origin": "由 through 与 out 复合而成。"
     },
     "silentIndices": [
-      4,
-      5
+      5,
+      6
     ],
     "examples": [
       {
@@ -42036,7 +41919,7 @@
     "trans": [
       "n. 注意；注意力；注意力机制（Transformer attention mechanism）"
     ],
-    "usphone": "əˈtenʃn",
+    "usphone": "əˈtenʃən",
     "ukphone": "əˈtenʃn",
     "syllables": [
       "at",
@@ -42089,7 +41972,7 @@
     "trans": [
       "n. 惯例；规范；约定；约定优于配置（convention over configuration）"
     ],
-    "usphone": "kənˈvenʃn",
+    "usphone": "kənˈvenʃən",
     "ukphone": "kənˈvenʃn",
     "syllables": [
       "con",
@@ -42142,7 +42025,7 @@
     "trans": [
       "adj. 传统的；常规的；约定俗成的；约定式提交（conventional commits）"
     ],
-    "usphone": "kənˈvenʃənl",
+    "usphone": "kənˈvenʃənəl",
     "ukphone": "kənˈvenʃənl",
     "syllables": [
       "con",
@@ -42334,9 +42217,7 @@
     "etymology": {
       "origin": "源自古英语 byldan（建造、构造房屋）。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Continuous integration pipelines compile source code, execute automated test suites, and generate production builds.",
@@ -42503,7 +42384,7 @@
       "adj. 水平的；横向的；水平扩展的（horizontal scaling）",
       "n. 水平线；水平位置"
     ],
-    "usphone": "ˌhɔːrəˈzɑːntl",
+    "usphone": "ˌhɔːrəˈzɑːntəl",
     "ukphone": "ˌhɒrɪˈzɒntl",
     "syllables": [
       "hor",
@@ -42694,9 +42575,7 @@
     "etymology": {
       "origin": "源自中古荷兰语 clocke（钟、钟声），来自中世纪拉丁语 clocca（钟）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The CPU internal clock frequency measured in gigahertz coordinates electrical transitions across processor logic gates.",
@@ -42882,7 +42761,6 @@
       "origin": "由 clock 与 -wise 复合而成。"
     },
     "silentIndices": [
-      3,
       8
     ],
     "examples": [
@@ -43243,7 +43121,7 @@
     "trans": [
       "n. 苹果；苹果公司（Apple Inc.）；苹果系统生态"
     ],
-    "usphone": "ˈæpl",
+    "usphone": "ˈæpəl",
     "ukphone": "ˈæpl",
     "syllables": [
       "ap",
@@ -43551,8 +43429,8 @@
     "ukphone": "kənˈviːniənt",
     "syllables": [
       "con",
-      "ven",
-      "ient"
+      "ve",
+      "nient"
     ],
     "etymology": {
       "prefix": {
@@ -44171,7 +44049,7 @@
       "n. 角度；角；尖括号（angle brackets `<>`）；视角",
       "v. 斜移；斜置"
     ],
-    "usphone": "ˈæŋɡl",
+    "usphone": "ˈæŋɡəl",
     "ukphone": "ˈæŋɡl",
     "syllables": [
       "an",
@@ -44218,7 +44096,7 @@
     "trans": [
       "adj. 词法的；词法分析的（lexical analysis）；词汇的；词法作用域（lexical scope）"
     ],
-    "usphone": "ˈleksɪkl",
+    "usphone": "ˈleksɪkəl",
     "ukphone": "ˈleksɪkl",
     "syllables": [
       "lex",
@@ -44315,7 +44193,7 @@
       "n. 故障；问题；烦恼；排障（troubleshooting）",
       "v. 麻烦；使烦恼"
     ],
-    "usphone": "ˈtrʌbl",
+    "usphone": "ˈtrʌbəl",
     "ukphone": "ˈtrʌbl",
     "syllables": [
       "trou",
@@ -44627,8 +44505,7 @@
     "syllables": [
       "val",
       "u",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -45860,7 +45737,7 @@
     "trans": [
       "n. 结合；连接；合取运算（逻辑与运算 conjunction）；连词"
     ],
-    "usphone": "kənˈdʒʌŋkʃn",
+    "usphone": "kənˈdʒʌŋkʃən",
     "ukphone": "kənˈdʒʌŋkʃn",
     "syllables": [
       "con",
@@ -46073,7 +45950,7 @@
     "trans": [
       "n. 间隔；时间间隔；定时器轮询（setInterval）；区间"
     ],
-    "usphone": "ˈɪntərvl",
+    "usphone": "ˈɪntərvəl",
     "ukphone": "ˈɪntəvl",
     "syllables": [
       "in",
@@ -46590,9 +46467,7 @@
     "etymology": {
       "origin": "源自希腊语 phoinix（传说中死后重生的不死鸟、凤凰）。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Phoenix Technologies developed legendary PC motherboard BIOS firmware widely utilized across IBM PC compatibles.",
@@ -46663,7 +46538,7 @@
     "trans": [
       "n. 画架；EaselJS 图形库（HTML5 Canvas 渲染库）"
     ],
-    "usphone": "ˈiːzl",
+    "usphone": "ˈiːzəl",
     "ukphone": "ˈiːzl",
     "syllables": [
       "ea",
@@ -46877,7 +46752,7 @@
     "trans": [
       "adj. 机密的；保密的；机密计算（confidential computing）"
     ],
-    "usphone": "ˌkɑːnfɪˈdenʃl",
+    "usphone": "ˌkɑːnfɪˈdenʃəl",
     "ukphone": "ˌkɒnfɪˈdenʃl",
     "syllables": [
       "con",
@@ -46969,7 +46844,7 @@
     "trans": [
       "n. 除法；除法运算符（/）；划分；部门"
     ],
-    "usphone": "dɪˈvɪʒn",
+    "usphone": "dɪˈvɪʒən",
     "ukphone": "dɪˈvɪʒn",
     "syllables": [
       "di",
@@ -47114,7 +46989,7 @@
       "v. 提及；说起；在 Issue 中 @提及（mention 用户）",
       "n. 提及；@提及功能"
     ],
-    "usphone": "ˈmenʃn",
+    "usphone": "ˈmenʃən",
     "ukphone": "ˈmenʃn",
     "syllables": [
       "men",
@@ -47226,7 +47101,7 @@
       "num. 七；七个",
       "n. OSI 七层参考模型"
     ],
-    "usphone": "ˈsevn",
+    "usphone": "ˈsevən",
     "ukphone": "ˈsevn",
     "syllables": [
       "sev",
@@ -47460,9 +47335,7 @@
     "etymology": {
       "origin": "源自古英语 geolu（黄色的）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Browser developer consoles display compiler warning logs highlighted with distinctive yellow icon badges.",
@@ -47807,7 +47680,7 @@
       "adv. 很少",
       "n. 少量"
     ],
-    "usphone": "ˈlɪtl",
+    "usphone": "ˈlɪtəl",
     "ukphone": "ˈlɪtl",
     "syllables": [
       "lit",
@@ -47864,9 +47737,7 @@
       "derivation": "将系统中的资源彻底抽干耗空 → 用尽、耗尽",
       "origin": "源自拉丁语 exhaustus，来自 exhaurire（抽干、耗尽）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Unclosed database socket leaks can exhaust available connection pool handles rapidly.",
@@ -48320,7 +48191,7 @@
       "n. 课；教程章节；经验教训（lessons learned）",
       "v. 教训"
     ],
-    "usphone": "ˈlesn",
+    "usphone": "ˈlesən",
     "ukphone": "ˈlesn",
     "syllables": [
       "les",
@@ -48449,9 +48320,7 @@
       "derivation": "对系统软硬件资源进行实际占用的量度或调用语法 → 使用率、用法",
       "origin": "源自古法语 usage，来自 user（使用）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Kubernetes horizontal autoscalers scale worker pods automatically based on active CPU and memory usage percentiles.",
@@ -48501,9 +48370,7 @@
       "derivation": "不易办到、极具挑战性的 → 困难的、棘手的",
       "origin": "源自拉丁语 difficultas，来自 difficilis（困难的）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Intermittent concurrency race condition bugs are notoriously difficult to reproduce in local test environments.",
@@ -48650,9 +48517,7 @@
       },
       "derivation": "组装架构软件或基础设施的工程活动 → 构建、建筑"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Microservices and containerization serve as the essential building blocks for modern cloud architectures.",
@@ -48901,7 +48766,7 @@
     "trans": [
       "n. 连接；连接池（connection pool）；TCP 连接；网络连接"
     ],
-    "usphone": "kəˈnekʃn",
+    "usphone": "kəˈnekʃən",
     "ukphone": "kəˈnekʃn",
     "syllables": [
       "con",
@@ -49120,9 +48985,7 @@
       "derivation": "位于最前沿直接面向用户交互的处理空间 → 前台、前景",
       "origin": "由 fore 与 ground 复合而成。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In UNIX shells, foreground processes occupy terminal control until execution finishes or SIGINT interrupts them.",
@@ -49275,7 +49138,7 @@
       "n. 圆；圆圈；SVG circle 元素；循环引用（circular dependency）",
       "v. 盘旋；圈出"
     ],
-    "usphone": "ˈsɜːrkl",
+    "usphone": "ˈsɜːrkəl",
     "ukphone": "ˈsɜːkl",
     "syllables": [
       "cir",
@@ -50028,7 +49891,7 @@
       "adj. 垂直的；纵向的；纵向扩展的（vertical scaling）",
       "n. 垂直线；纵向行业"
     ],
-    "usphone": "ˈvɜːrtɪkl",
+    "usphone": "ˈvɜːrtɪkəl",
     "ukphone": "ˈvɜːtɪkl",
     "syllables": [
       "ver",
@@ -50200,8 +50063,7 @@
       "un",
       "a",
       "vail",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -50322,7 +50184,7 @@
     "trans": [
       "adj. 不足的；不够的；权限不足（insufficient permissions）；内存不足"
     ],
-    "usphone": "ˌɪnsəˈfɪʃnt",
+    "usphone": "ˌɪnsəˈfɪʃənt",
     "ukphone": "ˌɪnsəˈfɪʃnt",
     "syllables": [
       "in",
@@ -50346,9 +50208,7 @@
       "derivation": "达不到最低配额或安全要求门槛的 → 不足的、不够的",
       "origin": "源自晚期拉丁语 insufficiens，来自 in- + sufficere（足够）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The API server emits an HTTP 403 Forbidden status when client tokens have insufficient permissions to access records.",
@@ -50607,8 +50467,8 @@
     "ukphone": "kənˈviːniəns",
     "syllables": [
       "con",
-      "ven",
-      "ience"
+      "ve",
+      "nience"
     ],
     "etymology": {
       "root": {
@@ -50964,9 +50824,7 @@
       },
       "derivation": "违背常规流程被硬性强迫执行的 → 强制的"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Querying geometric properties like offsetHeight immediately after modifying DOM classes causes forced synchronous layout reflow.",
@@ -51289,9 +51147,7 @@
       "derivation": "作为补充额外叠加进来地 → 此外、另外",
       "origin": "源自 additional 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The query optimizer evaluates index constraints; additionally, it estimates disk page read I/O costs.",
@@ -51769,7 +51625,7 @@
     "trans": [
       "adj. 可见的；显而易见的；CSS visibility 属性；视口可见"
     ],
-    "usphone": "ˈvɪzəbl",
+    "usphone": "ˈvɪzəbəl",
     "ukphone": "ˈvɪzəbl",
     "syllables": [
       "vis",
@@ -52322,9 +52178,7 @@
       "derivation": "从事编写软件程序的技术人员或烧录芯片的硬件设备 → 程序员、编程器",
       "origin": "由 program 加上名词后缀 -er 构成。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Proficient computer programmers author modular, well-tested code that adheres to industry design patterns.",
@@ -52352,7 +52206,7 @@
       "adj. 商业的；商业化的；商业许可的（commercial license）",
       "n. 商业广告"
     ],
-    "usphone": "kəˈmɜːrʃl",
+    "usphone": "kəˈmɜːrʃəl",
     "ukphone": "kəˈmɜːʃl",
     "syllables": [
       "com",
@@ -52450,9 +52304,7 @@
     "etymology": {
       "origin": "源自古诺斯语 lagr（矮小的、低矮的）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Low-level systems programming languages like C and Rust allow manual control over pointer memory allocations.",
@@ -52568,7 +52420,7 @@
       "adj. 合法的；法律的；符合规范的；法律许可（legal license）",
       "n. 法定权利"
     ],
-    "usphone": "ˈliːɡl",
+    "usphone": "ˈliːɡəl",
     "ukphone": "ˈliːɡl",
     "syllables": [
       "le",
@@ -52631,9 +52483,7 @@
       },
       "derivation": "在命名空间中给出完整层级限定路径的 → 完全限定的、有资格的"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "A Fully Qualified Domain Name FQDN specifies the complete DNS hierarchy right down to the root domain dot.",
@@ -52730,9 +52580,7 @@
       },
       "derivation": "被卷入其中参与协同运作的 → 涉及的、参与的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Database migration scripts analyze all foreign key constraints involved before altering column types.",
@@ -52760,7 +52608,7 @@
       "adj. 有条件的；条件语句的；三元条件运算符（conditional operator）",
       "n. 条件从句"
     ],
-    "usphone": "kənˈdɪʃənl",
+    "usphone": "kənˈdɪʃənəl",
     "ukphone": "kənˈdɪʃənl",
     "syllables": [
       "con",
@@ -53269,9 +53117,7 @@
       },
       "derivation": "向用户或屏幕展现呈现可见元素的动作 → 展示、呈现"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Modal dialog components toggle a boolean visibility flag indicating whether the overlay is currently showing.",
@@ -53329,7 +53175,7 @@
     "trans": [
       "n. 发行版（Linux distribution / distro）；分发；分布；分发包"
     ],
-    "usphone": "ˌdɪstrɪˈbjuːʃn",
+    "usphone": "ˌdɪstrɪˈbjuːʃən",
     "ukphone": "ˌdɪstrɪˈbjuːʃn",
     "syllables": [
       "dis",
@@ -53659,9 +53505,7 @@
       "derivation": "将已有的结构彻底清除后从源码或基础重新生成 → 重建、重新构建",
       "origin": "由前缀 re- 加上 build 构成。"
     },
-    "silentIndices": [
-      4
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Database administrators execute REINDEX statements to rebuild bloated B-tree index structures from scratch.",
@@ -53688,7 +53532,7 @@
     "trans": [
       "n. 确定性；必然的事；肯定"
     ],
-    "usphone": "ˈsɜːrtnti",
+    "usphone": "ˈsɜːrtənti",
     "ukphone": "ˈsɜːtnti",
     "syllables": [
       "cer",
@@ -53788,9 +53632,7 @@
     "etymology": {
       "origin": "源自希腊语 pseudes（假的、虚假的），首字母 p 不发音。"
     },
-    "silentIndices": [
-      0
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "CSS pseudo-classes like hover and focus style HTML elements based on ephemeral state transitions.",
@@ -53920,7 +53762,7 @@
       "n. 集成；集成学习（ensemble learning）；总体；剧团",
       "adj. 整体的"
     ],
-    "usphone": "ɑːnˈsɑːmbl",
+    "usphone": "ɑːnˈsɑːmbəl",
     "ukphone": "ɒnˈsɒmbl",
     "syllables": [
       "en",
@@ -54012,8 +53854,7 @@
     "syllables": [
       "al",
       "low",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -54056,7 +53897,7 @@
     "trans": [
       "n. 限制；约束；访问限制（access restriction）；规则限制"
     ],
-    "usphone": "rɪˈstrɪkʃn",
+    "usphone": "rɪˈstrɪkʃən",
     "ukphone": "rɪˈstrɪkʃn",
     "syllables": [
       "re",
@@ -54341,7 +54182,7 @@
     "trans": [
       "n. 解决方案；架构方案（architectural solution）；解答；溶液"
     ],
-    "usphone": "səˈluːʃn",
+    "usphone": "səˈluːʃən",
     "ukphone": "səˈluːʃn",
     "syllables": [
       "so",
@@ -54391,7 +54232,7 @@
       "adj. 外部的；外来的；外部依赖（external dependency）；外部样式表",
       "n. 外部事物"
     ],
-    "usphone": "ɪkˈstɜːrnl",
+    "usphone": "ɪkˈstɜːrnəl",
     "ukphone": "ɪkˈstɜːnl",
     "syllables": [
       "ex",
@@ -54678,9 +54519,7 @@
       "derivation": "将代码、依赖与元数据捆绑封装为统一分发的模块单元 → 软件包",
       "origin": "由 pack 加上名词后缀 -age 构成。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The package.json manifest records third-party package dependencies, entry points, and build scripts.",
@@ -54711,7 +54550,7 @@
     "trans": [
       "n. 插入；自动分号插入（ASI）；插入排序（insertion sort）"
     ],
-    "usphone": "ɪnˈsɜːrʃn",
+    "usphone": "ɪnˈsɜːrʃən",
     "ukphone": "ɪnˈsɜːʃn",
     "syllables": [
       "in",
@@ -54914,9 +54753,7 @@
       "derivation": "容量超出预定存储边界向外泛滥溢出 → 溢出",
       "origin": "由 over 与 flow 复合而成。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Infinite recursive call loops allocate stack frames indefinitely until triggering a fatal stack overflow exception.",
@@ -55396,9 +55233,7 @@
       "derivation": "位居整个数值或层级最底部最底端的 → 最低的",
       "origin": "源自 low 加上最高级后缀 -est。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In little-endian architectures, the lowest significant byte of an integer is stored at the lowest memory address.",
@@ -55426,7 +55261,7 @@
       "adj. 简单的；单纯的；简易的；简单邮件传输协议（SMTP）",
       "n. 单一体"
     ],
-    "usphone": "ˈsɪmpl",
+    "usphone": "ˈsɪmpəl",
     "ukphone": "ˈsɪmpl",
     "syllables": [
       "sim",
@@ -55622,9 +55457,7 @@
       },
       "derivation": "被特别标出记录为人所熟知注意的 → 著名的、被注明的"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "As noted in the API deprecation guide, legacy authentication endpoints will be discontinued next month.",
@@ -55701,7 +55534,7 @@
     "trans": [
       "n. 替换；代换；里氏替换原则（Liskov Substitution Principle）；变量代换"
     ],
-    "usphone": "ˌsʌbstɪˈtuːʃn",
+    "usphone": "ˌsʌbstɪˈtuːʃən",
     "ukphone": "ˌsʌbstɪˈtjuːʃn",
     "syllables": [
       "sub",
@@ -57177,7 +57010,7 @@
     "trans": [
       "n. 保护；内存保护（memory protection）；写保护（write protection）；安全防护"
     ],
-    "usphone": "prəˈtekʃn",
+    "usphone": "prəˈtekʃən",
     "ukphone": "prəˈtekʃn",
     "syllables": [
       "pro",
@@ -57357,7 +57190,7 @@
     "trans": [
       "n. 工厂；工厂模式（Factory Pattern / Abstract Factory）；制造厂"
     ],
-    "usphone": "ˈfæktri",
+    "usphone": "ˈfæktəri",
     "ukphone": "ˈfæktri",
     "syllables": [
       "fac",
@@ -57684,9 +57517,7 @@
       "derivation": "完成某项运算或工程所需的复杂与阻力程度 → 难度、困难",
       "origin": "源自拉丁语 difficultas，来自 difficilis（困难的）。"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Blockchain networks adjust mining difficulty targets dynamically every few blocks to stabilize block generation times.",
@@ -58068,7 +57899,7 @@
     "trans": [
       "adj. 传统的；惯例的；传统单体架构的（traditional monolithic）"
     ],
-    "usphone": "trəˈdɪʃənl",
+    "usphone": "trəˈdɪʃənəl",
     "ukphone": "trəˈdɪʃənl",
     "syllables": [
       "tra",
@@ -58139,9 +57970,7 @@
       "derivation": "使多个并发进程或分布式时钟在时间轴与状态上步调一致 → 同步",
       "origin": "源自希腊语 syn- + khronos（时间）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Mutexes and semaphores provide thread synchronization primitives to prevent concurrent memory access race conditions.",
@@ -59185,10 +59014,7 @@
       "derivation": "类型或身份尚未被编译器或系统查明认证的 → 未知的",
       "origin": "由 un- 与 known 复合而成。"
     },
-    "silentIndices": [
-      2,
-      6
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In TypeScript, the unknown type is a type-safe counterpart of any that forces explicit type narrowing before usage.",
@@ -59534,7 +59360,7 @@
     "trans": [
       "adj. 大量的；实质性的；重大的；坚固的（substantial performance gain）"
     ],
-    "usphone": "səbˈstænʃl",
+    "usphone": "səbˈstænʃəl",
     "ukphone": "səbˈstænʃl",
     "syllables": [
       "sub",
@@ -60124,7 +59950,7 @@
       "adj. 指数的；指数级增长的；指数退避算法（exponential backoff）",
       "n. 指数"
     ],
-    "usphone": "ˌekspəˈnenʃl",
+    "usphone": "ˌekspəˈnenʃəl",
     "ukphone": "ˌekspəˈnenʃl",
     "syllables": [
       "ex",
@@ -60369,7 +60195,6 @@
       "origin": "源自希腊语 synkhronos（同时的）加上后缀 -ize。"
     },
     "silentIndices": [
-      5,
       10
     ],
     "examples": [
@@ -60631,9 +60456,7 @@
       "derivation": "在版本对比或状态更新中完全保持原样未发生变动的 → 未改变的",
       "origin": "由 un- 与 changed 复合而成。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Git status reports unchanged clean working directories when working tree files match head commit snapshots.",
@@ -60753,9 +60576,7 @@
       "derivation": "以极慢的速度或较高的执行耗时推进地 → 缓慢地",
       "origin": "源自 slow 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Unindexed SQL queries execute slowly on large datasets, causing HTTP request timeouts on client connections.",
@@ -60884,9 +60705,7 @@
       "derivation": "从未被调用引用过的闲置资源或死代码 → 未使用的",
       "origin": "由 un- 与 used 复合而成。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Tree shaking bundlers scan ES module import graphs to eliminate unused functions and shrink production bundles.",
@@ -61087,9 +60906,7 @@
       "derivation": "推演达到最高极限程度地 → 极其、非常",
       "origin": "源自 extreme 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Redis in-memory key-value data structures provide extremely low microsecond read and write response latencies.",
@@ -61238,7 +61055,7 @@
     "trans": [
       "adj. 技术的；专门的；技术债务（technical debt）；技术规范（technical spec）"
     ],
-    "usphone": "ˈteknɪkl",
+    "usphone": "ˈteknɪkəl",
     "ukphone": "ˈteknɪkl",
     "syllables": [
       "tech",
@@ -61257,9 +61074,7 @@
       "derivation": "关乎工程技术专业机理的 → 技术的",
       "origin": "源自希腊语 tekhnikos，来自 tekhne（技艺、工艺）。"
     },
-    "silentIndices": [
-      2
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Accumulating technical debt by taking shortcuts slows down long-term feature velocity and complicates maintenance.",
@@ -61460,9 +61275,7 @@
       },
       "derivation": "牢固绑挂在主系统树结构或母机之上的 → 挂载的、附加的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Web Component connectedCallback fires when a custom element is first attached to the active document DOM.",
@@ -62085,9 +61898,7 @@
     "etymology": {
       "origin": "源自古法语 garder（保护、注视），来自日耳曼语族 wardon。在计算机中专指在执行核心代码前负责校验前置条件的门禁守卫。"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "TypeScript user-defined type guards utilize predicate return expressions to narrow down generic types at runtime.",
@@ -62411,7 +62222,7 @@
     "trans": [
       "n. 事务；数据库事务（ACID transaction）；交易；业务处理"
     ],
-    "usphone": "trænˈzækʃn",
+    "usphone": "trænˈzækʃən",
     "ukphone": "trænˈzækʃn",
     "syllables": [
       "trans",
@@ -62630,7 +62441,7 @@
     "trans": [
       "n. 张力；权衡博弈（architectural tension / trade-off）；紧张；拉力"
     ],
-    "usphone": "ˈtenʃn",
+    "usphone": "ˈtenʃən",
     "ukphone": "ˈtenʃn",
     "syllables": [
       "ten",
@@ -62674,8 +62485,7 @@
     "ukphone": "ˈprɒbəbl",
     "syllables": [
       "prob",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -63068,7 +62878,7 @@
     "trans": [
       "n. 比较；比较运算符（comparison operator `===`）；对照"
     ],
-    "usphone": "kəmˈpærɪsn",
+    "usphone": "kəmˈpærɪsən",
     "ukphone": "kəmˈpærɪsn",
     "syllables": [
       "com",
@@ -63136,9 +62946,7 @@
       },
       "derivation": "技术水平走在最前沿、成熟且高度工程化的 → 高级的、先进的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Advanced Encryption Standard AES is the symmetric block cipher adopted globally to encrypt sensitive data files.",
@@ -63296,8 +63104,7 @@
     "syllables": [
       "de",
       "fin",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -63340,8 +63147,7 @@
     "ukphone": "ˈriːdəbl",
     "syllables": [
       "read",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -63390,8 +63196,7 @@
       "re",
       "cov",
       "er",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -63522,7 +63327,7 @@
     "trans": [
       "adj. 适用的；可应用的；生效的（applicable rules / constraints）"
     ],
-    "usphone": "əˈplɪkəbl",
+    "usphone": "əˈplɪkəbəl",
     "ukphone": "əˈplɪkəbl",
     "syllables": [
       "ap",
@@ -63579,8 +63384,7 @@
     "ukphone": "ˈprɪntəbl",
     "syllables": [
       "print",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -63630,8 +63434,7 @@
       "ex",
       "e",
       "cut",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "prefix": {
@@ -63855,8 +63658,7 @@
     "ukphone": "ˈsuːtəbl",
     "syllables": [
       "suit",
-      "a",
-      "ble"
+      "able"
     ],
     "etymology": {
       "root": {
@@ -64044,7 +63846,7 @@
     "trans": [
       "adj. 可解释的；可解释 AI（interpretable AI）；可解释执行的（字节码）"
     ],
-    "usphone": "ɪnˈtɜːrprətəbl",
+    "usphone": "ɪnˈtɜːrprətəbəl",
     "ukphone": "ɪnˈtɜːprɪtəbl",
     "syllables": [
       "in",
@@ -64095,7 +63897,7 @@
       "n. 利益；关注点；关注点分离（separation of interests / concerns）；利息",
       "v. 使感兴趣"
     ],
-    "usphone": "ˈɪntrəst",
+    "usphone": "ˈɪntərəst",
     "ukphone": "ˈɪntrəst",
     "syllables": [
       "in",
@@ -64303,7 +64105,7 @@
     "trans": [
       "adv. 特别地；明确地；专门针对地（specifically designed）"
     ],
-    "usphone": "spəˈsɪfɪkli",
+    "usphone": "spəˈsɪfɪkəli",
     "ukphone": "spəˈsɪfɪkli",
     "syllables": [
       "spe",
@@ -64461,9 +64263,7 @@
       "derivation": "没有明确终止期限一直无限制持续下去地 → 无限期地",
       "origin": "源自 indefinite 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      10
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Deadlocks cause competing threads to block indefinitely while waiting for mutual locks that are never released.",
@@ -64914,7 +64714,7 @@
     "trans": [
       "n. 决策；判定；决策树（decision tree）；架构决策记录（ADR）"
     ],
-    "usphone": "dɪˈsɪʒn",
+    "usphone": "dɪˈsɪʒən",
     "ukphone": "dɪˈsɪʒn",
     "syllables": [
       "de",
@@ -65374,10 +65174,7 @@
       "derivation": "向发送方发出已完整收到数据包并核实无误的应答信号 → 确认收到、应答（ACK）",
       "origin": "由 acknowledge 加上名词后缀 -ment 构成。"
     },
-    "silentIndices": [
-      2,
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In reliable TCP communications, the receiver sends an acknowledgment packet ACK confirming successful byte reception.",
@@ -65404,7 +65201,7 @@
     "trans": [
       "adv. 高效地；有效地；低开销运行地（efficiently traverse）"
     ],
-    "usphone": "ɪˈfɪʃntli",
+    "usphone": "ɪˈfɪʃəntli",
     "ukphone": "ɪˈfɪʃntli",
     "syllables": [
       "ef",
@@ -65636,7 +65433,7 @@
       "adj. 自然的；自然语言处理（Natural Language Processing）；自然连接（NATURAL JOIN）；自然键",
       "n. 天然之物"
     ],
-    "usphone": "ˈnætʃrəl",
+    "usphone": "ˈnætʃərəl",
     "ukphone": "ˈnætʃrəl",
     "syllables": [
       "nat",
@@ -66063,9 +65860,7 @@
       "derivation": "按照父子从属关系依序层层嵌套组织的树形排布 → 层级的、分层的",
       "origin": "源自中世纪拉丁语 hierarchicus，来自 hierarchy。"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The Document Object Model DOM structures web page markup as a hierarchical tree of parent and child element nodes.",
@@ -66155,9 +65950,7 @@
       },
       "derivation": "在规模、流量或数据量上呈现持续膨胀状态的 → 不断增长的"
     },
-    "silentIndices": [
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Horizontally partitioned database clusters accommodate rapidly growing transaction volumes across cloud regions.",
@@ -66184,7 +65977,7 @@
     "trans": [
       "n. 讨论；技术探讨；GitHub 讨论区（GitHub Discussions）"
     ],
-    "usphone": "dɪˈskʌʃn",
+    "usphone": "dɪˈskʌʃən",
     "ukphone": "dɪˈskʌʃn",
     "syllables": [
       "dis",
@@ -66810,9 +66603,7 @@
       },
       "derivation": "已被切断通信链路或禁止修改的 → 关闭的、对修改关闭的"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The Open-Closed Principle states software entities should be open for extension but closed for modification.",
@@ -67225,9 +67016,7 @@
       },
       "derivation": "在技术规范中被假定或预期应当表现的规定状态 → 预期的、原本应当的"
     },
-    "silentIndices": [
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Software unit tests compare actual runtime output against the supposed behavior defined in the specification.",
@@ -67442,7 +67231,7 @@
     "trans": [
       "n. 重要性；重大意义；CSS `!important` 声明"
     ],
-    "usphone": "ɪmˈpɔːrtns",
+    "usphone": "ɪmˈpɔːrtəns",
     "ukphone": "ɪmˈpɔːtns",
     "syllables": [
       "im",
@@ -67665,7 +67454,7 @@
     "trans": [
       "n. 挂起；暂停；React Suspense 挂起机制；线程挂起（thread suspension）"
     ],
-    "usphone": "səˈspenʃn",
+    "usphone": "səˈspenʃən",
     "ukphone": "səˈspenʃn",
     "syllables": [
       "sus",
@@ -67820,10 +67609,7 @@
       "derivation": "最高有效位不作正负符号位使用，因而全部比特均用来表示非负正数值的数据类型 → 无符号的",
       "origin": "由 un- 与 signed 复合而成。"
     },
-    "silentIndices": [
-      5,
-      7
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "In C and Rust, unsigned integers like uint32 represent non-negative numbers ranging from zero to 2^32 minus 1.",
@@ -68143,9 +67929,7 @@
       "derivation": "位居幕后不占用终端前台悄然执行的进程或底层颜色 → 后台、背景",
       "origin": "由 back 与 ground 复合而成。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Web Workers execute heavy CPU-intensive operations in background threads without blocking user UI rendering.",
@@ -68243,9 +68027,7 @@
       "derivation": "将一个数值或对象引用明确指派给特定变量标识符的动作 → 赋值",
       "origin": "源自古法语 assignement，来自 assigner（指派）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Destructuring assignment in JavaScript unpacks properties from objects or arrays into distinct variables cleanly.",
@@ -68511,9 +68293,7 @@
       "derivation": "各归其位、按照一一对应顺序分别对应赋值地 → 分别地、各个地",
       "origin": "源自 respective 加上副词后缀 -ly。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The function returns width and height values measuring 1920 and 1080 pixels respectively.",
@@ -68536,7 +68316,7 @@
     "trans": [
       "adj. 不成功的；失败的；未成功的事务（unsuccessful transaction）"
     ],
-    "usphone": "ˌʌnsəkˈsesfl",
+    "usphone": "ˌʌnsəkˈsesfəl",
     "ukphone": "ˌʌnsəkˈsesfl",
     "syllables": [
       "un",
@@ -68752,7 +68532,7 @@
     "trans": [
       "adv. 最近；近来；最近最少使用算法（Least Recently Used, LRU）"
     ],
-    "usphone": "ˈriːsntli",
+    "usphone": "ˈriːsəntli",
     "ukphone": "ˈriːsntli",
     "syllables": [
       "re",
@@ -69096,9 +68876,7 @@
       "derivation": "关乎系统组件组织构造、骨架关系与类型契约的 → 结构性的",
       "origin": "源自 structure 加上形容词后缀 -al。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "TypeScript relies on a structural type system duck typing where compatibility is based on shape rather than names.",
@@ -69356,7 +69134,7 @@
     "trans": [
       "v. 汇编（assemble machine code）；组装；装配组件"
     ],
-    "usphone": "əˈsembl",
+    "usphone": "əˈsembəl",
     "ukphone": "əˈsembl",
     "syllables": [
       "as",
@@ -69585,7 +69363,7 @@
     "trans": [
       "adj. 典型的；有代表性的；常见架构用例（typical use case）"
     ],
-    "usphone": "ˈtɪpɪkl",
+    "usphone": "ˈtɪpɪkəl",
     "ukphone": "ˈtɪpɪkl",
     "syllables": [
       "typ",
@@ -69630,7 +69408,7 @@
     "trans": [
       "adj. 足够的；充分的；权限充分（sufficient permissions）"
     ],
-    "usphone": "səˈfɪʃnt",
+    "usphone": "səˈfɪʃənt",
     "ukphone": "səˈfɪʃnt",
     "syllables": [
       "suf",
@@ -69653,9 +69431,7 @@
       "derivation": "从底部提供全力支撑以满足需求配额门槛的 → 足够的、充分的",
       "origin": "源自拉丁语 sufficiens，来自 sufficere（胜任、供给）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The API server rejects the mutation with an HTTP 403 Forbidden status when the client lacks sufficient authorization permissions.",
@@ -69858,9 +69634,7 @@
       },
       "derivation": "在技术规范或 API 契约中白纸黑字明确阐述规定的 → 阐明的、规定的"
     },
-    "silentIndices": [
-      1
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "As stated in the official RFC specification, HTTP GET requests must remain safe and idempotent without mutations.",
@@ -69932,7 +69706,7 @@
     "trans": [
       "n. 在线状态；状态感知（real-time presence）；存在；出席"
     ],
-    "usphone": "ˈprezns",
+    "usphone": "ˈprezəns",
     "ukphone": "ˈprezns",
     "syllables": [
       "pres",
@@ -70532,7 +70306,7 @@
     "trans": [
       "adv. 物理上地；实体硬件上地；物理隔离地（physically isolated）"
     ],
-    "usphone": "ˈfɪzɪkli",
+    "usphone": "ˈfɪzɪkəli",
     "ukphone": "ˈfɪzɪkli",
     "syllables": [
       "phys",
@@ -70632,9 +70406,7 @@
       "derivation": "一个紧跟一个毫不停顿相继走来接续发生的 → 连续的、相继的",
       "origin": "源自中世纪拉丁语 successivus，来自 succedere（继承、随之发生）。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Streaming video player decoders buffer successive audio-visual frames to maintain smooth 60 FPS playback.",
@@ -70661,7 +70433,7 @@
     "trans": [
       "n. 连续；接替；快速相继发生（in rapid succession）"
     ],
-    "usphone": "səkˈseʃn",
+    "usphone": "səkˈseʃən",
     "ukphone": "səkˈseʃn",
     "syllables": [
       "suc",
@@ -70864,11 +70636,7 @@
       "derivation": "由机械铅字击打出固定字宽字符的经典打字机，现代指等宽编程字体与打字特效 → 打字机",
       "origin": "由 type 与 writer 复合而成。"
     },
-    "silentIndices": [
-      3,
-      4,
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Code editors utilize monospace typewriter fonts so that every character occupies identical horizontal display width.",
@@ -71015,7 +70783,7 @@
     "trans": [
       "n. 归约；MapReduce 归约操作（reduction）；降维（dimensionality reduction）；减少"
     ],
-    "usphone": "rɪˈdʌkʃn",
+    "usphone": "rɪˈdʌkʃən",
     "ukphone": "rɪˈdʌkʃn",
     "syllables": [
       "re",
@@ -71657,7 +71425,7 @@
     "trans": [
       "n. 区别；差别；值传递与引用传递的区别（distinction between value and reference）"
     ],
-    "usphone": "dɪˈstɪŋkʃn",
+    "usphone": "dɪˈstɪŋkʃən",
     "ukphone": "dɪˈstɪŋkʃn",
     "syllables": [
       "dis",
@@ -71850,7 +71618,7 @@
       "adj. 基础的；根本的；基本数据结构（fundamental data structure）",
       "n. 基本原理"
     ],
-    "usphone": "ˌfʌndəˈmentl",
+    "usphone": "ˌfʌndəˈmentəl",
     "ukphone": "ˌfʌndəˈmentl",
     "syllables": [
       "fun",
@@ -72060,7 +71828,7 @@
       "adj. 国家的；全国性的；国家标准规范（如 ANSI / NIST）；国民的",
       "n. 国民"
     ],
-    "usphone": "ˈnæʃnəl",
+    "usphone": "ˈnæʃənəl",
     "ukphone": "ˈnæʃnəl",
     "syllables": [
       "na",
@@ -72393,7 +72161,7 @@
     "trans": [
       "adj. 数值的；数字的；数值计算（numerical computation / NumPy）"
     ],
-    "usphone": "nuːˈmerɪkl",
+    "usphone": "nuːˈmerɪkəl",
     "ukphone": "njuːˈmerɪkl",
     "syllables": [
       "nu",
@@ -72440,7 +72208,7 @@
       "adj. 数字的；数字签名（digital signature）；数字证书（digital certificate）",
       "n. 数码"
     ],
-    "usphone": "ˈdɪdʒɪtl",
+    "usphone": "ˈdɪdʒɪtəl",
     "ukphone": "ˈdɪdʒɪtl",
     "syllables": [
       "dig",
@@ -72777,7 +72545,7 @@
     "trans": [
       "adj. 偶然的；意外的；偶然复杂度（accidental complexity，布鲁克斯《人月神话》核心概念）"
     ],
-    "usphone": "ˌæksɪˈdentl",
+    "usphone": "ˌæksɪˈdentəl",
     "ukphone": "ˌæksɪˈdentl",
     "syllables": [
       "ac",
@@ -72819,7 +72587,7 @@
     "trans": [
       "adj. 顺序的；连续的；顺序读写（sequential read/write）；顺序一致性（sequential consistency）"
     ],
-    "usphone": "sɪˈkwenʃl",
+    "usphone": "sɪˈkwenʃəl",
     "ukphone": "sɪˈkwenʃl",
     "syllables": [
       "se",
@@ -73117,7 +72885,7 @@
     "trans": [
       "n. 识别；语音识别（speech recognition）；图像模式识别（pattern recognition）"
     ],
-    "usphone": "ˌrekəɡˈnɪʃn",
+    "usphone": "ˌrekəɡˈnɪʃən",
     "ukphone": "ˌrekəɡˈnɪʃn",
     "syllables": [
       "rec",
@@ -73624,7 +73392,7 @@
       "n. 通道；通信信道（communication channel）；Go 协程通道（chan）；Alpha 色彩通道",
       "v. 引导；传送"
     ],
-    "usphone": "ˈtʃænl",
+    "usphone": "ˈtʃænəl",
     "ukphone": "ˈtʃænl",
     "syllables": [
       "chan",
@@ -73674,9 +73442,7 @@
       "derivation": "电流循环闭合流动的完整回路，微服务中借指自动跳闸防止级联故障的熔断设计模式 → 电路、熔断器",
       "origin": "源自拉丁语 circuitus（环绕、回路），来自 circumire（环绕走：circum- 周围 + ire 走）。"
     },
-    "silentIndices": [
-      5
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "The circuit breaker architectural pattern trips open to prevent cascading failures when a downstream microservice is down.",
@@ -73756,9 +73522,7 @@
       "derivation": "负责将算法思维转化为可执行代码的工程人员，或执行多媒体编解码的构件 → 编码器、程序员",
       "origin": "由 code 加上名词后缀 -er 构成。"
     },
-    "silentIndices": [
-      4
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Multimedia codecs bundle an encoder coder and decoder to compress raw video streams efficiently.",
@@ -74759,7 +74523,7 @@
     "trans": [
       "adj. 光学的；光纤的（optical fiber）；光盘存储（optical storage）；光学字符识别（OCR）"
     ],
-    "usphone": "ˈɑːptɪkl",
+    "usphone": "ˈɑːptɪkəl",
     "ukphone": "ˈɒptɪkl",
     "syllables": [
       "op",
@@ -74808,7 +74572,7 @@
     "trans": [
       "n. 面板；控制面板（control panel）；开发者工具面板（DevTools panel）；仪表板"
     ],
-    "usphone": "ˈpænl",
+    "usphone": "ˈpænəl",
     "ukphone": "ˈpænl",
     "syllables": [
       "pan",
@@ -75085,7 +74849,7 @@
     "trans": [
       "n. 哨兵；哨兵节点（sentinel node）；Redis Sentinel 高可用架构；哨兵值"
     ],
-    "usphone": "ˈsentɪnl",
+    "usphone": "ˈsentɪnəl",
     "ukphone": "ˈsentɪnl",
     "syllables": [
       "sen",
@@ -75575,9 +75339,7 @@
       "derivation": "将某种计算机语言编写的源代码或机器码原汁原味转换为另一种代码的目标翻译程序 → 翻译器、转译器",
       "origin": "源自拉丁语 translator，来自 transferre（搬运、转换）。"
     },
-    "silentIndices": [
-      8
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Rosetta 2 operates as a dynamic binary translator, translating x86-64 machine instructions into ARM64 code on Apple Silicon.",
