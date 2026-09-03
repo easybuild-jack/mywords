@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Lightbulb, Pencil } from 'lucide-react'
+import React from 'react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
@@ -99,7 +99,12 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
           {sIdx > 0 && (
             <span className="text-gray-500 font-normal select-none px-1">·</span>
           )}
-          <span className="inline-block">
+          <span
+            className="inline-block syllable-font-light select-none"
+            style={{
+              animationDelay: `${sIdx * 0.6}s`,
+            }}
+          >
             {group.map((segment, index) => (
               <span key={index} className={segmentClass(group, index)}>
                 {segment.text}
@@ -164,7 +169,7 @@ export function LearnCard({
 
   // 获取例句与词源扩展数据（2 条）
   const examples = getWordExamples(word)
-  const { origin, memoryHook, derivation } = getWordEtymologyExtras(word)
+  const { origin, derivation } = getWordEtymologyExtras(word)
 
   const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
 
@@ -180,9 +185,8 @@ export function LearnCard({
                 <span className="font-sans text-xs font-semibold text-[#6B7280]">{entry.label}</span>
               )}
               <span
-                className={`font-mono tracking-wide text-gray-300 ${
-                  phonetics.length > 1 ? 'text-lg' : 'text-xl'
-                }`}
+                className={`font-mono tracking-wide text-gray-300 ${phonetics.length > 1 ? 'text-lg' : 'text-xl'
+                  }`}
               >
                 {entry.text}
               </span>
@@ -206,11 +210,10 @@ export function LearnCard({
               <button
                 type="button"
                 onClick={toggleSplit}
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
-                  isSplit
+                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
                     ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
                     : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
-                }`}
+                  }`}
                 title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
                 aria-label={isSplit ? '合并单词' : '音节切分'}
               >
@@ -239,22 +242,19 @@ export function LearnCard({
         {/* 跟打输入槽 */}
         <div className="relative w-full pt-1">
           <div
-            className={`h-14 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl font-bold rounded-2xl border-2 px-6 transition-all ${
-              hasTypo
+            className={`h-14 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl font-bold rounded-2xl border-2 px-6 transition-all ${hasTypo
                 ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
                 : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
-            }`}
+              }`}
           >
             {currentInput && <span className="mr-1">{currentInput}</span>}
             <span
-              className={`inline-block w-0.5 h-9 animate-cursor shrink-0 ${
-                hasTypo ? 'bg-destructive' : 'bg-primary'
-              }`}
+              className={`inline-block w-0.5 h-9 animate-cursor shrink-0 ${hasTypo ? 'bg-destructive' : 'bg-primary'
+                }`}
             />
             <span
-              className={`ml-1 font-normal ${
-                hasTypo ? 'text-destructive/40' : 'text-primary/35'
-              }`}
+              className={`ml-1 font-normal ${hasTypo ? 'text-destructive/40' : 'text-primary/35'
+                }`}
             >
               {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
             </span>
@@ -337,9 +337,8 @@ export function LearnCard({
                       )}
                       <span className="whitespace-nowrap">
                         <span
-                          className={`font-mono text-base font-bold ${
-                            morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
-                          }`}
+                          className={`font-mono text-base font-bold ${morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
+                            }`}
                         >
                           {morpheme.text}
                         </span>
@@ -373,14 +372,6 @@ export function LearnCard({
               </div>
             )}
           </div>
-
-          {/* 联想助记口诀提示条（字号放大） */}
-          {memoryHook && (
-            <div className="mt-2 text-sm text-accent/95 bg-accent/[0.06] p-3 rounded-xl border border-accent/20 flex items-start gap-2.5">
-              <Lightbulb className="size-4.5 text-accent shrink-0 mt-0.5" />
-              <span className="leading-relaxed font-medium">{memoryHook}</span>
-            </div>
-          )}
         </div>
       </div>
 
