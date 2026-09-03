@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil } from 'lucide-react'
+import React, { useState } from 'react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil, Volume2 } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
@@ -11,6 +11,7 @@ import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
+import { audioEngine } from '@/core/audioEngine'
 
 interface LearnCardProps {
   word: WordItem
@@ -173,6 +174,15 @@ export function LearnCard({
 
   const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
 
+  const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
+
+  const handlePlaySentence = (sentence: string, idx: number) => {
+    setSpeakingSentenceIdx(idx)
+    audioEngine.playSentence(sentence, phoneticPreference, () => {
+      setSpeakingSentenceIdx((current) => (current === idx ? null : current))
+    })
+  }
+
   return (
     <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
       {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
@@ -280,24 +290,49 @@ export function LearnCard({
 
             {/* 2 示例句列表（宽幅排版，文字舒展） */}
             <div className="space-y-2.5">
-              {examples.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-xl bg-white/[0.025] border border-white/5 hover:bg-white/[0.05] transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="size-5 rounded-lg bg-accent/15 text-accent text-xs font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
-                      0{idx + 1}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <HighlightSentence sentence={item.en} wordName={word.name} />
-                      <div className="text-xs text-gray-400 leading-relaxed mt-1">
-                        {item.cn}
+              {examples.map((item, idx) => {
+                const isPlaying = speakingSentenceIdx === idx
+                return (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-xl bg-white/[0.025] border transition-all duration-200 group ${
+                      isPlaying
+                        ? 'border-primary/40 bg-primary/[0.04] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.1)]'
+                        : 'border-white/5 hover:bg-white/[0.05] hover:border-white/10'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="size-5 rounded-lg bg-accent/15 text-accent text-xs font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
+                        0{idx + 1}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <HighlightSentence sentence={item.en} wordName={word.name} />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handlePlaySentence(item.en, idx)
+                            }}
+                            className={`p-1.5 -mr-1 -mt-0.5 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
+                              isPlaying
+                                ? 'border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_rgb(var(--primary-rgb)/0.3)] animate-pulse'
+                                : 'border-transparent text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15'
+                            }`}
+                            title="朗读例句"
+                            aria-label="朗读例句"
+                          >
+                            <Volume2 className="size-3.5" />
+                          </button>
+                        </div>
+                        <div className="text-xs text-gray-400 leading-relaxed mt-1">
+                          {item.cn}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>

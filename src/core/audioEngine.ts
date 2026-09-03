@@ -166,6 +166,66 @@ class AudioEngine {
   }
 
   /**
+   * 播放例句朗读。
+   *
+   * 1. 采用 le=eng 强制英语长句语音模型，发音更标准自然。
+   * 2. 支持 rate 参数微调节奏（默认 0.88x），吐字更舒缓清晰，避免过快发颤。
+   * 3. 兼容 Web Speech Synthesis 兜底。
+   */
+  public playSentence(
+    sentence: string,
+    accent: 'us' | 'uk' = 'us',
+    rateOrOnEnd?: number | (() => void),
+    onEndCallback?: () => void
+  ) {
+    const rate = typeof rateOrOnEnd === 'number' ? rateOrOnEnd : 0.88
+    const onEnd = typeof rateOrOnEnd === 'function' ? rateOrOnEnd : onEndCallback
+
+    if (typeof window === 'undefined' || !sentence?.trim()) {
+      onEnd?.()
+      return
+    }
+
+    if (this.currentPronunciation) {
+      this.currentPronunciation.pause()
+      this.currentPronunciation.src = ''
+    }
+
+    const clean = encodeURIComponent(sentence.trim())
+    const type = accent === 'uk' ? '1' : '2'
+    // le=eng 让有道语音采用专门的英文长句神经网络模型，吐字更清晰自然
+    const url = `https://dict.youdao.com/dictvoice?audio=${clean}&type=${type}&le=eng`
+
+    const audio = new Audio(url)
+    // 客户端调速：0.88x 语速清晰沉稳，符合语言学习者跟读要求
+    audio.playbackRate = rate
+    this.currentPronunciation = audio
+
+    let settled = false
+    const handleEnd = () => {
+      if (!settled) {
+        settled = true
+        onEnd?.()
+      }
+    }
+
+    audio.addEventListener('ended', handleEnd, { once: true })
+    audio.addEventListener('error', () => {
+      if (!settled) {
+        settled = true
+        this.playSpeechSynthesis(sentence, accent, rate, onEnd)
+      }
+    }, { once: true })
+
+    audio.play().catch((err) => {
+      if (!settled) {
+        settled = true
+        this.playSpeechSynthesis(sentence, accent, rate, onEnd)
+      }
+    })
+  }
+
+  /**
    * 把被拦下的自动播放挂起，等用户第一次敲键或点击时补上。
    *
    * 默写页「进页面就该响一声」的听音线索必然撞上这条策略：此时页面刚挂载，
@@ -250,11 +310,19 @@ class AudioEngine {
   }
 
   /** 原生 Web Speech Synthesis 发音兜底 */
-  private playSpeechSynthesis(text: string, accent: 'us' | 'uk') {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+  private playSpeechSynthesis(text: string, accent: 'us' | 'uk', rate: number = 0.88, onEnd?: () => void) {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      onEnd?.()
+      return
+    }
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = accent === 'uk' ? 'en-GB' : 'en-US'
+    utterance.rate = rate
+    if (onEnd) {
+      utterance.onend = () => onEnd()
+      utterance.onerror = () => onEnd()
+    }
     window.speechSynthesis.speak(utterance)
   }
 }

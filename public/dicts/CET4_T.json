@@ -869,8 +869,8 @@
         "ukphone": "ˈɔːdiəns",
         "syllables": [
             "au",
-            "di",
-            "ence"
+            "die",
+            "nce"
         ],
         "examples": [
             {
@@ -902,7 +902,6 @@
                 "meaning": "行为/状态 (n.)"
             },
             "derivation": "audi（听）+ -ence → 听的状态/行为 → 听的人、观众",
-            "origin": "源自拉丁语 audientia（听力、听众），audire（听）的派生词。",
             "memoryHook": "audi（听）+ ence → 听你说话的人 → 观众、听众。"
         }
     },
@@ -960,7 +959,8 @@
             "sess"
         ],
         "silentIndices": [
-            2
+            2,
+            6
         ],
         "examples": [
             {
@@ -992,7 +992,6 @@
                 "meaning": "坐、占据"
             },
             "derivation": "pos（能够）+ sess（坐、占据）→ 能够坐在某物上 → 拥有、占有",
-            "origin": "源自古法语 possesser，拉丁语 possidere（占有、拥有）。",
             "memoryHook": "pos（有能力的）+ sess（坐）→ 能够坐在某物上 → 拥有。"
         }
     },

@@ -28424,19 +28424,18 @@
         "etymology": {
             "prefix": {
                 "form": "pos-",
-                "meaning": "有能力/做主"
+                "meaning": "能够/有能力"
             },
             "root": {
                 "form": "sess",
-                "meaning": "坐"
+                "meaning": "坐、占据"
             },
-            "derivation": "坐在上面做主人 → 拥有、占有",
-            "origin": "源自拉丁语 possidere，由 potis（有能力的/主人）+ sedere（坐）构成。",
-            "memoryHook": "pos（能做主）+ 双写 s + sess（坐）→ 坐在那儿当作自己的，就是「拥有」。"
+            "derivation": "pos（能够）+ sess（坐、占据）→ 能够坐在某物上 → 拥有、占有",
+            "memoryHook": "pos（有能力的）+ sess（坐）→ 能够坐在某物上 → 拥有。"
         },
         "silentIndices": [
             2,
-            5
+            6
         ],
         "examples": [
             {
@@ -74698,8 +74697,8 @@
         "ukphone": "ˈɔːdiəns",
         "syllables": [
             "au",
-            "di",
-            "ence"
+            "die",
+            "nce"
         ],
         "etymology": {
             "root": {
@@ -74708,15 +74707,11 @@
             },
             "suffix": {
                 "form": "-ence",
-                "meaning": "状态/集体 (n.)"
+                "meaning": "行为/状态 (n.)"
             },
-            "derivation": "在听的一群人 → 听众、观众",
-            "origin": "源自拉丁语 audientia，由 audire（听）的现在分词加 -entia 构成，原指倾听，后转指听众。",
-            "memoryHook": "audi（听）+ ence（一群人的状态）→ 在下面听的人，就是「观众、听众」。"
+            "derivation": "audi（听）+ -ence → 听的状态/行为 → 听的人、观众",
+            "memoryHook": "audi（听）+ ence → 听你说话的人 → 观众、听众。"
         },
-        "silentIndices": [
-            7
-        ],
         "examples": [
             {
                 "en": "The audience clapped loudly after the final song.",
