@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Star } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
 
@@ -23,11 +24,16 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
     toggleCurrentWordSplit,
     setEditWordSplitModalOpen,
     mode,
+    starredWordIds,
+    starCurrentWord,
   } = useWorkspaceStore()
 
   const total = currentLoadedWords.length || 20
   const currentNum = Math.min(activeWordIndex + 1, total)
   const isDictationError = isErrorPracticeActive && mode === 'dictation'
+
+  const currentWord = currentLoadedWords[activeWordIndex]
+  const isStarred = Boolean(currentWord && starredWordIds?.includes(currentWord.id))
 
   return (
     <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30">
@@ -52,6 +58,23 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
               </kbd>
               <span>偷看提示</span>
             </span>
+          )}
+
+          {!isErrorPracticeActive && (
+            <button
+              type="button"
+              onClick={starCurrentWord}
+              className={`flex items-center gap-1.5 xl:gap-2 transition-colors cursor-pointer ${
+                isStarred ? 'text-amber-400 hover:text-amber-300 font-semibold' : 'hover:text-white'
+              }`}
+              title={isStarred ? `已在生词本（点击或 ${formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')} 移出）` : `一键加入生词本 (${formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')})`}
+            >
+              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+                {formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')}
+              </kbd>
+              <Star className={`size-3.5 xl:size-4 ${isStarred ? 'fill-amber-400 text-amber-400' : ''}`} />
+              <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
+            </button>
           )}
 
           <button

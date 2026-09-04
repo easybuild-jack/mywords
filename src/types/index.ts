@@ -145,5 +145,6 @@ export interface ShortcutConfig {
   nextWord: string;            // 下一个词 (默认 ArrowRight)
   restartUnit: string;         // 重做本单元 (默认 Ctrl+R)
   toggleSplit: string;         // 切换音节切分 (默认 Alt+S)
+  toggleStar: string;          // 加入/移出生词本 (默认 Alt+W)
 }
 

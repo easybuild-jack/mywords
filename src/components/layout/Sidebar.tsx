@@ -25,7 +25,7 @@ export function Sidebar() {
     { label: '单词', icon: GraduationCap, href: '/learn' },
     { label: '默写', icon: PenLine, href: '/dictation' },
     { label: '词库', icon: BookOpen, href: '/books' },
-    { label: '错词本', icon: AlertCircle, href: '/errors' },
+    { label: '生错词', icon: AlertCircle, href: '/errors' },
     { label: '词根', icon: Sprout, href: '/roots' },
     { label: '短语', icon: Quote, href: '/phrases', comingSoon: true },
     { label: '语法', icon: SpellCheck, href: '/grammar', comingSoon: true },

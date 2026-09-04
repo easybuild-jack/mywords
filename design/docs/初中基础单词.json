@@ -1,0 +1,621 @@
+[
+  {
+    "name": "the",
+    "trans": ["art. 这；那；这些；那些（特指双方都知道的人或事物）"],
+    "usphone": "ðə",
+    "ukphone": "ðə",
+    "syllables": ["the"],
+    "examples": [
+      { "en": "The red book on the desk belongs to my sister.", "cn": "桌子上那本红色的书是我姐姐的。" },
+      { "en": "We watched the sun rise over the sea this morning.", "cn": "今天早上我们看着太阳从海面升起。" }
+    ],
+    "phrases": [
+      { "en": "by the way", "cn": "顺便说一下" },
+      { "en": "all the time", "cn": "一直；始终" },
+      { "en": "in the end", "cn": "最后；终于" }
+    ]
+  },
+  {
+    "name": "a",
+    "trans": ["art. 一；一个；每一（用于辅音音素开头的单数可数名词前）"],
+    "usphone": "ə",
+    "ukphone": "ə",
+    "syllables": ["a"],
+    "examples": [
+      { "en": "There is a big park near my school.", "cn": "我们学校附近有一个大公园。" },
+      { "en": "She bought a new bike for her little brother.", "cn": "她给弟弟买了一辆新自行车。" }
+    ],
+    "phrases": [
+      { "en": "a lot of", "cn": "许多；大量" },
+      { "en": "have a look", "cn": "看一看" },
+      { "en": "once a week", "cn": "每周一次" }
+    ]
+  },
+  {
+    "name": "an",
+    "trans": ["art. 一；一个（用于元音音素开头的单数可数名词前）"],
+    "usphone": "ən",
+    "ukphone": "ən",
+    "syllables": ["an"],
+    "examples": [
+      { "en": "I eat an apple after lunch every day.", "cn": "我每天午饭后吃一个苹果。" },
+      { "en": "It takes about an hour to get to the zoo.", "cn": "到动物园大约需要一个小时。" }
+    ],
+    "phrases": [
+      { "en": "an hour", "cn": "一小时" },
+      { "en": "half an hour", "cn": "半小时" },
+      { "en": "an egg", "cn": "一个鸡蛋" }
+    ]
+  },
+  {
+    "name": "to",
+    "trans": ["prep. 到；向；朝；对于；直到", "inf. （动词不定式符号，无实义）"],
+    "usphone": "tuː",
+    "ukphone": "tuː",
+    "syllables": ["to"],
+    "examples": [
+      { "en": "My friends and I walk to school together every morning.", "cn": "我和朋友们每天早上一起走路去学校。" },
+      { "en": "She wants to be a doctor when she grows up.", "cn": "她长大后想当一名医生。" }
+    ],
+    "phrases": [
+      { "en": "go to school", "cn": "去上学" },
+      { "en": "from ... to ...", "cn": "从……到……" },
+      { "en": "listen to", "cn": "听" }
+    ]
+  },
+  {
+    "name": "and",
+    "trans": ["conj. 和；与；并且；然后"],
+    "usphone": "ænd",
+    "ukphone": "ænd",
+    "syllables": ["and"],
+    "examples": [
+      { "en": "Tom and Lucy are good friends at school.", "cn": "汤姆和露西是学校里的好朋友。" },
+      { "en": "Wash your hands and then sit down for dinner.", "cn": "洗洗手，然后坐下来吃晚饭。" }
+    ],
+    "phrases": [
+      { "en": "and so on", "cn": "等等" },
+      { "en": "both ... and ...", "cn": "既……又……；两者都" },
+      { "en": "more and more", "cn": "越来越多" }
+    ]
+  },
+  {
+    "name": "in",
+    "trans": ["prep. 在……里；在……期间；用（语言）；穿着", "adv. 在里面；在家"],
+    "usphone": "ɪn",
+    "ukphone": "ɪn",
+    "syllables": ["in"],
+    "examples": [
+      { "en": "The children are playing in the park now.", "cn": "孩子们现在正在公园里玩。" },
+      { "en": "We have an English class in the morning.", "cn": "我们上午有一节英语课。" }
+    ],
+    "phrases": [
+      { "en": "in the morning", "cn": "在上午" },
+      { "en": "in front of", "cn": "在……前面" },
+      { "en": "in time", "cn": "及时" }
+    ]
+  },
+  {
+    "name": "of",
+    "trans": ["prep. ……的；属于；由……制成；关于"],
+    "usphone": "ʌv",
+    "ukphone": "ɒv",
+    "syllables": ["of"],
+    "examples": [
+      { "en": "She is a good friend of my brother.", "cn": "她是我哥哥的一个好朋友。" },
+      { "en": "Would you like a cup of tea or coffee?", "cn": "你想喝杯茶还是咖啡？" }
+    ],
+    "phrases": [
+      { "en": "a lot of", "cn": "许多" },
+      { "en": "of course", "cn": "当然" },
+      { "en": "be afraid of", "cn": "害怕" }
+    ]
+  },
+  {
+    "name": "it",
+    "trans": ["pron. 它；这；那（也用来指时间、天气、距离等）"],
+    "usphone": "ɪt",
+    "ukphone": "ɪt",
+    "syllables": ["it"],
+    "examples": [
+      { "en": "It is very cold in Harbin in winter.", "cn": "哈尔滨冬天非常冷。" },
+      { "en": "I like this book because it is interesting.", "cn": "我喜欢这本书，因为它很有趣。" }
+    ],
+    "phrases": [
+      { "en": "it's time to", "cn": "到……的时候了" },
+      { "en": "take it easy", "cn": "别紧张；放轻松" },
+      { "en": "make it", "cn": "成功；赶到" }
+    ]
+  },
+  {
+    "name": "is",
+    "trans": ["v. 是（be 的第三人称单数现在时，用于 he、she、it 等）"],
+    "usphone": "ɪz",
+    "ukphone": "ɪz",
+    "syllables": ["is"],
+    "examples": [
+      { "en": "My father is a teacher in a middle school.", "cn": "我爸爸是一名中学老师。" },
+      { "en": "Everyone knows that Beijing is the capital of China.", "cn": "大家都知道北京是中国的首都。" }
+    ],
+    "phrases": [
+      { "en": "that is", "cn": "也就是说" },
+      { "en": "there is", "cn": "有（单数）" },
+      { "en": "is going to", "cn": "将要；打算" }
+    ]
+  },
+  {
+    "name": "you",
+    "trans": ["pron. 你；您；你们"],
+    "usphone": "juː",
+    "ukphone": "juː",
+    "syllables": ["you"],
+    "examples": [
+      { "en": "Can you help me carry these heavy books?", "cn": "你能帮我搬这些很重的书吗？" },
+      { "en": "You and your friends are welcome to my party.", "cn": "欢迎你和你的朋友来参加我的聚会。" }
+    ],
+    "phrases": [
+      { "en": "thank you", "cn": "谢谢你" },
+      { "en": "see you", "cn": "再见" },
+      { "en": "you're welcome", "cn": "不客气" }
+    ]
+  },
+  {
+    "name": "do",
+    "trans": ["v. 做；干；从事", "aux. （构成疑问句和否定句，或加强语气）"],
+    "usphone": "duː",
+    "ukphone": "duː",
+    "syllables": ["do"],
+    "examples": [
+      { "en": "What do you usually do with your family on weekends?", "cn": "周末你通常和家人做什么？" },
+      { "en": "I have to do my homework before dinner.", "cn": "晚饭前我必须做作业。" }
+    ],
+    "phrases": [
+      { "en": "do homework", "cn": "做作业" },
+      { "en": "do sports", "cn": "做运动" },
+      { "en": "do one's best", "cn": "尽最大努力" }
+    ]
+  },
+  {
+    "name": "I",
+    "trans": ["pron. 我（主格）"],
+    "usphone": "aɪ",
+    "ukphone": "aɪ",
+    "syllables": ["I"],
+    "examples": [
+      { "en": "I go to school by bike every day.", "cn": "我每天骑自行车上学。" },
+      { "en": "My mother and I often cook dinner together.", "cn": "我和妈妈经常一起做晚饭。" }
+    ],
+    "phrases": [
+      { "en": "I see", "cn": "我明白了" },
+      { "en": "I think so", "cn": "我想是这样" },
+      { "en": "I'm sorry", "cn": "对不起" }
+    ]
+  },
+  {
+    "name": "for",
+    "trans": ["prep. 为了；给；因为；长达（一段时间）；对于"],
+    "usphone": "fɔːr",
+    "ukphone": "fɔː(r)",
+    "syllables": ["for"],
+    "examples": [
+      { "en": "Here is a small gift for your birthday, Mary.", "cn": "玛丽，这是送你的一份生日小礼物。" },
+      { "en": "We waited for the bus for twenty minutes.", "cn": "我们等了二十分钟公交车。" }
+    ],
+    "phrases": [
+      { "en": "for example", "cn": "例如" },
+      { "en": "look for", "cn": "寻找" },
+      { "en": "thank you for", "cn": "因……而感谢你" }
+    ]
+  },
+  {
+    "name": "be",
+    "trans": ["v. 是；存在；成为（原形，变化形式有 am、is、are、was、were）"],
+    "usphone": "biː",
+    "ukphone": "biː",
+    "syllables": ["be"],
+    "examples": [
+      { "en": "Please be quiet when you read in the library.", "cn": "在图书馆看书时请保持安静。" },
+      { "en": "It will be sunny and warm tomorrow afternoon.", "cn": "明天下午会晴朗温暖。" }
+    ],
+    "phrases": [
+      { "en": "be good at", "cn": "擅长" },
+      { "en": "be late for", "cn": "……迟到" },
+      { "en": "be from", "cn": "来自" }
+    ]
+  },
+  {
+    "name": "what",
+    "trans": ["pron. 什么；（所）……的事物", "det. 什么；多么"],
+    "usphone": "wʌt",
+    "ukphone": "wɒt",
+    "syllables": ["what"],
+    "silentIndices": [1],
+    "examples": [
+      { "en": "What is your favourite subject at school this year?", "cn": "今年你在学校最喜欢的科目是什么？" },
+      { "en": "I don't know what to buy for her.", "cn": "我不知道该给她买什么。" }
+    ],
+    "phrases": [
+      { "en": "what about", "cn": "……怎么样；……呢" },
+      { "en": "what's more", "cn": "而且；更重要的是" },
+      { "en": "what time", "cn": "几点；什么时候" }
+    ]
+  },
+  {
+    "name": "are",
+    "trans": ["v. 是（be 的现在时，用于 you、we、they 等）"],
+    "usphone": "ɑːr",
+    "ukphone": "ɑː(r)",
+    "syllables": ["are"],
+    "silentIndices": [2],
+    "examples": [
+      { "en": "There are forty students in our class this term.", "cn": "这学期我们班有四十名学生。" },
+      { "en": "You and your parents are always welcome to visit us.", "cn": "随时欢迎你和你父母来看我们。" }
+    ],
+    "phrases": [
+      { "en": "how are you", "cn": "你好吗" },
+      { "en": "there are", "cn": "有（复数）" },
+      { "en": "here you are", "cn": "给你" }
+    ]
+  },
+  {
+    "name": "can",
+    "trans": ["v. 能；会；可以（情态动词）", "n. 罐头；金属罐"],
+    "usphone": "kæn",
+    "ukphone": "kæn",
+    "syllables": ["can"],
+    "examples": [
+      { "en": "My little sister can swim very well now.", "cn": "我妹妹现在游泳游得很好。" },
+      { "en": "Can I borrow your pen for a minute?", "cn": "我可以借用一下你的笔吗？" }
+    ],
+    "phrases": [
+      { "en": "can't help doing", "cn": "忍不住做某事" },
+      { "en": "as ... as one can", "cn": "尽可能……" },
+      { "en": "a can of", "cn": "一罐" }
+    ]
+  },
+  {
+    "name": "he",
+    "trans": ["pron. 他（主格）"],
+    "usphone": "hiː",
+    "ukphone": "hiː",
+    "syllables": ["he"],
+    "examples": [
+      { "en": "He plays basketball with his friends after school.", "cn": "他放学后和朋友们打篮球。" },
+      { "en": "My brother is ten and he loves drawing.", "cn": "我弟弟十岁，他喜欢画画。" }
+    ]
+  },
+  {
+    "name": "was",
+    "trans": ["v. 是（be 的过去式，用于 I、he、she、it 等）"],
+    "usphone": "wʌz",
+    "ukphone": "wɒz",
+    "syllables": ["was"],
+    "examples": [
+      { "en": "Yesterday was a sunny day, so we went to the beach.", "cn": "昨天是个晴天，所以我们去了海边。" },
+      { "en": "He was late for school because he got up late.", "cn": "他上学迟到了，因为他起晚了。" }
+    ],
+    "phrases": [
+      { "en": "was born", "cn": "出生" },
+      { "en": "there was", "cn": "（过去）有" }
+    ]
+  },
+  {
+    "name": "on",
+    "trans": ["prep. 在……上；在（某天）；关于", "adv. 继续；（穿、开）着"],
+    "usphone": "ɑːn",
+    "ukphone": "ɒn",
+    "syllables": ["on"],
+    "examples": [
+      { "en": "There is a cup of milk on the table.", "cn": "桌子上有一杯牛奶。" },
+      { "en": "We have a music lesson on Friday afternoon.", "cn": "我们星期五下午有一节音乐课。" }
+    ],
+    "phrases": [
+      { "en": "on time", "cn": "准时" },
+      { "en": "on foot", "cn": "步行" },
+      { "en": "turn on", "cn": "打开（电器）" }
+    ]
+  },
+  {
+    "name": "that",
+    "trans": ["pron. 那；那个", "conj. （引导从句，无实义）", "adv. 那么"],
+    "usphone": "ðæt",
+    "ukphone": "ðæt",
+    "syllables": ["that"],
+    "examples": [
+      { "en": "That tall boy in blue is my cousin.", "cn": "那个穿蓝色衣服的高个子男孩是我表弟。" },
+      { "en": "I hope that you will have a great time.", "cn": "我希望你玩得开心。" }
+    ],
+    "phrases": [
+      { "en": "so that", "cn": "以便；为了" },
+      { "en": "that is", "cn": "也就是说" },
+      { "en": "like that", "cn": "像那样" }
+    ]
+  },
+  {
+    "name": "they",
+    "trans": ["pron. 他们；她们；它们"],
+    "usphone": "ðeɪ",
+    "ukphone": "ðeɪ",
+    "syllables": ["they"],
+    "examples": [
+      { "en": "They often play football on the playground after class.", "cn": "他们经常下课后在操场上踢足球。" },
+      { "en": "My parents work hard, and they love me very much.", "cn": "我父母工作努力，而且非常爱我。" }
+    ]
+  },
+  {
+    "name": "with",
+    "trans": ["prep. 和……一起；用（工具）；带有；随着"],
+    "usphone": "wɪð",
+    "ukphone": "wɪð",
+    "syllables": ["with"],
+    "examples": [
+      { "en": "I usually go shopping with my mother on Sundays.", "cn": "我通常星期天和妈妈一起去购物。" },
+      { "en": "Please write your name with a black pen.", "cn": "请用黑色的笔写下你的名字。" }
+    ],
+    "phrases": [
+      { "en": "with pleasure", "cn": "非常愿意" },
+      { "en": "help ... with ...", "cn": "帮助某人做某事" },
+      { "en": "play with", "cn": "和……一起玩" }
+    ]
+  },
+  {
+    "name": "she",
+    "trans": ["pron. 她（主格）"],
+    "usphone": "ʃiː",
+    "ukphone": "ʃiː",
+    "syllables": ["she"],
+    "examples": [
+      { "en": "She is the best singer in our class.", "cn": "她是我们班唱歌最好的。" },
+      { "en": "When she was young, she lived in a small village.", "cn": "她小时候住在一个小村庄里。" }
+    ]
+  },
+  {
+    "name": "at",
+    "trans": ["prep. 在（某地点、某时刻）；朝；以（速度、价格）"],
+    "usphone": "æt",
+    "ukphone": "æt",
+    "syllables": ["at"],
+    "examples": [
+      { "en": "School starts at eight o'clock in the morning.", "cn": "学校早上八点开始上课。" },
+      { "en": "Look at the picture and answer the questions.", "cn": "看图并回答问题。" }
+    ],
+    "phrases": [
+      { "en": "at home", "cn": "在家" },
+      { "en": "at night", "cn": "在夜里" },
+      { "en": "be good at", "cn": "擅长" }
+    ]
+  },
+  {
+    "name": "we",
+    "trans": ["pron. 我们（主格）"],
+    "usphone": "wiː",
+    "ukphone": "wiː",
+    "syllables": ["we"],
+    "examples": [
+      { "en": "We are going to have a picnic next Sunday.", "cn": "我们下周日要去野餐。" },
+      { "en": "After dinner we often take a walk by the river.", "cn": "晚饭后我们经常在河边散步。" }
+    ]
+  },
+  {
+    "name": "from",
+    "trans": ["prep. 从；来自；由于；（区别）于"],
+    "usphone": "frʌm",
+    "ukphone": "frɒm",
+    "syllables": ["from"],
+    "examples": [
+      { "en": "My new pen pal comes from a small town in Canada.", "cn": "我的新笔友来自加拿大的一个小镇。" },
+      { "en": "The shop is open from nine to six every day.", "cn": "这家商店每天九点到六点营业。" }
+    ],
+    "phrases": [
+      { "en": "come from", "cn": "来自" },
+      { "en": "from now on", "cn": "从现在起" },
+      { "en": "be different from", "cn": "与……不同" }
+    ]
+  },
+  {
+    "name": "as",
+    "trans": ["prep. 作为；像……一样", "conj. 因为；当……时；正如", "adv. 同样地（as ... as）"],
+    "usphone": "æz",
+    "ukphone": "æz",
+    "syllables": ["as"],
+    "examples": [
+      { "en": "As a student, you should finish your homework on time.", "cn": "作为学生，你应该按时完成作业。" },
+      { "en": "Lucy sings as well as her music teacher.", "cn": "露西唱歌和她的音乐老师一样好。" }
+    ],
+    "phrases": [
+      { "en": "as well", "cn": "也；同样" },
+      { "en": "as soon as", "cn": "一……就……" },
+      { "en": "such as", "cn": "例如" }
+    ]
+  },
+  {
+    "name": "his",
+    "trans": ["pron. 他的"],
+    "usphone": "hɪz",
+    "ukphone": "hɪz",
+    "syllables": ["his"],
+    "examples": [
+      { "en": "He put his books into the school bag.", "cn": "他把书放进了书包。" },
+      { "en": "Jack is very proud of his new bike.", "cn": "杰克为他的新自行车感到自豪。" }
+    ]
+  },
+  {
+    "name": "about",
+    "trans": ["prep. 关于；在……周围", "adv. 大约；到处"],
+    "usphone": "əˈbaʊt",
+    "ukphone": "əˈbaʊt",
+    "syllables": ["a", "bout"],
+    "examples": [
+      { "en": "This book is about a boy and his dog.", "cn": "这本书讲的是一个男孩和他的狗的故事。" },
+      { "en": "There are about fifty trees in the garden.", "cn": "花园里大约有五十棵树。" }
+    ],
+    "phrases": [
+      { "en": "talk about", "cn": "谈论" },
+      { "en": "be about to", "cn": "即将；正要" },
+      { "en": "how about", "cn": "……怎么样" }
+    ]
+  },
+  {
+    "name": "how",
+    "trans": ["adv. 怎样；如何；多么；（数量、程度）多少"],
+    "usphone": "haʊ",
+    "ukphone": "haʊ",
+    "syllables": ["how"],
+    "examples": [
+      { "en": "How do you usually go to school every day?", "cn": "你平时每天怎么去上学？" },
+      { "en": "Do you know how to make a paper plane?", "cn": "你知道怎么做纸飞机吗？" }
+    ],
+    "phrases": [
+      { "en": "how about", "cn": "……怎么样" },
+      { "en": "how many", "cn": "多少（可数）" },
+      { "en": "how much", "cn": "多少（不可数）；多少钱" }
+    ]
+  },
+  {
+    "name": "when",
+    "trans": ["adv. 什么时候；何时", "conj. 当……的时候"],
+    "usphone": "wen",
+    "ukphone": "wen",
+    "syllables": ["when"],
+    "silentIndices": [1],
+    "examples": [
+      { "en": "When do you usually get up on school days, Linda?", "cn": "琳达，上学的日子你通常几点起床？" },
+      { "en": "I was reading a book when my mother came home.", "cn": "妈妈回家时我正在看书。" }
+    ]
+  },
+  {
+    "name": "will",
+    "trans": ["aux. 将要；会；愿意", "n. 意志；意愿；遗嘱"],
+    "usphone": "wɪl",
+    "ukphone": "wɪl",
+    "syllables": ["will"],
+    "silentIndices": [2],
+    "examples": [
+      { "en": "I will call you when I get home.", "cn": "我到家后会给你打电话。" },
+      { "en": "It will rain tomorrow, so take an umbrella.", "cn": "明天会下雨，所以带把伞。" }
+    ],
+    "phrases": [
+      { "en": "against one's will", "cn": "违背某人的意愿" },
+      { "en": "at will", "cn": "随意；任意" }
+    ]
+  },
+  {
+    "name": "your",
+    "trans": ["pron. 你的；你们的"],
+    "usphone": "jʊr",
+    "ukphone": "jɔː(r)",
+    "syllables": ["your"],
+    "examples": [
+      { "en": "Please open your books and turn to page ten.", "cn": "请打开书，翻到第十页。" },
+      { "en": "Don't forget to bring your homework tomorrow morning.", "cn": "别忘了明天早上带作业。" }
+    ]
+  },
+  {
+    "name": "her",
+    "trans": ["pron. 她（宾格）；她的"],
+    "usphone": "hər",
+    "ukphone": "hɜː(r)",
+    "syllables": ["her"],
+    "examples": [
+      { "en": "I saw her at the bus stop this morning.", "cn": "今天早上我在公交车站看到了她。" },
+      { "en": "Amy likes her new English teacher very much.", "cn": "艾米非常喜欢她的新英语老师。" }
+    ]
+  },
+  {
+    "name": "go",
+    "trans": ["v. 去；走；离开；变得；进行"],
+    "usphone": "ɡoʊ",
+    "ukphone": "ɡəʊ",
+    "syllables": ["go"],
+    "examples": [
+      { "en": "Let's go to the new cinema together this weekend.", "cn": "这周末我们一起去新电影院吧。" },
+      { "en": "My grandparents go for a walk after supper.", "cn": "我爷爷奶奶晚饭后去散步。" }
+    ],
+    "phrases": [
+      { "en": "go to bed", "cn": "上床睡觉" },
+      { "en": "go shopping", "cn": "去购物" },
+      { "en": "go on", "cn": "继续" }
+    ]
+  },
+  {
+    "name": "but",
+    "trans": ["conj. 但是；然而", "prep. 除……以外"],
+    "usphone": "bʌt",
+    "ukphone": "bʌt",
+    "syllables": ["but"],
+    "examples": [
+      { "en": "The shirt is nice, but it is too expensive.", "cn": "这件衬衫不错，但太贵了。" },
+      { "en": "Everyone but Tom went to the party last night.", "cn": "昨晚除了汤姆，大家都去了聚会。" }
+    ],
+    "phrases": [
+      { "en": "not only ... but also ...", "cn": "不仅……而且……" },
+      { "en": "but for", "cn": "要不是；如果没有" }
+    ]
+  },
+  {
+    "name": "time",
+    "trans": ["n. 时间；时刻；次；时代", "v. 计时；为……安排时间"],
+    "usphone": "taɪm",
+    "ukphone": "taɪm",
+    "syllables": ["time"],
+    "silentIndices": [3],
+    "examples": [
+      { "en": "What time do you usually go to bed?", "cn": "你通常几点睡觉？" },
+      { "en": "This is my first time to visit the Great Wall.", "cn": "这是我第一次参观长城。" }
+    ],
+    "phrases": [
+      { "en": "on time", "cn": "准时" },
+      { "en": "in time", "cn": "及时" },
+      { "en": "have a good time", "cn": "玩得开心" }
+    ]
+  },
+  {
+    "name": "say",
+    "trans": ["v. 说；讲；表明", "n. 发言权"],
+    "usphone": "seɪ",
+    "ukphone": "seɪ",
+    "syllables": ["say"],
+    "examples": [
+      { "en": "What did the teacher say about our test?", "cn": "老师对我们的考试说了什么？" },
+      { "en": "Remember to say thank you when someone helps you.", "cn": "有人帮你时，记得说谢谢。" }
+    ],
+    "phrases": [
+      { "en": "say hello to", "cn": "向……问好" },
+      { "en": "say sorry", "cn": "道歉" },
+      { "en": "that is to say", "cn": "也就是说" }
+    ]
+  },
+  {
+    "name": "more",
+    "trans": ["adj. 更多的（many、much 的比较级）", "adv. 更；更多", "pron. 更多的人或事物"],
+    "usphone": "mɔːr",
+    "ukphone": "mɔː(r)",
+    "syllables": ["more"],
+    "silentIndices": [3],
+    "examples": [
+      { "en": "We need more time to finish the project.", "cn": "我们需要更多时间来完成这个项目。" },
+      { "en": "This dress is more beautiful than that one.", "cn": "这条裙子比那条更漂亮。" }
+    ],
+    "phrases": [
+      { "en": "more and more", "cn": "越来越" },
+      { "en": "no more", "cn": "不再" },
+      { "en": "more than", "cn": "超过；不只是" }
+    ]
+  },
+  {
+    "name": "help",
+    "trans": ["v. 帮助；有助于", "n. 帮助；援助", "int. 救命"],
+    "usphone": "help",
+    "ukphone": "help",
+    "syllables": ["help"],
+    "examples": [
+      { "en": "Could you help me with my English homework?", "cn": "你能帮我做英语作业吗？" },
+      { "en": "Thank you for your help with the party yesterday.", "cn": "谢谢你昨天帮忙准备聚会。" }
+    ],
+    "phrases": [
+      { "en": "help sb. with sth.", "cn": "帮助某人做某事" },
+      { "en": "with the help of", "cn": "在……的帮助下" },
+      { "en": "can't help doing", "cn": "忍不住做某事" }
+    ]
+  }
+]

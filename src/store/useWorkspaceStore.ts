@@ -162,6 +162,8 @@ interface WorkspaceState {
   peekHint: (show: boolean) => void
   replayAudio: () => void
   starCurrentWord: () => Promise<boolean>
+  starredWordIds: string[]
+  syncStarredWordIds: () => Promise<void>
   nextWord: () => void
   prevWord: () => void
   restartUnit: () => void
@@ -273,6 +275,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       skinId: 'slate-mint',
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
+      starredWordIds: [],
       loopCountBeforeErrorPractice: null,
 
       // 音节切分与编辑弹窗（仅作用于当前单词）
@@ -290,6 +293,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       ...DICTATION_STEP_RESET,
 
       loadCurrentUnitWords: async () => {
+        get().syncStarredWordIds()
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
         // 错词攻坚模式下不被常规章节覆盖
         if (isErrorPracticeActive) return
@@ -827,9 +831,24 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       starCurrentWord: async () => {
         const currentWord = get().getCurrentWord()
-        const { currentBookId } = get()
+        const { currentBookId, starredWordIds } = get()
         if (!currentWord) return false
-        return await toggleStarWord(currentWord.id, currentBookId)
+        const nextStarred = await toggleStarWord(currentWord.id, currentBookId, currentWord)
+        const nextList = nextStarred
+          ? Array.from(new Set([...(starredWordIds || []), currentWord.id]))
+          : (starredWordIds || []).filter((id) => id !== currentWord.id)
+        set({ starredWordIds: nextList })
+        return nextStarred
+      },
+
+      syncStarredWordIds: async () => {
+        try {
+          const records = await db.wordRecords.toArray()
+          const starredIds = records.filter((r) => r.isStarred).map((r) => r.wordId)
+          set({ starredWordIds: starredIds })
+        } catch (err) {
+          console.error('Failed to sync starred words:', err)
+        }
       },
 
       nextWord: () => {

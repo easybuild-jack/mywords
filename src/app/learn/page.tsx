@@ -10,13 +10,15 @@ export default function LearnPage() {
   const enterMode = useWorkspaceStore((s) => s.enterMode)
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
   const playCurrentWordAudio = useWorkspaceStore((s) => s.playCurrentWordAudio)
+  const syncStarredWordIds = useWorkspaceStore((s) => s.syncStarredWordIds)
 
   // 模式由路由声明；进入学习页会退出错词攻坚并载入学习页自己的进度
   React.useEffect(() => {
+    syncStarredWordIds()
     enterMode('learn')
       .then(() => loadCurrentUnitWords())
       .then(() => playCurrentWordAudio())
-  }, [enterMode, loadCurrentUnitWords, playCurrentWordAudio])
+  }, [enterMode, loadCurrentUnitWords, playCurrentWordAudio, syncStarredWordIds])
 
   return (
     <div className="flex-1 min-h-0 flex flex-col justify-between h-full relative">

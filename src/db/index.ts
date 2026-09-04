@@ -168,7 +168,7 @@ export async function recordWordAttempt(
 }
 
 /**
- * 彻底消除单个错词记录 (连续 3 次无误默写通关后调用)
+ * 彻底消除单个生错词记录 (连续 3 次无误默写通关后调用)
  */
 export async function eliminateErrorWord(wordId: string) {
   try {
@@ -176,6 +176,7 @@ export async function eliminateErrorWord(wordId: string) {
     if (existing) {
       await db.wordRecords.update(wordId, {
         isError: false,
+        isStarred: false,
         isMastered: true,
         consecutiveCorrectCount: 3,
         lastPracticedAt: Date.now(),
@@ -187,7 +188,7 @@ export async function eliminateErrorWord(wordId: string) {
 }
 
 /**
- * 手动从错词本移除/删除单个错词
+ * 手动从生错词本移除/删除单个生错词
  */
 export async function removeErrorWord(wordId: string) {
   try {
@@ -195,6 +196,7 @@ export async function removeErrorWord(wordId: string) {
     if (existing) {
       await db.wordRecords.update(wordId, {
         isError: false,
+        isStarred: false,
         consecutiveCorrectCount: 0,
         lastPracticedAt: Date.now(),
       })
@@ -205,36 +207,51 @@ export async function removeErrorWord(wordId: string) {
 }
 
 /**
- * 获取所有活跃待消灭的真实错词及完整信息
+ * 获取所有活跃待攻克的生错词（加星生词 + 默写错词）及完整信息
  */
-export async function getActiveErrorWords(): Promise<{ word: WordItem; record: WordMasteryRecord }[]> {
+export async function getActiveTroubleWords(): Promise<{ word: WordItem; record: WordMasteryRecord }[]> {
   try {
     const records = await db.wordRecords.toArray()
-    const errorRecords = records.filter((r) => r.isError)
+    const troubleRecords = records.filter((r) => r.isError || r.isStarred)
     const result: { word: WordItem; record: WordMasteryRecord }[] = []
 
-    for (const r of errorRecords) {
+    for (const r of troubleRecords) {
       if (r.wordItem) {
         result.push({ word: r.wordItem, record: r })
+      } else if (r.wordName) {
+        result.push({
+          word: {
+            id: r.wordId,
+            name: r.wordName,
+            syllables: [r.wordName],
+            posList: [],
+          },
+          record: r,
+        })
       }
     }
     return result
   } catch (err) {
-    console.error('Failed to get active error words:', err)
+    console.error('Failed to get active trouble words:', err)
     return []
   }
 }
 
+/** 向前兼容 */
+export const getActiveErrorWords = getActiveTroubleWords
+
 /**
  * 切换单词生词本加星状态
  */
-export async function toggleStarWord(wordId: string, bookId: string): Promise<boolean> {
+export async function toggleStarWord(wordId: string, bookId: string, wordItem?: WordItem): Promise<boolean> {
   try {
     const existing = await db.wordRecords.get(wordId)
     if (!existing) {
       await db.wordRecords.put({
         wordId,
         bookId,
+        wordName: wordItem?.name,
+        wordItem,
         isMastered: false,
         isStarred: true,
         isError: false,
@@ -247,7 +264,11 @@ export async function toggleStarWord(wordId: string, bookId: string): Promise<bo
     }
 
     const nextStarred = !existing.isStarred
-    await db.wordRecords.update(wordId, { isStarred: nextStarred })
+    await db.wordRecords.update(wordId, {
+      isStarred: nextStarred,
+      wordItem: wordItem || existing.wordItem,
+      wordName: wordItem?.name || existing.wordName,
+    })
     return nextStarred
   } catch (err) {
     console.error('Failed to toggle star word:', err)

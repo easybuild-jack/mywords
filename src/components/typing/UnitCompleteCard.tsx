@@ -108,12 +108,12 @@ export function UnitCompleteCard() {
       {isErrorPracticeActive ? (
         <div className="space-y-2">
           <h2 className="text-2xl font-bold text-white">
-            {mode === 'learn' ? '🎉 错词练习完成！' : '🎉 错词歼灭战圆满胜利！'}
+            {mode === 'learn' ? '🎉 生错词练习完成！' : '🎉 生错词攻坚圆满胜利！'}
           </h2>
           <p className="text-sm text-[#9CA3AF] leading-relaxed">
             {mode === 'learn'
-              ? '太棒了！错词本中的单词已全部完成跟学拼读，接下来可以去默写页检验记忆。'
-              : '恭喜！本次攻坚的所有高频错词均已连续 3 次无误默写通关，肌肉记忆重塑完成，已从错词本中全部消除归档。'}
+              ? '太棒了！生错词本中的单词已全部完成跟学拼读，接下来可以去默写页检验记忆。'
+              : '恭喜！本次攻坚的所有生错词均已连续 3 次无误默写通关，肌肉记忆重塑完成，已从生错词本中全部消除归档。'}
           </p>
         </div>
       ) : (
@@ -138,7 +138,7 @@ export function UnitCompleteCard() {
               }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
             >
-              <span>返回错词本</span>
+              <span>返回生错词</span>
             </button>
             {mode === 'learn' && (
               <button
@@ -149,7 +149,7 @@ export function UnitCompleteCard() {
                 }}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
               >
-                <span>去错词默写</span>
+                <span>去生错词默写</span>
               </button>
             )}
             <button

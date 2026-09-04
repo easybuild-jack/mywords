@@ -42,12 +42,12 @@ export function HeaderToolbar() {
   return (
     <header className="w-full flex items-center justify-center p-4 xl:p-6 sticky top-0 z-30 pointer-events-auto">
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-5 text-sm xl:text-base max-w-5xl xl:max-w-6xl 2xl:max-w-7xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300">
-        {/* 1. 词书与章节快速入口 / 错词本攻坚模式指示 */}
+        {/* 1. 词书与章节快速入口 / 生错词攻坚模式指示 */}
         {isErrorPracticeActive ? (
           <div className="flex items-center gap-2 px-3 xl:px-3.5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-destructive/15 border border-destructive/30 text-white font-medium">
             <Flame className="size-4 xl:size-4.5 text-destructive animate-pulse" />
             <span className="text-destructive font-bold text-xs xl:text-sm">
-              {mode === 'learn' ? '错词练习' : '错词攻坚'}
+              {mode === 'learn' ? '生错词练习' : '生错词攻坚'}
             </span>
             <span className="text-muted-foreground">·</span>
             <span className="text-xs xl:text-sm text-gray-300 font-mono">
@@ -55,7 +55,7 @@ export function HeaderToolbar() {
                 ? `第 ${activeWordIndex + 1} / ${currentLoadedWords.length} 词`
                 : `已消灭 ${conqueredErrorWordIds?.length || 0} / ${currentLoadedWords.length} 词`}
             </span>
-            <Tooltip content="退出错词练习，返回常规章节" side="bottom">
+            <Tooltip content="退出生错词练习，返回常规章节" side="bottom">
               <button
                 onClick={exitErrorPractice}
                 className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all cursor-pointer"

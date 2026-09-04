@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil, Volume2 } from 'lucide-react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil, Volume2, Star } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
@@ -160,6 +160,11 @@ export function LearnCard({
   const isEditModalOpen = useWorkspaceStore((s) => s.isEditWordSplitModalOpen)
   const setEditModalOpen = useWorkspaceStore((s) => s.setEditWordSplitModalOpen)
   const shortcuts = useWorkspaceStore((s) => s.shortcuts)
+  const isErrorPracticeActive = useWorkspaceStore((s) => s.isErrorPracticeActive)
+  const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
+  const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
+
+  const isStarred = Boolean(starredWordIds?.includes(word.id))
 
   const phonetics = listPhonetics(word)
   const meaningText = formatMeaningText(word)
@@ -173,6 +178,7 @@ export function LearnCard({
   const { origin, derivation } = getWordEtymologyExtras(word)
 
   const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
+  const starShortcutText = formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')
 
   const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
 
@@ -183,8 +189,39 @@ export function LearnCard({
     })
   }
 
+  const starButton = !isErrorPracticeActive ? (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation()
+        starCurrentWord()
+      }}
+      className={`h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center gap-2 text-xs xl:text-sm font-medium select-none active:scale-95 ${
+        isStarred
+          ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.25)] hover:bg-amber-400/30 hover:border-amber-400/80'
+          : 'border-white/10 bg-white/5 text-gray-300 hover:text-amber-300 hover:border-amber-400/40 hover:bg-amber-400/10'
+      }`}
+      title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
+      aria-label={isStarred ? '移出生词本' : '加入生词本'}
+    >
+      <Star
+        className={`size-4 xl:size-4.5 transition-transform duration-200 ${
+          isStarred
+            ? 'fill-amber-400 text-amber-400 scale-105 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]'
+            : 'text-gray-400 group-hover:text-amber-300'
+        }`}
+      />
+      <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
+    </button>
+  ) : null
+
   return (
-    <WordCardShell word={word} phoneticPreference={phoneticPreference} remainingLoops={remainingLoops}>
+    <WordCardShell
+      word={word}
+      phoneticPreference={phoneticPreference}
+      remainingLoops={remainingLoops}
+      headerActions={starButton}
+    >
       {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
       <div className="space-y-1 xl:space-y-2">
         {/* 音标栏 */}
