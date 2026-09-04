@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AlertCircle, Flame, CheckCircle, Volume2, ArrowRight, Play, Swords, Trash2 } from 'lucide-react'
+import { AlertCircle, Flame, CheckCircle, Volume2, ArrowRight, Play, Swords, Trash2, GraduationCap, PenLine } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { getActiveErrorWords, removeErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
@@ -10,7 +10,7 @@ import type { WordMasteryRecord, WordItem } from '@/types'
 
 export default function ErrorBookPage() {
   const router = useRouter()
-  const { startErrorPractice } = useWorkspaceStore()
+  const { startErrorPractice, startErrorLearnPractice } = useWorkspaceStore()
   const [errorList, setErrorList] = useState<{ word: WordItem; record: WordMasteryRecord }[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filterType, setFilterType] = useState<'all' | 'severe'>('all')
@@ -38,7 +38,15 @@ export default function ErrorBookPage() {
     setErrorList((prev) => prev.filter((item) => item.word.id !== wordId))
   }
 
-  // 启动错词歼灭战
+  // 启动错词跟学练习
+  const handleStartPractice = (wordsToPractice?: WordItem[], startIdx: number = 0) => {
+    const list = wordsToPractice || filteredList.map((item) => item.word)
+    if (!list.length) return
+    startErrorLearnPractice(list, startIdx)
+    router.push('/learn')
+  }
+
+  // 启动错词攻坚默写
   const handleStartAnnihilation = (wordsToPractice?: WordItem[], startIdx: number = 0) => {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
@@ -127,13 +135,22 @@ export default function ErrorBookPage() {
               </p>
             </div>
 
-            <button
-              onClick={() => handleStartAnnihilation()}
-              className="flex items-center gap-2 px-7 py-3 rounded-2xl bg-destructive hover:bg-destructive/90 text-white font-bold text-sm shadow-[0_0_25px_rgba(255,95,87,0.4)] transition-all cursor-pointer"
-            >
-              <Flame className="size-4" />
-              <span>🚀 开启错词歼灭战</span>
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => handleStartPractice()}
+                className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-bold text-sm shadow-[0_0_20px_rgba(var(--primary-rgb)/0.2)] transition-all cursor-pointer"
+              >
+                <GraduationCap className="size-4" />
+                <span>错词跟学练习</span>
+              </button>
+              <button
+                onClick={() => handleStartAnnihilation()}
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-destructive hover:bg-destructive/90 text-white font-bold text-sm shadow-[0_0_25px_rgba(255,95,87,0.4)] transition-all cursor-pointer"
+              >
+                <Flame className="size-4" />
+                <span>🚀 开启错词默写</span>
+              </button>
+            </div>
           </div>
 
           {/* 3. 错词详细明细表格 */}
@@ -144,7 +161,7 @@ export default function ErrorBookPage() {
                   <th className="py-2.5 px-4 w-48 font-semibold">单词拼写</th>
                   <th className="py-2.5 px-4 w-52 font-semibold">音标</th>
                   <th className="py-2.5 px-4 font-semibold">中文核心释义</th>
-                  <th className="py-2.5 px-4 w-36 text-right font-semibold">操作</th>
+                  <th className="py-2.5 px-4 w-44 text-right font-semibold">操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 font-mono">
@@ -175,13 +192,22 @@ export default function ErrorBookPage() {
                         <span>{w.posList?.[0]?.means?.join('； ')}</span>
                       </td>
                       <td className="py-2 px-4 text-right whitespace-nowrap">
-                        <div className="inline-flex items-center justify-end gap-2 whitespace-nowrap">
+                        <div className="inline-flex items-center justify-end gap-1.5 whitespace-nowrap">
+                          <button
+                            onClick={() => handleStartPractice(filteredList.map((i) => i.word), idx)}
+                            className="px-2.5 py-1 rounded-lg bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
+                            title="从该词开始错词跟学练习"
+                          >
+                            <GraduationCap className="size-3.5" />
+                            <span>练习</span>
+                          </button>
                           <button
                             onClick={() => handleStartAnnihilation(filteredList.map((i) => i.word), idx)}
-                            className="px-3 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
-                            title="从该词开始专项攻坚"
+                            className="px-2.5 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
+                            title="从该词开始专项攻坚默写"
                           >
-                            攻坚 →
+                            <PenLine className="size-3.5" />
+                            <span>默写</span>
                           </button>
                           <button
                             onClick={() => handleDeleteError(w.id)}

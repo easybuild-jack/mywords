@@ -22,10 +22,12 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
     conqueredErrorWordIds,
     toggleCurrentWordSplit,
     setEditWordSplitModalOpen,
+    mode,
   } = useWorkspaceStore()
 
   const total = currentLoadedWords.length || 20
   const currentNum = Math.min(activeWordIndex + 1, total)
+  const isDictationError = isErrorPracticeActive && mode === 'dictation'
 
   return (
     <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30">
@@ -33,11 +35,11 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
         <div className="flex items-center gap-2">
           <span className="font-mono text-primary font-bold text-sm xl:text-base">
-            {isErrorPracticeActive
+            {isDictationError
               ? `${conqueredErrorWordIds?.length || 0} / ${total}`
               : `${currentNum} / ${total}`}
           </span>
-          <span className="text-gray-500 text-xs xl:text-sm">{isErrorPracticeActive ? '已消灭' : '单词'}</span>
+          <span className="text-gray-500 text-xs xl:text-sm">{isDictationError ? '已消灭' : '单词'}</span>
         </div>
 
         <div className="h-4 xl:h-5 w-px bg-white/10" />

@@ -24,6 +24,7 @@ export function HeaderToolbar() {
   const {
     currentBook,
     currentUnitIndex,
+    activeWordIndex,
     isErrorPracticeActive,
     conqueredErrorWordIds,
     currentLoadedWords,
@@ -45,12 +46,16 @@ export function HeaderToolbar() {
         {isErrorPracticeActive ? (
           <div className="flex items-center gap-2 px-3 xl:px-3.5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-destructive/15 border border-destructive/30 text-white font-medium">
             <Flame className="size-4 xl:size-4.5 text-destructive animate-pulse" />
-            <span className="text-destructive font-bold text-xs xl:text-sm">错词攻坚</span>
+            <span className="text-destructive font-bold text-xs xl:text-sm">
+              {mode === 'learn' ? '错词练习' : '错词攻坚'}
+            </span>
             <span className="text-muted-foreground">·</span>
             <span className="text-xs xl:text-sm text-gray-300 font-mono">
-              已消灭 {conqueredErrorWordIds?.length || 0} / {currentLoadedWords.length} 词
+              {mode === 'learn'
+                ? `第 ${activeWordIndex + 1} / ${currentLoadedWords.length} 词`
+                : `已消灭 ${conqueredErrorWordIds?.length || 0} / ${currentLoadedWords.length} 词`}
             </span>
-            <Tooltip content="退出错词攻坚，返回常规章节" side="bottom">
+            <Tooltip content="退出错词练习，返回常规章节" side="bottom">
               <button
                 onClick={exitErrorPractice}
                 className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all cursor-pointer"
@@ -81,7 +86,7 @@ export function HeaderToolbar() {
         <div className="h-4 xl:h-5 w-px bg-white/10" />
 
         {/* 3. 单个单词循环次数配置 */}
-        {isErrorPracticeActive ? (
+        {isErrorPracticeActive && mode === 'dictation' ? (
           <Tooltip content="错词攻坚强制连续 3 次无误默写" side="bottom">
             <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-md xl:rounded-lg h-8 xl:h-9 px-3 xl:px-3.5 inline-flex items-center text-xs xl:text-sm font-mono font-bold cursor-default">
               循环 3次 (3-Streak)

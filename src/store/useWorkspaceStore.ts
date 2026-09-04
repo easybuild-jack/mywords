@@ -128,6 +128,7 @@ interface WorkspaceState {
   setUnitIndex: (unitIndex: number) => Promise<void>
   loadCurrentUnitWords: () => Promise<void>
   startErrorPractice: (words: WordItem[], startIndex?: number) => void
+  startErrorLearnPractice: (words: WordItem[], startIndex?: number) => void
   exitErrorPractice: () => Promise<void>
   enterMode: (mode: PracticeMode) => Promise<void>
   setLoopCountSetting: (count: 1 | 2 | 3 | 5) => void
@@ -365,9 +366,43 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         })
       },
 
+      startErrorLearnPractice: (words: WordItem[], startIndex: number = 0) => {
+        if (!words.length) return
+        const entryIndex = Math.min(Math.max(startIndex, 0), words.length - 1)
+
+        const wasActive = get().isErrorPracticeActive
+        const loopCounts = wasActive
+          ? get().loopCounts
+          : withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
+
+        const learnLoop = loopCounts.learn
+
+        set({
+          cursors: {
+            ...saveActiveCursor(get),
+            error: { activeWordIndex: entryIndex, isUnitFinished: false },
+          },
+          isErrorPracticeActive: true,
+          mode: 'learn',
+          loopCounts,
+          loopCountSetting: learnLoop,
+          loopCountBeforeErrorPractice: null,
+          currentLoadedWords: words,
+          conqueredErrorWordIds: [],
+          activeWordIndex: entryIndex,
+          currentInput: '',
+          hasTypo: false,
+          isUnitFinished: false,
+          retryWordQueue: [],
+          currentWordRemainingLoops: learnLoop,
+          ...DICTATION_STEP_RESET,
+        })
+      },
+
       exitErrorPractice: async () => {
-        // 攻坚结束回到默写页原来的位置与原来的循环次数，攻坚存档位清空
-        const restored = get().cursors.dictation
+        // 攻坚或错词练习结束回到对应模式原来的位置与循环次数，攻坚存档位清空
+        const isDictation = get().mode === 'dictation'
+        const restored = isDictation ? get().cursors.dictation : get().cursors.learn
 
         set({
           isErrorPracticeActive: false,
@@ -481,8 +516,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
        */
       enterMode: async (nextMode: PracticeMode) => {
         if (get().isErrorPracticeActive) {
-          // 停在默写页就保留攻坚现场；去学习页则视为放弃本次攻坚
-          if (nextMode !== 'learn') return
+          // 同模式下保留错词练习现场；跨模式切换则视为离开错词练习
+          if (get().mode === nextMode) return
           await get().exitErrorPractice()
         }
 
@@ -516,8 +551,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {
-        // 错词攻坚模式下锁定为 3 次
-        if (get().isErrorPracticeActive) return
+        // 错词攻坚在默写模式下锁定为 3 次
+        if (get().isErrorPracticeActive && get().mode === 'dictation') return
         set({
           loopCountSetting: count,
           loopCounts: withLoopCount(get().loopCounts, get().mode, count),
@@ -697,7 +732,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               if (isCorrectSoundEnabled) {
                 audioEngine.playCorrectSound(feedbackVolume)
               }
-              if (isErrorPracticeActive) {
+              if (isErrorPracticeActive && mode === 'dictation') {
                 eliminateErrorWord(currentWord.id)
                 const updatedConquered = Array.from(new Set([...get().conqueredErrorWordIds, currentWord.id]))
                 set({ conqueredErrorWordIds: updatedConquered })
@@ -738,13 +773,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }
 
           setTimeout(() => {
-            const { isErrorPracticeActive, conqueredErrorWordIds } = get()
+            const { isErrorPracticeActive, conqueredErrorWordIds, mode: currentMode } = get()
+            const isDictationError = isErrorPracticeActive && currentMode === 'dictation'
             set({
               currentInput: '',
               hasTypo: false,
-              // 错词攻坚模式下，一旦输错立刻重置回 3 次连对循环
-              currentWordRemainingLoops: isErrorPracticeActive ? 3 : get().loopCountSetting,
-              conqueredErrorWordIds: isErrorPracticeActive && currentWord
+              // 错词攻坚默写模式下，一旦输错立刻重置回 3 次连对循环
+              currentWordRemainingLoops: isDictationError ? 3 : get().loopCountSetting,
+              conqueredErrorWordIds: isDictationError && currentWord
                 ? conqueredErrorWordIds.filter((id) => id !== currentWord.id)
                 : conqueredErrorWordIds,
             })
@@ -818,9 +854,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
 
         // ==========================================
-        // 错词攻坚专项模式逻辑
+        // 错词攻坚专项模式逻辑 (仅默写模式下按 3-streak 消灭查找)
         // ==========================================
-        if (isErrorPracticeActive) {
+        if (isErrorPracticeActive && mode === 'dictation') {
           // 检查是否所有错词均已攻克消灭
           const allConquered = unitWords.every((w) => conqueredErrorWordIds.includes(w.id))
           if (allConquered) {
@@ -867,7 +903,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
 
         // ==========================================
-        // 常规章节学习逻辑
+        // 常规章节学习逻辑 (以及错词跟学练习模式)
         // ==========================================
         if (activeWordIndex < unitWords.length - 1) {
           const nextIndex = activeWordIndex + 1
@@ -914,8 +950,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         if (activeWordIndex > 0) {
           targetIndex = activeWordIndex - 1
-        } else if (isErrorPracticeActive && unitWords.length > 1) {
-          // 错词模式下在第 0 个往前按，循环回到最后一个
+        } else if (isErrorPracticeActive && mode === 'dictation' && unitWords.length > 1) {
+          // 错词默写模式下在第 0 个往前按，循环回到最后一个
           targetIndex = unitWords.length - 1
         }
 
@@ -926,7 +962,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             hasTypo: false,
             isCurrentWordSplit: false,
             isEditWordSplitModalOpen: false,
-            currentWordRemainingLoops: isErrorPracticeActive ? 3 : loopCountSetting,
+            currentWordRemainingLoops: isErrorPracticeActive && mode === 'dictation' ? 3 : loopCountSetting,
             ...DICTATION_STEP_RESET,
           })
 
@@ -943,6 +979,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       restartUnit: () => {
+        const isDictationError = get().isErrorPracticeActive && get().mode === 'dictation'
         set({
           activeWordIndex: 0,
           currentInput: '',
@@ -951,7 +988,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isCurrentWordSplit: false,
           isEditWordSplitModalOpen: false,
           retryWordQueue: [],
-          currentWordRemainingLoops: get().isErrorPracticeActive ? 3 : get().loopCountSetting,
+          currentWordRemainingLoops: isDictationError ? 3 : get().loopCountSetting,
           conqueredErrorWordIds: [],
           ...DICTATION_STEP_RESET,
         })
