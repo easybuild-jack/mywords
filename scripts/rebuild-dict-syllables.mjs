@@ -96,6 +96,8 @@ function loadLexicon() {
 }
 let LEXICON = new Set()
 let PHONES = new Map()
+/** 当前词的美音或英音里是否出现 ʃn / ʒn（由 processWord 设置） */
+let TION_UNIT = false
 
 // ---------- 字母层 ----------
 const VOWEL_LETTERS = 'aeiou'
@@ -280,7 +282,7 @@ function consonantsBefore(ctx, clusterStart, clusterEnd) {
   return pre + rest.length - tail
 }
 
-/** -tion/-sion/-cial/-tial/-cient：[tcsx] + i 开头的核，后接 n/l，且音标含 ʃ → 该核与后面的 n/l 是一个拼读单位 */
+/** -tion/-sion/-cial/-tial：[tcsx] + io/ia 读一个 /ə/，S<V 拆核补足时不能拆开（n/l 的归属仍按普通规则） */
 function isProtectedNucleus(word, absStart, absEnd, phone) {
   const prev = word[absStart - 1]
   const next = word[absEnd + 1]
@@ -307,7 +309,8 @@ function splitSimple(w, phone, dropEdEs = true, silent = findInnerSilentE(w)) {
   for (let n = 0; n < nuclei.length - 1; n++) {
     const cs = nuclei[n].end + 1
     let before = consonantsBefore(ctx, cs, nuclei[n + 1].start)
-    if (isProtectedNucleus(w, nuclei[n].start, nuclei[n].end, phone)) before = Math.max(before, 1)
+    // tion/sion 在美音或英音里读 ʃn/ʒn（n 成音节）时是整体，n 归前：na-tion-al；读 ʃən + 元音时按普通规则：op-tio-nal
+    if (TION_UNIT && isProtectedNucleus(w, nuclei[n].start, nuclei[n].end, phone)) before = Math.max(before, 1)
     cuts.push(cs + before)
   }
   const bounds = [0, ...cuts, w.length]
@@ -440,6 +443,7 @@ function processWord(w) {
   if (OVERRIDES[lower]) return { syllables: restoreCase(name, OVERRIDES[lower]), status: 'override' }
 
   const phone = normalizePhone(w.usphone || w.ukphone)
+  TION_UNIT = /[ʃʒ]n/.test(normalizePhone(w.usphone) + ' ' + normalizePhone(w.ukphone))
   const V = vowelCount(phone, lower)
 
   let { segs, hard } = splitWord(lower, phone, true)

@@ -3667,10 +3667,7 @@
     "syllables": [
       "right"
     ],
-    "silentIndices": [
-      2,
-      3
-    ],
+    "silentIndices": [],
     "examples": [
       {
         "en": "Click the right mouse button to open the context popup menu.",
@@ -7287,8 +7284,8 @@
     "ukphone": "ˈɒpʃənl",
     "syllables": [
       "op",
-      "tion",
-      "al"
+      "tio",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -11045,8 +11042,8 @@
     "syllables": [
       "ad",
       "di",
-      "tion",
-      "al"
+      "tio",
+      "nal"
     ],
     "etymology": {
       "prefix": {
@@ -24517,8 +24514,8 @@
     "syllables": [
       "i",
       "ni",
-      "tial",
-      "ize"
+      "tia",
+      "lize"
     ],
     "etymology": {
       "root": {
@@ -42163,8 +42160,8 @@
     "syllables": [
       "con",
       "ven",
-      "tion",
-      "al"
+      "tio",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -45806,8 +45803,8 @@
     "syllables": [
       "di",
       "men",
-      "sion",
-      "al"
+      "sio",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -49426,8 +49423,8 @@
     "ukphone": "ˈsteɪʃənri",
     "syllables": [
       "sta",
-      "tion",
-      "a",
+      "tio",
+      "na",
       "ry"
     ],
     "etymology": {
@@ -51353,8 +51350,8 @@
     "syllables": [
       "ad",
       "di",
-      "tion",
-      "al",
+      "tio",
+      "nal",
       "ly"
     ],
     "etymology": {
@@ -52083,8 +52080,8 @@
     "ukphone": "ˈspeʃəlaɪz",
     "syllables": [
       "spe",
-      "cial",
-      "ize"
+      "cia",
+      "lize"
     ],
     "etymology": {
       "root": {
@@ -52854,8 +52851,8 @@
     "syllables": [
       "con",
       "di",
-      "tion",
-      "al"
+      "tio",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -58188,8 +58185,8 @@
     "syllables": [
       "tra",
       "di",
-      "tion",
-      "al"
+      "tio",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -58599,8 +58596,8 @@
       "re",
       "vo",
       "lu",
-      "tion",
-      "ize"
+      "tio",
+      "nize"
     ],
     "etymology": {
       "root": {
