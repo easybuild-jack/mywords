@@ -32,7 +32,7 @@ export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: 
   'book_basewords': { path: '/dicts/basewords.json', totalWords: 1195, name: '基础词汇' },
   'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
-  'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: 'Coder Dict (通用 IT 编程词库)' },
+  'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: '程序员词库' },
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
 }
 

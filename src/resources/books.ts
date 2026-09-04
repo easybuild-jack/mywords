@@ -358,8 +358,8 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_coder',
-    name: 'Coder Dict',
-    description: '程序员常见高频英语词汇、计算机基础术语、开发与系统运维核心词库 (来自 Qwerty Learner Coder Dict 通用)',
+    name: '程序员词库',
+    description: '程序员常见高频英语词汇、计算机基础术语、开发与系统运维核心词库',
     category: 'developer',
     isCustom: false,
     unitSize: 20,
