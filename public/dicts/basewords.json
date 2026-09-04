@@ -280,8 +280,8 @@
     "usphone": "ˈɔːrɪndʒ",
     "ukphone": "ˈɒrɪndʒ",
     "syllables": [
-      "or",
-      "ange"
+      "o",
+      "range"
     ],
     "etymology": {
       "origin": "源自古法语 orenge，经阿拉伯语 naranj、波斯语 narang 追溯至梵语 naranga（橙树）。",
@@ -667,10 +667,6 @@
       "derivation": "用力拉紧伸展后不弯曲的状态 → 笔直的",
       "origin": "源自中古英语 streiȝt，原为动词 stretch（伸展、拉直）的过去分词形式。"
     },
-    "silentIndices": [
-      5,
-      6
-    ],
     "examples": [
       {
         "en": "Walk straight along this avenue until you reach the central library building.",
@@ -957,8 +953,8 @@
     "usphone": "ˈdʒækɪt",
     "ukphone": "ˈdʒækɪt",
     "syllables": [
-      "jack",
-      "et"
+      "ja",
+      "cket"
     ],
     "etymology": {
       "root": {
@@ -1083,8 +1079,8 @@
     "usphone": "ˈswetər",
     "ukphone": "ˈswetə(r)",
     "syllables": [
-      "sweat",
-      "er"
+      "swea",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -1582,8 +1578,8 @@
     "usphone": "ˈɡlæsɪz",
     "ukphone": "ˈɡlɑːsɪz",
     "syllables": [
-      "glas",
-      "ses"
+      "glass",
+      "es"
     ],
     "etymology": {
       "root": {
@@ -1635,9 +1631,6 @@
     "syllables": [
       "buy"
     ],
-    "silentIndices": [
-      1
-    ],
     "examples": [
       {
         "en": "You can buy fresh locally grown organic vegetables at the weekend morning market.",
@@ -1675,7 +1668,7 @@
       "sell"
     ],
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -3193,8 +3186,8 @@
     "syllables": [
       "wa",
       "ter",
-      "mel",
-      "on"
+      "me",
+      "lon"
     ],
     "etymology": {
       "prefix": {
@@ -3310,7 +3303,7 @@
       "origin": "源自古法语 vegetable，来自晚期拉丁语 vegetabilis（生机勃勃的），源于 vegetare（生长、使活跃）。"
     },
     "silentIndices": [
-      4,
+      3,
       8
     ],
     "examples": [
@@ -3393,8 +3386,8 @@
     "usphone": "ˈʌnjən",
     "ukphone": "ˈʌnjən",
     "syllables": [
-      "on",
-      "ion"
+      "o",
+      "nion"
     ],
     "etymology": {
       "root": {
@@ -4817,7 +4810,7 @@
       "origin": "源自古英语 Wodnesdæg（沃登之日），对应北欧主神 Odin（Woden）。"
     },
     "silentIndices": [
-      1,
+      2,
       4
     ],
     "examples": [
@@ -4949,8 +4942,8 @@
     "usphone": "ˈsætərdeɪ",
     "ukphone": "ˈsætədeɪ",
     "syllables": [
-      "Sat",
-      "ur",
+      "Sa",
+      "tur",
       "day"
     ],
     "etymology": {
@@ -5095,10 +5088,10 @@
     "usphone": "ˈdʒænjueri",
     "ukphone": "ˈdʒænjuəri",
     "syllables": [
-      "Jan",
-      "u",
-      "ar",
-      "y"
+      "Ja",
+      "nu",
+      "a",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -5145,10 +5138,10 @@
     "usphone": "ˈfebrueri",
     "ukphone": "ˈfebruəri",
     "syllables": [
-      "Feb",
-      "ru",
-      "ar",
-      "y"
+      "Fe",
+      "bru",
+      "a",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -5685,6 +5678,9 @@
         "en": "one day",
         "cn": "有朝一日；某天"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -5774,8 +5770,8 @@
     "usphone": "ˈsekənd",
     "ukphone": "ˈsekənd",
     "syllables": [
-      "sec",
-      "ond"
+      "se",
+      "cond"
     ],
     "etymology": {
       "root": {
@@ -6158,8 +6154,8 @@
     "usphone": "ˈsevn",
     "ukphone": "ˈsevn",
     "syllables": [
-      "sev",
-      "en"
+      "se",
+      "ven"
     ],
     "examples": [
       {
@@ -6196,8 +6192,8 @@
     "usphone": "ˈsevnθ",
     "ukphone": "ˈsevnθ",
     "syllables": [
-      "sev",
-      "enth"
+      "se",
+      "venth"
     ],
     "etymology": {
       "root": {
@@ -6245,10 +6241,6 @@
     "ukphone": "eɪt",
     "syllables": [
       "eight"
-    ],
-    "silentIndices": [
-      1,
-      2
     ],
     "examples": [
       {
@@ -6298,10 +6290,6 @@
       },
       "derivation": "数字八对应的序数位次或分成八等份中的一份 → 第八、八分之一"
     },
-    "silentIndices": [
-      1,
-      2
-    ],
     "examples": [
       {
         "en": "August is the eighth calendar month, filled with hot sunny vacation days.",
@@ -6508,8 +6496,8 @@
     "ukphone": "ɪˈlevn",
     "syllables": [
       "e",
-      "lev",
-      "en"
+      "le",
+      "ven"
     ],
     "etymology": {
       "origin": "源自古英语 endleofan，来自原始日耳曼语 *ainlif-，由 *ain-（一）+ *lif-（余下、超出十）组成，字面意为“十之外还剩下一个”。",
@@ -6989,8 +6977,8 @@
     "usphone": "ˌsevnˈtiːn",
     "ukphone": "ˌsevnˈtiːn",
     "syllables": [
-      "sev",
-      "en",
+      "se",
+      "ven",
       "teen"
     ],
     "etymology": {
@@ -7040,8 +7028,8 @@
     "usphone": "ˌsevnˈtiːnθ",
     "ukphone": "ˌsevnˈtiːnθ",
     "syllables": [
-      "sev",
-      "en",
+      "se",
+      "ven",
       "teenth"
     ],
     "etymology": {
@@ -7105,10 +7093,6 @@
       "derivation": "古英语 eahtatiene（八加十），字母 gh 为哑音，现代法律上标志着公民完全民事行为能力成年的黄金分水岭 → 十八",
       "origin": "源自古英语 eahtatiene，由 eahta（八）+ -tiene（十）复合而成。"
     },
-    "silentIndices": [
-      1,
-      2
-    ],
     "examples": [
       {
         "en": "Citizens obtain full voting franchise and civic legal independence upon turning eighteen years of age.",
@@ -7159,10 +7143,6 @@
       "derivation": "由基数词 eighteen 加上序数词后缀 -th 构成，字母 gh 为哑音 → 第十八",
       "origin": "由 eighteen + -th 派生而成。"
     },
-    "silentIndices": [
-      1,
-      2
-    ],
     "examples": [
       {
         "en": "The eighteenth century Enlightenment championed the universal values of human reason, liberty, and secular democracy.",
@@ -7598,8 +7578,8 @@
     "usphone": "ˈsevnti",
     "ukphone": "ˈsevnti",
     "syllables": [
-      "sev",
-      "en",
+      "se",
+      "ven",
       "ty"
     ],
     "etymology": {
@@ -7663,10 +7643,6 @@
       "derivation": "古英语 hundeahtatig（八个十），字母 gh 为哑音，后简化为 eahtatig → eighty",
       "origin": "源自古英语 eahtatig，由 eahta（八）+ -tig（十）复合而成。"
     },
-    "silentIndices": [
-      1,
-      2
-    ],
     "examples": [
       {
         "en": "Around eighty percent of Earth’s active volcanic eruptions take place quietly beneath deep oceanic trenches.",
@@ -7889,6 +7865,9 @@
         "en": "one in a million",
         "cn": "万里挑一；极其罕见的奇才或珍宝"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -8064,7 +8043,7 @@
       "origin": "源自中古英语 to-morwe，由 to + morrow（早晨、次日晨光）构成。"
     },
     "silentIndices": [
-      3
+      4
     ],
     "examples": [
       {
@@ -8219,8 +8198,8 @@
     "usphone": "ˈmɔːrnɪŋ",
     "ukphone": "ˈmɔːnɪŋ",
     "syllables": [
-      "morn",
-      "ing"
+      "mor",
+      "ning"
     ],
     "etymology": {
       "root": {
@@ -8361,8 +8340,8 @@
     "usphone": "ˈiːvnɪŋ",
     "ukphone": "ˈiːvnɪŋ",
     "syllables": [
-      "eve",
-      "ning"
+      "even",
+      "ing"
     ],
     "etymology": {
       "root": {
@@ -8419,10 +8398,6 @@
       "origin": "源自古英语 niht，来自原始印欧语 *nokwt-（夜晚），与拉丁语 nox、希腊语 nyx、梵语 nakti 同源。",
       "memoryHook": "night 带有典型的 gh 哑音组合，指太阳落下后的黑暗黑夜。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Brilliant twinkling stars illuminated the ink-black sky throughout clear winter night.",
@@ -8472,10 +8447,6 @@
       "derivation": "在当前正在经历的这个夜晚 → 今晚、今夜",
       "origin": "源自古英语 to niht，由 to + niht 组合演变而成。"
     },
-    "silentIndices": [
-      4,
-      5
-    ],
     "examples": [
       {
         "en": "Are you free to join our family dinner gathering downtown later tonight?",
@@ -8644,8 +8615,8 @@
     "usphone": "ˈnevər",
     "ukphone": "ˈnevə(r)",
     "syllables": [
-      "nev",
-      "er"
+      "ne",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -8803,7 +8774,7 @@
       "derivation": "按照日常习惯与普遍惯例地 → 通常、一般"
     },
     "silentIndices": [
-      6
+      4
     ],
     "examples": [
       {
@@ -9459,8 +9430,8 @@
     "usphone": "ˈmɪnɪt",
     "ukphone": "ˈmɪnɪt",
     "syllables": [
-      "min",
-      "ute"
+      "mi",
+      "nute"
     ],
     "etymology": {
       "root": {
@@ -9506,8 +9477,7 @@
     "usphone": "ˈaʊər",
     "ukphone": "ˈaʊə(r)",
     "syllables": [
-      "ho",
-      "ur"
+      "hour"
     ],
     "etymology": {
       "root": {
@@ -10102,7 +10072,7 @@
       "origin": "源自古英语 weall，直接借自拉丁语 vallum（堡垒栅栏、土墙防线）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -10454,8 +10424,8 @@
     "usphone": "ˈkɪtʃɪn",
     "ukphone": "ˈkɪtʃɪn",
     "syllables": [
-      "kitch",
-      "en"
+      "kit",
+      "chen"
     ],
     "etymology": {
       "root": {
@@ -10679,8 +10649,8 @@
     "usphone": "ˈwɔːrdroʊb",
     "ukphone": "ˈwɔːdrəʊb",
     "syllables": [
-      "war",
-      "drobe"
+      "ward",
+      "robe"
     ],
     "etymology": {
       "prefix": {
@@ -11235,7 +11205,7 @@
       "origin": "源自意大利语 ombrella，来自拉丁语 umbella（小遮阴伞），源于 umbra（阴影）。"
     },
     "silentIndices": [
-      7
+      5
     ],
     "examples": [
       {
@@ -11453,8 +11423,8 @@
     "usphone": "ˈfæməli",
     "ukphone": "ˈfæməli",
     "syllables": [
-      "fam",
-      "i",
+      "fa",
+      "mi",
       "ly"
     ],
     "etymology": {
@@ -11499,8 +11469,8 @@
     "usphone": "ˈperənt",
     "ukphone": "ˈpeərənt",
     "syllables": [
-      "par",
-      "ent"
+      "pa",
+      "rent"
     ],
     "etymology": {
       "root": {
@@ -11628,8 +11598,8 @@
     "usphone": "ˈmʌðər",
     "ukphone": "ˈmʌðə(r)",
     "syllables": [
-      "moth",
-      "er"
+      "mo",
+      "ther"
     ],
     "etymology": {
       "root": {
@@ -11712,8 +11682,8 @@
     "usphone": "ˈbrʌðər",
     "ukphone": "ˈbrʌðə(r)",
     "syllables": [
-      "broth",
-      "er"
+      "bro",
+      "ther"
     ],
     "etymology": {
       "root": {
@@ -11801,8 +11771,8 @@
     "ukphone": "ˈɡrænpeərənt",
     "syllables": [
       "grand",
-      "par",
-      "ent"
+      "pa",
+      "rent"
     ],
     "etymology": {
       "prefix": {
@@ -11954,8 +11924,8 @@
     "ukphone": "ˈɡrændmʌðə(r)",
     "syllables": [
       "grand",
-      "moth",
-      "er"
+      "mo",
+      "ther"
     ],
     "etymology": {
       "prefix": {
@@ -12155,9 +12125,6 @@
       "derivation": "由同辈姑表姨表舅堂亲演化而来的统称亲族词 → 堂表兄弟姐妹",
       "origin": "源自古法语 cosin，来自拉丁语 consobrinus（母亲姐妹的子女），源自 com-（共同）+ sobrinus（表亲）。"
     },
-    "silentIndices": [
-      2
-    ],
     "examples": [
       {
         "en": "My cousin and I spent blissful childhood summer holidays swimming at the lake.",
@@ -12685,7 +12652,7 @@
       "origin": "源自古英语 missan（未击中、未能企及、感到惋惜缺憾），来自原始日耳曼语 *missjanan。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -12844,8 +12811,8 @@
     "usphone": "ˈbɑːdi",
     "ukphone": "ˈbɒdi",
     "syllables": [
-      "bod",
-      "y"
+      "bo",
+      "dy"
     ],
     "etymology": {
       "origin": "源自古英语 bodig（躯干、体格、身材），原始日耳曼语来源不明，可能与 barrel（桶装圆躯）同源。",
@@ -13296,9 +13263,6 @@
       "origin": "源自古英语 sculdor，源于原始日耳曼语 *skuldro-（骨架、肩胛），与德语 Schulter 同源。",
       "memoryHook": "shoulder 能够挑起重担与包袱的人体两臂与颈相连之部位 → 肩膀。"
     },
-    "silentIndices": [
-      2
-    ],
     "examples": [
       {
         "en": "Dedicated public servants shoulder heavy civic responsibilities during unexpected emergency relief operations.",
@@ -13825,7 +13789,7 @@
       "memoryHook": "tall 垂直向上拔地挺立的身姿高大挺拔。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -13968,7 +13932,7 @@
       "origin": "副词源自古英语 wel（顺利、满意），与 will（意志）同源；水井名词源自古英语 wella（泉水、涌泉），与 wallow 同源。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -14012,7 +13976,7 @@
       "memoryHook": "ill 身体遭受风寒病疾折磨叫生病，恶劣兆头叫 ill omen。"
     },
     "silentIndices": [
-      2
+      1
     ],
     "examples": [
       {
@@ -14415,8 +14379,8 @@
     "usphone": "ˈmedɪsn",
     "ukphone": "ˈmedɪsn",
     "syllables": [
-      "med",
-      "i",
+      "me",
+      "di",
       "cine"
     ],
     "etymology": {
@@ -15540,7 +15504,7 @@
       "origin": "源自古法语 passer，来自通俗拉丁语 *passare（跨步），源于拉丁语 passus（步伐）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -15623,7 +15587,7 @@
       "memoryHook": "pull 用双手施加向自己身体靠拢的牵引力叫拉拖拽。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -16168,7 +16132,7 @@
       "origin": "源自古英语 feallan（掉落、跌倒、衰亡），源于原始日耳曼语 *fallanan。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -16758,6 +16722,9 @@
         "en": "worried look",
         "cn": "满面愁容的神情"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -16964,8 +16931,8 @@
     "usphone": "ˈbɔːrɪŋ",
     "ukphone": "ˈbɔːrɪŋ",
     "syllables": [
-      "bor",
-      "ing"
+      "bo",
+      "ring"
     ],
     "etymology": {
       "root": {
@@ -17012,8 +16979,7 @@
     "ukphone": "ˈɪntrəstɪd",
     "syllables": [
       "in",
-      "ter",
-      "est",
+      "terest",
       "ed"
     ],
     "etymology": {
@@ -17061,8 +17027,7 @@
     "ukphone": "ˈɪntrəstɪŋ",
     "syllables": [
       "in",
-      "ter",
-      "est",
+      "terest",
       "ing"
     ],
     "etymology": {
@@ -17111,8 +17076,8 @@
     "ukphone": "ɪkˈsaɪtɪd",
     "syllables": [
       "ex",
-      "cit",
-      "ed"
+      "ci",
+      "ted"
     ],
     "etymology": {
       "prefix": {
@@ -17164,8 +17129,8 @@
     "ukphone": "ɪkˈsaɪtɪŋ",
     "syllables": [
       "ex",
-      "cit",
-      "ing"
+      "ci",
+      "ting"
     ],
     "etymology": {
       "prefix": {
@@ -17326,7 +17291,7 @@
       "origin": "源自动词 surprise，来自古法语 surprendre（偷袭、出其不意），由 sur-（在……之上）+ prendre（抓取）构成。"
     },
     "silentIndices": [
-      8
+      7
     ],
     "examples": [
       {
@@ -17362,8 +17327,8 @@
     "ukphone": "əˈmeɪzɪŋ",
     "syllables": [
       "a",
-      "maz",
-      "ing"
+      "ma",
+      "zing"
     ],
     "etymology": {
       "prefix": {
@@ -18446,7 +18411,7 @@
     },
     "silentIndices": [
       3,
-      7
+      6
     ],
     "examples": [
       {
@@ -18497,7 +18462,7 @@
       "derivation": "由詹姆斯·奈史密斯博士于 1891 年发明，最初将两只桃篮钉在健身房两侧墙上供投掷得分 → 篮球"
     },
     "silentIndices": [
-      9
+      8
     ],
     "examples": [
       {
@@ -18547,7 +18512,7 @@
       "derivation": "主要依靠脚底传射盘带、严禁上肢触球的全球第一大球类运动（美式指手足并用的椭圆橄榄球） → 足球、橄榄球"
     },
     "silentIndices": [
-      7
+      6
     ],
     "examples": [
       {
@@ -18665,8 +18630,8 @@
     "usphone": "ˈtrævl",
     "ukphone": "ˈtrævl",
     "syllables": [
-      "trav",
-      "el"
+      "tra",
+      "vel"
     ],
     "etymology": {
       "root": {
@@ -18754,8 +18719,8 @@
     "usphone": "ˈvɪzɪt",
     "ukphone": "ˈvɪzɪt",
     "syllables": [
-      "vis",
-      "it"
+      "vi",
+      "sit"
     ],
     "etymology": {
       "root": {
@@ -18814,6 +18779,7 @@
       "origin": "源自古法语 ariver，来自通俗拉丁语 *arripare（靠岸），由 ad-（朝向）+ ripa（岸边）复合而成。"
     },
     "silentIndices": [
+      1,
       5
     ],
     "examples": [
@@ -18944,8 +18910,8 @@
     "usphone": "ˈhɑːlədeɪ",
     "ukphone": "ˈhɒlədeɪ",
     "syllables": [
-      "hol",
-      "i",
+      "ho",
+      "li",
       "day"
     ],
     "etymology": {
@@ -19044,8 +19010,8 @@
     "usphone": "ˈhaɪkɪŋ",
     "ukphone": "ˈhaɪkɪŋ",
     "syllables": [
-      "hik",
-      "ing"
+      "hi",
+      "king"
     ],
     "etymology": {
       "root": {
@@ -20249,8 +20215,8 @@
     "ukphone": "piˈænəʊ",
     "syllables": [
       "pi",
-      "an",
-      "o"
+      "a",
+      "no"
     ],
     "etymology": {
       "root": {
@@ -20441,9 +20407,8 @@
     "usphone": "ˈkæmrə",
     "ukphone": "ˈkæmərə",
     "syllables": [
-      "cam",
-      "e",
-      "ra"
+      "ca",
+      "mera"
     ],
     "etymology": {
       "root": {
@@ -20488,8 +20453,8 @@
     "usphone": "ˈvɪdioʊ",
     "ukphone": "ˈvɪdiəʊ",
     "syllables": [
-      "vid",
-      "e",
+      "vi",
+      "de",
       "o"
     ],
     "etymology": {
@@ -20767,8 +20732,8 @@
     "usphone": "ˌmæɡəˈziːn",
     "ukphone": "ˌmæɡəˈziːn",
     "syllables": [
-      "mag",
-      "a",
+      "ma",
+      "ga",
       "zine"
     ],
     "etymology": {
@@ -20911,8 +20876,8 @@
     "ukphone": "ˌθæŋksˈɡɪvɪŋ",
     "syllables": [
       "Thanks",
-      "giv",
-      "ing"
+      "gi",
+      "ving"
     ],
     "etymology": {
       "prefix": {
@@ -20925,9 +20890,6 @@
       },
       "derivation": "为庆祝秋季丰收、感念上苍与原住民帮助而设立的合家团圆传统感恩节日 → 感恩节"
     },
-    "silentIndices": [
-      11
-    ],
     "examples": [
       {
         "en": "Families reunite across long distances to share roasted turkey and cranberry sauce on Thanksgiving.",
@@ -21795,7 +21757,7 @@
       "origin": "源自古英语 tellan（计算、叙述、认为），源于原始日耳曼语 *tazljanan，与 tale（传说）同源。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -21890,7 +21852,7 @@
       "origin": "源自古英语 andswaru（作为应对的誓言、回答），由 and-（反向、相对）+ swerian（宣誓，即 swear）构成。"
     },
     "silentIndices": [
-      2
+      3
     ],
     "examples": [
       {
@@ -21986,7 +21948,7 @@
       "origin": "源自古诺斯语 kalla（大喊、呼唤、命名），来自原始日耳曼语 *kallon-。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -22066,8 +22028,8 @@
     "usphone": "ˈselɪbreɪt",
     "ukphone": "ˈselɪbreɪt",
     "syllables": [
-      "cel",
-      "e",
+      "ce",
+      "le",
       "brate"
     ],
     "etymology": {
@@ -22320,7 +22282,8 @@
       "origin": "源自古法语 adresser（指导向、直达），来自拉丁语 ad- + directus（直接的、正规的）。"
     },
     "silentIndices": [
-      6
+      1,
+      5
     ],
     "examples": [
       {
@@ -22448,7 +22411,8 @@
     "usphone": "ˈiːmeɪl",
     "ukphone": "ˈiːmeɪl",
     "syllables": [
-      "email"
+      "e",
+      "mail"
     ],
     "etymology": {
       "prefix": {
@@ -22967,8 +22931,8 @@
     "usphone": "ˈɑːrtɪst",
     "ukphone": "ˈɑːtɪst",
     "syllables": [
-      "art",
-      "ist"
+      "ar",
+      "tist"
     ],
     "etymology": {
       "root": {
@@ -23108,8 +23072,8 @@
     "usphone": "ˈdraɪvər",
     "ukphone": "ˈdraɪvə(r)",
     "syllables": [
-      "driv",
-      "er"
+      "dri",
+      "ver"
     ],
     "etymology": {
       "root": {
@@ -23155,8 +23119,8 @@
     "usphone": "ˈfɑːrmər",
     "ukphone": "ˈfɑːmə(r)",
     "syllables": [
-      "farm",
-      "er"
+      "far",
+      "mer"
     ],
     "etymology": {
       "root": {
@@ -23249,8 +23213,8 @@
     "usphone": "ˈraɪtər",
     "ukphone": "ˈraɪtə(r)",
     "syllables": [
-      "writ",
-      "er"
+      "wri",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -23392,8 +23356,8 @@
     "usphone": "ˈwɜːrkər",
     "ukphone": "ˈwɜːkə(r)",
     "syllables": [
-      "work",
-      "er"
+      "wor",
+      "ker"
     ],
     "etymology": {
       "root": {
@@ -23589,8 +23553,8 @@
     "usphone": "ˈæstrənɔːt",
     "ukphone": "ˈæstrənɔːt",
     "syllables": [
-      "as",
-      "tro",
+      "a",
+      "stro",
       "naut"
     ],
     "etymology": {
@@ -23638,9 +23602,10 @@
     "usphone": "ˈsekrəteri",
     "ukphone": "ˈsekrətri",
     "syllables": [
-      "sec",
-      "re",
-      "tary"
+      "se",
+      "cre",
+      "ta",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -23739,8 +23704,8 @@
     "ukphone": "ˈseɪlzwʊmən",
     "syllables": [
       "sales",
-      "wom",
-      "an"
+      "wo",
+      "man"
     ],
     "etymology": {
       "prefix": {
@@ -23754,7 +23719,7 @@
       "derivation": "在商场专柜或面向企业从事产品展示、推销交易促成的专业女性销售从业者 → 女售货员、女推销员"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -23843,8 +23808,8 @@
     "usphone": "ˌvɑːlənˈtɪr",
     "ukphone": "ˌvɒlənˈtɪə(r)",
     "syllables": [
-      "vol",
-      "un",
+      "vo",
+      "lun",
       "teer"
     ],
     "etymology": {
@@ -23892,8 +23857,8 @@
     "usphone": "ˈweɪtrəs",
     "ukphone": "ˈweɪtrəs",
     "syllables": [
-      "wait",
-      "ress"
+      "wai",
+      "tress"
     ],
     "etymology": {
       "root": {
@@ -23953,9 +23918,6 @@
       },
       "derivation": "身负行囊挨家挨户风雨无阻投送书信与包裹报刊的邮政投递专员 → 邮递员、邮差"
     },
-    "silentIndices": [
-      3
-    ],
     "examples": [
       {
         "en": "The cheerful neighborhood postman delivers letters and parcels promptly on his red bicycle every morning.",
@@ -23989,8 +23951,8 @@
     "usphone": "ˈbɪznəsmæn",
     "ukphone": "ˈbɪznəsmæn",
     "syllables": [
-      "busi",
-      "ness",
+      "bu",
+      "siness",
       "man"
     ],
     "etymology": {
@@ -24041,8 +24003,8 @@
     "usphone": "ˈfɪʃərmən",
     "ukphone": "ˈfɪʃəmən",
     "syllables": [
-      "fish",
-      "er",
+      "fi",
+      "sher",
       "man"
     ],
     "etymology": {
@@ -24181,8 +24143,8 @@
     "usphone": "ˈkɑːpi",
     "ukphone": "ˈkɒpi",
     "syllables": [
-      "cop",
-      "y"
+      "co",
+      "py"
     ],
     "etymology": {
       "root": {
@@ -24280,9 +24242,6 @@
       "derivation": "古希腊哲人认为摆脱繁重体力劳役后所拥有的高贵纯粹闲暇时光，当用于读书向学研讨真理，字母 h 为哑音 → 学校、学派",
       "origin": "源自古英语 scol，借自拉丁语 schola，来自古希腊语 schole（闲暇、用于学习辩论的闲暇时间、学堂）。"
     },
-    "silentIndices": [
-      1
-    ],
     "examples": [
       {
         "en": "Children gather eagerly in morning school courtyards ready to engage in new classroom discoveries.",
@@ -24469,7 +24428,8 @@
     "ukphone": "ˈlaɪbrəri",
     "syllables": [
       "li",
-      "brary"
+      "bra",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -24576,7 +24536,7 @@
       "origin": "源自古法语 classe，来自拉丁语 classis（召集的公民等级、舰队、组别），源于 calare（呼唤、召集）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -24750,8 +24710,8 @@
     "usphone": "ˈtiːtʃər",
     "ukphone": "ˈtiːtʃə(r)",
     "syllables": [
-      "teach",
-      "er"
+      "tea",
+      "cher"
     ],
     "etymology": {
       "root": {
@@ -24987,8 +24947,8 @@
     "usphone": "ˈstʌdi",
     "ukphone": "ˈstʌdi",
     "syllables": [
-      "stud",
-      "y"
+      "stu",
+      "dy"
     ],
     "etymology": {
       "root": {
@@ -25213,8 +25173,8 @@
     "usphone": "ˈɪŋɡlɪʃ",
     "ukphone": "ˈɪŋɡlɪʃ",
     "syllables": [
-      "Eng",
-      "lish"
+      "En",
+      "glish"
     ],
     "etymology": {
       "root": {
@@ -25299,6 +25259,9 @@
         "en": "Mandarin Chinese",
         "cn": "现代标准普通话"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -25321,9 +25284,6 @@
       "derivation": "亲历求索、客观翔实秉笔直书记述的人类社会往昔岁月兴衰变迁的伟大编年史卷 → 历史、历史学",
       "origin": "源自古法语 histoire，来自拉丁语 historia，借自希腊语 historia（通过调查求得的知识、探寻、叙述），源于 historein（调查）。"
     },
-    "silentIndices": [
-      4
-    ],
     "examples": [
       {
         "en": "Those who fail to study lessons of past history are doomed to repeat historical missteps.",
@@ -25401,8 +25361,8 @@
     "ukphone": "dʒiˈɒɡrəfi",
     "syllables": [
       "ge",
-      "og",
-      "ra",
+      "o",
+      "gra",
       "phy"
     ],
     "etymology": {
@@ -25726,9 +25686,6 @@
       },
       "derivation": "专供中小学生上学时背负课本、文具盒与作业册的专用书包背包 → 书包"
     },
-    "silentIndices": [
-      1
-    ],
     "examples": [
       {
         "en": "The young student slung his sturdy ergonomic schoolbag over both shoulders before heading to catch morning bus.",
@@ -25895,8 +25852,8 @@
     "usphone": "ˈruːlər",
     "ukphone": "ˈruːlə(r)",
     "syllables": [
-      "rul",
-      "er"
+      "ru",
+      "ler"
     ],
     "etymology": {
       "root": {
@@ -25942,8 +25899,9 @@
     "usphone": "ɪˈreɪsər",
     "ukphone": "ɪˈreɪzə(r)",
     "syllables": [
-      "eras",
-      "er"
+      "e",
+      "ra",
+      "ser"
     ],
     "etymology": {
       "prefix": {
@@ -26044,9 +26002,9 @@
     "ukphone": "ˈdɪkʃənri",
     "syllables": [
       "dic",
-      "tion",
-      "ar",
-      "y"
+      "tio",
+      "na",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -26514,8 +26472,8 @@
     "usphone": "ˈweðər",
     "ukphone": "ˈweðə(r)",
     "syllables": [
-      "weath",
-      "er"
+      "wea",
+      "ther"
     ],
     "etymology": {
       "root": {
@@ -26702,8 +26660,8 @@
     "usphone": "ˈreɪni",
     "ukphone": "ˈreɪni",
     "syllables": [
-      "rain",
-      "y"
+      "rai",
+      "ny"
     ],
     "etymology": {
       "root": {
@@ -27264,9 +27222,6 @@
       "origin": "指“光、光明”源自古英语 leoht，印欧语根 *leuk-（光亮，与 lucid 同源）；指“重量轻的”源自古英语 leoht，来自原始日耳曼语 *lingkhtaz（不沉重的，与 lung 同源）。字母 gh 为哑音。",
       "memoryHook": "light 照亮黑暗驱除阴霾叫光，分量微小不沉重也叫轻。"
     },
-    "silentIndices": [
-      2
-    ],
     "examples": [
       {
         "en": "Soft morning sunlight filtered gently through sheer linen curtains to illuminate the cozy bedroom.",
@@ -27816,7 +27771,7 @@
       "origin": "源自古英语 hyll（小山、土丘），来自原始日耳曼语 *khulniz，源于印欧语根 *kel-（高耸），与 column、culminate 同源。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -27944,8 +27899,8 @@
     "usphone": "ˈrɪvər",
     "ukphone": "ˈrɪvə(r)",
     "syllables": [
-      "riv",
-      "er"
+      "ri",
+      "ver"
     ],
     "etymology": {
       "root": {
@@ -28085,8 +28040,8 @@
     "usphone": "ˈænɪml",
     "ukphone": "ˈænɪml",
     "syllables": [
-      "an",
-      "i",
+      "a",
+      "ni",
       "mal"
     ],
     "etymology": {
@@ -28848,7 +28803,7 @@
       "origin": "借自法语 girafe，来自阿拉伯语 zarafa（长颈鹿），意为“高雅迈大步前行者”。"
     },
     "silentIndices": [
-      3,
+      4,
       6
     ],
     "examples": [
@@ -28925,8 +28880,8 @@
     "usphone": "ˈelɪfənt",
     "ukphone": "ˈelɪfənt",
     "syllables": [
-      "el",
       "e",
+      "le",
       "phant"
     ],
     "etymology": {
@@ -29024,7 +28979,7 @@
       "origin": "源自盎格鲁-诺曼法语 squirel，来自通俗拉丁语 *scuriolus，借自古希腊语 skiouros（松鼠，由 skia 阴凉 + oura 尾巴构成）。"
     },
     "silentIndices": [
-      7
+      4
     ],
     "examples": [
       {
@@ -29321,8 +29276,8 @@
     "usphone": "ˈtʃɪkɪn",
     "ukphone": "ˈtʃɪkɪn",
     "syllables": [
-      "chick",
-      "en"
+      "chi",
+      "cken"
     ],
     "etymology": {
       "root": {
@@ -29689,7 +29644,7 @@
       "origin": "源自古英语 buttorfleoge，由 butere（黄油）+ fleoge（飞虫）复合而成。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -30137,7 +30092,7 @@
       "origin": "源自古英语 græs，来自原始日耳曼语 *grasam，源于印欧语根 *ghre-（生长、长出新芽）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -30302,8 +30257,8 @@
     "usphone": "ˈfɔːrɪst",
     "ukphone": "ˈfɒrɪst",
     "syllables": [
-      "for",
-      "est"
+      "fo",
+      "rest"
     ],
     "etymology": {
       "root": {
@@ -30617,8 +30572,8 @@
     "usphone": "ˈsɪnəmə",
     "ukphone": "ˈsɪnəmə",
     "syllables": [
-      "cin",
-      "e",
+      "ci",
+      "ne",
       "ma"
     ],
     "etymology": {
@@ -30664,8 +30619,7 @@
     "ukphone": "ˈfæktri",
     "syllables": [
       "fac",
-      "to",
-      "ry"
+      "tory"
     ],
     "etymology": {
       "root": {
@@ -31369,8 +31323,8 @@
     "ukphone": "ˈɡrəʊsəri",
     "syllables": [
       "gro",
-      "cer",
-      "y"
+      "ce",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -31471,7 +31425,7 @@
       "origin": "源自古英语 heall（大厅、庄园主宅），来自原始日耳曼语 *khalo-（被覆盖的处所），源于印欧语根 *kel-（隐藏、覆盖）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -31522,7 +31476,7 @@
       "derivation": "供行人车辆安全横穿公路铁道、或轮渡横跨江海的交叉过道结点 → 人行横道、交叉路口、横渡"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -31900,9 +31854,6 @@
       "derivation": "笔直笔挺绝不弯曲偏斜的准绳，引申为符合道义法则的正确无误、神圣不可侵犯的公民权利与右侧，字母 gh 为哑音 → 正确的、权利、右边",
       "origin": "源自古英语 riht（正直的、正当的、合法的、直的），来自原始日耳曼语 *rekhtaz，源于印欧语根 *reg-（笔直移动、统治、指引）。"
     },
-    "silentIndices": [
-      2
-    ],
     "examples": [
       {
         "en": "Human rights organizations advocate tirelessly to ensure that all citizens enjoy freedom, dignity, and fair legal representation.",
@@ -33095,8 +33046,8 @@
     "usphone": "ˈfɔːrən",
     "ukphone": "ˈfɒrən",
     "syllables": [
-      "for",
-      "eign"
+      "fo",
+      "reign"
     ],
     "etymology": {
       "root": {
@@ -33237,8 +33188,8 @@
     "usphone": "ˈæfrɪkə",
     "ukphone": "ˈæfrɪkə",
     "syllables": [
-      "Af",
-      "ri",
+      "A",
+      "fri",
       "ca"
     ],
     "etymology": {
@@ -33287,8 +33238,8 @@
     "ukphone": "əˈmerɪkə",
     "syllables": [
       "A",
-      "mer",
-      "i",
+      "me",
+      "ri",
       "ca"
     ],
     "etymology": {
@@ -33334,8 +33285,8 @@
     "ukphone": "əˈmerɪkən",
     "syllables": [
       "A",
-      "mer",
-      "i",
+      "me",
+      "ri",
       "can"
     ],
     "etymology": {
@@ -33382,9 +33333,10 @@
     "usphone": "ɔːˈstreɪliə",
     "ukphone": "ɒˈstreɪliə",
     "syllables": [
-      "Aus",
-      "tra",
-      "lia"
+      "Au",
+      "stra",
+      "li",
+      "a"
     ],
     "etymology": {
       "root": {
@@ -33475,8 +33427,8 @@
     "usphone": "ˈkænədə",
     "ukphone": "ˈkænədə",
     "syllables": [
-      "Can",
-      "a",
+      "Ca",
+      "na",
       "da"
     ],
     "etymology": {
@@ -33560,8 +33512,8 @@
     "usphone": "ˈɪŋɡlənd",
     "ukphone": "ˈɪŋɡlənd",
     "syllables": [
-      "Eng",
-      "land"
+      "En",
+      "gland"
     ],
     "etymology": {
       "prefix": {
@@ -33657,8 +33609,8 @@
     "usphone": "ˈsɪti",
     "ukphone": "ˈsɪti",
     "syllables": [
-      "cit",
-      "y"
+      "ci",
+      "ty"
     ],
     "etymology": {
       "root": {
@@ -33706,8 +33658,8 @@
     "usphone": "ˈkæpɪtl",
     "ukphone": "ˈkæpɪtl",
     "syllables": [
-      "cap",
-      "i",
+      "ca",
+      "pi",
       "tal"
     ],
     "etymology": {
@@ -33867,6 +33819,7 @@
       "origin": "源自古法语 village，来自拉丁语 villaticus（属于乡村庄园的），源于 villa（庄园、农舍）。"
     },
     "silentIndices": [
+      2,
       6
     ],
     "examples": [
@@ -34172,9 +34125,6 @@
       "derivation": "最初指人工负责繁重弹道航海数理心算的“计算员”，现代专指执行二进制程序指令的高速数字集成电路机器 → 计算机、电脑",
       "origin": "源自 compute（计算），来自拉丁语 computare（一起核算），由 com- + putare（清理、算账、思考）构成。"
     },
-    "silentIndices": [
-      7
-    ],
     "examples": [
       {
         "en": "Supercomputing quantum computers execute complex meteorological and thermodynamic simulations in microsecond intervals.",
@@ -34399,8 +34349,8 @@
     "usphone": "ˈplænɪt",
     "ukphone": "ˈplænɪt",
     "syllables": [
-      "plan",
-      "et"
+      "pla",
+      "net"
     ],
     "etymology": {
       "root": {
@@ -34539,8 +34489,8 @@
     "usphone": "ˈrɑːkɪt",
     "ukphone": "ˈrɒkɪt",
     "syllables": [
-      "rock",
-      "et"
+      "ro",
+      "cket"
     ],
     "etymology": {
       "root": {
@@ -35235,9 +35185,6 @@
       "derivation": "动词为 may 的虚拟与过去时形式，表示委婉推测或许可；名词表示翻江倒海的磅礴雄浑巨力，字母 gh 为哑音 → 可能、威力、巨力",
       "origin": "情态动词源自古英语 meahte（may 的过去式）；名词源自古英语 miht（力量、权力），均源于印欧语根 *magh-（能够、有力量）。"
     },
-    "silentIndices": [
-      2
-    ],
     "examples": [
       {
         "en": "Early morning overcast skies suggested that sudden scattered showers might sweep across the coastal bay area.",
@@ -35327,7 +35274,7 @@
       "origin": "源自古英语 sceolde（欠、有义务），为 sculan（即 shall）的过去式。"
     },
     "silentIndices": [
-      3
+      4
     ],
     "examples": [
       {
@@ -35373,7 +35320,7 @@
       "origin": "源自古英语 sceal（我欠、我应当），来自原始日耳曼语 *skal-，源于印欧语根 *skel-（欠负）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -37397,7 +37344,7 @@
       "origin": "源自古英语 eall（所有、全部、完全），来自原始日耳曼语 *alnaz。"
     },
     "silentIndices": [
-      2
+      1
     ],
     "examples": [
       {
@@ -37434,8 +37381,8 @@
     "usphone": "ˈʌðər",
     "ukphone": "ˈʌðə(r)",
     "syllables": [
-      "oth",
-      "er"
+      "o",
+      "ther"
     ],
     "etymology": {
       "root": {
@@ -37479,9 +37426,9 @@
     "usphone": "əˈnʌðər",
     "ukphone": "əˈnʌðə(r)",
     "syllables": [
-      "an",
-      "oth",
-      "er"
+      "a",
+      "no",
+      "ther"
     ],
     "etymology": {
       "prefix": {
@@ -37527,8 +37474,8 @@
     "usphone": "ˈevri",
     "ukphone": "ˈevri",
     "syllables": [
-      "eve",
-      "ry"
+      "e",
+      "very"
     ],
     "etymology": {
       "prefix": {
@@ -37627,8 +37574,8 @@
     "usphone": "ˈevriwʌn",
     "ukphone": "ˈevriwʌn",
     "syllables": [
-      "ev",
-      "ery",
+      "e",
+      "very",
       "one"
     ],
     "etymology": {
@@ -37680,8 +37627,8 @@
     "usphone": "ˈevriwer",
     "ukphone": "ˈevriweə(r)",
     "syllables": [
-      "ev",
-      "ery",
+      "e",
+      "very",
       "where"
     ],
     "etymology": {
@@ -37786,8 +37733,8 @@
     "usphone": "ˈnʌθɪŋ",
     "ukphone": "ˈnʌθɪŋ",
     "syllables": [
-      "noth",
-      "ing"
+      "no",
+      "thing"
     ],
     "etymology": {
       "prefix": {
@@ -37835,8 +37782,8 @@
     "usphone": "ˈmeni",
     "ukphone": "ˈmeni",
     "syllables": [
-      "man",
-      "y"
+      "ma",
+      "ny"
     ],
     "etymology": {
       "root": {
@@ -38031,7 +37978,7 @@
       "origin": "源自古英语 læs（较小、较少），来自原始日耳曼语 *laisiz。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -38161,8 +38108,8 @@
     "usphone": "ˈeni",
     "ukphone": "ˈeni",
     "syllables": [
-      "an",
-      "y"
+      "a",
+      "ny"
     ],
     "etymology": {
       "root": {
@@ -38265,7 +38212,7 @@
       "origin": "源自盎格鲁-诺曼法语 matere，来自拉丁语 materia（物质、木材、主题），源于 mater（母亲、源头）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -38301,7 +38248,8 @@
     "ukphone": "aɪˈdɪə",
     "syllables": [
       "i",
-      "dea"
+      "de",
+      "a"
     ],
     "etymology": {
       "root": {
@@ -38389,8 +38337,8 @@
     "usphone": "ˈpɪti",
     "ukphone": "ˈpɪti",
     "syllables": [
-      "pit",
-      "y"
+      "pi",
+      "ty"
     ],
     "etymology": {
       "root": {
@@ -38568,8 +38516,8 @@
     "usphone": "ˈhæbɪt",
     "ukphone": "ˈhæbɪt",
     "syllables": [
-      "hab",
-      "it"
+      "ha",
+      "bit"
     ],
     "etymology": {
       "root": {
@@ -38760,8 +38708,8 @@
     "usphone": "ˈʃædoʊ",
     "ukphone": "ˈʃædəʊ",
     "syllables": [
-      "shad",
-      "ow"
+      "sha",
+      "dow"
     ],
     "etymology": {
       "root": {
@@ -38805,8 +38753,8 @@
     "usphone": "mɪˈsteɪk",
     "ukphone": "mɪˈsteɪk",
     "syllables": [
-      "mis",
-      "take"
+      "mi",
+      "stake"
     ],
     "etymology": {
       "prefix": {
@@ -38906,8 +38854,8 @@
     "usphone": "ˈprɑːbləm",
     "ukphone": "ˈprɒbləm",
     "syllables": [
-      "prob",
-      "lem"
+      "pro",
+      "blem"
     ],
     "etymology": {
       "prefix": {
@@ -39003,8 +38951,8 @@
     "usphone": "ˈtɪkɪt",
     "ukphone": "ˈtɪkɪt",
     "syllables": [
-      "tick",
-      "et"
+      "ti",
+      "cket"
     ],
     "etymology": {
       "root": {
@@ -39095,8 +39043,8 @@
     "usphone": "ˈmʌni",
     "ukphone": "ˈmʌni",
     "syllables": [
-      "mon",
-      "ey"
+      "mo",
+      "ney"
     ],
     "etymology": {
       "root": {
@@ -39286,7 +39234,7 @@
       "origin": "源自中古英语 bal，来自古诺斯语 bollr（球）或古英语 *beall，源于印欧语根 *bhel-（吹胀、鼓起）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -39329,7 +39277,7 @@
       "memoryHook": "doll 大眼睛卷发小巧惹人怜爱的童年洋娃娃陪伴布偶。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -39498,8 +39446,8 @@
     "usphone": "ˈfɪnɪʃ",
     "ukphone": "ˈfɪnɪʃ",
     "syllables": [
-      "fin",
-      "ish"
+      "fi",
+      "nish"
     ],
     "etymology": {
       "root": {
@@ -39946,6 +39894,9 @@
         "en": "beg, borrow, or steal",
         "cn": "想方设法；千方百计穷尽一切手段"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -40780,7 +40731,7 @@
     },
     "silentIndices": [
       1,
-      4
+      3
     ],
     "examples": [
       {
@@ -40919,7 +40870,7 @@
       "origin": "源自古英语 missan（未击中、未能企及、感到惋惜缺憾），来自原始日耳曼语 *missjanan。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -41174,6 +41125,9 @@
         "en": "call collect",
         "cn": "打对方付费电话"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -41621,6 +41575,9 @@
         "en": "follow through",
         "cn": "坚持到底；彻底贯彻执行"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -41761,6 +41718,9 @@
         "en": "worry oneself sick",
         "cn": "担心得寝食难安；忧心如焚"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -41809,6 +41769,9 @@
         "en": "accidents will happen",
         "cn": "天有不测风云；磕磕碰碰在所难免"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -42273,8 +42236,8 @@
     "usphone": "ˈklevər",
     "ukphone": "ˈklevə(r)",
     "syllables": [
-      "clev",
-      "er"
+      "cle",
+      "ver"
     ],
     "etymology": {
       "root": {
@@ -42455,6 +42418,9 @@
         "en": "pretty penny",
         "cn": "一笔不菲的巨款"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -42530,7 +42496,7 @@
       "origin": "源自中古英语 handsom（易于操纵的、灵巧的），由 hand + -some 复合而成，16 世纪演变为体貌英俊之义。"
     },
     "silentIndices": [
-      2,
+      3,
       7
     ],
     "examples": [
@@ -42718,10 +42684,6 @@
       "derivation": "中古英语原本指“一贫如洗、毫无价值恶劣之人”（来自 nought 零、无），后语义大幅软化，专指孩童或宠物小打小闹调皮捣蛋不守规矩，字母 gh 为哑音 → 顽皮的、淘气的",
       "origin": "源自中古英语 noughty（贫穷的、邪恶的、不端正的），来自 nought（无、零）+ -y。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "The naughty golden retriever puppy hid grandfather's favorite woolen house slippers underneath the living room sofa.",
@@ -42876,7 +42838,7 @@
     },
     "silentIndices": [
       3,
-      7
+      6
     ],
     "examples": [
       {
@@ -42911,8 +42873,8 @@
     "usphone": "ˈpɑːpjələr",
     "ukphone": "ˈpɒpjələ(r)",
     "syllables": [
-      "pop",
-      "u",
+      "po",
+      "pu",
       "lar"
     ],
     "etymology": {
@@ -43156,8 +43118,8 @@
     "usphone": "ˈbɪzi",
     "ukphone": "ˈbɪzi",
     "syllables": [
-      "bus",
-      "y"
+      "bu",
+      "sy"
     ],
     "etymology": {
       "root": {
@@ -43579,8 +43541,8 @@
     "ukphone": "ˈdeɪndʒərəs",
     "syllables": [
       "dan",
-      "ger",
-      "ous"
+      "ge",
+      "rous"
     ],
     "etymology": {
       "root": {
@@ -43639,10 +43601,6 @@
       "derivation": "高耸入云巍峨凸显的崇山峻岭，字母 gh 为哑音，与 hill（小山）、height（高度）同源 → 高的、高空",
       "origin": "源自古英语 heah（高的、崇高的、高贵的），来自原始日耳曼语 *khaukhaz，源于印欧语根 *kewk-（高）。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "High alpine mountain summits gleam brilliantly with untouched perpetual snow under the vibrant cobalt blue sky.",
@@ -43782,6 +43740,7 @@
       "origin": "源自古英语 lytel，来自原始日耳曼语 *lutillaz，为 *lut-（微小、弯曲缩身）的指小衍生词。"
     },
     "silentIndices": [
+      2,
       5
     ],
     "examples": [
@@ -44085,6 +44044,9 @@
         "en": "difficult to say",
         "cn": "很难断言；说不准"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -44096,8 +44058,7 @@
     "ukphone": "ˈdɪfrənt",
     "syllables": [
       "dif",
-      "fer",
-      "ent"
+      "ferent"
     ],
     "etymology": {
       "prefix": {
@@ -44138,6 +44099,9 @@
         "en": "same difference",
         "cn": "半斤八两；没多大区别"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -44503,8 +44467,8 @@
     "usphone": "ˈredi",
     "ukphone": "ˈredi",
     "syllables": [
-      "read",
-      "y"
+      "rea",
+      "dy"
     ],
     "etymology": {
       "prefix": {
@@ -44551,8 +44515,8 @@
     "usphone": "ˈfraɪtn",
     "ukphone": "ˈfraɪtn",
     "syllables": [
-      "fright",
-      "en"
+      "frigh",
+      "ten"
     ],
     "etymology": {
       "root": {
@@ -44566,10 +44530,6 @@
       "derivation": "自古英语 fright（恐惧战栗，字母 gh 为哑音）加上致使后缀 -en 构成，指突如其来的变故令人浑身寒毛倒竖打颤恐惧 → 使惊吓、使害怕",
       "origin": "由 fright（惊骇、恐惧，来自古英语 fyrhto）+ -en（动词后缀）衍生而成。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Sudden deafening thunderclaps during the midnight mountain storm frightened the trembling herd of alpine deer.",
@@ -45033,8 +44993,8 @@
     "usphone": "ˈveri",
     "ukphone": "ˈveri",
     "syllables": [
-      "ver",
-      "y"
+      "ve",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -45256,6 +45216,9 @@
         "en": "really something",
         "cn": "真了不起；确实非同凡响"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -45280,7 +45243,7 @@
       "origin": "源自古英语 stille（静止的、平静的、不动的），来自原始日耳曼语 *stilli-，源于印欧语根 *stel-（放置、站立）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -45364,8 +45327,8 @@
     "ukphone": "təˈɡeðə(r)",
     "syllables": [
       "to",
-      "geth",
-      "er"
+      "ge",
+      "ther"
     ],
     "etymology": {
       "prefix": {
@@ -46077,8 +46040,8 @@
     "usphone": "ˈeniθɪŋ",
     "ukphone": "ˈeniθɪŋ",
     "syllables": [
-      "an",
-      "y",
+      "a",
+      "ny",
       "thing"
     ],
     "etymology": {
@@ -46126,8 +46089,8 @@
     "usphone": "ˈeniwer",
     "ukphone": "ˈeniweə(r)",
     "syllables": [
-      "an",
-      "y",
+      "a",
+      "ny",
       "where"
     ],
     "etymology": {
@@ -46215,6 +46178,9 @@
         "en": "disappear into thin air",
         "cn": "凭空消失不见（反义对应）"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -46365,6 +46331,9 @@
         "en": "center of attention",
         "cn": "万众瞩目的焦点；引人注目"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -46466,6 +46435,9 @@
         "en": "balloon into",
         "cn": "暴涨成为；迅速膨胀为"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -46539,7 +46511,7 @@
       "origin": "源自古英语 belle（钟、铃），来自原始日耳曼语 *bellon，源于印欧拟声语根 *bhel-（鸣响、吼叫）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -47032,7 +47004,7 @@
       "origin": "源自中古英语 ches，借自古法语 eschecs（复数，意为西洋棋、国王们），来自波斯语 shah（国王）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -47114,8 +47086,8 @@
     "usphone": "ˈkliːnər",
     "ukphone": "ˈkliːnə(r)",
     "syllables": [
-      "clean",
-      "er"
+      "clea",
+      "ner"
     ],
     "etymology": {
       "root": {
@@ -47162,8 +47134,8 @@
     "usphone": "ˈklaɪmər",
     "ukphone": "ˈklaɪmə(r)",
     "syllables": [
-      "climb",
-      "er"
+      "clim",
+      "ber"
     ],
     "etymology": {
       "root": {
@@ -47215,8 +47187,8 @@
     "usphone": "ˈklɑːzət",
     "ukphone": "ˈklɒzɪt",
     "syllables": [
-      "clos",
-      "et"
+      "clo",
+      "set"
     ],
     "etymology": {
       "root": {
@@ -47653,7 +47625,7 @@
       "origin": "源自晚期古英语 cros，借自古诺斯语 kross，源于拉丁语 crux（十字架）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -47793,9 +47765,6 @@
       "derivation": "由 dance（跳舞，来自古法语 danser，原义可能与拉伸绷紧身段伸展姿态有关）加上 -er 构成，字母 e 为哑音，指以肢体语言挥洒生命韵律与崇高美感的大师 → 舞蹈演员、舞蹈家",
       "origin": "由 dance + -er 派生而成。"
     },
-    "silentIndices": [
-      4
-    ],
     "examples": [
       {
         "en": "The prima ballerina is an exceptionally graceful dancer who mesmerized audiences with her flawless pirouettes.",
@@ -48204,8 +48173,8 @@
     "usphone": "ˈenərdʒi",
     "ukphone": "ˈenədʒi",
     "syllables": [
-      "en",
-      "er",
+      "e",
+      "ner",
       "gy"
     ],
     "etymology": {
@@ -48329,10 +48298,6 @@
       "derivation": "古英语 genog（全然满足、无所欠缺充足），字母 gh 发 /f/ 擦音（但在历史上对应喉音），指量能充沛无需追加，祈使句表适可而止 → 足够的、充分地、够了",
       "origin": "源自古英语 genog（充足的、大量的），来自原始日耳曼语 *ganogaz，源于 *ga-（完备）+ *nah-（到达、足够）。"
     },
-    "silentIndices": [
-      4,
-      5
-    ],
     "examples": [
       {
         "en": "Ensure your high-altitude hiking expedition carries enough potable water and thermal caloric rations for the blizzard.",
@@ -48412,10 +48377,10 @@
     "usphone": "ˈevribɑːdi",
     "ukphone": "ˈevribɒdi",
     "syllables": [
-      "ev",
-      "ery",
-      "bod",
-      "y"
+      "e",
+      "very",
+      "bo",
+      "dy"
     ],
     "etymology": {
       "prefix": {
@@ -48465,8 +48430,8 @@
     "usphone": "ˈevriθɪŋ",
     "ukphone": "ˈevriθɪŋ",
     "syllables": [
-      "ev",
-      "ery",
+      "e",
+      "very",
       "thing"
     ],
     "etymology": {
@@ -48616,10 +48581,6 @@
       "derivation": "古英语 feohtan（近身肉搏扭打撕咬），字母 gh 为哑音，从原始人类近身格斗，升华至保卫文明正义自由之殊死搏杀，以及为追求人类崇高理想的终生矢志奋斗抗争 → 战斗、奋斗、搏斗",
       "origin": "源自古英语 feohtan（战斗、搏斗、努力争取），来自原始日耳曼语 *fehtanan。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Principled human rights advocates fight tirelessly through international courts to protect vulnerable marginalized communities.",
@@ -48692,6 +48653,9 @@
         "en": "finally resolved",
         "cn": "终于圆满解决"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -48939,8 +48903,8 @@
     "usphone": "ˈfuːlɪʃ",
     "ukphone": "ˈfuːlɪʃ",
     "syllables": [
-      "fool",
-      "ish"
+      "foo",
+      "lish"
     ],
     "etymology": {
       "root": {
@@ -49000,7 +48964,7 @@
       "origin": "源自古英语 full（满的、充实的、完全的），来自原始日耳曼语 *fullaz，源于印欧语根 *pele-（充满）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -49399,8 +49363,8 @@
     "usphone": "ˈhʌni",
     "ukphone": "ˈhʌni",
     "syllables": [
-      "hon",
-      "ey"
+      "ho",
+      "ney"
     ],
     "etymology": {
       "root": {
@@ -49445,8 +49409,8 @@
     "ukphone": "haʊˈevə(r)",
     "syllables": [
       "how",
-      "ev",
-      "er"
+      "e",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -49985,6 +49949,9 @@
         "en": "a litter of puppies",
         "cn": "一窝小狗崽"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -49995,8 +49962,8 @@
     "usphone": "ˈlʌki",
     "ukphone": "ˈlʌki",
     "syllables": [
-      "luck",
-      "y"
+      "lu",
+      "cky"
     ],
     "etymology": {
       "root": {
@@ -50045,8 +50012,8 @@
     "usphone": "ˈmædʒɪk",
     "ukphone": "ˈmædʒɪk",
     "syllables": [
-      "mag",
-      "ic"
+      "ma",
+      "gic"
     ],
     "etymology": {
       "root": {
@@ -50280,7 +50247,7 @@
       "origin": "源自古法语 mes（一道菜），来自晚期拉丁语 missus（送上、摆上桌的一道菜），源于 mittere（派遣、放置）。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {
@@ -50332,7 +50299,7 @@
       "origin": "源自古英语 middel，来自原始日耳曼语 *medilaz，源于印欧语根 *medhyo-（中间）。"
     },
     "silentIndices": [
-      4,
+      2,
       5
     ],
     "examples": [
@@ -50407,6 +50374,9 @@
         "en": "mirror site",
         "cn": "镜像网站（网络服务器）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -50419,8 +50389,8 @@
     "usphone": "ˈmɑːdl",
     "ukphone": "ˈmɒdl",
     "syllables": [
-      "mod",
-      "el"
+      "mo",
+      "del"
     ],
     "etymology": {
       "root": {
@@ -50611,8 +50581,8 @@
     "usphone": "ˈmʌʃrʊm",
     "ukphone": "ˈmʌʃrʊm",
     "syllables": [
-      "mush",
-      "room"
+      "mu",
+      "shroom"
     ],
     "etymology": {
       "root": {
@@ -50715,10 +50685,6 @@
       "derivation": "古英语 neahgebur（字面意为“居住在附近的农人伙伴”，由 neah 近 + gebur 居民农夫，与 near、boor 粗汉同源），字母 gh 为哑音，指门挨门户对户守望相助的邻里乡亲 → 邻居、毗邻",
       "origin": "源自古英语 neahgebur（附近的居住者），由 neah（近）+ gebur（农夫、定居者）复合而成。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Friendly countryside neighbours share baskets of crisp homegrown garden apples and wild berries each autumn.",
@@ -50844,8 +50810,8 @@
     "usphone": "ˈnɔɪzi",
     "ukphone": "ˈnɔɪzi",
     "syllables": [
-      "nois",
-      "y"
+      "noi",
+      "sy"
     ],
     "etymology": {
       "root": {
@@ -51202,6 +51168,9 @@
         "en": "as sick as a parrot",
         "cn": "极其失望沮丧（英式俚语）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -51301,8 +51270,8 @@
     "ukphone": "ˈpiːənɪst",
     "syllables": [
       "pi",
-      "an",
-      "ist"
+      "a",
+      "nist"
     ],
     "etymology": {
       "root": {
@@ -51541,8 +51510,8 @@
     "usphone": "ˈpɑːkɪt",
     "ukphone": "ˈpɒkɪt",
     "syllables": [
-      "pock",
-      "et"
+      "po",
+      "cket"
     ],
     "etymology": {
       "root": {
@@ -51637,8 +51606,8 @@
     "usphone": "ˈpoʊstər",
     "ukphone": "ˈpəʊstə(r)",
     "syllables": [
-      "post",
-      "er"
+      "pos",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -51724,6 +51693,9 @@
         "en": "put into practice",
         "cn": "付诸实践；付诸实施"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -51852,7 +51824,7 @@
       "origin": "借自法语 programme，源于晚期拉丁语 programma，来自古希腊语 programma（公告、公开通知），由 pro-（在前面）+ gramma（书写的东西）构成。"
     },
     "silentIndices": [
-      7,
+      6,
       8
     ],
     "examples": [
@@ -52273,7 +52245,7 @@
       "origin": "源自古英语 rædels（意见、猜想、谜题），来自 rædan（商议、阅读、解释）。"
     },
     "silentIndices": [
-      4,
+      2,
       5
     ],
     "examples": [
@@ -52435,6 +52407,9 @@
         "en": "natural rubber",
         "cn": "天然橡胶"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -52484,6 +52459,9 @@
         "en": "absolute rubbish",
         "cn": "纯属一派胡言；彻底的垃圾"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -52750,7 +52728,8 @@
       "origin": "源自古法语 cisoires（大剪刀），来自晚期拉丁语 cisorium，受拉丁语 scissor（雕刻匠、切割者）影响而拼写变异。"
     },
     "silentIndices": [
-      1
+      1,
+      3
     ],
     "examples": [
       {
@@ -52874,9 +52853,8 @@
     "usphone": "ˈsevrəl",
     "ukphone": "ˈsevrəl",
     "syllables": [
-      "sev",
-      "er",
-      "al"
+      "se",
+      "veral"
     ],
     "etymology": {
       "root": {
@@ -52891,7 +52869,7 @@
       "origin": "源自盎格鲁-诺曼法语 several，来自中世纪拉丁语 severalis（各自的、分开的），源于拉丁语 separare（分开）。"
     },
     "silentIndices": [
-      4
+      3
     ],
     "examples": [
       {
@@ -53435,8 +53413,7 @@
     "usphone": "ˈsaʊər",
     "ukphone": "ˈsaʊə(r)",
     "syllables": [
-      "so",
-      "ur"
+      "sour"
     ],
     "etymology": {
       "root": {
@@ -53903,7 +53880,7 @@
       "origin": "源自拉丁语 suggerere（从下方提供、暗示），由 sub-（在下面）+ gerere（带来、运载）组合而成。"
     },
     "silentIndices": [
-      1
+      2
     ],
     "examples": [
       {
@@ -54270,10 +54247,6 @@
       "derivation": "从物体的一端直接进入并从另一端穿出 → 穿过、自始至终",
       "origin": "源自古英语 þurh（穿过、经过），源自原始日耳曼语 *þurhw。"
     },
-    "silentIndices": [
-      5,
-      6
-    ],
     "examples": [
       {
         "en": "The swift express train sped smoothly through the dark underground mountain tunnel.",
@@ -54440,8 +54413,8 @@
     "usphone": "ˈtʊrɪst",
     "ukphone": "ˈtʊərɪst",
     "syllables": [
-      "tour",
-      "ist"
+      "tou",
+      "rist"
     ],
     "etymology": {
       "root": {
@@ -54505,7 +54478,7 @@
       "origin": "由 travel（旅行）+ 双写辅音加 -er 构成（英式拼写 traveller，美式常作 traveler）。"
     },
     "silentIndices": [
-      6
+      5
     ],
     "examples": [
       {
@@ -54673,8 +54646,8 @@
     "usphone": "ˈvɪzɪtər",
     "ukphone": "ˈvɪzɪtə(r)",
     "syllables": [
-      "vis",
-      "i",
+      "vi",
+      "si",
       "tor"
     ],
     "etymology": {
@@ -55109,7 +55082,7 @@
       "origin": "由 win（赢得）+ 双写辅音加 -er 派生而成。"
     },
     "silentIndices": [
-      3
+      2
     ],
     "examples": [
       {

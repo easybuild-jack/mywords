@@ -28,6 +28,7 @@ const DICT_FILES = {
   'it-words': 'it-words.json',
   '2025KaoYanHongBaoShu': '2025KaoYanHongBaoShu.json',
   '4000_Essential_English_Words-meaning': '4000_Essential_English_Words-meaning.json',
+  basewords: 'basewords.json',
 }
 
 // ---------- 音标 ----------
@@ -63,25 +64,29 @@ function countPhoneticVowels(phoneNorm, lowerName) {
   return count
 }
 
+/** 成音节辅音：l/n/m 前是辅音（非 l/r）、后面不是元音（词尾或再接辅音）：ˈbɒtl、ˈlesn、ˌsevnˈtiːn、ˈoʊpnli */
 function countSyllabicConsonant(phoneNorm) {
   const s = phoneNorm.trim()
-  for (let k = s.length - 1; k >= 0; k--) {
+  let count = 0
+  for (let k = 1; k < s.length; k++) {
     if (!'lnm'.includes(s[k])) continue
-    const prev = s[k - 1]
-    if (!prev || isVowelSym(prev) || 'lr'.includes(prev)) return 0
-    if ([...s.slice(k + 1)].some(isVowelSym)) return 0
-    return 1
+    const prev = s[k - 1], next = s[k + 1]
+    if (isVowelSym(prev) || 'lr'.includes(prev)) continue
+    if (next !== undefined && isVowelSym(next)) continue
+    count++
   }
-  return 0
+  return count
 }
 
 const vowelCount = (phoneNorm, lower) => countPhoneticVowels(phoneNorm, lower) + countSyllabicConsonant(phoneNorm)
 
 // ---------- 词表 ----------
+/** 词表 + 读音表；CET4 的音标写法较松（e/o 表示 eɪ/oʊ），放最后加载并打 loose 标记 */
 function loadLexicon() {
   const lex = new Set()
   const phones = new Map()
-  for (const file of [...Object.values(DICT_FILES), 'basewords.json']) {
+  const order = [...Object.entries(DICT_FILES)].sort(([a], [b]) => (a === 'CET4_T') - (b === 'CET4_T'))
+  for (const [key, file] of order) {
     const p = path.join(ROOT, 'public', 'dicts', file)
     if (!fs.existsSync(p)) continue
     for (const w of JSON.parse(fs.readFileSync(p, 'utf8'))) {
@@ -89,7 +94,7 @@ function loadLexicon() {
       if (!/^[a-z]+$/.test(n)) continue
       lex.add(n)
       const ph = normalizePhone(w.usphone || w.ukphone)
-      if (ph && !phones.has(n)) phones.set(n, ph)
+      if (ph && !phones.has(n)) phones.set(n, { p: ph, loose: key === 'CET4_T' })
     }
   }
   return { lex, phones }
@@ -98,6 +103,22 @@ let LEXICON = new Set()
 let PHONES = new Map()
 /** 当前词的美音或英音里是否出现 ʃn / ʒn（由 processWord 设置） */
 let TION_UNIT = false
+/** 当前词：重读元音核的起始字母下标 → 音标里重音符号后面紧跟的音（由 processWord 设置） */
+let STRESS = new Map()
+
+/** 音标里每个重音符号：它前面有几个元音音位（= 重读的是第几个核）、后面紧跟的字符 */
+function stressMarks(rawPhone, lowerName) {
+  if (!rawPhone) return []
+  let s = String(rawPhone).split(/[；;|]/)[0].split(/\s+/).filter((t) => !/^[a-z]+\.$/i.test(t)).join('')
+  s = s.replace(/[-()\/]/g, '').replace(/əu/g, 'əʊ').replace(/ou/g, 'oʊ').replace(/au/g, 'aʊ').replace(/ɛ/g, 'e').replace(/ɚ/g, 'ər').replace(/ɝ/g, 'ɜːr').replace(/ɡ/g, 'g').replace(/[’']/g, 'ˈ')
+  const marks = []
+  for (let i = 0; i < s.length; i++) {
+    if (!'ˈˌ'.includes(s[i])) continue
+    const before = s.slice(0, i).replace(/[ˈˌ]/g, '')
+    marks.push({ idx: vowelCount(before, lowerName), next: s[i + 1] })
+  }
+  return marks
+}
 
 // ---------- 字母层 ----------
 const VOWEL_LETTERS = 'aeiou'
@@ -118,16 +139,18 @@ function isKnownBase(base) {
 }
 
 /** 词中哑 e 的下标：辅音 + e + 辅音开头后缀（re-place-ment），软音 c/g 后的 e + able/ous（re-place-a-ble） */
+let NO_INNER_SILENT = false
 function findInnerSilentE(w) {
   const silent = new Set()
-  const m1 = w.match(/^(.*[^aeiou]e)(ment|ly|ness|less|ful|some|wise)$/)
+  if (NO_INNER_SILENT) return silent
+  const m1 = w.match(/^(.*[^aeiou]e)(ment|ly|ness|less|ful|some|wise|ty)$/)
   if (m1 && isKnownBase(m1[1])) silent.add(m1[1].length - 1)
   const m2 = w.match(/^(.*[cg]e)(able|ably|ous|ously)$/)
   if (m2 && isKnownBase(m2[1])) silent.add(m2[1].length - 1)
   return silent
 }
 
-function makeCtx(w, phone, silent = findInnerSilentE(w)) {
+function makeCtx(w, phone, silent = findInnerSilentE(w), base = 0) {
   const hasW = phone.includes('w')
   const hasJ = phone.includes('j')
   const isV = (i) => {
@@ -141,26 +164,48 @@ function makeCtx(w, phone, silent = findInnerSilentE(w)) {
     if (hasJ && i < w.length - 1 && isVowelLetter(w[i - 1]) && isVowelLetter(w[i + 1])) return false
     return true
   }
-  return { w, phone, silent, isV }
+  return { w, phone, silent, isV, base }
 }
 
-const ONSET2 = new Set(['bl', 'br', 'cl', 'cr', 'dr', 'dw', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'sc', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw', 'tr', 'tw', 'th', 'sh', 'ch', 'ph', 'wh', 'qu', 'ck'])
+const ONSET2 = new Set(['bl', 'br', 'cl', 'cr', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'sc', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw', 'tr', 'tw', 'th', 'sh', 'ch', 'ph', 'wh', 'qu', 'ck'])
 const ONSET3 = new Set(['scr', 'shr', 'spl', 'spr', 'squ', 'str', 'thr', 'chr', 'phr', 'sch'])
 
 const SUFFIX_LIKE = new Set(['age', 'ice', 'ion', 'ant', 'ent', 'ate', 'ing', 'able', 'ible', 'ish', 'ist', 'ism', 'ity', 'ive', 'ure', 'ise', 'ize', 'ment', 'ness', 'less', 'ful', 'ly', 'er', 'or', 'al', 'ic', 'ed', 'en', 'ry', 'ty', 'cy', 'fy', 'ence', 'ance', 'ous', 'ute', 'ite', 'ine', 'ary', 'ory', 'ery', 'ard', 'ern', 'ten', 'ter', 'tor', 'ile', 'ade', 'ide', 'ode', 'ude', 'ose', 'ase', 'ese', 'let', 'ling', 'ess', 'ette', 'ee', 'eer', 'ward', 'wise', 'ways', 'fold', 'some', 'most', 'like', 'hood', 'ship', 'dom', 'th', 'ing', 'ings', 'ings', 'ers', 'ies', 'ally', 'ical'])
 const PREFIX_LIKE = new Set(['un', 'in', 'im', 'il', 'ir', 're', 'de', 'dis', 'mis', 'ex', 'pre', 'pro', 'sub', 'con', 'com', 'col', 'cor', 'per', 'en', 'em', 'be', 'a', 'ad', 'ab', 'ob', 'sup', 'sur', 'non', 'co', 'e', 'i', 'o', 'u', 'an', 'al', 'ar', 'as', 'at', 'ac', 'af', 'ag', 'ap', 'ec', 'ef', 'uni', 'bi', 'tri'])
-const SHORT_WHITELIST = new Set(['up', 'in', 'on', 'by', 'to', 'at', 'of', 'as'])
+const SHORT_WHITELIST = new Set(['up', 'in', 'on', 'by', 'to', 'at', 'of', 'as', 'be'])
 const STRIP_PREFIXES = ['multi', 'super', 'inter', 'under', 'over', 'micro', 'macro', 'auto', 'trans', 'sub', 'pre', 're', 'de', 'en', 'dis', 'mis', 'un', 'non', 'out', 'up', 'in', 'co']
 
-/** 音标骨架：抹掉长音符、把元音归成大类，容忍各词库间 bɔrd/bɔːrd、ɪmpoz/ɪmpoʊz、əz/æz 之类的写法差异 */
-function phoneSkeleton(p) {
+/**
+ * 音标骨架：抹掉长音符、把元音归成大类，容忍各词库间 bɔrd/bɔːrd、ɪmpoz/ɪmpoʊz 之类的写法差异。
+ * schwa 单独一类（cap /kæp/ 与 capability 开头的 /kəp/ 不吻合 → 不是复合词）。
+ * loose：CET4 词库用 e/o 表示 /eɪ/ /oʊ/（ache → ek、mate → met），来自该词库的读音把 eɪ 与 e 视为同类。
+ */
+function phoneSkeleton(p, loose = false) {
   return p
     .replace(/ː/g, '')
-    .replace(/eɪ/g, '1').replace(/aɪ/g, '2').replace(/ɔɪ/g, '3').replace(/aʊ/g, '4')
+    .replace(/aɪ/g, '2').replace(/ɔɪ/g, '3').replace(/aʊ/g, '4')
     .replace(/oʊ|əʊ|[oɔɒɑ]/g, 'O')
-    .replace(/[əʌæeɜ]/g, 'A')
+    .replace(/ə/g, 'X')
+    .replace(/eɪ/g, loose ? 'A' : '1')
+    .replace(/[ʌæeɜ]/g, 'A')
     .replace(/[ɪi]/g, 'I')
     .replace(/[ʊu]/g, 'U')
+}
+
+/**
+ * 部件读音是否与整词读音的开头/结尾吻合。
+ * tolerant：允许 schwa 与短元音互换（复合词右半常弱读：police-man /mən/、Eng-land /lənd/；功能词 up/as 有弱读形式）
+ */
+function edgeMatches(whole, part, fromEnd, tolerant) {
+  if (part.length > whole.length) return false
+  for (let k = 0; k < part.length; k++) {
+    const a = fromEnd ? whole[whole.length - 1 - k] : whole[k]
+    const b = fromEnd ? part[part.length - 1 - k] : part[k]
+    if (a === b) continue
+    if (tolerant && 'AX'.includes(a) && 'AX'.includes(b)) continue
+    return false
+  }
+  return true
 }
 
 const BOUND_PREFIXES = ['re', 'un', 'dis', 'mis', 'pre', 'non', 'de', 'en', 'em', 'im', 'in', 'anti', 'semi', 'multi', 'inter', 'hyper', 'sub', 'trans', 'co']
@@ -172,20 +217,22 @@ const BOUND_PREFIXES = ['re', 'un', 'dis', 'mis', 'pre', 'non', 'de', 'en', 'em'
  */
 function findCompoundCut(lower, phone) {
   if (BOUND_PREFIXES.some((p) => lower.startsWith(p) && lower.length - p.length >= 4 && LEXICON.has(lower.slice(p.length)))) return -1
-  const sk = phoneSkeleton(phone)
   let best = null
   for (let i = 2; i <= lower.length - 2; i++) {
     const left = lower.slice(0, i)
     const right = lower.slice(i)
-    if (!LEXICON.has(left) || !LEXICON.has(right)) continue
+    // 左半允许是复数形式（sales-woman、sports-man），但 s 能并入右半成词时不算（under-score 不是 unders-core）
+    const pluralOk = left.endsWith('s') && left.length >= 5 && LEXICON.has(left.slice(0, -1)) && !LEXICON.has('s' + right)
+    const leftWord = LEXICON.has(left) ? left : pluralOk ? left.slice(0, -1) : null
+    if (!leftWord || !LEXICON.has(right)) continue
     if (PREFIX_LIKE.has(left) || SUFFIX_LIKE.has(right)) continue
     if (left.length < 3 && !SHORT_WHITELIST.has(left)) continue
     if (right.length < 3 && !SHORT_WHITELIST.has(right)) continue
     if (phone) {
       // 有音标且明确不吻合的一半 → 否决（beg+in、gene+rate、less+on）；没音标的一半不算反证
-      const lp = PHONES.get(left), rp = PHONES.get(right)
-      if (lp && !sk.startsWith(phoneSkeleton(lp))) continue
-      if (rp && !sk.endsWith(phoneSkeleton(rp))) continue
+      const lp = PHONES.get(leftWord), rp = PHONES.get(right)
+      if (lp && !edgeMatches(phoneSkeleton(phone, lp.loose), phoneSkeleton(lp.p, lp.loose), false, SHORT_WHITELIST.has(left))) continue
+      if (rp && !edgeMatches(phoneSkeleton(phone, rp.loose), phoneSkeleton(rp.p, rp.loose), true, true)) continue
     }
     const score = Math.min(left.length, right.length) * 10 + right.length
     if (!best || score > best.score) best = { i, score }
@@ -269,6 +316,11 @@ function consonantsBefore(ctx, clusterStart, clusterEnd) {
   rest = cluster.slice(pre)
   if (rest.length === 1) return rest === 'x' ? pre + 1 : pre
   if (rest.length === 0) return pre
+  // 元音 + s + 单辅音：看重音符号。后一音节重读且 ˈ 紧贴 s 前（mɪˈsteɪk、dɪˈskʌs）→ s 起音归后；
+  // 否则（ˈmæstər、fænˈtæstɪk、ˈredʒɪstər）s 作前一音节韵尾归前。sh 是一个音，不拆
+  if (rest.length === 2 && rest[0] === 's' && rest !== 'sh' && ctx.isV(clusterStart + pre - 1)) {
+    if (STRESS.get(ctx.base + clusterEnd) !== 's') return pre + 1
+  }
 
   // 词首专属簇 kn/wr/gn 只在首字母不发音时才算 onset（un-known、re-write；weak-ness、sig-nal 不算）
   const dyn = new Set()
@@ -290,19 +342,19 @@ function isProtectedNucleus(word, absStart, absEnd, phone) {
 }
 
 /** 单纯词切分（不含边界识别、不校 V） */
-function splitSimple(w, phone, dropEdEs = true, silent = findInnerSilentE(w)) {
+function splitSimple(w, phone, dropEdEs = true, silent = findInnerSilentE(w), base = 0) {
   if (w.length <= 1) return [w]
-  // 辅音 + le(s|d) 自成音节（-lled 是 ll + ed，不算）
-  const m = w.match(/^(.+?[^aeiou])(le[sd]?)$/)
+  // 辅音 + le(s|d) 自成音节（-lled 是 ll + ed，不算）；英式 -tre/-bre（metre、theatre、fibre）读 /ər/，同样处理
+  const m = w.match(/^(.+?[^aeiou])(le[sd]?)$/) || (/ər?$/.test(phone) ? w.match(/^(.+?[^aeiou])(re)$/) : null)
   if (m && w.length >= 4 && !/lle[sd]?$/.test(w)) {
     const cIdx = m[1].length - 1
-    const ctx0 = makeCtx(w, phone, silent)
+    const ctx0 = makeCtx(w, phone, silent, base)
     if (!ctx0.isV(cIdx)) {
       const head = w.slice(0, cIdx)
-      if (head && hasVowelLetter(head)) return [...splitSimple(head, phone, dropEdEs, silent), w.slice(cIdx)]
+      if (head && hasVowelLetter(head)) return [...splitSimple(head, phone, dropEdEs, silent, base), w.slice(cIdx)]
     }
   }
-  const ctx = makeCtx(w, phone, silent)
+  const ctx = makeCtx(w, phone, silent, base)
   const nuclei = dropSilentFinal(w, findNuclei(ctx, w), dropEdEs)
   if (nuclei.length < 2) return [w]
   const cuts = []
@@ -323,29 +375,29 @@ function splitSimple(w, phone, dropEdEs = true, silent = findInnerSilentE(w)) {
  * 完整切分：复合词 → 词根+屈折后缀 → trans-/sub- 前缀 → 单纯词。
  * 返回 { segs, hard }，hard 为不可跨越的边界（相对 w 的绝对下标）。
  */
-function splitWord(w, phone, dropEdEs, depth = 0) {
+function splitWord(w, phone, dropEdEs, depth = 0, base = 0) {
   const shift = (r, off) => ({ segs: r.segs, hard: new Set([...r.hard].map((b) => b + off)) })
   if (depth < 3) {
     // 子词没有自己的音标时不再做复合词判定，避免仅凭词表误切
-    const myPhone = depth === 0 ? phone : PHONES.get(w)
+    const myPhone = depth === 0 ? phone : PHONES.get(w)?.p
     const cut = myPhone ? findCompoundCut(w, myPhone) : -1
     if (cut > 0) {
-      const L = splitWord(w.slice(0, cut), phone, dropEdEs, depth + 1)
-      const R = shift(splitWord(w.slice(cut), phone, dropEdEs, depth + 1), cut)
+      const L = splitWord(w.slice(0, cut), phone, dropEdEs, depth + 1, base)
+      const R = shift(splitWord(w.slice(cut), phone, dropEdEs, depth + 1, base + cut), cut)
       return { segs: [...L.segs, ...R.segs], hard: new Set([...L.hard, cut, ...R.hard]) }
     }
     const scut = findSuffixCut(w)
     if (scut > 0) {
-      const L = splitWord(w.slice(0, scut), phone, dropEdEs, depth + 1)
+      const L = splitWord(w.slice(0, scut), phone, dropEdEs, depth + 1, base)
       return { segs: [...L.segs, w.slice(scut)], hard: new Set([...L.hard, scut]) }
     }
     const pm = w.match(/^(trans|sub)([^aeiouy].*)$/)
     if (pm && hasVowelLetter(pm[2])) {
-      const R = shift(splitWord(pm[2], phone, dropEdEs, depth + 1), pm[1].length)
+      const R = shift(splitWord(pm[2], phone, dropEdEs, depth + 1, base + pm[1].length), pm[1].length)
       return { segs: [pm[1], ...R.segs], hard: new Set([pm[1].length, ...R.hard]) }
     }
   }
-  return { segs: splitSimple(w, phone, dropEdEs), hard: new Set() }
+  return { segs: splitSimple(w, phone, dropEdEs, undefined, base), hard: new Set() }
 }
 
 // ---------- S ≠ V 修正 ----------
@@ -404,7 +456,8 @@ function mergeTo(word, segs, V, hard) {
       if (lv && 'rnlm'.includes(right[0])) score += 100
       if (/[aeiou][nlrm]$/.test(left) && !isVowelLetter(right[0])) score += 60
       score -= (left + right).length
-      if (score > bestScore) { bestScore = score; bestIdx = i }
+      // 同分取靠后的：脱落的弱读元音通常在重读音节之后（ca-mera 而不是 came-ra）
+      if (score >= bestScore) { bestScore = score; bestIdx = i }
     }
     if (bestIdx === -1) break
     work.splice(bestIdx, 2, work[bestIdx] + work[bestIdx + 1])
@@ -424,6 +477,7 @@ const OVERRIDES = {
   grandpa: ['grand', 'pa'],
   grandma: ['grand', 'ma'],
   iron: ['i', 'ron'],
+  wednesday: ['Wednes', 'day'],
   'etc.': ['etc.'],
 }
 
@@ -446,24 +500,52 @@ function processWord(w) {
   TION_UNIT = /[ʃʒ]n/.test(normalizePhone(w.usphone) + ' ' + normalizePhone(w.ukphone))
   const V = vowelCount(phone, lower)
 
+  // 把音标里的重音位置对到字母层的元音核上（字母核数与音标元音数一致时才可靠）
+  STRESS = new Map()
+  const wholeNuclei = dropSilentFinal(lower, findNuclei(makeCtx(lower, phone), lower), true)
+  if (wholeNuclei.length === V) {
+    for (const mk of stressMarks(w.usphone || w.ukphone, lower)) {
+      if (wholeNuclei[mk.idx]) STRESS.set(wholeNuclei[mk.idx].start, mk.next)
+    }
+  }
+
   let { segs, hard } = splitWord(lower, phone, true)
   const S = segs.length
   let status = 'rule'
+  let innerSilent = findInnerSilentE(lower)
   if (S > V) { segs = mergeTo(lower, segs, V, hard); status = 'merged' }
   else if (S < V) {
     const ex = expandToV(lower, segs, V, phone)
     if (ex) { segs = ex; status = 'expanded' }
     else {
       // -ed/-es 被当成哑音但实际发音（hun-dred、her-cu-les）：不去哑音重切
-      const alt = splitWord(lower, phone, false)
+      let alt = splitWord(lower, phone, false)
+      if (alt.segs.length !== V) {
+        // 词中 e 被当成哑音但音标里有它（ni-ce-ty /ˈnaɪsəti/ 对比 safe-ty /ˈseɪfti/）
+        NO_INNER_SILENT = true
+        alt = splitWord(lower, phone, true)
+        NO_INNER_SILENT = false
+        if (alt.segs.length === V) innerSilent = new Set()
+      }
       if (alt.segs.length === V) { segs = alt.segs; status = 'rule' } else status = 'tooFew'
     }
   }
-  return { syllables: restoreCase(name, segs), status, V, S }
+  return { syllables: restoreCase(name, segs), status, V, S, innerSilent }
 }
 
 // ---------- 主流程 ----------
 ;({ lex: LEXICON, phones: PHONES } = loadLexicon())
+
+const dbgIdx = args.indexOf('--debug')
+if (dbgIdx >= 0) {
+  const name = args[dbgIdx + 1].toLowerCase()
+  const entry = Object.values(DICT_FILES).flatMap((f) => JSON.parse(fs.readFileSync(path.join(ROOT, 'public', 'dicts', f), 'utf8'))).find((w) => w.name.toLowerCase() === name)
+  const phone = normalizePhone(entry?.usphone || entry?.ukphone) || PHONES.get(name)?.p || ''
+  TION_UNIT = /[ʃʒ]n/.test(normalizePhone(entry?.usphone) + ' ' + normalizePhone(entry?.ukphone))
+  const result = entry ? processWord(entry) : null
+  console.log({ name, phone, V: vowelCount(phone, name), stress: [...STRESS], compoundCut: findCompoundCut(name, phone), suffixCut: findSuffixCut(name), split: splitWord(name, phone, true).segs.join('-'), result })
+  process.exit(0)
+}
 const targets = TARGETS.length ? TARGETS : Object.keys(DICT_FILES)
 const logLines = []
 
@@ -508,7 +590,7 @@ for (const key of targets) {
       }
       if (/[^aeioutd]ed$/.test(lower) && lastNuclei.length >= 2) sil.add(lower.length - 2)
       if (/[^aeiousxzcgh]es$/.test(lower) && lastNuclei.length >= 2) sil.add(lower.length - 2)
-      for (const i of ctx.silent) sil.add(i)
+      for (const i of r.innerSilent || []) sil.add(i)
       let pos = 0
       for (let i = 0; i < segs.length - 1; i++) {
         pos += segs[i].length
