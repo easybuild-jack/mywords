@@ -138,57 +138,47 @@ export default function ErrorBookPage() {
 
           {/* 3. 错词详细明细表格 */}
           <div className="glass-card rounded-3xl border border-white/10 overflow-hidden shadow-lg">
-            <table className="w-full text-xs text-left border-collapse">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.02] text-muted-foreground font-mono">
-                  <th className="py-3.5 px-4">单词拼写</th>
-                  <th className="py-3.5 px-4">音标与音节拆分</th>
-                  <th className="py-3.5 px-4">中文核心释义</th>
-                  <th className="py-3.5 px-4 text-center">累计错误次数</th>
-                  <th className="py-3.5 px-4 text-center">连续攻克进度</th>
-                  <th className="py-3.5 px-4 text-right">操作</th>
+                <tr className="border-b border-white/10 bg-white/[0.02] text-muted-foreground font-mono text-xs">
+                  <th className="py-2.5 px-4 w-48 font-semibold">单词拼写</th>
+                  <th className="py-2.5 px-4 w-52 font-semibold">音标</th>
+                  <th className="py-2.5 px-4 font-semibold">中文核心释义</th>
+                  <th className="py-2.5 px-4 w-36 text-right font-semibold">操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 font-mono">
                 {filteredList.map((item, idx) => {
-                  const errors = item.record.dictationErrorCount || 1
-                  const streak = item.record.consecutiveCorrectCount || 0
                   const w = item.word
 
                   return (
                     <tr key={w.id || idx} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-white text-sm">{w.name}</td>
-                      <td className="py-3.5 px-4 text-gray-300">
-                        <span className="text-primary font-semibold">{w.syllables?.join(' · ')}</span>
-                        <span className="text-muted-foreground ml-2 text-[11px]">{w.phoneticUs}</span>
-                      </td>
-                      <td className="py-3.5 px-4 text-gray-200 font-sans text-xs">
-                        {w.posList?.[0]?.pos} {w.posList?.[0]?.means?.join('； ')}
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded-full bg-destructive/15 text-destructive border border-destructive/30 font-bold">
-                          {errors} 次
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="flex items-center justify-center gap-1.5" title={`连续正确 ${streak}/3 次`}>
-                          <div className={`size-2.5 rounded-full ${streak >= 1 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
-                          <div className={`size-2.5 rounded-full ${streak >= 2 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
-                          <div className={`size-2.5 rounded-full ${streak >= 3 ? 'bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]' : 'bg-white/10'}`} />
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="py-2 px-4 font-bold text-white text-lg tracking-wide whitespace-nowrap">{w.name}</td>
+                      <td className="py-2 px-4 text-gray-300 font-sans text-lg whitespace-nowrap">
+                        <div className="inline-flex items-center gap-2">
+                          <span className="text-gray-300">{w.phoneticUs || '-'}</span>
                           <button
                             onClick={() => audioEngine.playPronunciation(w.name)}
-                            className="p-1.5 rounded-lg text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                            className="p-1 rounded-lg text-primary/80 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                             title="发音"
                           >
                             <Volume2 className="size-4" />
                           </button>
+                        </div>
+                      </td>
+                      <td className="py-2 px-4 text-white font-sans text-base font-normal leading-snug">
+                        {w.posList?.[0]?.pos && (
+                          <span className="text-primary font-mono font-semibold mr-2 text-base">
+                            {w.posList[0].pos}
+                          </span>
+                        )}
+                        <span>{w.posList?.[0]?.means?.join('； ')}</span>
+                      </td>
+                      <td className="py-2 px-4 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center justify-end gap-2 whitespace-nowrap">
                           <button
                             onClick={() => handleStartAnnihilation(filteredList.map((i) => i.word), idx)}
-                            className="px-2.5 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30 text-xs font-semibold transition-all cursor-pointer"
+                            className="px-3 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
                             title="从该词开始专项攻坚"
                           >
                             攻坚 →

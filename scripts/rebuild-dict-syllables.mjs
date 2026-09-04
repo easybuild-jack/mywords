@@ -591,12 +591,10 @@ for (const key of targets) {
       if (/[^aeioutd]ed$/.test(lower) && lastNuclei.length >= 2) sil.add(lower.length - 2)
       if (/[^aeiousxzcgh]es$/.test(lower) && lastNuclei.length >= 2) sil.add(lower.length - 2)
       for (const i of r.innerSilent || []) sil.add(i)
-      let pos = 0
-      for (let i = 0; i < segs.length - 1; i++) {
-        pos += segs[i].length
-        const a = lower[pos - 1], b = lower[pos]
-        // cc + e/i/y 是 /ks/ 两个音（suc-cess），不算哑音
-        if (a === b && !isVowelLetter(a) && !(a === 'c' && 'eiy'.includes(lower[pos + 1] || ''))) sil.add(pos - 1)
+      // 双写辅音第一个字母（不限于音节边界：loss、small 也算）；cc + e/i/y 是 /ks/ 两个音（suc-cess、ac-cept），不算
+      for (const m of lower.matchAll(/([b-df-hj-np-tv-z])\1/g)) {
+        if (m[1] === 'c' && 'eiy'.includes(lower[m.index + 2] || '')) continue
+        sil.add(m.index)
       }
       if (sil.size !== before) {
         stats.silentAdded++

@@ -9579,10 +9579,6 @@
     "syllables": [
       "through"
     ],
-    "silentIndices": [
-      5,
-      6
-    ],
     "examples": [
       {
         "en": "Client requests pass through authentication middleware before reaching business controllers.",
@@ -10009,12 +10005,6 @@
       "derivation": "用明显的强光照亮 → 高亮、突出显示",
       "origin": "由 high 与 light 复合而成。"
     },
-    "silentIndices": [
-      2,
-      3,
-      6,
-      7
-    ],
     "examples": [
       {
         "en": "Modern IDEs highlight syntax errors in red squiggly lines instantly.",
@@ -19632,7 +19622,9 @@
       "derivation": "向前推进的步骤程序 → 过程、操作系统进程",
       "origin": "源自拉丁语 processus，来自 procedere（向前进）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      5
+    ],
     "examples": [
       {
         "en": "Operating systems allocate an isolated virtual memory space for each running process.",
@@ -21155,6 +21147,9 @@
         "en": "regardless of",
         "cn": "不管；不论"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -21806,7 +21801,9 @@
     "etymology": {
       "origin": "源自古英语 los（失去、破败）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "UDP transports streaming media without retransmissions, tolerating minor network packet loss.",
@@ -23358,6 +23355,9 @@
         "en": "more or less",
         "cn": "或多或少；差不多"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -25938,10 +25938,6 @@
     "syllables": [
       "high"
     ],
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "High availability server architectures eliminate single points of failure using automated failover.",
@@ -26029,10 +26025,6 @@
     "ukphone": "laɪt",
     "syllables": [
       "light"
-    ],
-    "silentIndices": [
-      2,
-      3
     ],
     "examples": [
       {
@@ -28017,10 +28009,6 @@
       "derivation": "对作品享有的复制与分发专有法律权利 → 版权、著作权",
       "origin": "由 copy 与 right 复合而成。"
     },
-    "silentIndices": [
-      6,
-      7
-    ],
     "examples": [
       {
         "en": "Open source LICENSE files declare copyright ownership alongside explicit usage permissions.",
@@ -28536,10 +28524,6 @@
       "derivation": "完全尽管如此 → 尽管、虽然",
       "origin": "由 all 与 though 复合而成。"
     },
-    "silentIndices": [
-      6,
-      7
-    ],
     "examples": [
       {
         "en": "Although interpreted code runs slower than native code, its rapid prototyping cycle accelerates development.",
@@ -28718,7 +28702,9 @@
     "syllables": [
       "small"
     ],
-    "silentIndices": [],
+    "silentIndices": [
+      3
+    ],
     "examples": [
       {
         "en": "Microservices emphasize small single-purpose services communicating through lightweight protocols.",
@@ -29382,7 +29368,8 @@
       "origin": "源自古法语 adrecier，来自拉丁语 addirectiare（直接指向）。"
     },
     "silentIndices": [
-      1
+      1,
+      5
     ],
     "examples": [
       {
@@ -31682,6 +31669,7 @@
       "derivation": "其状态受到严格规约监督管理的 → 受控的"
     },
     "silentIndices": [
+      6,
       8
     ],
     "examples": [
@@ -33205,6 +33193,9 @@
         "en": "successful build",
         "cn": "构建成功"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -39637,6 +39628,9 @@
         "en": "compress image",
         "cn": "压缩图像"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -40514,6 +40508,9 @@
         "en": "notification bell",
         "cn": "通知铃铛图标"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -41494,10 +41491,6 @@
       "derivation": "正值黑夜正中间的时段 → 午夜",
       "origin": "源自古英语 midniht。"
     },
-    "silentIndices": [
-      5,
-      6
-    ],
     "examples": [
       {
         "en": "Database maintenance cron jobs trigger scheduled backup archive scripts at midnight every evening.",
@@ -41529,10 +41522,6 @@
     "etymology": {
       "origin": "源自古英语 þeah（尽管、然而）。"
     },
-    "silentIndices": [
-      4,
-      5
-    ],
     "examples": [
       {
         "en": "The query returned instantly though underlying relational database tables contained millions of records.",
@@ -41813,10 +41802,6 @@
       "derivation": "自始至终完全穿透遍及全部空间或时间 → 贯穿、遍及",
       "origin": "由 through 与 out 复合而成。"
     },
-    "silentIndices": [
-      5,
-      6
-    ],
     "examples": [
       {
         "en": "Maintain consistent coding style conventions throughout the whole enterprise codebase.",
@@ -43414,6 +43399,9 @@
         "en": "skill set",
         "cn": "技能组合"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -44051,6 +44039,9 @@
         "en": "byte stuffing",
         "cn": "字节填充"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -44509,6 +44500,9 @@
         "en": "discuss in detail",
         "cn": "详细讨论"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -46103,6 +46097,9 @@
         "en": "fall back",
         "cn": "回退降级（Fallback）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -46428,6 +46425,9 @@
         "en": "regular expression",
         "cn": "正则表达式（Regex）"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -49688,6 +49688,9 @@
         "en": "spell out",
         "cn": "详细解释；拼出"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -51315,10 +51318,6 @@
       "derivation": "天空中瞬时疾闪的高能电光，引申为超高速度的技术框架 → 闪电般的、极速的",
       "origin": "源自中古英语 lightning。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Salesforce developed Lightning Web Components LWC utilizing native modern custom elements and Shadow DOM.",
@@ -54203,10 +54202,6 @@
     "etymology": {
       "origin": "源自古英语 hiehþu（高度、高处），来自 heah（高的）。"
     },
-    "silentIndices": [
-      3,
-      4
-    ],
     "examples": [
       {
         "en": "The CSS height property sets the vertical layout height dimension of block and inline-block elements.",
@@ -57361,6 +57356,9 @@
         "en": "frosted glass",
         "cn": "磨砂玻璃效果"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -60177,6 +60175,9 @@
         "en": "roll out",
         "cn": "推出；上线发布"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -60810,6 +60811,9 @@
         "en": "cross-site scripting",
         "cn": "跨站脚本攻击（XSS）"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -62983,6 +62987,7 @@
       "derivation": "已被写入诊断日志文件或处于合法鉴权会话中的 → 已记录的、已登录的"
     },
     "silentIndices": [
+      2,
       4
     ],
     "examples": [
@@ -64697,10 +64702,6 @@
       "derivation": "在抽象阶梯或运算层级上更加宏观高级的 → 更高的、高阶的",
       "origin": "源自 high 加上比较级后缀 -er。"
     },
-    "silentIndices": [
-      2,
-      3
-    ],
     "examples": [
       {
         "en": "Higher-order functions like map, filter, and reduce accept functions as arguments or return functions as output.",
@@ -65733,6 +65734,9 @@
         "en": "bypass firewall",
         "cn": "绕过防火墙"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -67742,6 +67746,9 @@
         "en": "overall performance",
         "cn": "综合整体性能"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -67921,6 +67928,9 @@
         "en": "seamless migration",
         "cn": "无缝迁移"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -68139,7 +68149,8 @@
       "origin": "由 use 加上否定后缀 -less 构成。"
     },
     "silentIndices": [
-      2
+      2,
+      5
     ],
     "examples": [
       {
@@ -68744,6 +68755,9 @@
         "en": "unsuccessful attempt",
         "cn": "失败的尝试"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -69186,6 +69200,9 @@
         "en": "symmetric multiprocessing",
         "cn": "对称多处理架构（SMP）"
       }
+    ],
+    "silentIndices": [
+      10
     ]
   },
   {
@@ -72025,6 +72042,9 @@
         "en": "progress bar",
         "cn": "进度条"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -72860,6 +72880,9 @@
         "en": "still running",
         "cn": "仍在运行中"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -73263,7 +73286,8 @@
       }
     ],
     "silentIndices": [
-      2
+      2,
+      6
     ]
   },
   {
@@ -73805,6 +73829,9 @@
         "en": "table cell",
         "cn": "表格单元格（td）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {

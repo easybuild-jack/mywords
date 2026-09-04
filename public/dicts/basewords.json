@@ -23894,6 +23894,9 @@
         "en": "work as a waitress",
         "cn": "从事女服务员工作"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -35113,6 +35116,9 @@
         "en": "iron will",
         "cn": "钢铁般的坚强意志"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -35611,6 +35617,9 @@
         "en": "take off",
         "cn": "起飞；脱下；事业飞速起步"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -45932,6 +45941,9 @@
         "en": "lead actress",
         "cn": "女一号；领衔主演女演员"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
