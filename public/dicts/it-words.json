@@ -267,8 +267,8 @@
     "usphone": "dɪˈspleɪ",
     "ukphone": "dɪˈspleɪ",
     "syllables": [
-      "dis",
-      "play"
+      "di",
+      "splay"
     ],
     "etymology": {
       "prefix": {
@@ -860,8 +860,8 @@
     "usphone": "ˈkærəktər",
     "ukphone": "ˈkærəktə(r)",
     "syllables": [
-      "char",
-      "ac",
+      "cha",
+      "rac",
       "ter"
     ],
     "etymology": {
@@ -1323,8 +1323,8 @@
     "usphone": "ˈrekərd",
     "ukphone": "ˈrekɔːd",
     "syllables": [
-      "rec",
-      "ord"
+      "re",
+      "cord"
     ],
     "etymology": {
       "prefix": {
@@ -2394,8 +2394,8 @@
     "ukphone": "sɪˈlektɪd",
     "syllables": [
       "se",
-      "lec",
-      "ted"
+      "lect",
+      "ed"
     ],
     "etymology": {
       "prefix": {
@@ -2875,8 +2875,8 @@
     "usphone": "ˈedɪt",
     "ukphone": "ˈedɪt",
     "syllables": [
-      "ed",
-      "it"
+      "e",
+      "dit"
     ],
     "etymology": {
       "root": {
@@ -2956,6 +2956,9 @@
         "en": "marked increase",
         "cn": "显著增长"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -2966,8 +2969,8 @@
     "usphone": "ˈeriə",
     "ukphone": "ˈeəriə",
     "syllables": [
-      "ar",
-      "e",
+      "a",
+      "re",
       "a"
     ],
     "etymology": {
@@ -3008,8 +3011,8 @@
     "ukphone": "pəˈræmɪtə(r)",
     "syllables": [
       "pa",
-      "ram",
-      "e",
+      "ra",
+      "me",
       "ter"
     ],
     "etymology": {
@@ -3094,8 +3097,8 @@
     "usphone": "ˈveriəbəl",
     "ukphone": "ˈveəriəbl",
     "syllables": [
-      "var",
-      "i",
+      "va",
+      "ri",
       "a",
       "ble"
     ],
@@ -3353,8 +3356,8 @@
     "usphone": "ˈtɑːpɪk",
     "ukphone": "ˈtɒpɪk",
     "syllables": [
-      "top",
-      "ic"
+      "to",
+      "pic"
     ],
     "etymology": {
       "root": {
@@ -3702,8 +3705,8 @@
     "usphone": "ˈvæljuː",
     "ukphone": "ˈvæljuː",
     "syllables": [
-      "val",
-      "ue"
+      "va",
+      "lue"
     ],
     "etymology": {
       "root": {
@@ -4343,8 +4346,8 @@
     "usphone": "ˈsɪstəm",
     "ukphone": "ˈsɪstəm",
     "syllables": [
-      "sys",
-      "tem"
+      "sy",
+      "stem"
     ],
     "etymology": {
       "prefix": {
@@ -5291,8 +5294,9 @@
     "usphone": "ɪˈneɪbl",
     "ukphone": "ɪnˈeɪbl",
     "syllables": [
-      "en",
-      "able"
+      "e",
+      "na",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -5342,9 +5346,9 @@
     "usphone": "ˌɑːpəˈreɪʃn",
     "ukphone": "ˌɒpəˈreɪʃn",
     "syllables": [
-      "op",
-      "er",
-      "a",
+      "o",
+      "pe",
+      "ra",
       "tion"
     ],
     "etymology": {
@@ -5536,9 +5540,9 @@
     "usphone": "əˈnʌðər",
     "ukphone": "əˈnʌðə(r)",
     "syllables": [
-      "an",
-      "oth",
-      "er"
+      "a",
+      "no",
+      "ther"
     ],
     "etymology": {
       "prefix": {
@@ -5621,8 +5625,8 @@
     "usphone": "ˈkɑːləm",
     "ukphone": "ˈkɒləm",
     "syllables": [
-      "col",
-      "umn"
+      "co",
+      "lumn"
     ],
     "etymology": {
       "root": {
@@ -5906,8 +5910,8 @@
     "usphone": "ɪˈskeɪp",
     "ukphone": "ɪˈskeɪp",
     "syllables": [
-      "es",
-      "cape"
+      "e",
+      "scape"
     ],
     "etymology": {
       "prefix": {
@@ -6673,9 +6677,9 @@
     "usphone": "ˈrefərəns",
     "ukphone": "ˈrefərəns",
     "syllables": [
-      "ref",
-      "er",
-      "ence"
+      "re",
+      "fe",
+      "rence"
     ],
     "etymology": {
       "prefix": {
@@ -6730,8 +6734,8 @@
     "usphone": "ˈʌðər",
     "ukphone": "ˈʌðə(r)",
     "syllables": [
-      "oth",
-      "er"
+      "o",
+      "ther"
     ],
     "examples": [
       {
@@ -7098,8 +7102,8 @@
     "usphone": "ˈdesɪməl",
     "ukphone": "ˈdesɪml",
     "syllables": [
-      "dec",
-      "i",
+      "de",
+      "ci",
       "mal"
     ],
     "etymology": {
@@ -7183,8 +7187,8 @@
     "usphone": "ˌdefɪˈnɪʃən",
     "ukphone": "ˌdefɪˈnɪʃn",
     "syllables": [
-      "def",
-      "i",
+      "de",
+      "fi",
       "ni",
       "tion"
     ],
@@ -7426,7 +7430,9 @@
       "ar",
       "row"
     ],
-    "silentIndices": [],
+    "silentIndices": [
+      1
+    ],
     "examples": [
       {
         "en": "ES6 arrow functions do not bind their own this value.",
@@ -7550,6 +7556,7 @@
       "sue"
     ],
     "silentIndices": [
+      1,
       2,
       4
     ],
@@ -7587,8 +7594,8 @@
     "ukphone": "ˈdɪfrənt",
     "syllables": [
       "dif",
-      "fer",
-      "ent"
+      "fe",
+      "rent"
     ],
     "etymology": {
       "prefix": {
@@ -7639,8 +7646,9 @@
     "ukphone": "əˈveɪləbl",
     "syllables": [
       "a",
-      "vail",
-      "able"
+      "vai",
+      "la",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -7681,6 +7689,9 @@
         "en": "available options",
         "cn": "可用选项"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -7801,8 +7812,8 @@
     "ukphone": "ˈætrɪbjuːt",
     "syllables": [
       "at",
-      "trib",
-      "ute"
+      "tri",
+      "bute"
     ],
     "etymology": {
       "prefix": {
@@ -7977,8 +7988,8 @@
     "usphone": "ˈmɑːdɪfaɪ",
     "ukphone": "ˈmɒdɪfaɪ",
     "syllables": [
-      "mod",
-      "i",
+      "mo",
+      "di",
       "fy"
     ],
     "etymology": {
@@ -8246,8 +8257,8 @@
     "usphone": "ˈprɪntər",
     "ukphone": "ˈprɪntə(r)",
     "syllables": [
-      "print",
-      "er"
+      "prin",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -8567,8 +8578,8 @@
     "usphone": "ˈedɪtər",
     "ukphone": "ˈedɪtə(r)",
     "syllables": [
-      "ed",
-      "i",
+      "e",
+      "di",
       "tor"
     ],
     "etymology": {
@@ -8712,8 +8723,8 @@
     "usphone": "ˈpærəɡræf",
     "ukphone": "ˈpærəɡrɑːf",
     "syllables": [
-      "par",
-      "a",
+      "pa",
+      "ra",
       "graph"
     ],
     "etymology": {
@@ -9122,8 +9133,8 @@
     "usphone": "ˈpɔɪntər",
     "ukphone": "ˈpɔɪntə(r)",
     "syllables": [
-      "point",
-      "er"
+      "poin",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -9735,7 +9746,9 @@
       },
       "derivation": "开始的动作或阶段 → 起点、开头"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "The file pointer resets to the beginning of the file when opened in read mode.",
@@ -10074,8 +10087,8 @@
     "ukphone": "kənˈtɪnjuː",
     "syllables": [
       "con",
-      "tin",
-      "ue"
+      "ti",
+      "nue"
     ],
     "etymology": {
       "prefix": {
@@ -11124,8 +11137,8 @@
     "usphone": "ˈdɑːkjumənt",
     "ukphone": "ˈdɒkjumənt",
     "syllables": [
-      "doc",
-      "u",
+      "do",
+      "cu",
       "ment"
     ],
     "etymology": {
@@ -11214,8 +11227,8 @@
     "ukphone": "njuːˈmerɪk",
     "syllables": [
       "nu",
-      "mer",
-      "ic"
+      "me",
+      "ric"
     ],
     "etymology": {
       "root": {
@@ -11483,8 +11496,8 @@
     "usphone": "ˈhɪstəri",
     "ukphone": "ˈhɪstri",
     "syllables": [
-      "his",
-      "to",
+      "hi",
+      "sto",
       "ry"
     ],
     "etymology": {
@@ -11525,8 +11538,8 @@
     "usphone": "ˈsekənd",
     "ukphone": "ˈsekənd",
     "syllables": [
-      "sec",
-      "ond"
+      "se",
+      "cond"
     ],
     "etymology": {
       "root": {
@@ -11927,7 +11940,9 @@
       "derivation": "在下方承受托举 → 支持、支援",
       "origin": "源自拉丁语 supportare，来自 sub- + portare（搬运、携带）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "Modern Web APIs support asynchronous streams to handle large file payloads efficiently.",
@@ -11963,8 +11978,8 @@
     "ukphone": "spəˈsɪfɪk",
     "syllables": [
       "spe",
-      "cif",
-      "ic"
+      "ci",
+      "fic"
     ],
     "etymology": {
       "prefix": {
@@ -12128,8 +12143,8 @@
     "usphone": "dɪˈsket",
     "ukphone": "dɪˈsket",
     "syllables": [
-      "Dis",
-      "kette"
+      "Di",
+      "skette"
     ],
     "etymology": {
       "prefix": {
@@ -12319,8 +12334,8 @@
     "usphone": "ˈweðər",
     "ukphone": "ˈweðə(r)",
     "syllables": [
-      "wheth",
-      "er"
+      "whe",
+      "ther"
     ],
     "silentIndices": [
       1
@@ -12595,8 +12610,8 @@
     "usphone": "ˈʌðərwaɪz",
     "ukphone": "ˈʌðəwaɪz",
     "syllables": [
-      "oth",
-      "er",
+      "o",
+      "ther",
       "wise"
     ],
     "etymology": {
@@ -12692,9 +12707,9 @@
     "ukphone": "dɪˈlɪmɪtə(r)",
     "syllables": [
       "de",
-      "lim",
-      "it",
-      "er"
+      "li",
+      "mi",
+      "ter"
     ],
     "etymology": {
       "prefix": {
@@ -12843,8 +12858,8 @@
     "usphone": "ˈɡræfɪk",
     "ukphone": "ˈɡræfɪk",
     "syllables": [
-      "graph",
-      "ic"
+      "gra",
+      "phic"
     ],
     "etymology": {
       "root": {
@@ -13098,8 +13113,8 @@
     "ukphone": "haʊˈevə(r)",
     "syllables": [
       "how",
-      "ev",
-      "er"
+      "e",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -13261,8 +13276,8 @@
     "ukphone": "əˈrɪdʒənl",
     "syllables": [
       "o",
-      "rig",
-      "i",
+      "ri",
+      "gi",
       "nal"
     ],
     "etymology": {
@@ -13358,8 +13373,8 @@
     "usphone": "ˈprɑːpərti",
     "ukphone": "ˈprɒpəti",
     "syllables": [
-      "prop",
-      "er",
+      "pro",
+      "per",
       "ty"
     ],
     "etymology": {
@@ -13408,9 +13423,9 @@
     "usphone": "ˈsevərəl",
     "ukphone": "ˈsevrəl",
     "syllables": [
-      "sev",
-      "er",
-      "al"
+      "se",
+      "ve",
+      "ral"
     ],
     "etymology": {
       "prefix": {
@@ -13527,8 +13542,8 @@
     "usphone": "ˈbrækɪt",
     "ukphone": "ˈbrækɪt",
     "syllables": [
-      "brack",
-      "et"
+      "bra",
+      "cket"
     ],
     "silentIndices": [],
     "examples": [
@@ -13623,7 +13638,9 @@
       },
       "derivation": "处于运行运转过程中的 → 运行中的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "Use the docker ps command to view a list of all currently running containers.",
@@ -13870,8 +13887,8 @@
     "usphone": "ˈstændərd",
     "ukphone": "ˈstændəd",
     "syllables": [
-      "stand",
-      "ard"
+      "stan",
+      "dard"
     ],
     "etymology": {
       "root": {
@@ -13939,7 +13956,9 @@
       "origin": "源自拉丁语 occurrentia，来自 occurrere（遇见、发生）。"
     },
     "silentIndices": [
-      1
+      1,
+      4,
+      9
     ],
     "examples": [
       {
@@ -14058,8 +14077,8 @@
     "usphone": "ˌdestɪˈneɪʃn",
     "ukphone": "ˌdestɪˈneɪʃn",
     "syllables": [
-      "des",
-      "ti",
+      "de",
+      "sti",
       "na",
       "tion"
     ],
@@ -14554,8 +14573,8 @@
     "usphone": "ˈmuːvɪŋ",
     "ukphone": "ˈmuːvɪŋ",
     "syllables": [
-      "mov",
-      "ing"
+      "mo",
+      "ving"
     ],
     "etymology": {
       "root": {
@@ -14598,8 +14617,8 @@
     "ukphone": "ˌkəʊˈprəʊsesə(r)",
     "syllables": [
       "co",
-      "proc",
-      "es",
+      "pro",
+      "ces",
       "sor"
     ],
     "etymology": {
@@ -14618,7 +14637,9 @@
       "derivation": "协同主处理器一起处理特殊任务的芯片 → 协处理器",
       "origin": "由前缀 co- 加上 processor 构成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      7
+    ],
     "examples": [
       {
         "en": "Early personal computers utilized an Intel 8087 numeric coprocessor to accelerate mathematical computations.",
@@ -14750,8 +14771,8 @@
     "usphone": "ˌnævɪˈɡeɪʃn",
     "ukphone": "ˌnævɪˈɡeɪʃn",
     "syllables": [
-      "nav",
-      "i",
+      "na",
+      "vi",
       "ga",
       "tion"
     ],
@@ -14802,8 +14823,8 @@
     "syllables": [
       "au",
       "to",
-      "mat",
-      "i",
+      "ma",
+      "ti",
       "cal",
       "ly"
     ],
@@ -15443,8 +15464,8 @@
     "usphone": "ˈmeɪkɪŋ",
     "ukphone": "ˈmeɪkɪŋ",
     "syllables": [
-      "mak",
-      "ing"
+      "ma",
+      "king"
     ],
     "etymology": {
       "root": {
@@ -15528,8 +15549,8 @@
     "ukphone": "ɔːlˈredi",
     "syllables": [
       "al",
-      "read",
-      "y"
+      "rea",
+      "dy"
     ],
     "etymology": {
       "prefix": {
@@ -15878,8 +15899,8 @@
     "ukphone": "kəmˈpjuːtə(r)",
     "syllables": [
       "com",
-      "put",
-      "er"
+      "pu",
+      "ter"
     ],
     "etymology": {
       "prefix": {
@@ -16055,8 +16076,8 @@
     "ukphone": "rɪˈkʌvə(r)",
     "syllables": [
       "re",
-      "cov",
-      "er"
+      "co",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -16195,8 +16216,7 @@
     "usphone": "ˈoʊpnɪŋ",
     "ukphone": "ˈəʊpnɪŋ",
     "syllables": [
-      "o",
-      "pen",
+      "open",
       "ing"
     ],
     "etymology": {
@@ -16907,8 +16927,8 @@
     "usphone": "ˈelɪmənt",
     "ukphone": "ˈelɪmənt",
     "syllables": [
-      "el",
       "e",
+      "le",
       "ment"
     ],
     "etymology": {
@@ -16952,8 +16972,8 @@
     "usphone": "ˌmɑːdɪfɪˈkeɪʃn",
     "ukphone": "ˌmɒdɪfɪˈkeɪʃn",
     "syllables": [
-      "mod",
-      "i",
+      "mo",
+      "di",
       "fi",
       "ca",
       "tion"
@@ -17067,6 +17087,7 @@
       "origin": "源自印刷排版术语 upper case。"
     },
     "silentIndices": [
+      1,
       2,
       8
     ],
@@ -17823,8 +17844,8 @@
     "usphone": "ˈlevəl",
     "ukphone": "ˈlevl",
     "syllables": [
-      "lev",
-      "el"
+      "le",
+      "vel"
     ],
     "etymology": {
       "root": {
@@ -18197,8 +18218,8 @@
     "usphone": "ˈveriənt",
     "ukphone": "ˈveəriənt",
     "syllables": [
-      "var",
-      "i",
+      "va",
+      "ri",
       "ant"
     ],
     "etymology": {
@@ -18393,7 +18414,9 @@
       "derivation": "在下面填补空缺不足 → 供应、补充",
       "origin": "源自拉丁语 supplere，来自 sub- + plere（填满）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "An uninterruptible power supply UPS protects server racks from sudden grid electricity drops.",
@@ -18552,8 +18575,8 @@
     "usphone": "ˈdʊrɪŋ",
     "ukphone": "ˈdjʊərɪŋ",
     "syllables": [
-      "dur",
-      "ing"
+      "du",
+      "ring"
     ],
     "etymology": {
       "root": {
@@ -18596,8 +18619,8 @@
     "usphone": "ˈmɑːdʒuːl",
     "ukphone": "ˈmɒdʒuːl",
     "syllables": [
-      "mod",
-      "ule"
+      "mo",
+      "dule"
     ],
     "etymology": {
       "root": {
@@ -18648,8 +18671,8 @@
     "usphone": "ˈmɑːnəkroʊm",
     "ukphone": "ˈmɒnəkrəʊm",
     "syllables": [
-      "mon",
-      "o",
+      "mo",
+      "no",
       "chrome"
     ],
     "etymology": {
@@ -18701,8 +18724,8 @@
     "ukphone": "əˈsɪstəns",
     "syllables": [
       "as",
-      "sist",
-      "ance"
+      "si",
+      "stance"
     ],
     "etymology": {
       "prefix": {
@@ -18785,8 +18808,8 @@
     "ukphone": "ˈlaɪbrəri",
     "syllables": [
       "li",
-      "brar",
-      "y"
+      "bra",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -18833,8 +18856,8 @@
     "usphone": "ˌdemənˈstreɪʃn",
     "ukphone": "ˌdemənˈstreɪʃn",
     "syllables": [
-      "dem",
-      "on",
+      "de",
+      "mon",
       "stra",
       "tion"
     ],
@@ -18962,8 +18985,8 @@
     "ukphone": "ɪˈvæljueɪt",
     "syllables": [
       "e",
-      "val",
-      "u",
+      "va",
+      "lu",
       "ate"
     ],
     "etymology": {
@@ -19144,8 +19167,8 @@
     "usphone": "ˈlɑːdʒɪkəl",
     "ukphone": "ˈlɒdʒɪkl",
     "syllables": [
-      "log",
-      "i",
+      "lo",
+      "gi",
       "cal"
     ],
     "etymology": {
@@ -19328,8 +19351,8 @@
     "usphone": "ˈdraɪvər",
     "ukphone": "ˈdraɪvə(r)",
     "syllables": [
-      "driv",
-      "er"
+      "dri",
+      "ver"
     ],
     "etymology": {
       "root": {
@@ -19420,8 +19443,8 @@
     "usphone": "ˈseɪvɪŋ",
     "ukphone": "ˈseɪvɪŋ",
     "syllables": [
-      "sav",
-      "ing"
+      "sa",
+      "ving"
     ],
     "etymology": {
       "root": {
@@ -19512,8 +19535,8 @@
     "usphone": "ˈlɪŋkər",
     "ukphone": "ˈlɪŋkə(r)",
     "syllables": [
-      "link",
-      "er"
+      "lin",
+      "ker"
     ],
     "etymology": {
       "root": {
@@ -19597,8 +19620,8 @@
     "usphone": "ˈprɑːses",
     "ukphone": "ˈprəʊses",
     "syllables": [
-      "proc",
-      "ess"
+      "pro",
+      "cess"
     ],
     "etymology": {
       "prefix": {
@@ -19694,9 +19717,9 @@
     "usphone": "ˈevəri",
     "ukphone": "ˈevri",
     "syllables": [
-      "ev",
-      "er",
-      "y"
+      "e",
+      "ve",
+      "ry"
     ],
     "etymology": {
       "origin": "源自古英语 æfre ælc（永远的每一个）。"
@@ -19793,6 +19816,7 @@
     },
     "silentIndices": [
       1,
+      2,
       7
     ],
     "examples": [
@@ -20602,6 +20626,7 @@
     },
     "silentIndices": [
       1,
+      2,
       7
     ],
     "examples": [
@@ -20736,8 +20761,8 @@
     "usphone": "ˈprezənt",
     "ukphone": "ˈpreznt",
     "syllables": [
-      "pres",
-      "ent"
+      "pre",
+      "sent"
     ],
     "etymology": {
       "prefix": {
@@ -20782,8 +20807,8 @@
     "syllables": [
       "in",
       "ter",
-      "pret",
-      "er"
+      "pre",
+      "ter"
     ],
     "etymology": {
       "prefix": {
@@ -20870,6 +20895,9 @@
         "en": "advance settings",
         "cn": "高级设置"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -21045,8 +21073,8 @@
     "ukphone": "juːˈtɪləti",
     "syllables": [
       "u",
-      "til",
-      "i",
+      "ti",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -21140,8 +21168,9 @@
     "usphone": "dɪsˈeɪbl",
     "ukphone": "dɪsˈeɪbl",
     "syllables": [
-      "dis",
-      "able"
+      "di",
+      "sa",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -21178,6 +21207,9 @@
         "en": "disable feature",
         "cn": "停用特性"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -21189,8 +21221,8 @@
     "ukphone": "kəmˈpætəbl",
     "syllables": [
       "com",
-      "pat",
-      "i",
+      "pa",
+      "ti",
       "ble"
     ],
     "etymology": {
@@ -21332,8 +21364,8 @@
     "syllables": [
       "al",
       "pha",
-      "bet",
-      "i",
+      "be",
+      "ti",
       "cal"
     ],
     "etymology": {
@@ -21518,8 +21550,8 @@
     "usphone": "ˈmɑːnɪtər",
     "ukphone": "ˈmɒnɪtə(r)",
     "syllables": [
-      "mon",
-      "i",
+      "mo",
+      "ni",
       "tor"
     ],
     "etymology": {
@@ -21568,8 +21600,8 @@
     "ukphone": "kənˌfɪɡəˈreɪʃn",
     "syllables": [
       "con",
-      "fig",
-      "u",
+      "fi",
+      "gu",
       "ra",
       "tion"
     ],
@@ -21697,7 +21729,9 @@
       },
       "derivation": "作为不可或缺的硬性条件的 → 必需的、必填的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "HTML form inputs marked with the required attribute block form submission if left blank.",
@@ -22202,8 +22236,8 @@
     "usphone": "ˈpʌblɪk",
     "ukphone": "ˈpʌblɪk",
     "syllables": [
-      "pub",
-      "lic"
+      "pu",
+      "blic"
     ],
     "etymology": {
       "root": {
@@ -22770,8 +22804,8 @@
     "usphone": "ˈvælɪd",
     "ukphone": "ˈvælɪd",
     "syllables": [
-      "val",
-      "id"
+      "va",
+      "lid"
     ],
     "etymology": {
       "root": {
@@ -22819,8 +22853,8 @@
     "usphone": "səˈspend",
     "ukphone": "səˈspend",
     "syllables": [
-      "sus",
-      "pend"
+      "su",
+      "spend"
     ],
     "etymology": {
       "prefix": {
@@ -22916,8 +22950,8 @@
     "usphone": "ˈsepəreɪt",
     "ukphone": "ˈseprət",
     "syllables": [
-      "sep",
-      "a",
+      "se",
+      "pa",
       "rate"
     ],
     "etymology": {
@@ -22969,8 +23003,8 @@
     "usphone": "ˈekoʊ",
     "ukphone": "ˈekəʊ",
     "syllables": [
-      "ech",
-      "o"
+      "e",
+      "cho"
     ],
     "etymology": {
       "root": {
@@ -23014,10 +23048,10 @@
     "usphone": "ˈnesəseri",
     "ukphone": "ˈnesəsəri",
     "syllables": [
-      "nec",
-      "es",
-      "sar",
-      "y"
+      "ne",
+      "ces",
+      "sa",
+      "ry"
     ],
     "etymology": {
       "prefix": {
@@ -23035,7 +23069,9 @@
       "derivation": "无法退让不可避免的 → 必要的、必需的",
       "origin": "源自拉丁语 necessarius，来自 ne- + cedere（退让）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "Install only necessary production dependencies to keep Docker container images lean and secure.",
@@ -23065,7 +23101,8 @@
     "usphone": "ˈeɪbl",
     "ukphone": "ˈeɪbl",
     "syllables": [
-      "able"
+      "a",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -23723,8 +23760,8 @@
     "usphone": "ˈveriəs",
     "ukphone": "ˈveəriəs",
     "syllables": [
-      "var",
-      "i",
+      "va",
+      "ri",
       "ous"
     ],
     "etymology": {
@@ -23953,7 +23990,9 @@
       },
       "derivation": "进行软件程序编写设计的工作活动 → 编程"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Object-oriented programming structures complex systems around encapsulated data objects and behaviors.",
@@ -24003,7 +24042,9 @@
       "derivation": "处于较靠上位置的 → 上层的、上面的",
       "origin": "源自 up 加上比较级后缀 -er。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1
+    ],
     "examples": [
       {
         "en": "The upper bound on binary search algorithm computational complexity is logarithmic O(log n).",
@@ -24118,8 +24159,8 @@
     "syllables": [
       "tem",
       "po",
-      "rar",
-      "i",
+      "ra",
+      "ri",
       "ly"
     ],
     "etymology": {
@@ -24390,9 +24431,8 @@
     "usphone": "ˈbaʊndri",
     "ukphone": "ˈbaʊndri",
     "syllables": [
-      "bound",
-      "a",
-      "ry"
+      "boun",
+      "dary"
     ],
     "etymology": {
       "root": {
@@ -24475,8 +24515,8 @@
     "usphone": "ɪˈnɪʃəlaɪz",
     "ukphone": "ɪˈnɪʃəlaɪz",
     "syllables": [
-      "in",
       "i",
+      "ni",
       "tial",
       "ize"
     ],
@@ -24530,8 +24570,8 @@
     "ukphone": "ˈpɜːsənl",
     "syllables": [
       "per",
-      "son",
-      "al"
+      "so",
+      "nal"
     ],
     "etymology": {
       "root": {
@@ -24761,8 +24801,8 @@
     "usphone": "ˈɡloʊbl",
     "ukphone": "ˈɡləʊbl",
     "syllables": [
-      "glob",
-      "al"
+      "glo",
+      "bal"
     ],
     "etymology": {
       "root": {
@@ -24915,8 +24955,8 @@
     "ukphone": "ˌɪntərˈæktɪv",
     "syllables": [
       "in",
-      "ter",
-      "ac",
+      "te",
+      "rac",
       "tive"
     ],
     "etymology": {
@@ -25018,9 +25058,9 @@
     "usphone": "ˈlɪtərəl",
     "ukphone": "ˈlɪtərəl",
     "syllables": [
-      "lit",
-      "er",
-      "al"
+      "li",
+      "te",
+      "ral"
     ],
     "etymology": {
       "root": {
@@ -25067,8 +25107,8 @@
     "usphone": "ˈræðər",
     "ukphone": "ˈrɑːðə(r)",
     "syllables": [
-      "rath",
-      "er"
+      "ra",
+      "ther"
     ],
     "etymology": {
       "root": {
@@ -25168,8 +25208,8 @@
     "usphone": "ˈmɑːrkər",
     "ukphone": "ˈmɑːkə(r)",
     "syllables": [
-      "mark",
-      "er"
+      "mar",
+      "ker"
     ],
     "etymology": {
       "root": {
@@ -25344,8 +25384,8 @@
     "ukphone": "əˈdæptə(r)",
     "syllables": [
       "a",
-      "dapt",
-      "er"
+      "dap",
+      "ter"
     ],
     "etymology": {
       "root": {
@@ -25719,7 +25759,9 @@
       "derivation": "按照正规规律标准地 → 正常地、通常地",
       "origin": "源自 normal 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      5
+    ],
     "examples": [
       {
         "en": "The daemon process terminates normally with an exit status code of zero upon task completion.",
@@ -25817,7 +25859,8 @@
       "origin": "源自 immediate 加上副词后缀 -ly。"
     },
     "silentIndices": [
-      1
+      1,
+      8
     ],
     "examples": [
       {
@@ -25849,10 +25892,10 @@
     "usphone": "ˈsepəreɪtɪd",
     "ukphone": "ˈsepəreɪtɪd",
     "syllables": [
-      "sep",
-      "a",
-      "rat",
-      "ed"
+      "se",
+      "pa",
+      "ra",
+      "ted"
     ],
     "etymology": {
       "root": {
@@ -25937,8 +25980,8 @@
     "ukphone": "ɪˈkwɪvələnt",
     "syllables": [
       "e",
-      "quiv",
-      "a",
+      "qui",
+      "va",
       "lent"
     ],
     "etymology": {
@@ -26068,8 +26111,8 @@
     "usphone": "ˈstɔːrɪdʒ",
     "ukphone": "ˈstɔːrɪdʒ",
     "syllables": [
-      "stor",
-      "age"
+      "sto",
+      "rage"
     ],
     "etymology": {
       "root": {
@@ -26556,8 +26599,8 @@
     "usphone": "ˈrezɪdənt",
     "ukphone": "ˈrezɪdənt",
     "syllables": [
-      "res",
-      "i",
+      "re",
+      "si",
       "dent"
     ],
     "etymology": {
@@ -26957,8 +27000,8 @@
     "syllables": [
       "in",
       "com",
-      "pat",
-      "i",
+      "pa",
+      "ti",
       "ble"
     ],
     "etymology": {
@@ -27143,8 +27186,8 @@
     "usphone": "ˈredɪli",
     "ukphone": "ˈredɪli",
     "syllables": [
-      "read",
-      "i",
+      "rea",
+      "di",
       "ly"
     ],
     "etymology": {
@@ -27185,8 +27228,8 @@
     "ukphone": "trænˈspɔːtəbl",
     "syllables": [
       "trans",
-      "port",
-      "a",
+      "por",
+      "ta",
       "ble"
     ],
     "etymology": {
@@ -27290,8 +27333,8 @@
     "usphone": "ˈredi",
     "ukphone": "ˈredi",
     "syllables": [
-      "read",
-      "y"
+      "rea",
+      "dy"
     ],
     "etymology": {
       "origin": "源自中古英语 redy，来自古英语 ræde（准备好的）。"
@@ -27534,6 +27577,9 @@
         "en": "user session",
         "cn": "用户会话"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -27659,8 +27705,8 @@
     "usphone": "ˈmænjuəl",
     "ukphone": "ˈmænjuəl",
     "syllables": [
-      "man",
-      "u",
+      "ma",
+      "nu",
       "al"
     ],
     "etymology": {
@@ -27710,8 +27756,8 @@
     "ukphone": "pəˈtɪkjələ(r)",
     "syllables": [
       "par",
-      "tic",
-      "u",
+      "ti",
+      "cu",
       "lar"
     ],
     "etymology": {
@@ -27821,6 +27867,7 @@
       "origin": "源自晚期拉丁语 additivus，来自 addere（增加）。"
     },
     "silentIndices": [
+      1,
       2,
       7
     ],
@@ -27854,8 +27901,8 @@
     "usphone": "ˈsɪmələr",
     "ukphone": "ˈsɪmələ(r)",
     "syllables": [
-      "sim",
-      "i",
+      "si",
+      "mi",
       "lar"
     ],
     "etymology": {
@@ -27957,8 +28004,8 @@
     "usphone": "ˈkɑːpiraɪt",
     "ukphone": "ˈkɒpiraɪt",
     "syllables": [
-      "cop",
-      "y",
+      "co",
+      "py",
       "right"
     ],
     "etymology": {
@@ -28112,8 +28159,8 @@
     "usphone": "mɪˈsteɪk",
     "ukphone": "mɪˈsteɪk",
     "syllables": [
-      "mis",
-      "take"
+      "mi",
+      "stake"
     ],
     "etymology": {
       "prefix": {
@@ -28292,8 +28339,8 @@
     "usphone": "ˈdɪdʒɪt",
     "ukphone": "ˈdɪdʒɪt",
     "syllables": [
-      "dig",
-      "it"
+      "di",
+      "git"
     ],
     "etymology": {
       "root": {
@@ -28390,8 +28437,8 @@
     "usphone": "ˈmɪnɪməm",
     "ukphone": "ˈmɪnɪməm",
     "syllables": [
-      "min",
-      "i",
+      "mi",
+      "ni",
       "mum"
     ],
     "etymology": {
@@ -28789,8 +28836,8 @@
     "usphone": "ˈmuːvi",
     "ukphone": "ˈmuːvi",
     "syllables": [
-      "mov",
-      "ie"
+      "mo",
+      "vie"
     ],
     "etymology": {
       "root": {
@@ -28949,7 +28996,9 @@
       },
       "derivation": "尚未被明确声明或赋值的 → 未定义的、undefined"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      7
+    ],
     "examples": [
       {
         "en": "In JavaScript, declaring a variable without an initialization assignment defaults its value to undefined.",
@@ -29130,8 +29179,8 @@
     "usphone": "ˌdɑːkjumenˈteɪʃn",
     "ukphone": "ˌdɒkjumenˈteɪʃn",
     "syllables": [
-      "doc",
-      "u",
+      "do",
+      "cu",
       "men",
       "ta",
       "tion"
@@ -29182,9 +29231,9 @@
     "usphone": "ˈæstərɪsk",
     "ukphone": "ˈæstərɪsk",
     "syllables": [
-      "as",
-      "ter",
-      "isk"
+      "a",
+      "ste",
+      "risk"
     ],
     "etymology": {
       "root": {
@@ -29227,8 +29276,8 @@
     "usphone": "ˈiːzəli",
     "ukphone": "ˈiːzəli",
     "syllables": [
-      "eas",
-      "i",
+      "ea",
+      "si",
       "ly"
     ],
     "etymology": {
@@ -29335,7 +29384,9 @@
       "derivation": "指引指向确切物理或虚拟目标位置的编号 → 地址、定址",
       "origin": "源自古法语 adrecier，来自拉丁语 addirectiare（直接指向）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1
+    ],
     "examples": [
       {
         "en": "Every network interface controller is assigned a unique hardware MAC address at manufacture.",
@@ -29880,8 +29931,8 @@
     "ukphone": "wenˈevə(r)",
     "syllables": [
       "when",
-      "ev",
-      "er"
+      "e",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -30084,9 +30135,9 @@
     "usphone": "ˈdʒenərəl",
     "ukphone": "ˈdʒenrəl",
     "syllables": [
-      "gen",
-      "er",
-      "al"
+      "ge",
+      "ne",
+      "ral"
     ],
     "etymology": {
       "root": {
@@ -30137,8 +30188,8 @@
       "as",
       "so",
       "ci",
-      "at",
-      "ed"
+      "a",
+      "ted"
     ],
     "etymology": {
       "prefix": {
@@ -30271,6 +30322,9 @@
         "en": "connect timeout",
         "cn": "连接超时"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -30334,8 +30388,8 @@
     "syllables": [
       "hex",
       "a",
-      "dec",
-      "i",
+      "de",
+      "ci",
       "mal"
     ],
     "etymology": {
@@ -30383,9 +30437,9 @@
     "usphone": "ˈdʒenəreɪt",
     "ukphone": "ˈdʒenəreɪt",
     "syllables": [
-      "gen",
-      "er",
-      "ate"
+      "ge",
+      "ne",
+      "rate"
     ],
     "etymology": {
       "root": {
@@ -30435,8 +30489,8 @@
     "usphone": "ˌspesɪfɪˈkeɪʃn",
     "ukphone": "ˌspesɪfɪˈkeɪʃn",
     "syllables": [
-      "spec",
-      "i",
+      "spe",
+      "ci",
       "fi",
       "ca",
       "tion"
@@ -30482,9 +30536,9 @@
     "usphone": "ˈkʌstəmaɪz",
     "ukphone": "ˈkʌstəmaɪz",
     "syllables": [
-      "cus",
-      "tom",
-      "ize"
+      "cu",
+      "sto",
+      "mize"
     ],
     "etymology": {
       "root": {
@@ -30706,6 +30760,9 @@
         "en": "lossless compression",
         "cn": "无损压缩"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -30716,8 +30773,9 @@
     "usphone": "ʌnˈeɪbl",
     "ukphone": "ʌnˈeɪbl",
     "syllables": [
-      "un",
-      "able"
+      "u",
+      "na",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -31031,8 +31089,8 @@
     "usphone": "ˈprɑːbləm",
     "ukphone": "ˈprɒbləm",
     "syllables": [
-      "prob",
-      "lem"
+      "pro",
+      "blem"
     ],
     "etymology": {
       "prefix": {
@@ -31365,6 +31423,9 @@
         "en": "snake case",
         "cn": "蛇形命名法（下划线命名）"
       }
+    ],
+    "silentIndices": [
+      9
     ]
   },
   {
@@ -31419,8 +31480,8 @@
     "usphone": "ɪˈnɪʃəli",
     "ukphone": "ɪˈnɪʃəli",
     "syllables": [
-      "in",
       "i",
+      "ni",
       "tial",
       "ly"
     ],
@@ -31436,7 +31497,9 @@
       "derivation": "在最开端的时间点地 → 最初、首先",
       "origin": "源自 initial 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "React state variables are initially populated with arguments passed into the useState call.",
@@ -32108,6 +32171,9 @@
         "en": "attempt to",
         "cn": "尝试去……"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -32185,6 +32251,9 @@
         "en": "newly formed",
         "cn": "新形成的"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -32279,8 +32348,8 @@
     "usphone": "ˈmɑːdəl",
     "ukphone": "ˈmɒdl",
     "syllables": [
-      "mod",
-      "el"
+      "mo",
+      "del"
     ],
     "etymology": {
       "root": {
@@ -32366,6 +32435,9 @@
         "en": "automatic correction",
         "cn": "自动纠正"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -32377,8 +32449,8 @@
     "usphone": "ˈreɪtɪŋ",
     "ukphone": "ˈreɪtɪŋ",
     "syllables": [
-      "rat",
-      "ing"
+      "ra",
+      "ting"
     ],
     "etymology": {
       "root": {
@@ -32421,10 +32493,10 @@
     "usphone": "ˈsekənderi",
     "ukphone": "ˈsekəndri",
     "syllables": [
-      "sec",
-      "ond",
-      "ar",
-      "y"
+      "se",
+      "con",
+      "da",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -32472,8 +32544,8 @@
     "usphone": "ˈlɪmɪt",
     "ukphone": "ˈlɪmɪt",
     "syllables": [
-      "lim",
-      "it"
+      "li",
+      "mit"
     ],
     "etymology": {
       "root": {
@@ -32861,8 +32933,8 @@
     "usphone": "ˈverɪfaɪ",
     "ukphone": "ˈverɪfaɪ",
     "syllables": [
-      "ver",
-      "i",
+      "ve",
+      "ri",
       "fy"
     ],
     "etymology": {
@@ -32944,6 +33016,9 @@
         "en": "in like manner",
         "cn": "同样地"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -33048,8 +33123,8 @@
     "usphone": "ˈemjuleɪtər",
     "ukphone": "ˈemjuleɪtə(r)",
     "syllables": [
-      "em",
-      "u",
+      "e",
+      "mu",
       "la",
       "tor"
     ],
@@ -33282,8 +33357,8 @@
     "ukphone": "təˈɡeðə(r)",
     "syllables": [
       "to",
-      "geth",
-      "er"
+      "ge",
+      "ther"
     ],
     "etymology": {
       "prefix": {
@@ -33463,8 +33538,8 @@
     "usphone": "ˈprɑːpərli",
     "ukphone": "ˈprɒpəli",
     "syllables": [
-      "prop",
-      "er",
+      "pro",
+      "per",
       "ly"
     ],
     "etymology": {
@@ -33577,6 +33652,9 @@
         "en": "partition splitting",
         "cn": "分区拆分"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -33691,9 +33769,9 @@
     "usphone": "ˈɑːpəreɪt",
     "ukphone": "ˈɒpəreɪt",
     "syllables": [
-      "op",
-      "er",
-      "ate"
+      "o",
+      "pe",
+      "rate"
     ],
     "etymology": {
       "root": {
@@ -33788,8 +33866,8 @@
     "usphone": "ˈiːzi",
     "ukphone": "ˈiːzi",
     "syllables": [
-      "eas",
-      "y"
+      "ea",
+      "sy"
     ],
     "etymology": {
       "root": {
@@ -33832,8 +33910,8 @@
     "usphone": "ˈmɑːdɪfaɪər",
     "ukphone": "ˈmɒdɪfaɪə(r)",
     "syllables": [
-      "mod",
-      "i",
+      "mo",
+      "di",
       "fi",
       "er"
     ],
@@ -33880,8 +33958,8 @@
     "ukphone": "ɪnˈvælɪd",
     "syllables": [
       "in",
-      "val",
-      "id"
+      "va",
+      "lid"
     ],
     "etymology": {
       "prefix": {
@@ -33929,8 +34007,8 @@
     "ukphone": "kəmˈpaɪlə(r)",
     "syllables": [
       "com",
-      "pil",
-      "er"
+      "pi",
+      "ler"
     ],
     "etymology": {
       "prefix": {
@@ -34131,8 +34209,8 @@
     "ukphone": "fəˈsɪləti",
     "syllables": [
       "fa",
-      "cil",
-      "i",
+      "ci",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -34323,8 +34401,8 @@
     "syllables": [
       "in",
       "di",
-      "vid",
-      "u",
+      "vi",
+      "du",
       "al"
     ],
     "etymology": {
@@ -34736,6 +34814,9 @@
         "en": "interrupt handler",
         "cn": "中断处理程序（ISR）"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -35320,8 +35401,8 @@
     "usphone": "ˈneɡətɪv",
     "ukphone": "ˈneɡətɪv",
     "syllables": [
-      "neg",
-      "a",
+      "ne",
+      "ga",
       "tive"
     ],
     "etymology": {
@@ -35373,8 +35454,8 @@
     "usphone": "ˈɪmɪdʒ",
     "ukphone": "ˈɪmɪdʒ",
     "syllables": [
-      "im",
-      "age"
+      "i",
+      "mage"
     ],
     "etymology": {
       "root": {
@@ -35728,8 +35809,8 @@
     "usphone": "ɪˈspeʃəli",
     "ukphone": "ɪˈspeʃəli",
     "syllables": [
-      "es",
-      "pe",
+      "e",
+      "spe",
       "cial",
       "ly"
     ],
@@ -35749,7 +35830,9 @@
       "derivation": "以格外突出特别的方式 → 特别、尤其",
       "origin": "源自古法语 especiel 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      7
+    ],
     "examples": [
       {
         "en": "Memory profiling is critical in long-running services, especially when handling concurrent WebSocket connections.",
@@ -35807,6 +35890,9 @@
         "en": "as usually",
         "cn": "照常；像往常一样"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -35818,8 +35904,8 @@
     "usphone": "ˌrekəˈmend",
     "ukphone": "ˌrekəˈmend",
     "syllables": [
-      "rec",
-      "om",
+      "re",
+      "com",
       "mend"
     ],
     "etymology": {
@@ -35853,6 +35939,9 @@
         "en": "strongly recommend",
         "cn": "强烈建议"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -36023,7 +36112,9 @@
       "derivation": "将两项相加合并放到一起的算术运算 → 加法、增加",
       "origin": "源自拉丁语 additio，来自 addere（增加）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1
+    ],
     "examples": [
       {
         "en": "Arithmetic Logic Units ALU execute binary integer addition in a single clock processor cycle.",
@@ -36054,8 +36145,8 @@
     "usphone": "ˈenitaɪm",
     "ukphone": "ˈenitaɪm",
     "syllables": [
-      "an",
-      "y",
+      "a",
+      "ny",
       "time"
     ],
     "etymology": {
@@ -36085,6 +36176,9 @@
         "en": "at anytime",
         "cn": "在任何时候"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -36095,8 +36189,8 @@
     "usphone": "ˈænəlɪst",
     "ukphone": "ˈænəlɪst",
     "syllables": [
-      "an",
       "a",
+      "na",
       "lyst"
     ],
     "etymology": {
@@ -36222,8 +36316,8 @@
     "usphone": "ˈɡæðər",
     "ukphone": "ˈɡæðə(r)",
     "syllables": [
-      "gath",
-      "er"
+      "ga",
+      "ther"
     ],
     "etymology": {
       "origin": "源自古英语 gaderian（聚集在一起）。"
@@ -36301,8 +36395,8 @@
     "usphone": "ˈrelətɪv",
     "ukphone": "ˈrelətɪv",
     "syllables": [
-      "rel",
-      "a",
+      "re",
+      "la",
       "tive"
     ],
     "etymology": {
@@ -36566,8 +36660,8 @@
     "usphone": "ˈprɑːpər",
     "ukphone": "ˈprɒpə(r)",
     "syllables": [
-      "prop",
-      "er"
+      "pro",
+      "per"
     ],
     "etymology": {
       "root": {
@@ -36659,8 +36753,8 @@
     "ukphone": "ɪɡˈzæmɪn",
     "syllables": [
       "ex",
-      "am",
-      "ine"
+      "a",
+      "mine"
     ],
     "etymology": {
       "prefix": {
@@ -36712,8 +36806,8 @@
     "usphone": "ɪˈnɪʃəl",
     "ukphone": "ɪˈnɪʃl",
     "syllables": [
-      "in",
       "i",
+      "ni",
       "tial"
     ],
     "etymology": {
@@ -36979,8 +37073,8 @@
     "usphone": "ˈpendɪŋ",
     "ukphone": "ˈpendɪŋ",
     "syllables": [
-      "pend",
-      "ing"
+      "pen",
+      "ding"
     ],
     "etymology": {
       "root": {
@@ -37507,6 +37601,7 @@
       "origin": "由 over 与 ride 复合而成。"
     },
     "silentIndices": [
+      3,
       7
     ],
     "examples": [
@@ -37646,8 +37741,8 @@
     "usphone": "ˈdæmɪdʒ",
     "ukphone": "ˈdæmɪdʒ",
     "syllables": [
-      "dam",
-      "age"
+      "da",
+      "mage"
     ],
     "etymology": {
       "root": {
@@ -37761,7 +37856,9 @@
       },
       "derivation": "留作专门用途不挪作他用的 → 保留的、预留的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Programming languages designate reserved keywords like class and return that cannot serve as identifier names.",
@@ -37796,8 +37893,8 @@
     "ukphone": "tekˈnɒlədʒi",
     "syllables": [
       "tech",
-      "nol",
-      "o",
+      "no",
+      "lo",
       "gy"
     ],
     "etymology": {
@@ -38023,8 +38120,8 @@
     "usphone": "ˈkɪləbaɪt",
     "ukphone": "ˈkɪləbaɪt",
     "syllables": [
-      "kil",
-      "o",
+      "ki",
+      "lo",
       "byte"
     ],
     "etymology": {
@@ -38054,6 +38151,9 @@
         "en": "kilobyte per second",
         "cn": "千字节每秒（KB/s）"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -38158,9 +38258,9 @@
     "ukphone": "dɪˈveləpə(r)",
     "syllables": [
       "de",
-      "vel",
-      "op",
-      "er"
+      "ve",
+      "lo",
+      "per"
     ],
     "etymology": {
       "root": {
@@ -38370,8 +38470,8 @@
     "ukphone": "kənˈsekjətɪv",
     "syllables": [
       "con",
-      "sec",
-      "u",
+      "se",
+      "cu",
       "tive"
     ],
     "etymology": {
@@ -38465,6 +38565,9 @@
         "en": "data collection",
         "cn": "数据收集"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -38569,8 +38672,8 @@
     "usphone": "ˌkærəˈsel",
     "ukphone": "ˌkærəˈsel",
     "syllables": [
-      "car",
-      "ou",
+      "ca",
+      "rou",
       "sel"
     ],
     "etymology": {
@@ -38657,8 +38760,8 @@
     "usphone": "ˈstætɪk",
     "ukphone": "ˈstætɪk",
     "syllables": [
-      "stat",
-      "ic"
+      "sta",
+      "tic"
     ],
     "etymology": {
       "root": {
@@ -38819,8 +38922,8 @@
     "usphone": "ˈpresɪdəns",
     "ukphone": "ˈpresɪdəns",
     "syllables": [
-      "prec",
-      "e",
+      "pre",
+      "ce",
       "dence"
     ],
     "etymology": {
@@ -38872,8 +38975,8 @@
     "usphone": "ˈskelɪtən",
     "ukphone": "ˈskelɪtn",
     "syllables": [
-      "skel",
-      "e",
+      "ske",
+      "le",
       "ton"
     ],
     "etymology": {
@@ -39031,7 +39134,8 @@
     "syllables": [
       "re",
       "place",
-      "able"
+      "a",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -39068,6 +39172,10 @@
         "en": "easily replaceable",
         "cn": "易于替换的"
       }
+    ],
+    "silentIndices": [
+      6,
+      10
     ]
   },
   {
@@ -39100,6 +39208,7 @@
       "origin": "源自晚期拉丁语 accessibilis，来自 accedere（接近）。"
     },
     "silentIndices": [
+      4,
       9
     ],
     "examples": [
@@ -39179,8 +39288,8 @@
     "ukphone": "kənˈfɪɡə(r)",
     "syllables": [
       "con",
-      "fig",
-      "ure"
+      "fi",
+      "gure"
     ],
     "etymology": {
       "prefix": {
@@ -39231,8 +39340,8 @@
     "usphone": "ˈkwestʃən",
     "ukphone": "ˈkwestʃən",
     "syllables": [
-      "ques",
-      "tion"
+      "que",
+      "stion"
     ],
     "etymology": {
       "root": {
@@ -39338,6 +39447,9 @@
         "en": "run entirely in memory",
         "cn": "完全在内存中运行"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -39410,6 +39522,7 @@
       "origin": "源自古英语 middel。"
     },
     "silentIndices": [
+      2,
       5
     ],
     "examples": [
@@ -39460,7 +39573,9 @@
       },
       "derivation": "已在源码中清楚告知编译器其存在与类型的 → 声明的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "TypeScript strict mode raises errors when accessing variables that have not been declared in scope.",
@@ -39535,8 +39650,8 @@
     "usphone": "ˈɡræfɪkəli",
     "ukphone": "ˈɡræfɪkli",
     "syllables": [
-      "graph",
-      "i",
+      "gra",
+      "phi",
       "cal",
       "ly"
     ],
@@ -39567,6 +39682,9 @@
         "en": "graphically represented",
         "cn": "图形化呈现的"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -39620,8 +39738,8 @@
     "syllables": [
       "au",
       "to",
-      "mat",
-      "ic"
+      "ma",
+      "tic"
     ],
     "etymology": {
       "prefix": {
@@ -39673,8 +39791,8 @@
     "usphone": "ˈeniwer",
     "ukphone": "ˈeniweə(r)",
     "syllables": [
-      "an",
-      "y",
+      "a",
+      "ny",
       "where"
     ],
     "etymology": {
@@ -39690,7 +39808,8 @@
       "origin": "由 any 与 where 复合而成。"
     },
     "silentIndices": [
-      5
+      5,
+      7
     ],
     "examples": [
       {
@@ -39848,8 +39967,8 @@
     "usphone": "ˌrezəˈluːʃən",
     "ukphone": "ˌrezəˈluːʃn",
     "syllables": [
-      "res",
-      "o",
+      "re",
+      "so",
       "lu",
       "tion"
     ],
@@ -39951,8 +40070,8 @@
     "usphone": "ˈsemikoʊlən",
     "ukphone": "ˈsemikəʊlən",
     "syllables": [
-      "sem",
-      "i",
+      "se",
+      "mi",
       "co",
       "lon"
     ],
@@ -40093,8 +40212,8 @@
     "usphone": "ˈkrɪtɪkəl",
     "ukphone": "ˈkrɪtɪkl",
     "syllables": [
-      "crit",
-      "i",
+      "cri",
+      "ti",
       "cal"
     ],
     "etymology": {
@@ -40142,9 +40261,9 @@
     "usphone": "ˈmænɪdʒər",
     "ukphone": "ˈmænɪdʒə(r)",
     "syllables": [
-      "man",
-      "ag",
-      "er"
+      "ma",
+      "na",
+      "ger"
     ],
     "etymology": {
       "root": {
@@ -40196,8 +40315,8 @@
     "syllables": [
       "ca",
       "pa",
-      "bil",
-      "i",
+      "bi",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -40561,8 +40680,8 @@
     "usphone": "ˌreprɪˈzent",
     "ukphone": "ˌreprɪˈzent",
     "syllables": [
-      "rep",
       "re",
+      "pre",
       "sent"
     ],
     "etymology": {
@@ -40607,8 +40726,8 @@
     "ukphone": "ˈdɪfrəns",
     "syllables": [
       "dif",
-      "fer",
-      "ence"
+      "fe",
+      "rence"
     ],
     "etymology": {
       "prefix": {
@@ -40627,6 +40746,7 @@
       "origin": "源自古法语 difference，来自拉丁语 differentia。"
     },
     "silentIndices": [
+      2,
       9
     ],
     "examples": [
@@ -40659,8 +40779,8 @@
     "usphone": "ˈprɑːdʒekt",
     "ukphone": "ˈprɒdʒekt",
     "syllables": [
-      "proj",
-      "ect"
+      "pro",
+      "ject"
     ],
     "etymology": {
       "prefix": {
@@ -40708,8 +40828,8 @@
     "usphone": "ˈfɪzɪkəl",
     "ukphone": "ˈfɪzɪkl",
     "syllables": [
-      "phys",
-      "i",
+      "phy",
+      "si",
       "cal"
     ],
     "etymology": {
@@ -40788,6 +40908,9 @@
         "en": "no matter",
         "cn": "无论；不管"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -40881,9 +41004,9 @@
     "usphone": "ˈpʌblɪʃər",
     "ukphone": "ˈpʌblɪʃə(r)",
     "syllables": [
-      "pub",
-      "lish",
-      "er"
+      "pu",
+      "bli",
+      "sher"
     ],
     "etymology": {
       "root": {
@@ -41013,8 +41136,9 @@
     "usphone": "dɪsˈeɪbld",
     "ukphone": "dɪsˈeɪbld",
     "syllables": [
-      "dis",
-      "abled"
+      "di",
+      "sa",
+      "bled"
     ],
     "etymology": {
       "prefix": {
@@ -41106,8 +41230,8 @@
     "usphone": "ˈpɑːzətɪv",
     "ukphone": "ˈpɒzətɪv",
     "syllables": [
-      "pos",
-      "i",
+      "po",
+      "si",
       "tive"
     ],
     "etymology": {
@@ -41292,6 +41416,9 @@
         "en": "happen to",
         "cn": "碰巧；发生于"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -41474,8 +41601,8 @@
     "usphone": "ˈmɑːnoʊ",
     "ukphone": "ˈmɒnəʊ",
     "syllables": [
-      "mon",
-      "o"
+      "mo",
+      "no"
     ],
     "etymology": {
       "origin": "源自希腊语 monos（单一、独自）。"
@@ -41912,6 +42039,9 @@
         "en": "scatter plot",
         "cn": "散点图"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -41965,6 +42095,9 @@
         "en": "pay attention to",
         "cn": "注意；重视"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -42113,9 +42246,9 @@
     "usphone": "ˈprɑːsesər",
     "ukphone": "ˈprəʊsesə(r)",
     "syllables": [
-      "proc",
-      "ess",
-      "or"
+      "pro",
+      "ces",
+      "sor"
     ],
     "etymology": {
       "root": {
@@ -42152,6 +42285,9 @@
         "en": "multi-core processor",
         "cn": "多核处理器"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -42252,8 +42388,8 @@
     "ukphone": "dɪˈveləpmənt",
     "syllables": [
       "de",
-      "vel",
-      "op",
+      "ve",
+      "lop",
       "ment"
     ],
     "etymology": {
@@ -42387,8 +42523,8 @@
     "usphone": "ˌhɔːrəˈzɑːntəl",
     "ukphone": "ˌhɒrɪˈzɒntl",
     "syllables": [
-      "hor",
-      "i",
+      "ho",
+      "ri",
       "zon",
       "tal"
     ],
@@ -42611,8 +42747,8 @@
     "usphone": "ˈmænɪfest",
     "ukphone": "ˈmænɪfest",
     "syllables": [
-      "man",
-      "i",
+      "ma",
+      "ni",
       "fest"
     ],
     "etymology": {
@@ -42699,8 +42835,8 @@
     "usphone": "ˌdɪskəˈnekt",
     "ukphone": "ˌdɪskəˈnekt",
     "syllables": [
-      "dis",
-      "con",
+      "di",
+      "scon",
       "nect"
     ],
     "etymology": {
@@ -42734,6 +42870,9 @@
         "en": "disconnect socket",
         "cn": "断开套接字连接"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -42793,8 +42932,8 @@
     "ukphone": "ɪˈlɪmɪneɪt",
     "syllables": [
       "e",
-      "lim",
-      "i",
+      "li",
+      "mi",
       "nate"
     ],
     "etymology": {
@@ -42895,8 +43034,8 @@
     "usphone": "ˌdekləˈreɪʃn",
     "ukphone": "ˌdekləˈreɪʃn",
     "syllables": [
-      "dec",
-      "la",
+      "de",
+      "cla",
       "ra",
       "tion"
     ],
@@ -42949,8 +43088,8 @@
     "usphone": "ˈprɑːbəbli",
     "ukphone": "ˈprɒbəbli",
     "syllables": [
-      "prob",
-      "a",
+      "pro",
+      "ba",
       "bly"
     ],
     "etymology": {
@@ -43030,8 +43169,8 @@
     "usphone": "ˈkʌvər",
     "ukphone": "ˈkʌvə(r)",
     "syllables": [
-      "cov",
-      "er"
+      "co",
+      "ver"
     ],
     "etymology": {
       "root": {
@@ -43131,6 +43270,7 @@
       "origin": "源自古英语 æppel（苹果、果实）。"
     },
     "silentIndices": [
+      1,
       4
     ],
     "examples": [
@@ -43202,9 +43342,9 @@
     "ukphone": "kənˌsɪdəˈreɪʃn",
     "syllables": [
       "con",
-      "sid",
-      "er",
-      "a",
+      "si",
+      "de",
+      "ra",
       "tion"
     ],
     "etymology": {
@@ -43418,6 +43558,9 @@
         "en": "suggest fix",
         "cn": "建议修复方案"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -43430,7 +43573,8 @@
     "syllables": [
       "con",
       "ve",
-      "nient"
+      "ni",
+      "ent"
     ],
     "etymology": {
       "prefix": {
@@ -43552,6 +43696,9 @@
         "en": "technical appendix",
         "cn": "技术附录"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -43661,8 +43808,8 @@
     "ukphone": "ɪnˈhɪbɪt",
     "syllables": [
       "in",
-      "hib",
-      "it"
+      "hi",
+      "bit"
     ],
     "etymology": {
       "prefix": {
@@ -43819,6 +43966,9 @@
         "en": "wavy underline",
         "cn": "波浪下划线（代码纠错提示）"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -43830,9 +43980,9 @@
     "usphone": "ˈredʒɪstər",
     "ukphone": "ˈredʒɪstə(r)",
     "syllables": [
-      "reg",
-      "is",
-      "ter"
+      "re",
+      "gi",
+      "ster"
     ],
     "etymology": {
       "prefix": {
@@ -44239,9 +44389,9 @@
     "usphone": "ˈkʌstəmər",
     "ukphone": "ˈkʌstəmə(r)",
     "syllables": [
-      "cus",
-      "tom",
-      "er"
+      "cu",
+      "sto",
+      "mer"
     ],
     "etymology": {
       "root": {
@@ -44328,8 +44478,8 @@
     "usphone": "dɪˈskʌs",
     "ukphone": "dɪˈskʌs",
     "syllables": [
-      "dis",
-      "cuss"
+      "di",
+      "scuss"
     ],
     "etymology": {
       "prefix": {
@@ -44422,8 +44572,8 @@
     "usphone": "ˈfaɪlɪŋ",
     "ukphone": "ˈfaɪlɪŋ",
     "syllables": [
-      "fil",
-      "ing"
+      "fi",
+      "ling"
     ],
     "etymology": {
       "root": {
@@ -44503,9 +44653,10 @@
     "usphone": "ˈvæljuəbl",
     "ukphone": "ˈvæljuəbl",
     "syllables": [
-      "val",
-      "u",
-      "able"
+      "va",
+      "lu",
+      "a",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -44538,6 +44689,9 @@
         "en": "valuable insight",
         "cn": "宝贵洞察"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -44549,8 +44703,8 @@
     "usphone": "ˈlɪmɪtɪd",
     "ukphone": "ˈlɪmɪtɪd",
     "syllables": [
-      "lim",
-      "it",
+      "li",
+      "mit",
       "ed"
     ],
     "etymology": {
@@ -44761,9 +44915,9 @@
     "ukphone": "əkˈseləreɪtə(r)",
     "syllables": [
       "ac",
-      "cel",
-      "er",
-      "a",
+      "ce",
+      "le",
+      "ra",
       "tor"
     ],
     "etymology": {
@@ -44816,8 +44970,8 @@
     "ukphone": "əˈrɪdʒənəli",
     "syllables": [
       "o",
-      "rig",
-      "i",
+      "ri",
+      "gi",
       "nal",
       "ly"
     ],
@@ -44852,6 +45006,9 @@
         "en": "originally created",
         "cn": "最初创建的"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -44863,8 +45020,8 @@
     "ukphone": "əˈbɪləti",
     "syllables": [
       "a",
-      "bil",
-      "i",
+      "bi",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -44944,6 +45101,9 @@
         "en": "stored internally",
         "cn": "内部存储"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -44955,8 +45115,8 @@
     "usphone": "ˈderəlɪkt",
     "ukphone": "ˈderəlɪkt",
     "syllables": [
-      "der",
-      "e",
+      "de",
+      "re",
       "lict"
     ],
     "etymology": {
@@ -45097,8 +45257,8 @@
     "usphone": "ˈhedər",
     "ukphone": "ˈhedə(r)",
     "syllables": [
-      "head",
-      "er"
+      "hea",
+      "der"
     ],
     "etymology": {
       "root": {
@@ -45362,8 +45522,8 @@
     "usphone": "ˈmænɪdʒmənt",
     "ukphone": "ˈmænɪdʒmənt",
     "syllables": [
-      "man",
-      "age",
+      "ma",
+      "nage",
       "ment"
     ],
     "etymology": {
@@ -45494,6 +45654,9 @@
         "en": "surrounding scope",
         "cn": "外层封闭作用域"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -45506,8 +45669,8 @@
     "usphone": "ˈmæstər",
     "ukphone": "ˈmɑːstə(r)",
     "syllables": [
-      "mas",
-      "ter"
+      "ma",
+      "ster"
     ],
     "etymology": {
       "root": {
@@ -45692,8 +45855,8 @@
     "usphone": "ˈlɑːdʒɪk",
     "ukphone": "ˈlɒdʒɪk",
     "syllables": [
-      "log",
-      "ic"
+      "lo",
+      "gic"
     ],
     "etymology": {
       "root": {
@@ -46003,10 +46166,10 @@
     "ukphone": "kəmˌpætəˈbɪləti",
     "syllables": [
       "com",
-      "pat",
-      "i",
-      "bil",
-      "i",
+      "pa",
+      "ti",
+      "bi",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -46200,6 +46363,7 @@
       "origin": "源自古法语 office，来自拉丁语 officium（职责、服务）。"
     },
     "silentIndices": [
+      1,
       5
     ],
     "examples": [
@@ -46278,8 +46442,8 @@
     "usphone": "ˈvɑːljuːm",
     "ukphone": "ˈvɒljuːm",
     "syllables": [
-      "vol",
-      "ume"
+      "vo",
+      "lume"
     ],
     "etymology": {
       "root": {
@@ -46370,8 +46534,8 @@
     "ukphone": "ækˈtɪvəti",
     "syllables": [
       "ac",
-      "tiv",
-      "i",
+      "ti",
+      "vi",
       "ty"
     ],
     "etymology": {
@@ -46420,8 +46584,8 @@
     "ukphone": "əʊˈdɒmɪtə(r)",
     "syllables": [
       "o",
-      "dom",
-      "e",
+      "do",
+      "me",
       "ter"
     ],
     "etymology": {
@@ -46603,6 +46767,9 @@
         "en": "the latter",
         "cn": "后者"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -46710,8 +46877,8 @@
     "syllables": [
       "di",
       "a",
-      "crit",
-      "i",
+      "cri",
+      "ti",
       "cal"
     ],
     "etymology": {
@@ -46897,8 +47064,8 @@
     "usphone": "ˈreɡjələr",
     "ukphone": "ˈreɡjələ(r)",
     "syllables": [
-      "reg",
-      "u",
+      "re",
+      "gu",
       "lar"
     ],
     "etymology": {
@@ -46943,8 +47110,8 @@
     "ukphone": "ɪmˈplɪsɪt",
     "syllables": [
       "im",
-      "plic",
-      "it"
+      "pli",
+      "cit"
     ],
     "etymology": {
       "prefix": {
@@ -47104,8 +47271,8 @@
     "usphone": "ˈsevən",
     "ukphone": "ˈsevn",
     "syllables": [
-      "sev",
-      "en"
+      "se",
+      "ven"
     ],
     "etymology": {
       "origin": "源自古英语 seofon（七）。"
@@ -47335,7 +47502,9 @@
     "etymology": {
       "origin": "源自古英语 geolu（黄色的）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "Browser developer consoles display compiler warning logs highlighted with distinctive yellow icon badges.",
@@ -47396,6 +47565,9 @@
         "en": "assistive technology",
         "cn": "辅助技术（无障碍 a11y）"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -47407,8 +47579,8 @@
     "usphone": "ˈfɪnɪʃ",
     "ukphone": "ˈfɪnɪʃ",
     "syllables": [
-      "fin",
-      "ish"
+      "fi",
+      "nish"
     ],
     "etymology": {
       "root": {
@@ -47690,6 +47862,7 @@
       "origin": "源自古英语 lytel（微小的、少量的）。"
     },
     "silentIndices": [
+      2,
       5
     ],
     "examples": [
@@ -47846,8 +48019,8 @@
     "ukphone": "dɪˈveləp",
     "syllables": [
       "de",
-      "vel",
-      "op"
+      "ve",
+      "lop"
     ],
     "etymology": {
       "prefix": {
@@ -48059,6 +48232,9 @@
         "en": "warranty disclaimer",
         "cn": "免责声明"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -48105,8 +48281,8 @@
     "ukphone": "ˈɪndəstri",
     "syllables": [
       "in",
-      "dus",
-      "try"
+      "du",
+      "stry"
     ],
     "etymology": {
       "prefix": {
@@ -48183,6 +48359,9 @@
         "en": "trigger build",
         "cn": "触发构建"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -48224,6 +48403,9 @@
         "en": "lessons learned",
         "cn": "经验教训（复盘总结）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -48270,8 +48452,8 @@
     "usphone": "ˈbɪzi",
     "ukphone": "ˈbɪzi",
     "syllables": [
-      "bus",
-      "y"
+      "bu",
+      "sy"
     ],
     "etymology": {
       "origin": "源自古英语 bisig（忙碌的、勤勉的）。"
@@ -48305,8 +48487,8 @@
     "usphone": "ˈjuːsɪdʒ",
     "ukphone": "ˈjuːsɪdʒ",
     "syllables": [
-      "us",
-      "age"
+      "u",
+      "sage"
     ],
     "etymology": {
       "root": {
@@ -48320,7 +48502,9 @@
       "derivation": "对系统软硬件资源进行实际占用的量度或调用语法 → 使用率、用法",
       "origin": "源自古法语 usage，来自 user（使用）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "Kubernetes horizontal autoscalers scale worker pods automatically based on active CPU and memory usage percentiles.",
@@ -48370,7 +48554,9 @@
       "derivation": "不易办到、极具挑战性的 → 困难的、棘手的",
       "origin": "源自拉丁语 difficultas，来自 difficilis（困难的）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "Intermittent concurrency race condition bugs are notoriously difficult to reproduce in local test environments.",
@@ -48396,8 +48582,8 @@
     "usphone": "ˈfeɪljər",
     "ukphone": "ˈfeɪljə(r)",
     "syllables": [
-      "fail",
-      "ure"
+      "fai",
+      "lure"
     ],
     "etymology": {
       "root": {
@@ -48434,6 +48620,9 @@
         "en": "hardware failure",
         "cn": "硬件故障"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -48721,8 +48910,8 @@
     "usphone": "ˈperənt",
     "ukphone": "ˈpeərənt",
     "syllables": [
-      "par",
-      "ent"
+      "pa",
+      "rent"
     ],
     "etymology": {
       "root": {
@@ -48812,6 +49001,9 @@
         "en": "close connection",
         "cn": "关闭连接"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -48824,8 +49016,8 @@
     "syllables": [
       "con",
       "nec",
-      "tiv",
-      "i",
+      "ti",
+      "vi",
       "ty"
     ],
     "etymology": {
@@ -48859,6 +49051,9 @@
         "en": "Java Database Connectivity",
         "cn": "Java 数据库连接（JDBC）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -48920,8 +49115,8 @@
     "ukphone": "daɪˈnæmɪk",
     "syllables": [
       "dy",
-      "nam",
-      "ic"
+      "na",
+      "mic"
     ],
     "etymology": {
       "root": {
@@ -49097,10 +49292,10 @@
     "usphone": "ˌnesəˈserəli",
     "ukphone": "ˌnesəˈserəli",
     "syllables": [
-      "nec",
-      "es",
-      "sar",
-      "i",
+      "ne",
+      "ces",
+      "sa",
+      "ri",
       "ly"
     ],
     "etymology": {
@@ -49130,6 +49325,9 @@
         "en": "not necessarily",
         "cn": "不一定；未必"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -49213,6 +49411,9 @@
         "en": "differ in",
         "cn": "在……方面有差异"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -49226,8 +49427,8 @@
     "syllables": [
       "sta",
       "tion",
-      "ar",
-      "y"
+      "a",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -49320,8 +49521,8 @@
     "ukphone": "ˌʌnˈrekəɡnaɪzd",
     "syllables": [
       "un",
-      "rec",
-      "og",
+      "re",
+      "cog",
       "nized"
     ],
     "etymology": {
@@ -49358,6 +49559,9 @@
         "en": "unrecognized token",
         "cn": "无法识别的词元"
       }
+    ],
+    "silentIndices": [
+      10
     ]
   },
   {
@@ -49499,8 +49703,8 @@
     "usphone": "ˈlɪmɪtɪŋ",
     "ukphone": "ˈlɪmɪtɪŋ",
     "syllables": [
-      "lim",
-      "it",
+      "li",
+      "mit",
       "ing"
     ],
     "etymology": {
@@ -49593,8 +49797,8 @@
     "ukphone": "dɪˈlɪmɪt",
     "syllables": [
       "de",
-      "lim",
-      "it"
+      "li",
+      "mit"
     ],
     "etymology": {
       "prefix": {
@@ -49672,8 +49876,8 @@
     "usphone": "ˈsepəreɪtli",
     "ukphone": "ˈsepərətli",
     "syllables": [
-      "sep",
-      "a",
+      "se",
+      "pa",
       "rate",
       "ly"
     ],
@@ -49756,6 +49960,9 @@
         "en": "classify as",
         "cn": "归类为"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -49847,8 +50054,8 @@
     "syllables": [
       "in",
       "di",
-      "vid",
-      "u",
+      "vi",
+      "du",
       "al",
       "ly"
     ],
@@ -49883,6 +50090,9 @@
         "en": "process individually",
         "cn": "逐个单独处理"
       }
+    ],
+    "silentIndices": [
+      9
     ]
   },
   {
@@ -49946,8 +50156,8 @@
     "syllables": [
       "un",
       "de",
-      "sir",
-      "a",
+      "si",
+      "ra",
       "ble"
     ],
     "etymology": {
@@ -49980,6 +50190,9 @@
         "en": "undesirable side effect",
         "cn": "不良副作用"
       }
+    ],
+    "silentIndices": [
+      10
     ]
   },
   {
@@ -50060,10 +50273,11 @@
     "usphone": "ˌʌnəˈveɪləbl",
     "ukphone": "ˌʌnəˈveɪləbl",
     "syllables": [
-      "un",
-      "a",
-      "vail",
-      "able"
+      "u",
+      "na",
+      "vai",
+      "la",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -50208,7 +50422,9 @@
       "derivation": "达不到最低配额或安全要求门槛的 → 不足的、不够的",
       "origin": "源自晚期拉丁语 insufficiens，来自 in- + sufficere（足够）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "The API server emits an HTTP 403 Forbidden status when client tokens have insufficient permissions to access records.",
@@ -50278,8 +50494,8 @@
     "usphone": "ˈfɪɡjər",
     "ukphone": "ˈfɪɡə(r)",
     "syllables": [
-      "fig",
-      "ure"
+      "fi",
+      "gure"
     ],
     "etymology": {
       "root": {
@@ -50373,8 +50589,8 @@
     "ukphone": "kənˈsɪdə(r)",
     "syllables": [
       "con",
-      "sid",
-      "er"
+      "si",
+      "der"
     ],
     "etymology": {
       "prefix": {
@@ -50468,7 +50684,8 @@
     "syllables": [
       "con",
       "ve",
-      "nience"
+      "ni",
+      "ence"
     ],
     "etymology": {
       "root": {
@@ -50514,8 +50731,8 @@
     "usphone": "ˈmeθəd",
     "ukphone": "ˈmeθəd",
     "syllables": [
-      "meth",
-      "od"
+      "me",
+      "thod"
     ],
     "etymology": {
       "derivation": "通往解决问题或执行计算的系统性道路途径 → 方法、类方法",
@@ -50590,8 +50807,8 @@
     "usphone": "ˈsæləri",
     "ukphone": "ˈsæləri",
     "syllables": [
-      "sal",
-      "a",
+      "sa",
+      "la",
       "ry"
     ],
     "etymology": {
@@ -50633,8 +50850,8 @@
     "ukphone": "pəˈsɪfɪk",
     "syllables": [
       "pa",
-      "cif",
-      "ic"
+      "ci",
+      "fic"
     ],
     "etymology": {
       "root": {
@@ -50751,6 +50968,9 @@
         "en": "HTML em tag",
         "cn": "HTML <em> 强调标签"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -50824,7 +51044,9 @@
       },
       "derivation": "违背常规流程被硬性强迫执行的 → 强制的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "Querying geometric properties like offsetHeight immediately after modifying DOM classes causes forced synchronous layout reflow.",
@@ -51028,8 +51250,8 @@
     "ukphone": "kənˈkætəneɪt",
     "syllables": [
       "con",
-      "cat",
-      "e",
+      "ca",
+      "te",
       "nate"
     ],
     "etymology": {
@@ -51147,7 +51369,10 @@
       "derivation": "作为补充额外叠加进来地 → 此外、另外",
       "origin": "源自 additional 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1,
+      9
+    ],
     "examples": [
       {
         "en": "The query optimizer evaluates index constraints; additionally, it estimates disk page read I/O costs.",
@@ -51173,8 +51398,8 @@
     "usphone": "ˈemjuleɪt",
     "ukphone": "ˈemjuleɪt",
     "syllables": [
-      "em",
-      "u",
+      "e",
+      "mu",
       "late"
     ],
     "etymology": {
@@ -51496,9 +51721,9 @@
     "usphone": "ˌredʒɪˈstreɪʃn",
     "ukphone": "ˌredʒɪˈstreɪʃn",
     "syllables": [
-      "reg",
-      "is",
-      "tra",
+      "re",
+      "gi",
+      "stra",
       "tion"
     ],
     "etymology": {
@@ -51547,8 +51772,8 @@
     "usphone": "ˈsɪti",
     "ukphone": "ˈsɪti",
     "syllables": [
-      "cit",
-      "y"
+      "ci",
+      "ty"
     ],
     "etymology": {
       "origin": "源自古法语 cite，来自拉丁语 civitas（公民群体、城市）。"
@@ -51579,8 +51804,8 @@
     "usphone": "ˈdezɪɡneɪt",
     "ukphone": "ˈdezɪɡneɪt",
     "syllables": [
-      "des",
-      "ig",
+      "de",
+      "sig",
       "nate"
     ],
     "etymology": {
@@ -51618,6 +51843,9 @@
         "en": "designate as",
         "cn": "指定为"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -51628,8 +51856,8 @@
     "usphone": "ˈvɪzəbəl",
     "ukphone": "ˈvɪzəbl",
     "syllables": [
-      "vis",
-      "i",
+      "vi",
+      "si",
       "ble"
     ],
     "etymology": {
@@ -51796,6 +52024,9 @@
         "en": "virtually impossible",
         "cn": "几乎不可能的"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -51838,6 +52069,9 @@
         "en": "substantially reduce",
         "cn": "大幅度降低"
       }
+    ],
+    "silentIndices": [
+      10
     ]
   },
   {
@@ -51936,8 +52170,8 @@
     "ukphone": "praɪˈmərəli",
     "syllables": [
       "pri",
-      "mar",
-      "i",
+      "ma",
+      "ri",
       "ly"
     ],
     "etymology": {
@@ -52178,7 +52412,9 @@
       "derivation": "从事编写软件程序的技术人员或烧录芯片的硬件设备 → 程序员、编程器",
       "origin": "由 program 加上名词后缀 -er 构成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Proficient computer programmers author modular, well-tested code that adheres to industry design patterns.",
@@ -52244,6 +52480,9 @@
         "en": "commercial off-the-shelf",
         "cn": "商用现成产品（COTS）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -52255,8 +52494,8 @@
     "ukphone": "pəˈtɪkjələli",
     "syllables": [
       "par",
-      "tic",
-      "u",
+      "ti",
+      "cu",
       "lar",
       "ly"
     ],
@@ -52468,8 +52707,8 @@
     "usphone": "ˈkwɑːlɪfaɪd",
     "ukphone": "ˈkwɒlɪfaɪd",
     "syllables": [
-      "qual",
-      "i",
+      "qua",
+      "li",
       "fied"
     ],
     "etymology": {
@@ -52580,7 +52819,9 @@
       },
       "derivation": "被卷入其中参与协同运作的 → 涉及的、参与的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Database migration scripts analyze all foreign key constraints involved before altering column types.",
@@ -52860,6 +53101,9 @@
         "en": "subroutine call",
         "cn": "子程序调用"
       }
+    ],
+    "silentIndices": [
+      9
     ]
   },
   {
@@ -52870,8 +53114,8 @@
     "usphone": "ˈmænjuəli",
     "ukphone": "ˈmænjuəli",
     "syllables": [
-      "man",
-      "u",
+      "ma",
+      "nu",
       "al",
       "ly"
     ],
@@ -52906,6 +53150,9 @@
         "en": "manually configured",
         "cn": "手动配置的"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -53143,8 +53390,8 @@
     "usphone": "ˈevər",
     "ukphone": "ˈevə(r)",
     "syllables": [
-      "ev",
-      "er"
+      "e",
+      "ver"
     ],
     "etymology": {
       "origin": "源自古英语 æfre（始终、在任何时候）。"
@@ -53178,8 +53425,8 @@
     "usphone": "ˌdɪstrɪˈbjuːʃən",
     "ukphone": "ˌdɪstrɪˈbjuːʃn",
     "syllables": [
-      "dis",
-      "tri",
+      "di",
+      "stri",
       "bu",
       "tion"
     ],
@@ -53349,8 +53596,8 @@
     "usphone": "ˈreplɪkeɪt",
     "ukphone": "ˈreplɪkeɪt",
     "syllables": [
-      "rep",
-      "li",
+      "re",
+      "pli",
       "cate"
     ],
     "etymology": {
@@ -53406,8 +53653,8 @@
     "usphone": "ˈmeɡə",
     "ukphone": "ˈmeɡə",
     "syllables": [
-      "meg",
-      "a"
+      "me",
+      "ga"
     ],
     "etymology": {
       "origin": "源自希腊语 megas（巨大的、百万）。"
@@ -53615,6 +53862,9 @@
         "en": "memory controller",
         "cn": "内存控制器"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -53666,8 +53916,8 @@
     "usphone": "ˈmænɪdʒ",
     "ukphone": "ˈmænɪdʒ",
     "syllables": [
-      "man",
-      "age"
+      "ma",
+      "nage"
     ],
     "etymology": {
       "root": {
@@ -53714,9 +53964,9 @@
     "ukphone": "ədˈmɪnɪstreɪtə(r)",
     "syllables": [
       "ad",
-      "min",
-      "is",
-      "tra",
+      "mi",
+      "ni",
+      "stra",
       "tor"
     ],
     "etymology": {
@@ -53854,7 +54104,8 @@
     "syllables": [
       "al",
       "low",
-      "able"
+      "a",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -53873,6 +54124,7 @@
       "origin": "由 allow 加上后缀 -able 构成。"
     },
     "silentIndices": [
+      1,
       8
     ],
     "examples": [
@@ -54094,8 +54346,8 @@
     "ukphone": "ˌɔːɡənaɪˈzeɪʃn",
     "syllables": [
       "or",
-      "gan",
-      "i",
+      "ga",
+      "ni",
       "za",
       "tion"
     ],
@@ -54284,8 +54536,8 @@
     "usphone": "ˈædɪkwət",
     "ukphone": "ˈædɪkwət",
     "syllables": [
-      "ad",
-      "e",
+      "a",
+      "de",
       "quate"
     ],
     "etymology": {
@@ -54336,8 +54588,8 @@
     "usphone": "ˈveri",
     "ukphone": "ˈveəri",
     "syllables": [
-      "var",
-      "y"
+      "va",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -54504,8 +54756,8 @@
     "usphone": "ˈpækɪdʒ",
     "ukphone": "ˈpækɪdʒ",
     "syllables": [
-      "pack",
-      "age"
+      "pa",
+      "ckage"
     ],
     "etymology": {
       "root": {
@@ -54519,7 +54771,9 @@
       "derivation": "将代码、依赖与元数据捆绑封装为统一分发的模块单元 → 软件包",
       "origin": "由 pack 加上名词后缀 -age 构成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "The package.json manifest records third-party package dependencies, entry points, and build scripts.",
@@ -54726,6 +54980,9 @@
         "en": "Really Simple Syndication",
         "cn": "简易信息聚合协议（RSS）"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -55020,8 +55277,8 @@
     "syllables": [
       "sen",
       "si",
-      "tiv",
-      "i",
+      "ti",
+      "vi",
       "ty"
     ],
     "etymology": {
@@ -55063,8 +55320,9 @@
     "ukphone": "fəˈmɪliə(r)",
     "syllables": [
       "fa",
-      "mil",
-      "iar"
+      "mi",
+      "li",
+      "ar"
     ],
     "etymology": {
       "root": {
@@ -55172,6 +55430,9 @@
         "en": "incorrect password",
         "cn": "密码错误"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -55443,8 +55704,8 @@
     "usphone": "ˈnoʊtɪd",
     "ukphone": "ˈnəʊtɪd",
     "syllables": [
-      "not",
-      "ed"
+      "no",
+      "ted"
     ],
     "etymology": {
       "root": {
@@ -55488,8 +55749,8 @@
     "ukphone": "dɪˈzaɪərəbl",
     "syllables": [
       "de",
-      "sir",
-      "a",
+      "si",
+      "ra",
       "ble"
     ],
     "etymology": {
@@ -55527,6 +55788,9 @@
         "en": "highly desirable",
         "cn": "非常可取的"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -55903,8 +56167,8 @@
     "usphone": "ˌmænjuˈfæktʃər",
     "ukphone": "ˌmænjuˈfæktʃə(r)",
     "syllables": [
-      "man",
-      "u",
+      "ma",
+      "nu",
       "fac",
       "ture"
     ],
@@ -56289,6 +56553,9 @@
         "en": "worry about",
         "cn": "担心；发愁"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -56420,8 +56687,8 @@
     "ukphone": "ˈnjuːmərəl",
     "syllables": [
       "nu",
-      "mer",
-      "al"
+      "me",
+      "ral"
     ],
     "etymology": {
       "root": {
@@ -56466,8 +56733,8 @@
     "ukphone": "wɪtʃˈevə(r)",
     "syllables": [
       "which",
-      "ev",
-      "er"
+      "e",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -56629,8 +56896,8 @@
     "ukphone": "ɪnˈdevə(r)",
     "syllables": [
       "en",
-      "deav",
-      "or"
+      "dea",
+      "vor"
     ],
     "etymology": {
       "prefix": {
@@ -56670,8 +56937,8 @@
     "usphone": "ˌmɪsˈmætʃ",
     "ukphone": "ˌmɪsˈmætʃ",
     "syllables": [
-      "mis",
-      "match"
+      "mi",
+      "smatch"
     ],
     "etymology": {
       "prefix": {
@@ -56789,6 +57056,9 @@
         "en": "ellipsis syntax",
         "cn": "省略号语法（展开运算符 ...）"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -56835,8 +57105,8 @@
     "usphone": "ˈbrɪtɪʃ",
     "ukphone": "ˈbrɪtɪʃ",
     "syllables": [
-      "Brit",
-      "ish"
+      "Bri",
+      "tish"
     ],
     "etymology": {
       "root": {
@@ -56877,8 +57147,8 @@
     "usphone": "ˈpærəlel",
     "ukphone": "ˈpærəlel",
     "syllables": [
-      "par",
-      "al",
+      "pa",
+      "ral",
       "lel"
     ],
     "etymology": {
@@ -56916,6 +57186,9 @@
         "en": "parallel port",
         "cn": "并行端口（并口）"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -56927,8 +57200,8 @@
     "usphone": "ˈkʌstəm",
     "ukphone": "ˈkʌstəm",
     "syllables": [
-      "cus",
-      "tom"
+      "cu",
+      "stom"
     ],
     "etymology": {
       "origin": "源自古法语 costume（习惯、风俗），来自拉丁语 consuetudo（习惯）。在计算机中表示由用户或开发者自行定制定义的。"
@@ -56967,8 +57240,8 @@
     "ukphone": "kənˌɡrætʃuˈleɪʃn",
     "syllables": [
       "con",
-      "grat",
-      "u",
+      "gra",
+      "tu",
       "la",
       "tion"
     ],
@@ -57140,6 +57413,9 @@
         "en": "regex pattern",
         "cn": "正则表达式模式"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -57322,6 +57598,9 @@
         "en": "computational effort",
         "cn": "计算开销；算力代价"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -57332,8 +57611,8 @@
     "usphone": "ˈwɜːrkər",
     "ukphone": "ˈwɜːkə(r)",
     "syllables": [
-      "work",
-      "er"
+      "wor",
+      "ker"
     ],
     "etymology": {
       "root": {
@@ -57517,7 +57796,9 @@
       "derivation": "完成某项运算或工程所需的复杂与阻力程度 → 难度、困难",
       "origin": "源自拉丁语 difficultas，来自 difficilis（困难的）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "Blockchain networks adjust mining difficulty targets dynamically every few blocks to stabilize block generation times.",
@@ -57585,8 +57866,8 @@
     "usphone": "ˈmædʒɪk",
     "ukphone": "ˈmædʒɪk",
     "syllables": [
-      "mag",
-      "ic"
+      "ma",
+      "gic"
     ],
     "etymology": {
       "origin": "源自古法语 magique，来自拉丁语 magicus（魔法的）。在计算机中表示未命名的硬编码字面常数或文件头签名。"
@@ -57624,8 +57905,8 @@
       "pro",
       "pri",
       "e",
-      "tar",
-      "y"
+      "ta",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -57720,8 +58001,8 @@
     "ukphone": "ˈnjuːmərəs",
     "syllables": [
       "nu",
-      "mer",
-      "ous"
+      "me",
+      "rous"
     ],
     "etymology": {
       "root": {
@@ -57892,6 +58173,9 @@
         "en": "high accuracy",
         "cn": "高准确性"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -58147,8 +58431,8 @@
     "usphone": "ˈhæbɪt",
     "ukphone": "ˈhæbɪt",
     "syllables": [
-      "hab",
-      "it"
+      "ha",
+      "bit"
     ],
     "etymology": {
       "root": {
@@ -58312,8 +58596,8 @@
     "usphone": "ˌrevəˈluːʃənaɪz",
     "ukphone": "ˌrevəˈluːʃənaɪz",
     "syllables": [
-      "rev",
-      "o",
+      "re",
+      "vo",
       "lu",
       "tion",
       "ize"
@@ -59175,8 +59459,8 @@
     "ukphone": "səˈdʒestʃən",
     "syllables": [
       "sug",
-      "ges",
-      "tion"
+      "ge",
+      "stion"
     ],
     "etymology": {
       "prefix": {
@@ -59213,6 +59497,9 @@
         "en": "index suggestion",
         "cn": "索引建议"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -59269,8 +59556,8 @@
     "ukphone": "ɪkˌsperɪmenˈteɪʃn",
     "syllables": [
       "ex",
-      "per",
-      "i",
+      "pe",
+      "ri",
       "men",
       "ta",
       "tion"
@@ -59314,8 +59601,8 @@
     "ukphone": "ɪkˈsperɪmənt",
     "syllables": [
       "ex",
-      "per",
-      "i",
+      "pe",
+      "ri",
       "ment"
     ],
     "etymology": {
@@ -59475,6 +59762,7 @@
       "origin": "源自古法语 anoncier，来自拉丁语 annuntiare（通报）。"
     },
     "silentIndices": [
+      1,
       7
     ],
     "examples": [
@@ -59544,9 +59832,9 @@
     "usphone": "dɪˈstrɪbjuːt",
     "ukphone": "dɪˈstrɪbjuːt",
     "syllables": [
-      "dis",
-      "trib",
-      "ute"
+      "di",
+      "stri",
+      "bute"
     ],
     "etymology": {
       "prefix": {
@@ -60046,8 +60334,8 @@
     "syllables": [
       "com",
       "pli",
-      "cat",
-      "ed"
+      "ca",
+      "ted"
     ],
     "etymology": {
       "prefix": {
@@ -60339,6 +60627,9 @@
         "en": "comma operator",
         "cn": "逗号运算符"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -60350,8 +60641,8 @@
     "usphone": "ˈveri",
     "ukphone": "ˈveri",
     "syllables": [
-      "ver",
-      "y"
+      "ve",
+      "ry"
     ],
     "etymology": {
       "root": {
@@ -60395,10 +60686,10 @@
     "ukphone": "ʌnˈnesəsəri",
     "syllables": [
       "un",
-      "nec",
-      "es",
-      "sar",
-      "y"
+      "ne",
+      "ces",
+      "sa",
+      "ry"
     ],
     "etymology": {
       "prefix": {
@@ -60431,6 +60722,10 @@
         "en": "unnecessary overhead",
         "cn": "多余的开销"
       }
+    ],
+    "silentIndices": [
+      1,
+      6
     ]
   },
   {
@@ -60456,7 +60751,9 @@
       "derivation": "在版本对比或状态更新中完全保持原样未发生变动的 → 未改变的",
       "origin": "由 un- 与 changed 复合而成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      7
+    ],
     "examples": [
       {
         "en": "Git status reports unchanged clean working directories when working tree files match head commit snapshots.",
@@ -60602,8 +60899,8 @@
     "usphone": "ˌɪnɪkˈspɪriənst",
     "ukphone": "ˌɪnɪkˈspɪəriənst",
     "syllables": [
-      "in",
-      "ex",
+      "i",
+      "nex",
       "pe",
       "ri",
       "enced"
@@ -60635,6 +60932,9 @@
         "en": "inexperienced developer",
         "cn": "新手初级开发者"
       }
+    ],
+    "silentIndices": [
+      11
     ]
   },
   {
@@ -60690,8 +60990,8 @@
     "usphone": "ˌʌnˈjuːzd",
     "ukphone": "ˌʌnˈjuːzd",
     "syllables": [
-      "un",
-      "used"
+      "u",
+      "nused"
     ],
     "etymology": {
       "prefix": {
@@ -60705,7 +61005,9 @@
       "derivation": "从未被调用引用过的闲置资源或死代码 → 未使用的",
       "origin": "由 un- 与 used 复合而成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "Tree shaking bundlers scan ES module import graphs to eliminate unused functions and shrink production bundles.",
@@ -60780,8 +61082,8 @@
     "usphone": "ˈnʌθɪŋ",
     "ukphone": "ˈnʌθɪŋ",
     "syllables": [
-      "noth",
-      "ing"
+      "no",
+      "thing"
     ],
     "etymology": {
       "origin": "源自古英语 nan þing（没有任何事物）。"
@@ -60906,7 +61208,9 @@
       "derivation": "推演达到最高极限程度地 → 极其、非常",
       "origin": "源自 extreme 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Redis in-memory key-value data structures provide extremely low microsecond read and write response latencies.",
@@ -61275,7 +61579,10 @@
       },
       "derivation": "牢固绑挂在主系统树结构或母机之上的 → 挂载的、附加的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1,
+      6
+    ],
     "examples": [
       {
         "en": "Web Component connectedCallback fires when a custom element is first attached to the active document DOM.",
@@ -61307,9 +61614,9 @@
     "usphone": "ˈævərɪdʒ",
     "ukphone": "ˈævərɪdʒ",
     "syllables": [
-      "av",
-      "er",
-      "age"
+      "a",
+      "ve",
+      "rage"
     ],
     "etymology": {
       "root": {
@@ -61401,8 +61708,8 @@
     "usphone": "dɪˈskɑːrd",
     "ukphone": "dɪˈskɑːd",
     "syllables": [
-      "dis",
-      "card"
+      "di",
+      "scard"
     ],
     "etymology": {
       "prefix": {
@@ -61445,8 +61752,8 @@
     "usphone": "ˈnevər",
     "ukphone": "ˈnevə(r)",
     "syllables": [
-      "nev",
-      "er"
+      "ne",
+      "ver"
     ],
     "etymology": {
       "prefix": {
@@ -61490,8 +61797,8 @@
     "usphone": "ɪˈnɪʃieɪt",
     "ukphone": "ɪˈnɪʃieɪt",
     "syllables": [
-      "in",
       "i",
+      "ni",
       "ti",
       "ate"
     ],
@@ -61758,6 +62065,9 @@
         "en": "possibly null",
         "cn": "可能为空（TS 常见类型警告）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -61800,6 +62110,9 @@
         "en": "potentially breaking",
         "cn": "具有潜在破坏性的（更新/变更）"
       }
+    ],
+    "silentIndices": [
+      8
     ]
   },
   {
@@ -61856,8 +62169,8 @@
     "ukphone": "əˈmerɪkən",
     "syllables": [
       "A",
-      "mer",
-      "i",
+      "me",
+      "ri",
       "can"
     ],
     "etymology": {
@@ -61969,8 +62282,8 @@
     "syllables": [
       "in",
       "de",
-      "pend",
-      "ent"
+      "pen",
+      "dent"
     ],
     "etymology": {
       "prefix": {
@@ -62019,8 +62332,8 @@
     "syllables": [
       "in",
       "de",
-      "pend",
-      "ent",
+      "pen",
+      "dent",
       "ly"
     ],
     "etymology": {
@@ -62065,8 +62378,8 @@
     "ukphone": "kənˈtɪnjuəsli",
     "syllables": [
       "con",
-      "tin",
-      "u",
+      "ti",
+      "nu",
       "ous",
       "ly"
     ],
@@ -62198,6 +62511,7 @@
       "derivation": "系统正在实时经历或产生出来的事件情况 → 正在发生的事、事件"
     },
     "silentIndices": [
+      2,
       4
     ],
     "examples": [
@@ -62225,8 +62539,8 @@
     "usphone": "trænˈzækʃən",
     "ukphone": "trænˈzækʃn",
     "syllables": [
-      "trans",
-      "ac",
+      "tran",
+      "sac",
       "tion"
     ],
     "etymology": {
@@ -62278,8 +62592,8 @@
     "usphone": "ˌemjuˈleɪʃn",
     "ukphone": "ˌemjuˈleɪʃn",
     "syllables": [
-      "em",
-      "u",
+      "e",
+      "mu",
       "la",
       "tion"
     ],
@@ -62434,6 +62748,10 @@
         "en": "occasionally occur",
         "cn": "偶尔发生"
       }
+    ],
+    "silentIndices": [
+      1,
+      9
     ]
   },
   {
@@ -62484,8 +62802,9 @@
     "usphone": "ˈprɑːbəbl",
     "ukphone": "ˈprɒbəbl",
     "syllables": [
-      "prob",
-      "able"
+      "pro",
+      "ba",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -62527,8 +62846,8 @@
     "usphone": "ˈtælənt",
     "ukphone": "ˈtælənt",
     "syllables": [
-      "tal",
-      "ent"
+      "ta",
+      "lent"
     ],
     "etymology": {
       "origin": "源自古希腊语 talanton（重量、货币单位），在《圣经》寓言中演变指代天资与专业技术人才。"
@@ -62833,8 +63152,8 @@
     "ukphone": "prɪˈsiːdɪŋ",
     "syllables": [
       "pre",
-      "ced",
-      "ing"
+      "ce",
+      "ding"
     ],
     "etymology": {
       "prefix": {
@@ -62882,8 +63201,8 @@
     "ukphone": "kəmˈpærɪsn",
     "syllables": [
       "com",
-      "par",
-      "i",
+      "pa",
+      "ri",
       "son"
     ],
     "etymology": {
@@ -62946,7 +63265,9 @@
       },
       "derivation": "技术水平走在最前沿、成熟且高度工程化的 → 高级的、先进的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "Advanced Encryption Standard AES is the symmetric block cipher adopted globally to encrypt sensitive data files.",
@@ -63071,6 +63392,7 @@
       "origin": "由 program 加上后缀 -able 构成。"
     },
     "silentIndices": [
+      6,
       11
     ],
     "examples": [
@@ -63103,8 +63425,9 @@
     "ukphone": "dɪˈfaɪnəbl",
     "syllables": [
       "de",
-      "fin",
-      "able"
+      "fi",
+      "na",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -63146,8 +63469,9 @@
     "usphone": "ˈriːdəbl",
     "ukphone": "ˈriːdəbl",
     "syllables": [
-      "read",
-      "able"
+      "rea",
+      "da",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -63194,9 +63518,10 @@
     "ukphone": "rɪˈkʌvərəbl",
     "syllables": [
       "re",
-      "cov",
-      "er",
-      "able"
+      "co",
+      "ve",
+      "ra",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -63248,8 +63573,8 @@
     "syllables": [
       "pos",
       "si",
-      "bil",
-      "i",
+      "bi",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -63279,6 +63604,9 @@
         "en": "possibility of error",
         "cn": "出错的可能性"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -63289,9 +63617,9 @@
     "usphone": "ˈfɪnɪʃər",
     "ukphone": "ˈfɪnɪʃə(r)",
     "syllables": [
-      "fin",
-      "ish",
-      "er"
+      "fi",
+      "ni",
+      "sher"
     ],
     "etymology": {
       "root": {
@@ -63352,6 +63680,7 @@
       "origin": "源自法语 applicable，来自 appliquer（应用）。"
     },
     "silentIndices": [
+      1,
       9
     ],
     "examples": [
@@ -63383,8 +63712,9 @@
     "usphone": "ˈprɪntəbl",
     "ukphone": "ˈprɪntəbl",
     "syllables": [
-      "print",
-      "able"
+      "prin",
+      "ta",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -63433,8 +63763,9 @@
     "syllables": [
       "ex",
       "e",
-      "cut",
-      "able"
+      "cu",
+      "ta",
+      "ble"
     ],
     "etymology": {
       "prefix": {
@@ -63516,6 +63847,10 @@
         "en": "essentially the same",
         "cn": "本质上相同"
       }
+    ],
+    "silentIndices": [
+      1,
+      8
     ]
   },
   {
@@ -63570,9 +63905,10 @@
     "ukphone": "fəˈmɪliəraɪz",
     "syllables": [
       "fa",
-      "mil",
-      "iar",
-      "ize"
+      "mi",
+      "li",
+      "a",
+      "rize"
     ],
     "etymology": {
       "root": {
@@ -63657,8 +63993,9 @@
     "usphone": "ˈsuːtəbl",
     "ukphone": "ˈsuːtəbl",
     "syllables": [
-      "suit",
-      "able"
+      "sui",
+      "ta",
+      "ble"
     ],
     "etymology": {
       "root": {
@@ -63704,9 +64041,9 @@
     "usphone": "ˌdʒenəˈreɪʃn",
     "ukphone": "ˌdʒenəˈreɪʃn",
     "syllables": [
-      "gen",
-      "er",
-      "a",
+      "ge",
+      "ne",
+      "ra",
       "tion"
     ],
     "etymology": {
@@ -63755,8 +64092,8 @@
     "usphone": "ˈkwɑːləti",
     "ukphone": "ˈkwɒləti",
     "syllables": [
-      "qual",
-      "i",
+      "qua",
+      "li",
       "ty"
     ],
     "etymology": {
@@ -63851,8 +64188,8 @@
     "syllables": [
       "in",
       "ter",
-      "pret",
-      "a",
+      "pre",
+      "ta",
       "ble"
     ],
     "etymology": {
@@ -63901,8 +64238,8 @@
     "ukphone": "ˈɪntrəst",
     "syllables": [
       "in",
-      "ter",
-      "est"
+      "te",
+      "rest"
     ],
     "etymology": {
       "prefix": {
@@ -64026,8 +64363,8 @@
     "syllables": [
       "pro",
       "ce",
-      "dur",
-      "al"
+      "du",
+      "ral"
     ],
     "etymology": {
       "root": {
@@ -64109,8 +64446,8 @@
     "ukphone": "spəˈsɪfɪkli",
     "syllables": [
       "spe",
-      "cif",
-      "i",
+      "ci",
+      "fi",
       "cal",
       "ly"
     ],
@@ -64141,6 +64478,9 @@
         "en": "specifically designed",
         "cn": "专门设计的"
       }
+    ],
+    "silentIndices": [
+      9
     ]
   },
   {
@@ -64151,8 +64491,8 @@
     "usphone": "ˈpenəlti",
     "ukphone": "ˈpenəlti",
     "syllables": [
-      "pen",
-      "al",
+      "pe",
+      "nal",
       "ty"
     ],
     "etymology": {
@@ -64231,6 +64571,9 @@
         "en": "violate protocol",
         "cn": "违背协议"
       }
+    ],
+    "silentIndices": [
+      6
     ]
   },
   {
@@ -64242,8 +64585,8 @@
     "ukphone": "ɪnˈdefɪnətli",
     "syllables": [
       "in",
-      "def",
-      "i",
+      "de",
+      "fi",
       "nite",
       "ly"
     ],
@@ -64263,7 +64606,9 @@
       "derivation": "没有明确终止期限一直无限制持续下去地 → 无限期地",
       "origin": "源自 indefinite 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      9
+    ],
     "examples": [
       {
         "en": "Deadlocks cause competing threads to block indefinitely while waiting for mutual locks that are never released.",
@@ -64428,8 +64773,8 @@
     "ukphone": "bɪˈkʌmɪŋ",
     "syllables": [
       "be",
-      "com",
-      "ing"
+      "co",
+      "ming"
     ],
     "etymology": {
       "prefix": {
@@ -64506,6 +64851,9 @@
         "en": "equally important",
         "cn": "同等重要的"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -64594,8 +64942,8 @@
     "usphone": "ˌdɪsəˈpɪr",
     "ukphone": "ˌdɪsəˈpɪə(r)",
     "syllables": [
-      "dis",
-      "ap",
+      "di",
+      "sap",
       "pear"
     ],
     "etymology": {
@@ -64625,6 +64973,9 @@
         "en": "disappear from view",
         "cn": "从视图中消失"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -64671,8 +65022,8 @@
     "ukphone": "daɪˈæɡənəli",
     "syllables": [
       "di",
-      "ag",
-      "o",
+      "a",
+      "go",
       "nal",
       "ly"
     ],
@@ -64707,6 +65058,9 @@
         "en": "diagonally adjacent",
         "cn": "对角相邻的"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -64787,6 +65141,7 @@
       "origin": "源自拉丁语 effectivus，来自 efficere（产生、促成）。"
     },
     "silentIndices": [
+      1,
       8
     ],
     "examples": [
@@ -64819,8 +65174,8 @@
     "ukphone": "sɪɡˈnɪfɪkənt",
     "syllables": [
       "sig",
-      "nif",
-      "i",
+      "ni",
+      "fi",
       "cant"
     ],
     "etymology": {
@@ -65104,8 +65459,8 @@
     "usphone": "ˈvɪʒuəl",
     "ukphone": "ˈvɪʒuəl",
     "syllables": [
-      "vis",
-      "u",
+      "vi",
+      "su",
       "al"
     ],
     "etymology": {
@@ -65153,9 +65508,9 @@
     "usphone": "əkˈnɑːlɪdʒmənt",
     "ukphone": "əkˈnɒlɪdʒmənt",
     "syllables": [
-      "ac",
-      "knowl",
-      "edg",
+      "ack",
+      "now",
+      "ledg",
       "ment"
     ],
     "etymology": {
@@ -65240,6 +65595,9 @@
         "en": "run efficiently",
         "cn": "高效运行"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -65295,8 +65653,8 @@
     "ukphone": "ænˈtɪsɪpeɪt",
     "syllables": [
       "an",
-      "tic",
-      "i",
+      "ti",
+      "ci",
       "pate"
     ],
     "etymology": {
@@ -65436,8 +65794,8 @@
     "usphone": "ˈnætʃərəl",
     "ukphone": "ˈnætʃrəl",
     "syllables": [
-      "nat",
-      "u",
+      "na",
+      "tu",
       "ral"
     ],
     "etymology": {
@@ -65520,8 +65878,8 @@
     "usphone": "ˈlɔːɡərɪðəm",
     "ukphone": "ˈlɒɡərɪðəm",
     "syllables": [
-      "log",
-      "a",
+      "lo",
+      "ga",
       "rithm"
     ],
     "etymology": {
@@ -65641,6 +65999,9 @@
         "en": "occupy port",
         "cn": "占用网络端口"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -65796,8 +66157,8 @@
     "usphone": "ˈsepəreɪtər",
     "ukphone": "ˈsepəreɪtə(r)",
     "syllables": [
-      "sep",
-      "a",
+      "se",
+      "pa",
       "ra",
       "tor"
     ],
@@ -65843,8 +66204,8 @@
     "ukphone": "ˌhaɪəˈrɑːkɪkl",
     "syllables": [
       "hi",
-      "er",
-      "ar",
+      "e",
+      "rar",
       "chi",
       "cal"
     ],
@@ -65925,6 +66286,9 @@
         "en": "assortment of tools",
         "cn": "各种各样的工具"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -65980,8 +66344,8 @@
     "usphone": "dɪˈskʌʃən",
     "ukphone": "dɪˈskʌʃn",
     "syllables": [
-      "dis",
-      "cus",
+      "di",
+      "scus",
       "sion"
     ],
     "etymology": {
@@ -66019,6 +66383,9 @@
         "en": "technical discussion",
         "cn": "技术讨论"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -66081,6 +66448,7 @@
       "derivation": "各元素分离散落在内存或磁盘不同位置的 → 分散的、离散的"
     },
     "silentIndices": [
+      3,
       7
     ],
     "examples": [
@@ -66145,6 +66513,9 @@
         "en": "eventually consistent",
         "cn": "最终一致性（分布式系统）"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -66190,6 +66561,9 @@
         "en": "Promise.prototype.finally",
         "cn": "Promise 收尾方法"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   },
   {
@@ -66281,6 +66655,9 @@
         "en": "superimpose layer",
         "cn": "重叠图层"
       }
+    ],
+    "silentIndices": [
+      10
     ]
   },
   {
@@ -66293,8 +66670,8 @@
     "syllables": [
       "re",
       "or",
-      "gan",
-      "i",
+      "ga",
+      "ni",
       "za",
       "tion"
     ],
@@ -66603,7 +66980,9 @@
       },
       "derivation": "已被切断通信链路或禁止修改的 → 关闭的、对修改关闭的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      4
+    ],
     "examples": [
       {
         "en": "The Open-Closed Principle states software entities should be open for extension but closed for modification.",
@@ -66728,8 +67107,8 @@
     "ukphone": "rɪˈpetətɪv",
     "syllables": [
       "re",
-      "pet",
-      "i",
+      "pe",
+      "ti",
       "tive"
     ],
     "etymology": {
@@ -66842,6 +67221,7 @@
       "origin": "由 re- 与 arrange 复合而成。"
     },
     "silentIndices": [
+      3,
       8
     ],
     "examples": [
@@ -66974,6 +67354,7 @@
       "origin": "源自古法语 suposer，来自 sub- + poser（放置）。"
     },
     "silentIndices": [
+      2,
       6
     ],
     "examples": [
@@ -67016,7 +67397,10 @@
       },
       "derivation": "在技术规范中被假定或预期应当表现的规定状态 → 预期的、原本应当的"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2,
+      6
+    ],
     "examples": [
       {
         "en": "Software unit tests compare actual runtime output against the supposed behavior defined in the specification.",
@@ -67046,9 +67430,9 @@
     "usphone": "ˈɑːpəreɪtər",
     "ukphone": "ˈɒpəreɪtə(r)",
     "syllables": [
-      "op",
-      "er",
-      "a",
+      "o",
+      "pe",
+      "ra",
       "tor"
     ],
     "etymology": {
@@ -67182,8 +67566,8 @@
     "usphone": "ˈdemənstreɪt",
     "ukphone": "ˈdemənstreɪt",
     "syllables": [
-      "dem",
-      "on",
+      "de",
+      "mon",
       "strate"
     ],
     "etymology": {
@@ -67414,8 +67798,8 @@
     "ukphone": "rɪˈstrɪktɪd",
     "syllables": [
       "re",
-      "stric",
-      "ted"
+      "strict",
+      "ed"
     ],
     "etymology": {
       "root": {
@@ -67457,8 +67841,8 @@
     "usphone": "səˈspenʃən",
     "ukphone": "səˈspenʃn",
     "syllables": [
-      "sus",
-      "pen",
+      "su",
+      "spen",
       "sion"
     ],
     "etymology": {
@@ -67584,6 +67968,9 @@
         "en": "web clipper",
         "cn": "网页剪藏扩展"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -67609,7 +67996,9 @@
       "derivation": "最高有效位不作正负符号位使用，因而全部比特均用来表示非负正数值的数据类型 → 无符号的",
       "origin": "由 un- 与 signed 复合而成。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      6
+    ],
     "examples": [
       {
         "en": "In C and Rust, unsigned integers like uint32 represent non-negative numbers ranging from zero to 2^32 minus 1.",
@@ -67675,6 +68064,9 @@
         "en": "unformatted text",
         "cn": "无格式纯文本"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -67860,8 +68252,8 @@
     "ukphone": "dɪˈpendənt",
     "syllables": [
       "de",
-      "pend",
-      "ent"
+      "pen",
+      "dent"
     ],
     "etymology": {
       "prefix": {
@@ -67963,8 +68355,8 @@
     "usphone": "ˈprɑːdʌkt",
     "ukphone": "ˈprɒdʌkt",
     "syllables": [
-      "prod",
-      "uct"
+      "pro",
+      "duct"
     ],
     "etymology": {
       "prefix": {
@@ -68027,7 +68419,9 @@
       "derivation": "将一个数值或对象引用明确指派给特定变量标识符的动作 → 赋值",
       "origin": "源自古法语 assignement，来自 assigner（指派）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      1
+    ],
     "examples": [
       {
         "en": "Destructuring assignment in JavaScript unpacks properties from objects or arrays into distinct variables cleanly.",
@@ -68182,8 +68576,8 @@
     "usphone": "ˈrekəɡnaɪz",
     "ukphone": "ˈrekəɡnaɪz",
     "syllables": [
-      "rec",
-      "og",
+      "re",
+      "cog",
       "nize"
     ],
     "etymology": {
@@ -68293,7 +68687,9 @@
       "derivation": "各归其位、按照一一对应顺序分别对应赋值地 → 分别地、各个地",
       "origin": "源自 respective 加上副词后缀 -ly。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      9
+    ],
     "examples": [
       {
         "en": "The function returns width and height values measuring 1920 and 1080 pixels respectively.",
@@ -68408,8 +68804,8 @@
     "usphone": "ˈnævɪɡeɪt",
     "ukphone": "ˈnævɪɡeɪt",
     "syllables": [
-      "nav",
-      "i",
+      "na",
+      "vi",
       "gate"
     ],
     "etymology": {
@@ -68458,8 +68854,8 @@
     "ukphone": "kənˈsɪdəd",
     "syllables": [
       "con",
-      "sid",
-      "ered"
+      "si",
+      "dered"
     ],
     "etymology": {
       "root": {
@@ -68656,8 +69052,8 @@
     "ukphone": "kənˈtɪɡjuəs",
     "syllables": [
       "con",
-      "tig",
-      "u",
+      "ti",
+      "gu",
       "ous"
     ],
     "etymology": {
@@ -68707,8 +69103,8 @@
     "ukphone": "kənˈsɪstənt",
     "syllables": [
       "con",
-      "sis",
-      "tent"
+      "si",
+      "stent"
     ],
     "etymology": {
       "prefix": {
@@ -68861,8 +69257,8 @@
     "ukphone": "ˈstrʌktʃərəl",
     "syllables": [
       "struc",
-      "tur",
-      "al"
+      "tu",
+      "ral"
     ],
     "etymology": {
       "root": {
@@ -68994,6 +69390,9 @@
         "en": "class association",
         "cn": "类关联（UML）"
       }
+    ],
+    "silentIndices": [
+      1
     ]
   },
   {
@@ -69005,8 +69404,8 @@
     "ukphone": "əˈpɪnjən",
     "syllables": [
       "o",
-      "pin",
-      "ion"
+      "pi",
+      "nion"
     ],
     "etymology": {
       "root": {
@@ -69091,8 +69490,8 @@
     "ukphone": "ɪkˈsplænətri",
     "syllables": [
       "ex",
-      "plan",
-      "a",
+      "pla",
+      "na",
       "to",
       "ry"
     ],
@@ -69154,6 +69553,7 @@
       "origin": "源自古法语 assembler，来自拉丁语 assimulare（使相似、聚集）。"
     },
     "silentIndices": [
+      1,
       7
     ],
     "examples": [
@@ -69198,6 +69598,7 @@
       "origin": "由 assemble 加上名词后缀 -er 构成。"
     },
     "silentIndices": [
+      1,
       7
     ],
     "examples": [
@@ -69316,8 +69717,8 @@
     "usphone": "ˌreprɪˈzentətɪv",
     "ukphone": "ˌreprɪˈzentətɪv",
     "syllables": [
-      "rep",
       "re",
+      "pre",
       "sen",
       "ta",
       "tive"
@@ -69366,8 +69767,8 @@
     "usphone": "ˈtɪpɪkəl",
     "ukphone": "ˈtɪpɪkl",
     "syllables": [
-      "typ",
-      "i",
+      "ty",
+      "pi",
       "cal"
     ],
     "etymology": {
@@ -69431,7 +69832,9 @@
       "derivation": "从底部提供全力支撑以满足需求配额门槛的 → 足够的、充分的",
       "origin": "源自拉丁语 sufficiens，来自 sufficere（胜任、供给）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      2
+    ],
     "examples": [
       {
         "en": "The API server rejects the mutation with an HTTP 403 Forbidden status when the client lacks sufficient authorization permissions.",
@@ -69535,8 +69938,8 @@
     "usphone": "ˈkærət",
     "ukphone": "ˈkærət",
     "syllables": [
-      "car",
-      "et"
+      "ca",
+      "ret"
     ],
     "etymology": {
       "origin": "源自拉丁语 caret（缺少），印刷校对用以指示缺失文字插入位置的符号 ^，现代包管理器中用于指示兼容小版本升级。"
@@ -69571,8 +69974,8 @@
     "usphone": "ˈsɑːkɪt",
     "ukphone": "ˈsɒkɪt",
     "syllables": [
-      "sock",
-      "et"
+      "so",
+      "cket"
     ],
     "etymology": {
       "root": {
@@ -69620,8 +70023,8 @@
     "usphone": "ˈsteɪtɪd",
     "ukphone": "ˈsteɪtɪd",
     "syllables": [
-      "stat",
-      "ed"
+      "sta",
+      "ted"
     ],
     "etymology": {
       "root": {
@@ -69709,8 +70112,8 @@
     "usphone": "ˈprezəns",
     "ukphone": "ˈprezns",
     "syllables": [
-      "pres",
-      "ence"
+      "pre",
+      "sence"
     ],
     "etymology": {
       "prefix": {
@@ -69757,8 +70160,8 @@
     "usphone": "ˈtelɪfoʊn",
     "ukphone": "ˈtelɪfəʊn",
     "syllables": [
-      "tel",
-      "e",
+      "te",
+      "le",
       "phone"
     ],
     "etymology": {
@@ -69971,8 +70374,8 @@
     "usphone": "ˌsɪtʃuˈeɪʃn",
     "ukphone": "ˌsɪtʃuˈeɪʃn",
     "syllables": [
-      "sit",
-      "u",
+      "si",
+      "tu",
       "a",
       "tion"
     ],
@@ -70124,8 +70527,8 @@
     "usphone": "ˌreprɪzenˈteɪʃn",
     "ukphone": "ˌreprɪzenˈteɪʃn",
     "syllables": [
-      "rep",
       "re",
+      "pre",
       "sen",
       "ta",
       "tion"
@@ -70171,10 +70574,10 @@
     "usphone": "ˌesəˈterɪk",
     "ukphone": "ˌesəˈterɪk",
     "syllables": [
-      "es",
-      "o",
-      "ter",
-      "ic"
+      "e",
+      "so",
+      "te",
+      "ric"
     ],
     "etymology": {
       "prefix": {
@@ -70309,8 +70712,8 @@
     "usphone": "ˈfɪzɪkəli",
     "ukphone": "ˈfɪzɪkli",
     "syllables": [
-      "phys",
-      "i",
+      "phy",
+      "si",
       "cal",
       "ly"
     ],
@@ -70345,6 +70748,9 @@
         "en": "physically located",
         "cn": "物理位于"
       }
+    ],
+    "silentIndices": [
+      7
     ]
   },
   {
@@ -70406,7 +70812,10 @@
       "derivation": "一个紧跟一个毫不停顿相继走来接续发生的 → 连续的、相继的",
       "origin": "源自中世纪拉丁语 successivus，来自 succedere（继承、随之发生）。"
     },
-    "silentIndices": [],
+    "silentIndices": [
+      5,
+      9
+    ],
     "examples": [
       {
         "en": "Streaming video player decoders buffer successive audio-visual frames to maintain smooth 60 FPS playback.",
@@ -70475,6 +70884,9 @@
         "en": "in succession",
         "cn": "接连地"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -70621,8 +71033,8 @@
     "ukphone": "ˈtaɪpraɪtə(r)",
     "syllables": [
       "type",
-      "writ",
-      "er"
+      "wri",
+      "ter"
     ],
     "etymology": {
       "prefix": {
@@ -70887,8 +71299,8 @@
     "syllables": [
       "ter",
       "mi",
-      "nol",
-      "o",
+      "no",
+      "lo",
       "gy"
     ],
     "etymology": {
@@ -70933,8 +71345,8 @@
     "usphone": "əˈsendɪŋ",
     "ukphone": "əˈsendɪŋ",
     "syllables": [
-      "as",
-      "cend",
+      "a",
+      "scend",
       "ing"
     ],
     "etymology": {
@@ -71230,6 +71642,8 @@
       "origin": "源自拉丁语 accommodatus，来自 accommodare（使适应、调和）。"
     },
     "silentIndices": [
+      1,
+      4,
       10
     ],
     "examples": [
@@ -71386,8 +71800,8 @@
     "ukphone": "ˌdɪfəˈrenʃieɪt",
     "syllables": [
       "dif",
-      "fer",
-      "en",
+      "fe",
+      "ren",
       "ti",
       "ate"
     ],
@@ -71418,6 +71832,10 @@
         "en": "differentiate between",
         "cn": "区分……与……"
       }
+    ],
+    "silentIndices": [
+      2,
+      12
     ]
   },
   {
@@ -71428,8 +71846,8 @@
     "usphone": "dɪˈstɪŋkʃən",
     "ukphone": "dɪˈstɪŋkʃn",
     "syllables": [
-      "dis",
-      "tinc",
+      "di",
+      "stinc",
       "tion"
     ],
     "etymology": {
@@ -71477,8 +71895,8 @@
     "usphone": "dɪˈstɪŋɡwɪʃ",
     "ukphone": "dɪˈstɪŋɡwɪʃ",
     "syllables": [
-      "dis",
-      "tin",
+      "di",
+      "stin",
       "guish"
     ],
     "etymology": {
@@ -71955,9 +72373,9 @@
     "usphone": "ˈɪtəreɪtɪv",
     "ukphone": "ˈɪtərətɪv",
     "syllables": [
-      "it",
-      "er",
-      "a",
+      "i",
+      "te",
+      "ra",
       "tive"
     ],
     "etymology": {
@@ -72165,8 +72583,8 @@
     "ukphone": "njuːˈmerɪkl",
     "syllables": [
       "nu",
-      "mer",
-      "i",
+      "me",
+      "ri",
       "cal"
     ],
     "etymology": {
@@ -72211,8 +72629,8 @@
     "usphone": "ˈdɪdʒɪtəl",
     "ukphone": "ˈdɪdʒɪtl",
     "syllables": [
-      "dig",
-      "i",
+      "di",
+      "gi",
       "tal"
     ],
     "etymology": {
@@ -72331,8 +72749,8 @@
     "ukphone": "ˈɔːɡənaɪz",
     "syllables": [
       "or",
-      "gan",
-      "ise"
+      "ga",
+      "nise"
     ],
     "etymology": {
       "root": {
@@ -72456,8 +72874,8 @@
     "ukphone": "ɪkˈsplɪsɪt",
     "syllables": [
       "ex",
-      "plic",
-      "it"
+      "pli",
+      "cit"
     ],
     "etymology": {
       "prefix": {
@@ -72716,6 +73134,9 @@
         "en": "reappear in",
         "cn": "重新出现在……"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -72843,6 +73264,9 @@
         "en": "suppress error",
         "cn": "压制/屏蔽错误输出"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -72888,8 +73312,8 @@
     "usphone": "ˌrekəɡˈnɪʃən",
     "ukphone": "ˌrekəɡˈnɪʃn",
     "syllables": [
-      "rec",
-      "og",
+      "re",
+      "cog",
       "ni",
       "tion"
     ],
@@ -72977,8 +73401,8 @@
       "al",
       "pha",
       "nu",
-      "mer",
-      "ic"
+      "me",
+      "ric"
     ],
     "etymology": {
       "prefix": {
@@ -73022,8 +73446,8 @@
     "usphone": "ˈænəlɔːɡ",
     "ukphone": "ˈænəlɒɡ",
     "syllables": [
-      "an",
       "a",
+      "na",
       "log"
     ],
     "etymology": {
@@ -73311,8 +73735,8 @@
     "usphone": "ˈriːdər",
     "ukphone": "ˈriːdə(r)",
     "syllables": [
-      "read",
-      "er"
+      "rea",
+      "der"
     ],
     "etymology": {
       "root": {
@@ -73424,6 +73848,9 @@
         "en": "communication channel",
         "cn": "通信信道"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -73507,8 +73934,8 @@
     "usphone": "ˈkoʊdər",
     "ukphone": "ˈkəʊdə(r)",
     "syllables": [
-      "cod",
-      "er"
+      "co",
+      "der"
     ],
     "etymology": {
       "root": {
@@ -73645,8 +74072,8 @@
     "syllables": [
       "cy",
       "ber",
-      "net",
-      "ics"
+      "ne",
+      "tics"
     ],
     "etymology": {
       "root": {
@@ -73760,8 +74187,8 @@
     "syllables": [
       "e",
       "lec",
-      "tron",
-      "ics"
+      "tro",
+      "nics"
     ],
     "etymology": {
       "root": {
@@ -73843,6 +74270,9 @@
         "en": "event emitter",
         "cn": "事件发射器模式"
       }
+    ],
+    "silentIndices": [
+      3
     ]
   },
   {
@@ -73887,6 +74317,9 @@
         "en": "encode data",
         "cn": "编码数据"
       }
+    ],
+    "silentIndices": [
+      5
     ]
   },
   {
@@ -74075,8 +74508,8 @@
     "ukphone": "ɪnˈkwaɪəri",
     "syllables": [
       "in",
-      "quir",
-      "y"
+      "qui",
+      "ry"
     ],
     "etymology": {
       "prefix": {
@@ -74126,8 +74559,8 @@
     "syllables": [
       "in",
       "te",
-      "grat",
-      "ed"
+      "gra",
+      "ted"
     ],
     "etymology": {
       "root": {
@@ -74173,8 +74606,7 @@
     "ukphone": "ˈleɪtnsi",
     "syllables": [
       "la",
-      "ten",
-      "cy"
+      "tency"
     ],
     "etymology": {
       "root": {
@@ -74221,8 +74653,8 @@
     "usphone": "ˈlɪŋkɪdʒ",
     "ukphone": "ˈlɪŋkɪdʒ",
     "syllables": [
-      "link",
-      "age"
+      "lin",
+      "kage"
     ],
     "etymology": {
       "root": {
@@ -74302,6 +74734,9 @@
         "en": "logger level",
         "cn": "日志级别（debug/info/warn/error）"
       }
+    ],
+    "silentIndices": [
+      2
     ]
   },
   {
@@ -74313,8 +74748,8 @@
     "ukphone": "mæɡˈnetɪk",
     "syllables": [
       "mag",
-      "net",
-      "ic"
+      "ne",
+      "tic"
     ],
     "etymology": {
       "root": {
@@ -74436,10 +74871,10 @@
     "usphone": "ˈnænoʊsekənd",
     "ukphone": "ˈnænəʊsekənd",
     "syllables": [
-      "nan",
-      "o",
-      "sec",
-      "ond"
+      "na",
+      "no",
+      "se",
+      "cond"
     ],
     "etymology": {
       "prefix": {
@@ -74575,8 +75010,8 @@
     "usphone": "ˈpænəl",
     "ukphone": "ˈpænl",
     "syllables": [
-      "pan",
-      "el"
+      "pa",
+      "nel"
     ],
     "etymology": {
       "origin": "源自古法语 panel（小布片、小镶板），来自中世纪拉丁语 panellus，在图形界面中指安放各类调试控件或系统设置的独立功能视窗面板。"
@@ -74662,9 +75097,9 @@
     "ukphone": "pəˈrɪfərəl",
     "syllables": [
       "pe",
-      "riph",
-      "er",
-      "al"
+      "ri",
+      "phe",
+      "ral"
     ],
     "etymology": {
       "prefix": {
@@ -74901,8 +75336,8 @@
     "usphone": "ˌsɪmjuˈleɪʃn",
     "ukphone": "ˌsɪmjuˈleɪʃn",
     "syllables": [
-      "sim",
-      "u",
+      "si",
+      "mu",
       "la",
       "tion"
     ],
@@ -74947,8 +75382,8 @@
     "usphone": "ˈsɪmjuleɪtər",
     "ukphone": "ˈsɪmjuleɪtə(r)",
     "syllables": [
-      "sim",
-      "u",
+      "si",
+      "mu",
       "la",
       "tor"
     ],
@@ -75038,8 +75473,8 @@
     "ukphone": "sɪmˈbɒlɪk",
     "syllables": [
       "sym",
-      "bol",
-      "ic"
+      "bo",
+      "lic"
     ],
     "etymology": {
       "root": {
@@ -75082,8 +75517,8 @@
     "usphone": "ˈtæbjuleɪtər",
     "ukphone": "ˈtæbjuleɪtə(r)",
     "syllables": [
-      "tab",
-      "u",
+      "ta",
+      "bu",
       "la",
       "tor"
     ],
@@ -75124,10 +75559,10 @@
     "usphone": "ˈtelɪprɪntər",
     "ukphone": "ˈtelɪprɪntə(r)",
     "syllables": [
-      "tel",
-      "e",
-      "print",
-      "er"
+      "te",
+      "le",
+      "prin",
+      "ter"
     ],
     "etymology": {
       "prefix": {
@@ -75169,8 +75604,8 @@
     "usphone": "ˈtaɪmər",
     "ukphone": "ˈtaɪmə(r)",
     "syllables": [
-      "tim",
-      "er"
+      "ti",
+      "mer"
     ],
     "etymology": {
       "root": {
@@ -75220,8 +75655,8 @@
     "usphone": "ˈtaɪmɪŋ",
     "ukphone": "ˈtaɪmɪŋ",
     "syllables": [
-      "tim",
-      "ing"
+      "ti",
+      "ming"
     ],
     "etymology": {
       "root": {
@@ -75370,8 +75805,8 @@
     "ukphone": "ˈwɪntʃɪstə(r)",
     "syllables": [
       "Win",
-      "ches",
-      "ter"
+      "che",
+      "ster"
     ],
     "etymology": {
       "origin": "源自英国地名 Winchester。1973 年 IBM 研发型号为 3340 的双主轴存储设备，工程代号为 Winchester（因其双 30MB 规格酷似著名的 Winchester 30-30 步枪），此后 Winchester 成为密封润滑式现代硬盘的代名词。"
@@ -75571,8 +76006,8 @@
     "usphone": "ˈbrækɪtɪd",
     "ukphone": "ˈbrækɪtɪd",
     "syllables": [
-      "brack",
-      "et",
+      "bra",
+      "cket",
       "ed"
     ],
     "etymology": {
@@ -75654,6 +76089,9 @@
         "en": "interactive debugger",
         "cn": "交互式调试器（GDB/LLDB/Chrome DevTools）"
       }
+    ],
+    "silentIndices": [
+      4
     ]
   }
 ]
