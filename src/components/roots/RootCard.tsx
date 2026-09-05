@@ -42,7 +42,7 @@ export function RootCard({ root }: RootCardProps) {
         </div>
 
         {/* 词源故事与演变逻辑（主解释区固定高度：上面留给 origin 词源，下面固定呈现 derivationNote 派生解析） */}
-        <div className="h-[116px] sm:h-[120px] xl:h-[126px] 2xl:h-[130px] text-sm sm:text-base xl:text-[17px] bg-white/[0.025] px-4 py-2.5 xl:px-4.5 xl:py-3 rounded-xl border border-white/5 flex flex-col justify-between select-none">
+        <div className="h-[116px] sm:h-[120px] xl:h-[126px] 2xl:h-[130px] text-sm sm:text-base xl:text-[17px] bg-white/[0.04] px-4 py-2.5 xl:px-4.5 xl:py-3 rounded-xl border border-white/10 flex flex-col justify-between select-none">
           {/* 上面：留给词根词缀的 origin 字段 */}
           <div className="overflow-y-auto custom-scrollbar flex-1 min-h-0 pr-1">
             <p className="text-gray-100 leading-relaxed">
@@ -52,7 +52,7 @@ export function RootCard({ root }: RootCardProps) {
 
           {/* 下面：固定在主解释区的底部 */}
           {root.derivationNote && (
-            <div className="pt-2 mt-auto shrink-0 border-t border-white/[0.06]">
+            <div className="pt-2 mt-auto shrink-0 border-t border-white/10">
               <p className="text-primary font-medium text-xs sm:text-sm xl:text-base leading-snug">
                 {root.derivationNote}
               </p>

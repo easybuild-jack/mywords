@@ -50,7 +50,7 @@ export function RootsStage() {
   }
 
   return (
-    <div className="relative w-full h-full flex-1 min-h-0 flex flex-col py-1">
+    <div className="w-full h-full flex-1 min-h-0 flex flex-col py-1">
       {/* 1. 默认常驻主视图：概览列表（表格看大概，无派生词干扰） */}
       <RootsTableView
         items={filteredRoots}
