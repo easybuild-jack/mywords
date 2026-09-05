@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="dark">
-      <body className="min-h-screen bg-easybuild-radial text-foreground flex antialiased overflow-hidden">
+      <body className="min-h-screen bg-background text-foreground flex antialiased overflow-hidden">
         {/* 左侧全局常驻侧边栏 */}
         <Sidebar />
 

@@ -27,7 +27,7 @@ export function RootCard({ root }: RootCardProps) {
         {/* 大字形态、读音音标、核心本义 */}
         <div className="flex flex-wrap items-baseline gap-3 sm:gap-4 xl:gap-5">
           <h2 className="text-3xl sm:text-4xl xl:text-5xl font-extrabold text-white font-mono tracking-tight flex items-center gap-2">
-            <span className="text-primary drop-shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]">
+            <span className="text-primary">
               {root.form}
             </span>
           </h2>

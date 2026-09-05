@@ -95,19 +95,19 @@ export function RootsTableView({
               <tr>
                 <th className="py-2.5 px-5 sm:px-6 w-52 sm:w-60 xl:w-68">
                   <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-primary shadow-[0_0_8px_rgb(var(--primary-rgb)/0.6)]" />
+                    <span className="size-2 rounded-full bg-primary" />
                     <span>形态与读音</span>
                   </div>
                 </th>
                 <th className="py-2.5 px-5 sm:px-6 w-56 sm:w-64 xl:w-76">
                   <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-accent shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
+                    <span className="size-2 rounded-full bg-accent" />
                     <span>核心本义</span>
                   </div>
                 </th>
                 <th className="py-2.5 px-5 sm:px-6">
                   <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+                    <span className="size-2 rounded-full bg-amber-400" />
                     <span>词源溯源与构词逻辑</span>
                   </div>
                 </th>

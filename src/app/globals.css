@@ -167,12 +167,9 @@
 
 /* 放进 components 层，才能被 border-primary/30 这类工具类覆盖 */
 @layer components {
-  /* EasyBuild.pro 风格背景氛围光晕与玻璃质感 */
+  /* 全局背景纯色深底，消除光圈光晕对文本清晰度的干扰 */
   .bg-easybuild-radial {
-    background:
-      radial-gradient(circle at 50% 0%, rgb(var(--primary-rgb) / 0.08) 0%, transparent 35%),
-      radial-gradient(circle at 80% 20%, rgba(254, 188, 46, 0.05) 0%, transparent 25%),
-      linear-gradient(180deg, var(--background) 0%, var(--background) 50%, var(--background) 100%);
+    background-color: var(--background);
   }
 
   .glass-card {
