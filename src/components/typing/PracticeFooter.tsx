@@ -77,17 +77,19 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
             </button>
           )}
 
-          <button
-            type="button"
-            onClick={toggleCurrentWordSplit}
-            className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
-            title={`音节拆分/合并 (${formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')})`}
-          >
-            <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
-              {formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')}
-            </kbd>
-            <span>音节切分</span>
-          </button>
+          {mode === 'learn' && (
+            <button
+              type="button"
+              onClick={toggleCurrentWordSplit}
+              className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
+              title={`音节拆分/合并 (${formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')})`}
+            >
+              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+                {formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')}
+              </kbd>
+              <span>音节切分</span>
+            </button>
+          )}
 
           <button
             type="button"

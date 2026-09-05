@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie'
-import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology } from '@/types'
+import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode } from '@/types'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { buildWordId } from '@/lib/wordId'
 
@@ -106,7 +106,7 @@ export async function recordWordAttempt(
   wordId: string,
   bookId: string,
   isCorrect: boolean,
-  mode: 'learn' | 'dictation',
+  mode: PracticeMode,
   wordItem?: WordItem
 ) {
   try {

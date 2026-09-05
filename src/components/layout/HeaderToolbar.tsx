@@ -75,47 +75,9 @@ export function HeaderToolbar() {
           </Link>
         )}
 
-        {/* 2. 发音口音下拉 */}
-        <Select<'us' | 'uk'>
-          value={phoneticPreference}
-          onChange={setPhoneticPreference}
-          options={ACCENT_OPTIONS}
-        />
-
-        {/* 分隔线 */}
-        <div className="h-4 xl:h-5 w-px bg-white/10" />
-
-        {/* 3. 单个单词循环次数配置 */}
-        {isErrorPracticeActive && mode === 'dictation' ? (
-          <Tooltip content="错词攻坚强制连续 3 次无误默写" side="bottom">
-            <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-md xl:rounded-lg h-8 xl:h-9 px-3 xl:px-3.5 inline-flex items-center text-xs xl:text-sm font-mono font-bold cursor-default">
-              循环 3次 (3-Streak)
-            </div>
-          </Tooltip>
-        ) : (
-          <Select<1 | 2 | 3 | 5>
-            value={loopCountSetting}
-            onChange={setLoopCountSetting}
-            options={LOOP_OPTIONS}
-          />
-        )}
-
-        {/* 4. 默写线索来源二选一，学习页不出现 */}
+        {/* 2. 默写线索来源二选一（置前展示，默认「看译文默写」） */}
         {mode === 'dictation' && (
           <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg xl:rounded-xl border border-white/10">
-            <Tooltip content="只给发音，需要写出中文释义与拼写" side="bottom">
-              <button
-                onClick={() => setDictationCueMode('listen')}
-                className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1 xl:py-1.5 rounded-md xl:rounded-lg text-xs xl:text-sm transition-all cursor-pointer ${
-                  dictationCueMode === 'listen'
-                    ? 'bg-primary/20 text-primary font-bold'
-                    : 'text-muted-foreground hover:text-white'
-                }`}
-              >
-                <Headphones className="size-3.5 xl:size-4" />
-                <span>听音默写</span>
-              </button>
-            </Tooltip>
             <Tooltip content="只给中文释义，不自动发音（可手动点或按 Ctrl+J 听），需要写出拼写" side="bottom">
               <button
                 onClick={() => setDictationCueMode('meaning')}
@@ -129,7 +91,45 @@ export function HeaderToolbar() {
                 <span>看译文默写</span>
               </button>
             </Tooltip>
+            <Tooltip content="只给发音，需要写出中文释义与拼写" side="bottom">
+              <button
+                onClick={() => setDictationCueMode('listen')}
+                className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1 xl:py-1.5 rounded-md xl:rounded-lg text-xs xl:text-sm transition-all cursor-pointer ${
+                  dictationCueMode === 'listen'
+                    ? 'bg-primary/20 text-primary font-bold'
+                    : 'text-muted-foreground hover:text-white'
+                }`}
+              >
+                <Headphones className="size-3.5 xl:size-4" />
+                <span>听音默写</span>
+              </button>
+            </Tooltip>
           </div>
+        )}
+
+        {/* 3. 发音口音下拉 */}
+        <Select<'us' | 'uk'>
+          value={phoneticPreference}
+          onChange={setPhoneticPreference}
+          options={ACCENT_OPTIONS}
+        />
+
+        {/* 分隔线 */}
+        <div className="h-4 xl:h-5 w-px bg-white/10" />
+
+        {/* 4. 单个单词循环次数配置 */}
+        {isErrorPracticeActive && mode === 'dictation' ? (
+          <Tooltip content="错词攻坚强制连续 3 次无误默写" side="bottom">
+            <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-md xl:rounded-lg h-8 xl:h-9 px-3 xl:px-3.5 inline-flex items-center text-xs xl:text-sm font-mono font-bold cursor-default">
+              循环 3次 (3-Streak)
+            </div>
+          </Tooltip>
+        ) : (
+          <Select<1 | 2 | 3 | 5>
+            value={loopCountSetting}
+            onChange={setLoopCountSetting}
+            options={LOOP_OPTIONS}
+          />
         )}
 
         {/* 5. 皮肤切换（仅配色） */}

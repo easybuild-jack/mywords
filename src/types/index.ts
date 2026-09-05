@@ -73,7 +73,7 @@ export interface VocabularyBook {
 // 3. 用户做题掌握度与持久化模型 (IndexedDB)
 // ==========================================
 
-export type PracticeMode = 'learn' | 'dictation';
+export type PracticeMode = 'learn' | 'dictation' | 'phonetic';
 
 /**
  * 默写页的线索来源：

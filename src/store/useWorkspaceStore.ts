@@ -15,7 +15,7 @@ import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
  * activeWordIndex / isUnitFinished 始终代表「当前页面」的实时进度，
  * cursors 只是另外两个页面的存档位，在切页的瞬间做一次存取。
  */
-export type PracticeCursorKey = 'learn' | 'dictation' | 'error'
+export type PracticeCursorKey = 'learn' | 'dictation' | 'phonetic' | 'error'
 
 interface PracticeCursor {
   activeWordIndex: number
@@ -28,6 +28,7 @@ function createFreshCursors(): Record<PracticeCursorKey, PracticeCursor> {
   return {
     learn: { ...EMPTY_CURSOR },
     dictation: { ...EMPTY_CURSOR },
+    phonetic: { ...EMPTY_CURSOR },
     error: { ...EMPTY_CURSOR },
   }
 }
@@ -36,6 +37,7 @@ function createFreshCursors(): Record<PracticeCursorKey, PracticeCursor> {
 const DEFAULT_LOOP_COUNTS: Record<PracticeMode, 1 | 2 | 3 | 5> = {
   learn: 1,
   dictation: 3,
+  phonetic: 1,
 }
 
 /** 校验失败的抖动提示持续时长 */
@@ -144,6 +146,10 @@ interface WorkspaceState {
   setDictationMeaningInput: (input: string) => void
   setIsPhoneticFocused: (focused: boolean) => void
   submitPhonetic: (overrideInput?: string) => boolean
+  appendPhoneticSymbol: (sym: string) => void
+  backspacePhonetic: () => void
+  clearPhonetic: () => void
+  submitPhoneticDictation: () => boolean
   submitMeaning: () => boolean
   resetDictationStepStates: () => void
   setInput: (input: string) => void
@@ -209,6 +215,7 @@ function withLoopCount(
   return {
     learn: mode === 'learn' ? count : counts.learn,
     dictation: mode === 'dictation' ? count : counts.dictation,
+    phonetic: mode === 'phonetic' ? count : counts.phonetic,
   }
 }
 
@@ -250,7 +257,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       loopCountSetting: DEFAULT_LOOP_COUNTS.learn,
       loopCounts: { ...DEFAULT_LOOP_COUNTS },
       currentWordRemainingLoops: DEFAULT_LOOP_COUNTS.learn,
-      dictationCueMode: 'listen',
+      dictationCueMode: 'meaning',
       phoneticPreference: 'us',
       
       shortcuts: DEFAULT_SHORTCUTS,
@@ -405,8 +412,9 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       exitErrorPractice: async () => {
         // 攻坚或错词练习结束回到对应模式原来的位置与循环次数，攻坚存档位清空
-        const isDictation = get().mode === 'dictation'
-        const restored = isDictation ? get().cursors.dictation : get().cursors.learn
+        const currentMode = get().mode
+        const targetKey: PracticeCursorKey = currentMode === 'dictation' ? 'dictation' : (currentMode === 'phonetic' ? 'phonetic' : 'learn')
+        const restored = get().cursors[targetKey]
 
         set({
           isErrorPracticeActive: false,
@@ -630,6 +638,65 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({ isPhoneticError: true })
         setTimeout(() => set({ isPhoneticError: false }), VALIDATION_ERROR_FLASH_MS)
         return false
+      },
+
+      appendPhoneticSymbol: (sym: string) => {
+        set((s) => ({ dictationPhoneticInput: s.dictationPhoneticInput + sym }))
+      },
+
+      backspacePhonetic: () => {
+        set((s) => ({ dictationPhoneticInput: s.dictationPhoneticInput.slice(0, -1) }))
+      },
+
+      clearPhonetic: () => {
+        set({ dictationPhoneticInput: '', isPhoneticError: false })
+      },
+
+      submitPhoneticDictation: () => {
+        const currentWord = get().getCurrentWord()
+        const {
+          dictationPhoneticInput,
+          currentBookId,
+          isCorrectSoundEnabled,
+          isWrongBeepEnabled,
+          feedbackVolume,
+          currentWordRemainingLoops,
+          phoneticPreference,
+          audioRate,
+        } = get()
+        if (!currentWord) return false
+        const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
+        if (isValid) {
+          if (isCorrectSoundEnabled) {
+            audioEngine.playKeySound('beep')
+          }
+          audioEngine.playPronunciationOnce(currentWord.name, phoneticPreference, audioRate)
+          set({ isPhoneticPassed: true, isPhoneticError: false })
+
+          if (currentWordRemainingLoops > 1) {
+            setTimeout(() => {
+              set((s) => ({
+                currentWordRemainingLoops: s.currentWordRemainingLoops - 1,
+                dictationPhoneticInput: '',
+                isPhoneticPassed: false,
+              }))
+            }, 300)
+          } else {
+            recordWordAttempt(currentWord.id, currentBookId, true, 'phonetic', currentWord)
+            setTimeout(() => {
+              get().nextWord()
+            }, 350)
+          }
+          return true
+        } else {
+          if (isWrongBeepEnabled) {
+            audioEngine.playBeepSound(feedbackVolume)
+          }
+          set({ isPhoneticError: true })
+          recordWordAttempt(currentWord.id, currentBookId, false, 'phonetic', currentWord)
+          setTimeout(() => set({ isPhoneticError: false }), VALIDATION_ERROR_FLASH_MS)
+          return false
+        }
       },
 
       submitMeaning: () => {
@@ -1148,6 +1215,11 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
         // 刷新后一律从学习页起步，生效的循环次数取学习页那一档
         const loopCount = loopCounts.learn
+        // 默写线索默认看译文；旧缓存若未标记迁移过则升级为新的默认值 'meaning'
+        const dictationCueMode = (persisted as any)?.dictationCueModeMigratedToMeaning
+          ? (persisted.dictationCueMode ?? 'meaning')
+          : 'meaning'
+
         return {
           ...currentState,
           ...persisted,
@@ -1155,6 +1227,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           loopCounts,
           loopCountSetting: loopCount,
           currentWordRemainingLoops: loopCount,
+          dictationCueMode,
           currentInput: '',
           hasTypo: false,
           // 模式由路由决定，不接受任何持久化值（含旧版本残留的 mode）
@@ -1169,6 +1242,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         currentUnitIndex: state.currentUnitIndex,
         loopCounts: state.loopCounts,
         dictationCueMode: state.dictationCueMode,
+        dictationCueModeMigratedToMeaning: true,
         phoneticPreference: state.phoneticPreference,
         isAutoPlayAudio: state.isAutoPlayAudio,
         keySoundPack: state.keySoundPack,

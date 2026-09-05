@@ -14,6 +14,7 @@ import {
   Quote,
   SpellCheck,
   Languages,
+  Keyboard,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
@@ -22,14 +23,15 @@ export function Sidebar() {
   const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
-    { label: '单词', icon: GraduationCap, href: '/learn' },
-    { label: '默写', icon: PenLine, href: '/dictation' },
-    { label: '词库', icon: BookOpen, href: '/books' },
-    { label: '生错词', icon: AlertCircle, href: '/errors' },
-    { label: '词根', icon: Sprout, href: '/roots' },
-    { label: '短语', icon: Quote, href: '/phrases', comingSoon: true },
-    { label: '语法', icon: SpellCheck, href: '/grammar', comingSoon: true },
-    { label: '翻译', icon: Languages, href: '/translate', comingSoon: true },
+    { label: '单词学习', icon: GraduationCap, href: '/learn' },
+    { label: '单词默写', icon: PenLine, href: '/dictation' },
+    { label: '音标默写', icon: Keyboard, href: '/phonetics' },
+    { label: '词库管理', icon: BookOpen, href: '/books' },
+    { label: '生错词本', icon: AlertCircle, href: '/errors' },
+    { label: '词根词缀', icon: Sprout, href: '/roots' },
+    { label: '常用短语', icon: Quote, href: '/phrases', comingSoon: true },
+    { label: '基础语法', icon: SpellCheck, href: '/grammar', comingSoon: true },
+    { label: '句子翻译', icon: Languages, href: '/translate', comingSoon: true },
   ]
 
   return (

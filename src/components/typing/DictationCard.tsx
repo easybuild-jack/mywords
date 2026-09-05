@@ -42,20 +42,12 @@ export function DictationCard({
   remainingLoops = 1,
 }: DictationCardProps) {
   const {
-    isDictationPhoneticEnabled,
-    toggleDictationPhonetic,
-    dictationPhoneticInput,
-    isPhoneticPassed,
-    submitPhonetic,
-    isPhoneticFocused,
-    setIsPhoneticFocused,
     isDictationMeaningEnabled,
     toggleDictationMeaning,
     dictationMeaningInput,
     setDictationMeaningInput,
     isMeaningPassed,
     submitMeaning,
-    isPhoneticError,
     isMeaningError,
   } = useWorkspaceStore()
 
@@ -63,9 +55,8 @@ export function DictationCard({
 
   const isMeaningStepEnabled = isMeaningStepActive(cueMode, isDictationMeaningEnabled)
 
-  // 拼写槽激活条件：开启的前置环节必须全部通过
-  const isSpellingUnlocked =
-    (!isDictationPhoneticEnabled || isPhoneticPassed) && (!isMeaningStepEnabled || isMeaningPassed)
+  // 拼写槽激活条件：开启的前置译文环节必须通过
+  const isSpellingUnlocked = !isMeaningStepEnabled || isMeaningPassed
 
   // 释义可能很长，输入框是多行文本域，但回车仍然是校验而不是换行
   const handleMeaningSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -75,15 +66,6 @@ export function DictationCard({
     }
   }
 
-  // 音标环节关闭或已通过时这一格是纯展示，点它不该唤出键盘
-  const isPhoneticSlotClickable = isDictationPhoneticEnabled && !isPhoneticPassed
-
-  const handlePhoneticSlotClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (!isPhoneticSlotClickable) return
-    setIsPhoneticFocused(true)
-  }
-
   return (
     <WordCardShell
       word={word}
@@ -91,16 +73,14 @@ export function DictationCard({
       remainingLoops={remainingLoops}
     >
       {/*
-        卡片里从上到下四块：顶部线索、模式提示、输入阶梯、底部偷看槽。
-        gap-4 只作用在这四块之间，阶梯内部的 space-y-3.5 不受影响——三个输入行是一个整体。
-        不给听音模式留空线索槽：看译文模式本来就会整行撤掉译文输入，
-        两个模式的阶梯高度天生不等，留空槽换不来排版一致，只会把内容压到卡片下半部分。
+        卡片内容整体往上靠：从居中改为顶部对齐（justify-start），
+        使看译文/听音线索与输入阶梯自然向上排布，消除上下过度空旷感。
       */}
-      <div className="flex flex-col h-full py-1 justify-center gap-4">
-        {/* 顶部线索槽：只在看译文模式出现，h-20 刚好装三行释义 */}
+      <div className="flex flex-col h-full justify-start pt-2 sm:pt-3 xl:pt-5 gap-3.5 xl:gap-4.5">
+        {/* 顶部线索槽：只在看译文模式出现，作为核心提示醒目呈现 */}
         {cueMode === 'meaning' && (
-          <div className="h-20 shrink-0 flex items-center justify-center px-6">
-            <p className="max-w-lg text-base font-bold text-white line-clamp-3 leading-relaxed text-center">
+          <div className="min-h-16 max-h-24 shrink-0 flex items-center justify-center px-4 sm:px-6">
+            <p className="max-w-xl text-base sm:text-lg xl:text-xl font-bold text-white line-clamp-3 leading-relaxed text-center">
               {meaningText}
             </p>
           </div>
@@ -115,82 +95,7 @@ export function DictationCard({
 
         {/* 中间主要输入阶梯区 */}
         <div className="w-full max-w-lg mx-auto space-y-3.5">
-          {/* 第一级：音标点选输入行 */}
-          <div className="flex items-center gap-2.5">
-            <div
-              onClick={handlePhoneticSlotClick}
-              className={`flex-1 h-12 rounded-2xl border px-3.5 flex items-center justify-between transition-all duration-200 ${isPhoneticSlotClickable
-                ? 'cursor-pointer'
-                : isDictationPhoneticEnabled
-                  ? 'cursor-default'
-                  : 'cursor-not-allowed'
-                } ${!isDictationPhoneticEnabled
-                  ? 'border-primary/10 bg-primary/[0.02] opacity-40'
-                  : isPhoneticPassed
-                    ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
-                    : isPhoneticError
-                      ? 'border-destructive bg-destructive/15 animate-shake'
-                      : isPhoneticFocused
-                        ? 'border-primary bg-primary/[0.07] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.22)] ring-1 ring-primary/40'
-                        : 'border-primary/20 bg-primary/[0.03] hover:border-primary/45 hover:bg-primary/[0.06]'
-                }`}
-            >
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1 shrink-0">
-                  <Keyboard className="size-3.5 text-primary/80" />
-                  <span>音标</span>
-                </span>
-                <div className="font-mono text-base font-bold text-white truncate text-left">
-                  {dictationPhoneticInput ? (
-                    <span className="text-primary tracking-wider">/{dictationPhoneticInput}/</span>
-                  ) : (
-                    <span className="text-xs text-muted-foreground/60 font-sans font-normal">
-                      {isDictationPhoneticEnabled ? '点击点选音标符号...' : '已关闭音标输入'}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5 shrink-0">
-                {isPhoneticPassed ? (
-                  <span className="flex items-center gap-1 text-[11px] font-bold text-primary bg-primary/20 px-2 py-0.5 rounded-md border border-primary/30">
-                    <Check className="size-3" />
-                    <span>通过</span>
-                  </span>
-                ) : isDictationPhoneticEnabled ? (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      submitPhonetic()
-                    }}
-                    className="text-[11px] font-semibold px-2 py-1 rounded-md bg-white/[0.08] hover:bg-primary hover:text-[#0B0C0E] text-gray-300 transition-all cursor-pointer"
-                  >
-                    校验
-                  </button>
-                ) : null}
-              </div>
-            </div>
-
-            {/* 音标环节独立开关 */}
-            <button
-              type="button"
-              onClick={() => toggleDictationPhonetic()}
-              className={`h-12 px-2.5 rounded-2xl border flex items-center justify-center gap-1 text-xs transition-all cursor-pointer shrink-0 ${isDictationPhoneticEnabled
-                ? 'border-primary/40 bg-primary/10 text-primary'
-                : 'border-white/10 bg-white/[0.04] text-muted-foreground hover:text-white'
-                }`}
-              title={isDictationPhoneticEnabled ? '点击关闭音标输入环节' : '点击开启音标输入环节'}
-            >
-              {isDictationPhoneticEnabled ? (
-                <ToggleRight className="size-5" />
-              ) : (
-                <ToggleLeft className="size-5" />
-              )}
-            </button>
-          </div>
-
-          {/* 第二级：中文译文输入行。看译文模式下释义已摆在顶部，这一级整体撤掉 */}
+          {/* 中文译文输入行。看译文模式下释义已摆在顶部，这一级整体撤掉 */}
           {cueMode === 'listen' && (
             <div className="flex items-center gap-2.5">
               <div
@@ -264,7 +169,7 @@ export function DictationCard({
             </div>
           )}
 
-          {/* 第三级：单词拼写盲打槽，前置完成后激活。
+          {/* 单词拼写盲打槽，前置完成后激活。
               样式与学习页的跟打槽保持一致（霓虹绿描边 + 48px 字号 + 剩余字母下划线），
               只多一个未解锁态，改动要两边同步 */}
           <div className="relative w-full">
@@ -279,15 +184,7 @@ export function DictationCard({
               {!isSpellingUnlocked ? (
                 <div className="flex items-center gap-2 text-sm font-sans font-normal text-muted-foreground">
                   <Lock className="size-4 text-accent/80" />
-                  <span>
-                    请先完成上方
-                    {!isPhoneticPassed && isDictationPhoneticEnabled ? '音标' : ''}
-                    {!isPhoneticPassed && isDictationPhoneticEnabled && !isMeaningPassed && isMeaningStepEnabled
-                      ? '与'
-                      : ''}
-                    {!isMeaningPassed && isMeaningStepEnabled ? '译文' : ''}
-                    输入后开启拼写
-                  </span>
+                  <span>请先完成上方译文输入后开启拼写</span>
                 </div>
               ) : (
                 <>
