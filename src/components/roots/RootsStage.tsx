@@ -2,27 +2,31 @@
 
 import React, { useEffect, useCallback, useMemo } from 'react'
 import { ArrowLeft, ArrowRight, SearchX } from 'lucide-react'
-import { BUILTIN_ROOTS } from '@/resources/roots'
+import { BUILTIN_ROOTS, ROOT_DATA_MAP, ROOT_TAB_LABELS } from '@/resources/roots'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { RootCard } from './RootCard'
 
 export function RootsStage() {
   const {
+    rootTab,
     activeRootIndex,
     rootSearchQuery,
     setRootIndex,
     setRootSearchQuery,
   } = useWorkspaceStore()
 
-  // 根据搜索词在词根列表里实时过滤
+  const currentDataset = useMemo(() => ROOT_DATA_MAP[rootTab] || BUILTIN_ROOTS, [rootTab])
+  const tabLabel = ROOT_TAB_LABELS[rootTab] || '词根'
+
+  // 根据搜索词在当前列表里实时过滤
   const filteredRoots = useMemo(() => {
     const q = rootSearchQuery.trim().toLowerCase()
-    if (!q) return BUILTIN_ROOTS
-    return BUILTIN_ROOTS.filter((root) => {
-      const matchForm = root.form.toLowerCase().includes(q)
-      const matchMeaning = root.meaning.toLowerCase().includes(q)
-      const matchOrigin = root.origin.toLowerCase().includes(q)
-      const matchWord = root.words.some(
+    if (!q) return currentDataset
+    return currentDataset.filter((item) => {
+      const matchForm = item.form.toLowerCase().includes(q)
+      const matchMeaning = item.meaning.toLowerCase().includes(q)
+      const matchOrigin = item.origin.toLowerCase().includes(q)
+      const matchWord = item.words.some(
         (w) =>
           w.name.toLowerCase().includes(q) ||
           w.meaning.toLowerCase().includes(q) ||
@@ -30,7 +34,7 @@ export function RootsStage() {
       )
       return matchForm || matchMeaning || matchOrigin || matchWord
     })
-  }, [rootSearchQuery])
+  }, [rootSearchQuery, currentDataset])
 
   const totalFiltered = filteredRoots.length
   // 保证索引在过滤结果的安全范围内
@@ -72,35 +76,35 @@ export function RootsStage() {
   }, [handleKeyDown])
 
   return (
-    <div className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-6">
-      {/* 左侧切词根按钮（在卡片外部左侧，尺寸与样式与练习页完全统一） */}
+    <div className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-4 sm:gap-6">
+      {/* 左侧切换按钮（与单词跟学/默写页 PracticeStageFrame 规格完全一致，支持大屏自适应放大） */}
       <button
         onClick={handlePrev}
         disabled={safeIndex === 0 || totalFiltered === 0}
-        className={`shrink-0 size-10 rounded-full glass-card flex items-center justify-center transition-all ${
+        className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all ${
           safeIndex === 0 || totalFiltered === 0
             ? 'opacity-20 cursor-not-allowed text-gray-600'
             : 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 cursor-pointer shadow-lg'
         }`}
-        title="上一词根 (←)"
-        aria-label="上一词根"
+        title={`上一${tabLabel} (←)`}
+        aria-label={`上一${tabLabel}`}
       >
-        <ArrowLeft className="size-5" />
+        <ArrowLeft className="size-5 xl:size-6" />
       </button>
 
-      {/* 中间词根卡片容器 */}
+      {/* 中间核心卡片容器：采用与单词卡片完全一致的多级响应式自适应尺寸 */}
       <div className="relative flex flex-col items-center">
-        <div className="relative w-[800px] h-[580px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-300">
           {totalFiltered === 0 ? (
             /* 搜索无结果时的温和提示 */
             <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4">
-              <div className="size-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500">
-                <SearchX className="size-8 text-gray-400" />
+              <div className="size-16 xl:size-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-500">
+                <SearchX className="size-8 xl:size-10 text-gray-400" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-xl font-bold text-white">未找到匹配的词根</h3>
-                <p className="text-sm text-gray-400 max-w-md">
-                  未找到与 “<span className="text-primary font-mono font-bold">{rootSearchQuery}</span>” 相关的词根、释义或派生词
+                <h3 className="text-xl xl:text-2xl font-bold text-white">未找到匹配的{tabLabel}</h3>
+                <p className="text-sm xl:text-base text-gray-400 max-w-md">
+                  未找到与 “<span className="text-primary font-mono font-bold">{rootSearchQuery}</span>” 相关的{tabLabel}、释义或派生词
                 </p>
               </div>
               <button
@@ -109,7 +113,7 @@ export function RootsStage() {
                   setRootSearchQuery('')
                   setRootIndex(0)
                 }}
-                className="px-4 py-2 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary text-sm font-bold transition-all cursor-pointer"
+                className="px-4 py-2 xl:px-5 xl:py-2.5 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary text-sm xl:text-base font-bold transition-all cursor-pointer"
               >
                 清空搜索条件
               </button>
@@ -126,19 +130,19 @@ export function RootsStage() {
         </div>
       </div>
 
-      {/* 右侧切词根按钮（在卡片外部右侧，尺寸与样式与练习页完全统一） */}
+      {/* 右侧切换按钮（与单词跟学/默写页 PracticeStageFrame 规格完全一致，支持大屏自适应放大） */}
       <button
         onClick={handleNext}
         disabled={safeIndex >= totalFiltered - 1 || totalFiltered === 0}
-        className={`shrink-0 size-10 rounded-full glass-card flex items-center justify-center transition-all ${
+        className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all ${
           safeIndex >= totalFiltered - 1 || totalFiltered === 0
             ? 'opacity-20 cursor-not-allowed text-gray-600'
             : 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 cursor-pointer shadow-lg'
         }`}
-        title="下一词根 (→)"
-        aria-label="下一词根"
+        title={`下一${tabLabel} (→)`}
+        aria-label={`下一${tabLabel}`}
       >
-        <ArrowRight className="size-5" />
+        <ArrowRight className="size-5 xl:size-6" />
       </button>
     </div>
   )

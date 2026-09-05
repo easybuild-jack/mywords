@@ -1,0 +1,732 @@
+[
+  {
+    "id": "suffix_tion",
+    "form": "-tion / -sion",
+    "type": "suffix",
+    "phonetic": "/-ʃn/ / -ʒn/",
+    "meaning": "动作、状态、行为或结果",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自拉丁语名词后缀 -tio / -sio，主要附着在动词之后，将动作行为转化为抽象名词或具体结果概念。",
+    "derivationNote": "英语中数量庞大的抽象名词核心后缀，使动词动作转化为可作为概念讨论的名词。",
+    "words": [
+      {
+        "name": "creation",
+        "phonetic": "/kriˈeɪʃn/",
+        "breakdown": "create (创造) + -ion (名词后缀：结果/过程)",
+        "meaning": "n. 创造；创造物",
+        "example": {
+          "en": "The museum displays the artist's finest creation.",
+          "cn": "博物馆展出了这位艺术家最杰出的创造物。"
+        }
+      },
+      {
+        "name": "decision",
+        "phonetic": "/dɪˈsɪʒn/",
+        "breakdown": "decide (决定) + -sion (名词后缀：结果)",
+        "meaning": "n. 决定；抉择",
+        "example": {
+          "en": "Making a major life decision requires calm consideration.",
+          "cn": "做出重大人生抉择需要冷静思考。"
+        }
+      },
+      {
+        "name": "reaction",
+        "phonetic": "/riˈækʃn/",
+        "breakdown": "react (反应) + -ion (名词后缀：行为)",
+        "meaning": "n. 反应；反作用",
+        "example": {
+          "en": "His prompt reaction prevented a serious accident.",
+          "cn": "他的迅速反应避免了一场严重事故。"
+        }
+      },
+      {
+        "name": "attraction",
+        "phonetic": "/əˈtrækʃn/",
+        "breakdown": "attract (吸引) + -ion (名词后缀：性质/力量)",
+        "meaning": "n. 吸引；引力；吸引物",
+        "example": {
+          "en": "The scenic waterfall is a major tourist attraction.",
+          "cn": "壮丽的瀑布是主要的旅游胜地。"
+        }
+      },
+      {
+        "name": "conclusion",
+        "phonetic": "/kənˈkluːʒn/",
+        "breakdown": "conclude (结论) + -sion (名词后缀：结果)",
+        "meaning": "n. 结论；推论；结尾",
+        "example": {
+          "en": "We reached an encouraging conclusion after discussions.",
+          "cn": "经过讨论，我们得出了令人鼓舞的结论。"
+        }
+      },
+      {
+        "name": "impression",
+        "phonetic": "/ɪmˈpreʃn/",
+        "breakdown": "impress (印入) + -sion (名词后缀：印迹)",
+        "meaning": "n. 印象；感想",
+        "example": {
+          "en": "Her confident speech left a deep impression on everyone.",
+          "cn": "她自信的演讲给所有人留下了深刻印象。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_able",
+    "form": "-able / -ible",
+    "type": "suffix",
+    "phonetic": "/-əbl/",
+    "meaning": "可...的 / 能够...的 / 易...的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自拉丁语形容词后缀 -abilis 和 -ibilis，接在动词或名词后，构成具备某种能力、资格或受动属性的形容词。",
+    "derivationNote": "现代英语中生产力极高，能直接与原生动词派生，表达客观可能性与可接受性。",
+    "words": [
+      {
+        "name": "readable",
+        "phonetic": "/ˈriːdəbl/",
+        "breakdown": "read (阅读) + -able (可...的)",
+        "meaning": "adj. 清晰易读的；耐读的",
+        "example": {
+          "en": "The code is well structured and easily readable.",
+          "cn": "这份代码结构良好且非常易读。"
+        }
+      },
+      {
+        "name": "flexible",
+        "phonetic": "/ˈfleksəbl/",
+        "breakdown": "flex (弯曲) + -ible (易...的/能...的)",
+        "meaning": "adj. 柔韧的；灵活的；可变通的",
+        "example": {
+          "en": "The company provides flexible working hours for employees.",
+          "cn": "公司为员工提供弹性工作时间。"
+        }
+      },
+      {
+        "name": "visible",
+        "phonetic": "/ˈvɪzəbl/",
+        "breakdown": "vis (看见) + -ible (能...的)",
+        "meaning": "adj. 可见的；显而易见的",
+        "example": {
+          "en": "Stars are clearly visible on a clear mountain night.",
+          "cn": "在晴朗的高山夜晚，繁星清晰可见。"
+        }
+      },
+      {
+        "name": "portable",
+        "phonetic": "/ˈpɔːrtəbl/",
+        "breakdown": "port (携带/搬运) + -able (可...的)",
+        "meaning": "adj. 便携的；手提式的",
+        "example": {
+          "en": "This portable speaker produces exceptionally rich sound.",
+          "cn": "这款便携式扬声器能够发出极其饱满的声音。"
+        }
+      },
+      {
+        "name": "adaptable",
+        "phonetic": "/əˈdæptəbl/",
+        "breakdown": "adapt (适应) + -able (能...的)",
+        "meaning": "adj. 有适应能力的；能随环境应变的",
+        "example": {
+          "en": "Successful professionals are adaptable to modern technology.",
+          "cn": "优秀的专业人士能够迅速适应现代技术。"
+        }
+      },
+      {
+        "name": "incredible",
+        "phonetic": "/ɪnˈkredəbl/",
+        "breakdown": "in- (不) + cred (相信) + -ible (可...的)",
+        "meaning": "adj. 难以置信的；极好的",
+        "example": {
+          "en": "The team achieved an incredible victory against all odds.",
+          "cn": "这支队伍顶住一切困难赢得了不可思议的胜利。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ment",
+    "form": "-ment",
+    "type": "suffix",
+    "phonetic": "/-mənt/",
+    "meaning": "行为、过程、结果或状态",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自拉丁语中性名词后缀 -mentum，经由古法语传入英语，主要与动词结合构成具体实体、状态或结果名词。",
+    "derivationNote": "通常使具体动作沉淀为制度、成果、状态或具体的具象工具。",
+    "words": [
+      {
+        "name": "development",
+        "phonetic": "/dɪˈveləpmənt/",
+        "breakdown": "develop (发展/开发) + -ment (名词后缀：过程/成果)",
+        "meaning": "n. 发展；开发；研制",
+        "example": {
+          "en": "Sustainable economic development benefits everyone in society.",
+          "cn": "可持续的经济发展惠及社会中的每一个人。"
+        }
+      },
+      {
+        "name": "movement",
+        "phonetic": "/ˈmuːvmənt/",
+        "breakdown": "move (移动/行动) + -ment (名词后缀：状态/运动)",
+        "meaning": "n. 移动；运动；乐章",
+        "example": {
+          "en": "She noticed a subtle movement in the surrounding trees.",
+          "cn": "她注意到了周围树丛里一丝轻微的晃动。"
+        }
+      },
+      {
+        "name": "improvement",
+        "phonetic": "/ɪmˈpruːvmənt/",
+        "breakdown": "improve (改善) + -ment (名词后缀：结果)",
+        "meaning": "n. 改进；改善；增进",
+        "example": {
+          "en": "Continuous practice leads to steady skill improvement.",
+          "cn": "不断练习能带来技能的稳定提升。"
+        }
+      },
+      {
+        "name": "agreement",
+        "phonetic": "/əˈɡriːmənt/",
+        "breakdown": "agree (同意) + -ment (名词后缀：结果)",
+        "meaning": "n. 协定；协议；一致同意",
+        "example": {
+          "en": "Both sides signed the partnership agreement this morning.",
+          "cn": "双方于今天上午正式签署了合作协议。"
+        }
+      },
+      {
+        "name": "judgment",
+        "phonetic": "/ˈdʒʌdʒmənt/",
+        "breakdown": "judge (判断) + -ment (名词后缀：能力/结果)",
+        "meaning": "n. 判断；裁判；判决",
+        "example": {
+          "en": "Trust your professional judgment when situations become ambiguous.",
+          "cn": "在局势不明朗时请相信你的专业判断。"
+        }
+      },
+      {
+        "name": "government",
+        "phonetic": "/ˈɡʌvərnmənt/",
+        "breakdown": "govern (管理/统治) + -ment (名词后缀：实体/机构)",
+        "meaning": "n. 政府；政体；治理",
+        "example": {
+          "en": "The municipal government introduced new environmental policies.",
+          "cn": "市政府出台了全新的环保政策。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ive",
+    "form": "-ive",
+    "type": "suffix",
+    "phonetic": "/-ɪv/",
+    "meaning": "有...属性的 / 趋向于...的 / 具有...特征的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自拉丁语形容词后缀 -ivus，附加于动词或词根之后，表示“具有某种主动性能或特定行动倾向”。",
+    "derivationNote": "多表达积极、能动的主动性质，也可在特定语境下转化为名词（如 native, representative）。",
+    "words": [
+      {
+        "name": "creative",
+        "phonetic": "/kriˈeɪtɪv/",
+        "breakdown": "create (创造) + -ive (有...属性的)",
+        "meaning": "adj. 创造性的；有创意的",
+        "example": {
+          "en": "Design thinking encourages unconventional and creative solutions.",
+          "cn": "设计思维鼓励采用非常规且富有创意的解决方案。"
+        }
+      },
+      {
+        "name": "active",
+        "phonetic": "/ˈæktɪv/",
+        "breakdown": "act (行动) + -ive (充满...倾向的)",
+        "meaning": "adj. 积极的；活跃的；起作用的",
+        "example": {
+          "en": "Staying physically active boosts overall energy and well-being.",
+          "cn": "保持身体活跃能够提升整体活力与幸福感。"
+        }
+      },
+      {
+        "name": "productive",
+        "phonetic": "/prəˈdʌktɪv/",
+        "breakdown": "product (生产/成果) + -ive (富有...特性的)",
+        "meaning": "adj. 富有成效的；多产的",
+        "example": {
+          "en": "Deep concentration creates a remarkably productive afternoon.",
+          "cn": "深度专注带来了一个效率极高的下午。"
+        }
+      },
+      {
+        "name": "attractive",
+        "phonetic": "/əˈtræktɪv/",
+        "breakdown": "attract (吸引) + -ive (具有...性质的)",
+        "meaning": "adj. 具有吸引力的；动人的",
+        "example": {
+          "en": "The product features an attractive minimalist aesthetic.",
+          "cn": "该产品具有极具吸引力的极简美学外观。"
+        }
+      },
+      {
+        "name": "decisive",
+        "phonetic": "/dɪˈsaɪsɪv/",
+        "breakdown": "decide (决定) + -ive (具决断倾向的)",
+        "meaning": "adj. 果断的；决定性的",
+        "example": {
+          "en": "A decisive action was necessary during the emergency crisis.",
+          "cn": "在突发危机面前，果断的行动至关重要。"
+        }
+      },
+      {
+        "name": "protective",
+        "phonetic": "/prəˈtektɪv/",
+        "breakdown": "protect (保护) + -ive (起保护作用的)",
+        "meaning": "adj. 防护的；保护性的",
+        "example": {
+          "en": "Workers wear protective helmets inside the construction site.",
+          "cn": "工人们在施工现场内均佩戴安全防护头盔。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ful",
+    "form": "-ful",
+    "type": "suffix",
+    "phonetic": "/-fl/",
+    "meaning": "充满...的 / 具有...特征的 / 充满倾向的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自古英语形容词 full（满的），直接加在抽象名词后构成形容词，表示事物充盈着某种情感、特质或属性。",
+    "derivationNote": "与 -less 构成完美的对立互补构词法体系。",
+    "words": [
+      {
+        "name": "hopeful",
+        "phonetic": "/ˈhoʊpfl/",
+        "breakdown": "hope (希望) + -ful (充满...的)",
+        "meaning": "adj. 抱有希望的；充满希望的",
+        "example": {
+          "en": "Researchers remain hopeful about the clinical trial results.",
+          "cn": "研究人员对临床试验的结果依然充满希望。"
+        }
+      },
+      {
+        "name": "careful",
+        "phonetic": "/ˈkerfl/",
+        "breakdown": "care (留心/关心) + -ful (充满...的)",
+        "meaning": "adj. 仔细的；小心翼翼的",
+        "example": {
+          "en": "Be exceptionally careful when handling precision instruments.",
+          "cn": "操作精密仪器时一定要格外仔细。"
+        }
+      },
+      {
+        "name": "powerful",
+        "phonetic": "/ˈpaʊərfl/",
+        "breakdown": "power (力量) + -ful (充满...的)",
+        "meaning": "adj. 强有力的；功能强大的",
+        "example": {
+          "en": "The algorithm is a powerful tool for big data analytics.",
+          "cn": "该算法是进行大数据分析的强大工具。"
+        }
+      },
+      {
+        "name": "successful",
+        "phonetic": "/səkˈsesfl/",
+        "breakdown": "success (成功) + -ful (充满...的)",
+        "meaning": "adj. 成功的；圆满的",
+        "example": {
+          "en": "The space mission concluded with a successful touchdown.",
+          "cn": "本次太空任务以成功的着陆圆满结束。"
+        }
+      },
+      {
+        "name": "grateful",
+        "phonetic": "/ˈɡreɪtfl/",
+        "breakdown": "grate (感激/恩德) + -ful (充满...的)",
+        "meaning": "adj. 感激的；感谢的",
+        "example": {
+          "en": "I am deeply grateful for your generous encouragement.",
+          "cn": "对您慷慨的鼓励，我深表感激。"
+        }
+      },
+      {
+        "name": "beautiful",
+        "phonetic": "/ˈbjuːtɪfl/",
+        "breakdown": "beauty (美) + -ful (充满...的)",
+        "meaning": "adj. 美丽的；美好的",
+        "example": {
+          "en": "The sunset bathed the quiet valley in a beautiful golden glow.",
+          "cn": "落日将宁静的山谷沐浴在美丽的金色光晕中。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_less",
+    "form": "-less",
+    "type": "suffix",
+    "phonetic": "/-ləs/",
+    "meaning": "无...的 / 没有...的 / 缺乏...的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自古英语 leas（失去的、缺乏的），是英语中表达否定与匮乏的最直接形容词后缀。",
+    "derivationNote": "与 -ful 成对出现，加在名词后表示彻底不具备该属性。",
+    "words": [
+      {
+        "name": "hopeless",
+        "phonetic": "/ˈhoʊpləs/",
+        "breakdown": "hope (希望) + -less (无...的)",
+        "meaning": "adj. 没有希望的；绝望的",
+        "example": {
+          "en": "Never assume a complex challenge is completely hopeless.",
+          "cn": "绝不要认为复杂的挑战是毫无希望的。"
+        }
+      },
+      {
+        "name": "careless",
+        "phonetic": "/ˈkerləs/",
+        "breakdown": "care (小心) + -less (缺乏...的)",
+        "meaning": "adj. 粗心的；疏忽的",
+        "example": {
+          "en": "A single careless mistake can alter calculation results.",
+          "cn": "哪怕一个微小的粗心疏漏也会改变运算结果。"
+        }
+      },
+      {
+        "name": "endless",
+        "phonetic": "/ˈendləs/",
+        "breakdown": "end (终点/尽头) + -less (没有...的)",
+        "meaning": "adj. 无止境的；无穷无尽的",
+        "example": {
+          "en": "Curiosity reveals endless opportunities for discovery.",
+          "cn": "好奇心揭示了无穷无尽的探索契机。"
+        }
+      },
+      {
+        "name": "wireless",
+        "phonetic": "/ˈwaɪərləs/",
+        "breakdown": "wire (线缆) + -less (无...的)",
+        "meaning": "adj. 无线的",
+        "example": {
+          "en": "Wireless charging makes daily desk setups much cleaner.",
+          "cn": "无线充电让日常桌面布置变得更为清爽整洁。"
+        }
+      },
+      {
+        "name": "harmless",
+        "phonetic": "/ˈhɑːrmləs/",
+        "breakdown": "harm (伤害) + -less (无...的)",
+        "meaning": "adj. 无害的；不会致病的",
+        "example": {
+          "en": "Most species of garden spiders are completely harmless to humans.",
+          "cn": "花园里的大多数蜘蛛对人类都是完全无害的。"
+        }
+      },
+      {
+        "name": "fearless",
+        "phonetic": "/ˈfɪrləs/",
+        "breakdown": "fear (恐惧) + -less (无...的)",
+        "meaning": "adj. 无畏的；英勇大胆的",
+        "example": {
+          "en": "Explorers demonstrated a fearless passion for unknown lands.",
+          "cn": "探险家们展现出了对未知领域的无畏热忱。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ly",
+    "form": "-ly",
+    "type": "suffix",
+    "phonetic": "/-li/",
+    "meaning": "...地 / 以...方式（副词）或 具备...特性的（形容词）",
+    "category": "adv",
+    "categoryLabel": "高频副词/形容词后缀",
+    "origin": "源自古英语 -lic（具有身体形态、外观）。附在形容词后构成副词，附在名词后构成形容词。",
+    "derivationNote": "英语中最基础的副词转换规则，将静态的描述性形容词转换为修饰动作态势的副词。",
+    "words": [
+      {
+        "name": "quickly",
+        "phonetic": "/ˈkwɪkli/",
+        "breakdown": "quick (快速的) + -ly (以...方式)",
+        "meaning": "adv. 迅速地；敏捷地",
+        "example": {
+          "en": "The system processes queries quickly and reliably.",
+          "cn": "该系统能迅速且可靠地处理查询请求。"
+        }
+      },
+      {
+        "name": "clearly",
+        "phonetic": "/ˈklɪrli/",
+        "breakdown": "clear (清楚的) + -ly (以...方式)",
+        "meaning": "adv. 清晰地；明了地",
+        "example": {
+          "en": "Please articulate each point clearly during the presentation.",
+          "cn": "演讲时请清晰阐述每一个要点。"
+        }
+      },
+      {
+        "name": "exactly",
+        "phonetic": "/ɪɡˈzæktli/",
+        "breakdown": "exact (准确的) + -ly (以...方式)",
+        "meaning": "adv. 精确地；确切地",
+        "example": {
+          "en": "The digital scale measures ingredients exactly down to grams.",
+          "cn": "这台电子秤能够精确测量食材至克。"
+        }
+      },
+      {
+        "name": "deeply",
+        "phonetic": "/ˈdiːpli/",
+        "breakdown": "deep (深沉的) + -ly (以...方式)",
+        "meaning": "adv. 深刻地；深深地",
+        "example": {
+          "en": "We were deeply touched by their heartfelt hospitality.",
+          "cn": "我们被他们由衷的热情好客深深打动。"
+        }
+      },
+      {
+        "name": "friendly",
+        "phonetic": "/ˈfrendli/",
+        "breakdown": "friend (朋友) + -ly (具...特性的：形容词)",
+        "meaning": "adj. 友好的；亲切的",
+        "example": {
+          "en": "The software offers a user-friendly and intuitive interface.",
+          "cn": "该软件提供了界面友好直观的人机交互。"
+        }
+      },
+      {
+        "name": "orderly",
+        "phonetic": "/ˈɔːrdərli/",
+        "breakdown": "order (秩序) + -ly (具...状态的：形容词)",
+        "meaning": "adj. 有秩序的；整齐的",
+        "example": {
+          "en": "Passengers queued in an orderly manner at the boarding gate.",
+          "cn": "乘客们在登机口有秩序地排队候机。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ize",
+    "form": "-ize / -ise",
+    "type": "suffix",
+    "phonetic": "/-aɪz/",
+    "meaning": "使成为... / ...化 / 从事...",
+    "category": "verb",
+    "categoryLabel": "高频动词后缀",
+    "origin": "源自古希腊语动词后缀 -izein，经拉丁语和法语演变为 -ize（美式主流）和 -ise（英式多用）。",
+    "derivationNote": "强大的使役动词后缀，将形容词或名词转换为具体行动过程，如现代化学术及科技词汇中极普遍。",
+    "words": [
+      {
+        "name": "realize",
+        "phonetic": "/ˈriːəlaɪz/",
+        "breakdown": "real (真实) + -ize (使...成真)",
+        "meaning": "v. 认识到；实现；意识到",
+        "example": {
+          "en": "Dedicated effort helps innovators realize their bold dreams.",
+          "cn": "专注的付出帮助创新者将大胆梦想变为现实。"
+        }
+      },
+      {
+        "name": "organize",
+        "phonetic": "/ˈɔːrɡənaɪz/",
+        "breakdown": "organ (器官/机构) + -ize (使...系统化)",
+        "meaning": "v. 组织；编排；整顿",
+        "example": {
+          "en": "Volunteers organize charity events across the neighborhood.",
+          "cn": "志愿者们在街区各处组织慈善公益活动。"
+        }
+      },
+      {
+        "name": "modernize",
+        "phonetic": "/ˈmɑːdərnaɪz/",
+        "breakdown": "modern (现代的) + -ize (使...现代)",
+        "meaning": "v. 使现代化；更新换代",
+        "example": {
+          "en": "The rail network will modernize its train signal infrastructure.",
+          "cn": "铁路网将对其火车信号基础设施进行现代化升级。"
+        }
+      },
+      {
+        "name": "civilize",
+        "phonetic": "/ˈsɪvəlaɪz/",
+        "breakdown": "civil (公民的/文明的) + -ize (使...文明)",
+        "meaning": "v. 使文明；开化；教化",
+        "example": {
+          "en": "Education helps civilize society through shared ethical values.",
+          "cn": "教育通过弘扬共同的伦理价值观促进社会文明。"
+        }
+      },
+      {
+        "name": "apologize",
+        "phonetic": "/əˈpɑːlədʒaɪz/",
+        "breakdown": "apology (辩护/歉意) + -ize (作...表态)",
+        "meaning": "v. 道歉；认错；谢罪",
+        "example": {
+          "en": "He had the courage to apologize sincerely for the misunderstanding.",
+          "cn": "他有勇气为此次误解做出真诚的道歉。"
+        }
+      },
+      {
+        "name": "recognize",
+        "phonetic": "/ˈrekəɡnaɪz/",
+        "breakdown": "re- (重新) + cogn (知晓) + -ize (使明确)",
+        "meaning": "v. 认出；辨识；承认",
+        "example": {
+          "en": "Facial recognition cameras recognize individuals in milliseconds.",
+          "cn": "人脸识别摄像机能在数毫秒内认出目标人物。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ity",
+    "form": "-ity / -ty",
+    "type": "suffix",
+    "phonetic": "/-əti/",
+    "meaning": "性质、状态、品质或程度",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自拉丁语抽象名词后缀 -itas（属格 -itatis），将形容词转化为衡量某种性质与本质的抽象名词。",
+    "derivationNote": "通常导致词重音前移至倒数第三音节（如 active → ac'tivity, curious → curi'osity）。",
+    "words": [
+      {
+        "name": "activity",
+        "phonetic": "/ækˈtɪvəti/",
+        "breakdown": "active (活跃的) + -ity (性质/状态)",
+        "meaning": "n. 活动；活力；活跃",
+        "example": {
+          "en": "Outdoor physical activity improves cardiorespiratory fitness.",
+          "cn": "户外体育活动能增强心肺适应能力。"
+        }
+      },
+      {
+        "name": "clarity",
+        "phonetic": "/ˈklærəti/",
+        "breakdown": "clear (清晰) + -ity (状态)",
+        "meaning": "n. 清晰；清楚；明确",
+        "example": {
+          "en": "Write documentation with exceptional clarity to help newcomers.",
+          "cn": "撰写文档应力求清晰明确，以方便新手理解。"
+        }
+      },
+      {
+        "name": "reality",
+        "phonetic": "/riˈæləti/",
+        "breakdown": "real (真实) + -ity (本质/实体)",
+        "meaning": "n. 现实；实际情况；真实",
+        "example": {
+          "en": "Virtual reality simulations immerse learners in authentic scenarios.",
+          "cn": "虚拟现实模拟技术将学习者置于真实的场景中。"
+        }
+      },
+      {
+        "name": "purity",
+        "phonetic": "/ˈpjʊrəti/",
+        "breakdown": "pure (纯净) + -ity (属性)",
+        "meaning": "n. 纯净；纯度；纯洁",
+        "example": {
+          "en": "Spring water is tested daily to verify chemical purity.",
+          "cn": "每天都会对泉水进行检测以核验其化学纯净度。"
+        }
+      },
+      {
+        "name": "ability",
+        "phonetic": "/əˈbɪləti/",
+        "breakdown": "able (能) + -ity (能力状态)",
+        "meaning": "n. 能力；才能；本领",
+        "example": {
+          "en": "Critical thinking ability is vital in the modern knowledge economy.",
+          "cn": "在现代知识经济时代，批判性思维能力至关重要。"
+        }
+      },
+      {
+        "name": "curiosity",
+        "phonetic": "/ˌkjʊriˈɑːsəti/",
+        "breakdown": "curious (好奇的) + -ity (心境性质)",
+        "meaning": "n. 好奇心；求知欲",
+        "example": {
+          "en": "Curiosity drives scientists to explore deep ocean mysteries.",
+          "cn": "好奇心驱使科学家们探索深海未解之谜。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_er_or",
+    "form": "-er / -or",
+    "type": "suffix",
+    "phonetic": "/-ər/",
+    "meaning": "做某事的人 / 工具 / 设备",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自古英语 -ere（日耳曼语系）及拉丁语行为施动者后缀 -or。接在动词之后指代行为执行主体或器械。",
+    "derivationNote": "英语中最基础的施事者后缀，原生词偏好 -er，拉丁借词偏好 -or。",
+    "words": [
+      {
+        "name": "teacher",
+        "phonetic": "/ˈtiːtʃər/",
+        "breakdown": "teach (教) + -er (施事者)",
+        "meaning": "n. 教师；导师",
+        "example": {
+          "en": "A passionate teacher inspires students to discover their potentials.",
+          "cn": "充满激情的老师能激励学生发掘自我潜能。"
+        }
+      },
+      {
+        "name": "creator",
+        "phonetic": "/kriˈeɪtər/",
+        "breakdown": "create (创造) + -or (施事者)",
+        "meaning": "n. 创作者；创造者",
+        "example": {
+          "en": "The creator of the app shared insights into modern user experience.",
+          "cn": "该应用的创作者分享了他对现代用户体验的独到见解。"
+        }
+      },
+      {
+        "name": "visitor",
+        "phonetic": "/ˈvɪzɪtər/",
+        "breakdown": "visit (访问) + -or (来访者)",
+        "meaning": "n. 访问者；参观者；客人",
+        "example": {
+          "en": "Every foreign visitor receives a warm greeting at reception.",
+          "cn": "每位外宾在前台都受到了热情的接待。"
+        }
+      },
+      {
+        "name": "leader",
+        "phonetic": "/ˈliːdər/",
+        "breakdown": "lead (引领) + -er (带领者)",
+        "meaning": "n. 领袖；领导者；首领",
+        "example": {
+          "en": "A wise leader listens with empathy before reaching crucial choices.",
+          "cn": "明智的领袖在做出重大决定前总是耐心倾听。"
+        }
+      },
+      {
+        "name": "inspector",
+        "phonetic": "/ɪnˈspektər/",
+        "breakdown": "in- (入内) + spect (看) + -or (视察者)",
+        "meaning": "n. 检查员；视察员；督察",
+        "example": {
+          "en": "The safety inspector examined the factory production lines.",
+          "cn": "安全检查员仔细检查了工厂的生产流水线。"
+        }
+      },
+      {
+        "name": "actor",
+        "phonetic": "/ˈæktər/",
+        "breakdown": "act (表演/行动) + -or (演者)",
+        "meaning": "n. 演员；行动者",
+        "example": {
+          "en": "The seasoned actor gave an unforgettable stage performance.",
+          "cn": "这位经验丰富的演员奉献了令人难忘的舞台表演。"
+        }
+      }
+    ]
+  }
+]

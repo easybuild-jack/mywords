@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig, WordEtymology } from '@/types'
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
-import { BUILTIN_ROOTS } from '@/resources/roots'
+import { BUILTIN_ROOTS, ROOT_DATA_MAP, type RootTabType } from '@/resources/roots'
 import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
@@ -180,12 +180,14 @@ interface WorkspaceState {
   restartUnit: () => void
 
   // 词根学习状态 (Roots Module)
+  rootTab: RootTabType
   activeRootIndex: number
   learnedRootIds: string[]
   rootSearchQuery: string
   isRootSearchModalOpen: boolean
   
   // 词根方法
+  setRootTab: (tab: RootTabType) => void
   setRootIndex: (index: number) => void
   prevRoot: () => void
   nextRoot: () => void
@@ -296,7 +298,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isCurrentWordSplit: false,
       isEditWordSplitModalOpen: false,
 
-      // 词根学习状态初始值
+      // 词根词缀学习状态初始值 (默认首项：前缀)
+      rootTab: 'prefix',
       activeRootIndex: 0,
       learnedRootIds: [],
       rootSearchQuery: '',
@@ -1113,8 +1116,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       // 词根模块专属操作
+      setRootTab: (tab: RootTabType) => {
+        set({ rootTab: tab, activeRootIndex: 0, rootSearchQuery: '' })
+      },
+
       setRootIndex: (index: number) => {
-        const total = BUILTIN_ROOTS.length
+        const { rootTab } = get()
+        const items = ROOT_DATA_MAP[rootTab] || BUILTIN_ROOTS
+        const total = items.length
         if (total === 0) return
         const safeIndex = Math.max(0, Math.min(index, total - 1))
         set({ activeRootIndex: safeIndex })
@@ -1128,14 +1137,17 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       nextRoot: () => {
-        const { activeRootIndex } = get()
-        if (activeRootIndex < BUILTIN_ROOTS.length - 1) {
+        const { activeRootIndex, rootTab } = get()
+        const items = ROOT_DATA_MAP[rootTab] || BUILTIN_ROOTS
+        if (activeRootIndex < items.length - 1) {
           set({ activeRootIndex: activeRootIndex + 1 })
         }
       },
 
       toggleRootLearned: (rootId?: string) => {
-        const currentRoot = BUILTIN_ROOTS[get().activeRootIndex]
+        const { activeRootIndex, rootTab } = get()
+        const items = ROOT_DATA_MAP[rootTab] || BUILTIN_ROOTS
+        const currentRoot = items[activeRootIndex]
         const targetId = rootId || currentRoot?.id
         if (!targetId) return
         const { learnedRootIds } = get()
@@ -1277,6 +1289,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         shortcuts: state.shortcuts,
         isDictationPhoneticEnabled: state.isDictationPhoneticEnabled,
         isDictationMeaningEnabled: state.isDictationMeaningEnabled,
+        rootTab: state.rootTab,
         activeRootIndex: state.activeRootIndex,
         learnedRootIds: state.learnedRootIds,
       }),

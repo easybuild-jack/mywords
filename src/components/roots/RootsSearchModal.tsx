@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useMemo, useEffect, useRef } from 'react'
-import { Search, X, Sprout, ArrowRight, BookOpen, Check } from 'lucide-react'
-import { BUILTIN_ROOTS } from '@/resources/roots'
+import { Search, X, Sprout, ArrowRight } from 'lucide-react'
+import { BUILTIN_ROOTS, ROOT_DATA_MAP, ROOT_TAB_LABELS } from '@/resources/roots'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 interface RootsSearchModalProps {
@@ -13,8 +13,11 @@ interface RootsSearchModalProps {
 export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  const { setRootIndex, learnedRootIds, activeRootIndex } = useWorkspaceStore()
+  const { rootTab, setRootIndex, activeRootIndex } = useWorkspaceStore()
   const [selectedIndex, setSelectedIndex] = useState(0)
+
+  const currentDataset = useMemo(() => ROOT_DATA_MAP[rootTab] || BUILTIN_ROOTS, [rootTab])
+  const tabLabel = ROOT_TAB_LABELS[rootTab] || '词根'
 
   useEffect(() => {
     if (isOpen) {
@@ -24,26 +27,26 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
     }
   }, [isOpen])
 
-  // 模糊匹配词根形态、释义、以及下辖单词拼写/中文
+  // 模糊匹配形态、释义、以及下辖单词拼写/中文
   const searchResults = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) {
-      return BUILTIN_ROOTS.map((root, index) => ({ root, index, matchedWord: null }))
+      return currentDataset.map((item, index) => ({ root: item, index, matchedWord: null }))
     }
 
-    const results: { root: (typeof BUILTIN_ROOTS)[0]; index: number; matchedWord: string | null }[] = []
+    const results: { root: (typeof currentDataset)[0]; index: number; matchedWord: string | null }[] = []
 
-    BUILTIN_ROOTS.forEach((root, index) => {
-      const matchForm = root.form.toLowerCase().includes(q)
-      const matchMeaning = root.meaning.toLowerCase().includes(q)
-      const matchOrigin = root.origin.toLowerCase().includes(q)
-      const matchedWordItem = root.words.find(
+    currentDataset.forEach((item, index) => {
+      const matchForm = item.form.toLowerCase().includes(q)
+      const matchMeaning = item.meaning.toLowerCase().includes(q)
+      const matchOrigin = item.origin.toLowerCase().includes(q)
+      const matchedWordItem = item.words.find(
         (w) => w.name.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q)
       )
 
       if (matchForm || matchMeaning || matchOrigin || matchedWordItem) {
         results.push({
-          root,
+          root: item,
           index,
           matchedWord: matchedWordItem ? `${matchedWordItem.name} (${matchedWordItem.meaning})` : null,
         })
@@ -51,7 +54,7 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
     })
 
     return results
-  }, [query])
+  }, [query, currentDataset])
 
   // 键盘快捷上下选择与回车确认
   useEffect(() => {
@@ -100,7 +103,7 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
               setQuery(e.target.value)
               setSelectedIndex(0)
             }}
-            placeholder="搜索词根 (如 spect, port)、释义 (如 看, 拉) 或派生词 (如 inspect)..."
+            placeholder={`搜索${tabLabel}、释义或派生词...`}
             className="flex-1 bg-transparent text-white placeholder:text-gray-500 text-base focus:outline-none"
           />
           {query && (
@@ -121,7 +124,7 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
           {searchResults.length === 0 ? (
             <div className="py-12 text-center text-gray-400 text-sm">
               <Sprout className="size-8 mx-auto mb-2 text-gray-600 opacity-60" />
-              未找到匹配的词根或派生单词
+              未找到匹配的{tabLabel}或派生单词
             </div>
           ) : (
             searchResults.map(({ root, index, matchedWord }, itemIdx) => {
@@ -213,7 +216,7 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
               直接前往
             </span>
           </div>
-          <span>共 {BUILTIN_ROOTS.length} 个经典词根</span>
+          <span>共 {currentDataset.length} 个经典{tabLabel}</span>
         </div>
       </div>
     </div>

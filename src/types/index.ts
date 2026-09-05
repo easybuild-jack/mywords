@@ -41,12 +41,13 @@ export interface RootWordItem {
 }
 
 export interface RootItem {
-  id: string;                                   // 唯一ID (如 "root_spect")
-  form: string;                                 // 词根形态 (如 "spect / spic")
-  phonetic?: string;                            // 词根读音/音标 (如 "/spekt/")
+  id: string;                                   // 唯一ID (如 "root_spect", "prefix_pre")
+  form: string;                                 // 词素形态 (如 "spect / spic", "pre-", "-tion")
+  type?: 'root' | 'prefix' | 'suffix';          // 词素类别：词根 | 前缀 | 后缀
+  phonetic?: string;                            // 读音/音标 (如 "/spekt/")
   meaning: string;                              // 核心释义 (如 "看 / 观察 / 视角")
-  category: 'latin' | 'greek' | 'core';         // 词根源流类别
-  categoryLabel: string;                        // 分类标签 (如 "拉丁核心词根")
+  category: 'latin' | 'greek' | 'core';         // 源流类别
+  categoryLabel: string;                        // 分类标签 (如 "拉丁核心词根", "常用高频前缀")
   origin: string;                               // 词源追溯与演变故事
   derivationNote?: string;                      // 构词衍生要领
   words: RootWordItem[];                        // 派生核心词族列表

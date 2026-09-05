@@ -1,0 +1,632 @@
+[
+  {
+    "id": "prefix_pre",
+    "form": "pre-",
+    "type": "prefix",
+    "phonetic": "/priː-/",
+    "meaning": "在...之前 / 预先 / 提前",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语副词和介词 prae，表示“在前面、在事前”。是英语中构词能力最强的时间与空间方位前缀之一。",
+    "derivationNote": "与不同动词词根组合，精准传达“预先规划”、“前置准备”与“超前预测”等语义。",
+    "words": [
+      {
+        "name": "predict",
+        "phonetic": "/prɪˈdɪkt/",
+        "breakdown": "pre- (预先) + dict (说)",
+        "meaning": "v. 预测；预言",
+        "example": {
+          "en": "Meteorologists predict heavy rainfall over the weekend.",
+          "cn": "气象学家预测周末将有强降雨。"
+        }
+      },
+      {
+        "name": "prepare",
+        "phonetic": "/prɪˈper/",
+        "breakdown": "pre- (预先) + pare (准备/安排)",
+        "meaning": "v. 准备；预备",
+        "example": {
+          "en": "Students prepare thoroughly for their final examinations.",
+          "cn": "学生们为期末考试做了充分准备。"
+        }
+      },
+      {
+        "name": "preview",
+        "phonetic": "/ˈpriːvjuː/",
+        "breakdown": "pre- (提前) + view (看)",
+        "meaning": "v./n. 预习；预览；预映",
+        "example": {
+          "en": "Press the button to preview the document before printing.",
+          "cn": "打印前请点击该按钮预览文档。"
+        }
+      },
+      {
+        "name": "prevent",
+        "phonetic": "/prɪˈvent/",
+        "breakdown": "pre- (在前面) + vent (来/走)",
+        "meaning": "v. 预防；防止；阻止",
+        "example": {
+          "en": "Regular exercise helps prevent chronic health conditions.",
+          "cn": "经常锻炼有助于预防慢性疾病。"
+        }
+      },
+      {
+        "name": "precede",
+        "phonetic": "/prɪˈsiːd/",
+        "breakdown": "pre- (在前面) + cede (走)",
+        "meaning": "v. 先于；在...之前发生",
+        "example": {
+          "en": "A formal ceremony preceded the championship match.",
+          "cn": "决赛之前举行了隆重的开幕仪式。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_re",
+    "form": "re-",
+    "type": "prefix",
+    "phonetic": "/riː-/",
+    "meaning": "再 / 又 / 重复 / 回 / 反向",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语前缀 re- / red-，核心包含双重逻辑：一是“动作的再次重复”（again），二是“向原点返回撤退”（back）。",
+    "derivationNote": "连接动作表示再次进行（rewrite 重写），连接状态表示复原撤回（return 返回、reverse 倒转）。",
+    "words": [
+      {
+        "name": "return",
+        "phonetic": "/rɪˈtɜːrn/",
+        "breakdown": "re- (回) + turn (转)",
+        "meaning": "v./n. 返回；归还；回报",
+        "example": {
+          "en": "Please return the borrowed books to the library on time.",
+          "cn": "请按时将借阅的图书归还给图书馆。"
+        }
+      },
+      {
+        "name": "review",
+        "phonetic": "/rɪˈvjuː/",
+        "breakdown": "re- (再/重) + view (看/审视)",
+        "meaning": "v./n. 复习；审查；评论",
+        "example": {
+          "en": "The committee will review all project proposals carefully.",
+          "cn": "委员会将认真审阅所有项目方案。"
+        }
+      },
+      {
+        "name": "react",
+        "phonetic": "/riˈækt/",
+        "breakdown": "re- (反向) + act (行动)",
+        "meaning": "v. 反应；作出反响；起化学反应",
+        "example": {
+          "en": "Investors reacted positively to the economic stimulus package.",
+          "cn": "投资者对经济刺激方案作出了积极积极的反响。"
+        }
+      },
+      {
+        "name": "rebuild",
+        "phonetic": "/ˌriːˈbɪld/",
+        "breakdown": "re- (重新) + build (建造)",
+        "meaning": "v. 重建；恢复；重塑",
+        "example": {
+          "en": "The community united to rebuild their damaged neighborhood.",
+          "cn": "社区居民齐心协力重建受损的家园。"
+        }
+      },
+      {
+        "name": "replace",
+        "phonetic": "/rɪˈpleɪs/",
+        "breakdown": "re- (放回原处) + place (放置)",
+        "meaning": "v. 取代；代替；更换",
+        "example": {
+          "en": "Renewable energy will gradually replace fossil fuels.",
+          "cn": "可再生能源将逐步取代化石燃料。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_dis",
+    "form": "dis-",
+    "type": "prefix",
+    "phonetic": "/dɪs-/",
+    "meaning": "否定 / 相反 / 分离 / 除去",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 dis-（分开、两端、除去）。表示将原有状态剥离、推向对立面或解散分离。",
+    "derivationNote": "与肯定词结合构成完全对立的词意（agree 赞同 → disagree 反对；cover 覆盖 → discover 揭开发现）。",
+    "words": [
+      {
+        "name": "discover",
+        "phonetic": "/dɪˈskʌvər/",
+        "breakdown": "dis- (去除) + cover (覆盖)",
+        "meaning": "v. 发现；发掘；认识到",
+        "example": {
+          "en": "Astronomers discovered a new planet orbiting a distant star.",
+          "cn": "天文学家发现了一颗围绕遥远恒星运行的新行星。"
+        }
+      },
+      {
+        "name": "disagree",
+        "phonetic": "/ˌdɪsəˈɡriː/",
+        "breakdown": "dis- (相反) + agree (同意)",
+        "meaning": "v. 不同意；持反对意见",
+        "example": {
+          "en": "Scholars often disagree on interpretations of historical events.",
+          "cn": "学者们经常对历史事件的解读持有不同见解。"
+        }
+      },
+      {
+        "name": "distract",
+        "phonetic": "/dɪˈstrækt/",
+        "breakdown": "dis- (分散) + tract (拉/引)",
+        "meaning": "v. 分散注意力；使分心",
+        "example": {
+          "en": "Smartphone notifications easily distract students from studying.",
+          "cn": "智能手机通知很容易分散学生的学习注意力。"
+        }
+      },
+      {
+        "name": "disable",
+        "phonetic": "/dɪsˈeɪbl/",
+        "breakdown": "dis- (丧失) + able (能够)",
+        "meaning": "v. 使丧失能力；禁用；使伤残",
+        "example": {
+          "en": "You can disable notifications in the app settings panel.",
+          "cn": "您可以在应用程序设置面板中禁用通知。"
+        }
+      },
+      {
+        "name": "disclose",
+        "phonetic": "/dɪsˈkloʊz/",
+        "breakdown": "dis- (打开/去除) + close (关闭/隐藏)",
+        "meaning": "v. 揭露；透露；公开",
+        "example": {
+          "en": "The spokesperson refused to disclose confidential financial data.",
+          "cn": "发言人拒绝透露机密的财务数据。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_in",
+    "form": "in- / im- / il- / ir-",
+    "type": "prefix",
+    "phonetic": "/ɪn-/",
+    "meaning": "否定 (不/无) 或 向内 (入/深入)",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 in-。在英语中兼具两个重要分支：分支一表示否定（不/非）；分支二表示空间方位的“向内、深入”。",
+    "derivationNote": "语音同化规则：在 b/p/m 前变更为 im-，在 l 前变更为 il-，在 r 前变更为 ir-。",
+    "words": [
+      {
+        "name": "impossible",
+        "phonetic": "/ɪmˈpɑːsəbl/",
+        "breakdown": "im- (否定) + possible (可能的)",
+        "meaning": "adj. 不可能的；难以办到的",
+        "example": {
+          "en": "Nothing is impossible to a willing heart.",
+          "cn": "有志者事竟成。"
+        }
+      },
+      {
+        "name": "inspect",
+        "phonetic": "/ɪnˈspekt/",
+        "breakdown": "in- (向内) + spect (看)",
+        "meaning": "v. 检查；视察；检阅",
+        "example": {
+          "en": "Safety inspectors inspect the theme park rides daily.",
+          "cn": "安全检查员每天仔细检查主题公园的游乐设施。"
+        }
+      },
+      {
+        "name": "illegal",
+        "phonetic": "/ɪˈliːɡl/",
+        "breakdown": "il- (否定) + legal (合法的)",
+        "meaning": "adj. 非法的；违法的",
+        "example": {
+          "en": "It is illegal to drive without a valid driver license.",
+          "cn": "无有效驾驶证驾车属于违法行为。"
+        }
+      },
+      {
+        "name": "import",
+        "phonetic": "/ˈɪmpɔːrt/",
+        "breakdown": "im- (向内) + port (运)",
+        "meaning": "v./n. 进口；输入",
+        "example": {
+          "en": "The nation imports advanced machinery from international partners.",
+          "cn": "该国从国际伙伴处进口尖端机械设备。"
+        }
+      },
+      {
+        "name": "irregular",
+        "phonetic": "/ɪˈreɡjələr/",
+        "breakdown": "ir- (否定) + regular (规律的)",
+        "meaning": "adj. 不规则的；不规律的",
+        "example": {
+          "en": "English has dozens of common irregular past-tense verbs.",
+          "cn": "英语中有数十个常见的不规则过去式动词。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_sub",
+    "form": "sub- / suc- / sup-",
+    "type": "prefix",
+    "phonetic": "/sʌb-/",
+    "meaning": "在...下面 / 下级 / 次 / 接近",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 sub（在下面、在基底）。引申为层级上的附属、程度上的次一级或位置上的底层支撑。",
+    "derivationNote": "subway（地下铁路）、submarine（水下潜艇）、submit（在下方呈送 → 提交）。同化为 suc- (succeed), sup- (support)。",
+    "words": [
+      {
+        "name": "subway",
+        "phonetic": "/ˈsʌbweɪ/",
+        "breakdown": "sub- (在下面) + way (路)",
+        "meaning": "n. 地铁；地下通道",
+        "example": {
+          "en": "Riding the subway is the fastest way to commute in rush hour.",
+          "cn": "在早晚高峰期乘地铁是最高效的通勤方式。"
+        }
+      },
+      {
+        "name": "submit",
+        "phonetic": "/səbˈmɪt/",
+        "breakdown": "sub- (从下往上) + mit (送出)",
+        "meaning": "v. 提交；呈递；屈服",
+        "example": {
+          "en": "Please submit your completed assignment via the student portal.",
+          "cn": "请通过学生管理平台提交您完成的作业。"
+        }
+      },
+      {
+        "name": "submarine",
+        "phonetic": "/ˌsʌbməˈriːn/",
+        "breakdown": "sub- (在下面) + marine (海洋的)",
+        "meaning": "n. 潜艇；水下航行器 adj. 水下的",
+        "example": {
+          "en": "The research submarine dove deep to explore hydrothermal vents.",
+          "cn": "科研潜艇潜入深海以勘探海底热液喷口。"
+        }
+      },
+      {
+        "name": "support",
+        "phonetic": "/səˈpɔːrt/",
+        "breakdown": "sub- (在下面) + port (托举/运)",
+        "meaning": "v./n. 支持；支撑；扶助",
+        "example": {
+          "en": "Mentors provide valuable emotional and technical support.",
+          "cn": "导师们提供宝贵的情感关怀与技术支持。"
+        }
+      },
+      {
+        "name": "subtract",
+        "phonetic": "/səbˈtrækt/",
+        "breakdown": "sub- (向下/分离) + tract (拉/抽)",
+        "meaning": "v. 减去；扣除",
+        "example": {
+          "en": "Subtract expenses from total revenue to compute net profit.",
+          "cn": "从总收入中扣除各项支出以计算净利润。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_con",
+    "form": "con- / com- / col- / cor-",
+    "type": "prefix",
+    "phonetic": "/kɑːn-/",
+    "meaning": "共同 / 一起 / 彻底 / 完全",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 cum（与...一起、共同）。在构词中表示多方汇聚结合，或作为加强语气表示“完全、彻底”。",
+    "derivationNote": "在 b/p/m 前变 com- (combine)，在 l 前变 col- (collaborate)，在 r 前变 cor- (correct)。",
+    "words": [
+      {
+        "name": "connect",
+        "phonetic": "/kəˈnekt/",
+        "breakdown": "con- (共同) + nect (系/缚)",
+        "meaning": "v. 连接；关联；联通",
+        "example": {
+          "en": "The new highway connects two major industrial manufacturing hubs.",
+          "cn": "这条新高速公路将两大主要工业制造中心紧密连接起来。"
+        }
+      },
+      {
+        "name": "construct",
+        "phonetic": "/kənˈstrʌkt/",
+        "breakdown": "con- (共同) + struct (堆叠/建)",
+        "meaning": "v. 建设；构建；创立",
+        "example": {
+          "en": "Engineers construct resilient buildings to withstand earthquakes.",
+          "cn": "工程师们建造坚固的建筑以抵御地震灾害。"
+        }
+      },
+      {
+        "name": "combine",
+        "phonetic": "/kəmˈbaɪn/",
+        "breakdown": "com- (共同) + bin (两两成对)",
+        "meaning": "v. 结合；联合；合并",
+        "example": {
+          "en": "The recipe combines traditional spices with modern cooking techniques.",
+          "cn": "这份食谱将传统香料与现代烹饪技艺融为一体。"
+        }
+      },
+      {
+        "name": "contract",
+        "phonetic": "/ˈkɑːntrækt/",
+        "breakdown": "con- (共同) + tract (拉到一起)",
+        "meaning": "n. 合同；契约 v. 收缩",
+        "example": {
+          "en": "Both organizations finalized and signed the partnership contract.",
+          "cn": "两家机构敲定并签署了长期合作协议。"
+        }
+      },
+      {
+        "name": "collaborate",
+        "phonetic": "/kəˈlæbəreɪt/",
+        "breakdown": "col- (共同) + labor (劳动) + -ate",
+        "meaning": "v. 合作；协作；协同工作",
+        "example": {
+          "en": "Scientists from ten nations collaborate on the climate initiative.",
+          "cn": "来自十个国家的科学家们在这一气候行动倡议上紧密协作。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_pro",
+    "form": "pro-",
+    "type": "prefix",
+    "phonetic": "/proʊ-/",
+    "meaning": "向前 / 朝前 / 赞同 / 支持",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语与希腊语 pro，核心空间概念为“向前推进、在前面”，引申出“赞同、拥护某种观点”以及“产生制造”。",
+    "derivationNote": "progress（向前迈步 → 进步）、prospect（向前看 → 前景）、produce（向前引导出产品 → 生产）。",
+    "words": [
+      {
+        "name": "progress",
+        "phonetic": "/ˈprɑːɡres/",
+        "breakdown": "pro- (向前) + gress (步/行)",
+        "meaning": "n./v. 进步；发展；推进",
+        "example": {
+          "en": "Technology continues to make remarkable progress every year.",
+          "cn": "科学技术每年都在取得令人瞩目的显著进步。"
+        }
+      },
+      {
+        "name": "prospect",
+        "phonetic": "/ˈprɑːspekt/",
+        "breakdown": "pro- (向前) + spect (看)",
+        "meaning": "n. 前景；前途；期望",
+        "example": {
+          "en": "Career prospects for computer science graduates remain extremely strong.",
+          "cn": "计算机专业毕业生的职业发展前景依然极其广阔。"
+        }
+      },
+      {
+        "name": "produce",
+        "phonetic": "/prəˈduːs/",
+        "breakdown": "pro- (向前) + duc (引导/产生)",
+        "meaning": "v. 生产；制造；引起 n. 农产品",
+        "example": {
+          "en": "Clean energy plants produce zero carbon emissions.",
+          "cn": "清洁能源工厂在发电过程中产生零碳排放。"
+        }
+      },
+      {
+        "name": "protect",
+        "phonetic": "/prəˈtekt/",
+        "breakdown": "pro- (在前面) + tect (遮盖/保护)",
+        "meaning": "v. 保护；防卫；保卫",
+        "example": {
+          "en": "Vaccines protect people against serious viral infections.",
+          "cn": "接种疫苗能够有效保护人们免受严重病毒感染。"
+        }
+      },
+      {
+        "name": "promote",
+        "phonetic": "/prəˈmoʊt/",
+        "breakdown": "pro- (向前) + mote (移动)",
+        "meaning": "v. 促进；提升；推销；升职",
+        "example": {
+          "en": "Healthy habits promote longevity and overall physical well-being.",
+          "cn": "健康的日常习惯能够促进长寿和整体身体健康。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_ex",
+    "form": "ex- / e- / ef-",
+    "type": "prefix",
+    "phonetic": "/eks-/",
+    "meaning": "向外 / 出 / 脱离 / 前任",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语介词 ex（出于、向外、离开）。是表达位置从内向外延伸、状态改变或身份脱离（如 ex-president 前总统）的基石前缀。",
+    "derivationNote": "export（向外运输 → 出口）、extract（向外拉出 → 提取）、educate（从蒙昧中引出来 → 教育）。",
+    "words": [
+      {
+        "name": "export",
+        "phonetic": "/ˈekspɔːrt/",
+        "breakdown": "ex- (外) + port (运)",
+        "meaning": "v./n. 出口；输出",
+        "example": {
+          "en": "The economy relies heavily on exporting agricultural products.",
+          "cn": "该国经济高度依赖农产品的对外出口贸易。"
+        }
+      },
+      {
+        "name": "extract",
+        "phonetic": "/ɪkˈstrækt/",
+        "breakdown": "ex- (出) + tract (拉/抽)",
+        "meaning": "v. 提取；拔出；榨取 n. 提取物",
+        "example": {
+          "en": "Chemists extract natural pigments from crushed flower petals.",
+          "cn": "化学家从粉碎的花瓣中萃取天然色素成分。"
+        }
+      },
+      {
+        "name": "educate",
+        "phonetic": "/ˈedʒukeɪt/",
+        "breakdown": "e- (向外) + duc (引导) + -ate",
+        "meaning": "v. 教育；培养；教导",
+        "example": {
+          "en": "Universities educate the next generation of visionary thinkers.",
+          "cn": "高等学府致力于培养具有前瞻眼光的下一代思想家。"
+        }
+      },
+      {
+        "name": "expand",
+        "phonetic": "/ɪkˈspænd/",
+        "breakdown": "ex- (向外) + pand (展开/伸张)",
+        "meaning": "v. 扩张；展开；扩大",
+        "example": {
+          "en": "The startup plans to expand into international markets next year.",
+          "cn": "这家初创企业计划明年全面进军国际海外市场。"
+        }
+      },
+      {
+        "name": "exit",
+        "phonetic": "/ˈeɡzɪt/",
+        "breakdown": "ex- (外) + it (走)",
+        "meaning": "n. 出口；通道 v. 离去；退出",
+        "example": {
+          "en": "Emergency exit signs must remain illuminated at all times.",
+          "cn": "应急安全出口指示标志必须时刻保持常亮状态。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_trans",
+    "form": "trans-",
+    "type": "prefix",
+    "phonetic": "/trænz-/",
+    "meaning": "跨越 / 穿过 / 转移 / 变换",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 trans（越过、穿过、到另一端）。表达从一处向另一处跳跃移动，或从一种状态演变为另一种状态。",
+    "derivationNote": "transport（跨区域搬运 → 运输）、translate（跨语言搬运 → 翻译）、transform（跨越形状 → 变形转型）。",
+    "words": [
+      {
+        "name": "transport",
+        "phonetic": "/ˈtrænspɔːrt/",
+        "breakdown": "trans- (跨越) + port (运)",
+        "meaning": "v./n. 运输；传送；交通工具",
+        "example": {
+          "en": "Cargo ships transport goods across global oceans efficiently.",
+          "cn": "远洋货轮高效地在全球各大洋之间运送大宗货物。"
+        }
+      },
+      {
+        "name": "translate",
+        "phonetic": "/trænzˈleɪt/",
+        "breakdown": "trans- (跨越) + late (搬动/转达)",
+        "meaning": "v. 翻译；转变；转化为",
+        "example": {
+          "en": "AI software can translate text into dozens of languages instantly.",
+          "cn": "人工智能软件能够瞬间将文本精准翻译成数十种语言。"
+        }
+      },
+      {
+        "name": "transform",
+        "phonetic": "/trænsˈfɔːrm/",
+        "breakdown": "trans- (改变) + form (形状/形态)",
+        "meaning": "v. 彻底改变；变形；转型",
+        "example": {
+          "en": "Cloud computing transformed the way businesses manage data.",
+          "cn": "云计算深刻改变了现代企业管理和调度数据的方式。"
+        }
+      },
+      {
+        "name": "transmit",
+        "phonetic": "/trænzˈmɪt/",
+        "breakdown": "trans- (穿过) + mit (送)",
+        "meaning": "v. 传输；发射；传播",
+        "example": {
+          "en": "Optical fiber cables transmit massive data at the speed of light.",
+          "cn": "光纤电缆以接近光速的极致速度传输海量信息数据。"
+        }
+      },
+      {
+        "name": "transfer",
+        "phonetic": "/trænsˈfɜːr/",
+        "breakdown": "trans- (跨越) + fer (带来/搬动)",
+        "meaning": "v./n. 转移；调动；转账；换乘",
+        "example": {
+          "en": "You can transfer funds securely via mobile banking applications.",
+          "cn": "您可以通过手机银行应用程序安全快速地办理转账汇款。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "prefix_inter",
+    "form": "inter-",
+    "type": "prefix",
+    "phonetic": "/ˈɪntər-/",
+    "meaning": "在...之间 / 相互 / 彼此交叉",
+    "category": "latin",
+    "categoryLabel": "高频核心前缀",
+    "origin": "源自拉丁语 inter（在中间、在两者之间）。是构建多边互动、国际关系与互联网络的核心前缀。",
+    "derivationNote": "internet（网络之间的互联 → 互联网）、interact（彼此相互作用 → 互动）、interview（互相审视 → 面试会见）。",
+    "words": [
+      {
+        "name": "international",
+        "phonetic": "/ˌɪntərˈnæʃnəl/",
+        "breakdown": "inter- (在...之间) + nation (国家) + -al",
+        "meaning": "adj. 国际的；跨国的",
+        "example": {
+          "en": "The summit hosted international leaders from over fifty countries.",
+          "cn": "该峰会汇聚了来自全球五十多个国家的国际领导人。"
+        }
+      },
+      {
+        "name": "interact",
+        "phonetic": "/ˌɪntərˈækt/",
+        "breakdown": "inter- (相互) + act (行动)",
+        "meaning": "v. 互动；相互作用；交流",
+        "example": {
+          "en": "Teachers encourage students to interact actively during seminars.",
+          "cn": "授课教师鼓励学生在研讨课期间踊跃积极地互动交流。"
+        }
+      },
+      {
+        "name": "internet",
+        "phonetic": "/ˈɪntərnet/",
+        "breakdown": "inter- (互联) + net (网络)",
+        "meaning": "n. 互联网；因特网",
+        "example": {
+          "en": "The internet revolutionized global knowledge sharing and communication.",
+          "cn": "互联网彻底变革了全球知识共享与日常沟通的方式。"
+        }
+      },
+      {
+        "name": "intercept",
+        "phonetic": "/ˌɪntərˈsept/",
+        "breakdown": "inter- (在途中) + cept (抓取)",
+        "meaning": "v. 拦截；截获；阻断",
+        "example": {
+          "en": "Defensive aircraft intercepted the unidentified aerial object.",
+          "cn": "防空战机在空中成功拦截了这架不明飞行物。"
+        }
+      },
+      {
+        "name": "interview",
+        "phonetic": "/ˈɪntərvjuː/",
+        "breakdown": "inter- (彼此) + view (会见/看)",
+        "meaning": "n./v. 面试；采访；会见",
+        "example": {
+          "en": "She prepared thoroughly for her final round technical interview.",
+          "cn": "她为自己的最后一轮高难度技术面试做了万全准备。"
+        }
+      }
+    ]
+  }
+]
