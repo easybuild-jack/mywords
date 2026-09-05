@@ -200,24 +200,19 @@
     animation: border-flash-animation 0.9s ease-in-out;
   }
 
-  /* 霓虹按钮光晕效果 */
+  /* 基础按钮过渡 */
   .btn-neon-glow {
-    box-shadow: 0 0 24px rgb(var(--primary-rgb) / 0.25);
     transition: all 0.2s ease;
   }
 
-  .btn-neon-glow:hover {
-    box-shadow: 0 0 32px rgb(var(--primary-rgb) / 0.4);
-  }
-
-  /* 切分音节纯文字动效：亮度由暗变亮，从最左侧向右波浪式扫描，柔和慢速不刺眼 */
+  /* 切分音节纯文字动效：亮度由暗变亮，从最左侧向右波浪式扫描，柔和慢速 */
   .syllable-font-light {
     animation: syllable-light-sweep 4.5s ease-in-out infinite;
     will-change: opacity, filter;
   }
 }
 
-/* 音节纯文字亮度扫描动效：极轻柔的由暗渐进变亮，过渡舒缓平静，无闪烁与缩放 */
+/* 音节纯文字亮度扫描动效：极轻柔的由暗渐进变亮，过渡舒缓平静 */
 @keyframes syllable-light-sweep {
   0% {
     opacity: 0.55;
@@ -240,15 +235,13 @@
   40%, 80% { transform: translateX(8px); }
 }
 
-/* 校验失败：边框与光晕红闪两下 */
+/* 校验失败：边框红闪两下，无刺眼光晕 */
 @keyframes border-flash-animation {
   0%, 50%, 100% {
     border-color: var(--destructive);
-    box-shadow: 0 0 24px rgba(255, 95, 87, 0.55);
   }
   25%, 75% {
-    border-color: rgba(255, 95, 87, 0.15);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 95, 87, 0.2);
   }
 }
 

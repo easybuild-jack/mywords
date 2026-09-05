@@ -32,7 +32,7 @@ export function RootsHeaderToolbar() {
                 onClick={() => setRootTab(tab.id)}
                 className={`px-3 xl:px-4 py-1 xl:py-1.5 rounded-lg text-xs xl:text-sm font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)] font-bold'
+                    ? 'bg-primary text-[#0B0C0E] font-bold'
                     : 'text-[#9CA3AF] hover:text-white'
                 }`}
               >

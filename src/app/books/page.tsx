@@ -128,7 +128,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('official')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'official'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
+                ? 'bg-primary text-[#0B0C0E]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -138,7 +138,7 @@ export default function BooksHubPage() {
             onClick={() => setActiveTab('custom')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'custom'
-                ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
+                ? 'bg-primary text-[#0B0C0E]'
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
@@ -233,9 +233,6 @@ export default function BooksHubPage() {
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 className="transition-all duration-700 ease-out"
-                style={{
-                  filter: progressPercent > 0 ? 'drop-shadow(0 0 6px rgb(var(--primary-rgb) / 0.5))' : 'none'
-                }}
               />
             </svg>
 
@@ -291,7 +288,7 @@ export default function BooksHubPage() {
                 onClick={() => handleSelectUnit(idx)}
                 className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between group min-h-[76px] ${
                   isCurrent
-                    ? 'border-accent bg-accent/[0.09] shadow-[0_0_18px_rgba(254,188,46,0.2)] ring-1 ring-accent/70'
+                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70'
                     : isMastered
                     ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05]'
                     : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]'
@@ -455,7 +452,7 @@ export default function BooksHubPage() {
                 type="button"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-[0_0_16px_rgba(225,29,72,0.35)] transition-all cursor-pointer disabled:opacity-50"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
               >
                 {isDeleting ? (
                   <>

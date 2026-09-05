@@ -462,7 +462,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                             onClick={() => handleToggleCutPoint(index + 1)}
                             className={`size-7 sm:size-8 rounded-lg flex items-center justify-center transition-all cursor-pointer font-bold text-sm ${
                               isCutAfter
-                                ? 'bg-primary text-black font-mono shadow-[0_0_10px_rgb(var(--primary-rgb)/0.4)] scale-110'
+                                ? 'bg-primary text-black font-mono scale-110'
                                 : 'bg-white/5 text-gray-500 hover:bg-white/15 hover:text-gray-300'
                             }`}
                             title={isCutAfter ? '点击取消该切分点' : '点击在此处切分'}
@@ -504,7 +504,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                         onClick={() => handleToggleSilentIndex(index)}
                         className={`px-3 py-1.5 rounded-xl border font-mono text-sm sm:text-base font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                           isSilent
-                            ? 'border-gray-500 bg-gray-500/20 text-gray-300 shadow-[0_0_10px_rgba(156,163,175,0.2)]'
+                            ? 'border-gray-500 bg-gray-500/20 text-gray-300'
                             : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
                         }`}
                         title={isSilent ? '点击取消不发音标记' : '点击标记为不发音字母（灰化）'}
@@ -672,10 +672,10 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
               disabled={isSaved || !isTextValid}
               className={`px-5 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
                 isSaved
-                  ? 'bg-green-600 text-white shadow-[0_0_12px_rgba(22,163,74,0.4)]'
+                  ? 'bg-green-600 text-white'
                   : !isTextValid
                   ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-primary text-black hover:opacity-90 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.3)]'
+                  : 'bg-primary text-black hover:opacity-90'
               }`}
             >
               {isSaved ? (

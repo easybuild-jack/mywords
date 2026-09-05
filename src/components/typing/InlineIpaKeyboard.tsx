@@ -18,27 +18,27 @@ interface GroupStyle {
 const GROUP_STYLES: Record<string, GroupStyle> = {
   '单元音': {
     titleClass: 'text-emerald-300',
-    dotClass: 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]',
+    dotClass: 'bg-emerald-400',
     keyHoverClass: 'hover:bg-emerald-400/20 hover:border-emerald-400/50 hover:text-emerald-300',
   },
   '双元音': {
     titleClass: 'text-amber-300',
-    dotClass: 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.7)]',
+    dotClass: 'bg-amber-400',
     keyHoverClass: 'hover:bg-amber-400/20 hover:border-amber-400/50 hover:text-amber-300',
   },
   '爆破音 & 破擦音': {
     titleClass: 'text-sky-300',
-    dotClass: 'bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.7)]',
+    dotClass: 'bg-sky-400',
     keyHoverClass: 'hover:bg-sky-400/20 hover:border-sky-400/50 hover:text-sky-300',
   },
   '摩擦音': {
     titleClass: 'text-violet-300',
-    dotClass: 'bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.7)]',
+    dotClass: 'bg-violet-400',
     keyHoverClass: 'hover:bg-violet-400/20 hover:border-violet-400/50 hover:text-violet-300',
   },
   '鼻音 & 辅音': {
     titleClass: 'text-pink-300',
-    dotClass: 'bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.7)]',
+    dotClass: 'bg-pink-400',
     keyHoverClass: 'hover:bg-rose-400/20 hover:border-rose-400/50 hover:text-pink-300',
   },
 }
@@ -47,7 +47,7 @@ function getGroupStyle(category: string): GroupStyle {
   return (
     GROUP_STYLES[category] || {
       titleClass: 'text-sky-300',
-      dotClass: 'bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.7)]',
+      dotClass: 'bg-sky-400',
       keyHoverClass: 'hover:bg-sky-400/20 hover:border-sky-400/50 hover:text-sky-300',
     }
   )

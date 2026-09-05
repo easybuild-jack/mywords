@@ -101,7 +101,7 @@ export function UnitCompleteCard() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       className="glass-card max-w-lg w-full p-8 rounded-3xl border border-white/10 text-center space-y-6 shadow-2xl relative z-20"
     >
-      <div className="size-16 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary mx-auto shadow-[0_0_30px_rgb(var(--primary-rgb)/0.3)]">
+      <div className="size-16 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary mx-auto">
         <Sparkles className="size-8 animate-pulse" />
       </div>
 

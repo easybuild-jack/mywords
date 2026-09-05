@@ -97,7 +97,7 @@ export function RootDetailModal({
         </button>
 
         {/* 详情卡片容器（复用自适应规格） */}
-        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[92vw] rounded-3xl overflow-hidden glass-card border border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.8)] transition-all duration-300">
+        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[92vw] rounded-3xl overflow-hidden glass-card border border-white/15 shadow-2xl transition-all duration-300">
           <RootCard
             root={currentRoot}
             currentIndex={currentIndex}

@@ -198,7 +198,7 @@ export function LearnCard({
       }}
       className={`h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center gap-2 text-xs xl:text-sm font-medium select-none active:scale-95 ${
         isStarred
-          ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.25)] hover:bg-amber-400/30 hover:border-amber-400/80'
+          ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 hover:border-amber-400/80'
           : 'border-white/10 bg-white/5 text-gray-300 hover:text-amber-300 hover:border-amber-400/40 hover:bg-amber-400/10'
       }`}
       title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
@@ -207,7 +207,7 @@ export function LearnCard({
       <Star
         className={`size-4 xl:size-4.5 transition-transform duration-200 ${
           isStarred
-            ? 'fill-amber-400 text-amber-400 scale-105 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]'
+            ? 'fill-amber-400 text-amber-400 scale-105'
             : 'text-gray-400 group-hover:text-amber-300'
         }`}
       />
@@ -258,7 +258,7 @@ export function LearnCard({
                 type="button"
                 onClick={toggleSplit}
                 className={`p-1.5 sm:p-2 xl:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
-                    ? 'border-primary/50 bg-primary/15 text-primary shadow-[0_0_12px_rgb(var(--primary-rgb)/0.2)]'
+                    ? 'border-primary/50 bg-primary/15 text-primary'
                     : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
                   }`}
                 title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
@@ -291,7 +291,7 @@ export function LearnCard({
           <div
             className={`h-14 xl:h-16 2xl:h-18 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl xl:text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${hasTypo
                 ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
-                : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
+                : 'border-primary/45 bg-primary/[0.05] text-primary'
               }`}
           >
             {currentInput && <span className="mr-1">{currentInput}</span>}
@@ -334,7 +334,7 @@ export function LearnCard({
                     key={idx}
                     className={`p-3 xl:p-3.5 2xl:p-4 rounded-xl bg-white/[0.025] border transition-all duration-200 group ${
                       isPlaying
-                        ? 'border-primary/40 bg-primary/[0.04] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.1)]'
+                        ? 'border-primary/40 bg-primary/[0.04]'
                         : 'border-white/5 hover:bg-white/[0.05] hover:border-white/10'
                     }`}
                   >
@@ -353,7 +353,7 @@ export function LearnCard({
                             }}
                             className={`p-1.5 -mr-1 -mt-0.5 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
                               isPlaying
-                                ? 'border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_rgb(var(--primary-rgb)/0.3)] animate-pulse'
+                                ? 'border-primary/50 bg-primary/20 text-primary animate-pulse'
                                 : 'border-transparent text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15'
                             }`}
                             title="朗读例句"

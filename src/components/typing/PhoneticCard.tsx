@@ -65,10 +65,10 @@ export function PhoneticCard({
           <div
             className={`h-14 sm:h-16 rounded-2xl border-2 px-4 sm:px-6 flex items-center justify-between transition-all duration-200 ${
               isPhoneticPassed
-                ? 'border-emerald-500/70 bg-emerald-500/15 shadow-[0_0_24px_rgba(16,185,129,0.25)] ring-1 ring-emerald-500/50'
+                ? 'border-emerald-500/70 bg-emerald-500/15 ring-1 ring-emerald-500/50'
                 : isPhoneticError
-                  ? 'border-destructive bg-destructive/15 animate-shake shadow-[0_0_24px_rgba(239,68,68,0.2)]'
-                  : 'border-primary/45 bg-primary/[0.05] shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]'
+                  ? 'border-destructive bg-destructive/15 animate-shake'
+                  : 'border-primary/45 bg-primary/[0.05]'
             }`}
           >
             {/* 默写音标内容 */}

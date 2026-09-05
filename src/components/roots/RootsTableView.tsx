@@ -164,7 +164,7 @@ export function RootsTableView({
                           e.stopPropagation()
                           onViewDetail(globalIndex)
                         }}
-                        className="px-3 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30 text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(var(--primary-rgb)/0.12)] hover:scale-105 active:scale-95"
+                        className="px-3 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30 text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
                         title={`查看 ${item.form} 详情卡片`}
                       >
                         <Eye className="size-3.5" />
@@ -212,7 +212,7 @@ export function RootsTableView({
                     onClick={() => setCurrentPage(pageNum as number)}
                     className={`size-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       currentPage === pageNum
-                        ? 'bg-primary text-[#0B0C0E] shadow-[0_0_10px_rgb(var(--primary-rgb)/0.3)] font-bold'
+                        ? 'bg-primary text-[#0B0C0E] font-bold'
                         : 'hover:bg-white/[0.06] text-muted-foreground hover:text-white'
                     }`}
                   >

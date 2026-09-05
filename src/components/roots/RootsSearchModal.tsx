@@ -140,7 +140,7 @@ export function RootsSearchModal({ isOpen, onClose }: RootsSearchModalProps) {
                   onMouseEnter={() => setSelectedIndex(itemIdx)}
                   className={`p-3.5 rounded-xl cursor-pointer transition-all flex items-center justify-between gap-3 border ${
                     isSelected
-                      ? 'bg-primary/15 border-primary/40 text-white shadow-[0_0_15px_rgb(var(--primary-rgb)/0.15)]'
+                      ? 'bg-primary/15 border-primary/40 text-white'
                       : isCurrent
                       ? 'bg-white/[0.06] border-white/20 text-white'
                       : 'bg-white/[0.02] border-transparent hover:bg-white/[0.04] text-gray-300'

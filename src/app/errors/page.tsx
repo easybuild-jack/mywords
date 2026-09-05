@@ -126,7 +126,7 @@ export default function TroubleWordsPage() {
       {/* 1. 顶部标题与筛选 */}
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-2xl bg-destructive/15 text-destructive flex items-center justify-center border border-destructive/30 shadow-[0_0_20px_rgba(255,95,87,0.25)]">
+          <div className="size-10 rounded-2xl bg-destructive/15 text-destructive flex items-center justify-center border border-destructive/30">
             <Flame className="size-5" />
           </div>
           <div>
@@ -146,7 +146,7 @@ export default function TroubleWordsPage() {
               onClick={() => handleFilterChange('all')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'all'
-                  ? 'bg-destructive text-white shadow-[0_0_12px_rgba(255,95,87,0.3)]'
+                  ? 'bg-destructive text-white'
                   : 'text-[#9CA3AF] hover:text-white'
               }`}
             >
@@ -156,7 +156,7 @@ export default function TroubleWordsPage() {
               onClick={() => handleFilterChange('starred')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'starred'
-                  ? 'bg-amber-500 text-white shadow-[0_0_12px_rgba(245,158,11,0.3)]'
+                  ? 'bg-amber-500 text-white'
                   : 'text-[#9CA3AF] hover:text-white'
               }`}
             >
@@ -166,7 +166,7 @@ export default function TroubleWordsPage() {
               onClick={() => handleFilterChange('error')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'error'
-                  ? 'bg-destructive text-white shadow-[0_0_12px_rgba(255,95,87,0.3)]'
+                  ? 'bg-destructive text-white'
                   : 'text-[#9CA3AF] hover:text-white'
               }`}
             >
@@ -176,7 +176,7 @@ export default function TroubleWordsPage() {
               onClick={() => handleFilterChange('severe')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 filterType === 'severe'
-                  ? 'bg-red-600 text-white shadow-[0_0_12px_rgba(220,38,38,0.3)]'
+                  ? 'bg-red-600 text-white'
                   : 'text-[#9CA3AF] hover:text-white'
               }`}
             >
@@ -193,8 +193,8 @@ export default function TroubleWordsPage() {
       ) : troubleList.length === 0 ? (
         /* 暂无生错词时的空状态 */
         <div className="flex-1 flex items-center justify-center">
-          <div className="glass-card p-12 rounded-3xl border border-white/10 text-center space-y-4 shadow-[0_0_40px_rgba(0,0,0,0.3)] max-w-lg">
-            <div className="size-16 rounded-3xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary mx-auto shadow-[0_0_30px_rgb(var(--primary-rgb)/0.2)]">
+          <div className="glass-card p-12 rounded-3xl border border-white/10 text-center space-y-4 shadow-xl max-w-lg">
+            <div className="size-16 rounded-3xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary mx-auto">
               <CheckCircle className="size-8" />
             </div>
             <div className="space-y-1">
@@ -216,7 +216,7 @@ export default function TroubleWordsPage() {
       ) : (
         <>
           {/* 2. 攻坚统计总览卡片 */}
-          <div className="glass-card p-4 md:p-5 rounded-2xl border border-destructive/30 bg-destructive/5 flex items-center justify-between shadow-[0_0_40px_rgba(255,95,87,0.1)] shrink-0">
+          <div className="glass-card p-4 md:p-5 rounded-2xl border border-destructive/30 bg-destructive/5 flex items-center justify-between shrink-0">
             <div className="space-y-1">
               <span className="text-xs text-destructive font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <Swords className="size-3.5" />
@@ -233,14 +233,14 @@ export default function TroubleWordsPage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleStartPractice()}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(var(--primary-rgb)/0.2)] transition-all cursor-pointer whitespace-nowrap"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-bold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap"
               >
                 <GraduationCap className="size-4" />
                 <span>生错词跟学练习</span>
               </button>
               <button
                 onClick={() => handleStartAnnihilation()}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(255,95,87,0.4)] transition-all cursor-pointer whitespace-nowrap"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap"
               >
                 <Flame className="size-4" />
                 <span>🚀 开启生错词默写</span>
@@ -371,7 +371,7 @@ export default function TroubleWordsPage() {
                         onClick={() => setCurrentPage(pageNum as number)}
                         className={`size-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                           currentPage === pageNum
-                            ? 'bg-destructive text-white shadow-[0_0_10px_rgba(255,95,87,0.3)]'
+                            ? 'bg-destructive text-white font-bold'
                             : 'hover:bg-white/[0.06] text-muted-foreground hover:text-white'
                         }`}
                       >

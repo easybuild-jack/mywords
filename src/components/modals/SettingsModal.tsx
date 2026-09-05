@@ -67,11 +67,11 @@ export function SettingsModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
-      <div className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 p-7 space-y-6 shadow-[0_0_60px_rgba(0,0,0,0.85)] text-white">
+      <div className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 p-7 space-y-6 shadow-2xl text-white">
         {/* 顶部标题与关闭 */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shadow-[0_0_15px_rgb(var(--primary-rgb)/0.2)]">
+            <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
               <Sliders className="size-5" />
             </div>
             <div>
@@ -98,7 +98,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('audio') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'audio' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'audio' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Volume2 className="size-4.5 shrink-0" />
@@ -108,7 +108,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('voice') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'voice' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'voice' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Mic className="size-4.5 shrink-0" />
@@ -118,7 +118,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('appearance') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'appearance' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'appearance' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Palette className="size-4.5 shrink-0" />
@@ -128,7 +128,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('shortcuts') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'shortcuts' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'shortcuts' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Keyboard className="size-4.5 shrink-0" />
@@ -138,7 +138,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('learn') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'learn' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'learn' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <span className="text-lg shrink-0">📚</span>
@@ -148,7 +148,7 @@ export function SettingsModal() {
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('backup') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'backup' ? 'bg-primary text-[#0B0C0E] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.35)]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+                activeTab === 'backup' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Database className="size-4.5 shrink-0" />
@@ -188,7 +188,7 @@ export function SettingsModal() {
                         }}
                         className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? 'border-primary bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
+                            ? 'border-primary bg-primary/10'
                             : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                         }`}
                       >
@@ -239,7 +239,7 @@ export function SettingsModal() {
                   <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">音标口音偏好</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                      phoneticPreference === 'us' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                      phoneticPreference === 'us' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                     }`}>
                       <input
                         type="radio"
@@ -256,7 +256,7 @@ export function SettingsModal() {
                     </label>
 
                     <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                      phoneticPreference === 'uk' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                      phoneticPreference === 'uk' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                     }`}>
                       <input
                         type="radio"
@@ -345,7 +345,7 @@ export function SettingsModal() {
                         onClick={() => setSkinId(skin.id)}
                         className={`group relative flex flex-col gap-3 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
                           isActive
-                            ? 'bg-primary/10 border-2 border-primary shadow-[0_0_20px_rgb(var(--primary-rgb)/0.25)]'
+                            ? 'bg-primary/10 border-2 border-primary'
                             : 'bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] hover:border-white/25'
                         }`}
                       >
@@ -464,7 +464,7 @@ export function SettingsModal() {
                           onClick={() => setRecordingAction(def.key)}
                           className={`px-3.5 py-2 rounded-xl font-mono font-bold text-xs transition-all cursor-pointer ${
                             isRecording
-                              ? 'bg-primary text-[#0B0C0E] shadow-[0_0_15px_rgb(var(--primary-rgb)/0.5)] animate-pulse'
+                              ? 'bg-primary text-[#0B0C0E] animate-pulse'
                               : 'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 hover:border-primary/50'
                           }`}
                           title="点击录制新快捷键"

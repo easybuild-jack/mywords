@@ -56,7 +56,7 @@ function ClozeSentence({
             return (
               <span
                 key={i}
-                className="inline-block mx-1 px-2 py-0.5 font-mono text-sm xl:text-base font-bold text-accent bg-accent/15 border border-accent/40 rounded-md shadow-[0_0_12px_rgba(251,191,36,0.25)] animate-in fade-in duration-200"
+                className="inline-block mx-1 px-2 py-0.5 font-mono text-sm xl:text-base font-bold text-accent bg-accent/15 border border-accent/40 rounded-md animate-in fade-in duration-200"
               >
                 {part}
               </span>
@@ -166,10 +166,10 @@ export function DictationCard({
                 className={`flex-1 h-24 rounded-2xl border px-3.5 py-2.5 flex items-start justify-between transition-all duration-200 ${!isDictationMeaningEnabled
                   ? 'border-primary/10 bg-primary/[0.02] opacity-40 cursor-not-allowed'
                   : isMeaningPassed
-                    ? 'border-primary/60 bg-primary/10 shadow-[0_0_16px_rgb(var(--primary-rgb)/0.2)]'
+                    ? 'border-primary/60 bg-primary/10'
                     : isMeaningError
                       ? 'border-destructive bg-destructive/15 animate-shake'
-                      : 'border-primary/20 bg-primary/[0.03] focus-within:border-primary focus-within:bg-primary/[0.06] focus-within:shadow-[0_0_20px_rgb(var(--primary-rgb)/0.22)]'
+                      : 'border-primary/20 bg-primary/[0.03] focus-within:border-primary focus-within:bg-primary/[0.06]'
                   }`}
               >
                 <div className="flex items-start gap-2 flex-1 min-w-0 mr-2 h-full">
@@ -242,7 +242,7 @@ export function DictationCard({
                 ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60'
                 : hasTypo
                   ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
-                  : 'border-primary/45 bg-primary/[0.05] text-primary shadow-[0_0_24px_rgb(var(--primary-rgb)/0.16)]'
+                  : 'border-primary/45 bg-primary/[0.05] text-primary'
                 }`}
             >
               {!isSpellingUnlocked ? (
@@ -297,7 +297,7 @@ export function DictationCard({
                   </div>
                   <div className="flex items-center gap-2">
                     {isPeeking && (
-                      <span className="text-xs font-mono font-bold text-accent px-2 py-0.5 rounded-md bg-accent/20 border border-accent/40 shadow-[0_0_12px_rgba(251,191,36,0.3)] animate-pulse">
+                      <span className="text-xs font-mono font-bold text-accent px-2 py-0.5 rounded-md bg-accent/20 border border-accent/40 animate-pulse">
                         答案: {word.name}
                       </span>
                     )}
@@ -308,7 +308,7 @@ export function DictationCard({
                       onPointerLeave={() => useWorkspaceStore.getState().peekHint(false)}
                       className={`text-[10px] xl:text-xs font-mono px-2 py-0.5 rounded border font-semibold transition-all cursor-pointer select-none active:scale-95 ${
                         isPeeking
-                          ? 'bg-accent/20 text-accent border-accent/40 shadow-[0_0_10px_rgba(251,191,36,0.3)]'
+                          ? 'bg-accent/20 text-accent border-accent/40'
                           : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border-white/10'
                       }`}
                       title="按住或按 Tab 键偷看答案"
@@ -327,7 +327,7 @@ export function DictationCard({
                         key={idx}
                         className={`p-2.5 xl:p-3 rounded-xl bg-white/[0.02] border transition-all duration-200 group ${
                           isPlaying
-                            ? 'border-primary/40 bg-primary/[0.04] shadow-[0_0_16px_rgb(var(--primary-rgb)/0.1)]'
+                            ? 'border-primary/40 bg-primary/[0.04]'
                             : 'border-white/5 hover:bg-white/[0.04] hover:border-white/10'
                         }`}
                       >
@@ -350,7 +350,7 @@ export function DictationCard({
                                 }}
                                 className={`p-1.5 -mr-1 -mt-0.5 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
                                   isPlaying
-                                    ? 'border-primary/50 bg-primary/20 text-primary shadow-[0_0_10px_rgb(var(--primary-rgb)/0.3)] animate-pulse'
+                                    ? 'border-primary/50 bg-primary/20 text-primary animate-pulse'
                                     : 'border-transparent text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15'
                                 }`}
                                 title="朗读例句"

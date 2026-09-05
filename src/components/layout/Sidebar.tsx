@@ -39,7 +39,7 @@ export function Sidebar() {
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">
-          <div className="size-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-105 transition-all shadow-[0_0_20px_rgb(var(--primary-rgb)/0.2)]">
+          <div className="size-10 rounded-xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-105 transition-all">
             <Sparkles className="size-5 text-primary" />
           </div>
           <div>
@@ -76,7 +76,7 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive
-                  ? 'bg-primary text-[#0B0C0E] font-bold shadow-[0_0_20px_rgb(var(--primary-rgb)/0.3)]'
+                  ? 'bg-primary text-[#0B0C0E] font-bold'
                   : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
                   }`}
               >
