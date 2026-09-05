@@ -322,8 +322,8 @@ export const INITIAL_SAMPLE_WORDS: WordItem[] = [
 export const BUILTIN_BOOKS: VocabularyBook[] = [
   {
     id: 'book_basewords',
-    name: '基础词汇',
-    description: '中小学阶段基础词汇 1195 词，按主题成组编排，音节拆分与词根词缀为人工校订',
+    name: '英语基础词汇',
+    description: '英语基础词汇，涵盖小学到高中常见词汇，英语单词的基础',
     category: 'daily',
     isCustom: false,
     unitSize: 20,
