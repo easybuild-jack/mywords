@@ -55,10 +55,18 @@ function getGroupStyle(category: string): GroupStyle {
 
 /** 默写音标页面内嵌平铺式点选音标键盘 */
 export function InlineIpaKeyboard({ onSelectSymbol }: InlineIpaKeyboardProps) {
-  const { isKeySoundEnabled, keySoundPack, keySoundVolume } = useWorkspaceStore()
+  const {
+    isKeySoundEnabled,
+    keySoundPack,
+    keySoundVolume,
+    isPhoneticSoundEnabled,
+    phoneticSoundVolume,
+  } = useWorkspaceStore()
 
   const handleSymbolClick = (sym: string) => {
-    if (isKeySoundEnabled) {
+    if (isPhoneticSoundEnabled) {
+      audioEngine.playPhoneticSound(sym, phoneticSoundVolume)
+    } else if (isKeySoundEnabled) {
       audioEngine.playKeySound(keySoundPack, keySoundVolume)
     }
     onSelectSymbol(sym)

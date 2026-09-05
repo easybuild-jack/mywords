@@ -110,6 +110,8 @@ interface WorkspaceState {
   isWrongBeepEnabled: boolean
   isCorrectSoundEnabled: boolean
   feedbackVolume: number
+  isPhoneticSoundEnabled: boolean
+  phoneticSoundVolume: number
 
   // 错词攻坚专项模式
   isErrorPracticeActive: boolean
@@ -161,6 +163,8 @@ interface WorkspaceState {
   setKeySoundPack: (pack: string) => void
   setKeySoundVolume: (vol: number) => void
   toggleKeySound: (enabled?: boolean) => void
+  togglePhoneticSound: (enabled?: boolean) => void
+  setPhoneticSoundVolume: (vol: number) => void
   
   // 练习与按键核心业务
   handleCharacterInput: (char: string) => void
@@ -276,6 +280,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isWrongBeepEnabled: true,
       isCorrectSoundEnabled: true,
       feedbackVolume: 0.8,
+      isPhoneticSoundEnabled: true,
+      phoneticSoundVolume: 0.85,
 
       isImportModalOpen: false,
       isSettingsModalOpen: false,
@@ -734,6 +740,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       setKeySoundPack: (pack: string) => set({ keySoundPack: pack }),
       setKeySoundVolume: (vol: number) => set({ keySoundVolume: vol }),
       toggleKeySound: (enabled?: boolean) => set((s) => ({ isKeySoundEnabled: enabled !== undefined ? enabled : !s.isKeySoundEnabled })),
+      togglePhoneticSound: (enabled?: boolean) => set((s) => ({ isPhoneticSoundEnabled: enabled !== undefined ? enabled : !s.isPhoneticSoundEnabled })),
+      setPhoneticSoundVolume: (vol: number) => set({ phoneticSoundVolume: vol }),
 
       handleCharacterInput: (char: string) => {
         const {
@@ -1251,6 +1259,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         isWrongBeepEnabled: state.isWrongBeepEnabled,
         isCorrectSoundEnabled: state.isCorrectSoundEnabled,
         feedbackVolume: state.feedbackVolume,
+        isPhoneticSoundEnabled: state.isPhoneticSoundEnabled,
+        phoneticSoundVolume: state.phoneticSoundVolume,
         shortcuts: state.shortcuts,
         isDictationPhoneticEnabled: state.isDictationPhoneticEnabled,
         isDictationMeaningEnabled: state.isDictationMeaningEnabled,

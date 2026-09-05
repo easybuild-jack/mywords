@@ -22,6 +22,10 @@ export function SettingsModal() {
     toggleKeySound,
     phoneticPreference,
     setPhoneticPreference,
+    isPhoneticSoundEnabled,
+    togglePhoneticSound,
+    phoneticSoundVolume,
+    setPhoneticSoundVolume,
     shortcuts,
     setShortcut,
     resetShortcuts,
@@ -230,42 +234,91 @@ export function SettingsModal() {
             )}
 
             {activeTab === 'voice' && (
-              <div className="space-y-5">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">音标口音偏好</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                    phoneticPreference === 'us' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
-                  }`}>
-                    <input
-                      type="radio"
-                      name="accent"
-                      value="us"
-                      checked={phoneticPreference === 'us'}
-                      onChange={() => setPhoneticPreference('us')}
-                      className="size-4.5 mt-0.5 accent-primary cursor-pointer"
-                    />
-                    <div className="space-y-1">
-                      <div className="text-sm font-bold text-white">美式发音 (US - K.K. 音标)</div>
-                      <div className="text-xs text-muted-foreground leading-relaxed">美式常用自然拼读规则与当代流行口音</div>
-                    </div>
-                  </label>
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">音标口音偏好</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
+                      phoneticPreference === 'us' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    }`}>
+                      <input
+                        type="radio"
+                        name="accent"
+                        value="us"
+                        checked={phoneticPreference === 'us'}
+                        onChange={() => setPhoneticPreference('us')}
+                        className="size-4.5 mt-0.5 accent-primary cursor-pointer"
+                      />
+                      <div className="space-y-1">
+                        <div className="text-sm font-bold text-white">美式发音 (US - K.K. 音标)</div>
+                        <div className="text-xs text-muted-foreground leading-relaxed">美式常用自然拼读规则与当代流行口音</div>
+                      </div>
+                    </label>
 
-                  <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                    phoneticPreference === 'uk' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
-                  }`}>
-                    <input
-                      type="radio"
-                      name="accent"
-                      value="uk"
-                      checked={phoneticPreference === 'uk'}
-                      onChange={() => setPhoneticPreference('uk')}
-                      className="size-4.5 mt-0.5 accent-primary cursor-pointer"
-                    />
-                    <div className="space-y-1">
-                      <div className="text-sm font-bold text-white">英式发音 (UK - DJ 音标)</div>
-                      <div className="text-xs text-muted-foreground leading-relaxed">标准牛津剑桥英式发音与国际音标呈现</div>
+                    <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
+                      phoneticPreference === 'uk' ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgb(var(--primary-rgb)/0.15)]' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    }`}>
+                      <input
+                        type="radio"
+                        name="accent"
+                        value="uk"
+                        checked={phoneticPreference === 'uk'}
+                        onChange={() => setPhoneticPreference('uk')}
+                        className="size-4.5 mt-0.5 accent-primary cursor-pointer"
+                      />
+                      <div className="space-y-1">
+                        <div className="text-sm font-bold text-white">英式发音 (UK - DJ 音标)</div>
+                        <div className="text-xs text-muted-foreground leading-relaxed">标准牛津剑桥英式发音与国际音标呈现</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                        音标键盘真人单音素发音
+                      </h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        在默写音标页面点选音标符号时，实时播放该音标的标准真人发音
+                      </p>
                     </div>
-                  </label>
+                    <label className="flex items-center gap-2.5 text-sm font-medium cursor-pointer text-primary">
+                      <input
+                        type="checkbox"
+                        checked={isPhoneticSoundEnabled}
+                        onChange={(e) => togglePhoneticSound(e.target.checked)}
+                        className="size-4 accent-primary rounded cursor-pointer"
+                      />
+                      <span>启用音标朗读</span>
+                    </label>
+                  </div>
+
+                  <div className="space-y-2.5 rounded-2xl bg-white/[0.03] border border-white/10 p-4">
+                    <div className="flex justify-between items-center text-sm text-muted-foreground">
+                      <span>音标发音音量 (Phonetic Sound Volume)</span>
+                      <div className="flex items-center gap-3">
+                        <span className="font-mono font-bold text-primary">{Math.round(phoneticSoundVolume * 100)}%</span>
+                        <button
+                          type="button"
+                          onClick={() => audioEngine.playPhoneticSound('iː', phoneticSoundVolume)}
+                          className="px-2.5 py-1 rounded-lg bg-white/[0.08] hover:bg-primary/20 text-xs font-semibold text-primary hover:text-white border border-white/10 transition-all cursor-pointer"
+                        >
+                          试听 /iː/
+                        </button>
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      value={phoneticSoundVolume}
+                      onChange={(e) => setPhoneticSoundVolume(parseFloat(e.target.value))}
+                      className="w-full accent-primary cursor-pointer"
+                    />
+                  </div>
                 </div>
               </div>
             )}

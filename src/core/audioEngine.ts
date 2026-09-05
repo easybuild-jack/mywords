@@ -19,6 +19,69 @@ export const MECHANICAL_SWITCHES: KeySoundOption[] = [
   { id: 'Buckling Spring', name: 'Buckling Spring (屈服弹簧)', filename: 'Buckling Spring.mp3', switchType: '经典IBM机械声' },
 ]
 
+/** 49 个国际音标与本地离线高保真单音素音频映射表 */
+export const IPA_AUDIO_MAP: Record<string, string> = {
+  // 单元音 (12)
+  'ɪ': 'i_short',
+  'iː': 'i_long',
+  'e': 'e',
+  'æ': 'ae',
+  'ɜː': 'er_long',
+  'ə': 'schwa',
+  'ʌ': 'wedge',
+  'uː': 'u_long',
+  'ʊ': 'u_short',
+  'ɔː': 'o_long',
+  'ɒ': 'o_short',
+  'ɑː': 'a_long',
+
+  // 双元音 (9)
+  'eɪ': 'ei',
+  'aɪ': 'ai',
+  'ɔɪ': 'oi',
+  'aʊ': 'au',
+  'əʊ': 'ou_uk',
+  'oʊ': 'ou_us',
+  'ɪə': 'ia',
+  'eə': 'ea',
+  'ʊə': 'ua',
+
+  // 爆破音 & 破擦音 (10)
+  'p': 'p',
+  'b': 'b',
+  't': 't',
+  'd': 'd',
+  'k': 'k',
+  'ɡ': 'g',
+  'g': 'g',
+  'tʃ': 'ch',
+  'dʒ': 'dj',
+  'tr': 'tr',
+  'dr': 'dr',
+
+  // 摩擦音 (11)
+  'f': 'f',
+  'v': 'v',
+  'θ': 'th_voiceless',
+  'ð': 'th_voiced',
+  's': 's',
+  'z': 'z',
+  'ʃ': 'sh',
+  'ʒ': 'zh',
+  'h': 'h',
+  'ts': 'ts',
+  'dz': 'dz',
+
+  // 鼻音 & 辅音 (7)
+  'm': 'm',
+  'n': 'n',
+  'ŋ': 'ng',
+  'l': 'l',
+  'r': 'r',
+  'w': 'w',
+  'j': 'j',
+}
+
 /** 同一个词的发音节流窗口：首次立即出声，其后 3 秒内的重复触发直接丢弃 */
 const PRONUNCIATION_THROTTLE_MS = 3000
 
@@ -44,6 +107,7 @@ class AudioEngine {
   private currentPronunciation: HTMLAudioElement | null = null
   private lastPronunciationKey = ''
   private lastPronunciationAt = 0
+  private phoneticSoundCache: Map<string, HTMLAudioElement> = new Map()
   /** 被自动播放策略拦下的那次请求，挂在这里等第一次用户手势 */
   private pendingPlayback: { word: string; accent: 'us' | 'uk'; rate: number; at: number } | null = null
   private isWaitingForGesture = false
@@ -119,6 +183,33 @@ class AudioEngine {
       }
     } catch (e) {
       console.error('Failed to play correct sound', e)
+    }
+  }
+
+  /**
+   * 播放英语国际音标单音素纯正真人发音。
+   * 支持快速点选连续出声，基于本地离线音频资源库秒级响应。
+   */
+  public playPhoneticSound(symbol: string, volume: number = 0.85) {
+    if (typeof window === 'undefined' || !symbol) return
+    const filename = IPA_AUDIO_MAP[symbol]
+    if (!filename) return
+
+    try {
+      let audio = this.phoneticSoundCache.get(filename)
+      if (!audio) {
+        audio = new Audio(`/sounds/phonetics/${filename}.mp3`)
+        audio.preload = 'auto'
+        this.phoneticSoundCache.set(filename, audio)
+      } else {
+        audio.currentTime = 0
+      }
+      audio.volume = Math.max(0, Math.min(1, volume))
+      audio.play().catch((err) => {
+        console.debug('Phonetic audio playback failed:', err)
+      })
+    } catch (e) {
+      console.error('Failed to play phonetic sound', e)
     }
   }
 
