@@ -140,7 +140,7 @@ export function RootsTableView({
                     </td>
 
                     {/* 2. 核心本义 */}
-                    <td className="py-2.5 px-5 sm:px-6 text-sm sm:text-[15px] font-semibold text-accent leading-snug">
+                    <td className="py-2.5 px-5 sm:px-6 text-sm sm:text-[15px] font-semibold text-white leading-snug">
                       {item.meaning}
                     </td>
 

@@ -64,17 +64,6 @@ export function RootDetailModal({
       onClick={onClose}
       className="absolute inset-0 z-40 flex items-center justify-center p-3 sm:p-5 xl:p-6 bg-black/80 backdrop-blur-sm animate-fade-in"
     >
-      {/* 右上角关闭按钮 */}
-      <button
-        type="button"
-        onClick={onClose}
-        className="absolute top-3 right-3 sm:top-4 sm:right-4 size-9 sm:size-10 xl:size-11 rounded-full bg-sidebar hover:bg-white/[0.1] border border-white/20 text-white flex items-center justify-center transition-all cursor-pointer z-50 shadow-xl hover:scale-105 active:scale-95"
-        title="关闭详情 (ESC)"
-        aria-label="关闭详情"
-      >
-        <X className="size-5" />
-      </button>
-
       {/* 弹窗核心区域：左右翻页 + 居中自适应卡片 */}
       <div
         onClick={(e) => e.stopPropagation()}
@@ -98,6 +87,17 @@ export function RootDetailModal({
 
         {/* 详情卡片容器（实底不透明，杜绝透光干扰底层数据） */}
         <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[calc(100%-100px)] sm:max-w-[calc(100%-130px)] rounded-3xl overflow-hidden bg-sidebar border border-white/15 shadow-2xl transition-all duration-300">
+          {/* 弹框卡片右上角关闭按钮 */}
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 xl:top-6 xl:right-6 size-9 sm:size-10 rounded-xl bg-white/[0.06] hover:bg-white/[0.14] border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-all cursor-pointer z-30 shadow-md hover:scale-105 active:scale-95"
+            title="关闭详情 (ESC)"
+            aria-label="关闭详情"
+          >
+            <X className="size-5" />
+          </button>
+
           <RootCard
             root={currentRoot}
             currentIndex={currentIndex}

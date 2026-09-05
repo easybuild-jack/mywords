@@ -282,9 +282,9 @@ function BooksHubContent() {
         </div>
       </div>
 
-      {/* 3. 单元矩阵网格 (Unit Grid - 紧凑型卡片设计) */}
+      {/* 3. 单元矩阵网格 (Unit Grid - 固定高度容器，防止切页或词书变化时高度跳动) */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between min-h-[28px]">
           <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider font-mono">
             章节单元列表 (第 {unitPage + 1}/{totalUnitPages} 页，共 {totalUnits} 单元)
           </h3>
@@ -295,7 +295,7 @@ function BooksHubContent() {
               <button
                 onClick={() => setUnitPage((p) => Math.max(0, p - 1))}
                 disabled={unitPage === 0}
-                className="p-1 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="p-1 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
               >
                 <ChevronLeft className="size-3.5" />
               </button>
@@ -305,7 +305,7 @@ function BooksHubContent() {
               <button
                 onClick={() => setUnitPage((p) => Math.min(totalUnitPages - 1, p + 1))}
                 disabled={unitPage === totalUnitPages - 1}
-                className="p-1 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="p-1 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
               >
                 <ChevronRight className="size-3.5" />
               </button>
@@ -313,7 +313,7 @@ function BooksHubContent() {
           )}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+        <div className="h-[336px] min-h-[336px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start overflow-y-auto pr-1">
           {currentUnits.map((idx) => {
             const isMastered = idx < activeModeUnit
             const isCurrent = idx === activeModeUnit
@@ -322,7 +322,7 @@ function BooksHubContent() {
               <div
                 key={idx}
                 onClick={() => handleSelectUnit(idx)}
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between group min-h-[76px] ${
+                className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between group h-[76px] ${
                   isCurrent
                     ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70'
                     : isMastered
