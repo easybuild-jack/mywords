@@ -17,19 +17,26 @@ import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
  */
 export type PracticeCursorKey = 'learn' | 'dictation' | 'phonetic' | 'error'
 
+export interface BookModeUnitRecord {
+  learn: number
+  dictation: number
+  phonetic: number
+}
+
 interface PracticeCursor {
+  unitIndex: number
   activeWordIndex: number
   isUnitFinished: boolean
 }
 
-const EMPTY_CURSOR: PracticeCursor = { activeWordIndex: 0, isUnitFinished: false }
+const EMPTY_CURSOR: PracticeCursor = { unitIndex: 0, activeWordIndex: 0, isUnitFinished: false }
 
-function createFreshCursors(): Record<PracticeCursorKey, PracticeCursor> {
+function createFreshCursors(initialUnits?: Partial<Record<PracticeMode, number>>): Record<PracticeCursorKey, PracticeCursor> {
   return {
-    learn: { ...EMPTY_CURSOR },
-    dictation: { ...EMPTY_CURSOR },
-    phonetic: { ...EMPTY_CURSOR },
-    error: { ...EMPTY_CURSOR },
+    learn: { unitIndex: initialUnits?.learn ?? 0, activeWordIndex: 0, isUnitFinished: false },
+    dictation: { unitIndex: initialUnits?.dictation ?? 0, activeWordIndex: 0, isUnitFinished: false },
+    phonetic: { unitIndex: initialUnits?.phonetic ?? 0, activeWordIndex: 0, isUnitFinished: false },
+    error: { unitIndex: 0, activeWordIndex: 0, isUnitFinished: false },
   }
 }
 
@@ -63,6 +70,10 @@ interface WorkspaceState {
   activeWordIndex: number
   currentLoadedWords: WordItem[]
   cursors: Record<PracticeCursorKey, PracticeCursor>
+  /** 各词库在各做题模式下的独立单元进度存档 */
+  bookModeProgress: Record<string, BookModeUnitRecord>
+  getBookModeUnit: (bookId: string, mode: PracticeMode) => number
+  commitBookAndUnit: (bookId: string, unitIndex: number, targetMode: PracticeMode) => Promise<void>
   
   // 模式与做题控制
   mode: PracticeMode
@@ -242,6 +253,7 @@ function saveActiveCursor(get: () => WorkspaceState): Record<PracticeCursorKey, 
   return {
     ...get().cursors,
     [activeCursorKey(get)]: {
+      unitIndex: get().currentUnitIndex,
       activeWordIndex: get().activeWordIndex,
       isUnitFinished: get().isUnitFinished,
     },
@@ -259,6 +271,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       activeWordIndex: 0,
       currentLoadedWords: INITIAL_SAMPLE_WORDS,
       cursors: createFreshCursors(),
+      bookModeProgress: {},
       
       mode: 'learn',
       loopCountSetting: DEFAULT_LOOP_COUNTS.learn,
@@ -365,7 +378,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           cursors: {
             ...saveActiveCursor(get),
-            error: { activeWordIndex: entryIndex, isUnitFinished: false },
+            error: { unitIndex: 0, activeWordIndex: entryIndex, isUnitFinished: false },
           },
           isErrorPracticeActive: true,
           mode: 'dictation',
@@ -401,7 +414,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           cursors: {
             ...saveActiveCursor(get),
-            error: { activeWordIndex: entryIndex, isUnitFinished: false },
+            error: { unitIndex: 0, activeWordIndex: entryIndex, isUnitFinished: false },
           },
           isErrorPracticeActive: true,
           mode: 'learn',
@@ -471,13 +484,20 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           book = custom || BUILTIN_BOOKS[0]
         }
 
+        const bookModeProgress = { ...get().bookModeProgress }
+        if (!bookModeProgress[book.id]) {
+          bookModeProgress[book.id] = { learn: 0, dictation: 0, phonetic: 0 }
+        }
+        const activeMode = get().isErrorPracticeActive ? 'dictation' : get().mode
+        const restoredUnitIndex = bookModeProgress[book.id][activeMode] ?? 0
+
         set({
           currentBookId: book.id,
           currentBook: book,
-          currentUnitIndex: 0,
+          currentUnitIndex: restoredUnitIndex,
           activeWordIndex: 0,
-          // 换书意味着两个页面的进度都失效
-          cursors: createFreshCursors(),
+          cursors: createFreshCursors(bookModeProgress[book.id]),
+          bookModeProgress,
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
@@ -515,11 +535,108 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         return true
       },
 
+      getBookModeUnit: (bookId: string, mode: PracticeMode) => {
+        const { bookModeProgress, currentBookId, currentUnitIndex, mode: currentMode, cursors } = get()
+        const recorded = bookModeProgress[bookId]?.[mode]
+        if (typeof recorded === 'number') return recorded
+        if (bookId === currentBookId) {
+          if (currentMode === mode) {
+            return currentUnitIndex
+          }
+          if (typeof cursors?.[mode]?.unitIndex === 'number') {
+            return cursors[mode].unitIndex
+          }
+          if (mode === 'learn') {
+            return currentUnitIndex
+          }
+        }
+        return 0
+      },
+
+      commitBookAndUnit: async (bookId: string, unitIndex: number, targetMode: PracticeMode) => {
+        const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId)
+        let book: VocabularyBook
+        if (builtin) {
+          const dynamicTotal = await dictionaryLoader.getBookTotalWords(builtin.id)
+          book = { ...builtin, totalWords: dynamicTotal > 0 ? dynamicTotal : builtin.totalWords }
+        } else {
+          const custom = await db.books.get(bookId)
+          book = custom || BUILTIN_BOOKS[0]
+        }
+
+        const bookModeProgress = { ...get().bookModeProgress }
+        if (!bookModeProgress[book.id]) {
+          bookModeProgress[book.id] = { learn: 0, dictation: 0, phonetic: 0 }
+        }
+        bookModeProgress[book.id] = {
+          ...bookModeProgress[book.id],
+          [targetMode]: unitIndex,
+        }
+
+        const cursors = { ...get().cursors }
+        cursors[targetMode] = {
+          unitIndex,
+          activeWordIndex: 0,
+          isUnitFinished: false,
+        }
+
+        set({
+          currentBookId: book.id,
+          currentBook: book,
+          mode: targetMode,
+          currentUnitIndex: unitIndex,
+          activeWordIndex: 0,
+          cursors,
+          bookModeProgress,
+          currentInput: '',
+          hasTypo: false,
+          isUnitFinished: false,
+          isCurrentWordSplit: false,
+          isEditWordSplitModalOpen: false,
+          isErrorPracticeActive: false,
+          retryWordQueue: [],
+          ...restoreLoopCount(get),
+          ...DICTATION_STEP_RESET,
+        })
+
+        await get().loadCurrentUnitWords()
+
+        const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
+        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
+        const firstWord = get().getCurrentWord()
+        if (firstWord && canPlayAudio) {
+          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+        }
+        const nextWord = get().currentLoadedWords[1]
+        if (nextWord) {
+          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+        }
+      },
+
       setUnitIndex: async (unitIndex: number) => {
+        const { currentBookId, mode, isErrorPracticeActive, bookModeProgress } = get()
+        const targetMode = isErrorPracticeActive ? 'dictation' : mode
+        const updatedProgress = { ...bookModeProgress }
+        if (!updatedProgress[currentBookId]) {
+          updatedProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
+        }
+        updatedProgress[currentBookId] = {
+          ...updatedProgress[currentBookId],
+          [targetMode]: unitIndex,
+        }
+
+        const cursors = { ...get().cursors }
+        cursors[targetMode] = {
+          unitIndex,
+          activeWordIndex: 0,
+          isUnitFinished: false,
+        }
+
         set({
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
-          cursors: createFreshCursors(),
+          cursors,
+          bookModeProgress: updatedProgress,
           currentInput: '',
           hasTypo: false,
           isUnitFinished: false,
@@ -532,7 +649,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         })
         await get().loadCurrentUnitWords()
 
-        const { isAutoPlayAudio, mode, dictationCueMode, phoneticPreference, audioRate } = get()
+        const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
         const firstWord = get().getCurrentWord()
         if (firstWord && canPlayAudio) {
@@ -558,18 +675,36 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (get().mode === nextMode) return
 
         const cursors = saveActiveCursor(get)
-        const target = cursors[nextMode]
+        const currentBookId = get().currentBookId
+        const prevMode = get().mode
+        const bookModeProgress = { ...get().bookModeProgress }
+        if (!bookModeProgress[currentBookId]) {
+          bookModeProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
+        }
+        if (!get().isErrorPracticeActive) {
+          bookModeProgress[currentBookId] = {
+            ...bookModeProgress[currentBookId],
+            [prevMode]: get().currentUnitIndex,
+          }
+        }
+
+        const targetCursor = cursors[nextMode]
+        const targetUnitIndex = bookModeProgress[currentBookId]?.[nextMode] ?? targetCursor?.unitIndex ?? 0
+        const isUnitDifferent = targetUnitIndex !== get().currentUnitIndex
+
         // 循环次数与游标一样按页面存档：默写页的三连对不该跟着跑到学习页
         const loopCounts = withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
         const nextLoopCount = loopCounts[nextMode]
 
         set({
           mode: nextMode,
+          currentUnitIndex: targetUnitIndex,
           cursors,
+          bookModeProgress,
           loopCounts,
           loopCountSetting: nextLoopCount,
-          activeWordIndex: target.activeWordIndex,
-          isUnitFinished: target.isUnitFinished,
+          activeWordIndex: isUnitDifferent ? 0 : (targetCursor?.activeWordIndex ?? 0),
+          isUnitFinished: isUnitDifferent ? false : (targetCursor?.isUnitFinished ?? false),
           currentInput: '',
           hasTypo: false,
           isPeeking: false,
@@ -577,6 +712,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentWordRemainingLoops: nextLoopCount,
           ...DICTATION_STEP_RESET,
         })
+
+        if (isUnitDifferent || get().currentLoadedWords.length === 0) {
+          await get().loadCurrentUnitWords()
+        }
 
         const total = get().currentLoadedWords.length
         if (get().activeWordIndex > total - 1) {
@@ -1253,9 +1392,24 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ? (persisted.dictationCueMode ?? 'meaning')
           : 'meaning'
 
+        // 确保持久化的独立进度字典包含当前选中的词库
+        const currentBookId = persisted.currentBookId || currentState.currentBookId
+        const bookModeProgress = { ...(persisted.bookModeProgress || {}) }
+        if (!bookModeProgress[currentBookId]) {
+          const initialUnit = persisted.currentUnitIndex ?? currentState.currentUnitIndex ?? 0
+          bookModeProgress[currentBookId] = {
+            learn: initialUnit,
+            dictation: 0,
+            phonetic: 0,
+          }
+        } else if (typeof bookModeProgress[currentBookId].learn !== 'number') {
+          bookModeProgress[currentBookId].learn = persisted.currentUnitIndex ?? currentState.currentUnitIndex ?? 0
+        }
+
         return {
           ...currentState,
           ...persisted,
+          bookModeProgress,
           shortcuts,
           loopCounts,
           loopCountSetting: loopCount,
@@ -1265,7 +1419,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           // 模式由路由决定，不接受任何持久化值（含旧版本残留的 mode）
           mode: currentState.mode,
-          cursors: createFreshCursors(),
+          cursors: createFreshCursors(bookModeProgress[currentBookId]),
           ...DICTATION_STEP_RESET,
         }
       },
@@ -1273,6 +1427,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         skinId: state.skinId,
         currentBookId: state.currentBookId,
         currentUnitIndex: state.currentUnitIndex,
+        bookModeProgress: state.bookModeProgress,
         loopCounts: state.loopCounts,
         dictationCueMode: state.dictationCueMode,
         dictationCueModeMigratedToMeaning: true,

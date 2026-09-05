@@ -66,7 +66,7 @@ export function HeaderToolbar() {
           </div>
         ) : (
           <Link
-            href="/books"
+            href={`/books?from=${mode}`}
             className="flex items-center gap-2 px-3 xl:px-3.5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium transition-all text-xs xl:text-sm"
           >
             <span className="text-primary font-bold">{currentBook?.name || 'CET-4'}</span>

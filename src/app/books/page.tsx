@@ -1,21 +1,46 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { Suspense, useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { BookOpen, Upload, Search, X, CheckCircle2, Play, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { db } from '@/db'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
-import type { VocabularyBook } from '@/types'
+import type { VocabularyBook, PracticeMode } from '@/types'
 
-export default function BooksHubPage() {
+function BooksHubContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const fromParam = searchParams.get('from')
+
+  // 根据来源页面判断：做题目标模式、跳转路由、以及词库页要展示哪种模式的单元进度
+  // 规则：
+  // 1. 默认或从 learn 来：展示学习进度，点击单元去 /learn
+  // 2. 从 dictation 来：展示默写进度，点击单元去 /dictation
+  // 3. 从 phonetic 来：展示学习进度（依用户明确要求），点击单元去 /phonetics
+  let targetMode: PracticeMode = 'learn'
+  let targetRoute = '/learn'
+  let progressMode: PracticeMode = 'learn'
+  let progressTitle = '学习进度'
+
+  if (fromParam === 'dictation') {
+    targetMode = 'dictation'
+    targetRoute = '/dictation'
+    progressMode = 'dictation'
+    progressTitle = '默写进度'
+  } else if (fromParam === 'phonetic' || fromParam === 'phonetics') {
+    targetMode = 'phonetic'
+    targetRoute = '/phonetics'
+    progressMode = 'phonetic'
+    progressTitle = '音标默写进度'
+  }
+
   const {
     currentBook,
-    currentUnitIndex,
-    setBookId,
-    setUnitIndex,
+    currentBookId,
+    getBookModeUnit,
+    commitBookAndUnit,
     setImportModalOpen,
     deleteCustomBook,
   } = useWorkspaceStore()
@@ -23,9 +48,17 @@ export default function BooksHubPage() {
   const [allBooks, setAllBooks] = useState<VocabularyBook[]>(BUILTIN_BOOKS)
   const [activeTab, setActiveTab] = useState<'official' | 'custom'>('official')
   const [searchQuery, setSearchQuery] = useState('')
+  const [previewBookId, setPreviewBookId] = useState<string>(currentBookId || BUILTIN_BOOKS[0].id)
   const [unitPage, setUnitPage] = useState(0)
   const [bookToDelete, setBookToDelete] = useState<VocabularyBook | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+  // 当进入词库管理页或全局正在学习的词库就绪时，默认展示当前选中的词库
+  useEffect(() => {
+    if (currentBookId) {
+      setPreviewBookId(currentBookId)
+    }
+  }, [currentBookId])
 
   useEffect(() => {
     async function loadBooks() {
@@ -59,9 +92,15 @@ export default function BooksHubPage() {
     return matchesTab && matchesSearch
   })
 
+  // 当前正在浏览/查看的词库对象（优先使用 previewBookId）
+  const activeBook = allBooks.find((b) => b.id === previewBookId) || currentBook || BUILTIN_BOOKS[0]
+
+  // 该词库在当前对应模式（学习 vs 默写）下的单元进度
+  const activeModeUnit = getBookModeUnit(activeBook.id, progressMode)
+
   // 计算单元总数与分页
-  const unitSize = currentBook?.unitSize || 20
-  const totalUnits = Math.max(1, Math.ceil((currentBook?.totalWords || 2600) / unitSize))
+  const unitSize = activeBook?.unitSize || 20
+  const totalUnits = Math.max(1, Math.ceil((activeBook?.totalWords || 2600) / unitSize))
   const unitsPerPage = 24
   const totalUnitPages = Math.ceil(totalUnits / unitsPerPage)
   const currentUnits = Array.from(
@@ -69,8 +108,8 @@ export default function BooksHubPage() {
     (_, i) => unitPage * unitsPerPage + i
   )
 
-  // 学习进度百分比计算 (已完成单元比例)
-  const masteredUnits = Math.min(totalUnits, currentUnitIndex)
+  // 进度百分比计算 (已完成单元比例)
+  const masteredUnits = Math.min(totalUnits, activeModeUnit)
   const progressPercent = totalUnits > 0 ? Math.min(100, Math.max(0, Math.round((masteredUnits / totalUnits) * 100))) : 0
 
   // SVG 进度环参数 (r=38, 周长约 238.76)
@@ -78,23 +117,26 @@ export default function BooksHubPage() {
   const strokeCircumference = 2 * Math.PI * strokeRadius
   const strokeDashoffset = strokeCircumference - (strokeCircumference * progressPercent) / 100
 
-  // 当切换词书或进入时，自动翻到当前正在学的单元所在页
+  // 当切换浏览词书或初始加载时，自动翻到该词库在当前模式下正在学的单元所在页
   useEffect(() => {
-    if (currentUnitIndex >= 0 && totalUnits > 0) {
-      const targetPage = Math.floor(currentUnitIndex / unitsPerPage)
+    if (activeModeUnit >= 0 && totalUnits > 0) {
+      const targetPage = Math.floor(activeModeUnit / unitsPerPage)
       setUnitPage(targetPage)
     }
-  }, [currentBook?.id, currentUnitIndex, totalUnits])
+  }, [previewBookId, activeModeUnit, totalUnits])
 
+  // 只有真正点击了某个具体的单元卡片，才将所选词库与单元生效并进入做题
   const handleSelectUnit = async (idx: number) => {
-    await setUnitIndex(idx)
-    // 选完单元先去学习页，检验记忆再由用户自己切到默写页
-    router.push('/learn')
+    await commitBookAndUnit(activeBook.id, idx, targetMode)
+    router.push(targetRoute)
   }
 
-  const handleSelectBook = async (bookId: string) => {
-    await setBookId(bookId)
-    setUnitPage(0)
+  // 切换词库卡片：仅更新当前页面的预览词库，不修改正在做题的状态数据
+  const handleSelectPreviewBook = (bookId: string) => {
+    setPreviewBookId(bookId)
+    const modeUnit = getBookModeUnit(bookId, progressMode)
+    const targetPage = Math.floor(modeUnit / unitsPerPage)
+    setUnitPage(targetPage)
   }
 
   const handleConfirmDelete = async () => {
@@ -102,12 +144,13 @@ export default function BooksHubPage() {
     setIsDeleting(true)
     try {
       const targetId = bookToDelete.id
-      const isDeletingCurrent = currentBook?.id === targetId
+      const isDeletingPreview = activeBook?.id === targetId
       const success = await deleteCustomBook(targetId)
       if (success) {
         setAllBooks((prev) => prev.filter((b) => b.id !== targetId))
         setBookToDelete(null)
-        if (isDeletingCurrent) {
+        if (isDeletingPreview) {
+          setPreviewBookId(BUILTIN_BOOKS[0].id)
           setUnitPage(0)
         }
       }
@@ -182,20 +225,13 @@ export default function BooksHubPage() {
       {/* 2. 当前选中词库看板大卡片 */}
       <div className="glass-card p-6 rounded-2xl border border-white/10 flex items-center justify-between">
         <div className="space-y-2.5">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/15 text-primary border border-primary/30 font-bold uppercase">
-              当前在学词库
-            </span>
-            <span className="text-xs text-muted-foreground">{currentBook?.category}</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{currentBook?.name}</h2>
-          <p className="text-xs text-[#9CA3AF] max-w-xl leading-relaxed">{currentBook?.description}</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{activeBook?.name}</h2>
+          <p className="text-xs text-[#9CA3AF] max-w-xl leading-relaxed">{activeBook?.description}</p>
 
           <div className="flex items-center gap-6 pt-1 font-mono text-xs">
             <div>
               <span className="text-muted-foreground">总词量：</span>
-              <span className="text-primary font-bold">{currentBook?.totalWords} 词</span>
+              <span className="text-primary font-bold">{activeBook?.totalWords} 词</span>
             </div>
             <div>
               <span className="text-muted-foreground">总单元：</span>
@@ -240,7 +276,7 @@ export default function BooksHubPage() {
               <span className="text-xl sm:text-2xl font-extrabold font-mono text-primary leading-none">
                 {progressPercent}%
               </span>
-              <p className="text-[10px] text-muted-foreground uppercase mt-1">学习进度</p>
+              <p className="text-[10px] text-muted-foreground uppercase mt-1">{progressTitle}</p>
             </div>
           </div>
         </div>
@@ -279,8 +315,8 @@ export default function BooksHubPage() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
           {currentUnits.map((idx) => {
-            const isMastered = idx < currentUnitIndex
-            const isCurrent = idx === currentUnitIndex
+            const isMastered = idx < activeModeUnit
+            const isCurrent = idx === activeModeUnit
 
             return (
               <div
@@ -301,7 +337,7 @@ export default function BooksHubPage() {
                   </span>
                   {isCurrent ? (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none">
-                      在学中
+                      进行中
                     </span>
                   ) : isMastered ? (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary font-bold border border-primary/25 flex items-center gap-1 leading-none">
@@ -324,7 +360,7 @@ export default function BooksHubPage() {
                   {isCurrent ? (
                     <span className="text-[11px] font-bold text-accent flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
                       <Play className="size-2.5 fill-current" />
-                      继续
+                      进入
                     </span>
                   ) : isMastered ? (
                     <span className="text-[10px] font-mono text-primary/80 font-semibold">
@@ -342,7 +378,7 @@ export default function BooksHubPage() {
         </div>
       </div>
 
-      {/* 4. 可选其他词书列表 */}
+      {/* 4. 可选其他词书列表 (点击仅切换当前预览，不立刻改动全局做题数据) */}
       <div className="space-y-3 pt-3 border-t border-white/10">
         <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider font-mono">
           {activeTab === 'official' ? '切换到其他词库 (Quick Switch)' : '我的自定义词库列表'}
@@ -379,10 +415,10 @@ export default function BooksHubPage() {
             {filteredBooks.map((b) => (
               <div
                 key={b.id}
-                onClick={() => handleSelectBook(b.id)}
+                onClick={() => handleSelectPreviewBook(b.id)}
                 className={`group relative p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
-                  currentBook?.id === b.id
-                    ? 'border-primary bg-primary/10'
+                  activeBook?.id === b.id
+                    ? 'border-primary bg-primary/10 ring-1 ring-primary/40'
                     : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                 }`}
               >
@@ -471,5 +507,13 @@ export default function BooksHubPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function BooksHubPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-muted-foreground font-mono text-sm">加载词库中...</div>}>
+      <BooksHubContent />
+    </Suspense>
   )
 }

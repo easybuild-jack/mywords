@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, Volume2, Mic, Sliders, Database, Keyboard, RotateCcw, Palette, Check } from 'lucide-react'
+import { X, Volume2, Mic, Sliders, Keyboard, RotateCcw, Palette, Check } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { MECHANICAL_SWITCHES, audioEngine } from '@/core/audioEngine'
 import { SHORTCUT_DEFINITIONS, eventToShortcutString, formatShortcutDisplay } from '@/lib/shortcuts'
 import { SKINS } from '@/lib/skins'
 import type { ShortcutConfig } from '@/types'
 
-type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'backup'
+type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn'
 
 export function SettingsModal() {
   const {
@@ -67,9 +67,9 @@ export function SettingsModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
-      <div className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 p-7 space-y-6 shadow-2xl text-white">
+      <div className="w-full max-w-4xl h-[600px] xl:h-[660px] 2xl:h-[720px] max-h-[88vh] min-h-[520px] rounded-3xl bg-sidebar border border-white/10 p-6 sm:p-7 shadow-2xl text-white flex flex-col overflow-hidden">
         {/* 顶部标题与关闭 */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
           <div className="flex items-center gap-3">
             <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
               <Sliders className="size-5" />
@@ -91,10 +91,10 @@ export function SettingsModal() {
           </button>
         </div>
 
-        {/* 主体两栏布局 */}
-        <div className="grid grid-cols-12 gap-6 min-h-[460px]">
+        {/* 主体两栏布局：高度自适应且固定填满中段空间，内容切换高度恒定 */}
+        <div className="grid grid-cols-12 gap-6 flex-1 min-h-0 pt-5 pb-2 overflow-hidden">
           {/* 左侧竖向导航 */}
-          <div className="col-span-4 space-y-2 border-r border-white/10 pr-5">
+          <div className="col-span-4 space-y-2 border-r border-white/10 pr-5 h-full overflow-y-auto custom-scrollbar">
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('audio') }}
               className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
@@ -144,20 +144,10 @@ export function SettingsModal() {
               <span className="text-lg shrink-0">📚</span>
               <span>学习参数</span>
             </button>
-
-            <button
-              onClick={() => { setRecordingAction(null); setActiveTab('backup') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'backup' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
-              }`}
-            >
-              <Database className="size-4.5 shrink-0" />
-              <span>数据导出</span>
-            </button>
           </div>
 
           {/* 右侧内容区域 */}
-          <div className="col-span-8 space-y-6 max-h-[500px] overflow-y-auto pr-3">
+          <div className="col-span-8 h-full overflow-y-auto custom-scrollbar pr-3">
             {activeTab === 'audio' && (
               <div className="space-y-5">
                 <div className="flex items-center justify-between">
@@ -496,31 +486,17 @@ export function SettingsModal() {
                 </div>
               </div>
             )}
-
-            {activeTab === 'backup' && (
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">数据导出与多端迁移</h3>
-                <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    所有做题进度与错词本数据均离线安全保存在你的本地 IndexedDB 中。
-                  </p>
-                  <button className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white text-xs font-semibold transition-all cursor-pointer">
-                    导出全部数据 (JSON 备份)
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
         {/* 底部完成按钮 */}
-        <div className="flex justify-end pt-4 border-t border-white/10">
+        <div className="flex justify-end pt-4 border-t border-white/10 shrink-0">
           <button
             onClick={() => {
               setRecordingAction(null)
               setSettingsModalOpen(false)
             }}
-            className="px-7 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all cursor-pointer"
+            className="px-7 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold transition-all cursor-pointer hover:bg-primary-hover active:scale-95"
           >
             完成并保存
           </button>
