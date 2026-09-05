@@ -357,6 +357,29 @@ export async function saveCustomVocabularyBook(name: string, description: string
 }
 
 /**
+ * 删除用户自定义词库及关联的章节进度数据
+ * 内置/官方词库受到保护，无法被删除
+ */
+export async function deleteCustomVocabularyBook(bookId: string): Promise<boolean> {
+  try {
+    const book = await db.books.get(bookId)
+    // 保护：仅允许删除明确标记为自定义的词库
+    if (!book || !book.isCustom) return false
+
+    // 1. 删除词库主体
+    await db.books.delete(bookId)
+
+    // 2. 级联清理该词库的所有单元学习进度记录
+    await db.unitProgress.where('bookId').equals(bookId).delete()
+
+    return true
+  } catch (err) {
+    console.error('Failed to delete custom vocabulary book:', err)
+    return false
+  }
+}
+
+/**
  * 保存单个单词的用户自定义切分与构词覆盖
  * 1. 写入 wordOverrides 表
  * 2. 同步更新 wordRecords 中已有的离线快照

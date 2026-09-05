@@ -4,7 +4,7 @@ import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, Shortcut
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { BUILTIN_ROOTS } from '@/resources/roots'
-import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride } from '@/db'
+import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
@@ -129,6 +129,7 @@ interface WorkspaceState {
 
   // 方法定义
   setBookId: (bookId: string) => Promise<void>
+  deleteCustomBook: (bookId: string) => Promise<boolean>
   setUnitIndex: (unitIndex: number) => Promise<void>
   loadCurrentUnitWords: () => Promise<void>
   startErrorPractice: (words: WordItem[], startIndex?: number) => void
@@ -497,6 +498,18 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (nextWord) {
           audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
         }
+      },
+
+      deleteCustomBook: async (bookId: string) => {
+        const { currentBookId, setBookId } = get()
+        const success = await deleteCustomVocabularyBook(bookId)
+        if (!success) return false
+
+        // 若删除的恰好是当前正在学习的词库，平滑回退切到官方第一本默认词库
+        if (currentBookId === bookId) {
+          await setBookId(BUILTIN_BOOKS[0].id)
+        }
+        return true
       },
 
       setUnitIndex: async (unitIndex: number) => {

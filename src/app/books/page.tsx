@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { BookOpen, Upload, Search, CheckCircle2, Play, ChevronLeft, ChevronRight } from 'lucide-react'
+import { BookOpen, Upload, Search, X, CheckCircle2, Play, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { db } from '@/db'
@@ -17,12 +17,15 @@ export default function BooksHubPage() {
     setBookId,
     setUnitIndex,
     setImportModalOpen,
+    deleteCustomBook,
   } = useWorkspaceStore()
 
   const [allBooks, setAllBooks] = useState<VocabularyBook[]>(BUILTIN_BOOKS)
   const [activeTab, setActiveTab] = useState<'official' | 'custom'>('official')
   const [searchQuery, setSearchQuery] = useState('')
   const [unitPage, setUnitPage] = useState(0)
+  const [bookToDelete, setBookToDelete] = useState<VocabularyBook | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     async function loadBooks() {
@@ -94,10 +97,31 @@ export default function BooksHubPage() {
     setUnitPage(0)
   }
 
+  const handleConfirmDelete = async () => {
+    if (!bookToDelete) return
+    setIsDeleting(true)
+    try {
+      const targetId = bookToDelete.id
+      const isDeletingCurrent = currentBook?.id === targetId
+      const success = await deleteCustomBook(targetId)
+      if (success) {
+        setAllBooks((prev) => prev.filter((b) => b.id !== targetId))
+        setBookToDelete(null)
+        if (isDeletingCurrent) {
+          setUnitPage(0)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to delete book:', err)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
     <div className="p-6 md:p-8 max-w-5xl mx-auto w-full space-y-6 text-white">
       {/* 1. 顶部操作栏 */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Tab 切换 */}
         <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/10 shrink-0">
           <button
@@ -124,15 +148,25 @@ export default function BooksHubPage() {
 
         {/* 搜索与导入按钮 */}
         <div className="flex items-center gap-2.5 shrink-0">
-          <div className="relative">
-            <Search className="size-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="relative flex items-center">
+            <Search className="size-3.5 text-muted-foreground absolute left-3 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜索词库..."
-              className="pl-8 pr-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 w-36 sm:w-48"
+              className="pl-8 pr-8 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 w-44 sm:w-64 md:w-80 transition-all"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 p-0.5 rounded-full text-muted-foreground hover:text-white hover:bg-white/10 transition-colors"
+                title="清空搜索"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
           </div>
 
           <button
@@ -314,29 +348,131 @@ export default function BooksHubPage() {
       {/* 4. 可选其他词书列表 */}
       <div className="space-y-3 pt-3 border-t border-white/10">
         <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider font-mono">
-          切换到其他词库 (Quick Switch)
+          {activeTab === 'official' ? '切换到其他词库 (Quick Switch)' : '我的自定义词库列表'}
         </h3>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {filteredBooks.map((b) => (
-            <div
-              key={b.id}
-              onClick={() => handleSelectBook(b.id)}
-              className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
-                currentBook?.id === b.id
-                  ? 'border-primary bg-primary/10'
-                  : 'border-white/10 bg-white/[0.03] hover:border-white/20'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-xs sm:text-sm text-white">{b.name}</span>
-                <span className="text-xs font-mono text-primary">{b.totalWords} 词</span>
-              </div>
-              <p className="text-[11px] text-muted-foreground line-clamp-1 mt-1">{b.description}</p>
+        {filteredBooks.length === 0 ? (
+          <div className="py-12 px-4 rounded-2xl border border-dashed border-white/10 flex flex-col items-center justify-center text-center space-y-3 bg-white/[0.01]">
+            <div className="size-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-muted-foreground">
+              <BookOpen className="size-6 opacity-40" />
             </div>
-          ))}
-        </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-white">
+                {searchQuery ? '未找到匹配的词库' : '暂无自定义词库'}
+              </p>
+              <p className="text-xs text-muted-foreground max-w-sm">
+                {searchQuery
+                  ? '请尝试其他关键词搜索，或点击右上角导入新单词创建词库。'
+                  : '您可以导入自定义单词文本或 CSV 文件，快速建立专属词库。'}
+              </p>
+            </div>
+            {!searchQuery && activeTab === 'custom' && (
+              <button
+                type="button"
+                onClick={() => setImportModalOpen(true)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all mt-1 cursor-pointer"
+              >
+                <Upload className="size-3.5" />
+                <span>+ 立即导入单词</span>
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {filteredBooks.map((b) => (
+              <div
+                key={b.id}
+                onClick={() => handleSelectBook(b.id)}
+                className={`group relative p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
+                  currentBook?.id === b.id
+                    ? 'border-primary bg-primary/10'
+                    : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-bold text-xs sm:text-sm text-white line-clamp-1">{b.name}</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {b.isCustom && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setBookToDelete(b)
+                          }}
+                          className="flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30 hover:bg-rose-500/25 hover:text-rose-300 transition-all cursor-pointer"
+                          title="删除该词库"
+                        >
+                          <Trash2 className="size-3" />
+                          <span>删除</span>
+                        </button>
+                      )}
+                      <span className="text-xs font-mono text-primary">{b.totalWords} 词</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{b.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* 5. 删除二次确认弹窗 */}
+      {bookToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-2xl bg-[#12141a] border border-white/10 shadow-2xl p-6 space-y-5 text-left animate-in zoom-in-95 duration-200">
+            <div className="flex items-start gap-3.5">
+              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0 mt-0.5">
+                <AlertTriangle className="size-5" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-white">确认删除自定义词库？</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  您即将删除词库 <span className="font-bold text-white">「{bookToDelete.name}」</span>。
+                </p>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-rose-500/[0.06] border border-rose-500/20 text-xs text-rose-300/90 leading-relaxed space-y-1">
+              <p>• 该词库包含的 <strong className="text-rose-300 font-mono">{bookToDelete.totalWords}</strong> 个单词条目将被永久清除。</p>
+              <p>• 对应章节的学习进度数据将被一并删除。</p>
+              {currentBook?.id === bookToDelete.id && (
+                <p className="text-accent">• 当前正在学习该词库，删除后将自动为您切回默认官方词库。</p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setBookToDelete(null)}
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-xl border border-white/10 text-xs font-semibold text-[#9CA3AF] hover:text-white hover:bg-white/5 transition-all cursor-pointer disabled:opacity-50"
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-[0_0_16px_rgba(225,29,72,0.35)] transition-all cursor-pointer disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="size-3.5 animate-spin" />
+                    <span>正在删除...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="size-3.5" />
+                    <span>确认删除</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
