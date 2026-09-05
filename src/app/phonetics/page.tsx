@@ -9,13 +9,11 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 export default function PhoneticsPage() {
   const enterMode = useWorkspaceStore((s) => s.enterMode)
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
-  const syncStarredWordIds = useWorkspaceStore((s) => s.syncStarredWordIds)
 
   React.useEffect(() => {
-    syncStarredWordIds()
     enterMode('phonetic')
       .then(() => loadCurrentUnitWords())
-  }, [enterMode, loadCurrentUnitWords, syncStarredWordIds])
+  }, [enterMode, loadCurrentUnitWords])
 
   return (
     <div className="flex-1 min-h-0 flex flex-col justify-between h-full relative">

@@ -52,15 +52,22 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
 
         <div className="flex items-center gap-4 xl:gap-5 font-mono text-xs xl:text-sm flex-wrap justify-center">
           {showPeekHint && (
-            <span className="flex items-center gap-1.5 xl:gap-2">
-              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+            <button
+              type="button"
+              onPointerDown={() => useWorkspaceStore.getState().peekHint(true)}
+              onPointerUp={() => useWorkspaceStore.getState().peekHint(false)}
+              onPointerLeave={() => useWorkspaceStore.getState().peekHint(false)}
+              className="flex items-center gap-1.5 xl:gap-2 cursor-pointer select-none group focus:outline-none"
+              title="按住鼠标或按 Tab 键偷看"
+            >
+              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] group-hover:bg-accent/20 group-hover:text-accent text-white border border-white/10 font-bold transition-all">
                 {formatShortcutDisplay(shortcuts.peekHint)}
               </kbd>
-              <span>偷看提示</span>
-            </span>
+              <span className="group-hover:text-accent transition-colors">偷看提示</span>
+            </button>
           )}
 
-          {!isErrorPracticeActive && (
+          {mode === 'learn' && !isErrorPracticeActive && (
             <button
               type="button"
               onClick={starCurrentWord}

@@ -1,13 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Delete, RotateCcw, Check, Star } from 'lucide-react'
+import { Delete, RotateCcw, Check } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { InlineIpaKeyboard } from '@/components/typing/InlineIpaKeyboard'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { formatShortcutDisplay } from '@/lib/shortcuts'
 
 interface PhoneticCardProps {
   word: WordItem
@@ -33,48 +32,15 @@ export function PhoneticCard({
     backspacePhonetic,
     clearPhonetic,
     submitPhoneticDictation,
-    isErrorPracticeActive,
-    starredWordIds,
-    starCurrentWord,
-    shortcuts,
   } = useWorkspaceStore()
 
   const meaningText = formatMeaningText(word)
-  const isStarred = Boolean(starredWordIds?.includes(word.id))
-  const starShortcutText = formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')
-
-  const starButton = !isErrorPracticeActive ? (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        starCurrentWord()
-      }}
-      className={`h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center gap-2 text-xs xl:text-sm font-medium select-none active:scale-95 ${
-        isStarred
-          ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.25)] hover:bg-amber-400/30 hover:border-amber-400/80'
-          : 'border-white/10 bg-white/5 text-gray-300 hover:text-amber-300 hover:border-amber-400/40 hover:bg-amber-400/10'
-      }`}
-      title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
-      aria-label={isStarred ? '移出生词本' : '加入生词本'}
-    >
-      <Star
-        className={`size-4 xl:size-4.5 transition-transform duration-200 ${
-          isStarred
-            ? 'fill-amber-400 text-amber-400 scale-105 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]'
-            : 'text-gray-400 group-hover:text-amber-300'
-        }`}
-      />
-      <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
-    </button>
-  ) : null
 
   return (
     <WordCardShell
       word={word}
       phoneticPreference={phoneticPreference}
       remainingLoops={remainingLoops}
-      headerActions={starButton}
     >
       <div className="flex flex-col h-full justify-between gap-3 sm:gap-4 py-1">
         {/* 顶部线索区：英文单词 + 发音按钮 + 完整中文译文 */}
@@ -106,17 +72,21 @@ export function PhoneticCard({
             }`}
           >
             {/* 默写音标内容 */}
-            <div className="flex-1 min-w-0 flex items-center gap-2">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider shrink-0 font-sans">
+            <div className="flex-1 min-w-0 flex items-center gap-2.5 h-full">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider shrink-0 font-sans select-none">
                 音标
               </span>
-              <div className="font-mono text-xl sm:text-2xl xl:text-3xl font-bold tracking-wider truncate">
+              <div className="flex-1 min-w-0 flex items-center">
                 {dictationPhoneticInput ? (
-                  <span className={isPhoneticPassed ? 'text-emerald-300' : 'text-primary'}>
+                  <span
+                    className={`font-mono text-xl sm:text-2xl xl:text-3xl font-bold tracking-wider truncate leading-tight ${
+                      isPhoneticPassed ? 'text-emerald-300' : 'text-primary'
+                    }`}
+                  >
                     /{dictationPhoneticInput}/
                   </span>
                 ) : (
-                  <span className="text-xs sm:text-sm text-muted-foreground/60 font-sans font-normal">
+                  <span className="text-xs sm:text-sm text-muted-foreground/60 font-sans font-normal truncate select-none">
                     请点选下方键盘输入音标，按 Enter 校验...
                   </span>
                 )}

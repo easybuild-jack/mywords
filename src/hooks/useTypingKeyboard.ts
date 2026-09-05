@@ -28,6 +28,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
   const toggleCurrentWordSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
   const isErrorPracticeActive = useWorkspaceStore((s) => s.isErrorPracticeActive)
+  const mode = useWorkspaceStore((s) => s.mode)
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -62,7 +63,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
         return
       }
 
-      if (!isErrorPracticeActive && isShortcutMatch(e, shortcuts?.toggleStar || DEFAULT_SHORTCUTS.toggleStar)) {
+      if (mode === 'learn' && !isErrorPracticeActive && isShortcutMatch(e, shortcuts?.toggleStar || DEFAULT_SHORTCUTS.toggleStar)) {
         e.preventDefault()
         starCurrentWord()
         return
@@ -109,6 +110,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
       nextWord,
       restartUnit,
       toggleCurrentWordSplit,
+      mode,
       starCurrentWord,
       handleBackspace,
       handleCharacterInput,

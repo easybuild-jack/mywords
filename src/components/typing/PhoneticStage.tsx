@@ -21,8 +21,6 @@ export function PhoneticStage() {
   const nextWord = useWorkspaceStore((s) => s.nextWord)
   const prevWord = useWorkspaceStore((s) => s.prevWord)
   const restartUnit = useWorkspaceStore((s) => s.restartUnit)
-  const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
-  const isErrorPracticeActive = useWorkspaceStore((s) => s.isErrorPracticeActive)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -57,12 +55,6 @@ export function PhoneticStage() {
         return
       }
 
-      if (!isErrorPracticeActive && isShortcutMatch(e, shortcuts?.toggleStar || DEFAULT_SHORTCUTS.toggleStar)) {
-        e.preventDefault()
-        starCurrentWord()
-        return
-      }
-
       if (isShortcutMatch(e, shortcuts.prevWord)) {
         e.preventDefault()
         prevWord()
@@ -87,14 +79,12 @@ export function PhoneticStage() {
   }, [
     isUnitFinished,
     shortcuts,
-    isErrorPracticeActive,
     submitPhoneticDictation,
     backspacePhonetic,
     replayAudio,
     prevWord,
     nextWord,
     restartUnit,
-    starCurrentWord,
   ])
 
   return (
