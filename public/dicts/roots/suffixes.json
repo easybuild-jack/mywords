@@ -69,6 +69,46 @@
           "en": "Her confident speech left a deep impression on everyone.",
           "cn": "她自信的演讲给所有人留下了深刻印象。"
         }
+      },
+      {
+        "name": "education",
+        "phonetic": "/ˌedʒuˈkeɪʃn/",
+        "breakdown": "educate (教育) + -ion (名词后缀)",
+        "meaning": "n. 教育；培养",
+        "example": {
+          "en": "Education is the key to success.",
+          "cn": "教育是成功的关键。"
+        }
+      },
+      {
+        "name": "information",
+        "phonetic": "/ˌɪnfərˈmeɪʃn/",
+        "breakdown": "inform (告知) + -ation (名词后缀)",
+        "meaning": "n. 信息；资料",
+        "example": {
+          "en": "We need more information before deciding.",
+          "cn": "我们需要更多信息才能决定。"
+        }
+      },
+      {
+        "name": "discussion",
+        "phonetic": "/dɪˈskʌʃn/",
+        "breakdown": "discuss (讨论) + -ion (名词后缀)",
+        "meaning": "n. 讨论；议论",
+        "example": {
+          "en": "We had a long discussion about the plan.",
+          "cn": "我们就这个计划进行了长时间讨论。"
+        }
+      },
+      {
+        "name": "expression",
+        "phonetic": "/ɪkˈspreʃn/",
+        "breakdown": "express (表达) + -ion (名词后缀)",
+        "meaning": "n. 表达；表情；措辞",
+        "example": {
+          "en": "Her facial expression showed surprise.",
+          "cn": "她的面部表情显示出惊讶。"
+        }
       }
     ]
   },
@@ -141,6 +181,46 @@
         "example": {
           "en": "The team achieved an incredible victory against all odds.",
           "cn": "这支队伍顶住一切困难赢得了不可思议的胜利。"
+        }
+      },
+      {
+        "name": "comfortable",
+        "phonetic": "/ˈkʌmftəbl/",
+        "breakdown": "comfort (舒适) + -able (可...的)",
+        "meaning": "adj. 舒适的；舒服的",
+        "example": {
+          "en": "This chair is very comfortable.",
+          "cn": "这把椅子非常舒适。"
+        }
+      },
+      {
+        "name": "reasonable",
+        "phonetic": "/ˈriːznəbl/",
+        "breakdown": "reason (理由) + -able (可...的)",
+        "meaning": "adj. 合理的；公道的",
+        "example": {
+          "en": "The price is quite reasonable.",
+          "cn": "价格相当合理。"
+        }
+      },
+      {
+        "name": "available",
+        "phonetic": "/əˈveɪləbl/",
+        "breakdown": "avail (有用) + -able (可...的)",
+        "meaning": "adj. 可获得的；有空的",
+        "example": {
+          "en": "Is the doctor available today?",
+          "cn": "医生今天有空吗？"
+        }
+      },
+      {
+        "name": "possible",
+        "phonetic": "/ˈpɑːsəbl/",
+        "breakdown": "poss (能够) + -ible (可...的)",
+        "meaning": "adj. 可能的；可能存在的",
+        "example": {
+          "en": "Anything is possible if you try.",
+          "cn": "只要努力，一切皆有可能。"
         }
       }
     ]
@@ -215,6 +295,46 @@
           "en": "The municipal government introduced new environmental policies.",
           "cn": "市政府出台了全新的环保政策。"
         }
+      },
+      {
+        "name": "environment",
+        "phonetic": "/ɪnˈvaɪrənmənt/",
+        "breakdown": "environ (环绕) + -ment (名词后缀)",
+        "meaning": "n. 环境；周围状况",
+        "example": {
+          "en": "We must protect the environment.",
+          "cn": "我们必须保护环境。"
+        }
+      },
+      {
+        "name": "equipment",
+        "phonetic": "/ɪˈkwɪpmənt/",
+        "breakdown": "equip (装备) + -ment (名词后缀)",
+        "meaning": "n. 设备；装备",
+        "example": {
+          "en": "The lab has modern equipment.",
+          "cn": "实验室有现代化设备。"
+        }
+      },
+      {
+        "name": "treatment",
+        "phonetic": "/ˈtriːtmənt/",
+        "breakdown": "treat (治疗) + -ment (名词后缀)",
+        "meaning": "n. 治疗；对待；处理",
+        "example": {
+          "en": "The treatment was very effective.",
+          "cn": "这种治疗非常有效。"
+        }
+      },
+      {
+        "name": "statement",
+        "phonetic": "/ˈsteɪtmənt/",
+        "breakdown": "state (陈述) + -ment (名词后缀)",
+        "meaning": "n. 声明；陈述；报表",
+        "example": {
+          "en": "He made an official statement.",
+          "cn": "他发表了正式声明。"
+        }
       }
     ]
   },
@@ -287,6 +407,46 @@
         "example": {
           "en": "Workers wear protective helmets inside the construction site.",
           "cn": "工人们在施工现场内均佩戴安全防护头盔。"
+        }
+      },
+      {
+        "name": "expensive",
+        "phonetic": "/ɪkˈspensɪv/",
+        "breakdown": "expense (花费) + -ive (有...性质的)",
+        "meaning": "adj. 昂贵的；花钱多的",
+        "example": {
+          "en": "This car is too expensive for me.",
+          "cn": "这辆车对我来说太贵了。"
+        }
+      },
+      {
+        "name": "native",
+        "phonetic": "/ˈneɪtɪv/",
+        "breakdown": "nat (出生) + -ive (有...性质的)",
+        "meaning": "adj. 本地的；天生的 n. 本地人",
+        "example": {
+          "en": "She is a native of Beijing.",
+          "cn": "她是北京本地人。"
+        }
+      },
+      {
+        "name": "relative",
+        "phonetic": "/ˈrelətɪv/",
+        "breakdown": "relate (相关) + -ive (有...性质的)",
+        "meaning": "adj. 相对的 n. 亲戚",
+        "example": {
+          "en": "We visited our relatives last weekend.",
+          "cn": "上周末我们拜访了亲戚。"
+        }
+      },
+      {
+        "name": "positive",
+        "phonetic": "/ˈpɑːzətɪv/",
+        "breakdown": "posit (放置) + -ive (有...性质的)",
+        "meaning": "adj. 积极的；肯定的；阳性的",
+        "example": {
+          "en": "Stay positive and keep trying.",
+          "cn": "保持积极，继续努力。"
         }
       }
     ]
@@ -361,6 +521,46 @@
           "en": "The sunset bathed the quiet valley in a beautiful golden glow.",
           "cn": "落日将宁静的山谷沐浴在美丽的金色光晕中。"
         }
+      },
+      {
+        "name": "wonderful",
+        "phonetic": "/ˈwʌndərfl/",
+        "breakdown": "wonder (奇迹) + -ful (充满...的)",
+        "meaning": "adj. 极好的；精彩的",
+        "example": {
+          "en": "We had a wonderful time at the party.",
+          "cn": "我们在聚会上玩得很开心。"
+        }
+      },
+      {
+        "name": "helpful",
+        "phonetic": "/ˈhelpfl/",
+        "breakdown": "help (帮助) + -ful (充满...的)",
+        "meaning": "adj. 有帮助的；有益的",
+        "example": {
+          "en": "Your advice was very helpful.",
+          "cn": "你的建议非常有帮助。"
+        }
+      },
+      {
+        "name": "useful",
+        "phonetic": "/ˈjuːsfl/",
+        "breakdown": "use (用处) + -ful (充满...的)",
+        "meaning": "adj. 有用的；有益的",
+        "example": {
+          "en": "This is a very useful tool.",
+          "cn": "这是一个非常有用的工具。"
+        }
+      },
+      {
+        "name": "painful",
+        "phonetic": "/ˈpeɪnfl/",
+        "breakdown": "pain (痛苦) + -ful (充满...的)",
+        "meaning": "adj. 痛苦的；疼痛的",
+        "example": {
+          "en": "The injection was slightly painful.",
+          "cn": "注射有点疼。"
+        }
       }
     ]
   },
@@ -433,6 +633,46 @@
         "example": {
           "en": "Explorers demonstrated a fearless passion for unknown lands.",
           "cn": "探险家们展现出了对未知领域的无畏热忱。"
+        }
+      },
+      {
+        "name": "homeless",
+        "phonetic": "/ˈhoʊmləs/",
+        "breakdown": "home (家) + -less (无...的)",
+        "meaning": "adj. 无家可归的",
+        "example": {
+          "en": "Many homeless people need help.",
+          "cn": "许多无家可归的人需要帮助。"
+        }
+      },
+      {
+        "name": "useless",
+        "phonetic": "/ˈjuːsləs/",
+        "breakdown": "use (用处) + -less (无...的)",
+        "meaning": "adj. 无用的；无效的",
+        "example": {
+          "en": "This old phone is useless now.",
+          "cn": "这部旧手机现在没用了。"
+        }
+      },
+      {
+        "name": "endless",
+        "phonetic": "/ˈendləs/",
+        "breakdown": "end (尽头) + -less (无...的)",
+        "meaning": "adj. 无止境的；无穷的",
+        "example": {
+          "en": "The possibilities are endless.",
+          "cn": "可能性是无穷的。"
+        }
+      },
+      {
+        "name": "helpless",
+        "phonetic": "/ˈhelpləs/",
+        "breakdown": "help (帮助) + -less (无...的)",
+        "meaning": "adj. 无助的；无能为力的",
+        "example": {
+          "en": "The baby looked so helpless.",
+          "cn": "婴儿看起来如此无助。"
         }
       }
     ]
@@ -507,6 +747,46 @@
           "en": "Passengers queued in an orderly manner at the boarding gate.",
           "cn": "乘客们在登机口有秩序地排队候机。"
         }
+      },
+      {
+        "name": "usually",
+        "phonetic": "/ˈjuːʒuəli/",
+        "breakdown": "usual (通常的) + -ly (以...方式)",
+        "meaning": "adv. 通常；平常",
+        "example": {
+          "en": "I usually get up at 7 AM.",
+          "cn": "我通常早上7点起床。"
+        }
+      },
+      {
+        "name": "really",
+        "phonetic": "/ˈriːəli/",
+        "breakdown": "real (真实的) + -ly (以...方式)",
+        "meaning": "adv. 真正地；非常",
+        "example": {
+          "en": "I really appreciate your help.",
+          "cn": "我真的很感谢你的帮助。"
+        }
+      },
+      {
+        "name": "probably",
+        "phonetic": "/ˈprɑːbəbli/",
+        "breakdown": "probable (可能的) + -ly (以...方式)",
+        "meaning": "adv. 大概；很可能",
+        "example": {
+          "en": "It will probably rain tomorrow.",
+          "cn": "明天很可能会下雨。"
+        }
+      },
+      {
+        "name": "suddenly",
+        "phonetic": "/ˈsʌdənli/",
+        "breakdown": "sudden (突然的) + -ly (以...方式)",
+        "meaning": "adv. 突然地；忽然",
+        "example": {
+          "en": "The lights suddenly went out.",
+          "cn": "灯突然灭了。"
+        }
       }
     ]
   },
@@ -579,6 +859,46 @@
         "example": {
           "en": "Facial recognition cameras recognize individuals in milliseconds.",
           "cn": "人脸识别摄像机能在数毫秒内认出目标人物。"
+        }
+      },
+      {
+        "name": "emphasize",
+        "phonetic": "/ˈemfəsaɪz/",
+        "breakdown": "emphasis (强调) + -ize (使...)",
+        "meaning": "v. 强调；着重",
+        "example": {
+          "en": "He emphasized the importance of teamwork.",
+          "cn": "他强调了团队合作的重要性。"
+        }
+      },
+      {
+        "name": "summarize",
+        "phonetic": "/ˈsʌməraɪz/",
+        "breakdown": "summary (摘要) + -ize (使...)",
+        "meaning": "v. 总结；概括",
+        "example": {
+          "en": "Can you summarize the main points?",
+          "cn": "你能总结一下要点吗？"
+        }
+      },
+      {
+        "name": "minimize",
+        "phonetic": "/ˈmɪnɪmaɪz/",
+        "breakdown": "minimum (最小) + -ize (使...)",
+        "meaning": "v. 使最小化；尽量减少",
+        "example": {
+          "en": "We need to minimize costs.",
+          "cn": "我们需要尽量减少成本。"
+        }
+      },
+      {
+        "name": "maximize",
+        "phonetic": "/ˈmæksɪmaɪz/",
+        "breakdown": "maximum (最大) + -ize (使...)",
+        "meaning": "v. 使最大化；充分利用",
+        "example": {
+          "en": "We want to maximize efficiency.",
+          "cn": "我们想最大化效率。"
         }
       }
     ]
@@ -653,6 +973,46 @@
           "en": "Curiosity drives scientists to explore deep ocean mysteries.",
           "cn": "好奇心驱使科学家们探索深海未解之谜。"
         }
+      },
+      {
+        "name": "possibility",
+        "phonetic": "/ˌpɑːsəˈbɪləti/",
+        "breakdown": "possible (可能的) + -ity (性质)",
+        "meaning": "n. 可能性；可能的事",
+        "example": {
+          "en": "There is a possibility of rain.",
+          "cn": "有可能下雨。"
+        }
+      },
+      {
+        "name": "responsibility",
+        "phonetic": "/rɪˌspɑːnsəˈbɪləti/",
+        "breakdown": "responsible (负责的) + -ity (性质)",
+        "meaning": "n. 责任；职责",
+        "example": {
+          "en": "It is your responsibility to finish this.",
+          "cn": "完成这件事是你的责任。"
+        }
+      },
+      {
+        "name": "creativity",
+        "phonetic": "/ˌkriːeɪˈtɪvəti/",
+        "breakdown": "creative (创造性的) + -ity (性质)",
+        "meaning": "n. 创造力；创造性",
+        "example": {
+          "en": "Art encourages creativity in children.",
+          "cn": "艺术激发孩子的创造力。"
+        }
+      },
+      {
+        "name": "diversity",
+        "phonetic": "/daɪˈvɜːrsəti/",
+        "breakdown": "diverse (多样的) + -ity (性质)",
+        "meaning": "n. 多样性；差异",
+        "example": {
+          "en": "Cultural diversity enriches society.",
+          "cn": "文化多样性丰富社会。"
+        }
       }
     ]
   },
@@ -725,6 +1085,5244 @@
         "example": {
           "en": "The seasoned actor gave an unforgettable stage performance.",
           "cn": "这位经验丰富的演员奉献了令人难忘的舞台表演。"
+        }
+      },
+      {
+        "name": "worker",
+        "phonetic": "/ˈwɜːrkər/",
+        "breakdown": "work (工作) + -er (施事者)",
+        "meaning": "n. 工人；劳动者",
+        "example": {
+          "en": "The workers built the bridge.",
+          "cn": "工人们建造了这座桥。"
+        }
+      },
+      {
+        "name": "writer",
+        "phonetic": "/ˈraɪtər/",
+        "breakdown": "write (写) + -er (施事者)",
+        "meaning": "n. 作家；作者",
+        "example": {
+          "en": "She is a famous writer.",
+          "cn": "她是一位著名作家。"
+        }
+      },
+      {
+        "name": "doctor",
+        "phonetic": "/ˈdɑːktər/",
+        "breakdown": "doct (教) + -or (施事者)",
+        "meaning": "n. 医生；博士",
+        "example": {
+          "en": "You should see a doctor.",
+          "cn": "你应该去看医生。"
+        }
+      },
+      {
+        "name": "professor",
+        "phonetic": "/prəˈfesər/",
+        "breakdown": "profess (教授) + -or (施事者)",
+        "meaning": "n. 教授",
+        "example": {
+          "en": "The professor gave a great lecture.",
+          "cn": "教授做了精彩的讲座。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ness",
+    "form": "-ness",
+    "type": "suffix",
+    "phonetic": "/-nəs/",
+    "meaning": "状态、性质、程度（形容词→名词）",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自古英语 -nes / -ness，是日耳曼语系中最能产的形容词转名词后缀，表示抽象的状态或品质。",
+    "derivationNote": "直接加在形容词后，将描述性品质转化为可度量的抽象名词，如 happy → happiness。",
+    "words": [
+      {
+        "name": "happiness",
+        "phonetic": "/ˈhæpinəs/",
+        "breakdown": "happy (快乐的) + -ness (状态)",
+        "meaning": "n. 幸福；快乐",
+        "example": {
+          "en": "Money cannot buy true happiness.",
+          "cn": "金钱买不到真正的幸福。"
+        }
+      },
+      {
+        "name": "darkness",
+        "phonetic": "/ˈdɑːrknəs/",
+        "breakdown": "dark (黑暗的) + -ness (状态)",
+        "meaning": "n. 黑暗；阴暗",
+        "example": {
+          "en": "The room was plunged into darkness.",
+          "cn": "房间陷入了黑暗之中。"
+        }
+      },
+      {
+        "name": "kindness",
+        "phonetic": "/ˈkaɪndnəs/",
+        "breakdown": "kind (善良的) + -ness (品质)",
+        "meaning": "n. 善良；仁慈；好意",
+        "example": {
+          "en": "Her kindness touched everyone around her.",
+          "cn": "她的善良感动了身边所有人。"
+        }
+      },
+      {
+        "name": "weakness",
+        "phonetic": "/ˈwiːknəs/",
+        "breakdown": "weak (虚弱的) + -ness (状态)",
+        "meaning": "n. 虚弱；弱点；缺点",
+        "example": {
+          "en": "Everyone has their own weaknesses.",
+          "cn": "每个人都有自己的弱点。"
+        }
+      },
+      {
+        "name": "sadness",
+        "phonetic": "/ˈsædnəs/",
+        "breakdown": "sad (悲伤的) + -ness (状态)",
+        "meaning": "n. 悲伤；难过",
+        "example": {
+          "en": "A deep sadness filled her heart.",
+          "cn": "她心中充满了深深的悲伤。"
+        }
+      },
+      {
+        "name": "awareness",
+        "phonetic": "/əˈwernəs/",
+        "breakdown": "aware (意识到的) + -ness (状态)",
+        "meaning": "n. 意识；认识；察觉",
+        "example": {
+          "en": "Environmental awareness is growing worldwide.",
+          "cn": "环保意识在全球范围内日益增强。"
+        }
+      },
+      {
+        "name": "illness",
+        "phonetic": "/ˈɪlnəs/",
+        "breakdown": "ill (生病的) + -ness (状态)",
+        "meaning": "n. 疾病；患病",
+        "example": {
+          "en": "He missed work due to a serious illness.",
+          "cn": "他因重病而缺勤。"
+        }
+      },
+      {
+        "name": "richness",
+        "phonetic": "/ˈrɪtʃnəs/",
+        "breakdown": "rich (丰富的) + -ness (品质)",
+        "meaning": "n. 丰富；富饶；浓烈",
+        "example": {
+          "en": "The richness of the culture is impressive.",
+          "cn": "这种文化的丰富性令人印象深刻。"
+        }
+      },
+      {
+        "name": "fairness",
+        "phonetic": "/ˈfernəs/",
+        "breakdown": "fair (公平的) + -ness (品质)",
+        "meaning": "n. 公平；公正；晴朗",
+        "example": {
+          "en": "Fairness is essential in any competition.",
+          "cn": "公平在任何竞争中都至关重要。"
+        }
+      },
+      {
+        "name": "eagerness",
+        "phonetic": "/ˈiːɡərnəs/",
+        "breakdown": "eager (渴望的) + -ness (状态)",
+        "meaning": "n. 渴望；热切；热心",
+        "example": {
+          "en": "The children showed great eagerness to learn.",
+          "cn": "孩子们表现出强烈的求知渴望。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ance",
+    "form": "-ance / -ence",
+    "type": "suffix",
+    "phonetic": "/-əns/",
+    "meaning": "行为、状态、性质或过程",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自拉丁语名词后缀 -antia / -entia，经法语进入英语，将动词或形容词转化为抽象名词。",
+    "derivationNote": "-ance 多接 -ant 形容词（important → importance），-ence 多接 -ent 形容词（different → difference）。",
+    "words": [
+      {
+        "name": "importance",
+        "phonetic": "/ɪmˈpɔːrtns/",
+        "breakdown": "important (重要的) + -ance (性质)",
+        "meaning": "n. 重要性；重要",
+        "example": {
+          "en": "Education is of great importance to society.",
+          "cn": "教育对社会至关重要。"
+        }
+      },
+      {
+        "name": "difference",
+        "phonetic": "/ˈdɪfrəns/",
+        "breakdown": "different (不同的) + -ence (性质)",
+        "meaning": "n. 差异；不同；分歧",
+        "example": {
+          "en": "There is a big difference between the two plans.",
+          "cn": "这两个计划之间有很大差异。"
+        }
+      },
+      {
+        "name": "appearance",
+        "phonetic": "/əˈpɪrəns/",
+        "breakdown": "appear (出现) + -ance (行为/状态)",
+        "meaning": "n. 出现；外貌；外观",
+        "example": {
+          "en": "Don't judge people by their appearance.",
+          "cn": "不要以貌取人。"
+        }
+      },
+      {
+        "name": "experience",
+        "phonetic": "/ɪkˈspɪriəns/",
+        "breakdown": "experi (经历) + -ence (状态)",
+        "meaning": "n./v. 经验；经历；体验",
+        "example": {
+          "en": "She has years of experience in teaching.",
+          "cn": "她有多年的教学经验。"
+        }
+      },
+      {
+        "name": "performance",
+        "phonetic": "/pərˈfɔːrməns/",
+        "breakdown": "perform (表演/执行) + -ance (行为)",
+        "meaning": "n. 表现；表演；性能",
+        "example": {
+          "en": "His performance in the exam was excellent.",
+          "cn": "他在考试中的表现非常出色。"
+        }
+      },
+      {
+        "name": "confidence",
+        "phonetic": "/ˈkɑːnfɪdəns/",
+        "breakdown": "confide (信任) + -ence (状态)",
+        "meaning": "n. 信心；信任；自信",
+        "example": {
+          "en": "Building confidence takes time and effort.",
+          "cn": "建立信心需要时间和努力。"
+        }
+      },
+      {
+        "name": "distance",
+        "phonetic": "/ˈdɪstəns/",
+        "breakdown": "di- (分开) + st (站立) + -ance (状态)",
+        "meaning": "n. 距离；远方 v. 疏远",
+        "example": {
+          "en": "The distance between the two cities is 200 km.",
+          "cn": "两座城市之间的距离是200公里。"
+        }
+      },
+      {
+        "name": "existence",
+        "phonetic": "/ɪɡˈzɪstəns/",
+        "breakdown": "exist (存在) + -ence (状态)",
+        "meaning": "n. 存在；生存；生活",
+        "example": {
+          "en": "Scientists debate the existence of aliens.",
+          "cn": "科学家们争论外星人是否存在。"
+        }
+      },
+      {
+        "name": "assistance",
+        "phonetic": "/əˈsɪstəns/",
+        "breakdown": "assist (帮助) + -ance (行为)",
+        "meaning": "n. 援助；帮助；协助",
+        "example": {
+          "en": "Can I be of any assistance to you?",
+          "cn": "我能帮你什么忙吗？"
+        }
+      },
+      {
+        "name": "independence",
+        "phonetic": "/ˌɪndɪˈpendəns/",
+        "breakdown": "in- (不) + depend (依赖) + -ence (状态)",
+        "meaning": "n. 独立；自主",
+        "example": {
+          "en": "The country gained independence in 1947.",
+          "cn": "该国于1947年获得独立。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ship",
+    "form": "-ship",
+    "type": "suffix",
+    "phonetic": "/-ʃɪp/",
+    "meaning": "身份、状态、关系或技能",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自古英语 -scipe（形状、状态、职位），与 shape 同源，表示某种身份、关系或技能状态。",
+    "derivationNote": "加在名词后，表示该名词所指的身份、关系或技能，如 friend → friendship（友谊）。",
+    "words": [
+      {
+        "name": "friendship",
+        "phonetic": "/ˈfrendʃɪp/",
+        "breakdown": "friend (朋友) + -ship (关系)",
+        "meaning": "n. 友谊；友情",
+        "example": {
+          "en": "True friendship lasts a lifetime.",
+          "cn": "真正的友谊持续一生。"
+        }
+      },
+      {
+        "name": "leadership",
+        "phonetic": "/ˈliːdərʃɪp/",
+        "breakdown": "leader (领导者) + -ship (身份/能力)",
+        "meaning": "n. 领导力；领导地位",
+        "example": {
+          "en": "Strong leadership is needed in times of crisis.",
+          "cn": "危机时刻需要强有力的领导。"
+        }
+      },
+      {
+        "name": "membership",
+        "phonetic": "/ˈmembərʃɪp/",
+        "breakdown": "member (成员) + -ship (身份)",
+        "meaning": "n. 会员资格；成员身份",
+        "example": {
+          "en": "The gym membership costs $50 a month.",
+          "cn": "健身房会员每月50美元。"
+        }
+      },
+      {
+        "name": "relationship",
+        "phonetic": "/rɪˈleɪʃnʃɪp/",
+        "breakdown": "relation (关系) + -ship (状态)",
+        "meaning": "n. 关系；联系",
+        "example": {
+          "en": "They have a close working relationship.",
+          "cn": "他们有着密切的工作关系。"
+        }
+      },
+      {
+        "name": "scholarship",
+        "phonetic": "/ˈskɑːlərʃɪp/",
+        "breakdown": "scholar (学者) + -ship (身份/资助)",
+        "meaning": "n. 奖学金；学问",
+        "example": {
+          "en": "She won a scholarship to study abroad.",
+          "cn": "她获得了出国留学的奖学金。"
+        }
+      },
+      {
+        "name": "citizenship",
+        "phonetic": "/ˈsɪtɪzənʃɪp/",
+        "breakdown": "citizen (公民) + -ship (身份)",
+        "meaning": "n. 公民身份；国籍",
+        "example": {
+          "en": "He applied for American citizenship.",
+          "cn": "他申请了美国公民身份。"
+        }
+      },
+      {
+        "name": "partnership",
+        "phonetic": "/ˈpɑːrtnərʃɪp/",
+        "breakdown": "partner (伙伴) + -ship (关系)",
+        "meaning": "n. 伙伴关系；合作",
+        "example": {
+          "en": "The two companies formed a partnership.",
+          "cn": "两家公司建立了合作关系。"
+        }
+      },
+      {
+        "name": "ownership",
+        "phonetic": "/ˈoʊnərʃɪp/",
+        "breakdown": "owner (所有者) + -ship (身份)",
+        "meaning": "n. 所有权；拥有",
+        "example": {
+          "en": "The ownership of the land is disputed.",
+          "cn": "这块土地的所有权存在争议。"
+        }
+      },
+      {
+        "name": "workmanship",
+        "phonetic": "/ˈwɜːrkmənʃɪp/",
+        "breakdown": "workman (工匠) + -ship (技能)",
+        "meaning": "n. 工艺；手艺；做工",
+        "example": {
+          "en": "The workmanship on this furniture is excellent.",
+          "cn": "这件家具的做工非常精良。"
+        }
+      },
+      {
+        "name": "sportsmanship",
+        "phonetic": "/ˈspɔːrtsmənʃɪp/",
+        "breakdown": "sportsman (运动员) + -ship (品质)",
+        "meaning": "n. 体育精神；运动家风度",
+        "example": {
+          "en": "Good sportsmanship is more important than winning.",
+          "cn": "良好的体育精神比获胜更重要。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_dom",
+    "form": "-dom",
+    "type": "suffix",
+    "phonetic": "/-dəm/",
+    "meaning": "领域、状态、身份或集体",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自古英语 -dōm（判断、法令、权力），与 doom 同源，表示统治领域、状态或集体。",
+    "derivationNote": "加在名词或形容词后，表示领域（kingdom 王国）、状态（freedom 自由）或集体（officialdom 官场）。",
+    "words": [
+      {
+        "name": "freedom",
+        "phonetic": "/ˈfriːdəm/",
+        "breakdown": "free (自由的) + -dom (状态)",
+        "meaning": "n. 自由；自主",
+        "example": {
+          "en": "Freedom of speech is a basic human right.",
+          "cn": "言论自由是一项基本人权。"
+        }
+      },
+      {
+        "name": "kingdom",
+        "phonetic": "/ˈkɪŋdəm/",
+        "breakdown": "king (国王) + -dom (领域)",
+        "meaning": "n. 王国；领域",
+        "example": {
+          "en": "The United Kingdom is a constitutional monarchy.",
+          "cn": "英国是君主立宪制国家。"
+        }
+      },
+      {
+        "name": "wisdom",
+        "phonetic": "/ˈwɪzdəm/",
+        "breakdown": "wise (明智的) + -dom (状态/品质)",
+        "meaning": "n. 智慧；明智；学问",
+        "example": {
+          "en": "With age comes wisdom.",
+          "cn": "智慧随年龄增长。"
+        }
+      },
+      {
+        "name": "boredom",
+        "phonetic": "/ˈbɔːrdəm/",
+        "breakdown": "bore (使厌烦) + -dom (状态)",
+        "meaning": "n. 无聊；厌倦",
+        "example": {
+          "en": "He read a book to fight boredom.",
+          "cn": "他读书以打发无聊。"
+        }
+      },
+      {
+        "name": "random",
+        "phonetic": "/ˈrændəm/",
+        "breakdown": "rand (边缘) + -dom (状态)",
+        "meaning": "adj./n. 随机的；任意的",
+        "example": {
+          "en": "The names were chosen at random.",
+          "cn": "名字是随机挑选的。"
+        }
+      },
+      {
+        "name": "stardom",
+        "phonetic": "/ˈstɑːrdəm/",
+        "breakdown": "star (明星) + -dom (领域/状态)",
+        "meaning": "n. 明星地位；明星界",
+        "example": {
+          "en": "She rose to stardom after the hit movie.",
+          "cn": "这部热门电影后她一跃成为明星。"
+        }
+      },
+      {
+        "name": "officialdom",
+        "phonetic": "/əˈfɪʃldəm/",
+        "breakdown": "official (官员) + -dom (集体)",
+        "meaning": "n. 官场；官僚作风",
+        "example": {
+          "en": "Navigating officialdom can be frustrating.",
+          "cn": "在官场中周旋可能令人沮丧。"
+        }
+      },
+      {
+        "name": "martyrdom",
+        "phonetic": "/ˈmɑːrtərdəm/",
+        "breakdown": "martyr (殉道者) + -dom (状态)",
+        "meaning": "n. 殉难；牺牲",
+        "example": {
+          "en": "He faced martyrdom for his beliefs.",
+          "cn": "他为信仰面对殉难。"
+        }
+      },
+      {
+        "name": "dukedom",
+        "phonetic": "/ˈdjuːkdəm/",
+        "breakdown": "duke (公爵) + -dom (领地)",
+        "meaning": "n. 公爵领地；公爵爵位",
+        "example": {
+          "en": "The dukedom was passed to his eldest son.",
+          "cn": "公爵爵位传给了长子。"
+        }
+      },
+      {
+        "name": "serfdom",
+        "phonetic": "/ˈsɜːrfdəm/",
+        "breakdown": "serf (农奴) + -dom (状态)",
+        "meaning": "n. 农奴制；农奴身份",
+        "example": {
+          "en": "Serfdom was abolished in the 19th century.",
+          "cn": "农奴制在19世纪被废除。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_hood",
+    "form": "-hood",
+    "type": "suffix",
+    "phonetic": "/-hʊd/",
+    "meaning": "身份、状态、时期或集体",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自古英语 -hād（状态、等级、身份），表示某种身份、状态或人生阶段。",
+    "derivationNote": "加在名词后，表示身份状态（childhood 童年）或集体（neighborhood 邻里）。",
+    "words": [
+      {
+        "name": "childhood",
+        "phonetic": "/ˈtʃaɪldhʊd/",
+        "breakdown": "child (孩子) + -hood (时期)",
+        "meaning": "n. 童年；幼年时代",
+        "example": {
+          "en": "She had a happy childhood in the countryside.",
+          "cn": "她在乡村度过了快乐的童年。"
+        }
+      },
+      {
+        "name": "neighborhood",
+        "phonetic": "/ˈneɪbərhʊd/",
+        "breakdown": "neighbor (邻居) + -hood (集体)",
+        "meaning": "n. 街区；邻里；附近",
+        "example": {
+          "en": "Our neighborhood is very safe and quiet.",
+          "cn": "我们的街区非常安全安静。"
+        }
+      },
+      {
+        "name": "brotherhood",
+        "phonetic": "/ˈbrʌðərhʊd/",
+        "breakdown": "brother (兄弟) + -hood (关系/状态)",
+        "meaning": "n. 兄弟情谊；兄弟会",
+        "example": {
+          "en": "They share a strong bond of brotherhood.",
+          "cn": "他们之间有着深厚的兄弟情谊。"
+        }
+      },
+      {
+        "name": "adulthood",
+        "phonetic": "/əˈdʌlthʊd/",
+        "breakdown": "adult (成年人) + -hood (状态)",
+        "meaning": "n. 成年；成人期",
+        "example": {
+          "en": "Adulthood comes with many responsibilities.",
+          "cn": "成年伴随着许多责任。"
+        }
+      },
+      {
+        "name": "motherhood",
+        "phonetic": "/ˈmʌðərhʊd/",
+        "breakdown": "mother (母亲) + -hood (身份)",
+        "meaning": "n. 母亲身份；母性",
+        "example": {
+          "en": "Motherhood changed her life completely.",
+          "cn": "做母亲彻底改变了她的生活。"
+        }
+      },
+      {
+        "name": "likelihood",
+        "phonetic": "/ˈlaɪklihʊd/",
+        "breakdown": "likely (可能的) + -hood (状态)",
+        "meaning": "n. 可能性；可能",
+        "example": {
+          "en": "The likelihood of rain is high today.",
+          "cn": "今天下雨的可能性很大。"
+        }
+      },
+      {
+        "name": "priesthood",
+        "phonetic": "/ˈpriːsthʊd/",
+        "breakdown": "priest (牧师) + -hood (身份)",
+        "meaning": "n. 牧师职位；神职",
+        "example": {
+          "en": "He was ordained into the priesthood.",
+          "cn": "他被授予神职。"
+        }
+      },
+      {
+        "name": "sisterhood",
+        "phonetic": "/ˈsɪstərhʊd/",
+        "breakdown": "sister (姐妹) + -hood (关系)",
+        "meaning": "n. 姐妹情谊；妇女团体",
+        "example": {
+          "en": "The sisterhood supported each other through hard times.",
+          "cn": "姐妹情谊在艰难时期互相支持。"
+        }
+      },
+      {
+        "name": "manhood",
+        "phonetic": "/ˈmænhʊd/",
+        "breakdown": "man (男人) + -hood (状态)",
+        "meaning": "n. 成年；男子气概",
+        "example": {
+          "en": "He reached manhood at the age of 18.",
+          "cn": "他18岁时长大成人。"
+        }
+      },
+      {
+        "name": "falsehood",
+        "phonetic": "/ˈfɔːlshʊd/",
+        "breakdown": "false (虚假的) + -hood (状态)",
+        "meaning": "n. 谎言；虚假；不真实",
+        "example": {
+          "en": "He was accused of spreading falsehoods.",
+          "cn": "他被指控散布谎言。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ism",
+    "form": "-ism",
+    "type": "suffix",
+    "phonetic": "/-ɪzəm/",
+    "meaning": "主义、学说、制度、行为或状态",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自希腊语 -ismos，经拉丁语和法语进入英语，表示某种学说、主义、制度或行为特征。",
+    "derivationNote": "常与 -ist（信奉者）、-istic（形容词）构成配套词族，如 capitalism / capitalist / capitalistic。",
+    "words": [
+      {
+        "name": "capitalism",
+        "phonetic": "/ˈkæpɪtəlɪzəm/",
+        "breakdown": "capital (资本) + -ism (主义/制度)",
+        "meaning": "n. 资本主义",
+        "example": {
+          "en": "Capitalism encourages free market competition.",
+          "cn": "资本主义鼓励自由市场竞争。"
+        }
+      },
+      {
+        "name": "socialism",
+        "phonetic": "/ˈsoʊʃəlɪzəm/",
+        "breakdown": "social (社会的) + -ism (主义)",
+        "meaning": "n. 社会主义",
+        "example": {
+          "en": "Socialism aims for equal distribution of wealth.",
+          "cn": "社会主义旨在财富的平等分配。"
+        }
+      },
+      {
+        "name": "tourism",
+        "phonetic": "/ˈtʊrɪzəm/",
+        "breakdown": "tour (旅游) + -ism (行业/行为)",
+        "meaning": "n. 旅游业；观光",
+        "example": {
+          "en": "Tourism is a major industry in this country.",
+          "cn": "旅游业是该国的支柱产业。"
+        }
+      },
+      {
+        "name": "criticism",
+        "phonetic": "/ˈkrɪtɪsɪzəm/",
+        "breakdown": "critic (批评家) + -ism (行为)",
+        "meaning": "n. 批评；评论；非难",
+        "example": {
+          "en": "Constructive criticism helps us improve.",
+          "cn": "建设性批评帮助我们进步。"
+        }
+      },
+      {
+        "name": "optimism",
+        "phonetic": "/ˈɑːptɪmɪzəm/",
+        "breakdown": "optim (最好) + -ism (态度)",
+        "meaning": "n. 乐观主义；乐观",
+        "example": {
+          "en": "Her optimism inspired everyone around her.",
+          "cn": "她的乐观激励了身边所有人。"
+        }
+      },
+      {
+        "name": "pessimism",
+        "phonetic": "/ˈpesɪmɪzəm/",
+        "breakdown": "pessim (最坏) + -ism (态度)",
+        "meaning": "n. 悲观主义；悲观",
+        "example": {
+          "en": "Pessimism can hold you back from trying.",
+          "cn": "悲观会阻碍你去尝试。"
+        }
+      },
+      {
+        "name": "realism",
+        "phonetic": "/ˈriːəlɪzəm/",
+        "breakdown": "real (真实的) + -ism (风格/主义)",
+        "meaning": "n. 现实主义；务实",
+        "example": {
+          "en": "The novel is known for its realism.",
+          "cn": "这部小说以现实主义著称。"
+        }
+      },
+      {
+        "name": "racism",
+        "phonetic": "/ˈreɪsɪzəm/",
+        "breakdown": "race (种族) + -ism (偏见/主义)",
+        "meaning": "n. 种族主义；种族歧视",
+        "example": {
+          "en": "We must fight against racism in all forms.",
+          "cn": "我们必须反对一切形式的种族主义。"
+        }
+      },
+      {
+        "name": "journalism",
+        "phonetic": "/ˈdʒɜːrnəlɪzəm/",
+        "breakdown": "journal (期刊) + -ism (职业)",
+        "meaning": "n. 新闻业；新闻工作",
+        "example": {
+          "en": "She studied journalism at university.",
+          "cn": "她在大学学习新闻学。"
+        }
+      },
+      {
+        "name": "consumerism",
+        "phonetic": "/kənˈsuːmərɪzəm/",
+        "breakdown": "consumer (消费者) + -ism (行为/主义)",
+        "meaning": "n. 消费主义；保护消费者利益",
+        "example": {
+          "en": "Consumerism drives the modern economy.",
+          "cn": "消费主义驱动着现代经济。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ist",
+    "form": "-ist",
+    "type": "suffix",
+    "phonetic": "/-ɪst/",
+    "meaning": "从事...的人 / 信奉...的人 / ...专家",
+    "category": "noun",
+    "categoryLabel": "高频名词后缀",
+    "origin": "源自希腊语 -istes，经拉丁语和法语进入英语，表示从事某种职业、信奉某种主义或具有某种专长的人。",
+    "derivationNote": "常与 -ism（主义）、-istic（形容词）配套，如 scientist / science / scientific。",
+    "words": [
+      {
+        "name": "scientist",
+        "phonetic": "/ˈsaɪəntɪst/",
+        "breakdown": "science (科学) + -ist (从事者)",
+        "meaning": "n. 科学家",
+        "example": {
+          "en": "The scientist made a groundbreaking discovery.",
+          "cn": "这位科学家做出了突破性发现。"
+        }
+      },
+      {
+        "name": "artist",
+        "phonetic": "/ˈɑːrtɪst/",
+        "breakdown": "art (艺术) + -ist (从事者)",
+        "meaning": "n. 艺术家；画家",
+        "example": {
+          "en": "The artist painted a beautiful landscape.",
+          "cn": "这位艺术家画了一幅美丽的风景画。"
+        }
+      },
+      {
+        "name": "journalist",
+        "phonetic": "/ˈdʒɜːrnəlɪst/",
+        "breakdown": "journal (新闻) + -ist (从事者)",
+        "meaning": "n. 新闻工作者；记者",
+        "example": {
+          "en": "The journalist investigated the corruption case.",
+          "cn": "记者调查了这起腐败案。"
+        }
+      },
+      {
+        "name": "specialist",
+        "phonetic": "/ˈspeʃəlɪst/",
+        "breakdown": "special (专门的) + -ist (专家)",
+        "meaning": "n. 专家；专科医生",
+        "example": {
+          "en": "She is a specialist in heart disease.",
+          "cn": "她是心脏病专家。"
+        }
+      },
+      {
+        "name": "tourist",
+        "phonetic": "/ˈtʊrɪst/",
+        "breakdown": "tour (旅游) + -ist (从事者)",
+        "meaning": "n. 游客；观光者",
+        "example": {
+          "en": "Millions of tourists visit the city each year.",
+          "cn": "每年有数百万游客参观这座城市。"
+        }
+      },
+      {
+        "name": "pianist",
+        "phonetic": "/ˈpiːənɪst/",
+        "breakdown": "piano (钢琴) + -ist (演奏者)",
+        "meaning": "n. 钢琴家",
+        "example": {
+          "en": "The pianist performed a beautiful concerto.",
+          "cn": "钢琴家演奏了一首优美的协奏曲。"
+        }
+      },
+      {
+        "name": "optimist",
+        "phonetic": "/ˈɑːptɪmɪst/",
+        "breakdown": "optim (最好) + -ist (信奉者)",
+        "meaning": "n. 乐观主义者",
+        "example": {
+          "en": "She is an optimist who always sees the bright side.",
+          "cn": "她是个乐观主义者，总能看到光明面。"
+        }
+      },
+      {
+        "name": "dentist",
+        "phonetic": "/ˈdentɪst/",
+        "breakdown": "dent (牙齿) + -ist (专家)",
+        "meaning": "n. 牙医",
+        "example": {
+          "en": "You should visit the dentist every six months.",
+          "cn": "你应该每半年看一次牙医。"
+        }
+      },
+      {
+        "name": "novelist",
+        "phonetic": "/ˈnɑːvəlɪst/",
+        "breakdown": "novel (小说) + -ist (作家)",
+        "meaning": "n. 小说家",
+        "example": {
+          "en": "The novelist won the Nobel Prize for Literature.",
+          "cn": "这位小说家获得了诺贝尔文学奖。"
+        }
+      },
+      {
+        "name": "physicist",
+        "phonetic": "/ˈfɪzɪsɪst/",
+        "breakdown": "physics (物理学) + -ist (专家)",
+        "meaning": "n. 物理学家",
+        "example": {
+          "en": "The physicist won the Nobel Prize.",
+          "cn": "这位物理学家获得了诺贝尔奖。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_age",
+    "form": "-age",
+    "type": "suffix",
+    "phonetic": "/-ɪdʒ/",
+    "meaning": "集合、状态、行为、费用或场所",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自法语 -age，来自拉丁语 -aticum，表示集合体、状态、行为结果、费用或场所。",
+    "derivationNote": "加在动词或名词后，表示行为结果（breakage 破损）、集合（baggage 行李）、费用（postage 邮资）或场所（orphanage 孤儿院）。",
+    "words": [
+      {
+        "name": "language",
+        "phonetic": "/ˈlæŋɡwɪdʒ/",
+        "breakdown": "langu (舌头/语言) + -age (集合)",
+        "meaning": "n. 语言；语言文字",
+        "example": {
+          "en": "English is a global language.",
+          "cn": "英语是一门全球性语言。"
+        }
+      },
+      {
+        "name": "storage",
+        "phonetic": "/ˈstɔːrɪdʒ/",
+        "breakdown": "store (储存) + -age (行为/场所)",
+        "meaning": "n. 储存；仓库；存储",
+        "example": {
+          "en": "We need more storage space for files.",
+          "cn": "我们需要更多文件存储空间。"
+        }
+      },
+      {
+        "name": "package",
+        "phonetic": "/ˈpækɪdʒ/",
+        "breakdown": "pack (打包) + -age (结果)",
+        "meaning": "n. 包裹；套餐 v. 包装",
+        "example": {
+          "en": "The package arrived this morning.",
+          "cn": "包裹今天早上到了。"
+        }
+      },
+      {
+        "name": "marriage",
+        "phonetic": "/ˈmærɪdʒ/",
+        "breakdown": "marry (结婚) + -age (状态/行为)",
+        "meaning": "n. 婚姻；结婚",
+        "example": {
+          "en": "Their marriage has lasted 50 years.",
+          "cn": "他们的婚姻持续了50年。"
+        }
+      },
+      {
+        "name": "postage",
+        "phonetic": "/ˈpoʊstɪdʒ/",
+        "breakdown": "post (邮寄) + -age (费用)",
+        "meaning": "n. 邮资；邮费",
+        "example": {
+          "en": "How much is the postage to China?",
+          "cn": "寄到中国的邮费是多少？"
+        }
+      },
+      {
+        "name": "baggage",
+        "phonetic": "/ˈbæɡɪdʒ/",
+        "breakdown": "bag (包) + -age (集合)",
+        "meaning": "n. 行李；包袱",
+        "example": {
+          "en": "We checked our baggage at the airport.",
+          "cn": "我们在机场托运了行李。"
+        }
+      },
+      {
+        "name": "shortage",
+        "phonetic": "/ˈʃɔːrtɪdʒ/",
+        "breakdown": "short (短缺的) + -age (状态)",
+        "meaning": "n. 短缺；不足",
+        "example": {
+          "en": "There is a shortage of skilled workers.",
+          "cn": "技术工人短缺。"
+        }
+      },
+      {
+        "name": "breakage",
+        "phonetic": "/ˈbreɪkɪdʒ/",
+        "breakdown": "break (打破) + -age (结果)",
+        "meaning": "n. 破损；破损物",
+        "example": {
+          "en": "The insurance covers breakage during shipping.",
+          "cn": "保险涵盖运输途中的破损。"
+        }
+      },
+      {
+        "name": "orphanage",
+        "phonetic": "/ˈɔːrfənɪdʒ/",
+        "breakdown": "orphan (孤儿) + -age (场所)",
+        "meaning": "n. 孤儿院",
+        "example": {
+          "en": "She volunteered at the local orphanage.",
+          "cn": "她在当地孤儿院做志愿者。"
+        }
+      },
+      {
+        "name": "passage",
+        "phonetic": "/ˈpæsɪdʒ/",
+        "breakdown": "pass (通过) + -age (行为/通道)",
+        "meaning": "n. 通道；段落；通过",
+        "example": {
+          "en": "Read the passage and answer the questions.",
+          "cn": "阅读这段文章并回答问题。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ure",
+    "form": "-ure",
+    "type": "suffix",
+    "phonetic": "/-ər/",
+    "meaning": "行为、过程、结果或状态",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自拉丁语名词后缀 -ura，表示行为、过程、结果或状态，常附着于动词词根。",
+    "derivationNote": "与 -tion/-sion 功能相似，但更直接附着于动词，如 fail → failure，press → pressure。",
+    "words": [
+      {
+        "name": "failure",
+        "phonetic": "/ˈfeɪljər/",
+        "breakdown": "fail (失败) + -ure (结果/状态)",
+        "meaning": "n. 失败；故障；失败者",
+        "example": {
+          "en": "Failure is the mother of success.",
+          "cn": "失败是成功之母。"
+        }
+      },
+      {
+        "name": "pressure",
+        "phonetic": "/ˈpreʃər/",
+        "breakdown": "press (压) + -ure (行为/状态)",
+        "meaning": "n. 压力；压强 v. 施压",
+        "example": {
+          "en": "High blood pressure can be dangerous.",
+          "cn": "高血压可能很危险。"
+        }
+      },
+      {
+        "name": "pleasure",
+        "phonetic": "/ˈpleʒər/",
+        "breakdown": "please (使高兴) + -ure (状态)",
+        "meaning": "n. 快乐；愉快；乐趣",
+        "example": {
+          "en": "It was a pleasure meeting you.",
+          "cn": "很高兴认识你。"
+        }
+      },
+      {
+        "name": "measure",
+        "phonetic": "/ˈmeʒər/",
+        "breakdown": "meas (测量) + -ure (行为/结果)",
+        "meaning": "n. 测量；措施 v. 测量",
+        "example": {
+          "en": "The government took measures to reduce pollution.",
+          "cn": "政府采取措施减少污染。"
+        }
+      },
+      {
+        "name": "nature",
+        "phonetic": "/ˈneɪtʃər/",
+        "breakdown": "nat (出生) + -ure (状态)",
+        "meaning": "n. 自然；本性；性质",
+        "example": {
+          "en": "We should protect nature for future generations.",
+          "cn": "我们应该为后代保护自然。"
+        }
+      },
+      {
+        "name": "culture",
+        "phonetic": "/ˈkʌltʃər/",
+        "breakdown": "cult (耕种/培养) + -ure (结果)",
+        "meaning": "n. 文化；文明；培养",
+        "example": {
+          "en": "Every culture has its own traditions.",
+          "cn": "每种文化都有自己的传统。"
+        }
+      },
+      {
+        "name": "feature",
+        "phonetic": "/ˈfiːtʃər/",
+        "breakdown": "feat (做/造) + -ure (结果)",
+        "meaning": "n. 特征；特色；特写",
+        "example": {
+          "en": "This phone has many useful features.",
+          "cn": "这款手机有许多实用功能。"
+        }
+      },
+      {
+        "name": "mixture",
+        "phonetic": "/ˈmɪkstʃər/",
+        "breakdown": "mix (混合) + -ture (结果)",
+        "meaning": "n. 混合；混合物",
+        "example": {
+          "en": "The cake is a mixture of flour, eggs and sugar.",
+          "cn": "蛋糕是面粉、鸡蛋和糖的混合物。"
+        }
+      },
+      {
+        "name": "signature",
+        "phonetic": "/ˈsɪɡnətʃər/",
+        "breakdown": "sign (签名) + -ature (行为/结果)",
+        "meaning": "n. 签名；签字；特征",
+        "example": {
+          "en": "Please put your signature at the bottom.",
+          "cn": "请在底部签名。"
+        }
+      },
+      {
+        "name": "adventure",
+        "phonetic": "/ədˈventʃər/",
+        "breakdown": "ad- (向) + vent (来) + -ure (行为)",
+        "meaning": "n. 冒险；奇遇 v. 冒险",
+        "example": {
+          "en": "Their trip turned into a great adventure.",
+          "cn": "他们的旅行变成了一场大冒险。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_th",
+    "form": "-th",
+    "type": "suffix",
+    "phonetic": "/-θ/",
+    "meaning": "状态、性质、过程（形容词/动词→名词）",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自古英语 -thu / -tho，是日耳曼语系中古老的形容词/动词转名词后缀，表示抽象的状态或性质。",
+    "derivationNote": "加在形容词或动词后，常伴随元音变化（如 long → length, wide → width, grow → growth）。",
+    "words": [
+      {
+        "name": "truth",
+        "phonetic": "/truːθ/",
+        "breakdown": "true (真实的) + -th (状态)",
+        "meaning": "n. 真理；事实；真相",
+        "example": {
+          "en": "The truth will eventually come out.",
+          "cn": "真相终将大白。"
+        }
+      },
+      {
+        "name": "growth",
+        "phonetic": "/ɡroʊθ/",
+        "breakdown": "grow (生长) + -th (过程/结果)",
+        "meaning": "n. 生长；增长；发展",
+        "example": {
+          "en": "Economic growth slowed down this year.",
+          "cn": "今年经济增长放缓。"
+        }
+      },
+      {
+        "name": "death",
+        "phonetic": "/deθ/",
+        "breakdown": "die (死) + -th (状态)",
+        "meaning": "n. 死亡；灭亡",
+        "example": {
+          "en": "The death of his wife was a great blow.",
+          "cn": "妻子的去世对他是巨大打击。"
+        }
+      },
+      {
+        "name": "health",
+        "phonetic": "/helθ/",
+        "breakdown": "heal (治愈) + -th (状态)",
+        "meaning": "n. 健康；卫生",
+        "example": {
+          "en": "Good health is more important than wealth.",
+          "cn": "健康比财富更重要。"
+        }
+      },
+      {
+        "name": "wealth",
+        "phonetic": "/welθ/",
+        "breakdown": "weal (福利) + -th (状态)",
+        "meaning": "n. 财富；富有；丰富",
+        "example": {
+          "en": "He accumulated great wealth through hard work.",
+          "cn": "他通过努力工作积累了巨大财富。"
+        }
+      },
+      {
+        "name": "length",
+        "phonetic": "/leŋθ/",
+        "breakdown": "long (长的) + -th (性质)",
+        "meaning": "n. 长度；时长；篇幅",
+        "example": {
+          "en": "The length of the river is 3000 km.",
+          "cn": "这条河的长度是3000公里。"
+        }
+      },
+      {
+        "name": "width",
+        "phonetic": "/wɪdθ/",
+        "breakdown": "wide (宽的) + -th (性质)",
+        "meaning": "n. 宽度；广度",
+        "example": {
+          "en": "Measure the width of the table.",
+          "cn": "测量一下桌子的宽度。"
+        }
+      },
+      {
+        "name": "strength",
+        "phonetic": "/streŋθ/",
+        "breakdown": "strong (强壮的) + -th (性质)",
+        "meaning": "n. 力量；强度；长处",
+        "example": {
+          "en": "She has great inner strength.",
+          "cn": "她有强大的内心力量。"
+        }
+      },
+      {
+        "name": "warmth",
+        "phonetic": "/wɔːrmθ/",
+        "breakdown": "warm (温暖的) + -th (状态)",
+        "meaning": "n. 温暖；热情；暖和",
+        "example": {
+          "en": "The warmth of the sun felt wonderful.",
+          "cn": "阳光的温暖感觉真好。"
+        }
+      },
+      {
+        "name": "depth",
+        "phonetic": "/depθ/",
+        "breakdown": "deep (深的) + -th (性质)",
+        "meaning": "n. 深度；深奥；深处",
+        "example": {
+          "en": "The depth of the ocean is amazing.",
+          "cn": "海洋的深度令人惊叹。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ous",
+    "form": "-ous / -ious / -eous",
+    "type": "suffix",
+    "phonetic": "/-əs/",
+    "meaning": "充满...的 / 具有...特征的 / 有...性质的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自拉丁语形容词后缀 -osus，表示\"充满、具有\"，加在名词后构成形容词。",
+    "derivationNote": "常与名词结合，表示\"充满某特质\"，如 danger → dangerous，fame → famous。",
+    "words": [
+      {
+        "name": "dangerous",
+        "phonetic": "/ˈdeɪndʒərəs/",
+        "breakdown": "danger (危险) + -ous (充满...的)",
+        "meaning": "adj. 危险的；不安全的",
+        "example": {
+          "en": "It is dangerous to drive in heavy fog.",
+          "cn": "在大雾中开车很危险。"
+        }
+      },
+      {
+        "name": "famous",
+        "phonetic": "/ˈfeɪməs/",
+        "breakdown": "fame (名声) + -ous (具有...的)",
+        "meaning": "adj. 著名的；出名的",
+        "example": {
+          "en": "She is a famous singer around the world.",
+          "cn": "她是世界著名的歌手。"
+        }
+      },
+      {
+        "name": "nervous",
+        "phonetic": "/ˈnɜːrvəs/",
+        "breakdown": "nerve (神经) + -ous (有...特征的)",
+        "meaning": "adj. 紧张的；神经质的",
+        "example": {
+          "en": "He felt nervous before the interview.",
+          "cn": "面试前他感到紧张。"
+        }
+      },
+      {
+        "name": "curious",
+        "phonetic": "/ˈkjʊriəs/",
+        "breakdown": "cur (关心) + -ious (有...倾向的)",
+        "meaning": "adj. 好奇的；奇特的",
+        "example": {
+          "en": "Children are naturally curious about the world.",
+          "cn": "孩子们天生对世界充满好奇。"
+        }
+      },
+      {
+        "name": "serious",
+        "phonetic": "/ˈsɪriəs/",
+        "breakdown": "seri (严肃) + -ous (具有...的)",
+        "meaning": "adj. 严肃的；严重的；认真的",
+        "example": {
+          "en": "This is a serious matter that needs attention.",
+          "cn": "这是一个需要关注的严重问题。"
+        }
+      },
+      {
+        "name": "various",
+        "phonetic": "/ˈveriəs/",
+        "breakdown": "vari (变化) + -ous (充满...的)",
+        "meaning": "adj. 各种各样的；不同的",
+        "example": {
+          "en": "The store sells various kinds of fruits.",
+          "cn": "这家商店出售各种水果。"
+        }
+      },
+      {
+        "name": "obvious",
+        "phonetic": "/ˈɑːbviəs/",
+        "breakdown": "obvi (在前面) + -ous (有...特征的)",
+        "meaning": "adj. 明显的；显而易见的",
+        "example": {
+          "en": "It is obvious that he is lying.",
+          "cn": "很明显他在撒谎。"
+        }
+      },
+      {
+        "name": "generous",
+        "phonetic": "/ˈdʒenərəs/",
+        "breakdown": "gener (产生) + -ous (充满...的)",
+        "meaning": "adj. 慷慨的；大方的",
+        "example": {
+          "en": "She is very generous with her time and money.",
+          "cn": "她在时间和金钱上都非常慷慨。"
+        }
+      },
+      {
+        "name": "humorous",
+        "phonetic": "/ˈhjuːmərəs/",
+        "breakdown": "humor (幽默) + -ous (具有...的)",
+        "meaning": "adj. 幽默的；诙谐的",
+        "example": {
+          "en": "He gave a humorous speech at the party.",
+          "cn": "他在聚会上发表了幽默的演讲。"
+        }
+      },
+      {
+        "name": "mysterious",
+        "phonetic": "/mɪˈstɪriəs/",
+        "breakdown": "mystery (神秘) + -ous (有...特征的)",
+        "meaning": "adj. 神秘的；难以理解的",
+        "example": {
+          "en": "A mysterious light appeared in the sky.",
+          "cn": "天空中出现了一道神秘的光。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_al",
+    "form": "-al / -ial",
+    "type": "suffix",
+    "phonetic": "/-əl/",
+    "meaning": "与...有关的 / 具有...性质的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自拉丁语形容词后缀 -alis，表示\"与...相关、具有...性质\"，加在名词后构成形容词。",
+    "derivationNote": "也可作名词后缀表示行为（如 arrival, refusal），但主要作形容词后缀，如 nature → natural。",
+    "words": [
+      {
+        "name": "natural",
+        "phonetic": "/ˈnætʃrəl/",
+        "breakdown": "nature (自然) + -al (与...有关的)",
+        "meaning": "adj. 自然的；天然的；天生的",
+        "example": {
+          "en": "It is natural to feel nervous before a test.",
+          "cn": "考试前感到紧张是很自然的。"
+        }
+      },
+      {
+        "name": "national",
+        "phonetic": "/ˈnæʃnəl/",
+        "breakdown": "nation (国家) + -al (与...有关的)",
+        "meaning": "adj. 国家的；民族的；全国的",
+        "example": {
+          "en": "The national anthem was played at the ceremony.",
+          "cn": "仪式上奏响了国歌。"
+        }
+      },
+      {
+        "name": "personal",
+        "phonetic": "/ˈpɜːrsənl/",
+        "breakdown": "person (人) + -al (与...有关的)",
+        "meaning": "adj. 个人的；私人的；亲自的",
+        "example": {
+          "en": "Please don't ask personal questions.",
+          "cn": "请不要问私人问题。"
+        }
+      },
+      {
+        "name": "special",
+        "phonetic": "/ˈspeʃl/",
+        "breakdown": "spec (种类) + -ial (具有...性质的)",
+        "meaning": "adj. 特别的；特殊的；专门的",
+        "example": {
+          "en": "Today is a special day for our family.",
+          "cn": "今天对我们家来说是个特别的日子。"
+        }
+      },
+      {
+        "name": "official",
+        "phonetic": "/əˈfɪʃl/",
+        "breakdown": "office (办公室) + -ial (与...有关的)",
+        "meaning": "adj. 官方的；正式的 n. 官员",
+        "example": {
+          "en": "The official results will be announced tomorrow.",
+          "cn": "官方结果将于明天公布。"
+        }
+      },
+      {
+        "name": "cultural",
+        "phonetic": "/ˈkʌltʃərəl/",
+        "breakdown": "culture (文化) + -al (与...有关的)",
+        "meaning": "adj. 文化的；教养的",
+        "example": {
+          "en": "The city has a rich cultural heritage.",
+          "cn": "这座城市有着丰富的文化遗产。"
+        }
+      },
+      {
+        "name": "traditional",
+        "phonetic": "/trəˈdɪʃənl/",
+        "breakdown": "tradition (传统) + -al (与...有关的)",
+        "meaning": "adj. 传统的；惯例的",
+        "example": {
+          "en": "They serve traditional Chinese food here.",
+          "cn": "这里供应传统中餐。"
+        }
+      },
+      {
+        "name": "global",
+        "phonetic": "/ˈɡloʊbl/",
+        "breakdown": "globe (地球) + -al (与...有关的)",
+        "meaning": "adj. 全球的；全世界的",
+        "example": {
+          "en": "Climate change is a global issue.",
+          "cn": "气候变化是一个全球性问题。"
+        }
+      },
+      {
+        "name": "legal",
+        "phonetic": "/ˈliːɡl/",
+        "breakdown": "leg (法律) + -al (与...有关的)",
+        "meaning": "adj. 法律的；合法的",
+        "example": {
+          "en": "It is legal to drive at 16 in this state.",
+          "cn": "在这个州16岁开车是合法的。"
+        }
+      },
+      {
+        "name": "central",
+        "phonetic": "/ˈsentrəl/",
+        "breakdown": "center (中心) + -al (与...有关的)",
+        "meaning": "adj. 中心的；中央的；主要的",
+        "example": {
+          "en": "The hotel is in a central location.",
+          "cn": "这家酒店位于市中心。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ic",
+    "form": "-ic / -ical",
+    "type": "suffix",
+    "phonetic": "/-ɪk/",
+    "meaning": "与...有关的 / 具有...性质的 / ...学的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自希腊语形容词后缀 -ikos，经拉丁语进入英语，表示\"与...相关、具有...性质\"。",
+    "derivationNote": "-ic 和 -ical 常可互换但有细微差别，如 historic（历史上有名的）vs historical（历史的）。",
+    "words": [
+      {
+        "name": "basic",
+        "phonetic": "/ˈbeɪsɪk/",
+        "breakdown": "base (基础) + -ic (具有...性质的)",
+        "meaning": "adj. 基本的；基础的",
+        "example": {
+          "en": "This is a basic concept in physics.",
+          "cn": "这是物理学的基本概念。"
+        }
+      },
+      {
+        "name": "economic",
+        "phonetic": "/ˌekəˈnɑːmɪk/",
+        "breakdown": "economy (经济) + -ic (与...有关的)",
+        "meaning": "adj. 经济的；经济学的",
+        "example": {
+          "en": "The country is facing economic challenges.",
+          "cn": "该国正面临经济挑战。"
+        }
+      },
+      {
+        "name": "scientific",
+        "phonetic": "/ˌsaɪənˈtɪfɪk/",
+        "breakdown": "science (科学) + -ific (具有...性质的)",
+        "meaning": "adj. 科学的；科学上的",
+        "example": {
+          "en": "The theory is based on scientific evidence.",
+          "cn": "这个理论基于科学证据。"
+        }
+      },
+      {
+        "name": "public",
+        "phonetic": "/ˈpʌblɪk/",
+        "breakdown": "pub (人民) + -lic (与...有关的)",
+        "meaning": "adj. 公共的；公众的 n. 公众",
+        "example": {
+          "en": "Smoking is not allowed in public places.",
+          "cn": "公共场所禁止吸烟。"
+        }
+      },
+      {
+        "name": "romantic",
+        "phonetic": "/roʊˈmæntɪk/",
+        "breakdown": "romance (浪漫) + -tic (具有...性质的)",
+        "meaning": "adj. 浪漫的；多情的",
+        "example": {
+          "en": "They had a romantic dinner by the sea.",
+          "cn": "他们在海边吃了一顿浪漫的晚餐。"
+        }
+      },
+      {
+        "name": "dramatic",
+        "phonetic": "/drəˈmætɪk/",
+        "breakdown": "drama (戏剧) + -tic (具有...性质的)",
+        "meaning": "adj. 戏剧性的；引人注目的",
+        "example": {
+          "en": "There was a dramatic change in the weather.",
+          "cn": "天气发生了戏剧性的变化。"
+        }
+      },
+      {
+        "name": "academic",
+        "phonetic": "/ˌækəˈdemɪk/",
+        "breakdown": "academy (学院) + -ic (与...有关的)",
+        "meaning": "adj. 学术的；学院的",
+        "example": {
+          "en": "She has excellent academic records.",
+          "cn": "她有着优秀的学业成绩。"
+        }
+      },
+      {
+        "name": "electric",
+        "phonetic": "/ɪˈlektrɪk/",
+        "breakdown": "electr (电) + -ic (具有...性质的)",
+        "meaning": "adj. 电的；电动的；令人激动的",
+        "example": {
+          "en": "The electric car is very quiet.",
+          "cn": "这辆电动车非常安静。"
+        }
+      },
+      {
+        "name": "magic",
+        "phonetic": "/ˈmædʒɪk/",
+        "breakdown": "mag (巫术) + -ic (具有...性质的)",
+        "meaning": "n. 魔法 adj. 魔术的；有魔力的",
+        "example": {
+          "en": "The magician performed amazing magic tricks.",
+          "cn": "魔术师表演了惊人的魔术。"
+        }
+      },
+      {
+        "name": "classic",
+        "phonetic": "/ˈklæsɪk/",
+        "breakdown": "class (等级) + -ic (具有...性质的)",
+        "meaning": "adj. 经典的；古典的 n. 经典作品",
+        "example": {
+          "en": "This is a classic example of good design.",
+          "cn": "这是优秀设计的经典范例。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_y",
+    "form": "-y",
+    "type": "suffix",
+    "phonetic": "/-i/",
+    "meaning": "具有...特征的 / 充满...的 / 有点...的",
+    "category": "adj",
+    "categoryLabel": "高频形容词后缀",
+    "origin": "源自古英语 -ig，源自日耳曼语系，表示\"具有...性质、充满...\"，是英语中最古老的形容词后缀之一。",
+    "derivationNote": "加在名词后构成形容词，常表示\"充满、具有\"，如 sun → sunny，rain → rainy。",
+    "words": [
+      {
+        "name": "sunny",
+        "phonetic": "/ˈsʌni/",
+        "breakdown": "sun (太阳) + -y (充满...的)",
+        "meaning": "adj. 阳光充足的；晴朗的",
+        "example": {
+          "en": "It was a sunny and warm day.",
+          "cn": "那是一个阳光明媚温暖的日子。"
+        }
+      },
+      {
+        "name": "rainy",
+        "phonetic": "/ˈreɪni/",
+        "breakdown": "rain (雨) + -y (充满...的)",
+        "meaning": "adj. 下雨的；多雨的",
+        "example": {
+          "en": "We stayed indoors on the rainy day.",
+          "cn": "下雨天我们待在室内。"
+        }
+      },
+      {
+        "name": "healthy",
+        "phonetic": "/ˈhelθi/",
+        "breakdown": "health (健康) + -y (具有...的)",
+        "meaning": "adj. 健康的；有益健康的",
+        "example": {
+          "en": "Eating vegetables is good for a healthy diet.",
+          "cn": "吃蔬菜对健康饮食有益。"
+        }
+      },
+      {
+        "name": "lucky",
+        "phonetic": "/ˈlʌki/",
+        "breakdown": "luck (运气) + -y (具有...的)",
+        "meaning": "adj. 幸运的；好运的",
+        "example": {
+          "en": "She was lucky to find her lost keys.",
+          "cn": "她很幸运找到了丢失的钥匙。"
+        }
+      },
+      {
+        "name": "easy",
+        "phonetic": "/ˈiːzi/",
+        "breakdown": "ease (轻松) + -y (具有...的)",
+        "meaning": "adj. 容易的；舒适的",
+        "example": {
+          "en": "This is an easy question to answer.",
+          "cn": "这是一个容易回答的问题。"
+        }
+      },
+      {
+        "name": "busy",
+        "phonetic": "/ˈbɪzi/",
+        "breakdown": "bus (忙碌) + -y (充满...的)",
+        "meaning": "adj. 忙碌的；繁忙的",
+        "example": {
+          "en": "I have been very busy with work lately.",
+          "cn": "我最近工作一直很忙。"
+        }
+      },
+      {
+        "name": "happy",
+        "phonetic": "/ˈhæpi/",
+        "breakdown": "hap (运气) + -y (具有...的)",
+        "meaning": "adj. 快乐的；幸福的",
+        "example": {
+          "en": "She looked happy on her wedding day.",
+          "cn": "她在婚礼那天看起来很幸福。"
+        }
+      },
+      {
+        "name": "dirty",
+        "phonetic": "/ˈdɜːrti/",
+        "breakdown": "dirt (脏) + -y (充满...的)",
+        "meaning": "adj. 脏的；肮脏的",
+        "example": {
+          "en": "Take off your dirty shoes before entering.",
+          "cn": "进屋前脱掉你的脏鞋。"
+        }
+      },
+      {
+        "name": "noisy",
+        "phonetic": "/ˈnɔɪzi/",
+        "breakdown": "noise (噪音) + -y (充满...的)",
+        "meaning": "adj. 嘈杂的；喧闹的",
+        "example": {
+          "en": "The street was very noisy at night.",
+          "cn": "这条街晚上很嘈杂。"
+        }
+      },
+      {
+        "name": "wealthy",
+        "phonetic": "/ˈwelθi/",
+        "breakdown": "wealth (财富) + -y (具有...的)",
+        "meaning": "adj. 富有的；富裕的",
+        "example": {
+          "en": "He comes from a wealthy family.",
+          "cn": "他出身于富裕家庭。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ish",
+    "form": "-ish",
+    "type": "suffix",
+    "phonetic": "/-ɪʃ/",
+    "meaning": "有点...的 / 像...的 / 大约...的 / 使...",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 -isc，表示\"具有...性质、有点像\"，也可作动词后缀表示\"使成为\"。",
+    "derivationNote": "作形容词后缀表示\"有点、稍微\"（childish 孩子气的），作动词后缀表示\"使\"（finish 完成）。",
+    "words": [
+      {
+        "name": "childish",
+        "phonetic": "/ˈtʃaɪldɪʃ/",
+        "breakdown": "child (孩子) + -ish (像...的)",
+        "meaning": "adj. 孩子气的；幼稚的",
+        "example": {
+          "en": "Don't be so childish about it.",
+          "cn": "别在这件事上这么孩子气。"
+        }
+      },
+      {
+        "name": "foolish",
+        "phonetic": "/ˈfuːlɪʃ/",
+        "breakdown": "fool (傻瓜) + -ish (像...的)",
+        "meaning": "adj. 愚蠢的；傻的",
+        "example": {
+          "en": "It was foolish of him to quit his job.",
+          "cn": "他辞职真是太愚蠢了。"
+        }
+      },
+      {
+        "name": "selfish",
+        "phonetic": "/ˈselfɪʃ/",
+        "breakdown": "self (自己) + -ish (有...倾向的)",
+        "meaning": "adj. 自私的；利己的",
+        "example": {
+          "en": "He is too selfish to share his things.",
+          "cn": "他太自私了，不愿分享东西。"
+        }
+      },
+      {
+        "name": "British",
+        "phonetic": "/ˈbrɪtɪʃ/",
+        "breakdown": "Brit (不列颠) + -ish (与...有关的)",
+        "meaning": "adj. 英国的；英国人的",
+        "example": {
+          "en": "She has a British accent.",
+          "cn": "她有英国口音。"
+        }
+      },
+      {
+        "name": "Spanish",
+        "phonetic": "/ˈspænɪʃ/",
+        "breakdown": "Spain (西班牙) + -ish (与...有关的)",
+        "meaning": "adj. 西班牙的 n. 西班牙语",
+        "example": {
+          "en": "He speaks Spanish fluently.",
+          "cn": "他西班牙语说得很流利。"
+        }
+      },
+      {
+        "name": "reddish",
+        "phonetic": "/ˈredɪʃ/",
+        "breakdown": "red (红) + -ish (有点...的)",
+        "meaning": "adj. 略带红色的；微红的",
+        "example": {
+          "en": "The sky turned reddish at sunset.",
+          "cn": "日落时天空变成了微红色。"
+        }
+      },
+      {
+        "name": "tallish",
+        "phonetic": "/ˈtɔːlɪʃ/",
+        "breakdown": "tall (高) + -ish (有点...的)",
+        "meaning": "adj. 有点高的；较高的",
+        "example": {
+          "en": "He is a tallish man in his thirties.",
+          "cn": "他是个三十多岁、个子较高的男人。"
+        }
+      },
+      {
+        "name": "bookish",
+        "phonetic": "/ˈbʊkɪʃ/",
+        "breakdown": "book (书) + -ish (有...倾向的)",
+        "meaning": "adj. 书呆子气的；好学的",
+        "example": {
+          "en": "She was a quiet, bookish girl.",
+          "cn": "她是个安静、爱读书的女孩。"
+        }
+      },
+      {
+        "name": "finish",
+        "phonetic": "/ˈfɪnɪʃ/",
+        "breakdown": "fin (结束) + -ish (使...：动词)",
+        "meaning": "v. 完成；结束 n. 结尾",
+        "example": {
+          "en": "Please finish your homework before dinner.",
+          "cn": "请在晚饭前完成作业。"
+        }
+      },
+      {
+        "name": "establish",
+        "phonetic": "/ɪˈstæblɪʃ/",
+        "breakdown": "e- (出) + stabl (稳定) + -ish (使...)",
+        "meaning": "v. 建立；确立；创办",
+        "example": {
+          "en": "The company was established in 1990.",
+          "cn": "这家公司成立于1990年。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_en_adj",
+    "form": "-en",
+    "type": "suffix",
+    "phonetic": "/-ən/",
+    "meaning": "由...制成的 / 使成为...（形容词或动词）",
+    "category": "adj",
+    "categoryLabel": "形容词/动词后缀",
+    "origin": "源自古英语 -en，加在名词后构成形容词表示\"由...制成\"，加在形容词后构成动词表示\"使成为\"。",
+    "derivationNote": "作形容词：wood → wooden（木制的）；作动词：weak → weaken（使变弱）。",
+    "words": [
+      {
+        "name": "wooden",
+        "phonetic": "/ˈwʊdn/",
+        "breakdown": "wood (木头) + -en (由...制成的)",
+        "meaning": "adj. 木制的；木头的",
+        "example": {
+          "en": "The table is made of wooden planks.",
+          "cn": "这张桌子是由木板制成的。"
+        }
+      },
+      {
+        "name": "golden",
+        "phonetic": "/ˈɡoʊldən/",
+        "breakdown": "gold (金子) + -en (由...制成的)",
+        "meaning": "adj. 金色的；金制的；极好的",
+        "example": {
+          "en": "The golden sun set over the ocean.",
+          "cn": "金色的太阳落在海面上。"
+        }
+      },
+      {
+        "name": "silken",
+        "phonetic": "/ˈsɪlkən/",
+        "breakdown": "silk (丝绸) + -en (由...制成的)",
+        "meaning": "adj. 丝制的；柔软光滑的",
+        "example": {
+          "en": "She wore a silken dress to the party.",
+          "cn": "她穿了一件丝质连衣裙去参加聚会。"
+        }
+      },
+      {
+        "name": "waxen",
+        "phonetic": "/ˈwæksən/",
+        "breakdown": "wax (蜡) + -en (由...制成的)",
+        "meaning": "adj. 蜡制的；苍白的",
+        "example": {
+          "en": "The waxen figures looked very real.",
+          "cn": "蜡像看起来非常逼真。"
+        }
+      },
+      {
+        "name": "weaken",
+        "phonetic": "/ˈwiːkən/",
+        "breakdown": "weak (虚弱的) + -en (使成为...)",
+        "meaning": "v. 使变弱；削弱",
+        "example": {
+          "en": "The illness weakened his body.",
+          "cn": "疾病使他的身体变弱了。"
+        }
+      },
+      {
+        "name": "strengthen",
+        "phonetic": "/ˈstreŋθən/",
+        "breakdown": "strength (力量) + -en (使成为...)",
+        "meaning": "v. 加强；增强",
+        "example": {
+          "en": "Exercise helps strengthen your muscles.",
+          "cn": "锻炼有助于增强肌肉。"
+        }
+      },
+      {
+        "name": "widen",
+        "phonetic": "/ˈwaɪdn/",
+        "breakdown": "wide (宽的) + -en (使成为...)",
+        "meaning": "v. 加宽；变宽",
+        "example": {
+          "en": "The road is being widened.",
+          "cn": "这条路正在被加宽。"
+        }
+      },
+      {
+        "name": "deepen",
+        "phonetic": "/ˈdiːpən/",
+        "breakdown": "deep (深的) + -en (使成为...)",
+        "meaning": "v. 加深；变深",
+        "example": {
+          "en": "The river deepens in the summer.",
+          "cn": "夏天河水变深。"
+        }
+      },
+      {
+        "name": "brighten",
+        "phonetic": "/ˈbraɪtn/",
+        "breakdown": "bright (明亮的) + -en (使成为...)",
+        "meaning": "v. 使明亮；使高兴",
+        "example": {
+          "en": "Flowers brighten up the room.",
+          "cn": "鲜花让房间明亮起来。"
+        }
+      },
+      {
+        "name": "sharpen",
+        "phonetic": "/ˈʃɑːrpən/",
+        "breakdown": "sharp (锋利的) + -en (使成为...)",
+        "meaning": "v. 削尖；使敏锐",
+        "example": {
+          "en": "Please sharpen this pencil for me.",
+          "cn": "请帮我把这支铅笔削尖。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ary",
+    "form": "-ary / -ory",
+    "type": "suffix",
+    "phonetic": "/-eri/",
+    "meaning": "与...有关的 / 从事...的 / ...的地方",
+    "category": "adj",
+    "categoryLabel": "形容词/名词后缀",
+    "origin": "源自拉丁语形容词后缀 -arius / -orius，表示\"与...相关、从事...\"，也可作名词后缀表示场所。",
+    "derivationNote": "作形容词：revolution → revolutionary；作名词：library（图书馆）、factory（工厂）。",
+    "words": [
+      {
+        "name": "necessary",
+        "phonetic": "/ˈnesəseri/",
+        "breakdown": "necess (需要) + -ary (与...有关的)",
+        "meaning": "adj. 必要的；必需的",
+        "example": {
+          "en": "It is necessary to wear a seatbelt.",
+          "cn": "系安全带是必要的。"
+        }
+      },
+      {
+        "name": "ordinary",
+        "phonetic": "/ˈɔːrdneri/",
+        "breakdown": "ordin (顺序) + -ary (与...有关的)",
+        "meaning": "adj. 普通的；平常的",
+        "example": {
+          "en": "It was just an ordinary day.",
+          "cn": "那只是普通的一天。"
+        }
+      },
+      {
+        "name": "revolutionary",
+        "phonetic": "/ˌrevəˈluːʃəneri/",
+        "breakdown": "revolution (革命) + -ary (与...有关的)",
+        "meaning": "adj. 革命的 n. 革命者",
+        "example": {
+          "en": "This is a revolutionary new technology.",
+          "cn": "这是一项革命性的新技术。"
+        }
+      },
+      {
+        "name": "primary",
+        "phonetic": "/ˈpraɪmeri/",
+        "breakdown": "prim (第一) + -ary (与...有关的)",
+        "meaning": "adj. 主要的；初级的",
+        "example": {
+          "en": "Safety is our primary concern.",
+          "cn": "安全是我们最关心的事。"
+        }
+      },
+      {
+        "name": "library",
+        "phonetic": "/ˈlaɪbreri/",
+        "breakdown": "libr (书) + -ary (场所)",
+        "meaning": "n. 图书馆；藏书室",
+        "example": {
+          "en": "I borrowed this book from the library.",
+          "cn": "我从图书馆借了这本书。"
+        }
+      },
+      {
+        "name": "dictionary",
+        "phonetic": "/ˈdɪkʃəneri/",
+        "breakdown": "dict (说) + -ion + -ary (工具书)",
+        "meaning": "n. 字典；词典",
+        "example": {
+          "en": "Look up the word in the dictionary.",
+          "cn": "在字典里查这个词。"
+        }
+      },
+      {
+        "name": "factory",
+        "phonetic": "/ˈfæktəri/",
+        "breakdown": "fact (做) + -ory (场所)",
+        "meaning": "n. 工厂；制造厂",
+        "example": {
+          "en": "The factory produces 1000 cars a day.",
+          "cn": "这家工厂每天生产1000辆汽车。"
+        }
+      },
+      {
+        "name": "history",
+        "phonetic": "/ˈhɪstəri/",
+        "breakdown": "histor (知道) + -ory (学科)",
+        "meaning": "n. 历史；历史学",
+        "example": {
+          "en": "History repeats itself.",
+          "cn": "历史会重演。"
+        }
+      },
+      {
+        "name": "territory",
+        "phonetic": "/ˈterətɔːri/",
+        "breakdown": "terr (土地) + -itory (场所)",
+        "meaning": "n. 领土；领域；范围",
+        "example": {
+          "en": "This is the territory of the native tribe.",
+          "cn": "这是原住民部落的领土。"
+        }
+      },
+      {
+        "name": "satisfactory",
+        "phonetic": "/ˌsætɪsˈfæktəri/",
+        "breakdown": "satisfact (满足) + -ory (与...有关的)",
+        "meaning": "adj. 令人满意的",
+        "example": {
+          "en": "The results were satisfactory.",
+          "cn": "结果令人满意。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ant",
+    "form": "-ant / -ent",
+    "type": "suffix",
+    "phonetic": "/-ənt/",
+    "meaning": "具有...性质的 / 做...的人或物",
+    "category": "adj",
+    "categoryLabel": "形容词/名词后缀",
+    "origin": "源自拉丁语现在分词后缀 -ans / -ens，表示\"正在做...、具有...性质\"，可作形容词或名词。",
+    "derivationNote": "作形容词：important（重要的）、different（不同的）；作名词：assistant（助手）、student（学生）。",
+    "words": [
+      {
+        "name": "important",
+        "phonetic": "/ɪmˈpɔːrtnt/",
+        "breakdown": "import (重要) + -ant (具有...性质的)",
+        "meaning": "adj. 重要的；重大的",
+        "example": {
+          "en": "Education is very important for children.",
+          "cn": "教育对孩子非常重要。"
+        }
+      },
+      {
+        "name": "different",
+        "phonetic": "/ˈdɪfrənt/",
+        "breakdown": "differ (不同) + -ent (具有...性质的)",
+        "meaning": "adj. 不同的；有差异的",
+        "example": {
+          "en": "Everyone has a different opinion.",
+          "cn": "每个人都有不同的意见。"
+        }
+      },
+      {
+        "name": "pleasant",
+        "phonetic": "/ˈpleznt/",
+        "breakdown": "please (使高兴) + -ant (具有...性质的)",
+        "meaning": "adj. 令人愉快的；舒适的",
+        "example": {
+          "en": "We had a pleasant evening together.",
+          "cn": "我们一起度过了愉快的夜晚。"
+        }
+      },
+      {
+        "name": "excellent",
+        "phonetic": "/ˈeksələnt/",
+        "breakdown": "excell (超越) + -ent (具有...性质的)",
+        "meaning": "adj. 极好的；优秀的",
+        "example": {
+          "en": "She did an excellent job on the project.",
+          "cn": "她在这个项目上做得非常出色。"
+        }
+      },
+      {
+        "name": "assistant",
+        "phonetic": "/əˈsɪstənt/",
+        "breakdown": "assist (帮助) + -ant (做...的人)",
+        "meaning": "n. 助手；助理 adj. 辅助的",
+        "example": {
+          "en": "She works as a personal assistant.",
+          "cn": "她做私人助理。"
+        }
+      },
+      {
+        "name": "student",
+        "phonetic": "/ˈstuːdnt/",
+        "breakdown": "study (学习) + -ent (做...的人)",
+        "meaning": "n. 学生；学者",
+        "example": {
+          "en": "He is a medical student.",
+          "cn": "他是一名医学生。"
+        }
+      },
+      {
+        "name": "servant",
+        "phonetic": "/ˈsɜːrvənt/",
+        "breakdown": "serve (服务) + -ant (做...的人)",
+        "meaning": "n. 仆人；公务员",
+        "example": {
+          "en": "The servant opened the door for us.",
+          "cn": "仆人为我们开了门。"
+        }
+      },
+      {
+        "name": "president",
+        "phonetic": "/ˈprezɪdənt/",
+        "breakdown": "preside (主持) + -ent (做...的人)",
+        "meaning": "n. 总统；校长；主席",
+        "example": {
+          "en": "The president gave a speech on TV.",
+          "cn": "总统在电视上发表了演讲。"
+        }
+      },
+      {
+        "name": "dependent",
+        "phonetic": "/dɪˈpendənt/",
+        "breakdown": "depend (依赖) + -ent (具有...性质的)",
+        "meaning": "adj. 依赖的；取决于...的",
+        "example": {
+          "en": "Children are dependent on their parents.",
+          "cn": "孩子依赖父母。"
+        }
+      },
+      {
+        "name": "confident",
+        "phonetic": "/ˈkɑːnfɪdənt/",
+        "breakdown": "confide (信任) + -ent (具有...性质的)",
+        "meaning": "adj. 自信的；确信的",
+        "example": {
+          "en": "She is confident about the interview.",
+          "cn": "她对面试很有信心。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_like",
+    "form": "-like",
+    "type": "suffix",
+    "phonetic": "/-laɪk/",
+    "meaning": "像...的 / 具有...特征的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 -lic（像、相似），与 like 同源，表示\"具有某种特征或相似性\"。",
+    "derivationNote": "加在名词后构成形容词，表示\"像...一样\"，如 child → childlike（孩子般的）。",
+    "words": [
+      {
+        "name": "childlike",
+        "phonetic": "/ˈtʃaɪldlaɪk/",
+        "breakdown": "child (孩子) + -like (像...的)",
+        "meaning": "adj. 孩子般的；天真的",
+        "example": {
+          "en": "She has a childlike sense of wonder.",
+          "cn": "她有着孩子般的好奇心。"
+        }
+      },
+      {
+        "name": "lifelike",
+        "phonetic": "/ˈlaɪflaɪk/",
+        "breakdown": "life (生命) + -like (像...的)",
+        "meaning": "adj. 逼真的；栩栩如生的",
+        "example": {
+          "en": "The robot has lifelike movements.",
+          "cn": "这个机器人有着逼真的动作。"
+        }
+      },
+      {
+        "name": "businesslike",
+        "phonetic": "/ˈbɪznəslaɪk/",
+        "breakdown": "business (事务) + -like (像...的)",
+        "meaning": "adj. 公事公办的；有条理的",
+        "example": {
+          "en": "She handled the situation in a businesslike manner.",
+          "cn": "她以公事公办的方式处理了情况。"
+        }
+      },
+      {
+        "name": "dreamlike",
+        "phonetic": "/ˈdriːmlaɪk/",
+        "breakdown": "dream (梦) + -like (像...的)",
+        "meaning": "adj. 梦幻般的；朦胧的",
+        "example": {
+          "en": "The scene had a dreamlike quality.",
+          "cn": "这个场景有一种梦幻般的质感。"
+        }
+      },
+      {
+        "name": "warmlike",
+        "phonetic": "/ˈwɔːrmlaɪk/",
+        "breakdown": "warm (温暖) + -like (像...的)",
+        "meaning": "adj. 像温暖的；温暖的",
+        "example": {
+          "en": "The room had a warmlike atmosphere.",
+          "cn": "房间里有一种温暖的氛围。"
+        }
+      },
+      {
+        "name": "catlike",
+        "phonetic": "/ˈkætlaɪk/",
+        "breakdown": "cat (猫) + -like (像...的)",
+        "meaning": "adj. 像猫的；敏捷的",
+        "example": {
+          "en": "He moved with catlike grace.",
+          "cn": "他动作如猫般优雅。"
+        }
+      },
+      {
+        "name": "godlike",
+        "phonetic": "/ˈɡɑːdlaɪk/",
+        "breakdown": "god (神) + -like (像...的)",
+        "meaning": "adj. 神一般的；神圣的",
+        "example": {
+          "en": "The hero had godlike strength.",
+          "cn": "这位英雄有着神一般的力量。"
+        }
+      },
+      {
+        "name": "homelike",
+        "phonetic": "/ˈhoʊmlaɪk/",
+        "breakdown": "home (家) + -like (像...的)",
+        "meaning": "adj. 像家一样的；舒适的",
+        "example": {
+          "en": "The hotel room had a homelike feel.",
+          "cn": "酒店房间有一种家的感觉。"
+        }
+      },
+      {
+        "name": "snake-like",
+        "phonetic": "/ˈsneɪklaɪk/",
+        "breakdown": "snake (蛇) + -like (像...的)",
+        "meaning": "adj. 像蛇的；蜿蜒的",
+        "example": {
+          "en": "The snake-like river wound through the valley.",
+          "cn": "蜿蜒的河流穿过山谷。"
+        }
+      },
+      {
+        "name": "starlike",
+        "phonetic": "/ˈstɑːrlaɪk/",
+        "breakdown": "star (星星) + -like (像...的)",
+        "meaning": "adj. 星形的；明亮的",
+        "example": {
+          "en": "The flowers have starlike petals.",
+          "cn": "这些花有着星形的花瓣。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_some",
+    "form": "-some",
+    "type": "suffix",
+    "phonetic": "/-səm/",
+    "meaning": "易于...的 / 有...倾向的 / 引起...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 -sum，表示\"具有某种倾向或特征\"，加在动词或名词后构成形容词。",
+    "derivationNote": "表示\"易于、倾向于\"，如 trouble → troublesome（麻烦的）， tire → tiresome（令人厌倦的）。",
+    "words": [
+      {
+        "name": "troublesome",
+        "phonetic": "/ˈtrʌblsəm/",
+        "breakdown": "trouble (麻烦) + -some (引起...的)",
+        "meaning": "adj. 麻烦的；令人烦恼的",
+        "example": {
+          "en": "This is a troublesome problem.",
+          "cn": "这是一个麻烦的问题。"
+        }
+      },
+      {
+        "name": "tiresome",
+        "phonetic": "/ˈtaɪərsəm/",
+        "breakdown": "tire (使疲倦) + -some (有...倾向的)",
+        "meaning": "adj. 令人厌倦的；烦人的",
+        "example": {
+          "en": "The long meeting was tiresome.",
+          "cn": "漫长的会议令人厌倦。"
+        }
+      },
+      {
+        "name": "handsome",
+        "phonetic": "/ˈhænsəm/",
+        "breakdown": "hand (手) + -some (易于...的)",
+        "meaning": "adj. 英俊的；可观的",
+        "example": {
+          "en": "He is a tall and handsome man.",
+          "cn": "他是个高大英俊的男人。"
+        }
+      },
+      {
+        "name": "wholesome",
+        "phonetic": "/ˈhoʊlsəm/",
+        "breakdown": "whole (完整) + -some (有...性质的)",
+        "meaning": "adj. 有益健康的；有益的",
+        "example": {
+          "en": "Milk is a wholesome drink.",
+          "cn": "牛奶是有益健康的饮品。"
+        }
+      },
+      {
+        "name": "fearsome",
+        "phonetic": "/ˈfɪrsəm/",
+        "breakdown": "fear (恐惧) + -some (引起...的)",
+        "meaning": "adj. 可怕的；吓人的",
+        "example": {
+          "en": "The dragon was a fearsome creature.",
+          "cn": "龙是一种可怕的生物。"
+        }
+      },
+      {
+        "name": "burdensome",
+        "phonetic": "/ˈbɜːrdnsəm/",
+        "breakdown": "burden (负担) + -some (有...性质的)",
+        "meaning": "adj. 沉重的；累赘的",
+        "example": {
+          "en": "The debt became burdensome.",
+          "cn": "债务变得沉重不堪。"
+        }
+      },
+      {
+        "name": "meddlesome",
+        "phonetic": "/ˈmedlsəm/",
+        "breakdown": "meddle (干涉) + -some (有...倾向的)",
+        "meaning": "adj. 爱管闲事的",
+        "example": {
+          "en": "She is a meddlesome neighbor.",
+          "cn": "她是个爱管闲事的邻居。"
+        }
+      },
+      {
+        "name": "quarrelsome",
+        "phonetic": "/ˈkwɔːrəlsəm/",
+        "breakdown": "quarrel (争吵) + -some (有...倾向的)",
+        "meaning": "adj. 好争吵的；好斗的",
+        "example": {
+          "en": "The quarrelsome man argued with everyone.",
+          "cn": "这个好争吵的男人跟谁都吵。"
+        }
+      },
+      {
+        "name": "awesome",
+        "phonetic": "/ˈɔːsəm/",
+        "breakdown": "awe (敬畏) + -some (引起...的)",
+        "meaning": "adj. 令人惊叹的；极好的",
+        "example": {
+          "en": "The view from the mountain was awesome.",
+          "cn": "从山上看到的景色令人惊叹。"
+        }
+      },
+      {
+        "name": "lonesome",
+        "phonetic": "/ˈloʊnsəm/",
+        "breakdown": "lone (孤独) + -some (有...性质的)",
+        "meaning": "adj. 寂寞的；荒凉的",
+        "example": {
+          "en": "He felt lonesome in the big city.",
+          "cn": "他在大城市里感到寂寞。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ify",
+    "form": "-ify / -fy",
+    "type": "suffix",
+    "phonetic": "/-faɪ/",
+    "meaning": "使成为... / ...化 / 使具有...性质",
+    "category": "verb",
+    "categoryLabel": "高频动词后缀",
+    "origin": "源自拉丁语动词后缀 -ficare（使做、使成为），经法语 -ifier 进入英语。",
+    "derivationNote": "强大的使役动词后缀，将形容词或名词转化为使役动词，如 simple → simplify（简化）。",
+    "words": [
+      {
+        "name": "simplify",
+        "phonetic": "/ˈsɪmplɪfaɪ/",
+        "breakdown": "simple (简单的) + -ify (使成为...)",
+        "meaning": "v. 简化；使简明",
+        "example": {
+          "en": "We need to simplify the process.",
+          "cn": "我们需要简化这个流程。"
+        }
+      },
+      {
+        "name": "identify",
+        "phonetic": "/aɪˈdentɪfaɪ/",
+        "breakdown": "ident (相同) + -ify (使成为...)",
+        "meaning": "v. 识别；认出；认同",
+        "example": {
+          "en": "Can you identify this plant?",
+          "cn": "你能识别这种植物吗？"
+        }
+      },
+      {
+        "name": "beautify",
+        "phonetic": "/ˈbjuːtɪfaɪ/",
+        "breakdown": "beauty (美) + -ify (使成为...)",
+        "meaning": "v. 美化；使美丽",
+        "example": {
+          "en": "Flowers beautify the garden.",
+          "cn": "鲜花美化了花园。"
+        }
+      },
+      {
+        "name": "classify",
+        "phonetic": "/ˈklæsɪfaɪ/",
+        "breakdown": "class (类别) + -ify (使成为...)",
+        "meaning": "v. 分类；归类",
+        "example": {
+          "en": "Librarians classify books by subject.",
+          "cn": "图书管理员按主题分类图书。"
+        }
+      },
+      {
+        "name": "satisfy",
+        "phonetic": "/ˈsætɪsfaɪ/",
+        "breakdown": "satis (足够) + -fy (使成为...)",
+        "meaning": "v. 使满意；满足",
+        "example": {
+          "en": "The meal satisfied our hunger.",
+          "cn": "这顿饭满足了我们的饥饿。"
+        }
+      },
+      {
+        "name": "modify",
+        "phonetic": "/ˈmɑːdɪfaɪ/",
+        "breakdown": "mod (方式) + -ify (使成为...)",
+        "meaning": "v. 修改；改变；修饰",
+        "example": {
+          "en": "We need to modify the design.",
+          "cn": "我们需要修改设计。"
+        }
+      },
+      {
+        "name": "clarify",
+        "phonetic": "/ˈklærəfaɪ/",
+        "breakdown": "clar (清楚) + -ify (使成为...)",
+        "meaning": "v. 澄清；阐明",
+        "example": {
+          "en": "Could you clarify your point?",
+          "cn": "你能澄清一下你的观点吗？"
+        }
+      },
+      {
+        "name": "justify",
+        "phonetic": "/ˈdʒʌstɪfaɪ/",
+        "breakdown": "just (公正的) + -ify (使成为...)",
+        "meaning": "v. 证明...正当；为...辩护",
+        "example": {
+          "en": "Nothing can justify such cruelty.",
+          "cn": "没有什么能为这种残忍辩护。"
+        }
+      },
+      {
+        "name": "purify",
+        "phonetic": "/ˈpjʊrɪfaɪ/",
+        "breakdown": "pure (纯净的) + -ify (使成为...)",
+        "meaning": "v. 净化；使纯净",
+        "example": {
+          "en": "This filter purifies the water.",
+          "cn": "这个过滤器净化水。"
+        }
+      },
+      {
+        "name": "magnify",
+        "phonetic": "/ˈmæɡnɪfaɪ/",
+        "breakdown": "magni (大) + -fy (使成为...)",
+        "meaning": "v. 放大；夸大",
+        "example": {
+          "en": "A microscope magnifies tiny objects.",
+          "cn": "显微镜放大微小物体。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ate",
+    "form": "-ate",
+    "type": "suffix",
+    "phonetic": "/-eɪt/",
+    "meaning": "使成为... / 做... / 具有...的（动词/形容词/名词）",
+    "category": "verb",
+    "categoryLabel": "高频动词后缀",
+    "origin": "源自拉丁语动词后缀 -atus，表示\"使成为、做、具有\"，可作动词、形容词和名词后缀。",
+    "derivationNote": "作动词：create（创造）、operate（操作）；作形容词：private（私人的）；作名词：graduate（毕业生）。",
+    "words": [
+      {
+        "name": "create",
+        "phonetic": "/kriˈeɪt/",
+        "breakdown": "cre (创造) + -ate (做...)",
+        "meaning": "v. 创造；创作；引起",
+        "example": {
+          "en": "Artists create beautiful works.",
+          "cn": "艺术家创造美丽的作品。"
+        }
+      },
+      {
+        "name": "operate",
+        "phonetic": "/ˈɑːpəreɪt/",
+        "breakdown": "oper (工作) + -ate (做...)",
+        "meaning": "v. 操作；运转；动手术",
+        "example": {
+          "en": "She knows how to operate this machine.",
+          "cn": "她知道如何操作这台机器。"
+        }
+      },
+      {
+        "name": "educate",
+        "phonetic": "/ˈedʒukeɪt/",
+        "breakdown": "e- (出) + duc (引导) + -ate (做...)",
+        "meaning": "v. 教育；培养",
+        "example": {
+          "en": "Parents should educate their children well.",
+          "cn": "父母应该好好教育孩子。"
+        }
+      },
+      {
+        "name": "communicate",
+        "phonetic": "/kəˈmjuːnɪkeɪt/",
+        "breakdown": "commun (共同) + -icate (做...)",
+        "meaning": "v. 交流；沟通；传达",
+        "example": {
+          "en": "We communicate by email.",
+          "cn": "我们通过电子邮件交流。"
+        }
+      },
+      {
+        "name": "graduate",
+        "phonetic": "/ˈɡrædʒuət/",
+        "breakdown": "grad (步/级) + -uate (做...)",
+        "meaning": "v. 毕业 n. 毕业生",
+        "example": {
+          "en": "She graduated from university last year.",
+          "cn": "她去年大学毕业。"
+        }
+      },
+      {
+        "name": "private",
+        "phonetic": "/ˈpraɪvət/",
+        "breakdown": "priv (私人) + -ate (具有...的)",
+        "meaning": "adj. 私人的；私有的",
+        "example": {
+          "en": "This is a private conversation.",
+          "cn": "这是私人谈话。"
+        }
+      },
+      {
+        "name": "separate",
+        "phonetic": "/ˈsepərət/",
+        "breakdown": "se- (分开) + par (准备) + -ate (做...)",
+        "meaning": "v. 分开 adj. 单独的",
+        "example": {
+          "en": "Please separate the recyclables.",
+          "cn": "请把可回收物分开。"
+        }
+      },
+      {
+        "name": "celebrate",
+        "phonetic": "/ˈselɪbreɪt/",
+        "breakdown": "celebr (荣誉) + -ate (做...)",
+        "meaning": "v. 庆祝；颂扬",
+        "example": {
+          "en": "We celebrate birthdays with cake.",
+          "cn": "我们用蛋糕庆祝生日。"
+        }
+      },
+      {
+        "name": "demonstrate",
+        "phonetic": "/ˈdemənstreɪt/",
+        "breakdown": "de- (完全) + monstr (显示) + -ate (做...)",
+        "meaning": "v. 证明；演示；示威",
+        "example": {
+          "en": "Let me demonstrate how it works.",
+          "cn": "让我演示一下它如何工作。"
+        }
+      },
+      {
+        "name": "appropriate",
+        "phonetic": "/əˈproʊpriət/",
+        "breakdown": "ap- (向) + propri (自己的) + -ate (具有...的)",
+        "meaning": "adj. 适当的 v. 挪用",
+        "example": {
+          "en": "Wear appropriate clothes for the interview.",
+          "cn": "面试时穿合适的衣服。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ward",
+    "form": "-ward / -wards",
+    "type": "suffix",
+    "phonetic": "/-wərd/",
+    "meaning": "向...方向 / 朝...",
+    "category": "adv",
+    "categoryLabel": "副词/形容词后缀",
+    "origin": "源自古英语 -weard（朝向），表示方向，-ward 可作形容词/副词，-wards 主要作副词。",
+    "derivationNote": "加在方位词后表示方向，如 forward（向前）、backward（向后）、upward（向上）。",
+    "words": [
+      {
+        "name": "forward",
+        "phonetic": "/ˈfɔːrwərd/",
+        "breakdown": "fore (前) + -ward (向...方向)",
+        "meaning": "adv./adj. 向前；前进的",
+        "example": {
+          "en": "Please move forward to the front.",
+          "cn": "请向前走到前面。"
+        }
+      },
+      {
+        "name": "backward",
+        "phonetic": "/ˈbækwərd/",
+        "breakdown": "back (后) + -ward (向...方向)",
+        "meaning": "adv./adj. 向后；落后的",
+        "example": {
+          "en": "He took a step backward.",
+          "cn": "他向后退了一步。"
+        }
+      },
+      {
+        "name": "upward",
+        "phonetic": "/ˈʌpwərd/",
+        "breakdown": "up (上) + -ward (向...方向)",
+        "meaning": "adv./adj. 向上；上升的",
+        "example": {
+          "en": "The bird flew upward into the sky.",
+          "cn": "鸟向上飞入天空。"
+        }
+      },
+      {
+        "name": "downward",
+        "phonetic": "/ˈdaʊnwərd/",
+        "breakdown": "down (下) + -ward (向...方向)",
+        "meaning": "adv./adj. 向下；下降的",
+        "example": {
+          "en": "The path leads downward to the river.",
+          "cn": "这条路向下通向河边。"
+        }
+      },
+      {
+        "name": "inward",
+        "phonetic": "/ˈɪnwərd/",
+        "breakdown": "in (内) + -ward (向...方向)",
+        "meaning": "adv./adj. 向内；内心的",
+        "example": {
+          "en": "She turned her thoughts inward.",
+          "cn": "她把思绪转向内心。"
+        }
+      },
+      {
+        "name": "outward",
+        "phonetic": "/ˈaʊtwərd/",
+        "breakdown": "out (外) + -ward (向...方向)",
+        "meaning": "adv./adj. 向外；表面的",
+        "example": {
+          "en": "The door opens outward.",
+          "cn": "这扇门向外开。"
+        }
+      },
+      {
+        "name": "afterward",
+        "phonetic": "/ˈæftərwərd/",
+        "breakdown": "after (后) + -ward (向...方向)",
+        "meaning": "adv. 后来；以后",
+        "example": {
+          "en": "We met afterward for coffee.",
+          "cn": "我们后来见面喝了咖啡。"
+        }
+      },
+      {
+        "name": "toward",
+        "phonetic": "/tɔːrd/",
+        "breakdown": "to (向) + -ward (向...方向)",
+        "meaning": "prep. 朝；向；对于",
+        "example": {
+          "en": "She walked toward the door.",
+          "cn": "她朝门口走去。"
+        }
+      },
+      {
+        "name": "eastward",
+        "phonetic": "/ˈiːstwərd/",
+        "breakdown": "east (东) + -ward (向...方向)",
+        "meaning": "adv./adj. 向东",
+        "example": {
+          "en": "We traveled eastward across the country.",
+          "cn": "我们向东穿越全国。"
+        }
+      },
+      {
+        "name": "homeward",
+        "phonetic": "/ˈhoʊmwərd/",
+        "breakdown": "home (家) + -ward (向...方向)",
+        "meaning": "adv./adj. 向家；回家的",
+        "example": {
+          "en": "The sailors turned homeward.",
+          "cn": "水手们转向回家的方向。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_wise",
+    "form": "-wise",
+    "type": "suffix",
+    "phonetic": "/-waɪz/",
+    "meaning": "在...方面 / 关于... / 以...方式",
+    "category": "adv",
+    "categoryLabel": "副词后缀",
+    "origin": "源自古英语 -wise（方式、方向），表示\"在某方面、以某种方式\"。",
+    "derivationNote": "加在名词后表示\"在...方面\"，如 money-wise（在金钱方面）、clockwise（顺时针方向）。",
+    "words": [
+      {
+        "name": "clockwise",
+        "phonetic": "/ˈklɑːkwaɪz/",
+        "breakdown": "clock (时钟) + -wise (以...方式)",
+        "meaning": "adv./adj. 顺时针方向",
+        "example": {
+          "en": "Turn the knob clockwise to open it.",
+          "cn": "顺时针转动旋钮打开它。"
+        }
+      },
+      {
+        "name": "otherwise",
+        "phonetic": "/ˈʌðərwaɪz/",
+        "breakdown": "other (其他) + -wise (方式)",
+        "meaning": "adv. 否则；另外；在其他方面",
+        "example": {
+          "en": "Hurry up, otherwise you'll be late.",
+          "cn": "快点，否则你会迟到。"
+        }
+      },
+      {
+        "name": "likewise",
+        "phonetic": "/ˈlaɪkwaɪz/",
+        "breakdown": "like (相似) + -wise (方式)",
+        "meaning": "adv. 同样地；也",
+        "example": {
+          "en": "I enjoyed the movie, and likewise did she.",
+          "cn": "我喜欢这部电影，她也一样。"
+        }
+      },
+      {
+        "name": "moneywise",
+        "phonetic": "/ˈmʌniwaɪz/",
+        "breakdown": "money (金钱) + -wise (在...方面)",
+        "meaning": "adv. 在金钱方面；财政上",
+        "example": {
+          "en": "Moneywise, we are doing well.",
+          "cn": "在金钱方面，我们做得不错。"
+        }
+      },
+      {
+        "name": "timewise",
+        "phonetic": "/ˈtaɪmwaɪz/",
+        "breakdown": "time (时间) + -wise (在...方面)",
+        "meaning": "adv. 在时间方面",
+        "example": {
+          "en": "Timewise, the project is on schedule.",
+          "cn": "在时间方面，项目按计划进行。"
+        }
+      },
+      {
+        "name": "lengthwise",
+        "phonetic": "/ˈleŋθwaɪz/",
+        "breakdown": "length (长度) + -wise (方向)",
+        "meaning": "adv. 纵向；沿长度方向",
+        "example": {
+          "en": "Cut the carrot lengthwise.",
+          "cn": "把胡萝卜纵向切开。"
+        }
+      },
+      {
+        "name": "crosswise",
+        "phonetic": "/ˈkrɔːswaɪz/",
+        "breakdown": "cross (交叉) + -wise (方向)",
+        "meaning": "adv. 横向；交叉地",
+        "example": {
+          "en": "Lay the planks crosswise.",
+          "cn": "把木板横向放置。"
+        }
+      },
+      {
+        "name": "coastwise",
+        "phonetic": "/ˈkoʊstwaɪz/",
+        "breakdown": "coast (海岸) + -wise (方向)",
+        "meaning": "adv./adj. 沿海岸",
+        "example": {
+          "en": "We sailed coastwise for two days.",
+          "cn": "我们沿海岸航行了两天。"
+        }
+      },
+      {
+        "name": "stepwise",
+        "phonetic": "/ˈstepwaɪz/",
+        "breakdown": "step (步) + -wise (方式)",
+        "meaning": "adv./adj. 逐步；分阶段",
+        "example": {
+          "en": "Follow the stepwise instructions.",
+          "cn": "按照分步说明操作。"
+        }
+      },
+      {
+        "name": "weatherwise",
+        "phonetic": "/ˈweðərwaɪz/",
+        "breakdown": "weather (天气) + -wise (在...方面)",
+        "meaning": "adv. 在天气方面",
+        "example": {
+          "en": "Weatherwise, it's been a strange month.",
+          "cn": "就天气而言，这是个奇怪的月份。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_logy",
+    "form": "-logy / -ology",
+    "type": "suffix",
+    "phonetic": "/-lədʒi/",
+    "meaning": "...学 / ...论 / 研究",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 -logia（学说、研究），来自 logos（言语、理性），表示某一学科或研究领域。",
+    "derivationNote": "表示\"...学\"，如 biology（生物学）、psychology（心理学）、technology（技术学）。",
+    "words": [
+      {
+        "name": "biology",
+        "phonetic": "/baɪˈɑːlədʒi/",
+        "breakdown": "bio (生命) + -logy (学科)",
+        "meaning": "n. 生物学",
+        "example": {
+          "en": "She is studying biology at university.",
+          "cn": "她在大学学习生物学。"
+        }
+      },
+      {
+        "name": "psychology",
+        "phonetic": "/saɪˈkɑːlədʒi/",
+        "breakdown": "psycho (心理) + -logy (学科)",
+        "meaning": "n. 心理学",
+        "example": {
+          "en": "Psychology helps us understand human behavior.",
+          "cn": "心理学帮助我们理解人类行为。"
+        }
+      },
+      {
+        "name": "technology",
+        "phonetic": "/tekˈnɑːlədʒi/",
+        "breakdown": "techno (技术) + -logy (学科)",
+        "meaning": "n. 技术；科技",
+        "example": {
+          "en": "Technology changes our lives rapidly.",
+          "cn": "科技迅速改变我们的生活。"
+        }
+      },
+      {
+        "name": "geology",
+        "phonetic": "/dʒiˈɑːlədʒi/",
+        "breakdown": "geo (地球) + -logy (学科)",
+        "meaning": "n. 地质学",
+        "example": {
+          "en": "Geology studies the Earth's structure.",
+          "cn": "地质学研究地球结构。"
+        }
+      },
+      {
+        "name": "sociology",
+        "phonetic": "/ˌsoʊsiˈɑːlədʒi/",
+        "breakdown": "socio (社会) + -logy (学科)",
+        "meaning": "n. 社会学",
+        "example": {
+          "en": "Sociology examines human society.",
+          "cn": "社会学研究人类社会。"
+        }
+      },
+      {
+        "name": "ecology",
+        "phonetic": "/iˈkɑːlədʒi/",
+        "breakdown": "eco (环境) + -logy (学科)",
+        "meaning": "n. 生态学",
+        "example": {
+          "en": "Ecology is important for environmental protection.",
+          "cn": "生态学对环境保护很重要。"
+        }
+      },
+      {
+        "name": "philosophy",
+        "phonetic": "/fəˈlɑːsəfi/",
+        "breakdown": "philo (爱) + sophy (智慧)",
+        "meaning": "n. 哲学；人生观",
+        "example": {
+          "en": "Philosophy asks deep questions about life.",
+          "cn": "哲学提出关于生命的深刻问题。"
+        }
+      },
+      {
+        "name": "history",
+        "phonetic": "/ˈhɪstəri/",
+        "breakdown": "histor (知道) + -y (学科)",
+        "meaning": "n. 历史；历史学",
+        "example": {
+          "en": "History teaches us lessons from the past.",
+          "cn": "历史教给我们过去的教训。"
+        }
+      },
+      {
+        "name": "mythology",
+        "phonetic": "/mɪˈθɑːlədʒi/",
+        "breakdown": "myth (神话) + -ology (学科)",
+        "meaning": "n. 神话学；神话体系",
+        "example": {
+          "en": "Greek mythology has many famous gods.",
+          "cn": "希腊神话有许多著名的神。"
+        }
+      },
+      {
+        "name": "terminology",
+        "phonetic": "/ˌtɜːrmɪˈnɑːlədʒi/",
+        "breakdown": "termin (术语) + -ology (学科)",
+        "meaning": "n. 术语；术语学",
+        "example": {
+          "en": "Medical terminology can be confusing.",
+          "cn": "医学术语可能令人困惑。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ee",
+    "form": "-ee",
+    "type": "suffix",
+    "phonetic": "/-iː/",
+    "meaning": "被...的人 / 受...者 / 处于...状态的人",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自法语 -é，来自拉丁语过去分词后缀 -atus，表示动作的承受者或受事者，与 -er/-or（施事者）相对。",
+    "derivationNote": "表示动作的承受者，如 employ（雇用）→ employee（雇员），与 employer（雇主）构成施受对立。",
+    "words": [
+      {
+        "name": "employee",
+        "phonetic": "/ɪmˈplɔɪiː/",
+        "breakdown": "employ (雇用) + -ee (被...的人)",
+        "meaning": "n. 雇员；员工",
+        "example": {
+          "en": "The company has over 500 employees.",
+          "cn": "公司有500多名员工。"
+        }
+      },
+      {
+        "name": "trainee",
+        "phonetic": "/ˌtreɪˈniː/",
+        "breakdown": "train (培训) + -ee (被...的人)",
+        "meaning": "n. 实习生；受训者",
+        "example": {
+          "en": "The trainee learned quickly on the job.",
+          "cn": "实习生在工作中学习很快。"
+        }
+      },
+      {
+        "name": "interviewee",
+        "phonetic": "/ˌɪntərvjuːˈiː/",
+        "breakdown": "interview (面试) + -ee (被...的人)",
+        "meaning": "n. 被面试者；受访者",
+        "example": {
+          "en": "The interviewee answered all questions confidently.",
+          "cn": "被面试者自信地回答了所有问题。"
+        }
+      },
+      {
+        "name": "nominee",
+        "phonetic": "/ˌnɑːmɪˈniː/",
+        "breakdown": "nominate (提名) + -ee (被...的人)",
+        "meaning": "n. 被提名者；候选人",
+        "example": {
+          "en": "She was the nominee for best actress.",
+          "cn": "她是最佳女主角的被提名者。"
+        }
+      },
+      {
+        "name": "referee",
+        "phonetic": "/ˌrefəˈriː/",
+        "breakdown": "refer (提交) + -ee (被...的人)",
+        "meaning": "n. 裁判；推荐人",
+        "example": {
+          "en": "The referee blew the whistle for a foul.",
+          "cn": "裁判吹哨判犯规。"
+        }
+      },
+      {
+        "name": "absentee",
+        "phonetic": "/ˌæbsənˈtiː/",
+        "breakdown": "absent (缺席) + -ee (处于...状态的人)",
+        "meaning": "n. 缺席者；旷工者",
+        "example": {
+          "en": "Absentees will need to make up the exam.",
+          "cn": "缺席者需要补考。"
+        }
+      },
+      {
+        "name": "addressee",
+        "phonetic": "/ˌædreˈsiː/",
+        "breakdown": "address (地址) + -ee (被...的人)",
+        "meaning": "n. 收件人；收信人",
+        "example": {
+          "en": "The letter was returned to the addressee.",
+          "cn": "信被退还给了收件人。"
+        }
+      },
+      {
+        "name": "payee",
+        "phonetic": "/peɪˈiː/",
+        "breakdown": "pay (支付) + -ee (被...的人)",
+        "meaning": "n. 收款人；受款人",
+        "example": {
+          "en": "Write the name of the payee on the check.",
+          "cn": "在支票上写上收款人姓名。"
+        }
+      },
+      {
+        "name": "escapee",
+        "phonetic": "/ɪˌskeɪˈpiː/",
+        "breakdown": "escape (逃跑) + -ee (被...的人)",
+        "meaning": "n. 逃犯；逃亡者",
+        "example": {
+          "en": "The escapee was captured after three days.",
+          "cn": "逃犯三天后被抓获。"
+        }
+      },
+      {
+        "name": "devotee",
+        "phonetic": "/ˌdevəˈtiː/",
+        "breakdown": "devote (奉献) + -ee (处于...状态的人)",
+        "meaning": "n. 爱好者；虔诚信徒",
+        "example": {
+          "en": "He is a devotee of classical music.",
+          "cn": "他是古典音乐的爱好者。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_eer",
+    "form": "-eer / -ier",
+    "type": "suffix",
+    "phonetic": "/-ɪr/",
+    "meaning": "从事...的人 / 与...有关的人",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自法语 -ier，来自拉丁语 -arius，表示从事某种职业或与某事物相关的人，常带有专业或技术含义。",
+    "derivationNote": "表示从事某种职业的人，如 engine（发动机）→ engineer（工程师），volunteer（志愿者）。",
+    "words": [
+      {
+        "name": "engineer",
+        "phonetic": "/ˌendʒɪˈnɪr/",
+        "breakdown": "engine (发动机) + -eer (从事...的人)",
+        "meaning": "n. 工程师；技师",
+        "example": {
+          "en": "The engineer designed the new bridge.",
+          "cn": "工程师设计了这座新桥。"
+        }
+      },
+      {
+        "name": "volunteer",
+        "phonetic": "/ˌvɑːlənˈtɪr/",
+        "breakdown": "volunt (意愿) + -eer (从事...的人)",
+        "meaning": "n. 志愿者 v. 自愿",
+        "example": {
+          "en": "Many volunteers helped after the earthquake.",
+          "cn": "地震后许多志愿者提供了帮助。"
+        }
+      },
+      {
+        "name": "auctioneer",
+        "phonetic": "/ˌɔːkʃəˈnɪr/",
+        "breakdown": "auction (拍卖) + -eer (从事...的人)",
+        "meaning": "n. 拍卖师",
+        "example": {
+          "en": "The auctioneer started the bidding at $100.",
+          "cn": "拍卖师以100美元起拍。"
+        }
+      },
+      {
+        "name": "pioneer",
+        "phonetic": "/ˌpaɪəˈnɪr/",
+        "breakdown": "pion (脚) + -eer (从事...的人)",
+        "meaning": "n. 先驱；开拓者 v. 开创",
+        "example": {
+          "en": "She was a pioneer in the field of AI.",
+          "cn": "她是人工智能领域的先驱。"
+        }
+      },
+      {
+        "name": "profiteer",
+        "phonetic": "/ˌprɑːfɪˈtɪr/",
+        "breakdown": "profit (利润) + -eer (从事...的人)",
+        "meaning": "n. 投机商；牟取暴利者",
+        "example": {
+          "en": "Profiteers raised prices during the shortage.",
+          "cn": "投机商在短缺期间抬高价格。"
+        }
+      },
+      {
+        "name": "mountaineer",
+        "phonetic": "/ˌmaʊntnˈɪr/",
+        "breakdown": "mountain (山) + -eer (从事...的人)",
+        "meaning": "n. 登山家；登山运动员",
+        "example": {
+          "en": "The mountaineer reached the summit at dawn.",
+          "cn": "登山家在黎明时到达顶峰。"
+        }
+      },
+      {
+        "name": "sloganeer",
+        "phonetic": "/ˌsloʊɡəˈnɪr/",
+        "breakdown": "slogan (口号) + -eer (从事...的人)",
+        "meaning": "n. 口号撰写者",
+        "example": {
+          "en": "The sloganeer created catchy phrases for the campaign.",
+          "cn": "口号撰写者为活动创作了朗朗上口的短语。"
+        }
+      },
+      {
+        "name": "pamphleteer",
+        "phonetic": "/ˌpæmfləˈtɪr/",
+        "breakdown": "pamphlet (小册子) + -eer (从事...的人)",
+        "meaning": "n. 小册子作者",
+        "example": {
+          "en": "The pamphleteer wrote about political reform.",
+          "cn": "小册子作者撰写了关于政治改革的文章。"
+        }
+      },
+      {
+        "name": "electioneer",
+        "phonetic": "/ɪˌlekʃəˈnɪr/",
+        "breakdown": "election (选举) + -eer (从事...的人)",
+        "meaning": "n. 竞选活动者",
+        "example": {
+          "en": "The electioneer traveled across the state.",
+          "cn": "竞选活动者走遍了全州。"
+        }
+      },
+      {
+        "name": "songster",
+        "phonetic": "/ˈsɔːŋstər/",
+        "breakdown": "song (歌) + -ster (从事...的人)",
+        "meaning": "n. 歌手；歌唱家",
+        "example": {
+          "en": "The songster performed at the concert.",
+          "cn": "这位歌手在音乐会上表演。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ette",
+    "form": "-ette",
+    "type": "suffix",
+    "phonetic": "/-et/",
+    "meaning": "小 / 小型 / 女性 / 仿制品",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自法语指小后缀 -ette，来自拉丁语 -itta，表示小的、女性的或仿造的事物。",
+    "derivationNote": "表示小型化（kitchenette 小厨房）、女性（suffragette 妇女参政论者）或仿制品（leatherette 人造革）。",
+    "words": [
+      {
+        "name": "cigarette",
+        "phonetic": "/ˌsɪɡəˈret/",
+        "breakdown": "cigar (雪茄) + -ette (小)",
+        "meaning": "n. 香烟；纸烟",
+        "example": {
+          "en": "Smoking cigarettes is harmful to health.",
+          "cn": "吸烟有害健康。"
+        }
+      },
+      {
+        "name": "kitchenette",
+        "phonetic": "/ˌkɪtʃɪˈnet/",
+        "breakdown": "kitchen (厨房) + -ette (小)",
+        "meaning": "n. 小厨房",
+        "example": {
+          "en": "The apartment has a small kitchenette.",
+          "cn": "这套公寓有一个小厨房。"
+        }
+      },
+      {
+        "name": "cassette",
+        "phonetic": "/kəˈset/",
+        "breakdown": "casse (盒子) + -ette (小)",
+        "meaning": "n. 盒式磁带；暗盒",
+        "example": {
+          "en": "We used to listen to music on cassettes.",
+          "cn": "我们过去用磁带听音乐。"
+        }
+      },
+      {
+        "name": "novelette",
+        "phonetic": "/ˌnɑːvəˈlet/",
+        "breakdown": "novel (小说) + -ette (小)",
+        "meaning": "n. 中篇小说",
+        "example": {
+          "en": "She wrote a novelette about her childhood.",
+          "cn": "她写了一部关于童年的中篇小说。"
+        }
+      },
+      {
+        "name": "diskette",
+        "phonetic": "/ˈdɪsket/",
+        "breakdown": "disk (磁盘) + -ette (小)",
+        "meaning": "n. 软盘",
+        "example": {
+          "en": "Diskettes were used to store data in the past.",
+          "cn": "过去用软盘存储数据。"
+        }
+      },
+      {
+        "name": "brunette",
+        "phonetic": "/bruːˈnet/",
+        "breakdown": "brun (棕色) + -ette (女性)",
+        "meaning": "n. 深褐色头发的女子",
+        "example": {
+          "en": "The actress is a beautiful brunette.",
+          "cn": "这位女演员是位美丽的深发女子。"
+        }
+      },
+      {
+        "name": "suffragette",
+        "phonetic": "/ˌsʌfrəˈdʒet/",
+        "breakdown": "suffrage (选举权) + -ette (女性)",
+        "meaning": "n. 妇女参政论者",
+        "example": {
+          "en": "Suffragettes fought for women's right to vote.",
+          "cn": "妇女参政论者为女性投票权而斗争。"
+        }
+      },
+      {
+        "name": "leatherette",
+        "phonetic": "/ˌleðəˈret/",
+        "breakdown": "leather (皮革) + -ette (仿制品)",
+        "meaning": "n. 人造革；假皮",
+        "example": {
+          "en": "The chair is covered in leatherette.",
+          "cn": "椅子表面覆盖着人造革。"
+        }
+      },
+      {
+        "name": "maisonette",
+        "phonetic": "/ˌmeɪzəˈnet/",
+        "breakdown": "maison (房屋) + -ette (小)",
+        "meaning": "n. 小住宅；复式公寓",
+        "example": {
+          "en": "They live in a maisonette in the city.",
+          "cn": "他们住在城里的一套复式公寓里。"
+        }
+      },
+      {
+        "name": "usherette",
+        "phonetic": "/ˌʌʃəˈret/",
+        "breakdown": "usher (引座员) + -ette (女性)",
+        "meaning": "n. 女引座员；女招待",
+        "example": {
+          "en": "The usherette showed us to our seats.",
+          "cn": "女引座员带我们到座位。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_let",
+    "form": "-let",
+    "type": "suffix",
+    "phonetic": "/-lət/",
+    "meaning": "小 / 小型",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自古法语 -elet，来自拉丁语指小后缀 -ellus，表示小的事物。",
+    "derivationNote": "加在名词后表示小型化，如 book（书）→ booklet（小册子），pig（猪）→ piglet（小猪）。",
+    "words": [
+      {
+        "name": "booklet",
+        "phonetic": "/ˈbʊklət/",
+        "breakdown": "book (书) + -let (小)",
+        "meaning": "n. 小册子",
+        "example": {
+          "en": "The information booklet explains the rules.",
+          "cn": "信息小册子解释了规则。"
+        }
+      },
+      {
+        "name": "piglet",
+        "phonetic": "/ˈpɪɡlət/",
+        "breakdown": "pig (猪) + -let (小)",
+        "meaning": "n. 小猪；猪崽",
+        "example": {
+          "en": "The piglets played in the mud.",
+          "cn": "小猪在泥里玩耍。"
+        }
+      },
+      {
+        "name": "droplet",
+        "phonetic": "/ˈdrɑːplət/",
+        "breakdown": "drop (滴) + -let (小)",
+        "meaning": "n. 小滴；微滴",
+        "example": {
+          "en": "Droplets of water covered the window.",
+          "cn": "小水滴覆盖了窗户。"
+        }
+      },
+      {
+        "name": "leaflet",
+        "phonetic": "/ˈliːflət/",
+        "breakdown": "leaf (叶) + -let (小)",
+        "meaning": "n. 传单；小叶",
+        "example": {
+          "en": "They handed out leaflets on the street.",
+          "cn": "他们在街上散发传单。"
+        }
+      },
+      {
+        "name": "starlet",
+        "phonetic": "/ˈstɑːrlət/",
+        "breakdown": "star (明星) + -let (小)",
+        "meaning": "n. 小明星；初涉影坛的演员",
+        "example": {
+          "en": "The starlet was discovered at a young age.",
+          "cn": "这位小明星很年轻就被发掘了。"
+        }
+      },
+      {
+        "name": "eyelet",
+        "phonetic": "/ˈaɪlət/",
+        "breakdown": "eye (眼) + -let (小)",
+        "meaning": "n. 小孔；鸡眼；孔眼",
+        "example": {
+          "en": "Thread the lace through the eyelets.",
+          "cn": "把鞋带穿过孔眼。"
+        }
+      },
+      {
+        "name": "ringlet",
+        "phonetic": "/ˈrɪŋlət/",
+        "breakdown": "ring (环) + -let (小)",
+        "meaning": "n. 小环；长卷发",
+        "example": {
+          "en": "Her hair fell in ringlets down her back.",
+          "cn": "她的头发成卷垂在背上。"
+        }
+      },
+      {
+        "name": "applet",
+        "phonetic": "/ˈæplət/",
+        "breakdown": "app (应用) + -let (小)",
+        "meaning": "n. 小应用程序；小程序",
+        "example": {
+          "en": "The applet runs directly in the browser.",
+          "cn": "这个小程序直接在浏览器中运行。"
+        }
+      },
+      {
+        "name": "streamlet",
+        "phonetic": "/ˈstriːmlət/",
+        "breakdown": "stream (溪) + -let (小)",
+        "meaning": "n. 小溪；细流",
+        "example": {
+          "en": "A small streamlet flowed through the meadow.",
+          "cn": "一条小溪流过草地。"
+        }
+      },
+      {
+        "name": "hamlet",
+        "phonetic": "/ˈhæmlət/",
+        "breakdown": "ham (村庄) + -let (小)",
+        "meaning": "n. 小村庄",
+        "example": {
+          "en": "They live in a quiet hamlet in the hills.",
+          "cn": "他们住在山里一个安静的小村庄。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ling",
+    "form": "-ling",
+    "type": "suffix",
+    "phonetic": "/-lɪŋ/",
+    "meaning": "小 / 幼 / 具有某种性质的人或物",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自古英语 -ling，表示小的、年幼的或具有某种特征的人或物，常带有亲昵或轻蔑意味。",
+    "derivationNote": "表示幼小（duckling 小鸭）、人（hireling 雇工）或具有某种特征（underling 下属）。",
+    "words": [
+      {
+        "name": "duckling",
+        "phonetic": "/ˈdʌklɪŋ/",
+        "breakdown": "duck (鸭) + -ling (幼)",
+        "meaning": "n. 小鸭；幼鸭",
+        "example": {
+          "en": "The ducklings followed their mother to the pond.",
+          "cn": "小鸭跟着妈妈到池塘。"
+        }
+      },
+      {
+        "name": "fledgling",
+        "phonetic": "/ˈfledʒlɪŋ/",
+        "breakdown": "fledge (长羽毛) + -ling (幼)",
+        "meaning": "n. 刚会飞的鸟；新手",
+        "example": {
+          "en": "The fledgling tried to fly for the first time.",
+          "cn": "刚会飞的小鸟第一次尝试飞翔。"
+        }
+      },
+      {
+        "name": "sapling",
+        "phonetic": "/ˈsæplɪŋ/",
+        "breakdown": "sap (树液) + -ling (幼)",
+        "meaning": "n. 幼树；树苗",
+        "example": {
+          "en": "They planted saplings along the road.",
+          "cn": "他们沿路种植了树苗。"
+        }
+      },
+      {
+        "name": "hireling",
+        "phonetic": "/ˈhaɪərlɪŋ/",
+        "breakdown": "hire (雇用) + -ling (人)",
+        "meaning": "n. 雇工；雇员（常含贬义）",
+        "example": {
+          "en": "He was just a hireling, not a true believer.",
+          "cn": "他只是个雇工，不是真正的信徒。"
+        }
+      },
+      {
+        "name": "underling",
+        "phonetic": "/ˈʌndərlɪŋ/",
+        "breakdown": "under (下) + -ling (人)",
+        "meaning": "n. 下属；部下；走卒",
+        "example": {
+          "en": "The boss sent his underling to deliver the message.",
+          "cn": "老板派下属去送信。"
+        }
+      },
+      {
+        "name": "darling",
+        "phonetic": "/ˈdɑːrlɪŋ/",
+        "breakdown": "dear (亲爱的) + -ling (人)",
+        "meaning": "n. 亲爱的人；宠儿",
+        "example": {
+          "en": "Come here, my darling.",
+          "cn": "过来，亲爱的。"
+        }
+      },
+      {
+        "name": "sibling",
+        "phonetic": "/ˈsɪblɪŋ/",
+        "breakdown": "sib (亲属) + -ling (人)",
+        "meaning": "n. 兄弟姐妹；同胞",
+        "example": {
+          "en": "She has three siblings.",
+          "cn": "她有三个兄弟姐妹。"
+        }
+      },
+      {
+        "name": "yearling",
+        "phonetic": "/ˈjɪrlɪŋ/",
+        "breakdown": "year (年) + -ling (幼)",
+        "meaning": "n. 一岁的动物；一岁兽",
+        "example": {
+          "en": "The yearling horse was strong and healthy.",
+          "cn": "这匹一岁马强壮健康。"
+        }
+      },
+      {
+        "name": "nestling",
+        "phonetic": "/ˈnestlɪŋ/",
+        "breakdown": "nest (巢) + -ling (幼)",
+        "meaning": "n. 雏鸟；未离巢的小鸟",
+        "example": {
+          "en": "The mother bird fed the nestlings.",
+          "cn": "母鸟喂养雏鸟。"
+        }
+      },
+      {
+        "name": "princeling",
+        "phonetic": "/ˈprɪnslɪŋ/",
+        "breakdown": "prince (王子) + -ling (小)",
+        "meaning": "n. 小诸侯；幼年王子",
+        "example": {
+          "en": "The princeling ruled over a tiny territory.",
+          "cn": "这位小诸侯统治着一小块领土。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_graph",
+    "form": "-graph",
+    "type": "suffix",
+    "phonetic": "/-ɡræf/",
+    "meaning": "写 / 记录 / 图 / 书写工具",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 graphein（写、记录），表示书写、记录、图表或书写工具。",
+    "derivationNote": "表示记录工具或产物，如 photo（光）+ graph → photograph（照片），tele（远）+ graph → telegraph（电报）。",
+    "words": [
+      {
+        "name": "photograph",
+        "phonetic": "/ˈfoʊtəɡræf/",
+        "breakdown": "photo (光) + -graph (记录)",
+        "meaning": "n. 照片 v. 拍照",
+        "example": {
+          "en": "She took a photograph of the sunset.",
+          "cn": "她拍了一张日落的照片。"
+        }
+      },
+      {
+        "name": "telegraph",
+        "phonetic": "/ˈteləɡræf/",
+        "breakdown": "tele (远) + -graph (写/记录)",
+        "meaning": "n. 电报 v. 发电报",
+        "example": {
+          "en": "Before phones, people used telegraphs.",
+          "cn": "电话发明前，人们使用电报。"
+        }
+      },
+      {
+        "name": "autograph",
+        "phonetic": "/ˈɔːtəɡræf/",
+        "breakdown": "auto (自己) + -graph (写)",
+        "meaning": "n. 亲笔签名 v. 亲笔签名",
+        "example": {
+          "en": "The actor signed autographs for fans.",
+          "cn": "演员为粉丝签名。"
+        }
+      },
+      {
+        "name": "paragraph",
+        "phonetic": "/ˈpærəɡræf/",
+        "breakdown": "para (旁边) + -graph (写)",
+        "meaning": "n. 段落；节",
+        "example": {
+          "en": "Please read the first paragraph.",
+          "cn": "请阅读第一段。"
+        }
+      },
+      {
+        "name": "monograph",
+        "phonetic": "/ˈmɑːnəɡræf/",
+        "breakdown": "mono (单一) + -graph (写/记录)",
+        "meaning": "n. 专题论文；专著",
+        "example": {
+          "en": "He published a monograph on ancient history.",
+          "cn": "他出版了一本关于古代史的专著。"
+        }
+      },
+      {
+        "name": "lithograph",
+        "phonetic": "/ˈlɪθəɡræf/",
+        "breakdown": "litho (石) + -graph (印刷)",
+        "meaning": "n. 平版画；石印品",
+        "example": {
+          "en": "The museum displayed rare lithographs.",
+          "cn": "博物馆展出了稀有的平版画。"
+        }
+      },
+      {
+        "name": "phonograph",
+        "phonetic": "/ˈfoʊnəɡræf/",
+        "breakdown": "phono (声音) + -graph (记录)",
+        "meaning": "n. 留声机；唱机",
+        "example": {
+          "en": "The phonograph was invented by Edison.",
+          "cn": "留声机是爱迪生发明的。"
+        }
+      },
+      {
+        "name": "seismograph",
+        "phonetic": "/ˈsaɪzməɡræf/",
+        "breakdown": "seismo (地震) + -graph (记录)",
+        "meaning": "n. 地震仪",
+        "example": {
+          "en": "The seismograph recorded the earthquake.",
+          "cn": "地震仪记录了这次地震。"
+        }
+      },
+      {
+        "name": "barograph",
+        "phonetic": "/ˈbærəɡræf/",
+        "breakdown": "baro (压力) + -graph (记录)",
+        "meaning": "n. 气压计；自记气压计",
+        "example": {
+          "en": "The barograph tracks atmospheric pressure.",
+          "cn": "气压计跟踪大气压。"
+        }
+      },
+      {
+        "name": "holograph",
+        "phonetic": "/ˈhɑːləɡræf/",
+        "breakdown": "holo (全部) + -graph (写)",
+        "meaning": "n. 全息图；亲笔文件",
+        "example": {
+          "en": "The holograph showed a 3D image.",
+          "cn": "全息图显示了三维图像。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_graphy",
+    "form": "-graphy",
+    "type": "suffix",
+    "phonetic": "/-ɡrəfi/",
+    "meaning": "...术 / ...法 / 记录 / 描写",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 -graphia（书写、记录），表示某种记录、描写或制作的技术、方法或学科。",
+    "derivationNote": "表示某种技艺或学科，如 biography（传记）、geography（地理学）、photography（摄影术）。",
+    "words": [
+      {
+        "name": "biography",
+        "phonetic": "/baɪˈɑːɡrəfi/",
+        "breakdown": "bio (生命) + -graphy (记录)",
+        "meaning": "n. 传记",
+        "example": {
+          "en": "I'm reading a biography of Einstein.",
+          "cn": "我正在读爱因斯坦的传记。"
+        }
+      },
+      {
+        "name": "geography",
+        "phonetic": "/dʒiˈɑːɡrəfi/",
+        "breakdown": "geo (地球) + -graphy (描写)",
+        "meaning": "n. 地理学；地形",
+        "example": {
+          "en": "Geography is my favorite subject.",
+          "cn": "地理是我最喜欢的科目。"
+        }
+      },
+      {
+        "name": "photography",
+        "phonetic": "/fəˈtɑːɡrəfi/",
+        "breakdown": "photo (光) + -graphy (术)",
+        "meaning": "n. 摄影；摄影术",
+        "example": {
+          "en": "She studied photography in college.",
+          "cn": "她在大学学习摄影。"
+        }
+      },
+      {
+        "name": "autobiography",
+        "phonetic": "/ˌɔːtəbaɪˈɑːɡrəfi/",
+        "breakdown": "auto (自己) + bio (生命) + -graphy (记录)",
+        "meaning": "n. 自传",
+        "example": {
+          "en": "She published her autobiography last year.",
+          "cn": "她去年出版了自传。"
+        }
+      },
+      {
+        "name": "choreography",
+        "phonetic": "/ˌkɔːriˈɑːɡrəfi/",
+        "breakdown": "choreo (舞蹈) + -graphy (术)",
+        "meaning": "n. 编舞；舞蹈设计",
+        "example": {
+          "en": "The choreography was stunning.",
+          "cn": "编舞令人惊叹。"
+        }
+      },
+      {
+        "name": "typography",
+        "phonetic": "/taɪˈpɑːɡrəfi/",
+        "breakdown": "typo (印刷) + -graphy (术)",
+        "meaning": "n. 排版；印刷术",
+        "example": {
+          "en": "Good typography improves readability.",
+          "cn": "好的排版提高可读性。"
+        }
+      },
+      {
+        "name": "bibliography",
+        "phonetic": "/ˌbɪbliˈɑːɡrəfi/",
+        "breakdown": "biblio (书) + -graphy (记录)",
+        "meaning": "n. 参考书目；文献目录",
+        "example": {
+          "en": "Include a bibliography at the end.",
+          "cn": "在末尾附上参考书目。"
+        }
+      },
+      {
+        "name": "cartography",
+        "phonetic": "/kɑːrˈtɑːɡrəfi/",
+        "breakdown": "carto (地图) + -graphy (术)",
+        "meaning": "n. 制图学；地图绘制",
+        "example": {
+          "en": "Cartography has advanced with satellite technology.",
+          "cn": "制图学随着卫星技术而进步。"
+        }
+      },
+      {
+        "name": "cinematography",
+        "phonetic": "/ˌsɪnəməˈtɑːɡrəfi/",
+        "breakdown": "cinema (电影) + to + -graphy (术)",
+        "meaning": "n. 电影摄影；摄影术",
+        "example": {
+          "en": "The cinematography was beautiful.",
+          "cn": "电影摄影非常美丽。"
+        }
+      },
+      {
+        "name": "radiography",
+        "phonetic": "/ˌreɪdiˈɑːɡrəfi/",
+        "breakdown": "radio (射线) + -graphy (术)",
+        "meaning": "n. 射线照相术；X光摄影",
+        "example": {
+          "en": "Radiography is used in medical diagnosis.",
+          "cn": "射线照相术用于医学诊断。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_metry",
+    "form": "-metry / -meter",
+    "type": "suffix",
+    "phonetic": "/-mətri/",
+    "meaning": "测量 / 度量 / 测量学",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 metron（测量），-metry 表示测量学或测量过程，-meter 表示测量工具。",
+    "derivationNote": "-metry 表示测量学科（geometry 几何学），-meter 表示测量工具（thermometer 温度计）。",
+    "words": [
+      {
+        "name": "geometry",
+        "phonetic": "/dʒiˈɑːmətri/",
+        "breakdown": "geo (土地) + -metry (测量)",
+        "meaning": "n. 几何学",
+        "example": {
+          "en": "We studied geometry in high school.",
+          "cn": "我们在高中学了几何。"
+        }
+      },
+      {
+        "name": "symmetry",
+        "phonetic": "/ˈsɪmətri/",
+        "breakdown": "sym (共同) + -metry (测量)",
+        "meaning": "n. 对称；匀称",
+        "example": {
+          "en": "The building has perfect symmetry.",
+          "cn": "这座建筑有完美的对称性。"
+        }
+      },
+      {
+        "name": "telemetry",
+        "phonetic": "/təˈlemətri/",
+        "breakdown": "tele (远) + -metry (测量)",
+        "meaning": "n. 遥测；遥感",
+        "example": {
+          "en": "The satellite sends telemetry data to Earth.",
+          "cn": "卫星将遥测数据发回地球。"
+        }
+      },
+      {
+        "name": "thermometer",
+        "phonetic": "/θərˈmɑːmɪtər/",
+        "breakdown": "thermo (热) + -meter (测量工具)",
+        "meaning": "n. 温度计；体温计",
+        "example": {
+          "en": "The thermometer reads 38 degrees.",
+          "cn": "温度计显示38度。"
+        }
+      },
+      {
+        "name": "barometer",
+        "phonetic": "/bəˈrɑːmɪtər/",
+        "breakdown": "baro (压力) + -meter (测量工具)",
+        "meaning": "n. 气压计；晴雨表",
+        "example": {
+          "en": "The barometer indicates changing weather.",
+          "cn": "气压计显示天气变化。"
+        }
+      },
+      {
+        "name": "optometry",
+        "phonetic": "/ɑːpˈtɑːmətri/",
+        "breakdown": "opto (视力) + -metry (测量)",
+        "meaning": "n. 验光术；视力测定",
+        "example": {
+          "en": "She studied optometry at university.",
+          "cn": "她在大学学习验光术。"
+        }
+      },
+      {
+        "name": "trigonometry",
+        "phonetic": "/ˌtrɪɡəˈnɑːmətri/",
+        "breakdown": "trigono (三角) + -metry (测量)",
+        "meaning": "n. 三角学",
+        "example": {
+          "en": "Trigonometry is used in engineering.",
+          "cn": "三角学用于工程学。"
+        }
+      },
+      {
+        "name": "diameter",
+        "phonetic": "/daɪˈæmɪtər/",
+        "breakdown": "dia (穿过) + -meter (测量)",
+        "meaning": "n. 直径",
+        "example": {
+          "en": "The diameter of the circle is 10 cm.",
+          "cn": "圆的直径是10厘米。"
+        }
+      },
+      {
+        "name": "perimeter",
+        "phonetic": "/pəˈrɪmɪtər/",
+        "breakdown": "peri (周围) + -meter (测量)",
+        "meaning": "n. 周长；周边",
+        "example": {
+          "en": "Calculate the perimeter of the rectangle.",
+          "cn": "计算矩形的周长。"
+        }
+      },
+      {
+        "name": "gravimetry",
+        "phonetic": "/ɡrəˈvɪmətri/",
+        "breakdown": "gravi (重力) + -metry (测量)",
+        "meaning": "n. 重力测量学",
+        "example": {
+          "en": "Gravimetry measures variations in gravity.",
+          "cn": "重力测量学测量重力变化。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_pathy",
+    "form": "-pathy / -path",
+    "type": "suffix",
+    "phonetic": "/-pəθi/",
+    "meaning": "感情 / 感觉 / 疾病 / 疗法",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 pathos（感情、痛苦、疾病），-pathy 表示感情、疾病或疗法，-path 表示患者或从事者。",
+    "derivationNote": "表示感情（sympathy 同情）、疾病（neuropathy 神经病）或疗法（homeopathy 顺势疗法）。",
+    "words": [
+      {
+        "name": "sympathy",
+        "phonetic": "/ˈsɪmpəθi/",
+        "breakdown": "sym (共同) + -pathy (感情)",
+        "meaning": "n. 同情；同情心",
+        "example": {
+          "en": "I have sympathy for the victims.",
+          "cn": "我同情受害者。"
+        }
+      },
+      {
+        "name": "empathy",
+        "phonetic": "/ˈempəθi/",
+        "breakdown": "em (进入) + -pathy (感情)",
+        "meaning": "n. 共情；同理心",
+        "example": {
+          "en": "Empathy helps us understand others.",
+          "cn": "同理心帮助我们理解他人。"
+        }
+      },
+      {
+        "name": "pathology",
+        "phonetic": "/pəˈθɑːlədʒi/",
+        "breakdown": "patho (疾病) + -logy (学科)",
+        "meaning": "n. 病理学",
+        "example": {
+          "en": "Pathology studies the causes of disease.",
+          "cn": "病理学研究疾病的原因。"
+        }
+      },
+      {
+        "name": "apathy",
+        "phonetic": "/ˈæpəθi/",
+        "breakdown": "a (无) + -pathy (感情)",
+        "meaning": "n. 冷漠；无动于衷",
+        "example": {
+          "en": "Voter apathy is a growing problem.",
+          "cn": "选民冷漠是一个日益严重的问题。"
+        }
+      },
+      {
+        "name": "antipathy",
+        "phonetic": "/ænˈtɪpəθi/",
+        "breakdown": "anti (反对) + -pathy (感情)",
+        "meaning": "n. 反感；厌恶",
+        "example": {
+          "en": "She felt a strong antipathy toward him.",
+          "cn": "她对他感到强烈反感。"
+        }
+      },
+      {
+        "name": "telepathy",
+        "phonetic": "/təˈlepəθi/",
+        "breakdown": "tele (远) + -pathy (感情)",
+        "meaning": "n. 心灵感应；传心术",
+        "example": {
+          "en": "Some believe twins share telepathy.",
+          "cn": "有些人相信双胞胎有心灵感应。"
+        }
+      },
+      {
+        "name": "neuropathy",
+        "phonetic": "/ˌnʊˈrɑːpəθi/",
+        "breakdown": "neuro (神经) + -pathy (疾病)",
+        "meaning": "n. 神经病；神经病变",
+        "example": {
+          "en": "Diabetic neuropathy can cause numbness.",
+          "cn": "糖尿病神经病变会导致麻木。"
+        }
+      },
+      {
+        "name": "homeopathy",
+        "phonetic": "/ˌhoʊmiˈɑːpəθi/",
+        "breakdown": "homeo (相似) + -pathy (疗法)",
+        "meaning": "n. 顺势疗法",
+        "example": {
+          "en": "Homeopathy is an alternative medicine.",
+          "cn": "顺势疗法是一种替代医学。"
+        }
+      },
+      {
+        "name": "psychopath",
+        "phonetic": "/ˈsaɪkəpæθ/",
+        "breakdown": "psycho (精神) + -path (患者)",
+        "meaning": "n. 精神变态者",
+        "example": {
+          "en": "The movie's villain is a psychopath.",
+          "cn": "电影中的反派是个精神变态者。"
+        }
+      },
+      {
+        "name": "sociopath",
+        "phonetic": "/ˈsoʊsiəpæθ/",
+        "breakdown": "socio (社会) + -path (患者)",
+        "meaning": "n. 反社会者；社交病态者",
+        "example": {
+          "en": "A sociopath lacks empathy for others.",
+          "cn": "反社会者缺乏对他人的同理心。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_archy",
+    "form": "-archy / -arch",
+    "type": "suffix",
+    "phonetic": "/-ɑːrki/",
+    "meaning": "统治 / 政体 / 首领",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 arkhein（统治、开始），-archy 表示统治形式或政体，-arch 表示统治者或首领。",
+    "derivationNote": "表示统治形式，如 monarchy（君主制）、anarchy（无政府状态）、hierarchy（等级制度）。",
+    "words": [
+      {
+        "name": "monarchy",
+        "phonetic": "/ˈmɑːnɑːrki/",
+        "breakdown": "mono (单一) + -archy (统治)",
+        "meaning": "n. 君主制；君主国",
+        "example": {
+          "en": "The United Kingdom is a constitutional monarchy.",
+          "cn": "英国是君主立宪制国家。"
+        }
+      },
+      {
+        "name": "anarchy",
+        "phonetic": "/ˈænɑːrki/",
+        "breakdown": "an (无) + -archy (统治)",
+        "meaning": "n. 无政府状态；混乱",
+        "example": {
+          "en": "The country descended into anarchy.",
+          "cn": "该国陷入无政府状态。"
+        }
+      },
+      {
+        "name": "hierarchy",
+        "phonetic": "/ˈhaɪərɑːrki/",
+        "breakdown": "hier (神圣) + -archy (统治)",
+        "meaning": "n. 等级制度；层级",
+        "example": {
+          "en": "The company has a strict hierarchy.",
+          "cn": "公司有严格的等级制度。"
+        }
+      },
+      {
+        "name": "oligarchy",
+        "phonetic": "/ˈɑːlɪɡɑːrki/",
+        "breakdown": "oligo (少数) + -archy (统治)",
+        "meaning": "n. 寡头政治；寡头统治",
+        "example": {
+          "en": "The country was ruled by an oligarchy.",
+          "cn": "该国由寡头统治。"
+        }
+      },
+      {
+        "name": "patriarchy",
+        "phonetic": "/ˈpeɪtriɑːrki/",
+        "breakdown": "patri (父亲) + -archy (统治)",
+        "meaning": "n. 父权制；父系社会",
+        "example": {
+          "en": "The society was a traditional patriarchy.",
+          "cn": "这个社会是传统的父权制。"
+        }
+      },
+      {
+        "name": "matriarchy",
+        "phonetic": "/ˈmeɪtriɑːrki/",
+        "breakdown": "matri (母亲) + -archy (统治)",
+        "meaning": "n. 母权制；母系社会",
+        "example": {
+          "en": "Some ancient cultures were matriarchies.",
+          "cn": "一些古代文化是母系社会。"
+        }
+      },
+      {
+        "name": "autarchy",
+        "phonetic": "/ˈɔːtɑːrki/",
+        "breakdown": "auto (自己) + -archy (统治)",
+        "meaning": "n. 独裁；专制；自给自足",
+        "example": {
+          "en": "The ruler established an autarchy.",
+          "cn": "统治者建立了独裁统治。"
+        }
+      },
+      {
+        "name": "tetrarchy",
+        "phonetic": "/ˈtetrɑːrki/",
+        "breakdown": "tetra (四) + -archy (统治)",
+        "meaning": "n. 四头政治；四人统治",
+        "example": {
+          "en": "The Roman tetrarchy was established by Diocletian.",
+          "cn": "罗马四头政治由戴克里先建立。"
+        }
+      },
+      {
+        "name": "architect",
+        "phonetic": "/ˈɑːrkɪtekt/",
+        "breakdown": "archi (主要) + tect (建造)",
+        "meaning": "n. 建筑师；设计师",
+        "example": {
+          "en": "The architect designed the new building.",
+          "cn": "建筑师设计了这座新建筑。"
+        }
+      },
+      {
+        "name": "patriarch",
+        "phonetic": "/ˈpeɪtriɑːrk/",
+        "breakdown": "patri (父亲) + -arch (首领)",
+        "meaning": "n. 家长；族长；元老",
+        "example": {
+          "en": "The patriarch of the family lived to be 90.",
+          "cn": "家族的族长活到了90岁。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_cracy",
+    "form": "-cracy / -crat",
+    "type": "suffix",
+    "phonetic": "/-krəsi/",
+    "meaning": "统治 / 政体 / 政府",
+    "category": "noun",
+    "categoryLabel": "学科类名词后缀",
+    "origin": "源自希腊语 kratos（力量、统治），-cracy 表示统治形式或政体，-crat 表示统治者或支持者。",
+    "derivationNote": "表示政体形式，如 democracy（民主制）、aristocracy（贵族制）、bureaucracy（官僚制）。",
+    "words": [
+      {
+        "name": "democracy",
+        "phonetic": "/dəˈmɑːkrəsi/",
+        "breakdown": "demo (人民) + -cracy (统治)",
+        "meaning": "n. 民主；民主制",
+        "example": {
+          "en": "Democracy gives power to the people.",
+          "cn": "民主赋予人民权力。"
+        }
+      },
+      {
+        "name": "aristocracy",
+        "phonetic": "/ˌærɪˈstɑːkrəsi/",
+        "breakdown": "aristo (最好) + -cracy (统治)",
+        "meaning": "n. 贵族；贵族统治",
+        "example": {
+          "en": "The aristocracy lived in grand palaces.",
+          "cn": "贵族住在宏伟的宫殿里。"
+        }
+      },
+      {
+        "name": "bureaucracy",
+        "phonetic": "/bjʊˈrɑːkrəsi/",
+        "breakdown": "bureau (办公室) + -cracy (统治)",
+        "meaning": "n. 官僚主义；官僚机构",
+        "example": {
+          "en": "The bureaucracy slowed down the process.",
+          "cn": "官僚主义拖慢了进程。"
+        }
+      },
+      {
+        "name": "plutocracy",
+        "phonetic": "/pluːˈtɑːkrəsi/",
+        "breakdown": "pluto (财富) + -cracy (统治)",
+        "meaning": "n. 富豪统治；财阀政治",
+        "example": {
+          "en": "Critics say the system is a plutocracy.",
+          "cn": "批评者说这个制度是富豪统治。"
+        }
+      },
+      {
+        "name": "theocracy",
+        "phonetic": "/θiˈɑːkrəsi/",
+        "breakdown": "theo (神) + -cracy (统治)",
+        "meaning": "n. 神权政治；神权国家",
+        "example": {
+          "en": "The country was ruled as a theocracy.",
+          "cn": "该国以神权政治统治。"
+        }
+      },
+      {
+        "name": "meritocracy",
+        "phonetic": "/ˌmerɪˈtɑːkrəsi/",
+        "breakdown": "merit (功绩) + -cracy (统治)",
+        "meaning": "n. 精英统治；贤能政治",
+        "example": {
+          "en": "A meritocracy rewards ability and effort.",
+          "cn": "精英统治奖励能力和努力。"
+        }
+      },
+      {
+        "name": "technocracy",
+        "phonetic": "/tekˈnɑːkrəsi/",
+        "breakdown": "techno (技术) + -cracy (统治)",
+        "meaning": "n. 技术专家统治；技术官僚政治",
+        "example": {
+          "en": "Some advocate for a technocracy.",
+          "cn": "有些人主张技术专家统治。"
+        }
+      },
+      {
+        "name": "autocracy",
+        "phonetic": "/ɔːˈtɑːkrəsi/",
+        "breakdown": "auto (自己) + -cracy (统治)",
+        "meaning": "n. 独裁政体；专制",
+        "example": {
+          "en": "The autocracy gave no power to the people.",
+          "cn": "独裁政体不给人民权力。"
+        }
+      },
+      {
+        "name": "gerontocracy",
+        "phonetic": "/ˌdʒerənˈtɑːkrəsi/",
+        "breakdown": "geronto (老人) + -cracy (统治)",
+        "meaning": "n. 老人统治；老年政治",
+        "example": {
+          "en": "The leadership was a gerontocracy.",
+          "cn": "领导层是老人政治。"
+        }
+      },
+      {
+        "name": "democrat",
+        "phonetic": "/ˈdeməkræt/",
+        "breakdown": "demo (人民) + -crat (统治者)",
+        "meaning": "n. 民主主义者；民主党人",
+        "example": {
+          "en": "He is a registered Democrat.",
+          "cn": "他是登记的民主党人。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_itude",
+    "form": "-itude",
+    "type": "suffix",
+    "phonetic": "/-ɪtuːd/",
+    "meaning": "状态 / 性质 / 程度",
+    "category": "noun",
+    "categoryLabel": "名词后缀",
+    "origin": "源自拉丁语名词后缀 -itudo，表示状态、性质或程度，常附着于形容词词根。",
+    "derivationNote": "表示抽象的状态或性质，如 attitude（态度）、magnitude（大小）、gratitude（感激）。",
+    "words": [
+      {
+        "name": "attitude",
+        "phonetic": "/ˈætɪtuːd/",
+        "breakdown": "apt (适合) + -itude (状态)",
+        "meaning": "n. 态度；看法；姿势",
+        "example": {
+          "en": "A positive attitude leads to success.",
+          "cn": "积极的态度通向成功。"
+        }
+      },
+      {
+        "name": "magnitude",
+        "phonetic": "/ˈmæɡnɪtuːd/",
+        "breakdown": "magni (大) + -itude (程度)",
+        "meaning": "n. 大小；量级；重要性",
+        "example": {
+          "en": "The magnitude of the earthquake was 7.0.",
+          "cn": "地震的震级是7.0级。"
+        }
+      },
+      {
+        "name": "longitude",
+        "phonetic": "/ˈlɑːndʒɪtuːd/",
+        "breakdown": "long (长) + -itude (程度)",
+        "meaning": "n. 经度；经线",
+        "example": {
+          "en": "The city is at 120 degrees east longitude.",
+          "cn": "这座城市位于东经120度。"
+        }
+      },
+      {
+        "name": "latitude",
+        "phonetic": "/ˈlætɪtuːd/",
+        "breakdown": "lat (宽) + -itude (程度)",
+        "meaning": "n. 纬度；纬线；自由",
+        "example": {
+          "en": "The latitude of the city is 30 degrees north.",
+          "cn": "这座城市的纬度是北纬30度。"
+        }
+      },
+      {
+        "name": "altitude",
+        "phonetic": "/ˈæltɪtuːd/",
+        "breakdown": "alt (高) + -itude (程度)",
+        "meaning": "n. 高度；海拔",
+        "example": {
+          "en": "The plane flew at an altitude of 10,000 meters.",
+          "cn": "飞机在10000米的高度飞行。"
+        }
+      },
+      {
+        "name": "gratitude",
+        "phonetic": "/ˈɡrætɪtuːd/",
+        "breakdown": "grate (感激) + -itude (状态)",
+        "meaning": "n. 感激；感谢",
+        "example": {
+          "en": "She expressed her gratitude for the help.",
+          "cn": "她对帮助表达了感激。"
+        }
+      },
+      {
+        "name": "fortitude",
+        "phonetic": "/ˈfɔːrtɪtuːd/",
+        "breakdown": "fort (强) + -itude (状态)",
+        "meaning": "n. 坚韧；刚毅；勇气",
+        "example": {
+          "en": "She showed great fortitude during the crisis.",
+          "cn": "她在危机中表现出极大的坚韧。"
+        }
+      },
+      {
+        "name": "solitude",
+        "phonetic": "/ˈsɑːlɪtuːd/",
+        "breakdown": "sol (单独) + -itude (状态)",
+        "meaning": "n. 孤独；独居；荒僻",
+        "example": {
+          "en": "He enjoyed the solitude of the mountains.",
+          "cn": "他享受山中的孤独。"
+        }
+      },
+      {
+        "name": "exactitude",
+        "phonetic": "/ɪɡˈzæktɪtuːd/",
+        "breakdown": "exact (精确) + -itude (程度)",
+        "meaning": "n. 精确；严谨",
+        "example": {
+          "en": "The work was done with great exactitude.",
+          "cn": "工作完成得非常精确。"
+        }
+      },
+      {
+        "name": "verisimilitude",
+        "phonetic": "/ˌverɪsɪˈmɪlɪtuːd/",
+        "breakdown": "veri (真实) + simili (相似) + -itude (状态)",
+        "meaning": "n. 逼真；貌似真实",
+        "example": {
+          "en": "The novel has a sense of verisimilitude.",
+          "cn": "这部小说有一种逼真感。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_esque",
+    "form": "-esque",
+    "type": "suffix",
+    "phonetic": "/-esk/",
+    "meaning": "如...风格的 / 像...的 / ...式的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自法语 -esque，来自意大利语 -esco，表示\"如...风格、像...式样\"。",
+    "derivationNote": "表示某种风格或样式，如 picturesque（如画的）、grotesque（怪诞的）、statuesque（雕像般的）。",
+    "words": [
+      {
+        "name": "picturesque",
+        "phonetic": "/ˌpɪktʃəˈresk/",
+        "breakdown": "picture (画) + -esque (如...风格的)",
+        "meaning": "adj. 如画的；风景如画的",
+        "example": {
+          "en": "The village is picturesque and charming.",
+          "cn": "这个村庄风景如画，迷人可爱。"
+        }
+      },
+      {
+        "name": "grotesque",
+        "phonetic": "/ɡroʊˈtesk/",
+        "breakdown": "grotto (洞穴) + -esque (如...风格的)",
+        "meaning": "adj. 怪诞的；奇异的 n. 怪诞风格",
+        "example": {
+          "en": "The costume was grotesque and frightening.",
+          "cn": "服装怪诞而吓人。"
+        }
+      },
+      {
+        "name": "statuesque",
+        "phonetic": "/ˌstætʃuˈesk/",
+        "breakdown": "statue (雕像) + -esque (如...风格的)",
+        "meaning": "adj. 雕像般的；庄严优美的",
+        "example": {
+          "en": "She had a statuesque figure.",
+          "cn": "她有着雕像般的身材。"
+        }
+      },
+      {
+        "name": "burlesque",
+        "phonetic": "/bɜːrˈlesk/",
+        "breakdown": "burl (嘲弄) + -esque (如...风格的)",
+        "meaning": "n./adj. 滑稽讽刺的；滑稽表演",
+        "example": {
+          "en": "The play was a burlesque of politics.",
+          "cn": "这出戏是对政治的滑稽讽刺。"
+        }
+      },
+      {
+        "name": "arabesque",
+        "phonetic": "/ˌærəˈbesk/",
+        "breakdown": "arab (阿拉伯) + -esque (如...风格的)",
+        "meaning": "n. 阿拉伯式花纹；蔓藤花纹",
+        "example": {
+          "en": "The wallpaper had an arabesque pattern.",
+          "cn": "壁纸有阿拉伯式花纹图案。"
+        }
+      },
+      {
+        "name": "romanesque",
+        "phonetic": "/ˌroʊməˈnesk/",
+        "breakdown": "roman (罗马) + -esque (如...风格的)",
+        "meaning": "adj. 罗马式的；罗马风格的",
+        "example": {
+          "en": "The church was built in a romanesque style.",
+          "cn": "这座教堂是罗马式风格建造的。"
+        }
+      },
+      {
+        "name": "gigantesque",
+        "phonetic": "/ˌdʒaɪɡænˈtesk/",
+        "breakdown": "gigant (巨人) + -esque (如...风格的)",
+        "meaning": "adj. 巨人般的；巨大的",
+        "example": {
+          "en": "The gigantesque statue towered over the city.",
+          "cn": "巨大的雕像高耸于城市之上。"
+        }
+      },
+      {
+        "name": "lionesque",
+        "phonetic": "/ˌlaɪəˈnesk/",
+        "breakdown": "lion (狮子) + -esque (如...风格的)",
+        "meaning": "adj. 狮子般的；勇猛的",
+        "example": {
+          "en": "He had a lionesque appearance.",
+          "cn": "他有着狮子般的外表。"
+        }
+      },
+      {
+        "name": "dantesque",
+        "phonetic": "/dænˈtesk/",
+        "breakdown": "dante (但丁) + -esque (如...风格的)",
+        "meaning": "adj. 但丁式的；但丁风格的",
+        "example": {
+          "en": "The poem had a dantesque quality.",
+          "cn": "这首诗有但丁式的风格。"
+        }
+      },
+      {
+        "name": "kafkaseque",
+        "phonetic": "/ˈkɑːfkəesk/",
+        "breakdown": "kafka (卡夫卡) + -esque (如...风格的)",
+        "meaning": "adj. 卡夫卡式的；荒诞离奇的",
+        "example": {
+          "en": "The situation was kafkaseque and surreal.",
+          "cn": "情况荒诞离奇，超现实。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_worthy",
+    "form": "-worthy",
+    "type": "suffix",
+    "phonetic": "/-wɜːrði/",
+    "meaning": "值得...的 / 配得上...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 weorð（价值、值得），表示\"值得...、配得上...\"。",
+    "derivationNote": "加在名词后表示\"值得...的\"，如 praise（赞扬）→ praiseworthy（值得赞扬的），trust（信任）→ trustworthy（值得信任的）。",
+    "words": [
+      {
+        "name": "praiseworthy",
+        "phonetic": "/ˈpreɪzwɜːrði/",
+        "breakdown": "praise (赞扬) + -worthy (值得...的)",
+        "meaning": "adj. 值得赞扬的；可嘉的",
+        "example": {
+          "en": "Her efforts are praiseworthy.",
+          "cn": "她的努力值得赞扬。"
+        }
+      },
+      {
+        "name": "trustworthy",
+        "phonetic": "/ˈtrʌstwɜːrði/",
+        "breakdown": "trust (信任) + -worthy (值得...的)",
+        "meaning": "adj. 值得信任的；可靠的",
+        "example": {
+          "en": "He is a trustworthy friend.",
+          "cn": "他是一个值得信任的朋友。"
+        }
+      },
+      {
+        "name": "noteworthy",
+        "phonetic": "/ˈnoʊtwɜːrði/",
+        "breakdown": "note (注意) + -worthy (值得...的)",
+        "meaning": "adj. 值得注意的；显著的",
+        "example": {
+          "en": "There are several noteworthy points.",
+          "cn": "有几个值得注意的要点。"
+        }
+      },
+      {
+        "name": "blameworthy",
+        "phonetic": "/ˈbleɪmwɜːrði/",
+        "breakdown": "blame (责备) + -worthy (值得...的)",
+        "meaning": "adj. 该受责备的；有过错的",
+        "example": {
+          "en": "His behavior was blameworthy.",
+          "cn": "他的行为该受责备。"
+        }
+      },
+      {
+        "name": "newsworthy",
+        "phonetic": "/ˈnuːzwɜːrði/",
+        "breakdown": "news (新闻) + -worthy (值得...的)",
+        "meaning": "adj. 有新闻价值的",
+        "example": {
+          "en": "The story is newsworthy.",
+          "cn": "这个故事有新闻价值。"
+        }
+      },
+      {
+        "name": "creditworthy",
+        "phonetic": "/ˈkredɪtwɜːrði/",
+        "breakdown": "credit (信用) + -worthy (值得...的)",
+        "meaning": "adj. 有信用的；信贷可靠的",
+        "example": {
+          "en": "You need to be creditworthy to get a loan.",
+          "cn": "你需要有信用才能获得贷款。"
+        }
+      },
+      {
+        "name": "seaworthy",
+        "phonetic": "/ˈsiːwɜːrði/",
+        "breakdown": "sea (海) + -worthy (适合...的)",
+        "meaning": "adj. 适航的；经得起航海的",
+        "example": {
+          "en": "The boat is seaworthy.",
+          "cn": "这艘船适航。"
+        }
+      },
+      {
+        "name": "roadworthy",
+        "phonetic": "/ˈroʊdwɜːrði/",
+        "breakdown": "road (路) + -worthy (适合...的)",
+        "meaning": "adj. 适合道路行驶的；车况良好的",
+        "example": {
+          "en": "The car is not roadworthy.",
+          "cn": "这辆车不适合上路。"
+        }
+      },
+      {
+        "name": "airworthy",
+        "phonetic": "/ˈerwɜːrði/",
+        "breakdown": "air (空) + -worthy (适合...的)",
+        "meaning": "adj. 适航的；飞机性能良好的",
+        "example": {
+          "en": "The plane was certified airworthy.",
+          "cn": "飞机被认证适航。"
+        }
+      },
+      {
+        "name": "prizeworthy",
+        "phonetic": "/ˈpraɪzwɜːrði/",
+        "breakdown": "prize (奖) + -worthy (值得...的)",
+        "meaning": "adj. 值得获奖的；优秀的",
+        "example": {
+          "en": "Her essay was prizeworthy.",
+          "cn": "她的文章值得获奖。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_proof",
+    "form": "-proof",
+    "type": "suffix",
+    "phonetic": "/-pruːf/",
+    "meaning": "防...的 / 耐...的 / 不透...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自中古英语 proof（证明、考验），表示\"能抵抗、能防护\"某种事物。",
+    "derivationNote": "加在名词后表示\"防...的\"，如 water（水）→ waterproof（防水的），fire（火）→ fireproof（防火的）。",
+    "words": [
+      {
+        "name": "waterproof",
+        "phonetic": "/ˈwɔːtərpruːf/",
+        "breakdown": "water (水) + -proof (防...的)",
+        "meaning": "adj. 防水的 v. 使防水",
+        "example": {
+          "en": "Wear a waterproof jacket in the rain.",
+          "cn": "下雨时穿防水夹克。"
+        }
+      },
+      {
+        "name": "fireproof",
+        "phonetic": "/ˈfaɪərpruːf/",
+        "breakdown": "fire (火) + -proof (防...的)",
+        "meaning": "adj. 防火的；耐火的",
+        "example": {
+          "en": "The safe is fireproof.",
+          "cn": "这个保险箱是防火的。"
+        }
+      },
+      {
+        "name": "bulletproof",
+        "phonetic": "/ˈbʊlɪtpruːf/",
+        "breakdown": "bullet (子弹) + -proof (防...的)",
+        "meaning": "adj. 防弹的",
+        "example": {
+          "en": "The president's car is bulletproof.",
+          "cn": "总统的车是防弹的。"
+        }
+      },
+      {
+        "name": "soundproof",
+        "phonetic": "/ˈsaʊndpruːf/",
+        "breakdown": "sound (声音) + -proof (防...的)",
+        "meaning": "adj. 隔音的 v. 使隔音",
+        "example": {
+          "en": "The recording studio is soundproof.",
+          "cn": "录音室是隔音的。"
+        }
+      },
+      {
+        "name": "dustproof",
+        "phonetic": "/ˈdʌstpruːf/",
+        "breakdown": "dust (灰尘) + -proof (防...的)",
+        "meaning": "adj. 防尘的",
+        "example": {
+          "en": "The camera has a dustproof seal.",
+          "cn": "相机有防尘密封。"
+        }
+      },
+      {
+        "name": "shockproof",
+        "phonetic": "/ˈʃɑːkpruːf/",
+        "breakdown": "shock (震动) + -proof (防...的)",
+        "meaning": "adj. 防震的；抗震的",
+        "example": {
+          "en": "The watch is shockproof.",
+          "cn": "这块表是防震的。"
+        }
+      },
+      {
+        "name": "windproof",
+        "phonetic": "/ˈwɪndpruːf/",
+        "breakdown": "wind (风) + -proof (防...的)",
+        "meaning": "adj. 防风的",
+        "example": {
+          "en": "Wear a windproof jacket outside.",
+          "cn": "在外面穿防风夹克。"
+        }
+      },
+      {
+        "name": "leakproof",
+        "phonetic": "/ˈliːkpruːf/",
+        "breakdown": "leak (漏) + -proof (防...的)",
+        "meaning": "adj. 防漏的；不渗漏的",
+        "example": {
+          "en": "The bottle is leakproof.",
+          "cn": "这个瓶子是防漏的。"
+        }
+      },
+      {
+        "name": "childproof",
+        "phonetic": "/ˈtʃaɪldpruːf/",
+        "breakdown": "child (孩子) + -proof (防...的)",
+        "meaning": "adj. 儿童安全的；防儿童开启的",
+        "example": {
+          "en": "The medicine bottle has a childproof cap.",
+          "cn": "药瓶有儿童安全盖。"
+        }
+      },
+      {
+        "name": "foolproof",
+        "phonetic": "/ˈfuːlpruːf/",
+        "breakdown": "fool (傻瓜) + -proof (防...的)",
+        "meaning": "adj. 万无一失的；傻瓜都能做的",
+        "example": {
+          "en": "The instructions are foolproof.",
+          "cn": "说明万无一失。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_free",
+    "form": "-free",
+    "type": "suffix",
+    "phonetic": "/-friː/",
+    "meaning": "无...的 / 不含...的 / 免...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 freo（自由的、不受约束的），表示\"没有、不含、免除\"某种事物。",
+    "derivationNote": "加在名词后表示\"无...的\"，如 duty（税）→ duty-free（免税的），sugar（糖）→ sugar-free（无糖的）。",
+    "words": [
+      {
+        "name": "duty-free",
+        "phonetic": "/ˌduːtiˈfriː/",
+        "breakdown": "duty (税) + -free (免...的)",
+        "meaning": "adj. 免税的",
+        "example": {
+          "en": "You can buy duty-free goods at the airport.",
+          "cn": "你可以在机场买免税商品。"
+        }
+      },
+      {
+        "name": "sugar-free",
+        "phonetic": "/ˌʃʊɡərˈfriː/",
+        "breakdown": "sugar (糖) + -free (无...的)",
+        "meaning": "adj. 无糖的",
+        "example": {
+          "en": "I prefer sugar-free drinks.",
+          "cn": "我更喜欢无糖饮料。"
+        }
+      },
+      {
+        "name": "carefree",
+        "phonetic": "/ˈkerfriː/",
+        "breakdown": "care (忧虑) + -free (无...的)",
+        "meaning": "adj. 无忧无虑的；轻松的",
+        "example": {
+          "en": "They had a carefree childhood.",
+          "cn": "他们有一个无忧无虑的童年。"
+        }
+      },
+      {
+        "name": "tax-free",
+        "phonetic": "/ˌtæksˈfriː/",
+        "breakdown": "tax (税) + -free (免...的)",
+        "meaning": "adj. 免税的",
+        "example": {
+          "en": "The income is tax-free.",
+          "cn": "这笔收入是免税的。"
+        }
+      },
+      {
+        "name": "smoke-free",
+        "phonetic": "/ˌsmoʊkˈfriː/",
+        "breakdown": "smoke (烟) + -free (无...的)",
+        "meaning": "adj. 无烟的；禁止吸烟的",
+        "example": {
+          "en": "This is a smoke-free building.",
+          "cn": "这是一栋无烟大楼。"
+        }
+      },
+      {
+        "name": "alcohol-free",
+        "phonetic": "/ˌælkəhɔːlˈfriː/",
+        "breakdown": "alcohol (酒精) + -free (无...的)",
+        "meaning": "adj. 无酒精的",
+        "example": {
+          "en": "I'll have an alcohol-free beer.",
+          "cn": "我要一杯无酒精啤酒。"
+        }
+      },
+      {
+        "name": "gluten-free",
+        "phonetic": "/ˌɡluːtnˈfriː/",
+        "breakdown": "gluten (麸质) + -free (无...的)",
+        "meaning": "adj. 无麸质的",
+        "example": {
+          "en": "She follows a gluten-free diet.",
+          "cn": "她遵循无麸质饮食。"
+        }
+      },
+      {
+        "name": "dairy-free",
+        "phonetic": "/ˌderiˈfriː/",
+        "breakdown": "dairy (乳制品) + -free (无...的)",
+        "meaning": "adj. 无乳制品的",
+        "example": {
+          "en": "This cake is dairy-free.",
+          "cn": "这个蛋糕不含乳制品。"
+        }
+      },
+      {
+        "name": "nut-free",
+        "phonetic": "/ˌnʌtˈfriː/",
+        "breakdown": "nut (坚果) + -free (无...的)",
+        "meaning": "adj. 无坚果的",
+        "example": {
+          "en": "The school is a nut-free zone.",
+          "cn": "学校是无坚果区。"
+        }
+      },
+      {
+        "name": "worry-free",
+        "phonetic": "/ˌwɜːriˈfriː/",
+        "breakdown": "worry (烦恼) + -free (无...的)",
+        "meaning": "adj. 无忧无虑的",
+        "example": {
+          "en": "Enjoy a worry-free vacation.",
+          "cn": "享受无忧无虑的假期。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_bound",
+    "form": "-bound",
+    "type": "suffix",
+    "phonetic": "/-baʊnd/",
+    "meaning": "向...方向的 / 被...束缚的 / 前往...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 bind（绑、束缚）的过去分词 bound，表示\"被束缚、前往、朝...方向\"。",
+    "derivationNote": "表示方向（homeward 回家的）或被束缚（snowbound 被雪困住的），如 home（家）→ homebound（回家的）。",
+    "words": [
+      {
+        "name": "homebound",
+        "phonetic": "/ˈhoʊmbaʊnd/",
+        "breakdown": "home (家) + -bound (向...方向的)",
+        "meaning": "adj. 回家的；因病居家的",
+        "example": {
+          "en": "The homebound train was delayed.",
+          "cn": "回家的火车晚点了。"
+        }
+      },
+      {
+        "name": "westbound",
+        "phonetic": "/ˈwestbaʊnd/",
+        "breakdown": "west (西) + -bound (向...方向的)",
+        "meaning": "adj. 向西行的",
+        "example": {
+          "en": "Take the westbound train.",
+          "cn": "乘坐西行列车。"
+        }
+      },
+      {
+        "name": "eastbound",
+        "phonetic": "/ˈiːstbaʊnd/",
+        "breakdown": "east (东) + -bound (向...方向的)",
+        "meaning": "adj. 向东行的",
+        "example": {
+          "en": "The eastbound highway is closed.",
+          "cn": "东行高速公路关闭了。"
+        }
+      },
+      {
+        "name": "northbound",
+        "phonetic": "/ˈnɔːrθbaʊnd/",
+        "breakdown": "north (北) + -bound (向...方向的)",
+        "meaning": "adj. 向北行的",
+        "example": {
+          "en": "The northbound traffic is heavy.",
+          "cn": "北行交通很拥挤。"
+        }
+      },
+      {
+        "name": "southbound",
+        "phonetic": "/ˈsaʊθbaʊnd/",
+        "breakdown": "south (南) + -bound (向...方向的)",
+        "meaning": "adj. 向南行的",
+        "example": {
+          "en": "The southbound bus leaves at 3 PM.",
+          "cn": "南行公交车下午3点出发。"
+        }
+      },
+      {
+        "name": "snowbound",
+        "phonetic": "/ˈsnoʊbaʊnd/",
+        "breakdown": "snow (雪) + -bound (被...束缚的)",
+        "meaning": "adj. 被雪困住的；被大雪封住的",
+        "example": {
+          "en": "The village was snowbound for a week.",
+          "cn": "村庄被雪困住了一周。"
+        }
+      },
+      {
+        "name": "fogbound",
+        "phonetic": "/ˈfɔːɡbaʊnd/",
+        "breakdown": "fog (雾) + -bound (被...束缚的)",
+        "meaning": "adj. 被雾困住的；雾锁的",
+        "example": {
+          "en": "The airport was fogbound all morning.",
+          "cn": "机场整个上午都被雾笼罩。"
+        }
+      },
+      {
+        "name": "desk-bound",
+        "phonetic": "/ˈdeskb aʊnd/",
+        "breakdown": "desk (书桌) + -bound (被...束缚的)",
+        "meaning": "adj. 伏案工作的；坐办公室的",
+        "example": {
+          "en": "He has a desk-bound job.",
+          "cn": "他有一份伏案工作。"
+        }
+      },
+      {
+        "name": "tradition-bound",
+        "phonetic": "/trəˈdɪʃnbaʊnd/",
+        "breakdown": "tradition (传统) + -bound (被...束缚的)",
+        "meaning": "adj. 被传统束缚的",
+        "example": {
+          "en": "The society was tradition-bound.",
+          "cn": "这个社会被传统束缚。"
+        }
+      },
+      {
+        "name": "class-bound",
+        "phonetic": "/ˈklæsb aʊnd/",
+        "breakdown": "class (阶级) + -bound (被...束缚的)",
+        "meaning": "adj. 受阶级限制的",
+        "example": {
+          "en": "It was a class-bound society.",
+          "cn": "那是一个受阶级限制的社会。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_minded",
+    "form": "-minded",
+    "type": "suffix",
+    "phonetic": "/-maɪndɪd/",
+    "meaning": "有...思想的 / 有...头脑的 / 关心...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 gemynded（有思想的），表示具有某种思想、态度或倾向。",
+    "derivationNote": "加在名词或形容词后表示\"有...思想的\"，如 open（开放）→ open-minded（思想开放的），narrow（狭窄）→ narrow-minded（心胸狭窄的）。",
+    "words": [
+      {
+        "name": "open-minded",
+        "phonetic": "/ˌoʊpənˈmaɪndɪd/",
+        "breakdown": "open (开放) + -minded (有...思想的)",
+        "meaning": "adj. 思想开放的；虚心的",
+        "example": {
+          "en": "She is open-minded to new ideas.",
+          "cn": "她对新思想持开放态度。"
+        }
+      },
+      {
+        "name": "narrow-minded",
+        "phonetic": "/ˌnæroʊˈmaɪndɪd/",
+        "breakdown": "narrow (狭窄) + -minded (有...思想的)",
+        "meaning": "adj. 心胸狭窄的；固执的",
+        "example": {
+          "en": "Don't be so narrow-minded.",
+          "cn": "别这么心胸狭窄。"
+        }
+      },
+      {
+        "name": "like-minded",
+        "phonetic": "/ˌlaɪkˈmaɪndɪd/",
+        "breakdown": "like (相似) + -minded (有...思想的)",
+        "meaning": "adj. 志同道合的；想法相同的",
+        "example": {
+          "en": "They are like-minded friends.",
+          "cn": "他们是志同道合的朋友。"
+        }
+      },
+      {
+        "name": "strong-minded",
+        "phonetic": "/ˌstrɔːŋˈmaɪndɪd/",
+        "breakdown": "strong (坚强) + -minded (有...思想的)",
+        "meaning": "adj. 意志坚强的；有主见的",
+        "example": {
+          "en": "She is a strong-minded woman.",
+          "cn": "她是一个意志坚强的女人。"
+        }
+      },
+      {
+        "name": "weak-minded",
+        "phonetic": "/ˌwiːkˈmaɪndɪd/",
+        "breakdown": "weak (软弱) + -minded (有...思想的)",
+        "meaning": "adj. 意志薄弱的；优柔寡断的",
+        "example": {
+          "en": "He is too weak-minded to decide.",
+          "cn": "他太优柔寡断，无法做决定。"
+        }
+      },
+      {
+        "name": "simple-minded",
+        "phonetic": "/ˌsɪmplˈmaɪndɪd/",
+        "breakdown": "simple (简单) + -minded (有...思想的)",
+        "meaning": "adj. 头脑简单的；纯朴的",
+        "example": {
+          "en": "He is a simple-minded man.",
+          "cn": "他是一个头脑简单的人。"
+        }
+      },
+      {
+        "name": "independent-minded",
+        "phonetic": "/ˌɪndɪˈpendəntˌmaɪndɪd/",
+        "breakdown": "independent (独立) + -minded (有...思想的)",
+        "meaning": "adj. 有独立思想的",
+        "example": {
+          "en": "She is an independent-minded thinker.",
+          "cn": "她是一个有独立思想的思考者。"
+        }
+      },
+      {
+        "name": "conservative-minded",
+        "phonetic": "/kənˈsɜːrvətɪvˌmaɪndɪd/",
+        "breakdown": "conservative (保守) + -minded (有...思想的)",
+        "meaning": "adj. 思想保守的",
+        "example": {
+          "en": "He is conservative-minded about change.",
+          "cn": "他对变革持保守态度。"
+        }
+      },
+      {
+        "name": "liberal-minded",
+        "phonetic": "/ˈlɪbərəlˌmaɪndɪd/",
+        "breakdown": "liberal (自由) + -minded (有...思想的)",
+        "meaning": "adj. 思想开明的",
+        "example": {
+          "en": "They are liberal-minded parents.",
+          "cn": "他们是思想开明的父母。"
+        }
+      },
+      {
+        "name": "sports-minded",
+        "phonetic": "/ˈspɔːrtsˌmaɪndɪd/",
+        "breakdown": "sports (运动) + -minded (关心...的)",
+        "meaning": "adj. 爱好体育的；关心运动的",
+        "example": {
+          "en": "He is very sports-minded.",
+          "cn": "他非常爱好体育。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_hearted",
+    "form": "-hearted",
+    "type": "suffix",
+    "phonetic": "/-hɑːrtɪd/",
+    "meaning": "有...心肠的 / 心地...的",
+    "category": "adj",
+    "categoryLabel": "形容词后缀",
+    "origin": "源自古英语 heorte（心）+ -ed，表示具有某种心肠或性格特征。",
+    "derivationNote": "加在形容词后表示\"心地...的\"，如 kind（善良）→ kind-hearted（心地善良的），cold（冷）→ cold-hearted（冷酷的）。",
+    "words": [
+      {
+        "name": "kind-hearted",
+        "phonetic": "/ˌkaɪndˈhɑːrtɪd/",
+        "breakdown": "kind (善良) + -hearted (有...心肠的)",
+        "meaning": "adj. 心地善良的；仁慈的",
+        "example": {
+          "en": "She is a kind-hearted person.",
+          "cn": "她是一个心地善良的人。"
+        }
+      },
+      {
+        "name": "cold-hearted",
+        "phonetic": "/ˌkoʊldˈhɑːrtɪd/",
+        "breakdown": "cold (冷) + -hearted (有...心肠的)",
+        "meaning": "adj. 冷酷的；无情的",
+        "example": {
+          "en": "He was cold-hearted toward strangers.",
+          "cn": "他对陌生人很冷酷。"
+        }
+      },
+      {
+        "name": "warm-hearted",
+        "phonetic": "/ˌwɔːrmˈhɑːrtɪd/",
+        "breakdown": "warm (温暖) + -hearted (有...心肠的)",
+        "meaning": "adj. 热心的；热情的",
+        "example": {
+          "en": "She gave a warm-hearted welcome.",
+          "cn": "她给予了热情的欢迎。"
+        }
+      },
+      {
+        "name": "hard-hearted",
+        "phonetic": "/ˌhɑːrdˈhɑːrtɪd/",
+        "breakdown": "hard (硬) + -hearted (有...心肠的)",
+        "meaning": "adj. 铁石心肠的；无情的",
+        "example": {
+          "en": "Don't be so hard-hearted.",
+          "cn": "别这么铁石心肠。"
+        }
+      },
+      {
+        "name": "soft-hearted",
+        "phonetic": "/ˌsɔːftˈhɑːrtɪd/",
+        "breakdown": "soft (软) + -hearted (有...心肠的)",
+        "meaning": "adj. 软心肠的；仁慈的",
+        "example": {
+          "en": "She is too soft-hearted to say no.",
+          "cn": "她心肠太软，无法拒绝。"
+        }
+      },
+      {
+        "name": "heavy-hearted",
+        "phonetic": "/ˌheviˈhɑːrtɪd/",
+        "breakdown": "heavy (沉重) + -hearted (有...心肠的)",
+        "meaning": "adj. 心情沉重的；悲伤的",
+        "example": {
+          "en": "He left with a heavy-hearted feeling.",
+          "cn": "他心情沉重地离开了。"
+        }
+      },
+      {
+        "name": "light-hearted",
+        "phonetic": "/ˌlaɪtˈhɑːrtɪd/",
+        "breakdown": "light (轻松) + -hearted (有...心肠的)",
+        "meaning": "adj. 轻松愉快的；无忧无虑的",
+        "example": {
+          "en": "They had a light-hearted conversation.",
+          "cn": "他们进行了轻松愉快的交谈。"
+        }
+      },
+      {
+        "name": "broken-hearted",
+        "phonetic": "/ˌbroʊkənˈhɑːrtɪd/",
+        "breakdown": "broken (破碎) + -hearted (有...心肠的)",
+        "meaning": "adj. 心碎的；极度悲伤的",
+        "example": {
+          "en": "She was broken-hearted after the breakup.",
+          "cn": "分手后她心碎了。"
+        }
+      },
+      {
+        "name": "tender-hearted",
+        "phonetic": "/ˌtendərˈhɑːrtɪd/",
+        "breakdown": "tender (温柔) + -hearted (有...心肠的)",
+        "meaning": "adj. 软心肠的；温柔的",
+        "example": {
+          "en": "The tender-hearted nurse cared for the patients.",
+          "cn": "温柔的护士照顾病人。"
+        }
+      },
+      {
+        "name": "noble-hearted",
+        "phonetic": "/ˌnoʊblˈhɑːrtɪd/",
+        "breakdown": "noble (高尚) + -hearted (有...心肠的)",
+        "meaning": "adj. 高尚的；崇高的",
+        "example": {
+          "en": "He was a noble-hearted leader.",
+          "cn": "他是一位高尚的领袖。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_le",
+    "form": "-le",
+    "type": "suffix",
+    "phonetic": "/-l/",
+    "meaning": "小 / 反复 / 使...（动词或名词）",
+    "category": "verb",
+    "categoryLabel": "动词/名词后缀",
+    "origin": "源自古英语 -lian，表示反复、小的动作或使役，也可作名词指小的事物。",
+    "derivationNote": "作动词后缀表示反复或小的动作（sparkle 闪烁、twinkle 闪烁），作名词后缀表示小（bottle 瓶子）。",
+    "words": [
+      {
+        "name": "sparkle",
+        "phonetic": "/ˈspɑːrkl/",
+        "breakdown": "spark (火花) + -le (小/反复)",
+        "meaning": "v./n. 闪烁；闪耀；火花",
+        "example": {
+          "en": "The stars sparkle in the night sky.",
+          "cn": "星星在夜空中闪烁。"
+        }
+      },
+      {
+        "name": "twinkle",
+        "phonetic": "/ˈtwɪŋkl/",
+        "breakdown": "twink (眨眼) + -le (反复)",
+        "meaning": "v./n. 闪烁；眨眼；瞬间",
+        "example": {
+          "en": "The lights twinkle in the distance.",
+          "cn": "灯光在远处闪烁。"
+        }
+      },
+      {
+        "name": "wrinkle",
+        "phonetic": "/ˈrɪŋkl/",
+        "breakdown": "wrink (扭) + -le (小/反复)",
+        "meaning": "n. 皱纹 v. 起皱",
+        "example": {
+          "en": "Age brings wrinkles.",
+          "cn": "年龄带来皱纹。"
+        }
+      },
+      {
+        "name": "crumble",
+        "phonetic": "/ˈkrʌmbl/",
+        "breakdown": "crumb (碎屑) + -le (小/反复)",
+        "meaning": "v. 崩溃；破碎；瓦解",
+        "example": {
+          "en": "The old building crumbled.",
+          "cn": "老建筑倒塌了。"
+        }
+      },
+      {
+        "name": "stumble",
+        "phonetic": "/ˈstʌmbl/",
+        "breakdown": "stum (绊) + -le (反复)",
+        "meaning": "v. 绊倒；结巴；偶然发现",
+        "example": {
+          "en": "He stumbled on the stairs.",
+          "cn": "他在楼梯上绊倒了。"
+        }
+      },
+      {
+        "name": "fumble",
+        "phonetic": "/ˈfʌmbl/",
+        "breakdown": "fum (摸索) + -le (反复)",
+        "meaning": "v. 摸索；笨拙地做；漏球",
+        "example": {
+          "en": "She fumbled with the keys.",
+          "cn": "她笨拙地摸索钥匙。"
+        }
+      },
+      {
+        "name": "mumble",
+        "phonetic": "/ˈmʌmbl/",
+        "breakdown": "mum (咕哝) + -le (反复)",
+        "meaning": "v./n. 咕哝；喃喃自语",
+        "example": {
+          "en": "He mumbled something under his breath.",
+          "cn": "他低声咕哝着什么。"
+        }
+      },
+      {
+        "name": "grumble",
+        "phonetic": "/ˈɡrʌmbl/",
+        "breakdown": "grum (抱怨) + -le (反复)",
+        "meaning": "v./n. 抱怨；嘟囔；隆隆声",
+        "example": {
+          "en": "He grumbled about the weather.",
+          "cn": "他抱怨天气。"
+        }
+      },
+      {
+        "name": "rumble",
+        "phonetic": "/ˈrʌmbl/",
+        "breakdown": "rum (隆隆) + -le (反复)",
+        "meaning": "v./n. 隆隆声；辘辘声",
+        "example": {
+          "en": "Thunder rumbled in the distance.",
+          "cn": "远处雷声隆隆。"
+        }
+      },
+      {
+        "name": "jingle",
+        "phonetic": "/ˈdʒɪŋɡl/",
+        "breakdown": "jing (叮当) + -le (反复)",
+        "meaning": "v./n. 叮当声；顺口溜",
+        "example": {
+          "en": "The bells jingle on the door.",
+          "cn": "门上的铃铛叮当响。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "suffix_ways",
+    "form": "-ways / -wise",
+    "type": "suffix",
+    "phonetic": "/-weɪz/",
+    "meaning": "以...方式 / 朝...方向 / 在...方面",
+    "category": "adv",
+    "categoryLabel": "副词后缀",
+    "origin": "源自古英语 -weges（方式、方向），表示以某种方式、方向或方面。",
+    "derivationNote": "表示方向或方式，如 sideways（向侧面）、lengthways（纵向）、crossways（交叉地）。",
+    "words": [
+      {
+        "name": "sideways",
+        "phonetic": "/ˈsaɪdweɪz/",
+        "breakdown": "side (侧面) + -ways (以...方式)",
+        "meaning": "adv./adj. 向侧面；斜向一边",
+        "example": {
+          "en": "He looked sideways at me.",
+          "cn": "他斜着眼看我。"
+        }
+      },
+      {
+        "name": "lengthways",
+        "phonetic": "/ˈleŋθweɪz/",
+        "breakdown": "length (长度) + -ways (方向)",
+        "meaning": "adv. 纵向；沿长度方向",
+        "example": {
+          "en": "Cut the carrot lengthways.",
+          "cn": "把胡萝卜纵向切开。"
+        }
+      },
+      {
+        "name": "crossways",
+        "phonetic": "/ˈkrɔːsweɪz/",
+        "breakdown": "cross (交叉) + -ways (方向)",
+        "meaning": "adv. 横向；交叉地",
+        "example": {
+          "en": "Lay the planks crossways.",
+          "cn": "把木板横向放置。"
+        }
+      },
+      {
+        "name": "edgeways",
+        "phonetic": "/ˈedʒweɪz/",
+        "breakdown": "edge (边缘) + -ways (方向)",
+        "meaning": "adv. 以边缘向外；从旁边",
+        "example": {
+          "en": "He squeezed in edgeways.",
+          "cn": "他从旁边挤了进去。"
+        }
+      },
+      {
+        "name": "coastways",
+        "phonetic": "/ˈkoʊstweɪz/",
+        "breakdown": "coast (海岸) + -ways (方向)",
+        "meaning": "adv. 沿海岸",
+        "example": {
+          "en": "We traveled coastways for two days.",
+          "cn": "我们沿海岸旅行了两天。"
+        }
+      },
+      {
+        "name": "endways",
+        "phonetic": "/ˈendweɪz/",
+        "breakdown": "end (末端) + -ways (方向)",
+        "meaning": "adv. 末端向前；竖着",
+        "example": {
+          "en": "Place the box endways.",
+          "cn": "把盒子竖着放。"
+        }
+      },
+      {
+        "name": "breadthways",
+        "phonetic": "/ˈbredθweɪz/",
+        "breakdown": "breadth (宽度) + -ways (方向)",
+        "meaning": "adv. 横向；沿宽度方向",
+        "example": {
+          "en": "Fold the paper breadthways.",
+          "cn": "把纸横向折叠。"
+        }
+      },
+      {
+        "name": "widthways",
+        "phonetic": "/ˈwɪdθweɪz/",
+        "breakdown": "width (宽度) + -ways (方向)",
+        "meaning": "adv. 横向；沿宽度方向",
+        "example": {
+          "en": "Cut the fabric widthways.",
+          "cn": "沿宽度方向裁剪布料。"
+        }
+      },
+      {
+        "name": "skyways",
+        "phonetic": "/ˈskaɪweɪz/",
+        "breakdown": "sky (天空) + -ways (路线)",
+        "meaning": "n. 航线；航空路线",
+        "example": {
+          "en": "The plane flew the skyways.",
+          "cn": "飞机沿航线飞行。"
+        }
+      },
+      {
+        "name": "parkways",
+        "phonetic": "/ˈpɑːrkweɪz/",
+        "breakdown": "park (公园) + -ways (道路)",
+        "meaning": "n. 公园大道；景观道路",
+        "example": {
+          "en": "The parkways are lined with trees.",
+          "cn": "公园大道两旁绿树成荫。"
         }
       }
     ]
