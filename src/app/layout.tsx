@@ -6,8 +6,11 @@ import { ImportModal } from '@/components/modals/ImportModal'
 import { SettingsModal } from '@/components/modals/SettingsModal'
 
 export const metadata: Metadata = {
-  title: 'MyWords — 音节拼读与肌肉记忆背单词',
+  title: 'SynapWord 突触记词 — 音节拼读与肌肉记忆背单词',
   description: '专为深度英语学习者打造的音节拼读、构词法拆解与肌肉记忆闭环默写系统。',
+  icons: {
+    icon: '/logo.png',
+  },
 }
 
 export default function RootLayout({

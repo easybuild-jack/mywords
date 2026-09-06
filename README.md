@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ SynapWord (突触记词)
 
-## Getting Started
+> **专为深度英语学习者打造的音节拼读、构词法拆解与肌肉记忆闭环默写系统。**
 
-First, run the development server:
+---
+
+## ✨ 核心特性
+
+- 🧠 **认知突触联结**：通过音节、重音、词根词缀建立对英语单词的立体神经记忆网络。
+- 🎹 **键盘肌肉记忆默写**：支持盲打拼读、音标默写，听音辨字与击键反馈相结合，打磨深度拼写记忆。
+- 🔬 **音节规则拼读拆解**：针对复杂长难词进行音节切分与音标标注，符合自然拼读规律。
+- 📚 **词库与生错词本**：词库灵活管理、生词错词自动归集沉淀与艾宾浩斯复习流。
+- 🎨 **沉浸式科技美学**：多款深度定制的赛博暗黑、未来科幻主题皮肤与极致微交互设计。
+
+---
+
+## 🚀 快速启动
+
+### 1. 安装依赖
+
+```bash
+npm install
+```
+
+### 2. 启动开发服务器
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+浏览器访问 [http://localhost:3000](http://localhost:3000) 即可开始学习。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. 构建生产版本
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ 技术栈
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **前端框架**：Next.js 16 (App Router) + React 19 + TypeScript
+- **样式与动效**：Tailwind CSS v4 + Framer Motion + Lucide React
+- **本地存储与数据库**：Dexie.js (IndexedDB) + Zustand (持久化状态)
+- **音频引擎**：Howler.js + Web Speech Synthesis API
