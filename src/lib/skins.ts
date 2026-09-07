@@ -8,6 +8,8 @@
 export interface SkinTokens {
   /** 主背景（body / 主内容区） */
   background: string
+  /** 主前景文字色（可选，浅色模式下为深字） */
+  foreground?: string
   /** 侧栏背景（与主背景区分，营造层次） */
   sidebarBg: string
   /** 品牌主色 —— Tailwind 的 text-primary / bg-primary / border-primary */
@@ -20,6 +22,8 @@ export interface SkinTokens {
   ring: string
   /** glass-card / 工具栏玻璃面板背景 */
   card: string
+  /** 卡片前景色（可选） */
+  cardForeground?: string
   /** 玻璃面板描边 */
   border: string
   /** 弱化背景块（按钮、徽标） */
@@ -70,40 +74,6 @@ export const SKINS: Skin[] = [
       border: 'rgba(255, 255, 255, 0.1)',
       muted: 'rgba(255, 255, 255, 0.08)',
       mutedForeground: '#9CA3AF',
-    },
-  },
-  {
-    id: 'midnight-cyan',
-    name: '冷月青',
-    tagline: '深靛蓝 + 天青',
-    tokens: {
-      background: '#0A0E1A',
-      sidebarBg: '#11172A',
-      primary: '#7DD3FC',
-      primaryRgb: '125 211 252',
-      primaryHover: '#BAE6FD',
-      ring: '#7DD3FC',
-      card: 'rgba(255, 255, 255, 0.04)',
-      border: 'rgba(125, 211, 252, 0.10)',
-      muted: 'rgba(255, 255, 255, 0.06)',
-      mutedForeground: '#94A3B8',
-    },
-  },
-  {
-    id: 'warm-amber',
-    name: '暖石琥珀',
-    tagline: '暖炭灰 + 琥珀金',
-    tokens: {
-      background: '#0F0E0E',
-      sidebarBg: '#1A1717',
-      primary: '#FEBC2E',
-      primaryRgb: '254 188 46',
-      primaryHover: '#FCD34D',
-      ring: '#FEBC2E',
-      card: 'rgba(255, 255, 255, 0.04)',
-      border: 'rgba(254, 188, 46, 0.10)',
-      muted: 'rgba(255, 255, 255, 0.06)',
-      mutedForeground: '#94A3B8',
     },
   },
   {
@@ -175,20 +145,39 @@ export const SKINS: Skin[] = [
     },
   },
   {
-    id: 'starry-iris',
-    name: '星野鸢尾',
-    tagline: '静谧星野 + 长春花紫，法式优雅',
+    id: 'oxford-twilight',
+    name: '牛津暮色',
+    tagline: '牛津暗蓝 + 鸢尾紫蓝，学院雅致',
     tokens: {
-      background: '#0E111C',
-      sidebarBg: '#151A2C',
-      primary: '#A5B4FC',
-      primaryRgb: '165 180 252',
-      primaryHover: '#C7D2FE',
-      ring: '#A5B4FC',
+      background: '#090D1A',
+      sidebarBg: '#0F1528',
+      primary: '#818CF8',
+      primaryRgb: '129 140 248',
+      primaryHover: '#A5B4FC',
+      ring: '#818CF8',
       card: 'rgba(255, 255, 255, 0.045)',
-      border: 'rgba(165, 180, 252, 0.12)',
+      border: 'rgba(129, 140, 248, 0.14)',
       muted: 'rgba(255, 255, 255, 0.06)',
-      mutedForeground: '#A4AFC6',
+      mutedForeground: '#8E9BB5',
+    },
+  },
+  {
+    id: 'muted-parchment',
+    name: '晨曦纸墨',
+    tagline: '米白宣纸 + 松烟墨青，护眼纸质感',
+    tokens: {
+      background: '#F5F1E8',
+      foreground: '#1C1917',
+      sidebarBg: '#ECE6D8',
+      primary: '#0D766E',
+      primaryRgb: '13 118 110',
+      primaryHover: '#115E59',
+      ring: '#0D766E',
+      card: 'rgba(255, 255, 255, 0.75)',
+      cardForeground: '#1C1917',
+      border: 'rgba(13, 118, 110, 0.16)',
+      muted: 'rgba(0, 0, 0, 0.05)',
+      mutedForeground: '#78716C',
     },
   },
 ]
@@ -203,12 +192,14 @@ export function getSkin(id: string | undefined | null): Skin {
 export function applySkinTokens(tokens: SkinTokens) {
   const root = document.documentElement
   root.style.setProperty('--background', tokens.background)
+  root.style.setProperty('--foreground', tokens.foreground ?? '#F3F4F6')
   root.style.setProperty('--sidebar-bg', tokens.sidebarBg)
   root.style.setProperty('--primary', tokens.primary)
   root.style.setProperty('--primary-rgb', tokens.primaryRgb)
   root.style.setProperty('--primary-hover', tokens.primaryHover)
   root.style.setProperty('--ring', tokens.ring)
   root.style.setProperty('--card', tokens.card)
+  root.style.setProperty('--card-foreground', tokens.cardForeground ?? '#FFFFFF')
   root.style.setProperty('--border', tokens.border)
   root.style.setProperty('--muted', tokens.muted)
   root.style.setProperty('--muted-foreground', tokens.mutedForeground)

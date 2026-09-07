@@ -42,32 +42,6 @@
   --ring: #34D399;
 }
 
-:root[data-skin="midnight-cyan"] {
-  --background: #0A0E1A;
-  --sidebar-bg: #11172A;
-  --card: rgba(255, 255, 255, 0.04);
-  --primary: #7DD3FC;
-  --primary-hover: #BAE6FD;
-  --primary-rgb: 125 211 252;
-  --border: rgba(125, 211, 252, 0.10);
-  --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: #94A3B8;
-  --ring: #7DD3FC;
-}
-
-:root[data-skin="warm-amber"] {
-  --background: #0F0E0E;
-  --sidebar-bg: #1A1717;
-  --card: rgba(255, 255, 255, 0.04);
-  --primary: #FEBC2E;
-  --primary-hover: #FCD34D;
-  --primary-rgb: 254 188 46;
-  --border: rgba(254, 188, 46, 0.10);
-  --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: #94A3B8;
-  --ring: #FEBC2E;
-}
-
 :root[data-skin="sakura-pink"] {
   --background: #140E15;
   --sidebar-bg: #1E1420;
@@ -120,17 +94,37 @@
   --ring: #86EFAC;
 }
 
-:root[data-skin="starry-iris"] {
-  --background: #0E111C;
-  --sidebar-bg: #151A2C;
+:root[data-skin="oxford-twilight"] {
+  --background: #090D1A;
+  --sidebar-bg: #0F1528;
   --card: rgba(255, 255, 255, 0.045);
-  --primary: #A5B4FC;
-  --primary-hover: #C7D2FE;
-  --primary-rgb: 165 180 252;
-  --border: rgba(165, 180, 252, 0.12);
+  --primary: #818CF8;
+  --primary-hover: #A5B4FC;
+  --primary-rgb: 129 140 248;
+  --border: rgba(129, 140, 248, 0.14);
   --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: #A4AFC6;
-  --ring: #A5B4FC;
+  --muted-foreground: #8E9BB5;
+  --ring: #818CF8;
+}
+
+:root[data-skin="muted-parchment"] {
+  --background: #F5F1E8;
+  --foreground: #1C1917;
+  --sidebar-bg: #ECE6D8;
+  --card: rgba(255, 255, 255, 0.75);
+  --card-foreground: #1C1917;
+  --primary: #0D766E;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #115E59;
+  --primary-rgb: 13 118 110;
+  --secondary: #E5DFC9;
+  --secondary-foreground: #1C1917;
+  --muted: rgba(0, 0, 0, 0.05);
+  --muted-foreground: #78716C;
+  --accent: #D97706;
+  --accent-foreground: #FFFFFF;
+  --border: rgba(13, 118, 110, 0.16);
+  --ring: #0D766E;
 }
 
 /* Tailwind v4 只认 @theme 里注册的令牌，缺了这层 bg-primary / text-accent 等工具类不会被生成 */
@@ -268,4 +262,157 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* ---------------------------------------------------------------------------
+   晨曦纸墨（muted-parchment）浅色纸质模式专属适配规则
+   在不影响其他暗色皮肤的前提下，将页面内浅色文字映射为清晰墨色
+   --------------------------------------------------------------------------- */
+:root[data-skin="muted-parchment"] {
+  color-scheme: light;
+}
+
+:root[data-skin="muted-parchment"] body {
+  color: #1C1917;
+}
+
+:root[data-skin="muted-parchment"] h1,
+:root[data-skin="muted-parchment"] h2,
+:root[data-skin="muted-parchment"] h3,
+:root[data-skin="muted-parchment"] h4 {
+  color: #1C1917;
+}
+
+:root[data-skin="muted-parchment"] .text-white,
+:root[data-skin="muted-parchment"] [class*="text-white"] {
+  color: #1C1917 !important;
+}
+
+:root[data-skin="muted-parchment"] .text-gray-100 {
+  color: #1C1917 !important;
+}
+
+:root[data-skin="muted-parchment"] .text-gray-200 {
+  color: #292524 !important;
+}
+
+:root[data-skin="muted-parchment"] .text-gray-300 {
+  color: #44403C !important;
+}
+
+:root[data-skin="muted-parchment"] .text-gray-400 {
+  color: #57534E !important;
+}
+
+:root[data-skin="muted-parchment"] .text-gray-500 {
+  color: #78716C !important;
+}
+
+:root[data-skin="muted-parchment"] .text-\[\#9CA3AF\],
+:root[data-skin="muted-parchment"] [class*="text-\[\#9CA3AF\]"] {
+  color: #57534E !important;
+}
+
+:root[data-skin="muted-parchment"] .text-muted-foreground,
+:root[data-skin="muted-parchment"] [class*="text-muted-foreground"] {
+  color: #78716C !important;
+}
+
+/* 品牌色与状态色背景容器上的文字保持纯白，保证高对比可读性 */
+:root[data-skin="muted-parchment"] .bg-primary,
+:root[data-skin="muted-parchment"] .bg-primary *,
+:root[data-skin="muted-parchment"] .bg-primary.text-\[\#0B0C0E\],
+:root[data-skin="muted-parchment"] [class*="bg-destructive"],
+:root[data-skin="muted-parchment"] [class*="bg-destructive"] *,
+:root[data-skin="muted-parchment"] [class*="bg-rose-"],
+:root[data-skin="muted-parchment"] [class*="bg-rose-"] *,
+:root[data-skin="muted-parchment"] [class*="bg-green-600"],
+:root[data-skin="muted-parchment"] [class*="bg-green-600"] * {
+  color: #FFFFFF !important;
+}
+
+/* 边框在浅色下的感知染色 */
+:root[data-skin="muted-parchment"] .border-white\/5,
+:root[data-skin="muted-parchment"] .border-white\/10,
+:root[data-skin="muted-parchment"] .border-white\/15,
+:root[data-skin="muted-parchment"] .border-white\/20,
+:root[data-skin="muted-parchment"] [class*="border-white/"],
+:root[data-skin="muted-parchment"] .divide-white\/5 > * + *,
+:root[data-skin="muted-parchment"] .divide-white\/10 > * + * {
+  border-color: rgba(13, 118, 110, 0.22) !important;
+}
+
+/* 半透明浅色背景块（包括下拉选择框与徽标） */
+:root[data-skin="muted-parchment"] .bg-white\/5,
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.02\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.025\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.03\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.04\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.05\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.06\],
+:root[data-skin="muted-parchment"] .bg-white\/\[0\.08\],
+:root[data-skin="muted-parchment"] [class*="bg-white/"] {
+  background-color: rgba(13, 118, 110, 0.06) !important;
+}
+
+:root[data-skin="muted-parchment"] .hover\:bg-white\/\[0\.06\]:hover,
+:root[data-skin="muted-parchment"] .hover\:bg-white\/\[0\.08\]:hover,
+:root[data-skin="muted-parchment"] .hover\:bg-white\/\[0\.1\]:hover,
+:root[data-skin="muted-parchment"] .hover\:bg-white\/\[0\.12\]:hover,
+:root[data-skin="muted-parchment"] .hover\:bg-white\/10:hover,
+:root[data-skin="muted-parchment"] .hover\:bg-white\/5:hover,
+:root[data-skin="muted-parchment"] [class*="hover:bg-white/"]:hover {
+  background-color: rgba(13, 118, 110, 0.12) !important;
+}
+
+/* 磨砂玻璃卡片 */
+:root[data-skin="muted-parchment"] .glass-card {
+  background: rgba(255, 255, 255, 0.90) !important;
+  border: 1px solid rgba(13, 118, 110, 0.18) !important;
+  box-shadow: 0 10px 32px 0 rgba(70, 60, 45, 0.10) !important;
+}
+
+:root[data-skin="muted-parchment"] .glass-panel {
+  background: rgba(245, 241, 232, 0.98) !important;
+  border: 1px solid rgba(13, 118, 110, 0.22) !important;
+  color: #1C1917 !important;
+}
+
+/* 侧边栏与弹窗底色 */
+:root[data-skin="muted-parchment"] aside {
+  background-color: rgba(236, 230, 216, 0.95) !important;
+  border-right-color: rgba(13, 118, 110, 0.18) !important;
+}
+
+:root[data-skin="muted-parchment"] .bg-sidebar {
+  background-color: #ECE6D8 !important;
+  color: #1C1917 !important;
+}
+
+:root[data-skin="muted-parchment"] .bg-\[\#12141A\],
+:root[data-skin="muted-parchment"] [class*="bg-\[\#12141A\]"] {
+  background-color: #FDFCFA !important;
+  border-color: rgba(13, 118, 110, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(60, 50, 35, 0.18) !important;
+  color: #1C1917 !important;
+}
+
+/* 输入框聚焦与 placeholder 颜色 */
+:root[data-skin="muted-parchment"] input,
+:root[data-skin="muted-parchment"] textarea {
+  color: #1C1917 !important;
+}
+
+:root[data-skin="muted-parchment"] input::placeholder,
+:root[data-skin="muted-parchment"] textarea::placeholder {
+  color: #78716C !important;
+}
+
+/* 浅色滚动条 */
+:root[data-skin="muted-parchment"] ::-webkit-scrollbar-thumb {
+  background: rgba(13, 118, 110, 0.2) !important;
+}
+
+:root[data-skin="muted-parchment"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(13, 118, 110, 0.35) !important;
 }
