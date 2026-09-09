@@ -127,6 +127,26 @@
   --ring: #0D766E;
 }
 
+:root[data-skin="avocado-cream"] {
+  --background: #F9FBE6;
+  --foreground: #242B23;
+  --sidebar-bg: #EEF3D2;
+  --card: rgba(255, 255, 255, 0.90);
+  --card-foreground: #242B23;
+  --primary: #7FA921;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #6C9219;
+  --primary-rgb: 127 169 33;
+  --secondary: #E3E9C4;
+  --secondary-foreground: #242B23;
+  --muted: rgba(110, 118, 108, 0.08);
+  --muted-foreground: #6E766C;
+  --accent: #D97706;
+  --accent-foreground: #FFFFFF;
+  --border: rgba(110, 118, 108, 0.20);
+  --ring: #7FA921;
+}
+
 /* Tailwind v4 只认 @theme 里注册的令牌，缺了这层 bg-primary / text-accent 等工具类不会被生成 */
 @theme inline {
   --color-background: var(--background);
@@ -474,4 +494,177 @@
 
 :root[data-skin="muted-parchment"] ::-webkit-scrollbar-thumb:hover {
   background: rgba(13, 118, 110, 0.35) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   酪梨青灰（avocado-cream）潮流高级感浅色模式专属适配规则
+   核心三色：豆汁黄(#F9FBE6) + 青灰(#6E766C) + 牛油果绿(#7FA921)
+   --------------------------------------------------------------------------- */
+:root[data-skin="avocado-cream"] {
+  color-scheme: light;
+}
+
+:root[data-skin="avocado-cream"] body {
+  color: #242B23;
+}
+
+:root[data-skin="avocado-cream"] h1,
+:root[data-skin="avocado-cream"] h2,
+:root[data-skin="avocado-cream"] h3,
+:root[data-skin="avocado-cream"] h4 {
+  color: #242B23;
+}
+
+:root[data-skin="avocado-cream"] .text-white,
+:root[data-skin="avocado-cream"] [class*="text-white"] {
+  color: #242B23 !important;
+}
+
+:root[data-skin="avocado-cream"] .text-gray-100 {
+  color: #242B23 !important;
+}
+
+:root[data-skin="avocado-cream"] .text-gray-200 {
+  color: #313B2F !important;
+}
+
+:root[data-skin="avocado-cream"] .text-gray-300 {
+  color: #485246 !important;
+}
+
+:root[data-skin="avocado-cream"] .text-gray-400 {
+  color: #6E766C !important;
+}
+
+:root[data-skin="avocado-cream"] .text-gray-500 {
+  color: #6E766C !important;
+}
+
+:root[data-skin="avocado-cream"] .text-\[\#9CA3AF\],
+:root[data-skin="avocado-cream"] [class*="text-\[\#9CA3AF\]"] {
+  color: #6E766C !important;
+}
+
+:root[data-skin="avocado-cream"] .text-muted-foreground,
+:root[data-skin="avocado-cream"] [class*="text-muted-foreground"] {
+  color: #6E766C !important;
+}
+
+/* 实色主按钮与状态色文字保持纯白高对比 */
+:root[data-skin="avocado-cream"] button.bg-primary,
+:root[data-skin="avocado-cream"] button.bg-primary *,
+:root[data-skin="avocado-cream"] .btn-primary,
+:root[data-skin="avocado-cream"] .btn-primary *,
+:root[data-skin="avocado-cream"] .bg-primary:not([class*="/"]),
+:root[data-skin="avocado-cream"] .bg-primary:not([class*="/"]) *,
+:root[data-skin="avocado-cream"] button.bg-destructive,
+:root[data-skin="avocado-cream"] button.bg-destructive *,
+:root[data-skin="avocado-cream"] .bg-destructive:not([class*="/"]),
+:root[data-skin="avocado-cream"] .bg-destructive:not([class*="/"]) *,
+:root[data-skin="avocado-cream"] [class*="bg-rose-"]:not([class*="/"]),
+:root[data-skin="avocado-cream"] [class*="bg-rose-"]:not([class*="/"]) *,
+:root[data-skin="avocado-cream"] [class*="bg-green-600"]:not([class*="/"]),
+:root[data-skin="avocado-cream"] [class*="bg-green-600"]:not([class*="/"]) * {
+  color: #FFFFFF !important;
+}
+
+/* 键盘按键与字符色映射 */
+:root[data-skin="avocado-cream"] .text-primary {
+  color: #7FA921 !important;
+}
+:root[data-skin="avocado-cream"] .text-destructive {
+  color: #DC2626 !important;
+}
+:root[data-skin="avocado-cream"] .text-destructive\/40 {
+  color: rgba(220, 38, 38, 0.45) !important;
+}
+:root[data-skin="avocado-cream"] .text-primary\/35 {
+  color: rgba(127, 169, 33, 0.4) !important;
+}
+
+/* 边框映射：雅致青灰边框 */
+:root[data-skin="avocado-cream"] .border-white\/5,
+:root[data-skin="avocado-cream"] .border-white\/10,
+:root[data-skin="avocado-cream"] .border-white\/15,
+:root[data-skin="avocado-cream"] .border-white\/20,
+:root[data-skin="avocado-cream"] [class*="border-white/"],
+:root[data-skin="avocado-cream"] .divide-white\/5 > * + *,
+:root[data-skin="avocado-cream"] .divide-white\/10 > * + * {
+  border-color: rgba(110, 118, 108, 0.20) !important;
+}
+
+/* 半透明背景微块（按钮、徽章） */
+:root[data-skin="avocado-cream"] .bg-white\/5,
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.02\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.025\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.03\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.04\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.05\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.06\],
+:root[data-skin="avocado-cream"] .bg-white\/\[0\.08\],
+:root[data-skin="avocado-cream"] [class*="bg-white/"] {
+  background-color: rgba(127, 169, 33, 0.08) !important;
+}
+
+:root[data-skin="avocado-cream"] .hover\:bg-white\/\[0\.06\]:hover,
+:root[data-skin="avocado-cream"] .hover\:bg-white\/\[0\.08\]:hover,
+:root[data-skin="avocado-cream"] .hover\:bg-white\/\[0\.1\]:hover,
+:root[data-skin="avocado-cream"] .hover\:bg-white\/\[0\.12\]:hover,
+:root[data-skin="avocado-cream"] .hover\:bg-white\/10:hover,
+:root[data-skin="avocado-cream"] .hover\:bg-white\/5:hover,
+:root[data-skin="avocado-cream"] [class*="hover:bg-white/"]:hover {
+  background-color: rgba(127, 169, 33, 0.16) !important;
+}
+
+/* 磨砂玻璃卡片 */
+:root[data-skin="avocado-cream"] .glass-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(127, 169, 33, 0.20) !important;
+  box-shadow: 0 10px 32px 0 rgba(110, 118, 108, 0.12) !important;
+}
+
+:root[data-skin="avocado-cream"] .glass-panel {
+  background: rgba(249, 251, 230, 0.98) !important;
+  border: 1px solid rgba(127, 169, 33, 0.22) !important;
+  color: #242B23 !important;
+}
+
+/* 侧边栏与弹窗底色 */
+:root[data-skin="avocado-cream"] aside {
+  background-color: rgba(238, 243, 210, 0.96) !important;
+  border-right-color: rgba(110, 118, 108, 0.18) !important;
+}
+
+:root[data-skin="avocado-cream"] .bg-sidebar {
+  background-color: #EEF3D2 !important;
+  color: #242B23 !important;
+}
+
+/* 下拉菜单与弹层底色：纯净高亮遮盖 */
+:root[data-skin="avocado-cream"] .bg-\[\#12141A\],
+:root[data-skin="avocado-cream"] [class*="bg-\[\#12141A\]"] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(127, 169, 33, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(110, 118, 108, 0.18) !important;
+  color: #242B23 !important;
+}
+
+/* 输入框与 placeholder */
+:root[data-skin="avocado-cream"] input,
+:root[data-skin="avocado-cream"] textarea {
+  color: #242B23 !important;
+}
+
+:root[data-skin="avocado-cream"] input::placeholder,
+:root[data-skin="avocado-cream"] textarea::placeholder {
+  color: #6E766C !important;
+}
+
+/* 浅色滚动条 */
+:root[data-skin="avocado-cream"] ::-webkit-scrollbar-thumb {
+  background: rgba(127, 169, 33, 0.25) !important;
+}
+
+:root[data-skin="avocado-cream"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(127, 169, 33, 0.45) !important;
 }

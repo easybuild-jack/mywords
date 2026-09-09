@@ -180,6 +180,25 @@ export const SKINS: Skin[] = [
       mutedForeground: '#78716C',
     },
   },
+  {
+    id: 'avocado-cream',
+    name: '酪梨青灰',
+    tagline: '豆汁淡黄 + 牛油果绿 + 雅致青灰，潮流高级浅色',
+    tokens: {
+      background: '#F9FBE6',
+      foreground: '#242B23',
+      sidebarBg: '#EEF3D2',
+      primary: '#7FA921',
+      primaryRgb: '127 169 33',
+      primaryHover: '#6C9219',
+      ring: '#7FA921',
+      card: 'rgba(255, 255, 255, 0.90)',
+      cardForeground: '#242B23',
+      border: 'rgba(110, 118, 108, 0.20)',
+      muted: 'rgba(110, 118, 108, 0.08)',
+      mutedForeground: '#6E766C',
+    },
+  },
 ]
 
 export const DEFAULT_SKIN_ID = 'slate-mint'
