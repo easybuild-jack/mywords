@@ -23,7 +23,7 @@ export default function PhoneticsPage() {
         <PhoneticStage />
       </div>
 
-      <PracticeFooter />
+      <PracticeFooter showPeekHint />
     </div>
   )
 }

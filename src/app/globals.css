@@ -204,6 +204,16 @@
     animation: syllable-light-sweep 4.5s ease-in-out infinite;
     will-change: opacity, filter;
   }
+
+  /* 输入错误字母红色闪动提示（闪动 3 次后平稳常亮） */
+  .animate-error-flash {
+    animation: error-letter-flash 0.45s ease-in-out 3 forwards;
+  }
+
+  /* 错误输入槽外框红色呼吸提示（闪动 3 次后平稳常亮） */
+  .animate-error-box {
+    animation: error-box-pulse 0.45s ease-in-out 3 forwards;
+  }
 }
 
 /* 音节纯文字亮度扫描动效：极轻柔的由暗渐进变亮，过渡舒缓平静 */
@@ -243,6 +253,36 @@
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* 输入错误字母红光闪烁提示 */
+@keyframes error-letter-flash {
+  0%, 100% {
+    opacity: 1;
+    color: #ef4444;
+    text-shadow: 0 0 14px rgba(239, 68, 68, 0.95);
+    border-color: rgba(239, 68, 68, 0.8);
+    background-color: rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    opacity: 0.35;
+    color: #f87171;
+    text-shadow: 0 0 2px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+    background-color: rgba(239, 68, 68, 0.08);
+  }
+}
+
+/* 错误输入槽外框红色呼吸提示 */
+@keyframes error-box-pulse {
+  0%, 100% {
+    border-color: rgba(239, 68, 68, 0.8);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: none;
+  }
 }
 
 /* 自定义极简暗黑滚动条 */
@@ -318,17 +358,36 @@
   color: #78716C !important;
 }
 
-/* 品牌色与状态色背景容器上的文字保持纯白，保证高对比可读性 */
-:root[data-skin="muted-parchment"] .bg-primary,
-:root[data-skin="muted-parchment"] .bg-primary *,
-:root[data-skin="muted-parchment"] .bg-primary.text-\[\#0B0C0E\],
-:root[data-skin="muted-parchment"] [class*="bg-destructive"],
-:root[data-skin="muted-parchment"] [class*="bg-destructive"] *,
-:root[data-skin="muted-parchment"] [class*="bg-rose-"],
-:root[data-skin="muted-parchment"] [class*="bg-rose-"] *,
-:root[data-skin="muted-parchment"] [class*="bg-green-600"],
-:root[data-skin="muted-parchment"] [class*="bg-green-600"] * {
+/* 实色品牌色与状态色按钮上的文字保持纯白，保证高对比可读性（排除带 / 的半透明背景，如 bg-destructive/10、bg-destructive/[0.04] 等） */
+:root[data-skin="muted-parchment"] button.bg-primary,
+:root[data-skin="muted-parchment"] button.bg-primary *,
+:root[data-skin="muted-parchment"] .btn-primary,
+:root[data-skin="muted-parchment"] .btn-primary *,
+:root[data-skin="muted-parchment"] .bg-primary:not([class*="/"]),
+:root[data-skin="muted-parchment"] .bg-primary:not([class*="/"]) *,
+:root[data-skin="muted-parchment"] button.bg-destructive,
+:root[data-skin="muted-parchment"] button.bg-destructive *,
+:root[data-skin="muted-parchment"] .bg-destructive:not([class*="/"]),
+:root[data-skin="muted-parchment"] .bg-destructive:not([class*="/"]) *,
+:root[data-skin="muted-parchment"] [class*="bg-rose-"]:not([class*="/"]),
+:root[data-skin="muted-parchment"] [class*="bg-rose-"]:not([class*="/"]) *,
+:root[data-skin="muted-parchment"] [class*="bg-green-600"]:not([class*="/"]),
+:root[data-skin="muted-parchment"] [class*="bg-green-600"]:not([class*="/"]) * {
   color: #FFFFFF !important;
+}
+
+/* 浅色纸质模式下：明确保证打字输入槽中已输入的正确字母保持深青墨色，错误字母保持鲜明深红 */
+:root[data-skin="muted-parchment"] .text-primary {
+  color: var(--primary) !important;
+}
+:root[data-skin="muted-parchment"] .text-destructive {
+  color: #DC2626 !important;
+}
+:root[data-skin="muted-parchment"] .text-destructive\/40 {
+  color: rgba(220, 38, 38, 0.45) !important;
+}
+:root[data-skin="muted-parchment"] .text-primary\/35 {
+  color: rgba(13, 118, 110, 0.4) !important;
 }
 
 /* 边框在浅色下的感知染色 */

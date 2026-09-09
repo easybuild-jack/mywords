@@ -919,7 +919,13 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           dictationCueMode,
         } = get()
 
-        if (hasTypo) return
+        if (hasTypo) {
+          // 错误时不能继续往下输入，播放提示音提示先退格修正
+          if (isWrongBeepEnabled) {
+            audioEngine.playBeepSound(feedbackVolume)
+          }
+          return
+        }
 
         // 默写模式下前置校验拦截
         if (mode === 'dictation') {
@@ -945,7 +951,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         // 校验输入前缀是否正确
         if (targetWord.toLowerCase().startsWith(nextInput.toLowerCase())) {
-          set({ currentInput: nextInput })
+          set({ currentInput: nextInput, hasTypo: false })
 
           // 如果打完整个单词
           if (nextInput.length === targetWord.length) {
@@ -991,12 +997,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             }
           }
         } else {
-          // 输错：触发蜂鸣音 + 震动 + 200ms 清空重打
+          // 输错：保留用户输入并在错误处报红，不自动清空，阻止继续输入
           if (isWrongBeepEnabled) {
             audioEngine.playBeepSound(feedbackVolume)
           }
 
-          set({ hasTypo: true })
+          set({
+            currentInput: nextInput,
+            hasTypo: true,
+          })
 
           if (mode === 'dictation') {
             recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
@@ -1004,29 +1013,33 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
               return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
             })
-          }
 
-          setTimeout(() => {
-            const { isErrorPracticeActive, conqueredErrorWordIds, mode: currentMode } = get()
-            const isDictationError = isErrorPracticeActive && currentMode === 'dictation'
-            set({
-              currentInput: '',
-              hasTypo: false,
-              // 错词攻坚默写模式下，一旦输错立刻重置回 3 次连对循环
-              currentWordRemainingLoops: isDictationError ? 3 : get().loopCountSetting,
-              conqueredErrorWordIds: isDictationError && currentWord
-                ? conqueredErrorWordIds.filter((id) => id !== currentWord.id)
-                : conqueredErrorWordIds,
-            })
-          }, 220)
+            const { isErrorPracticeActive, conqueredErrorWordIds } = get()
+            if (isErrorPracticeActive && currentWord) {
+              set({
+                currentWordRemainingLoops: 3,
+                conqueredErrorWordIds: conqueredErrorWordIds.filter((id) => id !== currentWord.id),
+              })
+            }
+          }
         }
       },
 
       handleBackspace: () => {
-        const { currentInput, hasTypo } = get()
-        if (!hasTypo && currentInput.length > 0) {
-          set({ currentInput: currentInput.slice(0, -1) })
-        }
+        const { currentInput } = get()
+        if (currentInput.length === 0) return
+
+        const nextInput = currentInput.slice(0, -1)
+        const currentWord = get().getCurrentWord()
+        const targetWord = currentWord?.name || ''
+
+        // 检查退格后的前缀是否符合目标词前缀
+        const isNowCorrect = targetWord.toLowerCase().startsWith(nextInput.toLowerCase())
+
+        set({
+          currentInput: nextInput,
+          hasTypo: !isNowCorrect,
+        })
       },
 
       peekHint: (show: boolean) => {
@@ -1160,6 +1173,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: nextIndex,
             currentInput: '',
             hasTypo: false,
+            isPeeking: false,
             isCurrentWordSplit: false,
             isEditWordSplitModalOpen: false,
             currentWordRemainingLoops: loopCountSetting,
@@ -1209,6 +1223,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             activeWordIndex: targetIndex,
             currentInput: '',
             hasTypo: false,
+            isPeeking: false,
             isCurrentWordSplit: false,
             isEditWordSplitModalOpen: false,
             currentWordRemainingLoops: isErrorPracticeActive && mode === 'dictation' ? 3 : loopCountSetting,

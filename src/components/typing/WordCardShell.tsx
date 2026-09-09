@@ -10,6 +10,7 @@ interface WordCardShellProps {
   phoneticPreference: 'us' | 'uk'
   remainingLoops?: number
   headerActions?: React.ReactNode
+  className?: string
   children: React.ReactNode
 }
 
@@ -19,6 +20,7 @@ export function WordCardShell({
   phoneticPreference,
   remainingLoops = 1,
   headerActions,
+  className,
   children,
 }: WordCardShellProps) {
   const speak = (e: React.MouseEvent) => {
@@ -27,7 +29,11 @@ export function WordCardShell({
   }
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between pt-5 pb-6 px-7 xl:pt-6 xl:pb-7 xl:px-10 2xl:pt-8 2xl:pb-8 2xl:px-12 text-center select-none">
+    <div
+      className={`relative w-full h-full flex flex-col justify-between text-center select-none ${
+        className || 'pt-5 pb-6 px-7 xl:pt-6 xl:pb-7 xl:px-10 2xl:pt-8 2xl:pb-8 2xl:px-12'
+      }`}
+    >
       <div className="absolute top-4 right-4 xl:top-5 xl:right-5 2xl:top-6 2xl:right-6 flex items-center gap-2 xl:gap-2.5 z-20">
         {headerActions}
         <button

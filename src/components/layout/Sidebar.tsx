@@ -14,6 +14,7 @@ import {
   SpellCheck,
   Languages,
   Keyboard,
+  BookA,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
@@ -22,6 +23,7 @@ export function Sidebar() {
   const { setSettingsModalOpen } = useWorkspaceStore()
 
   const navItems = [
+    { label: '单词查询', icon: BookA, href: '/dictionary' },
     { label: '单词学习', icon: GraduationCap, href: '/learn' },
     { label: '单词默写', icon: PenLine, href: '/dictation' },
     { label: '音标默写', icon: Keyboard, href: '/phonetics' },

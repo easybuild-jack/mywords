@@ -12,7 +12,7 @@ export interface WordEnrichOverrides {
   silentIndices?: number[]
 }
 
-interface RawDictEntry {
+export interface RawDictEntry {
   name: string
   trans?: string[]
   usphone?: string
@@ -343,6 +343,85 @@ class DictionaryLoader {
     }
 
     return enrichedList
+  }
+
+  /**
+   * 加载官方词库的全部原始词条数据（带内存缓存）
+   */
+  public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
+    const config = OFFICIAL_BOOK_FILE_MAP[bookId] || OFFICIAL_BOOK_FILE_MAP['book_cet4']
+    if (!config) return []
+
+    let allRawWords = this.bookJsonCache.get(config.path)
+    if (!allRawWords && typeof window !== 'undefined') {
+      try {
+        const res = await fetch(config.path)
+        if (res.ok) {
+          allRawWords = await res.json()
+          if (allRawWords) {
+            this.bookJsonCache.set(config.path, allRawWords)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load book json file:', config.path, err)
+      }
+    }
+    return allRawWords || []
+  }
+
+  /**
+   * 将单个 RawDictEntry 转换为带有音节、发音、构词法与用户覆盖的标准 WordItem
+   */
+  public async convertRawEntryToWordItem(entry: RawDictEntry): Promise<WordItem> {
+    const name = entry.name || ''
+    const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
+    const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)
+    const rawUk = formatPhonetic(entry.ukphone) || formatPhonetic(entry.phone) || rawUs
+    const usphone = rawUs || `/ ${name.toLowerCase()} /`
+    const ukphone = rawUk || usphone
+
+    const curatedSyllables = entry.syllables
+    const syllables =
+      curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
+        ? curatedSyllables
+        : splitIntoSyllables(name)
+    const etymology = entry.etymology
+    const silentIndices = entry.silentIndices
+    const posList = this.parsePosAndMeans(rawTrans)
+
+    const wordItem: WordItem = {
+      id: buildWordId(name),
+      name,
+      syllables,
+      phoneticUs: usphone,
+      phoneticUk: ukphone,
+      posList,
+      etymology,
+      silentIndices,
+      examples: entry.examples,
+      phrases: entry.phrases,
+    }
+
+    if (typeof window !== 'undefined') {
+      try {
+        const override = await db.wordOverrides.get(wordItem.id)
+        if (override) {
+          if (override.syllables && override.syllables.length) {
+            wordItem.syllables = override.syllables
+          }
+          if (override.etymology !== undefined) {
+            wordItem.etymology = override.etymology
+          }
+          if (override.silentIndices !== undefined) {
+            wordItem.silentIndices = override.silentIndices
+          }
+        }
+      } catch {
+        // 容错
+      }
+    }
+
+    return wordItem
   }
 
   /**

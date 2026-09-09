@@ -21,6 +21,7 @@ export function PhoneticStage() {
   const nextWord = useWorkspaceStore((s) => s.nextWord)
   const prevWord = useWorkspaceStore((s) => s.prevWord)
   const restartUnit = useWorkspaceStore((s) => s.restartUnit)
+  const peekHint = useWorkspaceStore((s) => s.peekHint)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,6 +35,12 @@ export function PhoneticStage() {
         target.tagName === 'SELECT' ||
         target.isContentEditable
       ) {
+        return
+      }
+
+      if (isShortcutMatch(e, shortcuts?.peekHint || DEFAULT_SHORTCUTS.peekHint)) {
+        e.preventDefault()
+        peekHint(true)
         return
       }
 
@@ -74,11 +81,29 @@ export function PhoneticStage() {
       }
     }
 
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (isShortcutMatch(e, shortcuts?.peekHint || DEFAULT_SHORTCUTS.peekHint)) {
+        peekHint(false)
+      }
+    }
+
+    const handleBlur = () => {
+      peekHint(false)
+    }
+
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    window.addEventListener('blur', handleBlur)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+      window.removeEventListener('blur', handleBlur)
+      peekHint(false)
+    }
   }, [
     isUnitFinished,
     shortcuts,
+    peekHint,
     submitPhoneticDictation,
     backspacePhonetic,
     replayAudio,

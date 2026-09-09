@@ -10,25 +10,19 @@ import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { formatShortcutDisplay } from '@/lib/shortcuts'
 import { audioEngine } from '@/core/audioEngine'
 
-interface LearnCardProps {
+interface DictWordCardProps {
   word: WordItem
-  currentInput: string
-  hasTypo: boolean
   phoneticPreference: 'us' | 'uk'
-  remainingLoops?: number
 }
 
-/** 长单词按字数降档，避免撑破卡片，大屏下按比例自适应放大 */
 function wordSizeClass(length: number) {
-  if (length <= 8) return 'text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5rem]'
-  if (length <= 12) return 'text-4xl sm:text-5xl xl:text-6xl 2xl:text-[4rem]'
-  return 'text-3xl sm:text-4xl xl:text-5xl 2xl:text-[3.25rem]'
+  if (length <= 8) return 'text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5.25rem]'
+  if (length <= 12) return 'text-4xl sm:text-5xl xl:text-6xl 2xl:text-[4.25rem]'
+  return 'text-3xl sm:text-4xl xl:text-5xl 2xl:text-[3.5rem]'
 }
 
-/** 四类字母组合在界面上共用一套黄色，不按类别再分色 */
 const COMBO_KINDS = new Set<GraphemeKind>([
   'vowel-team',
   'r-controlled',
@@ -59,7 +53,6 @@ function segmentClass(segments: GraphemeSegment[], index: number): string | unde
   return COMBO_TONES[comboToneIndex(segments, index)]
 }
 
-/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色，不发音的哑音e及自定义哑音标灰 */
 function MarkedWord({ word }: { word: WordItem }) {
   const segments = splitIntoGraphemes(word.name, resolveSyllables(word), word.silentIndices)
   return (
@@ -73,7 +66,6 @@ function MarkedWord({ word }: { word: WordItem }) {
   )
 }
 
-/** 按音节切分逐段渲染单词 */
 function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: string[] }) {
   const allSegments = splitIntoGraphemes(word.name, syllables, word.silentIndices)
   let currentOffset = 0
@@ -97,14 +89,10 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
     <>
       {syllableGroups.map((group, sIdx) => (
         <React.Fragment key={sIdx}>
-          {sIdx > 0 && (
-            <span className="text-gray-500 font-normal select-none px-1">·</span>
-          )}
+          {sIdx > 0 && <span className="text-gray-500 font-normal select-none px-1">·</span>}
           <span
             className="inline-block syllable-font-light select-none"
-            style={{
-              animationDelay: `${sIdx * 0.6}s`,
-            }}
+            style={{ animationDelay: `${sIdx * 0.6}s` }}
           >
             {group.map((segment, index) => (
               <span key={index} className={segmentClass(group, index)}>
@@ -118,12 +106,10 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
   )
 }
 
-/** 例句中的目标单词高亮渲染 */
 function HighlightSentence({ sentence, wordName }: { sentence: string; wordName: string }) {
   const cleanWord = wordName.trim()
   if (!cleanWord) return <span>{sentence}</span>
 
-  // 匹配单词本身或复数/过去式等变形词干
   const escaped = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   const regex = new RegExp(`(\\b${escaped}[a-zA-Z]*\\b)`, 'gi')
   const parts = sentence.split(regex)
@@ -147,22 +133,17 @@ function HighlightSentence({ sentence, wordName }: { sentence: string; wordName:
   )
 }
 
-/** 跟学卡片：上半区专注跟打，下半区分栏展示词根词源与2条精选双语例句 */
-export function LearnCard({
+export function DictWordCard({
   word,
-  currentInput,
-  hasTypo,
   phoneticPreference,
-  remainingLoops = 1,
-}: LearnCardProps) {
-  const isSplit = useWorkspaceStore((s) => s.isCurrentWordSplit)
-  const toggleSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
-  const isEditModalOpen = useWorkspaceStore((s) => s.isEditWordSplitModalOpen)
-  const setEditModalOpen = useWorkspaceStore((s) => s.setEditWordSplitModalOpen)
-  const shortcuts = useWorkspaceStore((s) => s.shortcuts)
-  const isErrorPracticeActive = useWorkspaceStore((s) => s.isErrorPracticeActive)
+}: DictWordCardProps) {
+  const [isSplit, setIsSplit] = useState(false)
+  const [isEditModalOpen, setEditModalOpen] = useState(false)
+  const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
+
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
+  const currentBook = useWorkspaceStore((s) => s.currentBook)
 
   const isStarred = Boolean(starredWordIds?.includes(word.id))
 
@@ -170,17 +151,10 @@ export function LearnCard({
   const meaningText = formatMeaningText(word)
   const morphemes = splitIntoMorphemes(word)
   const syllables = resolveSyllables(word)
-
   const displayLength = word.name.length
 
-  // 获取例句与词源扩展数据（2 条）
   const examples = getWordExamples(word)
   const { origin, derivation } = getWordEtymologyExtras(word)
-
-  const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
-  const starShortcutText = formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')
-
-  const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
 
   const handlePlaySentence = (sentence: string, idx: number) => {
     setSpeakingSentenceIdx(idx)
@@ -189,19 +163,23 @@ export function LearnCard({
     })
   }
 
-  const starButton = !isErrorPracticeActive ? (
+  const starButton = (
     <button
       type="button"
-      onClick={(e) => {
+      onClick={async (e) => {
         e.stopPropagation()
-        starCurrentWord()
+        // 同步加星状态到 Dexie
+        const { toggleStarWord } = await import('@/db')
+        await toggleStarWord(word.id, currentBook?.id || 'book_cet4', word)
+        // 刷新 store 中的加星列表
+        useWorkspaceStore.getState().syncStarredWordIds()
       }}
       className={`h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center gap-2 text-xs xl:text-sm font-medium select-none active:scale-95 ${
         isStarred
           ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 hover:border-amber-400/80'
           : 'border-white/10 bg-white/5 text-gray-300 hover:text-amber-300 hover:border-amber-400/40 hover:bg-amber-400/10'
       }`}
-      title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
+      title={isStarred ? '已在生词本（点击移出）' : '一键加入生词本'}
       aria-label={isStarred ? '移出生词本' : '加入生词本'}
     >
       <Star
@@ -213,27 +191,30 @@ export function LearnCard({
       />
       <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
     </button>
-  ) : null
+  )
 
   return (
     <WordCardShell
       word={word}
       phoneticPreference={phoneticPreference}
-      remainingLoops={remainingLoops}
+      remainingLoops={1}
       headerActions={starButton}
     >
-      {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
-      <div className="space-y-1 xl:space-y-2">
+      {/* 上半区（音标 + 单词 + 音节拆分 + 释义）无跟打输入槽 */}
+      <div className="space-y-2 xl:space-y-3 pt-2">
         {/* 音标栏 */}
         <div className="h-8 xl:h-9 flex items-center justify-center gap-x-5">
           {phonetics.map((entry) => (
             <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
               {entry.label && (
-                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280]">{entry.label}</span>
+                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280]">
+                  {entry.label}
+                </span>
               )}
               <span
-                className={`font-mono tracking-wide text-gray-300 ${phonetics.length > 1 ? 'text-lg xl:text-xl' : 'text-xl xl:text-2xl'
-                  }`}
+                className={`font-mono tracking-wide text-gray-300 ${
+                  phonetics.length > 1 ? 'text-lg xl:text-xl' : 'text-xl xl:text-2xl'
+                }`}
               >
                 {entry.text}
               </span>
@@ -242,10 +223,12 @@ export function LearnCard({
         </div>
 
         {/* 单词主体展示与音节切分切换 */}
-        <div className="h-16 xl:h-20 2xl:h-24 flex items-center justify-center relative">
+        <div className="h-20 xl:h-24 2xl:h-28 flex items-center justify-center relative">
           <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3 xl:gap-4">
             <h2
-              className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
+              className={`${wordSizeClass(
+                displayLength
+              )} font-extrabold tracking-tight text-white font-mono leading-tight`}
             >
               {isSplit ? (
                 <MarkedSplitWord word={word} syllables={syllables} />
@@ -256,93 +239,34 @@ export function LearnCard({
             <div className="flex items-center gap-1.5 xl:gap-2">
               <button
                 type="button"
-                onClick={toggleSplit}
-                className={`p-1.5 sm:p-2 xl:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
+                onClick={() => setIsSplit(!isSplit)}
+                className={`p-1.5 sm:p-2 xl:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${
+                  isSplit
                     ? 'border-primary/50 bg-primary/15 text-primary'
                     : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
-                  }`}
-                title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
+                }`}
+                title={isSplit ? '合并单词' : '音节切分'}
                 aria-label={isSplit ? '合并单词' : '音节切分'}
               >
                 {isSplit ? <Combine className="size-4 xl:size-5" /> : <Scissors className="size-4 xl:size-5" />}
-              </button>
-              <button
-                type="button"
-                onClick={() => setEditModalOpen(true)}
-                className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
-                title="修改单词切分与构词"
-                aria-label="修改单词切分与构词"
-              >
-                <Pencil className="size-4 xl:size-5" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* 单词释义 */}
-        <div className="h-9 xl:h-10 flex items-center justify-center px-4">
-          <p className="text-sm sm:text-base xl:text-lg 2xl:text-xl text-gray-300 font-medium line-clamp-1">
+        {/* 单词释义（去掉跟打槽后，释义有更舒展的排版展示） */}
+        <div className="min-h-9 xl:min-h-11 flex items-center justify-center px-4">
+          <p className="text-base sm:text-lg xl:text-xl 2xl:text-2xl text-gray-200 font-medium">
             {meaningText}
           </p>
-        </div>
-
-        {/* 跟打输入槽 */}
-        <div className="relative w-full pt-1">
-          <div
-            className={`h-14 xl:h-16 2xl:h-18 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl xl:text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
-              hasTypo
-                ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
-                : 'border-primary/45 bg-primary/[0.05]'
-            }`}
-          >
-            {currentInput && (
-              <span className="mr-1 inline-flex items-center">
-                {currentInput.split('').map((char, idx) => {
-                  const targetChar = word.name[idx]
-                  const isCharCorrect = targetChar && char.toLowerCase() === targetChar.toLowerCase()
-
-                  if (isCharCorrect) {
-                    return (
-                      <span key={idx} className="text-primary">
-                        {char}
-                      </span>
-                    )
-                  }
-
-                  return (
-                    <span
-                      key={idx}
-                      className="text-destructive font-black animate-error-flash mx-0.5 px-1 py-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]"
-                      title="输入错误，请按退格键 (Backspace) 修正"
-                    >
-                      {char}
-                    </span>
-                  )
-                })}
-              </span>
-            )}
-            <span
-              className={`inline-block w-0.5 h-9 xl:h-10 animate-cursor shrink-0 ${
-                hasTypo ? 'bg-destructive' : 'bg-primary'
-              }`}
-            />
-            <span
-              className={`ml-1 font-normal ${
-                hasTypo ? 'text-destructive/40' : 'text-primary/35'
-              }`}
-            >
-              {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
-            </span>
-          </div>
         </div>
       </div>
 
       {/* 下半区：左右分栏排版（左侧占 8/12 宽幅双语例句；右侧占 4/12 词根词源/助记） */}
-      <div className="grid grid-cols-12 gap-3.5 xl:gap-5 pt-3 xl:pt-4 flex-1 min-h-0 text-left">
-        {/* 左栏：2 条精选双语例句（col-span-8，宽幅排版，文字舒展） */}
+      <div className="grid grid-cols-12 gap-3.5 xl:gap-5 pt-4 xl:pt-5 flex-1 min-h-0 text-left">
+        {/* 左栏：2 条精选双语例句 */}
         <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 xl:p-4 2xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
           <div className="space-y-2.5 xl:space-y-3.5">
-            {/* 顶栏小标题 */}
             <div className="flex items-center justify-between pb-1.5 xl:pb-2 border-b border-white/5">
               <div className="flex items-center gap-1.5 xl:gap-2">
                 <Quote className="size-3.5 xl:size-4 text-accent" />
@@ -353,7 +277,6 @@ export function LearnCard({
               </span>
             </div>
 
-            {/* 2 示例句列表（宽幅排版，文字舒展） */}
             <div className="space-y-2.5 xl:space-y-3.5">
               {examples.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx
@@ -402,14 +325,15 @@ export function LearnCard({
           </div>
         </div>
 
-        {/* 右栏：词根词源与构词助记（col-span-4） */}
+        {/* 右栏：词根词源与构词助记 */}
         <div className="col-span-4 rounded-2xl bg-white/[0.03] border border-white/10 p-4 xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
           <div className="space-y-3 xl:space-y-4">
-            {/* 顶栏小标题 */}
             <div className="flex items-center justify-between pb-2 border-b border-white/5">
               <div className="flex items-center gap-2 min-w-0">
                 <BookOpen className="size-4 xl:size-4.5 text-primary shrink-0" />
-                <span className="text-sm xl:text-base font-bold text-white/90 truncate">词根 · 助记</span>
+                <span className="text-sm xl:text-base font-bold text-white/90 truncate">
+                  词根 · 助记
+                </span>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
@@ -426,24 +350,24 @@ export function LearnCard({
               </div>
             </div>
 
-            {/* 词根拆解块或词源探究（字号全面放大） */}
             {morphemes.length > 0 ? (
               <div className="space-y-3 xl:space-y-4">
                 <div className="text-sm xl:text-base leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
                   {morphemes.map((morpheme, index) => (
                     <React.Fragment key={index}>
-                      {index > 0 && (
-                        <span className="text-gray-500 font-mono font-bold">+</span>
-                      )}
+                      {index > 0 && <span className="text-gray-500 font-mono font-bold">+</span>}
                       <span className="whitespace-nowrap">
                         <span
-                          className={`font-mono text-base xl:text-lg font-bold ${morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
-                            }`}
+                          className={`font-mono text-base xl:text-lg font-bold ${
+                            morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
+                          }`}
                         >
                           {morpheme.text}
                         </span>
                         {morpheme.meaning && (
-                          <span className="text-sm xl:text-base text-gray-400">（{morpheme.meaning}）</span>
+                          <span className="text-sm xl:text-base text-gray-400">
+                            （{morpheme.meaning}）
+                          </span>
                         )}
                       </span>
                     </React.Fragment>
@@ -459,10 +383,7 @@ export function LearnCard({
               </div>
             ) : (
               <div className="space-y-2 xl:space-y-3 text-left">
-                {origin && (
-                  <p className="text-sm xl:text-base text-gray-200 leading-relaxed">{origin}</p>
-                )}
-
+                {origin && <p className="text-sm xl:text-base text-gray-200 leading-relaxed">{origin}</p>}
                 {derivation && (
                   <div className="flex items-start gap-2 text-sm xl:text-base text-gray-200 font-normal leading-relaxed pt-1">
                     <ArrowRight className="size-4 xl:size-4.5 text-primary shrink-0 mt-0.5" />
@@ -484,5 +405,3 @@ export function LearnCard({
     </WordCardShell>
   )
 }
-
-

@@ -238,12 +238,13 @@ export function DictationCard({
               只多一个未解锁态，改动要两边同步 */}
           <div className="relative w-full">
             <div
-              className={`h-16 sm:h-18 xl:h-20 2xl:h-22 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl xl:text-6xl font-bold rounded-2xl border-2 px-6 transition-all ${!isSpellingUnlocked
-                ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60'
-                : hasTypo
-                  ? 'border-destructive bg-destructive/10 text-destructive animate-shake'
-                  : 'border-primary/45 bg-primary/[0.05] text-primary'
-                }`}
+              className={`h-16 sm:h-18 xl:h-20 2xl:h-22 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl xl:text-6xl font-bold rounded-2xl border-2 px-6 transition-all ${
+                !isSpellingUnlocked
+                  ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60'
+                  : hasTypo
+                  ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
+                  : 'border-primary/45 bg-primary/[0.05]'
+              }`}
             >
               {!isSpellingUnlocked ? (
                 <div className="flex items-center gap-2 text-sm font-sans font-normal text-muted-foreground">
@@ -252,7 +253,32 @@ export function DictationCard({
                 </div>
               ) : (
                 <>
-                  {currentInput && <span className="mr-1">{currentInput}</span>}
+                  {currentInput && (
+                    <span className="mr-1 inline-flex items-center">
+                      {currentInput.split('').map((char, idx) => {
+                        const targetChar = word.name[idx]
+                        const isCharCorrect = targetChar && char.toLowerCase() === targetChar.toLowerCase()
+
+                        if (isCharCorrect) {
+                          return (
+                            <span key={idx} className="text-primary">
+                              {char}
+                            </span>
+                          )
+                        }
+
+                        return (
+                          <span
+                            key={idx}
+                            className="text-destructive font-black animate-error-flash mx-0.5 px-1 py-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]"
+                            title="输入错误，请按退格键 (Backspace) 修正"
+                          >
+                            {char}
+                          </span>
+                        )
+                      })}
+                    </span>
+                  )}
                   <span
                     className={`inline-block w-0.5 h-10 sm:h-11 xl:h-13 animate-cursor shrink-0 ${
                       hasTypo ? 'bg-destructive' : 'bg-primary'
@@ -272,9 +298,9 @@ export function DictationCard({
 
             <div className="h-5 mt-1">
               {hasTypo && (
-                <div className="flex items-center justify-center gap-1.5 h-full text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-lg">
+                <div className="flex items-center justify-center gap-1.5 h-full text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-lg animate-in fade-in-50">
                   <AlertTriangle className="size-3.5" />
-                  <span>拼写错误，已重置重试</span>
+                  <span>字母输入错误，请按退格键 (Backspace) 修正</span>
                 </div>
               )}
             </div>
