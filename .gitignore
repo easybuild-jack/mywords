@@ -41,3 +41,5 @@ next-env.d.ts
 .workbuddy
 *.py
 *.bak
+/data
+
