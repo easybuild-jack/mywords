@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, Volume2, Mic, Sliders, Keyboard, RotateCcw, Palette, Check, Link2, Copy, CheckCheck, Send, Sparkles } from 'lucide-react'
+import { X, Volume2, Mic, Sliders, Keyboard, RotateCcw, Palette, Check, Link2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { MECHANICAL_SWITCHES, audioEngine } from '@/core/audioEngine'
 import { SHORTCUT_DEFINITIONS, eventToShortcutString, formatShortcutDisplay } from '@/lib/shortcuts'
@@ -38,9 +38,6 @@ export function SettingsModal() {
 
   // 外部工具同步设置状态
   const [syncToken, setSyncToken] = useState('')
-  const [isCopied, setIsCopied] = useState(false)
-  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'success' | 'failed'>('idle')
-  const [testMsg, setTestMsg] = useState('')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -56,42 +53,6 @@ export function SettingsModal() {
       } else {
         localStorage.removeItem('mywords_sync_token')
       }
-    }
-  }
-
-  const handleCopyUrl = (url: string) => {
-    navigator.clipboard.writeText(url)
-    setIsCopied(true)
-    setTimeout(() => setIsCopied(false), 2000)
-  }
-
-  const handleTestSend = async () => {
-    setTestStatus('testing')
-    setTestMsg('')
-    try {
-      const res = await fetch('/api/words/collect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(syncToken ? { Authorization: `Bearer ${syncToken}` } : {}),
-        },
-        body: JSON.stringify({
-          words: ['resilient', 'cabbage'],
-        }),
-      })
-
-      if (res.ok) {
-        setTestStatus('success')
-        setTestMsg('✅ 接口联通正常！已成功接收测试生词并自动同步入库。')
-        setTimeout(() => setTestStatus('idle'), 4000)
-      } else {
-        const data = await res.json().catch(() => ({}))
-        setTestStatus('failed')
-        setTestMsg(`❌ 失败: ${data.error || '状态码 ' + res.status}`)
-      }
-    } catch (err: any) {
-      setTestStatus('failed')
-      setTestMsg(`❌ 网络错误: ${err?.message || '连接失败'}`)
     }
   }
 
@@ -565,77 +526,23 @@ export function SettingsModal() {
                   </p>
                 </div>
 
-                {/* 1. 接口地址 */}
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                  <label className="text-xs font-semibold text-foreground block">
-                    收藏 API 接口地址 (POST URL)
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      readOnly
-                      value={typeof window !== 'undefined' ? `${window.location.origin}/api/words/collect` : '/api/words/collect'}
-                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-xs font-mono text-primary font-semibold select-all focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const url = typeof window !== 'undefined' ? `${window.location.origin}/api/words/collect` : '/api/words/collect'
-                        handleCopyUrl(url)
-                      }}
-                      className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-foreground flex items-center gap-1.5 transition-all cursor-pointer"
-                    >
-                      {isCopied ? <CheckCheck className="size-3.5 text-emerald-500" /> : <Copy className="size-3.5" />}
-                      <span>{isCopied ? '已复制' : '复制'}</span>
-                    </button>
+                {/* 专属同步密钥 */}
+                <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                  <div>
+                    <label className="text-sm font-semibold text-foreground block">
+                      专属同步密钥 (Token / 选填)
+                    </label>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                      若服务端设置了 <code className="text-primary font-mono font-bold">COLLECT_TOKEN</code> 作为通信暗号（例如阿里云 ECS 或 Vercel 环境变量），请在此填入相同密钥以授权拉取；本地免密模式可留空。
+                    </p>
                   </div>
-                  <p className="text-[11px] text-muted-foreground">
-                    💡 无论本地开发（localhost:3000）或公网 Vercel 部署，只要将此地址填入您的翻译小工具即可。
-                  </p>
-                </div>
-
-                {/* 2. 密钥配置 */}
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                  <label className="text-xs font-semibold text-foreground block">
-                    专属同步密钥 (Token / 选填)
-                  </label>
                   <input
                     type="text"
                     value={syncToken}
                     onChange={(e) => handleUpdateToken(e.target.value)}
                     placeholder="留空则为免密模式，若服务端设置了 COLLECT_TOKEN 请在此填入"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
                   />
-                  <p className="text-[11px] text-muted-foreground">
-                    若部署到公网，可在服务端环境变量配置 <code className="text-primary font-mono font-bold">COLLECT_TOKEN</code> 作为通信暗号；在此处填入相同密钥即可专属拉取。
-                  </p>
-                </div>
-
-                {/* 3. 一键测试发送 */}
-                <div className="p-4 rounded-2xl bg-primary/10 border border-primary/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                      <Sparkles className="size-3.5 text-primary" />
-                      <span>连接验证测试</span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      点击按钮向接口批量发送示例单词（resilient, cabbage），检查自动补全与入库流程。
-                    </p>
-                    {testMsg && (
-                      <p className={`text-xs mt-1.5 font-medium ${testStatus === 'success' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                        {testMsg}
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleTestSend}
-                    disabled={testStatus === 'testing'}
-                    className="shrink-0 px-4 py-2 rounded-xl bg-primary text-[#0B0C0E] hover:bg-primary-hover font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    <Send className="size-3.5" />
-                    <span>{testStatus === 'testing' ? '正在发送...' : '发送测试单词'}</span>
-                  </button>
                 </div>
               </div>
             )}

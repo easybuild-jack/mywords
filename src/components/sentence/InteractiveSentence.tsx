@@ -68,7 +68,6 @@ export function InteractiveSentence({
                   onWordClick(token, sentence, sentenceCn, rect)
                 }}
                 className="inline-block mx-1 px-2 py-0.5 font-mono text-sm xl:text-base font-bold text-accent bg-accent/15 border border-accent/40 rounded-md animate-in fade-in duration-200 cursor-pointer hover:underline hover:bg-accent/25 transition-colors"
-                title="点击查词"
               >
                 {token}
               </span>
@@ -100,7 +99,6 @@ export function InteractiveSentence({
                 onWordClick(token, sentence, sentenceCn, rect)
               }}
               className="text-primary font-bold px-0.5 underline decoration-primary/60 decoration-2 underline-offset-2 cursor-pointer hover:bg-primary/15 rounded transition-colors"
-              title="点击查词"
             >
               {token}
             </span>
@@ -119,7 +117,6 @@ export function InteractiveSentence({
               onWordClick(token, sentence, sentenceCn, rect)
             }}
             className="cursor-pointer hover:text-primary hover:underline hover:bg-primary/10 rounded-sm px-0.5 transition-colors duration-150 inline-block"
-            title="点击查词"
           >
             {token}
           </span>
