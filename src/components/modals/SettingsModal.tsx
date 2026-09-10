@@ -6,6 +6,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { MECHANICAL_SWITCHES, audioEngine } from '@/core/audioEngine'
 import { SHORTCUT_DEFINITIONS, eventToShortcutString, formatShortcutDisplay } from '@/lib/shortcuts'
 import { SKINS } from '@/lib/skins'
+import { isAuthorSyncToken } from '@/lib/permissions'
 import type { ShortcutConfig } from '@/types'
 
 type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'sync'
@@ -53,6 +54,7 @@ export function SettingsModal() {
       } else {
         localStorage.removeItem('mywords_sync_token')
       }
+      window.dispatchEvent(new Event('mywords_sync_token_changed'))
     }
   }
 
@@ -543,6 +545,12 @@ export function SettingsModal() {
                     placeholder="留空则为免密模式，若服务端设置了 COLLECT_TOKEN 请在此填入"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
                   />
+                  {isAuthorSyncToken(syncToken) && (
+                    <div className="flex items-center gap-2 p-2.5 rounded-xl bg-primary/10 border border-primary/25 text-xs text-primary font-medium">
+                      <span className="text-sm">👑</span>
+                      <span>已识别为系统作者身份（享有官方词库音节切分与词根构词维护权限）</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

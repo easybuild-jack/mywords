@@ -10,6 +10,7 @@ import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useCanEditWordSplit } from '@/lib/permissions'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
@@ -127,6 +128,7 @@ export function DictWordCard({
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
   const currentBook = useWorkspaceStore((s) => s.currentBook)
+  const canEditWordSplit = useCanEditWordSplit()
 
   const isStarred = Boolean(starredWordIds?.includes(word.id))
 
@@ -326,14 +328,16 @@ export function DictWordCard({
                 </span>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setEditModalOpen(true)}
-                  className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                  title="修改构词与词根"
-                >
-                  <Pencil className="size-3.5 xl:size-4" />
-                </button>
+                {canEditWordSplit && (
+                  <button
+                    type="button"
+                    onClick={() => setEditModalOpen(true)}
+                    className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                    title="修改构词与词根"
+                  >
+                    <Pencil className="size-3.5 xl:size-4" />
+                  </button>
+                )}
                 <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
                   ROOTS
                 </span>

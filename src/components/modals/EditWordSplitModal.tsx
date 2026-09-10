@@ -6,6 +6,7 @@ import type { WordItem, WordEtymology } from '@/types'
 import { splitIntoSyllables, analyzeEtymology, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useCanEditWordSplit, useIsAuthor } from '@/lib/permissions'
 
 interface EditWordSplitModalProps {
   isOpen: boolean
@@ -141,6 +142,9 @@ function parseSyllableText(wordName: string, text: string): { syllables: string[
 
 export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModalProps) {
   const updateWordSplit = useWorkspaceStore((s) => s.updateWordSplit)
+  const currentBook = useWorkspaceStore((s) => s.currentBook)
+  const canEdit = useCanEditWordSplit()
+  const isAuthor = useIsAuthor()
   const [activeTab, setActiveTab] = useState<'syllables' | 'etymology'>('syllables')
 
   // 音节拆分状态
@@ -264,6 +268,11 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
 
   // 保存修改
   const handleSave = useCallback(async () => {
+    if (!canEdit) {
+      setSaveError('仅作者本人（token: myword_jack）可修改官方词库，普通用户可在自定义词库中编辑切分')
+      return
+    }
+
     if (!currentSyllables.length || currentSyllables.join('').toLowerCase() !== word.name.trim().toLowerCase()) {
       setSaveError('音节拆分拼接后必须与单词原拼写完全一致')
       return
@@ -312,6 +321,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
     memoryHook,
     updateWordSplit,
     silentIndices,
+    canEdit,
     onClose,
   ])
 
@@ -656,7 +666,11 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
         {/* 底部按钮栏 Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-white/[0.02]">
           <div className="text-xs text-gray-500">
-            修改将自动保存到本地数据库
+            {currentBook?.isCustom
+              ? '修改将保存至您的自定义词库 (本地存储)'
+              : isAuthor
+              ? '👑 作者模式：修改将直接持久化写回官方词库源文件'
+              : '官方词库仅供作者维护，普通用户可在自定义词库中编辑'}
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -669,11 +683,11 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
             <button
               type="button"
               onClick={handleSave}
-              disabled={isSaved || !isTextValid}
+              disabled={isSaved || !isTextValid || !canEdit}
               className={`px-5 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
                 isSaved
                   ? 'bg-green-600 text-white'
-                  : !isTextValid
+                  : !isTextValid || !canEdit
                   ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
                   : 'bg-primary text-black hover:opacity-90'
               }`}

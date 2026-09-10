@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import path from 'path'
 import fs from 'fs/promises'
 import type { WordEtymology } from '@/types'
+import { AUTHOR_SYNC_TOKEN } from '@/lib/permissions'
 
 const OFFICIAL_FILES = [
   'basewords.json',
@@ -20,6 +21,7 @@ const BOOK_ID_TO_FILE: Record<string, string> = {
 }
 
 interface UpdateWordPayload {
+  token?: string
   bookId?: string
   wordName: string
   syllables?: string[]
@@ -30,7 +32,17 @@ interface UpdateWordPayload {
 export async function POST(req: Request) {
   try {
     const payload: UpdateWordPayload = await req.json()
-    const { bookId, wordName, syllables, silentIndices, etymology } = payload
+    const { token, bookId, wordName, syllables, silentIndices, etymology } = payload
+
+    const headerToken = req.headers.get('x-sync-token')
+    const finalToken = (token || headerToken || '').trim()
+
+    if (finalToken !== AUTHOR_SYNC_TOKEN) {
+      return NextResponse.json(
+        { error: 'Forbidden: 只有作者本人（token: myword_jack）才能修改官方词库' },
+        { status: 403 }
+      )
+    }
 
     if (!wordName || typeof wordName !== 'string') {
       return NextResponse.json({ error: 'Missing wordName' }, { status: 400 })

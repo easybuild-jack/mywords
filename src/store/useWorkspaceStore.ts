@@ -9,6 +9,7 @@ import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
+import { isCurrentAuthor, getSyncToken } from '@/lib/permissions'
 
 /**
  * 学习页与默写页各自维护一份练习进度，错词攻坚再单独占一份。
@@ -1363,12 +1364,21 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           // 自定义词库：持久化保存到本地 IndexedDB
           await saveWordOverride(wordId, targetWord.name, updates)
         } else {
-          // 自带官方词库：直接通过 API 更新并写回 public/dicts/*.json 文件！
+          // 自带官方词库：仅允许作者本人（token === 'myword_jack'）通过 API 更新并写回 public/dicts/*.json 文件！
+          if (!isCurrentAuthor()) {
+            console.warn('仅作者本人（token: myword_jack）可修改官方词库单词切分')
+            return
+          }
+          const syncToken = getSyncToken()
           try {
             await fetch('/api/dict/update-word', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                'x-sync-token': syncToken,
+              },
               body: JSON.stringify({
+                token: syncToken,
                 bookId: currentBookId,
                 wordName: targetWord.name,
                 syllables: updates.syllables,

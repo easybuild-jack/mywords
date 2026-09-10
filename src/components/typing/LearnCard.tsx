@@ -11,6 +11,7 @@ import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
+import { useCanEditWordSplit } from '@/lib/permissions'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
@@ -137,6 +138,7 @@ export function LearnCard({
   const isErrorPracticeActive = useWorkspaceStore((s) => s.isErrorPracticeActive)
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
+  const canEditWordSplit = useCanEditWordSplit()
 
   const isStarred = Boolean(starredWordIds?.includes(word.id))
 
@@ -246,15 +248,17 @@ export function LearnCard({
               >
                 {isSplit ? <Combine className="size-4 xl:size-5" /> : <Scissors className="size-4 xl:size-5" />}
               </button>
-              <button
-                type="button"
-                onClick={() => setEditModalOpen(true)}
-                className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
-                title="修改单词切分与构词"
-                aria-label="修改单词切分与构词"
-              >
-                <Pencil className="size-4 xl:size-5" />
-              </button>
+              {canEditWordSplit && (
+                <button
+                  type="button"
+                  onClick={() => setEditModalOpen(true)}
+                  className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
+                  title="修改单词切分与构词"
+                  aria-label="修改单词切分与构词"
+                >
+                  <Pencil className="size-4 xl:size-5" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -399,14 +403,16 @@ export function LearnCard({
                 <span className="text-sm xl:text-base font-bold text-white/90 truncate">词根 · 助记</span>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setEditModalOpen(true)}
-                  className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                  title="修改构词与词根"
-                >
-                  <Pencil className="size-3.5 xl:size-4" />
-                </button>
+                {canEditWordSplit && (
+                  <button
+                    type="button"
+                    onClick={() => setEditModalOpen(true)}
+                    className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                    title="修改构词与词根"
+                  >
+                    <Pencil className="size-3.5 xl:size-4" />
+                  </button>
+                )}
                 <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
                   ROOTS
                 </span>
