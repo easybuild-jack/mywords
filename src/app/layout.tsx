@@ -7,8 +7,8 @@ import { SettingsModal } from '@/components/modals/SettingsModal'
 import { ExternalSyncManager } from '@/components/sync/ExternalSyncManager'
 
 export const metadata: Metadata = {
-  title: 'MyWords — 音节拼读与肌肉记忆背单词',
-  description: '专为深度英语学习者打造的音节拼读、构词法拆解与肌肉记忆闭环默写系统。',
+  title: 'MyWords — 专属英语单词记忆 APP',
+  description: '打造属于您的专属英语单词库，结合音节拼读、构词法拆解与肌肉记忆的高效记忆系统。',
   icons: {
     icon: '/logo.png',
   },
