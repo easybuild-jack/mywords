@@ -213,7 +213,7 @@ compile v. 编译；编纂`
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = 'SynapWord_导入模板.csv'
+    link.download = 'MyWords_导入模板.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

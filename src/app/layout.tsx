@@ -7,7 +7,7 @@ import { SettingsModal } from '@/components/modals/SettingsModal'
 import { ExternalSyncManager } from '@/components/sync/ExternalSyncManager'
 
 export const metadata: Metadata = {
-  title: 'SynapWord 突触记词 — 音节拼读与肌肉记忆背单词',
+  title: 'MyWords — 音节拼读与肌肉记忆背单词',
   description: '专为深度英语学习者打造的音节拼读、构词法拆解与肌肉记忆闭环默写系统。',
   icons: {
     icon: '/logo.png',

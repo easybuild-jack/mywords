@@ -41,11 +41,11 @@ export function Sidebar() {
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">
           <div className="size-10 rounded-xl bg-black/40 border border-primary/30 flex items-center justify-center group-hover:scale-105 transition-all overflow-hidden p-0.5 shadow-lg shadow-primary/10">
-            <img src="/logo.png" alt="SynapWord" className="size-full object-contain rounded-lg" />
+            <img src="/logo.png" alt="MyWords" className="size-full object-contain rounded-lg" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">SynapWord</h1>
-            <p className="text-xs text-muted-foreground">突触记词 · 音节与肌肉记忆</p>
+            <h1 className="text-xl font-bold tracking-tight text-white">MyWords</h1>
+            <p className="text-xs text-muted-foreground">音节拼读与肌肉记忆</p>
           </div>
         </Link>
 
