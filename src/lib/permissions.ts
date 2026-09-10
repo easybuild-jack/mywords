@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react'
-import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-
 /** 作者本人的专属同步密钥标识（硬编码判定） */
 export const AUTHOR_SYNC_TOKEN = 'myword_jack'
 
@@ -12,7 +9,7 @@ export function isAuthorSyncToken(token?: string | null): boolean {
 }
 
 /**
- * 获取当前客户端配置的同步 Token
+ * 获取当前客户端配置的同步 Token（仅客户端可用，服务端安全返回空字符串）
  */
 export function getSyncToken(): string {
   if (typeof window === 'undefined') return ''
@@ -24,7 +21,7 @@ export function getSyncToken(): string {
 }
 
 /**
- * 判断当前环境是否为作者本人
+ * 判断当前客户端环境是否为作者本人
  */
 export function isCurrentAuthor(): boolean {
   return isAuthorSyncToken(getSyncToken())
@@ -37,38 +34,4 @@ export function isCurrentAuthor(): boolean {
  */
 export function canModifyWordSplit(isCustomBook?: boolean): boolean {
   return isCurrentAuthor() || Boolean(isCustomBook)
-}
-
-/**
- * 响应式监听当前用户是否为作者本人的 Hook
- */
-export function useIsAuthor(): boolean {
-  const [isAuthor, setIsAuthor] = useState(false)
-
-  useEffect(() => {
-    const check = () => {
-      setIsAuthor(isCurrentAuthor())
-    }
-    check()
-
-    // 监听其他标签页的 storage 变更以及同窗口的自定义事件
-    window.addEventListener('storage', check)
-    window.addEventListener('mywords_sync_token_changed', check)
-
-    return () => {
-      window.removeEventListener('storage', check)
-      window.removeEventListener('mywords_sync_token_changed', check)
-    }
-  }, [])
-
-  return isAuthor
-}
-
-/**
- * 响应式判断当前是否允许修改单词切分与构词的 Hook
- */
-export function useCanEditWordSplit(): boolean {
-  const isAuthor = useIsAuthor()
-  const currentBook = useWorkspaceStore((s) => s.currentBook)
-  return isAuthor || Boolean(currentBook?.isCustom)
 }

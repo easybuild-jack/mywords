@@ -6,7 +6,7 @@ import type { WordItem, WordEtymology } from '@/types'
 import { splitIntoSyllables, analyzeEtymology, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { useCanEditWordSplit, useIsAuthor } from '@/lib/permissions'
+import { useCanEditWordSplit, useIsAuthor } from '@/hooks/usePermissions'
 
 interface EditWordSplitModalProps {
   isOpen: boolean
