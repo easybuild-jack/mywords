@@ -4,6 +4,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { SkinApplier } from '@/components/layout/SkinApplier'
 import { ImportModal } from '@/components/modals/ImportModal'
 import { SettingsModal } from '@/components/modals/SettingsModal'
+import { ExternalSyncManager } from '@/components/sync/ExternalSyncManager'
 
 export const metadata: Metadata = {
   title: 'SynapWord 突触记词 — 音节拼读与肌肉记忆背单词',
@@ -35,6 +36,9 @@ export default function RootLayout({
         {/* 全局弹窗 */}
         <ImportModal />
         <SettingsModal />
+
+        {/* 外部小工具实时同步监听器 */}
+        <ExternalSyncManager />
       </body>
     </html>
   )
