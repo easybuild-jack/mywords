@@ -45,7 +45,7 @@ export function Sidebar() {
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white">MyWords</h1>
-            <p className="text-xs text-muted-foreground">专属英语单词记忆</p>
+            <p className="text-xs text-muted-foreground">私人专属英语学习搭子</p>
           </div>
         </Link>
 
