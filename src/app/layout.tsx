@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'MyWords — 您的私人专属英语单词学习搭子',
   description: '打造属于您的专属英语单词库，结合音节拼读、构词法拆解与肌肉记忆的高效记忆系统。',
   icons: {
-    icon: '/logo.png',
+    icon: '/favicon.ico',
   },
 }
 
