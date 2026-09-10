@@ -7,6 +7,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { searchWordAcrossDictionaries, type DictSearchResult } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
 import { toggleStarWord } from '@/db'
+import { formatMeaningText } from '@/lib/wordDisplay'
 
 export interface WordLookupModalProps {
   isOpen: boolean
@@ -211,47 +212,6 @@ export function WordLookupModal({
     [result]
   )
 
-  // 解析当前语境释义与其他常见释义
-  const { currentPos, currentContextMean, otherMeansText } = useMemo(() => {
-    if (!result?.word) return { currentPos: '', currentContextMean: '', otherMeansText: '' }
-
-    const word = result.word
-    const allPosMeans: { pos: string; mean: string }[] = []
-    for (const p of word.posList || []) {
-      for (const m of p.means || []) {
-        allPosMeans.push({ pos: p.pos, mean: m })
-      }
-    }
-
-    if (allPosMeans.length === 0) {
-      return { currentPos: '', currentContextMean: '核心词义', otherMeansText: '' }
-    }
-
-    // 若例句中文译文存在，优先从译文中找到最符合句意的那个词义
-    let matched = allPosMeans[0]
-    if (sentenceCn) {
-      const direct = allPosMeans.find((item) => {
-        const cleanM = item.mean.replace(/[（(].*?[)）]/g, '').trim()
-        return cleanM.length >= 2 && sentenceCn.includes(cleanM)
-      })
-      if (direct) matched = direct
-    }
-
-    const currentPos = matched.pos && matched.pos !== 'other' ? matched.pos : ''
-    const currentContextMean = matched.mean
-
-    // 其它常见释义（排除掉已被选为当前语境的那项）
-    const others = allPosMeans
-      .filter((item) => item !== matched && item.mean !== currentContextMean)
-      .map((item) => item.mean)
-
-    return {
-      currentPos,
-      currentContextMean,
-      otherMeansText: others.join('、'),
-    }
-  }, [result?.word, sentenceCn])
-
   // 音标显示（美 /.../ 或 英 /.../）
   const displayPhonetic = useMemo(() => {
     if (!result?.word) return ''
@@ -279,13 +239,13 @@ export function WordLookupModal({
         top: `${position.top}px`,
         left: `${position.left}px`,
       }}
-      className="fixed z-[120] w-[340px] sm:w-[360px] rounded-xl p-4 sm:p-4.5 bg-[#181B22] border border-white/15 shadow-[0_12px_36px_rgba(0,0,0,0.55)] text-white select-text transition-all duration-150 animate-in fade-in zoom-in-95"
+      className="word-lookup-card fixed z-[120] w-[340px] sm:w-[360px] rounded-2xl p-3.5 sm:p-4 border shadow-[0_16px_40px_rgba(0,0,0,0.55)] text-white select-text transition-all duration-150 animate-in fade-in zoom-in-95"
     >
       {/* 箭头指示角 */}
       {targetRect && (
         <div
           style={{ left: `${position.arrowLeft}px` }}
-          className={`absolute size-2.5 -translate-x-1/2 rotate-45 bg-[#181B22] border-white/15 pointer-events-none transition-all ${
+          className={`word-lookup-arrow absolute size-2.5 -translate-x-1/2 rotate-45 pointer-events-none transition-all ${
             position.placement === 'top'
               ? '-bottom-1.5 border-r border-b'
               : '-top-1.5 border-l border-t'
@@ -301,18 +261,13 @@ export function WordLookupModal({
           </p>
         </div>
       ) : result ? (
-        <div className="space-y-2.5">
-          {/* 顶栏：单词名 + 词性 (斜体) + 发音/收藏/关闭按钮 */}
+        <div className="space-y-2">
+          {/* 顶栏：单词名 + 发音/收藏/关闭按钮 */}
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-baseline flex-wrap gap-x-2 min-w-0">
               <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white font-sans truncate">
                 {result.word.name}
               </h3>
-              {currentPos && (
-                <span className="italic text-xs text-gray-400 font-normal font-sans">
-                  {currentPos}
-                </span>
-              )}
             </div>
 
             <div className="flex items-center gap-1 -mr-1 -mt-0.5 shrink-0">
@@ -364,26 +319,30 @@ export function WordLookupModal({
             </div>
           )}
 
-          {/* 当前语境释义：[当前语境] 标签 + 加粗释义 */}
-          <div className="pt-2 border-t border-white/10 flex items-baseline gap-2">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-medium bg-blue-500/15 text-blue-400 border border-blue-500/30 shrink-0 select-none">
-              当前语境
-            </span>
-            <span className="text-sm sm:text-base font-bold text-white leading-snug">
-              {currentContextMean}
-            </span>
+          {/* 翻译提示小框：与例句组件中的单个句子小框完全保持一致 */}
+          <div className="mt-2.5 rounded-xl bg-white/[0.025] border border-white/5 p-2.5 sm:p-3 space-y-1.5 max-h-48 overflow-y-auto pr-1">
+            {result.word.posList && result.word.posList.length > 0 ? (
+              result.word.posList.map((p, idx) => (
+                <div key={idx} className="flex items-baseline gap-2 text-xs sm:text-sm leading-relaxed">
+                  {p.pos && p.pos !== 'other' && (
+                    <span className="italic font-serif font-semibold text-primary shrink-0 select-none">
+                      {p.pos}
+                    </span>
+                  )}
+                  <span className="text-gray-200 font-sans">
+                    {p.means.join('、')}
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="text-xs sm:text-sm text-gray-300 font-sans">
+                {formatMeaningText(result.word) || '暂无详细释义'}
+              </div>
+            )}
           </div>
-
-          {/* 其他常见义 */}
-          {otherMeansText && (
-            <div className="flex items-start gap-2 text-xs leading-relaxed text-gray-400 pt-0.5">
-              <span className="text-gray-500 shrink-0 select-none">其他常见义</span>
-              <span className="text-gray-300 font-sans">{otherMeansText}</span>
-            </div>
-          )}
         </div>
       ) : (
-        <div className="space-y-3 py-1">
+        <div className="space-y-2.5 py-0.5">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-white font-sans">{cleanDisplayQuery}</h3>
             <button
@@ -394,9 +353,11 @@ export function WordLookupModal({
               <X className="size-3.5" />
             </button>
           </div>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            暂未在现有词库中查询到该单词的释义。
-          </p>
+          <div className="rounded-xl bg-white/[0.025] border border-white/5 p-2.5 sm:p-3">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              暂未在现有词库中查询到该单词的释义。
+            </p>
+          </div>
         </div>
       )}
     </div>,

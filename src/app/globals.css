@@ -201,6 +201,26 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* 例句查词浮层卡片与提示小框：与例句组件框背景、边框完全保持一致 */
+  .word-lookup-card {
+    background: rgba(18, 22, 29, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .word-lookup-arrow {
+    background: rgba(18, 22, 29, 0.96);
+    border-color: rgba(255, 255, 255, 0.10);
+  }
+
+  .tooltip-box {
+    background: rgba(18, 22, 29, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
   .animate-shake {
     animation: shake-animation 0.22s ease-in-out;
   }
@@ -478,10 +498,13 @@
   color: #1C1917 !important;
 }
 
-:root[data-skin="muted-parchment"] .bg-blue-500\/15 {
-  background-color: rgba(13, 118, 110, 0.12) !important;
-  color: #0D766E !important;
-  border-color: rgba(13, 118, 110, 0.28) !important;
+:root[data-skin="muted-parchment"] .word-lookup-card,
+:root[data-skin="muted-parchment"] .word-lookup-arrow,
+:root[data-skin="muted-parchment"] .tooltip-box {
+  background-color: #FDFCFA !important;
+  border-color: rgba(13, 118, 110, 0.20) !important;
+  color: #1C1917 !important;
+  box-shadow: 0 16px 40px rgba(60, 50, 35, 0.16) !important;
 }
 
 /* 输入框聚焦与 placeholder 颜色 */
@@ -659,10 +682,13 @@
   color: #242B23 !important;
 }
 
-:root[data-skin="avocado-cream"] .bg-blue-500\/15 {
-  background-color: rgba(127, 169, 33, 0.14) !important;
-  color: #5C7E14 !important;
-  border-color: rgba(127, 169, 33, 0.32) !important;
+:root[data-skin="avocado-cream"] .word-lookup-card,
+:root[data-skin="avocado-cream"] .word-lookup-arrow,
+:root[data-skin="avocado-cream"] .tooltip-box {
+  background-color: #FFFFFF !important;
+  border-color: rgba(127, 169, 33, 0.20) !important;
+  color: #242B23 !important;
+  box-shadow: 0 16px 40px rgba(110, 118, 108, 0.16) !important;
 }
 
 /* 输入框与 placeholder */

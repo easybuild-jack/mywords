@@ -40,7 +40,7 @@ export function Tooltip({
       {visible && (
         <span
           role="tooltip"
-          className={`absolute z-[80] ${sideClass} ${alignClass} px-2 py-1 rounded-md text-[11px] font-medium leading-snug whitespace-nowrap bg-[#12141A] text-white/90 border border-white/15 shadow-[0_6px_18px_rgba(0,0,0,0.5)] pointer-events-none animate-in fade-in-0 zoom-in-95 duration-100`}
+          className={`tooltip-box absolute z-[80] ${sideClass} ${alignClass} px-2.5 py-1.5 rounded-lg text-[11px] font-medium leading-snug whitespace-nowrap text-white/90 border shadow-[0_8px_24px_rgba(0,0,0,0.45)] pointer-events-none animate-in fade-in-0 zoom-in-95 duration-100`}
         >
           {content}
         </span>
