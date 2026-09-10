@@ -40,7 +40,9 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
         target.tagName === 'INPUT' ||
         target.tagName === 'TEXTAREA' ||
         target.tagName === 'SELECT' ||
-        target.isContentEditable
+        target.isContentEditable ||
+        target.closest?.('[role="dialog"]') ||
+        Boolean(document.querySelector('[role="dialog"]'))
       ) {
         return
       }

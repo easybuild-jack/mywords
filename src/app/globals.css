@@ -469,11 +469,19 @@
 }
 
 :root[data-skin="muted-parchment"] .bg-\[\#12141A\],
-:root[data-skin="muted-parchment"] [class*="bg-\[\#12141A\]"] {
+:root[data-skin="muted-parchment"] [class*="bg-\[\#12141A\]"],
+:root[data-skin="muted-parchment"] .bg-\[\#181B22\],
+:root[data-skin="muted-parchment"] [class*="bg-\[\#181B22\]"] {
   background-color: #FDFCFA !important;
   border-color: rgba(13, 118, 110, 0.25) !important;
   box-shadow: 0 16px 40px rgba(60, 50, 35, 0.18) !important;
   color: #1C1917 !important;
+}
+
+:root[data-skin="muted-parchment"] .bg-blue-500\/15 {
+  background-color: rgba(13, 118, 110, 0.12) !important;
+  color: #0D766E !important;
+  border-color: rgba(13, 118, 110, 0.28) !important;
 }
 
 /* 输入框聚焦与 placeholder 颜色 */
@@ -642,11 +650,19 @@
 
 /* 下拉菜单与弹层底色：纯净高亮遮盖 */
 :root[data-skin="avocado-cream"] .bg-\[\#12141A\],
-:root[data-skin="avocado-cream"] [class*="bg-\[\#12141A\]"] {
+:root[data-skin="avocado-cream"] [class*="bg-\[\#12141A\]"],
+:root[data-skin="avocado-cream"] .bg-\[\#181B22\],
+:root[data-skin="avocado-cream"] [class*="bg-\[\#181B22\]"] {
   background-color: #FFFFFF !important;
   border-color: rgba(127, 169, 33, 0.25) !important;
   box-shadow: 0 16px 40px rgba(110, 118, 108, 0.18) !important;
   color: #242B23 !important;
+}
+
+:root[data-skin="avocado-cream"] .bg-blue-500\/15 {
+  background-color: rgba(127, 169, 33, 0.14) !important;
+  color: #5C7E14 !important;
+  border-color: rgba(127, 169, 33, 0.32) !important;
 }
 
 /* 输入框与 placeholder */

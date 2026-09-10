@@ -12,6 +12,8 @@ import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
 import { audioEngine } from '@/core/audioEngine'
+import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
+import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
 
 interface LearnCardProps {
   word: WordItem
@@ -118,34 +120,6 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
   )
 }
 
-/** 例句中的目标单词高亮渲染 */
-function HighlightSentence({ sentence, wordName }: { sentence: string; wordName: string }) {
-  const cleanWord = wordName.trim()
-  if (!cleanWord) return <span>{sentence}</span>
-
-  // 匹配单词本身或复数/过去式等变形词干
-  const escaped = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const regex = new RegExp(`(\\b${escaped}[a-zA-Z]*\\b)`, 'gi')
-  const parts = sentence.split(regex)
-
-  return (
-    <span className="text-sm xl:text-base 2xl:text-[1.05rem] text-gray-100 leading-relaxed font-sans">
-      {parts.map((part, i) => {
-        if (part.toLowerCase().startsWith(cleanWord.toLowerCase())) {
-          return (
-            <span
-              key={i}
-              className="text-primary font-bold px-0.5 underline decoration-primary/60 decoration-2 underline-offset-2"
-            >
-              {part}
-            </span>
-          )
-        }
-        return <span key={i}>{part}</span>
-      })}
-    </span>
-  )
-}
 
 /** 跟学卡片：上半区专注跟打，下半区分栏展示词根词源与2条精选双语例句 */
 export function LearnCard({
@@ -181,6 +155,12 @@ export function LearnCard({
   const starShortcutText = formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')
 
   const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
+  const [lookupWordInfo, setLookupWordInfo] = useState<{
+    word: string
+    sentenceEn: string
+    sentenceCn?: string
+    targetRect?: DOMRect
+  } | null>(null)
 
   const handlePlaySentence = (sentence: string, idx: number) => {
     setSpeakingSentenceIdx(idx)
@@ -372,7 +352,14 @@ export function LearnCard({
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
-                          <HighlightSentence sentence={item.en} wordName={word.name} />
+                          <InteractiveSentence
+                            sentence={item.en}
+                            wordName={word.name}
+                            sentenceCn={item.cn}
+                            onWordClick={(clickedWord, en, cn, rect) => {
+                              setLookupWordInfo({ word: clickedWord, sentenceEn: en, sentenceCn: cn, targetRect: rect })
+                            }}
+                          />
                           <button
                             type="button"
                             onClick={(e) => {
@@ -481,6 +468,18 @@ export function LearnCard({
         onClose={() => setEditModalOpen(false)}
         word={word}
       />
+
+      {/* 例句单词点击查词浮层弹窗 */}
+      {lookupWordInfo && (
+        <WordLookupModal
+          isOpen={Boolean(lookupWordInfo)}
+          onClose={() => setLookupWordInfo(null)}
+          wordQuery={lookupWordInfo.word}
+          sentenceEn={lookupWordInfo.sentenceEn}
+          sentenceCn={lookupWordInfo.sentenceCn}
+          targetRect={lookupWordInfo.targetRect}
+        />
+      )}
     </WordCardShell>
   )
 }

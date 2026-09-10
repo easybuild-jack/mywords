@@ -19,6 +19,8 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples } from '@/lib/wordExamples'
 import { audioEngine } from '@/core/audioEngine'
+import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
+import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
 
 interface DictationCardProps {
   word: WordItem
@@ -30,55 +32,7 @@ interface DictationCardProps {
   remainingLoops?: number
 }
 
-/** 例句中的目标单词挖空渲染，未揭晓时呈现 [ _____ ]，揭晓或偷看时高亮展开 */
-function ClozeSentence({
-  sentence,
-  wordName,
-  isRevealed,
-}: {
-  sentence: string
-  wordName: string
-  isRevealed: boolean
-}) {
-  const cleanWord = wordName.trim()
-  if (!cleanWord) return <span>{sentence}</span>
 
-  // 匹配单词本身或变形词干（如复数、时态等变形）
-  const escaped = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const regex = new RegExp(`(\\b${escaped}[a-zA-Z]*\\b)`, 'gi')
-  const parts = sentence.split(regex)
-
-  return (
-    <span className="text-sm xl:text-base text-gray-100 leading-relaxed font-sans">
-      {parts.map((part, i) => {
-        if (part.toLowerCase().startsWith(cleanWord.toLowerCase())) {
-          if (isRevealed) {
-            return (
-              <span
-                key={i}
-                className="inline-block mx-1 px-2 py-0.5 font-mono text-sm xl:text-base font-bold text-accent bg-accent/15 border border-accent/40 rounded-md animate-in fade-in duration-200"
-              >
-                {part}
-              </span>
-            )
-          }
-
-          const underlineLen = Math.max(3, Math.min(part.length, 7))
-          return (
-            <span
-              key={i}
-              className="inline-flex items-center justify-center mx-1 px-2 py-0.5 font-mono text-xs xl:text-sm font-bold text-primary bg-primary/10 border border-dashed border-primary/40 rounded-md select-none tracking-widest"
-              title="按 Tab 键可临时偷看答案"
-            >
-              [{'_'.repeat(underlineLen)}]
-            </span>
-          )
-        }
-        return <span key={i}>{part}</span>
-      })}
-    </span>
-  )
-}
 
 /**
  * 默写卡片：英文全部遮蔽，按「音标 → 译文 → 拼写」三级闯关推进。
@@ -106,6 +60,12 @@ export function DictationCard({
   } = useWorkspaceStore()
 
   const [speakingSentenceIdx, setSpeakingSentenceIdx] = React.useState<number | null>(null)
+  const [lookupWordInfo, setLookupWordInfo] = React.useState<{
+    word: string
+    sentenceEn: string
+    sentenceCn?: string
+    targetRect?: DOMRect
+  } | null>(null)
   const examples = getWordExamples(word)
 
   const handlePlaySentence = (sentence: string, idx: number) => {
@@ -363,10 +323,15 @@ export function DictationCard({
                           </span>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start justify-between gap-2">
-                              <ClozeSentence
+                              <InteractiveSentence
                                 sentence={item.en}
                                 wordName={word.name}
+                                sentenceCn={item.cn}
+                                isCloze={true}
                                 isRevealed={isPeeking}
+                                onWordClick={(clickedWord, en, cn, rect) => {
+                                  setLookupWordInfo({ word: clickedWord, sentenceEn: en, sentenceCn: cn, targetRect: rect })
+                                }}
                               />
                               <button
                                 type="button"
@@ -399,6 +364,18 @@ export function DictationCard({
           </div>
         )}
       </div>
+
+      {/* 例句单词点击查词浮层弹窗 */}
+      {lookupWordInfo && (
+        <WordLookupModal
+          isOpen={Boolean(lookupWordInfo)}
+          onClose={() => setLookupWordInfo(null)}
+          wordQuery={lookupWordInfo.word}
+          sentenceEn={lookupWordInfo.sentenceEn}
+          sentenceCn={lookupWordInfo.sentenceCn}
+          targetRect={lookupWordInfo.targetRect}
+        />
+      )}
     </WordCardShell>
   )
 }
