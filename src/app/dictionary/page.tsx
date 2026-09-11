@@ -13,11 +13,8 @@ import {
   type DictSuggestionItem,
 } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
-import { dictionaryLoader } from '@/core/dictionaryLoader'
-import { fetchAiDictionaryWord } from '@/lib/aiClient'
-import { saveWordToAiCache } from '@/db'
+import { queryAiWordCore } from '@/hooks/useEnsureAiWordSections'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
-import type { WordItem } from '@/types'
 
 export default function DictionaryPage() {
   const currentBook = useWorkspaceStore((s) => s.currentBook)
@@ -40,6 +37,8 @@ export default function DictionaryPage() {
   const [suggestions, setSuggestions] = useState<DictSuggestionItem[]>([])
 
   const suggestionDebounceRef = useRef<NodeJS.Timeout | null>(null)
+  const aiAbortRef = useRef<AbortController | null>(null)
+  const searchSequenceRef = useRef(0)
 
   // 初始化：同步生词本，并默认展示当前学习中的单词条目（保证进入词典页面即有丰富内容）
   useEffect(() => {
@@ -56,8 +55,9 @@ export default function DictionaryPage() {
       setSearchQuery(activeWord.name)
     } else {
       // 默认 fallback 查 CET4 第一个词
+      const sequence = searchSequenceRef.current
       searchWordAcrossDictionaries('discover', currentBook?.id, currentBook?.name).then((res) => {
-        if (res) {
+        if (res && searchSequenceRef.current === sequence) {
           setCurrentResult(res)
           setSearchQuery('discover')
         }
@@ -68,13 +68,19 @@ export default function DictionaryPage() {
   // 校验是否已配置有效的大模型 API Key（具备 AI 能力）
   const hasAiKey = Boolean(aiConfig?.apiKey?.trim())
 
+  useEffect(() => () => aiAbortRef.current?.abort(), [])
+
   // 执行检索（自顶向下：AI 缓存表 -> 本地各词库 -> 自动触发 AI 查询并缓存）
   const handleSearchSubmit = useCallback(
     async (queryText: string) => {
       const trimmed = queryText.trim()
       if (!trimmed) return
 
+      const sequence = ++searchSequenceRef.current
+      aiAbortRef.current?.abort()
+      aiAbortRef.current = null
       setIsSearching(true)
+      setIsAiSearching(false)
       setAiError(null)
 
       try {
@@ -84,6 +90,7 @@ export default function DictionaryPage() {
           currentBook?.id || 'book_cet4',
           currentBook?.name || 'CET-4 核心词库'
         )
+        if (searchSequenceRef.current !== sequence) return
 
         if (localResult) {
           setCurrentResult(localResult)
@@ -102,20 +109,21 @@ export default function DictionaryPage() {
           setNotFoundQuery(null)
           setAiError(null)
 
+          const controller = new AbortController()
+          aiAbortRef.current = controller
           try {
-            const rawEntry = await fetchAiDictionaryWord(aiConfig, trimmed)
-            if (rawEntry) {
-              const wordItem = await dictionaryLoader.convertRawEntryToWordItem(rawEntry)
-              // 自动存入本地 AI 单词缓存表，以备下次直接命中，降低 AI 查询次数
-              await saveWordToAiCache(wordItem)
+            const wordItem = await queryAiWordCore(aiConfig, trimmed)
+            if (searchSequenceRef.current !== sequence || controller.signal.aborted) return
 
-              // 立即返回页面渲染，其他（AI 来源）不要展示来源名称
+            if (wordItem) {
+              // 基础数据一旦返回就立即渲染；富内容在后台分块补全
               setCurrentResult({
                 word: wordItem,
                 sourceBookId: 'ai_live',
-                sourceBookName: '', // 其他不要展示来源！
+                sourceBookName: '',
                 isCurrentBook: false,
               })
+              setIsAiSearching(false)
               setNotFoundQuery(null)
               setAiError(null)
               audioEngine.playPronunciation(wordItem.name, phoneticPreference)
@@ -127,6 +135,12 @@ export default function DictionaryPage() {
             }
           } catch (aiErr: unknown) {
             console.warn('AI dictionary query failed:', aiErr)
+            if (
+              controller.signal.aborted ||
+              searchSequenceRef.current !== sequence
+            ) {
+              return
+            }
             const isTimeout =
               aiErr instanceof Error &&
               (aiErr.name === 'AbortError' || aiErr.message.includes('超时'))
@@ -140,7 +154,9 @@ export default function DictionaryPage() {
             setCurrentResult(null)
             setNotFoundQuery(trimmed)
           } finally {
-            setIsAiSearching(false)
+            if (searchSequenceRef.current === sequence) {
+              setIsAiSearching(false)
+            }
           }
         } else {
           // 未配置 AI API Key：静默不处理，不使用 AI 字典功能，直接显示未收录
@@ -148,14 +164,22 @@ export default function DictionaryPage() {
           setNotFoundQuery(trimmed)
         }
       } catch (err) {
+        if (searchSequenceRef.current !== sequence) return
         console.error('Search error:', err)
         setCurrentResult(null)
         setNotFoundQuery(trimmed)
       } finally {
-        setIsSearching(false)
+        if (searchSequenceRef.current === sequence) {
+          setIsSearching(false)
+        }
       }
     },
-    [currentBook?.id, currentBook?.name, phoneticPreference, hasAiKey, aiConfig]
+    [
+      currentBook,
+      phoneticPreference,
+      hasAiKey,
+      aiConfig,
+    ]
   )
 
   // 搜索框输入变化并防抖获取联想

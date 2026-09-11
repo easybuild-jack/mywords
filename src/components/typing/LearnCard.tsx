@@ -15,6 +15,7 @@ import { useCanEditWordSplit } from '@/hooks/usePermissions'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
+import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
 
 interface LearnCardProps {
   word: WordItem
@@ -38,6 +39,7 @@ const COMBO_KINDS = new Set<GraphemeKind>([
   'consonant-digraph',
   'suffix-chunk',
 ])
+const FULL_AI_SECTIONS = ['structure', 'examples'] as const
 
 const COMBO_TONES = ['text-accent', 'text-[#FDE68A]']
 
@@ -124,12 +126,13 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
 
 /** 跟学卡片：上半区专注跟打，下半区分栏展示词根词源与2条精选双语例句 */
 export function LearnCard({
-  word,
+  word: sourceWord,
   currentInput,
   hasTypo,
   phoneticPreference,
   remainingLoops = 1,
 }: LearnCardProps) {
+  const word = useEnsureAiWordSections(sourceWord, FULL_AI_SECTIONS)
   const isSplit = useWorkspaceStore((s) => s.isCurrentWordSplit)
   const toggleSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
   const isEditModalOpen = useWorkspaceStore((s) => s.isEditWordSplitModalOpen)
@@ -149,9 +152,18 @@ export function LearnCard({
 
   const displayLength = word.name.length
 
-  // 获取例句与词源扩展数据
-  const examples = getWordExamples(word)
-  const { origin, derivation } = getWordEtymologyExtras(word)
+  const structureStatus = word.aiSections?.structure
+  const examplesStatus = word.aiSections?.examples
+  const examples =
+    word.examples?.length
+      ? word.examples
+      : word.aiSections
+        ? []
+        : getWordExamples(word)
+  const { origin, derivation } =
+    !structureStatus || structureStatus === 'ready'
+      ? getWordEtymologyExtras(word)
+      : {}
 
   const splitShortcutText = formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')
   const starShortcutText = formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')
@@ -333,13 +345,27 @@ export function LearnCard({
                 <span className="text-xs xl:text-sm font-bold text-white/90">语境双语例句</span>
               </div>
               <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                {examples.length} EXAMPLES
+                {examplesStatus === 'pending'
+                  ? 'LOADING'
+                  : examplesStatus === 'error'
+                    ? 'FAILED'
+                    : `${examples.length} EXAMPLES`}
               </span>
             </div>
 
             {/* 示例句列表（宽幅排版，文字舒展） */}
             <div className="min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-1 custom-scrollbar xl:space-y-3.5">
-              {examples.map((item, idx) => {
+              {examplesStatus === 'pending' ? (
+                <div className="space-y-3 animate-pulse" aria-label="AI 例句生成中">
+                  {[0, 1].map((item) => (
+                    <div key={item} className="h-24 rounded-xl border border-white/5 bg-white/[0.04]" />
+                  ))}
+                </div>
+              ) : examplesStatus === 'error' ? (
+                <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                  例句生成失败，下次进入时将重新补全
+                </div>
+              ) : examples.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx
                 return (
                   <div
@@ -414,13 +440,27 @@ export function LearnCard({
                   </button>
                 )}
                 <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
-                  ROOTS
+                  {structureStatus === 'pending'
+                    ? 'LOADING'
+                    : structureStatus === 'error'
+                      ? 'FAILED'
+                      : 'ROOTS'}
                 </span>
               </div>
             </div>
 
             {/* 词根拆解块或词源探究（字号全面放大） */}
-            {morphemes.length > 0 ? (
+            {structureStatus === 'pending' ? (
+              <div className="space-y-3 animate-pulse" aria-label="AI 构词分析中">
+                <div className="h-5 w-4/5 rounded bg-white/[0.06]" />
+                <div className="h-5 w-3/5 rounded bg-white/[0.06]" />
+                <div className="h-16 rounded-lg bg-white/[0.04]" />
+              </div>
+            ) : structureStatus === 'error' ? (
+              <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                构词分析失败，下次进入时将重新补全
+              </div>
+            ) : morphemes.length > 0 ? (
               <div className="space-y-3 xl:space-y-4">
                 <div className="text-sm xl:text-base leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
                   {morphemes.map((morpheme, index) => (

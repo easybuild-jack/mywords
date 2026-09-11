@@ -4,10 +4,12 @@ import React, { useEffect, useState, useMemo, useCallback, useRef, useLayoutEffe
 import { createPortal } from 'react-dom'
 import { Volume2, Star, X, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 import { searchWordAcrossDictionaries, type DictSearchResult } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
 import { toggleStarWord } from '@/db'
 import { formatMeaningText } from '@/lib/wordDisplay'
+import { queryAiWordCore } from '@/hooks/useEnsureAiWordSections'
 
 export interface WordLookupModalProps {
   isOpen: boolean
@@ -47,6 +49,7 @@ export function WordLookupModal({
   const currentBook = useWorkspaceStore((s) => s.currentBook)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
+  const aiConfig = useAiAssistantStore((s) => s.aiConfig)
 
   // 避免 SSR 水合不匹配
   useEffect(() => {
@@ -102,33 +105,54 @@ export function WordLookupModal({
     if (!cleanWord) return
 
     setIsLoading(true)
-    searchWordAcrossDictionaries(
-      cleanWord,
-      currentBook?.id || 'book_cet4',
-      currentBook?.name || 'CET-4 核心词库'
-    )
-      .then((res) => {
-        if (!isCancelled) {
-          setResult(res)
-          setIsLoading(false)
-          // 查到单词后自动播放一次发音
-          if (res?.word?.name) {
-            audioEngine.playPronunciation(res.word.name, phoneticPreference)
+
+    void (async () => {
+      try {
+        let lookupResult = await searchWordAcrossDictionaries(
+          cleanWord,
+          currentBook?.id || 'book_cet4',
+          currentBook?.name || 'CET-4 核心词库'
+        )
+
+        if (!lookupResult && aiConfig.apiKey?.trim()) {
+          const wordItem = await queryAiWordCore(aiConfig, cleanWord)
+          if (wordItem) {
+            lookupResult = {
+              word: wordItem,
+              sourceBookId: 'ai_live',
+              sourceBookName: '',
+              isCurrentBook: false,
+            }
           }
         }
-      })
-      .catch((err) => {
-        console.error('Word lookup error:', err)
+
         if (!isCancelled) {
-          setResult(null)
-          setIsLoading(false)
+          setResult(lookupResult)
+          if (lookupResult?.word.name) {
+            audioEngine.playPronunciation(lookupResult.word.name, phoneticPreference)
+          }
         }
-      })
+      } catch (err) {
+        if (!isCancelled) {
+          console.error('Word lookup error:', err)
+          setResult(null)
+        }
+      } finally {
+        if (!isCancelled) setIsLoading(false)
+      }
+    })()
 
     return () => {
       isCancelled = true
     }
-  }, [isOpen, wordQuery, currentBook?.id, currentBook?.name, phoneticPreference])
+  }, [
+    aiConfig,
+    currentBook?.id,
+    currentBook?.name,
+    isOpen,
+    phoneticPreference,
+    wordQuery,
+  ])
 
   // 计算智能浮动位置 (Tooltip Positioning)
   const updatePosition = useCallback(() => {

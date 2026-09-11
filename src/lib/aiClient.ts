@@ -319,6 +319,7 @@ export async function callAiChatCompletion(
   const controller = new AbortController()
   const abortFromCaller = () => controller.abort()
   signal?.addEventListener('abort', abortFromCaller, { once: true })
+  if (signal?.aborted) controller.abort()
   // 延迟请求超时时间至 120 秒，为带思考推理的模型预留充足时间
   const timeoutId = setTimeout(() => controller.abort(), 120000)
 
@@ -338,8 +339,6 @@ export async function callAiChatCompletion(
       }),
       signal: controller.signal,
     })
-
-    clearTimeout(timeoutId)
 
     if (!res.ok) {
       let errMsg = `接口返回状态码 ${res.status}`
@@ -373,8 +372,6 @@ export async function callAiChatCompletion(
 
     return reply
   } catch (err: unknown) {
-    clearTimeout(timeoutId)
-
     if (signal?.aborted) {
       signal.removeEventListener('abort', abortFromCaller)
       throw new Error('用户已中断生成')
@@ -478,43 +475,126 @@ async function fetchDictionarySection(
   return extractJsonFromAiReply(rawReply)
 }
 
+function assertMatchingWord(entry: RawDictEntry, word: string) {
+  if (entry.name.trim().toLowerCase() !== word.trim().toLowerCase()) {
+    throw new Error('模型返回的单词与查询目标不一致')
+  }
+}
+
+function hasValidEtymology(value: RawDictEntry['etymology']): boolean {
+  if (value === undefined) return true
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+
+  const hasValidPart = (part: unknown) => {
+    if (part === undefined || part === null) return true
+    if (!part || typeof part !== 'object' || Array.isArray(part)) return false
+    const candidate = part as { form?: unknown; meaning?: unknown }
+    return (
+      typeof candidate.form === 'string' &&
+      Boolean(candidate.form.trim()) &&
+      typeof candidate.meaning === 'string'
+    )
+  }
+
+  return (
+    hasValidPart(value.prefix) &&
+    hasValidPart(value.root) &&
+    hasValidPart(value.suffix) &&
+    [value.derivation, value.origin, value.memoryHook].every(
+      (item) => item === undefined || typeof item === 'string'
+    )
+  )
+}
+
 /** 首屏基础数据：音标与释义。 */
-export function fetchAiDictionaryWordCore(
+export async function fetchAiDictionaryWordCore(
   config: AiClientConfig,
   word: string,
   signal?: AbortSignal
 ): Promise<RawDictEntry | null> {
-  return fetchDictionarySection(config, buildWordCoreQueryMessages(word), 1024, signal)
+  const entry = await fetchDictionarySection(
+    config,
+    buildWordCoreQueryMessages(word),
+    1024,
+    signal
+  )
+  if (!entry) return null
+  assertMatchingWord(entry, word)
+  if (
+    !entry.trans?.length ||
+    entry.trans.some((item) => typeof item !== 'string' || !item.trim()) ||
+    !entry.usphone?.trim() ||
+    !entry.ukphone?.trim()
+  ) {
+    throw new Error('模型返回的音标或释义数据不完整')
+  }
+  return entry
 }
 
 /** 后台构词数据：音节、哑音与词源。 */
-export function fetchAiDictionaryWordStructure(
+export async function fetchAiDictionaryWordStructure(
   config: AiClientConfig,
   word: string,
   core: Pick<RawDictEntry, 'trans' | 'usphone' | 'ukphone'>,
   signal?: AbortSignal
 ): Promise<RawDictEntry | null> {
-  return fetchDictionarySection(
+  const entry = await fetchDictionarySection(
     config,
     buildWordStructureQueryMessages(word, core),
     2048,
     signal
   )
+  if (!entry) return null
+  assertMatchingWord(entry, word)
+  const silentIndices = entry.silentIndices
+  if (
+    !entry.syllables?.length ||
+    entry.syllables.some(
+      (syllable) => typeof syllable !== 'string' || !syllable.trim()
+    ) ||
+    entry.syllables.join('').toLowerCase() !== word.trim().toLowerCase() ||
+    !Array.isArray(silentIndices) ||
+    silentIndices.some(
+      (index) => !Number.isInteger(index) || index < 0 || index >= word.trim().length
+    ) ||
+    silentIndices.some((index, position) =>
+      position > 0 ? index <= silentIndices[position - 1] : false
+    ) ||
+    !hasValidEtymology(entry.etymology)
+  ) {
+    throw new Error('模型返回的音节或哑音数据不完整')
+  }
+  return entry
 }
 
 /** 后台语境数据：覆盖核心释义的双语例句。 */
-export function fetchAiDictionaryWordExamples(
+export async function fetchAiDictionaryWordExamples(
   config: AiClientConfig,
   word: string,
   trans: string[],
   signal?: AbortSignal
 ): Promise<RawDictEntry | null> {
-  return fetchDictionarySection(
+  const entry = await fetchDictionarySection(
     config,
     buildWordExamplesQueryMessages(word, trans),
     4096,
     signal
   )
+  if (!entry) return null
+  assertMatchingWord(entry, word)
+  if (
+    !entry.examples?.length ||
+    entry.examples.some(
+      (example) =>
+        typeof example.en !== 'string' ||
+        !example.en.trim() ||
+        typeof example.cn !== 'string' ||
+        !example.cn.trim()
+    )
+  ) {
+    throw new Error('模型返回的例句数据不完整')
+  }
+  return entry
 }
 
 /** 保留完整查询能力，内部同样采用基础优先、富内容并行。 */

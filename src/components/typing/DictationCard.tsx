@@ -21,6 +21,7 @@ import { getWordExamples } from '@/lib/wordExamples'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
+import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
 
 interface DictationCardProps {
   word: WordItem
@@ -32,8 +33,7 @@ interface DictationCardProps {
   remainingLoops?: number
 }
 
-
-
+const EXAMPLES_AI_SECTION = ['examples'] as const
 /**
  * 默写卡片：英文全部遮蔽，按「音标 → 译文 → 拼写」三级闯关推进。
  *
@@ -41,7 +41,7 @@ interface DictationCardProps {
  * 看译文模式只给中文、不自动发音（想听得自己点），下半区配备语境双语例句挖空辅助。
  */
 export function DictationCard({
-  word,
+  word: sourceWord,
   currentInput,
   hasTypo,
   isPeeking,
@@ -49,6 +49,7 @@ export function DictationCard({
   phoneticPreference,
   remainingLoops = 1,
 }: DictationCardProps) {
+  const word = useEnsureAiWordSections(sourceWord, EXAMPLES_AI_SECTION)
   const {
     isDictationMeaningEnabled,
     toggleDictationMeaning,
@@ -66,7 +67,13 @@ export function DictationCard({
     sentenceCn?: string
     targetRect?: DOMRect
   } | null>(null)
-  const examples = getWordExamples(word)
+  const examplesStatus = word.aiSections?.examples
+  const examples =
+    word.examples?.length
+      ? word.examples
+      : word.aiSections
+        ? []
+        : getWordExamples(word)
 
   const handlePlaySentence = (sentence: string, idx: number) => {
     setSpeakingSentenceIdx(idx)
@@ -268,7 +275,7 @@ export function DictationCard({
         </div>
 
         {/* 下半区：语境双语例句（挖空填空线索，看译文与听音模式保持完全一致） */}
-        {examples.length > 0 && (
+        {(examples.length > 0 || examplesStatus === 'pending' || examplesStatus === 'error') && (
           <div className="w-full max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto flex-1 min-h-0 flex flex-col justify-start text-left pt-1">
             <div className="flex min-h-0 flex-1 flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] p-3 shadow-inner xl:p-4 2xl:p-4.5">
               <div className="flex h-full min-h-0 flex-col gap-2 xl:gap-2.5">
@@ -306,7 +313,17 @@ export function DictationCard({
 
                 {/* 示例句列表（挖空呈现） */}
                 <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 custom-scrollbar xl:space-y-2.5">
-                  {examples.map((item, idx) => {
+                  {examplesStatus === 'pending' ? (
+                    <div className="space-y-2 animate-pulse" aria-label="AI 例句生成中">
+                      {[0, 1].map((item) => (
+                        <div key={item} className="h-20 rounded-xl border border-white/5 bg-white/[0.04]" />
+                      ))}
+                    </div>
+                  ) : examplesStatus === 'error' ? (
+                    <div className="h-full flex items-center justify-center text-sm text-gray-400">
+                      例句生成失败，下次进入时将重新补全
+                    </div>
+                  ) : examples.map((item, idx) => {
                     const isPlaying = speakingSentenceIdx === idx
                     return (
                       <div

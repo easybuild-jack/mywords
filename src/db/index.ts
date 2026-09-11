@@ -533,15 +533,26 @@ type AiWordCachePatch = Omit<Partial<WordItem>, 'aiSections'> &
 
 /** 原子合并 AI 分阶段结果，避免并发请求互相覆盖。 */
 export async function mergeWordIntoAiCache(
-  patch: AiWordCachePatch
+  patch: AiWordCachePatch,
+  fallback?: WordItem
 ): Promise<WordItem | null> {
   if (!patch.name || typeof window === 'undefined') return null
 
   try {
     const canonicalId = buildWordId(patch.name)
-    return await db.transaction('rw', db.aiWordCache, async () => {
-      const existing = await db.aiWordCache.get(canonicalId)
+    return await db.transaction(
+      'rw',
+      db.aiWordCache,
+      db.wordRecords,
+      db.wordOverrides,
+      async () => {
+      const existing = (await db.aiWordCache.get(canonicalId)) || fallback
       if (!existing) return null
+
+      const mergeStatus = (
+        current: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined,
+        next: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined
+      ) => (current === 'ready' ? 'ready' : next ?? current ?? 'pending')
 
       const merged: WordItem = {
         ...existing,
@@ -549,20 +560,41 @@ export async function mergeWordIntoAiCache(
         id: canonicalId,
         aiSections: patch.aiSections
           ? {
-              structure:
-                patch.aiSections.structure ??
-                existing.aiSections?.structure ??
-                'pending',
-              examples:
-                patch.aiSections.examples ??
-                existing.aiSections?.examples ??
-                'pending',
+              structure: mergeStatus(
+                existing.aiSections?.structure,
+                patch.aiSections.structure
+              ),
+              examples: mergeStatus(
+                existing.aiSections?.examples,
+                patch.aiSections.examples
+              ),
             }
           : existing.aiSections,
       }
       await db.aiWordCache.put(merged)
+      const record = await db.wordRecords.get(canonicalId)
+      if (record?.wordItem) {
+        const override = await db.wordOverrides.get(canonicalId)
+        const recordWord: WordItem = {
+          ...record.wordItem,
+          ...patch,
+          id: canonicalId,
+          name: merged.name,
+          aiSections: merged.aiSections,
+        }
+        if (override?.syllables?.length) recordWord.syllables = override.syllables
+        if (override?.etymology !== undefined) recordWord.etymology = override.etymology
+        if (override?.silentIndices !== undefined) {
+          recordWord.silentIndices = override.silentIndices
+        }
+        await db.wordRecords.update(canonicalId, {
+          wordName: merged.name,
+          wordItem: recordWord,
+        })
+      }
       return merged
-    })
+      }
+    )
   } catch (err) {
     console.warn('Failed to merge AI word cache:', err)
     return null
