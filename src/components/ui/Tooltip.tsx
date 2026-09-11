@@ -5,13 +5,13 @@ import React, { useState } from 'react'
 interface TooltipProps {
   content: React.ReactNode
   children: React.ReactElement
-  side?: 'top' | 'bottom'
+  side?: 'top' | 'bottom' | 'left' | 'right'
   align?: 'start' | 'center' | 'end'
   className?: string
 }
 
 /**
- * shadcn/ui 风格的极简 Tooltip：用 hover/focus 触发，浮在子元素上方。
+ * shadcn/ui 风格的极简 Tooltip：用 hover/focus 触发，浮在子元素上方/侧方。
  * 相比原生 title=：立即出现（不用等 1.5s）、样式可控、深色背景下也清晰。
  * 不挡点击（pointer-events-none）。
  */
@@ -24,9 +24,23 @@ export function Tooltip({
 }: TooltipProps) {
   const [visible, setVisible] = useState(false)
 
-  const sideClass = side === 'bottom' ? 'top-[calc(100%+6px)]' : 'bottom-[calc(100%+6px)]'
+  const sideClass =
+    side === 'bottom'
+      ? 'top-[calc(100%+6px)]'
+      : side === 'top'
+      ? 'bottom-[calc(100%+6px)]'
+      : side === 'left'
+      ? 'right-[calc(100%+8px)] top-1/2 -translate-y-1/2'
+      : 'left-[calc(100%+8px)] top-1/2 -translate-y-1/2'
+
   const alignClass =
-    align === 'start' ? 'left-0' : align === 'end' ? 'right-0' : 'left-1/2 -translate-x-1/2'
+    side === 'left' || side === 'right'
+      ? ''
+      : align === 'start'
+      ? 'left-0'
+      : align === 'end'
+      ? 'right-0'
+      : 'left-1/2 -translate-x-1/2'
 
   return (
     <span
