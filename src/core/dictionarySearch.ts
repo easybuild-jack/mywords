@@ -1,6 +1,8 @@
 import type { WordItem, WordEtymology } from '@/types'
 import { dictionaryLoader, OFFICIAL_BOOK_FILE_MAP } from '@/core/dictionaryLoader'
 import { db, getWordFromAiCache, searchWordsInAiCache } from '@/db'
+import { queryAiWordCore } from '@/lib/aiWordCore'
+import type { AiClientConfig } from '@/lib/aiClient'
 
 
 export interface DictSearchResult {
@@ -377,13 +379,27 @@ export interface ReconciledImportWord {
  * 3. 标记数据来源（特别标明是否源自 AI 缓存 'ai_cache'，以备后续入库后执行精准清理）
  */
 export async function reconcileWordForImport(
-  candidate: ImportWordCandidate
+  candidate: ImportWordCandidate,
+  aiConfig?: AiClientConfig
 ): Promise<ReconciledImportWord> {
   const cleanName = candidate.rawName.trim()
   const lowerName = cleanName.toLowerCase()
 
   // 1. 调用全局查询接口查词（带 AI 缓存优先、所有词库、词形还原）
-  const queryResult = await searchWordAcrossDictionaries(cleanName)
+  let queryResult = await searchWordAcrossDictionaries(cleanName)
+
+  // 本地与在线词典均未命中时，导入只查询 AI 基础数据，富内容留到实际展示时按需补全
+  if (!queryResult && aiConfig?.apiKey?.trim()) {
+    const aiWord = await queryAiWordCore(aiConfig, cleanName)
+    if (aiWord) {
+      queryResult = {
+        word: aiWord,
+        sourceBookId: 'ai_cache',
+        sourceBookName: '',
+        isCurrentBook: false,
+      }
+    }
+  }
 
   if (queryResult) {
     const baseWord = queryResult.word

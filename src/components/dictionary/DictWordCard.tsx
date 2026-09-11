@@ -1,16 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil, Volume2, Star } from 'lucide-react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Volume2, Star } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
-import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { useCanEditWordSplit } from '@/hooks/usePermissions'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
@@ -121,7 +119,7 @@ export function DictWordCard({
 }: DictWordCardProps) {
   const word = useEnsureAiWordSections(sourceWord, FULL_AI_SECTIONS)
   const [isSplit, setIsSplit] = useState(false)
-  const [isEditModalOpen, setEditModalOpen] = useState(false)
+  const [contextTab, setContextTab] = useState<'examples' | 'phrases'>('examples')
   const [speakingSentenceIdx, setSpeakingSentenceIdx] = useState<number | null>(null)
   const [lookupWordInfo, setLookupWordInfo] = useState<{
     word: string
@@ -133,7 +131,6 @@ export function DictWordCard({
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
   const currentBook = useWorkspaceStore((s) => s.currentBook)
-  const canEditWordSplit = useCanEditWordSplit()
 
   const isStarred = Boolean(starredWordIds?.includes(word.id))
 
@@ -151,6 +148,10 @@ export function DictWordCard({
       : word.aiSections
         ? []
         : getWordExamples(word)
+  const phrases = word.phrases || []
+  const contextItems = contextTab === 'examples' ? examples : phrases
+  const contextStatus =
+    contextTab === 'examples' ? examplesStatus : structureStatus
   const { origin, derivation } =
     !structureStatus || structureStatus === 'ready'
       ? getWordEtymologyExtras(word)
@@ -281,29 +282,57 @@ export function DictWordCard({
             <div className="flex items-center justify-between pb-1.5 xl:pb-2 border-b border-white/5">
               <div className="flex items-center gap-1.5 xl:gap-2">
                 <Quote className="size-3.5 xl:size-4 text-accent" />
-                <span className="text-xs xl:text-sm font-bold text-white/90">语境双语例句</span>
+                <div className="flex items-center rounded-lg bg-white/5 p-0.5" role="tablist" aria-label="语境内容">
+                  {([
+                    ['examples', '例句'],
+                    ['phrases', '短语'],
+                  ] as const).map(([tab, label]) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      role="tab"
+                      aria-selected={contextTab === tab}
+                      onClick={() => setContextTab(tab)}
+                      className={`rounded-md px-2.5 py-1 text-xs font-bold transition-colors cursor-pointer ${
+                        contextTab === tab
+                          ? 'bg-accent/15 text-accent'
+                          : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
               <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                {examplesStatus === 'pending'
+                {contextStatus === 'pending'
                   ? 'LOADING'
-                  : examplesStatus === 'error'
+                  : contextStatus === 'error'
                     ? 'FAILED'
-                    : `${examples.length} EXAMPLES`}
+                    : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
               </span>
             </div>
 
-            <div className="min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-1 custom-scrollbar xl:space-y-3.5">
-              {examplesStatus === 'pending' ? (
-                <div className="space-y-3 animate-pulse" aria-label="AI 例句生成中">
+            <div className={`min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar ${
+              contextTab === 'phrases'
+                ? 'grid grid-cols-2 content-start gap-2.5 xl:gap-3.5'
+                : 'space-y-2.5 xl:space-y-3.5'
+            }`}>
+              {contextStatus === 'pending' ? (
+                <div className="col-span-2 space-y-3 animate-pulse" aria-label="AI 语境内容生成中">
                   {[0, 1].map((item) => (
                     <div key={item} className="h-24 rounded-xl border border-white/5 bg-white/[0.04]" />
                   ))}
                 </div>
-              ) : examplesStatus === 'error' ? (
-                <div className="h-full flex items-center justify-center text-sm text-gray-400">
-                  例句生成失败，重新查询可再次补全
+              ) : contextStatus === 'error' ? (
+                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
+                  {contextTab === 'examples' ? '例句' : '短语'}生成失败，重新查询可再次补全
                 </div>
-              ) : examples.map((item, idx) => {
+              ) : contextItems.length === 0 ? (
+                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
+                  暂无{contextTab === 'examples' ? '例句' : '常用短语'}
+                </div>
+              ) : contextItems.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx
                 return (
                   <div
@@ -339,8 +368,8 @@ export function DictWordCard({
                                 ? 'border-primary/50 bg-primary/20 text-primary animate-pulse'
                                 : 'border-transparent text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15'
                             }`}
-                            title="朗读例句"
-                            aria-label="朗读例句"
+                            title={`朗读${contextTab === 'examples' ? '例句' : '短语'}`}
+                            aria-label={`朗读${contextTab === 'examples' ? '例句' : '短语'}`}
                           >
                             <Volume2 className="size-3.5 xl:size-4" />
                           </button>
@@ -368,16 +397,6 @@ export function DictWordCard({
                 </span>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
-                {canEditWordSplit && (
-                  <button
-                    type="button"
-                    onClick={() => setEditModalOpen(true)}
-                    className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                    title="修改构词与词根"
-                  >
-                    <Pencil className="size-3.5 xl:size-4" />
-                  </button>
-                )}
                 <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
                   {structureStatus === 'pending'
                     ? 'LOADING'
@@ -443,13 +462,6 @@ export function DictWordCard({
           </div>
         </div>
       </div>
-
-      {/* 修改单词切分与构词弹窗 */}
-      <EditWordSplitModal
-        isOpen={isEditModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        word={word}
-      />
 
       {/* 例句单词点击查词浮层弹窗 */}
       {lookupWordInfo && (

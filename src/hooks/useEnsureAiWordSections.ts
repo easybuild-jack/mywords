@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { getWordFromAiCache, mergeWordIntoAiCache } from '@/db'
 import {
-  fetchAiDictionaryWordCore,
   fetchAiDictionaryWordExamples,
   fetchAiDictionaryWordStructure,
   type AiClientConfig,
@@ -19,10 +18,16 @@ const inFlightSections = new Map<
   string,
   { fingerprint: string; promise: Promise<WordItem | null> }
 >()
-const inFlightCore = new Map<string, Promise<WordItem | null>>()
 
 function configFingerprint(config: AiClientConfig) {
   return `${config.endpoint}::${config.model}::${config.apiKey}`
+}
+
+function isSectionReady(word: WordItem, section: AiWordSection) {
+  if (word.aiSections?.[section] !== 'ready') return false
+  return section === 'structure'
+    ? Boolean(word.phrases?.length)
+    : Boolean(word.examples?.length)
 }
 
 function mergeSectionWord(
@@ -36,6 +41,7 @@ function mergeSectionWord(
         syllables: updated.syllables,
         silentIndices: updated.silentIndices,
         etymology: updated.etymology,
+        phrases: updated.phrases,
         aiSections: updated.aiSections,
       }
     : {
@@ -62,7 +68,7 @@ async function generateSection(
 ): Promise<WordItem | null> {
   const cached = await getWordFromAiCache(snapshot.name)
   const word = cached || snapshot
-  if (!word.aiSections || word.aiSections[section] === 'ready') return word
+  if (!word.aiSections || isSectionReady(word, section)) return word
 
   await mergeWordIntoAiCache({
     name: word.name,
@@ -87,6 +93,7 @@ async function generateSection(
         syllables: converted.syllables,
         silentIndices: converted.silentIndices,
         etymology: converted.etymology,
+        phrases: raw.phrases,
         aiSections: { structure: 'ready' },
       }, word)
     }
@@ -118,7 +125,7 @@ function ensureSection(
   if (existing) {
     if (existing.fingerprint === fingerprint) return existing.promise
     return existing.promise.then((updated) =>
-      updated?.aiSections?.[section] === 'ready'
+      updated && isSectionReady(updated, section)
         ? updated
         : ensureSection(config, updated || word, section)
     )
@@ -128,41 +135,6 @@ function ensureSection(
     if (inFlightSections.get(key)?.promise === task) inFlightSections.delete(key)
   })
   inFlightSections.set(key, { fingerprint, promise: task })
-  return task
-}
-
-/** 只查询弹窗和首屏需要的音标、释义，并缓存为待补全词条。 */
-export function queryAiWordCore(
-  config: AiClientConfig,
-  word: string
-): Promise<WordItem | null> {
-  const key = `${configFingerprint(config)}::${word.trim().toLowerCase()}`
-  const existing = inFlightCore.get(key)
-  if (existing) return existing
-
-  const task = (async () => {
-    const cached = await getWordFromAiCache(word)
-    if (cached) return cached
-
-    const raw = await fetchAiDictionaryWordCore(config, word)
-    if (!raw) return null
-    const coreWord = await dictionaryLoader.convertRawEntryToWordItem(raw)
-    coreWord.aiSections = { structure: 'pending', examples: 'pending' }
-
-    return await mergeWordIntoAiCache(
-      {
-        name: coreWord.name,
-        phoneticUs: coreWord.phoneticUs,
-        phoneticUk: coreWord.phoneticUk,
-        posList: coreWord.posList,
-        aiSections: coreWord.aiSections,
-      },
-      coreWord
-    )
-  })().finally(() => {
-    if (inFlightCore.get(key) === task) inFlightCore.delete(key)
-  })
-  inFlightCore.set(key, task)
   return task
 }
 
@@ -194,7 +166,7 @@ export function useEnsureAiWordSections(
     if (!word.aiSections || !aiConfig.apiKey?.trim()) return
 
     for (const section of sectionsKey.split(',').filter(Boolean) as AiWordSection[]) {
-      if (word.aiSections[section] === 'ready') continue
+      if (isSectionReady(word, section)) continue
       const attemptKey = `${fingerprint}::${word.id}::${section}`
       if (attemptedRef.current.has(attemptKey)) continue
       attemptedRef.current.add(attemptKey)
@@ -214,16 +186,17 @@ export function useEnsureAiWordSections(
     }
   }, [aiConfig, contextKey, fingerprint, sectionsKey, word])
 
-  if (resolved?.word.id === word.id && resolved.fingerprint === fingerprint) {
-    return { ...word, ...resolved.word }
-  }
+  const effectiveWord =
+    resolved?.word.id === word.id && resolved.fingerprint === fingerprint
+      ? { ...word, ...resolved.word }
+      : word
 
-  if (!word.aiSections) return word
-  const pendingSections = { ...word.aiSections }
+  if (!effectiveWord.aiSections) return effectiveWord
+  const pendingSections = { ...effectiveWord.aiSections }
   for (const section of sections) {
-    if (pendingSections[section] !== 'ready') {
+    if (!isSectionReady(effectiveWord, section)) {
       pendingSections[section] = aiConfig.apiKey?.trim() ? 'pending' : 'error'
     }
   }
-  return { ...word, aiSections: pendingSections }
+  return { ...effectiveWord, aiSections: pendingSections }
 }

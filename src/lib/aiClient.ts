@@ -560,9 +560,17 @@ export async function fetchAiDictionaryWordStructure(
     silentIndices.some((index, position) =>
       position > 0 ? index <= silentIndices[position - 1] : false
     ) ||
-    !hasValidEtymology(entry.etymology)
+    !hasValidEtymology(entry.etymology) ||
+    !entry.phrases?.length ||
+    entry.phrases.some(
+      (phrase) =>
+        typeof phrase.en !== 'string' ||
+        !phrase.en.trim() ||
+        typeof phrase.cn !== 'string' ||
+        !phrase.cn.trim()
+    )
   ) {
-    throw new Error('模型返回的音节或哑音数据不完整')
+    throw new Error('模型返回的构词或短语数据不完整')
   }
   return entry
 }
@@ -597,7 +605,15 @@ export async function fetchAiDictionaryWordExamples(
   return entry
 }
 
-/** 保留完整查询能力，内部同样采用基础优先、富内容并行。 */
+/**
+ * 一次等待完整单词数据的兼容接口。
+ *
+ * @deprecated 请优先调用 `fetchAiDictionaryWordCore`，并在页面实际需要时按分区补全。
+ *
+ * 性能警告：该接口会先请求基础数据，再并行请求构词/短语和例句。调用方必须等待
+ * 所有模型输出完成，首屏响应更慢、Token 消耗更高，任一分区失败也会导致整次查询失败。
+ * 仅限确实需要在单次操作中拿到完整离线数据的场景，不要用于查词弹窗、导入或页面首屏。
+ */
 export async function fetchAiDictionaryWord(
   config: AiClientConfig,
   word: string,
@@ -613,6 +629,3 @@ export async function fetchAiDictionaryWord(
 
   return { ...core, ...structure, ...examples, name: core.name }
 }
-
-
-

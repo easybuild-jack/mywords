@@ -51,11 +51,15 @@ export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的英语�
     "derivation": "去除覆盖物 → 发现",
     "origin": "可靠且简短的词源",
     "memoryHook": "简明记忆线索"
-  }
+  },
+  "phrases": [
+    { "en": "discover the truth", "cn": "查明真相" }
+  ]
 }
 syllables.join('') 必须严格等于 name，音节数应符合美音音标。
 silentIndices 是不发音字母的 0-based 升序下标；无哑音时返回 []。
 词源必须可靠；没有可靠词根词缀时省略相应字段，严禁编造。
+phrases 生成 4–8 条最常见、最实用的固定搭配，并提供准确中文释义。
 ${JSON_ONLY_RULE}`
 
 export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。

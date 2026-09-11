@@ -9,7 +9,7 @@ import { searchWordAcrossDictionaries, type DictSearchResult } from '@/core/dict
 import { audioEngine } from '@/core/audioEngine'
 import { toggleStarWord } from '@/db'
 import { formatMeaningText } from '@/lib/wordDisplay'
-import { queryAiWordCore } from '@/hooks/useEnsureAiWordSections'
+import { queryAiWordCore } from '@/lib/aiWordCore'
 
 export interface WordLookupModalProps {
   isOpen: boolean

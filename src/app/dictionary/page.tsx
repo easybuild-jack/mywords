@@ -13,7 +13,7 @@ import {
   type DictSuggestionItem,
 } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
-import { queryAiWordCore } from '@/hooks/useEnsureAiWordSections'
+import { queryAiWordCore } from '@/lib/aiWordCore'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 
 export default function DictionaryPage() {

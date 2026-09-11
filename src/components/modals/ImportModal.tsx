@@ -14,6 +14,7 @@ import {
   ArrowRight
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook, deleteWordsFromAiCache } from '@/db'
 import { reconcileWordForImport, type ReconciledImportWord } from '@/core/dictionarySearch'
@@ -33,6 +34,7 @@ function describeMorphemes(word: WordItem): string {
 
 export function ImportModal() {
   const { isImportModalOpen, setImportModalOpen, setBookId } = useWorkspaceStore()
+  const aiConfig = useAiAssistantStore((state) => state.aiConfig)
   const [activeTab, setActiveTab] = useState<'text' | 'file'>('text')
   const [bookName, setBookName] = useState('我的自定义生词本')
 
@@ -103,7 +105,7 @@ compile v. 编译；编纂`
       const reconciled = await reconcileWordForImport({
         rawName: wordName,
         customMeaning,
-      })
+      }, aiConfig)
       entries.push(reconciled)
     }
 
@@ -149,7 +151,7 @@ compile v. 编译；编纂`
                 ? entry.syllables
                 : parseSyllablesCell(entry.syllables, name),
               customEtymology: entry.etymology ?? parseEtymologyCell(entry.morphemes, entry.derivation),
-            })
+            }, aiConfig)
             entries.push(reconciled)
           }
         } catch (err) {
@@ -198,7 +200,7 @@ compile v. 编译；编纂`
             customPhonetic: phonetic,
             customSyllables: parseSyllablesCell(rawSyllables, wordName),
             customEtymology: parseEtymologyCell(rawMorphemes, rawDerivation),
-          })
+          }, aiConfig)
           entries.push(reconciled)
         }
       }
