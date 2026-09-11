@@ -14,6 +14,7 @@ import {
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { fetchAiDictionaryWord } from '@/lib/aiClient'
+import { saveWordToAiCache } from '@/db'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 import type { WordItem } from '@/types'
 
@@ -62,26 +63,70 @@ export default function DictionaryPage() {
     }
   }, [currentBook?.id, currentBook?.name, currentLoadedWords, activeWordIndex, syncStarredWordIds])
 
-  // 执行检索
+  // 校验是否已配置有效的大模型 API Key（具备 AI 能力）
+  const hasAiKey = Boolean(aiConfig?.apiKey?.trim())
+
+  // 执行检索（自顶向下：AI 缓存表 -> 本地各词库 -> 自动触发 AI 查询并缓存）
   const handleSearchSubmit = useCallback(
     async (queryText: string) => {
       const trimmed = queryText.trim()
       if (!trimmed) return
 
       setIsSearching(true)
+      setAiError(null)
+
       try {
-        const result = await searchWordAcrossDictionaries(
+        // 步骤 1：本地检索（首先查 AI 单词缓存表，其次查当前词库、其他词库与词形还原）
+        const localResult = await searchWordAcrossDictionaries(
           trimmed,
           currentBook?.id || 'book_cet4',
           currentBook?.name || 'CET-4 核心词库'
         )
 
-        if (result) {
-          setCurrentResult(result)
+        if (localResult) {
+          setCurrentResult(localResult)
           setNotFoundQuery(null)
-          // 朗读找到的单词发音
-          audioEngine.playPronunciation(result.word.name, phoneticPreference)
+          setIsSearching(false)
+          audioEngine.playPronunciation(localResult.word.name, phoneticPreference)
+          return
+        }
+
+        // 步骤 2：本地完全查询不到时，检测是否具备 AI 能力
+        if (hasAiKey) {
+          setIsSearching(false)
+          setIsAiSearching(true)
+          try {
+            const rawEntry = await fetchAiDictionaryWord(aiConfig, trimmed)
+            if (rawEntry) {
+              const wordItem = await dictionaryLoader.convertRawEntryToWordItem(rawEntry)
+              // 自动存入本地 AI 单词缓存表，以备下次直接命中，降低 AI 查询次数
+              await saveWordToAiCache(wordItem)
+
+              // 立即返回页面渲染，其他（AI 来源）不要展示来源名称
+              setCurrentResult({
+                word: wordItem,
+                sourceBookId: 'ai_live',
+                sourceBookName: '', // 其他不要展示来源！
+                isCurrentBook: false,
+              })
+              setNotFoundQuery(null)
+              audioEngine.playPronunciation(wordItem.name, phoneticPreference)
+              return
+            } else {
+              setCurrentResult(null)
+              setNotFoundQuery(trimmed)
+            }
+          } catch (aiErr: unknown) {
+            console.error('AI dictionary query error:', aiErr)
+            const msg = aiErr instanceof Error ? aiErr.message : 'AI 字典生成失败，请检查网络或配置'
+            setAiError(msg)
+            setCurrentResult(null)
+            setNotFoundQuery(trimmed)
+          } finally {
+            setIsAiSearching(false)
+          }
         } else {
+          // 未配置 AI API Key：静默不处理，不使用 AI 字典功能，直接显示未收录
           setCurrentResult(null)
           setNotFoundQuery(trimmed)
         }
@@ -93,39 +138,8 @@ export default function DictionaryPage() {
         setIsSearching(false)
       }
     },
-    [currentBook?.id, currentBook?.name, phoneticPreference]
+    [currentBook?.id, currentBook?.name, phoneticPreference, hasAiKey, aiConfig]
   )
-
-  // 校验是否已配置有效的大模型 API Key
-  const hasAiKey = Boolean(aiConfig?.apiKey?.trim())
-
-  // 场景二：AI 字典即时查询与生成
-  const handleAiLookup = async (wordToQuery: string) => {
-    // 字典场景：若未配置 API Key，静默不处理，不使用 AI 字典功能
-    if (!hasAiKey) return
-    if (isAiSearching) return
-    setIsAiSearching(true)
-    setAiError(null)
-
-    try {
-      const rawEntry = await fetchAiDictionaryWord(aiConfig, wordToQuery)
-      if (!rawEntry) return
-      const wordItem = await dictionaryLoader.convertRawEntryToWordItem(rawEntry)
-      setCurrentResult({
-        word: wordItem,
-        sourceBookId: 'ai_dict',
-        sourceBookName: 'AI 字典即时解析',
-        isCurrentBook: false,
-      })
-      setNotFoundQuery(null)
-      audioEngine.playPronunciation(wordItem.name, phoneticPreference)
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'AI 字典解析失败，请检查模型配置与网络'
-      setAiError(msg)
-    } finally {
-      setIsAiSearching(false)
-    }
-  }
 
   // 搜索框输入变化并防抖获取联想
   const handleSearchChange = (text: string) => {
@@ -202,6 +216,7 @@ export default function DictionaryPage() {
             <DictWordCard
               word={currentResult.word}
               phoneticPreference={phoneticPreference}
+              sourceBookName={currentResult.sourceBookName}
             />
           ) : (
             <DictEmptyState
@@ -211,7 +226,7 @@ export default function DictionaryPage() {
                 setSearchQuery(word)
                 handleSearchSubmit(word)
               }}
-              onAiLookup={hasAiKey ? handleAiLookup : undefined}
+              onAiLookup={hasAiKey ? (w) => handleSearchSubmit(w) : undefined}
               isAiSearching={isAiSearching}
               aiError={aiError}
             />

@@ -1,6 +1,6 @@
 import type { WordItem } from '@/types'
 import { dictionaryLoader, OFFICIAL_BOOK_FILE_MAP } from '@/core/dictionaryLoader'
-import { db } from '@/db'
+import { db, getWordFromAiCache, searchWordsInAiCache } from '@/db'
 
 export interface DictSearchResult {
   word: WordItem
@@ -186,21 +186,45 @@ export async function searchWordAcrossDictionaries(
   const clean = query.trim().toLowerCase()
   if (!clean) return null
 
+  // ---- 核心流转第 1 步：优先从 AI 单词缓存表中检索 ----
+  const cachedWord = await getWordFromAiCache(clean)
+  if (cachedWord) {
+    return {
+      word: cachedWord,
+      sourceBookId: 'ai_cache',
+      sourceBookName: '', // 其他不要展示来源
+      isCurrentBook: false,
+    }
+  }
+
   const cacheKey = `${currentBookId}::${clean}`
   if (searchResultCache.has(cacheKey)) {
     return searchResultCache.get(cacheKey) || null
   }
 
-  // 1. 精确匹配
+  // ---- 核心流转第 2 步：当前词库与其它词库精确匹配 ----
   let match = await searchExactWordInBooks(clean, currentBookId, currentBookName)
   if (match) {
     searchResultCache.set(cacheKey, match)
     return match
   }
 
-  // 2. 词形还原匹配（复数、时态、变形原型）
+  // ---- 核心流转第 3 步：词形还原匹配（复数、时态、变形原型） ----
   const candidates = generateLemmaCandidates(clean)
   for (const candidate of candidates) {
+    // 词形还原也先看缓存
+    const lemmaCached = await getWordFromAiCache(candidate)
+    if (lemmaCached) {
+      const res: DictSearchResult = {
+        word: lemmaCached,
+        sourceBookId: 'ai_cache',
+        sourceBookName: '', // 其他不要展示来源
+        isCurrentBook: false,
+      }
+      searchResultCache.set(cacheKey, res)
+      return res
+    }
+
     match = await searchExactWordInBooks(candidate, currentBookId, currentBookName)
     if (match) {
       searchResultCache.set(cacheKey, match)
@@ -208,7 +232,7 @@ export async function searchWordAcrossDictionaries(
     }
   }
 
-  // 3. 回退至综合本地词表与在线词典 enrichWord
+  // ---- 核心流转第 4 步：本地综合词表与在线词库 enrichWord 兜底 ----
   try {
     const enriched = await dictionaryLoader.enrichWord(clean)
     if (
@@ -220,7 +244,7 @@ export async function searchWordAcrossDictionaries(
       const result: DictSearchResult = {
         word: enriched,
         sourceBookId: 'dict_extended',
-        sourceBookName: '综合词汇',
+        sourceBookName: '', // 非词库来源不展示来源
         isCurrentBook: false,
       }
       searchResultCache.set(cacheKey, result)
@@ -230,7 +254,7 @@ export async function searchWordAcrossDictionaries(
     console.warn('enrichWord fallback failed:', err)
   }
 
-  // 4. 最终查询不到
+  // 本地词库体系全部未查到，返回 null 供上层判断是否流转至 AI 查询
   searchResultCache.set(cacheKey, null)
   return null
 }
@@ -249,6 +273,24 @@ export async function searchWordSuggestions(
 
   const results: DictSuggestionItem[] = []
   const seenWords = new Set<string>()
+
+  // 0. 优先匹配 AI 缓存中的单词（不展示来源）
+  const cachedMatches = await searchWordsInAiCache(clean, limit)
+  for (const item of cachedMatches) {
+    if (!item.name) continue
+    const lower = item.name.toLowerCase()
+    if (lower.startsWith(clean) && !seenWords.has(lower)) {
+      seenWords.add(lower)
+      const meaning = item.posList?.[0]?.means?.[0] || '常用释义'
+      results.push({
+        name: item.name,
+        meaning,
+        sourceBookName: '', // 其他不要展示来源
+        isCurrentBook: false,
+      })
+      if (results.length >= limit) return results
+    }
+  }
 
   // 1. 当前词库前缀匹配
   if (!currentBookId.startsWith('book_custom_')) {

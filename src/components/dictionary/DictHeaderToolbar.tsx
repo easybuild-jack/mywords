@@ -117,15 +117,17 @@ export function DictHeaderToolbar({
                       {item.meaning}
                     </span>
                   </div>
-                  <span
-                    className={`text-[10px] xl:text-[11px] font-mono px-2 py-0.5 rounded-md shrink-0 border ${
-                      item.isCurrentBook
-                        ? 'bg-primary/10 text-primary border-primary/20'
-                        : 'bg-white/5 text-gray-400 border-white/10'
-                    }`}
-                  >
-                    {item.sourceBookName}
-                  </span>
+                  {item.sourceBookName ? (
+                    <span
+                      className={`text-[10px] xl:text-[11px] font-mono px-2 py-0.5 rounded-md shrink-0 border ${
+                        item.isCurrentBook
+                          ? 'bg-primary/10 text-primary border-primary/20'
+                          : 'bg-white/5 text-gray-400 border-white/10'
+                      }`}
+                    >
+                      {item.sourceBookName}
+                    </span>
+                  ) : null}
                 </button>
               ))}
             </div>

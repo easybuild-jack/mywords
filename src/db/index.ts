@@ -14,6 +14,11 @@ const STORE_SCHEMA_V3: Record<string, string> = {
   wordOverrides: 'wordId, name, updatedAt',
 }
 
+const STORE_SCHEMA_V4: Record<string, string> = {
+  ...STORE_SCHEMA_V3,
+  aiWordCache: 'id, name',
+}
+
 /**
  * 把同一个单词散落的多条记录合成一条：
  * 累计类字段相加，「当前状态」类字段取最近一次练习的那条，加星是用户意图不能丢。
@@ -37,6 +42,7 @@ export class MyWordsDatabase extends Dexie {
   wordRecords!: Table<WordMasteryRecord, string>
   unitProgress!: Table<UnitProgressRecord, string>
   wordOverrides!: Table<WordOverrideRecord, string>
+  aiWordCache!: Table<WordItem, string>
 
   constructor() {
     super('MyWordsDB')
@@ -80,6 +86,9 @@ export class MyWordsDatabase extends Dexie {
 
     // v3: 增加用户自定义单词拆分与构词覆盖表
     this.version(3).stores(STORE_SCHEMA_V3)
+
+    // v4: 增加 AI 字典单词本地缓存表
+    this.version(4).stores(STORE_SCHEMA_V4)
   }
 
   async initializeDefaults() {
@@ -467,4 +476,83 @@ export async function getAllWordOverrides(): Promise<WordOverrideRecord[]> {
     return []
   }
 }
+
+/**
+ * =================================================================
+ * AI 字典单词缓存相关操作（结构与 WordItem 完全一致）
+ * =================================================================
+ */
+
+/**
+ * 从 AI 单词缓存表中查询单词（大小写不敏感匹配）
+ */
+export async function getWordFromAiCache(cleanWord: string): Promise<WordItem | null> {
+  if (!cleanWord || typeof window === 'undefined') return null
+  try {
+    const lower = cleanWord.trim().toLowerCase()
+    const directId = buildWordId(lower)
+
+    // 1. 优先根据确定性 wordId 直查
+    const byId = await db.aiWordCache.get(directId)
+    if (byId) return byId
+
+    // 2. 备选：根据 name 字段做大小写不敏感匹配
+    const byName = await db.aiWordCache
+      .filter((item) => item.name?.toLowerCase() === lower)
+      .first()
+
+    return byName || null
+  } catch (err) {
+    console.warn('Failed to query AI word cache:', err)
+    return null
+  }
+}
+
+/**
+ * 将 AI 字典生成的完整 WordItem 存入缓存表
+ */
+export async function saveWordToAiCache(wordItem: WordItem): Promise<void> {
+  if (!wordItem?.name || typeof window === 'undefined') return
+  try {
+    const canonicalId = buildWordId(wordItem.name)
+    await db.aiWordCache.put({
+      ...wordItem,
+      id: canonicalId,
+    })
+  } catch (err) {
+    console.warn('Failed to save word to AI cache:', err)
+  }
+}
+
+/**
+ * 前缀检索 AI 缓存中的单词（用于搜索下拉建议）
+ */
+export async function searchWordsInAiCache(
+  prefix: string,
+  limit: number = 6
+): Promise<WordItem[]> {
+  if (!prefix || typeof window === 'undefined') return []
+  try {
+    const lower = prefix.trim().toLowerCase()
+    return await db.aiWordCache
+      .filter((item) => Boolean(item.name?.toLowerCase().startsWith(lower)))
+      .limit(limit)
+      .toArray()
+  } catch {
+    return []
+  }
+}
+
+/**
+ * 清空 AI 字典缓存
+ */
+export async function clearAiWordCache(): Promise<void> {
+  if (typeof window === 'undefined') return
+  try {
+    await db.aiWordCache.clear()
+  } catch (err) {
+    console.warn('Failed to clear AI word cache:', err)
+  }
+}
+
 
