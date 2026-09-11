@@ -8,7 +8,12 @@
  */
 
 import type { RawDictEntry } from '@/core/dictionaryLoader'
-import { buildWordQueryMessages, extractJsonFromAiReply } from '@/lib/aiPrompts'
+import {
+  buildWordCoreQueryMessages,
+  buildWordExamplesQueryMessages,
+  buildWordStructureQueryMessages,
+  extractJsonFromAiReply,
+} from '@/lib/aiPrompts'
 
 export interface AiChatMessage {
   role: 'system' | 'user' | 'assistant'
@@ -303,7 +308,8 @@ export async function streamAiChatCompletion(
  */
 export async function callAiChatCompletion(
   config: AiClientConfig,
-  messages: AiChatMessage[]
+  messages: AiChatMessage[],
+  signal?: AbortSignal
 ): Promise<string> {
   if (!config.apiKey?.trim()) {
     throw new Error('未配置 API Key，请在偏好设置中绑定您的模型密钥。')
@@ -311,6 +317,8 @@ export async function callAiChatCompletion(
 
   const url = resolveChatCompletionsUrl(config.endpoint)
   const controller = new AbortController()
+  const abortFromCaller = () => controller.abort()
+  signal?.addEventListener('abort', abortFromCaller, { once: true })
   // 延迟请求超时时间至 120 秒，为带思考推理的模型预留充足时间
   const timeoutId = setTimeout(() => controller.abort(), 120000)
 
@@ -367,6 +375,11 @@ export async function callAiChatCompletion(
   } catch (err: unknown) {
     clearTimeout(timeoutId)
 
+    if (signal?.aborted) {
+      signal.removeEventListener('abort', abortFromCaller)
+      throw new Error('用户已中断生成')
+    }
+
     // 若直连遇到跨域 CORS 或网络故障，自动通过本地 Next.js 服务端路由非流式代理
     try {
       const proxyRes = await fetch('/api/ai/chat', {
@@ -381,6 +394,7 @@ export async function callAiChatCompletion(
           maxTokens: config.maxTokens ?? 4096,
           stream: false, // 严格非流式
         }),
+        signal: controller.signal,
       })
 
       if (proxyRes.ok) {
@@ -415,32 +429,20 @@ export async function callAiChatCompletion(
     }
 
     if (err instanceof Error) {
+      signal?.removeEventListener('abort', abortFromCaller)
       if (err.name === 'AbortError') {
         throw new Error('AI 词典生成请求响应超时 (超过 120 秒)，没有等到模型结果，请稍后再试。')
       }
       throw err
     }
     throw new Error('网络请求异常，请检查接口与网络连接。')
+  } finally {
+    clearTimeout(timeoutId)
+    signal?.removeEventListener('abort', abortFromCaller)
   }
 }
 
-/**
- * 场景二：单词查询接口
- * 依据词库真实数据参考与 word-data-builder skill 规则，向大模型请求完整结构化单词数据
- * 【注意】：词典场景严格采用非流式 (stream: false)，低温 0.1，确保单次返回完整的结构化 JSON
- */
-export async function fetchAiDictionaryWord(
-  config: AiClientConfig,
-  word: string
-): Promise<RawDictEntry | null> {
-  // 字典场景：未配置 API Key 时静默不处理，不使用 AI 字典功能
-  if (!config.apiKey?.trim()) {
-    return null
-  }
-
-  // 词典结构化数据模型处理：
-  // 严格尊重用户在设置中自定义的模型（例如 deepseek-flash 等）
-  // 仅当用户明确配置了纯推理思考模型（如 deepseek-reasoner 或 r1）时，才自动适配为对应的快速结构化模型，避免 Token 耗尽
+function resolveDictionaryConfig(config: AiClientConfig, maxTokens: number): AiClientConfig {
   let model = config.model?.trim() || 'deepseek-chat'
   const lowerModel = model.toLowerCase()
   const lowerEndpoint = (config.endpoint || '').toLowerCase()
@@ -453,22 +455,83 @@ export async function fetchAiDictionaryWord(
     }
   }
 
-  const messages = buildWordQueryMessages(word)
-  const isReasoner = lowerModel.includes('reasoner') || lowerModel.includes('r1')
-  const maxTokens = isReasoner ? 8192 : Math.max(config.maxTokens ?? 4096, 4096)
+  return {
+    ...config,
+    model,
+    temperature: 0.1,
+    maxTokens,
+  }
+}
 
-  // 词典场景严格非流式 (stream: false)，低温 (0.1) 保证 JSON 格式准确、严谨不胡编
+async function fetchDictionarySection(
+  config: AiClientConfig,
+  messages: AiChatMessage[],
+  maxTokens: number,
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  if (!config.apiKey?.trim()) return null
   const rawReply = await callAiChatCompletion(
-    {
-      ...config,
-      model,
-      temperature: 0.1,
-      maxTokens,
-    },
-    messages
+    resolveDictionaryConfig(config, maxTokens),
+    messages,
+    signal
   )
-
   return extractJsonFromAiReply(rawReply)
+}
+
+/** 首屏基础数据：音标与释义。 */
+export function fetchAiDictionaryWordCore(
+  config: AiClientConfig,
+  word: string,
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  return fetchDictionarySection(config, buildWordCoreQueryMessages(word), 1024, signal)
+}
+
+/** 后台构词数据：音节、哑音与词源。 */
+export function fetchAiDictionaryWordStructure(
+  config: AiClientConfig,
+  word: string,
+  core: Pick<RawDictEntry, 'trans' | 'usphone' | 'ukphone'>,
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  return fetchDictionarySection(
+    config,
+    buildWordStructureQueryMessages(word, core),
+    2048,
+    signal
+  )
+}
+
+/** 后台语境数据：覆盖核心释义的双语例句。 */
+export function fetchAiDictionaryWordExamples(
+  config: AiClientConfig,
+  word: string,
+  trans: string[],
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  return fetchDictionarySection(
+    config,
+    buildWordExamplesQueryMessages(word, trans),
+    4096,
+    signal
+  )
+}
+
+/** 保留完整查询能力，内部同样采用基础优先、富内容并行。 */
+export async function fetchAiDictionaryWord(
+  config: AiClientConfig,
+  word: string,
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  const core = await fetchAiDictionaryWordCore(config, word, signal)
+  if (!core) return null
+
+  const [structure, examples] = await Promise.all([
+    fetchAiDictionaryWordStructure(config, word, core, signal),
+    fetchAiDictionaryWordExamples(config, word, core.trans || [], signal),
+  ])
+
+  return { ...core, ...structure, ...examples, name: core.name }
 }
 
 

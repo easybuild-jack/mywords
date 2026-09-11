@@ -16,6 +16,8 @@ export interface WordEtymology {
   memoryHook?: string;                          // 联想助记口诀
 }
 
+export type AiWordSectionStatus = 'pending' | 'ready' | 'error';
+
 export interface WordItem {
   id: string;                                   // 唯一ID
   name: string;                                 // 拼写 (如 "discover")
@@ -30,6 +32,10 @@ export interface WordItem {
   silentIndices?: number[];                     // 自定义不发音/哑音字母下标 (如 bottle 中的第一个t [2])
   examples?: WordExample[];                     // 3条左右经典例句
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
+  aiSections?: {                                // AI 分阶段生成状态（仅 AI 缓存词使用）
+    structure: AiWordSectionStatus;
+    examples: AiWordSectionStatus;
+  };
 }
 
 export interface RootWordItem {

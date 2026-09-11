@@ -270,8 +270,8 @@ export function DictationCard({
         {/* 下半区：语境双语例句（挖空填空线索，看译文与听音模式保持完全一致） */}
         {examples.length > 0 && (
           <div className="w-full max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto flex-1 min-h-0 flex flex-col justify-start text-left pt-1">
-            <div className="rounded-2xl bg-white/[0.025] border border-white/10 p-3 xl:p-4 2xl:p-4.5 flex flex-col justify-between overflow-hidden shadow-inner">
-              <div className="space-y-2 xl:space-y-2.5">
+            <div className="flex min-h-0 flex-1 flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] p-3 shadow-inner xl:p-4 2xl:p-4.5">
+              <div className="flex h-full min-h-0 flex-col gap-2 xl:gap-2.5">
                 {/* 顶栏小标题与偷看状态 */}
                 <div className="flex items-center justify-between pb-1.5 border-b border-white/5">
                   <div className="flex items-center gap-1.5 xl:gap-2">
@@ -304,8 +304,8 @@ export function DictationCard({
                   </div>
                 </div>
 
-                {/* 2 示例句列表（挖空呈现） */}
-                <div className="space-y-2 xl:space-y-2.5">
+                {/* 示例句列表（挖空呈现） */}
+                <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 custom-scrollbar xl:space-y-2.5">
                   {examples.map((item, idx) => {
                     const isPlaying = speakingSentenceIdx === idx
                     return (

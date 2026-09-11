@@ -25,83 +25,77 @@ export const AI_ENGLISH_TEACHER_SYSTEM_PROMPT = `你是一位教学经验丰富�
 - 结构清晰，排版优雅：熟练使用 Markdown 标题、加粗、列表与对比表格，让知识要点一目了然。
 - 耐心专业，鼓励启发：用积极亲切的态度引导学习者建立语感与学习信心。`
 
-/**
- * 场景二：单词查询系统提示词（AI 字典）
- */
-export const AI_DICTIONARY_SYSTEM_PROMPT = `你是一个专业的英语词典与词库结构化数据生成引擎，属于 MyWords 平台的专属 AI 字典。
-你的任务是：根据用户提供的英文单词，严格按照 MyWords 词库底层数据结构与规范，生成该单词的完整 JSON 数据。
+const JSON_ONLY_RULE = '必须且仅输出合法的单个 JSON 对象，不要输出解释、Markdown 或推导过程。'
 
-【参考示例（词库真实标准数据）】
+export const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
+只生成查询首屏所需的基础数据：
 {
   "name": "discover",
   "trans": ["v. 发现；发掘；查明"],
   "usphone": "dɪˈskʌvər",
-  "ukphone": "dɪˈskʌvə(r)",
+  "ukphone": "dɪˈskʌvə(r)"
+}
+trans 按词性分组，格式为“词性. 释义；释义”，覆盖最常用核心义项。
+美音和英音使用标准 IPA，不要带斜杠，保留重音符号。
+${JSON_ONLY_RULE}`
+
+export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的英语构词分析引擎。
+根据单词、音标和释义生成：
+{
+  "name": "discover",
   "syllables": ["dis", "cov", "er"],
-  "etymology": {
-    "prefix": { "form": "dis-", "meaning": "否定/相反/去除" },
-    "root": { "form": "cover", "meaning": "覆盖/遮盖" },
-    "derivation": "去除覆盖的东西 → 揭开、发现、发掘",
-    "origin": "源自古法语 descovrir，由 dis-（去除）+ covrir（遮盖）复合而成。",
-    "memoryHook": "dis（去除）+ cover（覆盖、遮盖）→ 揭开覆盖物，也就是「发现、查明」。"
-  },
   "silentIndices": [],
+  "etymology": {
+    "prefix": { "form": "dis-", "meaning": "去除" },
+    "root": { "form": "cover", "meaning": "覆盖" },
+    "derivation": "去除覆盖物 → 发现",
+    "origin": "可靠且简短的词源",
+    "memoryHook": "简明记忆线索"
+  }
+}
+syllables.join('') 必须严格等于 name，音节数应符合美音音标。
+silentIndices 是不发音字母的 0-based 升序下标；无哑音时返回 []。
+词源必须可靠；没有可靠词根词缀时省略相应字段，严禁编造。
+${JSON_ONLY_RULE}`
+
+export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
+根据给定单词及中文释义生成：
+{
+  "name": "discover",
   "examples": [
-    { "en": "We must discover the cause of the problem.", "cn": "我们必须查明问题的原因。" },
-    { "en": "Scientists are working hard to discover a cure.", "cn": "科学家们正努力寻找治愈方法。" },
-    { "en": "Columbus discovered America in 1492.", "cn": "哥伦布于1492年发现了美洲大陆。" }
-  ],
-  "phrases": [
-    { "en": "discover the truth", "cn": "查明真相" },
-    { "en": "discover by chance", "cn": "偶然发现" },
-    { "en": "discover new talents", "cn": "发掘新人" },
-    { "en": "discover a secret", "cn": "发现秘密" }
+    { "en": "We must discover the truth.", "cn": "我们必须查明真相。" }
+  ]
+}
+例句应覆盖给出的不同词性和主要义项；单义词至少生成两条。
+每条例句简短、自然、适合英语学习，并准确提供中文翻译。
+${JSON_ONLY_RULE}`
+
+export function buildWordCoreQueryMessages(word: string) {
+  return [
+    { role: 'system' as const, content: AI_DICTIONARY_CORE_SYSTEM_PROMPT },
+    { role: 'user' as const, content: `查询英文单词：${JSON.stringify(word.trim())}` },
   ]
 }
 
-【数据生成规范与硬性约束】
-1. name (string): 单词拼写，保持原始正确大小写。
-2. trans (string[]): 中文释义数组。每个词性一条独立字符串，格式为 "词性. 释义；释义"（如 "v. 发现；发掘；查明"），义项用 "；" 分隔，列出最常用的核心释义。
-3. usphone / ukphone (string): 美音与英音标准 IPA 音标。
-   - 严禁带 "/" 包裹（例如输出 "dɪˈskʌvər"，绝对不要输出 "/dɪˈskʌvər/"）。
-   - 必须包含主重音 ˈ 与次重音 ˌ；老式符号需规范化（如 əu 统一为 əʊ）。
-4. syllables (string[]): 音节切分数组。
-   - syllables.join('') 必须严格等于 name。
-   - 音节数量必须严格等于美音音标中的元音音位数（双元音算 1 个，成音节辅音如 -le 算 1 个）。
-   - 复合词先在子词边界切分（如 head-ache、pass-word）；双写辅音按 VC-CV 拆开（如 yel-low、bot-tle）。
-5. silentIndices (number[]): 哑音（不发音）字母在单词中的 0-based 下标数组，升序排列。
-   - 双写辅音的第一个字母标为哑音（如 yellow 中第一个 l 标下标 2）；
-   - 词尾哑 e、经典不发音字母（如 listen 中的 t、doubt 中的 b）标哑音；
-   - igh/eigh 中的 gh 是元音字母组合，不标哑音；
-   - 无哑音字母时设为空数组 []。
-6. etymology (object): 词根词缀结构化拆解。
-   - 包含 prefix(前缀)、root(词根)、suffix(后缀)、derivation(引申推导)、origin(词源背景)、memoryHook(联想记忆钩子)。
-   - 必须科学可靠，若为基础独体词或无可靠词根，可省略对应字段或设为 null，严禁胡乱编造！
-7. examples (object[]): 双语例句数组 [{ "en": "...", "cn": "..." }]。
-   - 【覆盖所有含义】：生成例句时，必须全面覆盖该单词的所有含义！无论是不同词性（如名词/动词/形容词等不同类型含义），还是同词性下的不同主要释义与含义，都要分别给出针对性的示例例句。
-   - 【单义词保底】：如果一个单词就一个意思，则至少给出两个例句。
-   - 【简明地道】：每条例句保持 5~10 词左右的简短日常简单句，避免复杂长难句，突出目标词在特定释义下的真实语境。
-8. phrases (object[]): 常见固定搭配短语数组 [{ "en": "...", "cn": "..." }]。
-   - 【数量要求】：短语至少 4 个，最多 10 个（4 ~ 10 条）。
-   - 【尽量全面且常用】：尽量全面，收录该单词最常用的短语组合（包括核心动词短语、介词固定搭配、高频搭配等）。
-
-【输出格式要求】
-- 必须且仅输出合法的单个 JSON 对象。严禁包含任何前言、寒暄或额外的解释文字。`
-
-/**
- * 构造单词查询的请求消息体
- */
-export function buildWordQueryMessages(word: string) {
-  const cleanWord = word.trim()
+export function buildWordStructureQueryMessages(
+  word: string,
+  core: Pick<RawDictEntry, 'trans' | 'usphone' | 'ukphone'>
+) {
   return [
-    {
-      role: 'system' as const,
-      content: AI_DICTIONARY_SYSTEM_PROMPT,
-    },
+    { role: 'system' as const, content: AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT },
     {
       role: 'user' as const,
-      content: `请为英文单词 "${cleanWord}" 生成完整词库 JSON 数据。特别注意：例句必须覆盖该词的所有含义（不同类型的含义、不同意思的含义都要给出示例；若仅有一个意思至少给两个例句）；短语至少 4 个，最多 10 个，尽量全面收录常用的短语组合。
-【输出与思考约束】：请直接输出合法的单个 JSON 对象，不要输出寒暄，不要展开漫长的推导过程，确保在 Token 限制内完整输出 JSON。`,
+      content: `分析以下基础数据：${JSON.stringify({ name: word.trim(), ...core })}`,
+    },
+  ]
+}
+
+export function buildWordExamplesQueryMessages(word: string, trans: string[]) {
+  return [
+    { role: 'system' as const, content: AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT },
+    {
+      role: 'user' as const,
+      content: `为以下单词及释义生成例句：${JSON.stringify({ name: word.trim(), trans })}`,
     },
   ]
 }

@@ -262,20 +262,20 @@ export function DictWordCard({
 
       {/* 下半区：左右分栏排版（左侧占 8/12 宽幅双语例句；右侧占 4/12 词根词源/助记） */}
       <div className="grid grid-cols-12 gap-3.5 xl:gap-5 pt-4 xl:pt-5 flex-1 min-h-0 text-left">
-        {/* 左栏：2 条精选双语例句 */}
+        {/* 左栏：精选双语例句 */}
         <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 xl:p-4 2xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
-          <div className="space-y-2.5 xl:space-y-3.5">
+          <div className="flex h-full min-h-0 flex-col gap-2.5 xl:gap-3.5">
             <div className="flex items-center justify-between pb-1.5 xl:pb-2 border-b border-white/5">
               <div className="flex items-center gap-1.5 xl:gap-2">
                 <Quote className="size-3.5 xl:size-4 text-accent" />
                 <span className="text-xs xl:text-sm font-bold text-white/90">语境双语例句</span>
               </div>
               <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                2 EXAMPLES
+                {examples.length} EXAMPLES
               </span>
             </div>
 
-            <div className="space-y-2.5 xl:space-y-3.5">
+            <div className="min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-1 custom-scrollbar xl:space-y-3.5">
               {examples.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx
                 return (

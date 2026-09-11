@@ -112,15 +112,15 @@ const SAMPLE_ETYMOLOGY_EXTRAS: Record<string, { origin?: string; memoryHook?: st
   },
 }
 
-/** 获取单词的 2 条精选双语例句（优先读取 JSON，缺省时智能回退） */
+/** 获取单词的双语例句（优先读取 JSON，缺省时智能回退） */
 export function getWordExamples(word: WordItem): WordExample[] {
   if (word.examples && word.examples.length > 0) {
-    return word.examples.slice(0, 2)
+    return word.examples
   }
 
   const key = word.name.toLowerCase().trim()
   if (SAMPLE_WORD_EXAMPLES[key]) {
-    return SAMPLE_WORD_EXAMPLES[key].slice(0, 2)
+    return SAMPLE_WORD_EXAMPLES[key]
   }
 
   // 通用兜底例句（保证任何新单词在对接完整 JSON 前排版依然充实好看）

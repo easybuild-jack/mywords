@@ -511,7 +511,7 @@ export async function getWordFromAiCache(cleanWord: string): Promise<WordItem | 
 }
 
 /**
- * 将 AI 字典生成的完整 WordItem 存入缓存表
+ * 将 AI 字典生成的 WordItem 存入缓存表
  */
 export async function saveWordToAiCache(wordItem: WordItem): Promise<void> {
   if (!wordItem?.name || typeof window === 'undefined') return
@@ -523,6 +523,49 @@ export async function saveWordToAiCache(wordItem: WordItem): Promise<void> {
     })
   } catch (err) {
     console.warn('Failed to save word to AI cache:', err)
+  }
+}
+
+type AiWordCachePatch = Omit<Partial<WordItem>, 'aiSections'> &
+  Pick<WordItem, 'name'> & {
+    aiSections?: Partial<NonNullable<WordItem['aiSections']>>
+  }
+
+/** 原子合并 AI 分阶段结果，避免并发请求互相覆盖。 */
+export async function mergeWordIntoAiCache(
+  patch: AiWordCachePatch
+): Promise<WordItem | null> {
+  if (!patch.name || typeof window === 'undefined') return null
+
+  try {
+    const canonicalId = buildWordId(patch.name)
+    return await db.transaction('rw', db.aiWordCache, async () => {
+      const existing = await db.aiWordCache.get(canonicalId)
+      if (!existing) return null
+
+      const merged: WordItem = {
+        ...existing,
+        ...patch,
+        id: canonicalId,
+        aiSections: patch.aiSections
+          ? {
+              structure:
+                patch.aiSections.structure ??
+                existing.aiSections?.structure ??
+                'pending',
+              examples:
+                patch.aiSections.examples ??
+                existing.aiSections?.examples ??
+                'pending',
+            }
+          : existing.aiSections,
+      }
+      await db.aiWordCache.put(merged)
+      return merged
+    })
+  } catch (err) {
+    console.warn('Failed to merge AI word cache:', err)
+    return null
   }
 }
 
