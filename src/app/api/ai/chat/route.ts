@@ -50,8 +50,10 @@ export async function POST(req: Request) {
     // 词典场景或明确非流式请求 (stream = false)：返回单体 JSON
     if (!stream) {
       const data = await upstreamRes.json()
+      console.log('[api/ai/chat] model used:', model, 'finish_reason:', data?.choices?.[0]?.finish_reason, 'hasContent:', Boolean(data?.choices?.[0]?.message?.content), 'hasReasoning:', Boolean(data?.choices?.[0]?.message?.reasoning_content))
       return NextResponse.json(data)
     }
+
 
     // 对话场景 (stream = true)：转发 SSE 流式数据 (流水输出)
     return new Response(upstreamRes.body, {

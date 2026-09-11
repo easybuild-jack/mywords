@@ -19,9 +19,11 @@ export interface AiClientConfig {
   endpoint: string
   apiKey: string
   model: string
+  provider?: string
   temperature?: number
   maxTokens?: number
 }
+
 
 /** 规范化拼接 chat/completions 端点 */
 export function resolveChatCompletionsUrl(rawEndpoint: string): string {
@@ -153,7 +155,7 @@ export async function readSseStream(
           try {
             const parsed = JSON.parse(jsonStr)
             const delta = parsed?.choices?.[0]?.delta
-            const chunk = delta?.content ?? delta?.reasoning_content ?? ''
+            const chunk = delta?.content ?? ''
             if (chunk) {
               accumulated += chunk
               onChunk(chunk)
@@ -169,7 +171,7 @@ export async function readSseStream(
     if (buffer.trim().startsWith('data:') && !buffer.includes('[DONE]')) {
       try {
         const parsed = JSON.parse(buffer.trim().slice(5).trim())
-        const chunk = parsed?.choices?.[0]?.delta?.content ?? parsed?.choices?.[0]?.delta?.reasoning_content ?? ''
+        const chunk = parsed?.choices?.[0]?.delta?.content ?? ''
         if (chunk) {
           accumulated += chunk
           onChunk(chunk)
@@ -343,9 +345,21 @@ export async function callAiChatCompletion(
     }
 
     const data = await res.json()
-    const reply = data?.choices?.[0]?.message?.content
-    if (typeof reply !== 'string') {
-      throw new Error('模型未返回合法的文本内容。')
+    const choice = data?.choices?.[0]
+    let reply = choice?.message?.content || choice?.text
+
+    // 若 content 为空但 reasoning_content 中包含 "name" 字段，尝试从 reasoning_content 救回 JSON
+    if ((!reply || !reply.trim()) && choice?.message?.reasoning_content) {
+      if (choice.message.reasoning_content.includes('"name"')) {
+        reply = choice.message.reasoning_content
+      }
+    }
+
+    if (typeof reply !== 'string' || !reply.trim()) {
+      if (choice?.message?.reasoning_content) {
+        throw new Error('思考模型（如 R1/Reasoner）在推理阶段耗尽了 Token，未输出最终单词数据。已自动优化模型参数，请重试或在设置中选择 deepseek-chat。')
+      }
+      throw new Error('模型未返回合法的文本内容，请检查模型服务或 API 配置。')
     }
 
     return reply
@@ -370,9 +384,22 @@ export async function callAiChatCompletion(
 
       if (proxyRes.ok) {
         const proxyData = await proxyRes.json()
-        const reply = proxyData?.choices?.[0]?.message?.content
-        if (typeof reply === 'string') {
+        const choice = proxyData?.choices?.[0]
+        let reply = choice?.message?.content || choice?.text
+
+        // 若代理返回的 content 为空但思考草稿中存在 JSON，尝试从草稿中提取
+        if ((!reply || !reply.trim()) && choice?.message?.reasoning_content) {
+          if (choice.message.reasoning_content.includes('"name"')) {
+            reply = choice.message.reasoning_content
+          }
+        }
+
+        if (typeof reply === 'string' && reply.trim()) {
           return reply
+        }
+
+        if (choice?.message?.reasoning_content) {
+          throw new Error('思考模型（如 R1/Reasoner）在推理阶段耗尽了 Token，未输出最终单词数据。已自动优化模型参数，请重试或在设置中选择 deepseek-chat。')
         }
       } else {
         const errJson = await proxyRes.json().catch(() => null)
@@ -410,16 +437,38 @@ export async function fetchAiDictionaryWord(
     return null
   }
 
+  // 词典结构化数据模型处理：
+  // 严格尊重用户在设置中自定义的模型（例如 deepseek-flash 等）
+  // 仅当用户明确配置了纯推理思考模型（如 deepseek-reasoner 或 r1）时，才自动适配为对应的快速结构化模型，避免 Token 耗尽
+  let model = config.model?.trim() || 'deepseek-chat'
+  const lowerModel = model.toLowerCase()
+  const lowerEndpoint = (config.endpoint || '').toLowerCase()
+
+  if (lowerModel.includes('reasoner') || lowerModel.includes('r1')) {
+    if (lowerEndpoint.includes('siliconflow')) {
+      model = 'deepseek-ai/DeepSeek-V3'
+    } else {
+      model = 'deepseek-chat'
+    }
+  }
+
   const messages = buildWordQueryMessages(word)
+  const isReasoner = lowerModel.includes('reasoner') || lowerModel.includes('r1')
+  const maxTokens = isReasoner ? 8192 : Math.max(config.maxTokens ?? 4096, 4096)
+
   // 词典场景严格非流式 (stream: false)，低温 (0.1) 保证 JSON 格式准确、严谨不胡编
   const rawReply = await callAiChatCompletion(
     {
       ...config,
+      model,
       temperature: 0.1,
-      maxTokens: 2048,
+      maxTokens,
     },
     messages
   )
 
   return extractJsonFromAiReply(rawReply)
 }
+
+
+

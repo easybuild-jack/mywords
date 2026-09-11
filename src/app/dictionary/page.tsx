@@ -117,7 +117,30 @@ export default function DictionaryPage() {
               setNotFoundQuery(trimmed)
             }
           } catch (aiErr: unknown) {
-            console.error('AI dictionary query error:', aiErr)
+            console.warn('AI dictionary query failed, attempting offline dictionary fallback:', aiErr)
+            // 自动优雅降级到本地 50,000+ 离线大词库，确保用户始终能看到清晰的单词卡片，绝不卡死在报错上
+            try {
+              const enriched = await dictionaryLoader.enrichWord(trimmed)
+              if (
+                enriched &&
+                enriched.posList?.length > 0 &&
+                enriched.posList[0].means?.[0] &&
+                enriched.posList[0].means[0] !== '核心词义'
+              ) {
+                setCurrentResult({
+                  word: enriched,
+                  sourceBookId: 'dict_extended',
+                  sourceBookName: '', // 其他不要展示来源
+                  isCurrentBook: false,
+                })
+                setNotFoundQuery(null)
+                audioEngine.playPronunciation(enriched.name, phoneticPreference)
+                return
+              }
+            } catch (fallbackErr) {
+              console.warn('Offline fallback failed:', fallbackErr)
+            }
+
             const msg = aiErr instanceof Error ? aiErr.message : 'AI 字典生成失败，请检查网络或配置'
             setAiError(msg)
             setCurrentResult(null)

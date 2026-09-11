@@ -100,38 +100,212 @@ export function buildWordQueryMessages(word: string) {
     },
     {
       role: 'user' as const,
-      content: `请为英文单词 "${cleanWord}" 生成完整词库 JSON 数据。特别注意：例句必须覆盖该词的所有含义（不同类型的含义、不同意思的含义都要给出示例；若仅有一个意思至少给两个例句）；短语至少 4 个，最多 10 个，尽量全面收录常用的短语组合。`,
+      content: `请为英文单词 "${cleanWord}" 生成完整词库 JSON 数据。特别注意：例句必须覆盖该词的所有含义（不同类型的含义、不同意思的含义都要给出示例；若仅有一个意思至少给两个例句）；短语至少 4 个，最多 10 个，尽量全面收录常用的短语组合。
+【输出与思考约束】：请直接输出合法的单个 JSON 对象，不要输出寒暄，不要展开漫长的推导过程，确保在 Token 限制内完整输出 JSON。`,
     },
   ]
 }
 
 /**
- * 从大模型回复中提取并解析 JSON 对象
+ * 从文本中寻找首个括号平衡的最外层完整 JSON 对象
+ */
+function extractOutermostJsonObject(str: string): string | null {
+  const start = str.indexOf('{')
+  if (start === -1) return null
+
+  let depth = 0
+  let inString = false
+  let isEscaped = false
+
+  for (let i = start; i < str.length; i++) {
+    const char = str[i]
+    if (inString) {
+      if (isEscaped) {
+        isEscaped = false
+      } else if (char === '\\') {
+        isEscaped = true
+      } else if (char === '"') {
+        inString = false
+      }
+    } else {
+      if (char === '"') {
+        inString = true
+      } else if (char === '{') {
+        depth++
+      } else if (char === '}') {
+        depth--
+        if (depth === 0) {
+          return str.slice(start, i + 1)
+        }
+      }
+    }
+  }
+
+  return null
+}
+
+/**
+ * 寻找包含 "name" 属性的最外层单词 JSON 对象（避免误匹配杂乱思考文本中的内部对象）
+ */
+function findWordJsonObject(text: string): string | null {
+  const nameMatch = text.search(/"name"\s*:/i)
+  if (nameMatch === -1) {
+    return extractOutermostJsonObject(text)
+  }
+
+  let startIndex = -1
+  for (let i = nameMatch; i >= 0; i--) {
+    if (text[i] === '{') {
+      startIndex = i
+      break
+    }
+  }
+
+  if (startIndex === -1) {
+    return extractOutermostJsonObject(text)
+  }
+
+  const candidate = extractOutermostJsonObject(text.slice(startIndex))
+  if (candidate) return candidate
+
+  return text.slice(startIndex)
+}
+
+/**
+ * 智能修复被截断的不完整 JSON 字符串（例如模型受 max_tokens 限制或网络中断未闭合尾部）
+ */
+export function repairTruncatedJson(raw: string): string {
+  let s = raw.trim()
+  const start = s.indexOf('{')
+  if (start === -1) return s
+  s = s.slice(start)
+
+  const stack: ('{' | '[')[] = []
+  let inString = false
+  let isEscaped = false
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i]
+    if (inString) {
+      if (isEscaped) {
+        isEscaped = false
+      } else if (char === '\\') {
+        isEscaped = true
+      } else if (char === '"') {
+        inString = false
+      }
+    } else {
+      if (char === '"') {
+        inString = true
+      } else if (char === '{' || char === '[') {
+        stack.push(char)
+      } else if (char === '}') {
+        if (stack.length && stack[stack.length - 1] === '{') {
+          stack.pop()
+        }
+      } else if (char === ']') {
+        if (stack.length && stack[stack.length - 1] === '[') {
+          stack.pop()
+        }
+      }
+    }
+  }
+
+  // 1. 如果还在未结束的字符串内部，先闭合双引号
+  if (inString) {
+    if (s.endsWith('\\')) s = s.slice(0, -1)
+    s += '"'
+  }
+
+  // 2. 循环清理末尾多余逗号或孤立键值对（如 `"incompleteKey":` 或 `...,`）
+  s = s.trimEnd()
+  let modified = true
+  while (modified) {
+    modified = false
+    if (s.endsWith(',')) {
+      s = s.slice(0, -1).trimEnd()
+      modified = true
+    }
+    if (/:\s*$/.test(s)) {
+      s = s.replace(/,?\s*"[^"]*"\s*:\s*$/, '').trimEnd()
+      modified = true
+    }
+  }
+
+  // 3. 按照栈逆序闭合括号
+  while (stack.length > 0) {
+    const top = stack.pop()
+    if (top === '{') s += '}'
+    else if (top === '[') s += ']'
+  }
+
+  return s
+}
+
+/**
+ * 从大模型回复中提取并解析 JSON 对象（带抗截断与思考标签过滤的高鲁棒性解析器）
  */
 export function extractJsonFromAiReply(reply: string): RawDictEntry {
+  if (!reply || !reply.trim()) {
+    throw new Error('模型未返回有效文本内容（回复为空）')
+  }
+
   let cleaned = reply.trim()
 
-  // 剔除 markdown ```json ... ``` 标记
+  // 1. 彻底剔除 <think> ... </think> 标签（兼容 DeepSeek R1 等推理思考模型）
+  cleaned = cleaned.replace(/<think>[\s\S]*?(?:<\/think>|$)/gi, '').trim()
+
+  // 2. 剔除 markdown ```json ... ``` 标记（即使尾部 ``` 被截断也能匹配）
   if (cleaned.includes('```')) {
-    const match = cleaned.match(/```(?:json)?\s*([\s\S]*?)\s*```/i)
+    const match = cleaned.match(/```(?:json)?\s*([\s\S]*?)(?:```|$)/i)
     if (match && match[1]) {
       cleaned = match[1].trim()
     }
   }
 
-  // 寻找第一个 { 到最后一个 }
+  // 3. 首选方案：寻找包含 "name" 单词根对象的最外层完整 JSON 对象
+  const outermost = findWordJsonObject(cleaned)
+  if (outermost) {
+    try {
+      const parsed = JSON.parse(outermost)
+      if (parsed && typeof parsed === 'object' && parsed.name) {
+        return parsed as RawDictEntry
+      }
+    } catch {
+      // 若提取的最外层包含微小语法问题，继续尝试修复
+    }
+  }
+
+
+  // 4. 次选方案：寻找第一个 { 开始尝试直接解析
   const firstBrace = cleaned.indexOf('{')
-  const lastBrace = cleaned.lastIndexOf('}')
-
-  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-    cleaned = cleaned.substring(firstBrace, lastBrace + 1)
+  if (firstBrace === -1) {
+    throw new Error('模型返回内容中未检测到合法的 JSON 格式')
   }
 
-  const parsed = JSON.parse(cleaned)
+  const candidateJson = cleaned.slice(firstBrace)
 
-  if (!parsed || typeof parsed !== 'object' || !parsed.name) {
-    throw new Error('返回数据缺少必要的单词字段 name')
+  // 尝试直接解析
+  try {
+    const parsed = JSON.parse(candidateJson)
+    if (parsed && typeof parsed === 'object' && parsed.name) {
+      return parsed as RawDictEntry
+    }
+  } catch {
+    // 5. 兜底容错：模型输出在末尾被截断，执行智能语法修复
+    try {
+      const repaired = repairTruncatedJson(candidateJson)
+      const parsed = JSON.parse(repaired)
+      if (parsed && typeof parsed === 'object' && parsed.name) {
+        console.warn('AI dictionary reply was truncated by token limit and successfully auto-repaired.')
+        return parsed as RawDictEntry
+      }
+    } catch (repairErr) {
+      console.error('Failed to repair truncated AI JSON:', candidateJson)
+      throw new Error('模型生成的词典数据格式不完整或受截断，请重试或检查 API 配置。')
+    }
   }
 
-  return parsed as RawDictEntry
+  throw new Error('模型返回数据缺少必要的单词字段 name')
 }
+
