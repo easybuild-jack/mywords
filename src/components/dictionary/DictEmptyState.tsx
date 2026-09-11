@@ -10,6 +10,7 @@ interface DictEmptyStateProps {
   onAiLookup?: (word: string) => void
   isAiSearching?: boolean
   aiError?: string | null
+  wordNotFound?: boolean
 }
 
 export function DictEmptyState({
@@ -17,6 +18,7 @@ export function DictEmptyState({
   onAiLookup,
   isAiSearching,
   aiError,
+  wordNotFound,
 }: DictEmptyStateProps) {
   const cleanWord = query?.trim()
 
@@ -44,6 +46,26 @@ export function DictEmptyState({
           <span className="size-2 rounded-full bg-primary animate-ping" />
           <span>实时推导 IPA 音标 · 音节拆分 · 构词源流 · 语境例句</span>
         </div>
+      </div>
+    )
+  }
+
+  if (wordNotFound) {
+    return (
+      <div className="relative w-full h-full flex flex-col items-center justify-center p-8 text-center select-none animate-in fade-in-50 duration-300">
+        <div className="size-16 xl:size-20 rounded-2xl xl:rounded-3xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center mb-5">
+          <SearchX className="size-8 xl:size-10 text-amber-400" />
+        </div>
+        <h3 className="text-xl xl:text-2xl font-bold text-foreground tracking-tight mb-2.5">
+          未找到有效英文单词
+        </h3>
+        <p className="text-sm xl:text-base text-muted-foreground max-w-md leading-relaxed">
+          AI 词典无法确认{' '}
+          <span className="text-foreground font-mono font-bold px-1.5 py-0.5 rounded bg-foreground/5 border border-foreground/10">
+            {cleanWord || '该拼写'}
+          </span>{' '}
+          是有效英文单词，请检查拼写后重新查询。
+        </p>
       </div>
     )
   }

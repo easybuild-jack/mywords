@@ -14,6 +14,8 @@ import {
 } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
 import { queryAiWordCore } from '@/lib/aiWordCore'
+import { getWordValidationError, isLikelyEnglishWord } from '@/lib/wordValidation'
+import { AiDictionaryLookupError } from '@/lib/aiPrompts'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 
 export default function DictionaryPage() {
@@ -28,6 +30,7 @@ export default function DictionaryPage() {
   const [isAiSearching, setIsAiSearching] = useState(false)
   const [searchingWord, setSearchingWord] = useState<string>('')
   const [aiError, setAiError] = useState<string | null>(null)
+  const [aiWordNotFound, setAiWordNotFound] = useState(false)
 
   // 查词输入与状态
   const [searchQuery, setSearchQuery] = useState('')
@@ -35,6 +38,7 @@ export default function DictionaryPage() {
   const [currentResult, setCurrentResult] = useState<DictSearchResult | null>(null)
   const [notFoundQuery, setNotFoundQuery] = useState<string | null>(null)
   const [suggestions, setSuggestions] = useState<DictSuggestionItem[]>([])
+  const [searchValidationError, setSearchValidationError] = useState<string | null>(null)
 
   const suggestionDebounceRef = useRef<NodeJS.Timeout | null>(null)
   const aiAbortRef = useRef<AbortController | null>(null)
@@ -74,14 +78,25 @@ export default function DictionaryPage() {
   const handleSearchSubmit = useCallback(
     async (queryText: string) => {
       const trimmed = queryText.trim()
-      if (!trimmed) return
-
       const sequence = ++searchSequenceRef.current
       aiAbortRef.current?.abort()
       aiAbortRef.current = null
+
+      const validationError = getWordValidationError(trimmed)
+      if (validationError) {
+        setSearchValidationError(validationError)
+        setAiWordNotFound(false)
+        setIsSearching(false)
+        setIsAiSearching(false)
+        setSuggestions([])
+        return
+      }
+
+      setSearchValidationError(null)
       setIsSearching(true)
       setIsAiSearching(false)
       setAiError(null)
+      setAiWordNotFound(false)
 
       try {
         // 步骤 1：本地检索（首先查 AI 单词缓存表，其次查当前词库、其他词库与词形还原）
@@ -141,6 +156,13 @@ export default function DictionaryPage() {
             ) {
               return
             }
+            if (aiErr instanceof AiDictionaryLookupError) {
+              setAiError(null)
+              setAiWordNotFound(true)
+              setCurrentResult(null)
+              setNotFoundQuery(trimmed)
+              return
+            }
             const isTimeout =
               aiErr instanceof Error &&
               (aiErr.name === 'AbortError' || aiErr.message.includes('超时'))
@@ -185,12 +207,18 @@ export default function DictionaryPage() {
   // 搜索框输入变化并防抖获取联想
   const handleSearchChange = (text: string) => {
     setSearchQuery(text)
+    setSearchValidationError(null)
 
     if (suggestionDebounceRef.current) {
       clearTimeout(suggestionDebounceRef.current)
     }
 
     if (!text.trim()) {
+      setSuggestions([])
+      return
+    }
+
+    if (!isLikelyEnglishWord(text)) {
       setSuggestions([])
       return
     }
@@ -248,6 +276,7 @@ export default function DictionaryPage() {
         isSearching={isSearching}
         suggestions={suggestions}
         onSelectSuggestion={handleSelectSuggestion}
+        validationError={searchValidationError}
       />
 
       {/* 中部舞台：单词卡片展示区（垂直完美居中，彻底去除打字输入槽，底部无工具栏） */}
@@ -271,6 +300,7 @@ export default function DictionaryPage() {
               }}
               onAiLookup={hasAiKey ? (w) => handleSearchSubmit(w) : undefined}
               aiError={aiError}
+              wordNotFound={aiWordNotFound}
             />
           )}
         </div>

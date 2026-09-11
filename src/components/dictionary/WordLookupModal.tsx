@@ -10,6 +10,7 @@ import { audioEngine } from '@/core/audioEngine'
 import { toggleStarWord } from '@/db'
 import { formatMeaningText } from '@/lib/wordDisplay'
 import { queryAiWordCore } from '@/lib/aiWordCore'
+import { AiDictionaryLookupError } from '@/lib/aiPrompts'
 
 export interface WordLookupModalProps {
   isOpen: boolean
@@ -31,6 +32,7 @@ export function WordLookupModal({
   const [mounted, setMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<DictSearchResult | null>(null)
+  const [lookupError, setLookupError] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -105,6 +107,7 @@ export function WordLookupModal({
     if (!cleanWord) return
 
     setIsLoading(true)
+    setLookupError(null)
 
     void (async () => {
       try {
@@ -134,7 +137,11 @@ export function WordLookupModal({
         }
       } catch (err) {
         if (!isCancelled) {
-          console.error('Word lookup error:', err)
+          if (err instanceof AiDictionaryLookupError) {
+            setLookupError(err.message)
+          } else {
+            console.error('Word lookup error:', err)
+          }
           setResult(null)
         }
       } finally {
@@ -379,7 +386,7 @@ export function WordLookupModal({
           </div>
           <div className="rounded-xl bg-white/[0.025] border border-white/5 p-2.5 sm:p-3">
             <p className="text-xs text-gray-400 leading-relaxed">
-              暂未在现有词库中查询到该单词的释义。
+              {lookupError || '暂未在现有词库中查询到该单词的释义。'}
             </p>
           </div>
         </div>

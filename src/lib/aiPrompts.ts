@@ -25,11 +25,16 @@ export const AI_ENGLISH_TEACHER_SYSTEM_PROMPT = `你是一位教学经验丰富�
 - 结构清晰，排版优雅：熟练使用 Markdown 标题、加粗、列表与对比表格，让知识要点一目了然。
 - 耐心专业，鼓励启发：用积极亲切的态度引导学习者建立语感与学习信心。`
 
-const JSON_ONLY_RULE = '必须且仅输出合法的单个 JSON 对象，不要输出解释、Markdown 或推导过程。'
+const WORD_NOT_FOUND_JSON =
+  '{"status":"error","error":{"code":"WORD_NOT_FOUND","message":"未找到严格匹配的英文单词"}}'
+const JSON_ONLY_RULE = `必须且仅输出合法的单个 JSON 对象，不要输出解释、Markdown 或推导过程。
+必须严格查询用户给出的原始单词，不得纠正拼写、联想近似词、替换为词形相近的单词或编造释义。
+如果无法确认该拼写是有效英文单词，必须原样返回：${WORD_NOT_FOUND_JSON}`
 
 export const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
 只生成查询首屏所需的基础数据：
 {
+  "status": "ok",
   "name": "discover",
   "trans": ["v. 发现；发掘；查明"],
   "usphone": "dɪˈskʌvər",
@@ -42,6 +47,7 @@ ${JSON_ONLY_RULE}`
 export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的英语构词分析引擎。
 根据单词、音标和释义生成：
 {
+  "status": "ok",
   "name": "discover",
   "syllables": ["dis", "cov", "er"],
   "silentIndices": [],
@@ -65,6 +71,7 @@ ${JSON_ONLY_RULE}`
 export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
 根据给定单词及中文释义生成：
 {
+  "status": "ok",
   "name": "discover",
   "examples": [
     { "en": "We must discover the truth.", "cn": "我们必须查明真相。" }
@@ -77,7 +84,10 @@ ${JSON_ONLY_RULE}`
 export function buildWordCoreQueryMessages(word: string) {
   return [
     { role: 'system' as const, content: AI_DICTIONARY_CORE_SYSTEM_PROMPT },
-    { role: 'user' as const, content: `查询英文单词：${JSON.stringify(word.trim())}` },
+    {
+      role: 'user' as const,
+      content: `精准查询英文单词：${JSON.stringify(word.trim())}。只允许返回该拼写本身的数据，不能联想或改成其他单词。`,
+    },
   ]
 }
 
@@ -240,6 +250,40 @@ export function repairTruncatedJson(raw: string): string {
   return s
 }
 
+export class AiDictionaryLookupError extends Error {
+  readonly code = 'WORD_NOT_FOUND'
+
+  constructor() {
+    super('未找到严格匹配的英文单词，请检查拼写。')
+    this.name = 'AiDictionaryLookupError'
+  }
+}
+
+function parseDictionaryPayload(json: string): RawDictEntry | null {
+  const parsed: unknown = JSON.parse(json)
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
+
+  const payload = parsed as {
+    status?: unknown
+    name?: unknown
+    error?: { code?: unknown }
+  }
+  if (
+    payload.status === 'error' &&
+    payload.error?.code === 'WORD_NOT_FOUND'
+  ) {
+    throw new AiDictionaryLookupError()
+  }
+  if (
+    (payload.status === undefined || payload.status === 'ok') &&
+    typeof payload.name === 'string' &&
+    payload.name.trim()
+  ) {
+    return parsed as RawDictEntry
+  }
+  return null
+}
+
 /**
  * 从大模型回复中提取并解析 JSON 对象（带抗截断与思考标签过滤的高鲁棒性解析器）
  */
@@ -265,11 +309,10 @@ export function extractJsonFromAiReply(reply: string): RawDictEntry {
   const outermost = findWordJsonObject(cleaned)
   if (outermost) {
     try {
-      const parsed = JSON.parse(outermost)
-      if (parsed && typeof parsed === 'object' && parsed.name) {
-        return parsed as RawDictEntry
-      }
-    } catch {
+      const parsed = parseDictionaryPayload(outermost)
+      if (parsed) return parsed
+    } catch (error) {
+      if (error instanceof AiDictionaryLookupError) throw error
       // 若提取的最外层包含微小语法问题，继续尝试修复
     }
   }
@@ -285,20 +328,20 @@ export function extractJsonFromAiReply(reply: string): RawDictEntry {
 
   // 尝试直接解析
   try {
-    const parsed = JSON.parse(candidateJson)
-    if (parsed && typeof parsed === 'object' && parsed.name) {
-      return parsed as RawDictEntry
-    }
-  } catch {
+    const parsed = parseDictionaryPayload(candidateJson)
+    if (parsed) return parsed
+  } catch (error) {
+    if (error instanceof AiDictionaryLookupError) throw error
     // 5. 兜底容错：模型输出在末尾被截断，执行智能语法修复
     try {
       const repaired = repairTruncatedJson(candidateJson)
-      const parsed = JSON.parse(repaired)
-      if (parsed && typeof parsed === 'object' && parsed.name) {
+      const parsed = parseDictionaryPayload(repaired)
+      if (parsed) {
         console.warn('AI dictionary reply was truncated by token limit and successfully auto-repaired.')
-        return parsed as RawDictEntry
+        return parsed
       }
-    } catch (repairErr) {
+    } catch (repairError) {
+      if (repairError instanceof AiDictionaryLookupError) throw repairError
       console.error('Failed to repair truncated AI JSON:', candidateJson)
       throw new Error('模型生成的词典数据格式不完整或受截断，请重试或检查 API 配置。')
     }

@@ -6,6 +6,7 @@ import {
   fetchAiDictionaryWordCore,
   type AiClientConfig,
 } from '@/lib/aiClient'
+import { isLikelyEnglishWord } from '@/lib/wordValidation'
 import type { WordItem } from '@/types'
 
 const inFlightCore = new Map<string, Promise<WordItem | null>>()
@@ -19,6 +20,8 @@ export function queryAiWordCore(
   config: AiClientConfig,
   word: string
 ): Promise<WordItem | null> {
+  if (!isLikelyEnglishWord(word)) return Promise.resolve(null)
+
   const key = `${configFingerprint(config)}::${word.trim().toLowerCase()}`
   const existing = inFlightCore.get(key)
   if (existing) return existing

@@ -3,6 +3,8 @@ import { dictionaryLoader, OFFICIAL_BOOK_FILE_MAP } from '@/core/dictionaryLoade
 import { db, getWordFromAiCache, searchWordsInAiCache } from '@/db'
 import { queryAiWordCore } from '@/lib/aiWordCore'
 import type { AiClientConfig } from '@/lib/aiClient'
+import { isLikelyEnglishWord } from '@/lib/wordValidation'
+import { AiDictionaryLookupError } from '@/lib/aiPrompts'
 
 
 export interface DictSearchResult {
@@ -187,7 +189,7 @@ export async function searchWordAcrossDictionaries(
   currentBookName: string = 'CET-4 核心词库'
 ): Promise<DictSearchResult | null> {
   const clean = query.trim().toLowerCase()
-  if (!clean) return null
+  if (!isLikelyEnglishWord(clean)) return null
 
   // ---- 核心流转第 1 步：优先从 AI 单词缓存表中检索 ----
   const cachedWord = await getWordFromAiCache(clean)
@@ -272,7 +274,7 @@ export async function searchWordSuggestions(
   limit: number = 6
 ): Promise<DictSuggestionItem[]> {
   const clean = prefix.trim().toLowerCase()
-  if (!clean) return []
+  if (!isLikelyEnglishWord(clean)) return []
 
   const results: DictSuggestionItem[] = []
   const seenWords = new Set<string>()
@@ -381,7 +383,7 @@ export interface ReconciledImportWord {
 export async function reconcileWordForImport(
   candidate: ImportWordCandidate,
   aiConfig?: AiClientConfig
-): Promise<ReconciledImportWord> {
+): Promise<ReconciledImportWord | null> {
   const cleanName = candidate.rawName.trim()
   const lowerName = cleanName.toLowerCase()
 
@@ -390,7 +392,13 @@ export async function reconcileWordForImport(
 
   // 本地与在线词典均未命中时，导入只查询 AI 基础数据，富内容留到实际展示时按需补全
   if (!queryResult && aiConfig?.apiKey?.trim()) {
-    const aiWord = await queryAiWordCore(aiConfig, cleanName)
+    let aiWord: WordItem | null
+    try {
+      aiWord = await queryAiWordCore(aiConfig, cleanName)
+    } catch (error) {
+      if (error instanceof AiDictionaryLookupError) return null
+      throw error
+    }
     if (aiWord) {
       queryResult = {
         word: aiWord,

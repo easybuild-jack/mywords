@@ -106,7 +106,7 @@ compile v. 编译；编纂`
         rawName: wordName,
         customMeaning,
       }, aiConfig)
-      entries.push(reconciled)
+      if (reconciled) entries.push(reconciled)
     }
 
     setParsedEntries(entries)
@@ -152,7 +152,7 @@ compile v. 编译；编纂`
                 : parseSyllablesCell(entry.syllables, name),
               customEtymology: entry.etymology ?? parseEtymologyCell(entry.morphemes, entry.derivation),
             }, aiConfig)
-            entries.push(reconciled)
+            if (reconciled) entries.push(reconciled)
           }
         } catch (err) {
           alert('JSON 解析失败，请检查文件格式')
@@ -201,7 +201,7 @@ compile v. 编译；编纂`
             customSyllables: parseSyllablesCell(rawSyllables, wordName),
             customEtymology: parseEtymologyCell(rawMorphemes, rawDerivation),
           }, aiConfig)
-          entries.push(reconciled)
+          if (reconciled) entries.push(reconciled)
         }
       }
 

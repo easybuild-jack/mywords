@@ -19,6 +19,7 @@ interface DictHeaderToolbarProps {
   isSearching: boolean
   suggestions?: DictSuggestionItem[]
   onSelectSuggestion?: (item: DictSuggestionItem) => void
+  validationError?: string | null
 }
 
 export function DictHeaderToolbar({
@@ -28,6 +29,7 @@ export function DictHeaderToolbar({
   isSearching,
   suggestions = [],
   onSelectSuggestion,
+  validationError,
 }: DictHeaderToolbarProps) {
   const { phoneticPreference, setPhoneticPreference } = useWorkspaceStore()
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -79,8 +81,14 @@ export function DictHeaderToolbar({
                 if (suggestions.length > 0) setShowSuggestions(true)
               }}
               onKeyDown={handleKeyDown}
+              aria-invalid={Boolean(validationError)}
+              title={validationError || undefined}
               placeholder="搜索单词 (如: discover, perspective...)"
-              className="w-full h-10 xl:h-11 pl-10 pr-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] focus:bg-black/40 border border-white/10 focus:border-primary/50 text-white placeholder:text-muted-foreground/60 text-xs xl:text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className={`w-full h-10 xl:h-11 pl-10 pr-9 rounded-xl bg-white/[0.06] hover:bg-white/[0.09] focus:bg-black/40 border text-white placeholder:text-muted-foreground/60 text-xs xl:text-sm font-medium transition-all focus:outline-none focus:ring-2 ${
+                validationError
+                  ? 'border-destructive/70 focus:border-destructive focus:ring-destructive/20'
+                  : 'border-white/10 focus:border-primary/50 focus:ring-primary/20'
+              }`}
             />
             {isSearching ? (
               <Loader2 className="absolute right-3 size-4 text-primary animate-spin" />
@@ -95,6 +103,11 @@ export function DictHeaderToolbar({
               </button>
             ) : null}
           </div>
+          {validationError && (
+            <p className="absolute left-2 top-full mt-1 text-[11px] text-destructive">
+              {validationError}
+            </p>
+          )}
 
           {/* 实时搜索联想下拉卡片（纯色不透明背景，层级覆盖背景内容） */}
           {showSuggestions && suggestions.length > 0 && (
