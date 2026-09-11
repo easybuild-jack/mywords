@@ -6,6 +6,7 @@ import {
   X,
   Trash2,
   Send,
+  Square,
   MessageSquare,
   History,
   Plus,
@@ -27,6 +28,8 @@ export function AiAssistantDrawer() {
     setInputPrompt,
     sendMessage,
     isThinking,
+    isStreaming,
+    stopGeneration,
     activeTab,
     setActiveTab,
     sessions,
@@ -34,6 +37,8 @@ export function AiAssistantDrawer() {
     createNewSession,
     switchSession,
     deleteSession,
+    aiConfig,
+    setApiKeyPromptOpen,
   } = useAiAssistantStore()
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -344,8 +349,13 @@ export function AiAssistantDrawer() {
   }
 
   const handleSend = () => {
-    if (!inputPrompt.trim()) return
-    sendMessage(inputPrompt)
+    const text = inputPrompt.trim()
+    if (!text) return
+    if (!aiConfig?.apiKey?.trim()) {
+      setApiKeyPromptOpen(true)
+      return
+    }
+    sendMessage(text)
   }
 
   const handleTextareaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -520,15 +530,22 @@ export function AiAssistantDrawer() {
                       <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
                     </div>
                     <p className="text-sm font-medium text-foreground mb-1">
-                      有什么我可以帮你的？
+                      我是你的专属 MyWords Copilot ✨
                     </p>
-                    <p className="text-xs text-muted-foreground max-w-[260px] leading-relaxed">
-                      随时输入你想探讨的任何语法结构、长难句拆解、学术写作润色或复杂问题。
+                    <p className="text-xs text-muted-foreground max-w-[270px] leading-relaxed">
+                      专注解答英语词汇构词、语法疑难、长难句结构拆解与学术写作润色。
                     </p>
+                    <div className="mt-3 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[11px] text-primary max-w-[270px] text-left leading-relaxed">
+                      ⚠️ <strong>教学专一原则</strong>：我只专注于英语学习领域，无法探讨与英语学习无关的外部话题哦。
+                    </div>
                   </div>
                 ) : (
-                  messages.map((msg) => (
-                    <AiMessageItem key={msg.id} message={msg} />
+                  messages.map((msg, idx) => (
+                    <AiMessageItem
+                      key={msg.id}
+                      message={msg}
+                      isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
+                    />
                   ))
                 )}
 
@@ -536,7 +553,7 @@ export function AiAssistantDrawer() {
                 {isThinking && (
                   <div className="flex items-center gap-2.5 p-2.5 px-3 rounded-xl bg-card border border-border text-xs text-muted-foreground animate-pulse my-3 w-fit shadow-sm">
                     <img src="/logo.svg" alt="思考中" className="size-3.5 object-contain animate-spin" />
-                    <span>MyWords Copilot 正在思考并组织回复...</span>
+                    <span>MyWords Copilot 正在深入分析并组织回复...</span>
                   </div>
                 )}
 
@@ -599,7 +616,7 @@ export function AiAssistantDrawer() {
                   value={inputPrompt}
                   onChange={(e) => setInputPrompt(e.target.value)}
                   onKeyDown={handleTextareaKeyDown}
-                  placeholder="向 MyWords Copilot 提问，按 Enter 发送..."
+                  placeholder="向 MyWords Copilot 提问（语法、长难句、词根、写作），按 Enter 发送..."
                   rows={2}
                   className="w-full bg-transparent px-3.5 pt-2.5 pb-9 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none resize-none caret-primary leading-relaxed"
                 />
@@ -609,14 +626,26 @@ export function AiAssistantDrawer() {
                     Enter 发送 · Shift+Enter 换行
                   </span>
 
-                  <button
-                    disabled={!inputPrompt.trim()}
-                    onClick={handleSend}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs btn-neon-glow hover:bg-primary-hover disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
-                  >
-                    <span>发送</span>
-                    <Send className="size-3" />
-                  </button>
+                  {isThinking || isStreaming ? (
+                    <button
+                      type="button"
+                      onClick={stopGeneration}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-500 font-bold text-xs transition-all cursor-pointer shadow-sm animate-pulse"
+                      title="停止流水生成"
+                    >
+                      <Square className="size-2.5 fill-rose-500" />
+                      <span>停止生成</span>
+                    </button>
+                  ) : (
+                    <button
+                      disabled={!inputPrompt.trim()}
+                      onClick={handleSend}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs btn-neon-glow hover:bg-primary-hover disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer shadow-sm"
+                    >
+                      <span>发送</span>
+                      <Send className="size-3" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

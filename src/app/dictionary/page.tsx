@@ -12,6 +12,9 @@ import {
   type DictSuggestionItem,
 } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
+import { dictionaryLoader } from '@/core/dictionaryLoader'
+import { fetchAiDictionaryWord } from '@/lib/aiClient'
+import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 import type { WordItem } from '@/types'
 
 export default function DictionaryPage() {
@@ -20,6 +23,11 @@ export default function DictionaryPage() {
   const activeWordIndex = useWorkspaceStore((s) => s.activeWordIndex)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
   const syncStarredWordIds = useWorkspaceStore((s) => s.syncStarredWordIds)
+
+  // AI 字典配置与状态
+  const aiConfig = useAiAssistantStore((s) => s.aiConfig)
+  const [isAiSearching, setIsAiSearching] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
 
   // 查词输入与状态
   const [searchQuery, setSearchQuery] = useState('')
@@ -87,6 +95,37 @@ export default function DictionaryPage() {
     },
     [currentBook?.id, currentBook?.name, phoneticPreference]
   )
+
+  // 校验是否已配置有效的大模型 API Key
+  const hasAiKey = Boolean(aiConfig?.apiKey?.trim())
+
+  // 场景二：AI 字典即时查询与生成
+  const handleAiLookup = async (wordToQuery: string) => {
+    // 字典场景：若未配置 API Key，静默不处理，不使用 AI 字典功能
+    if (!hasAiKey) return
+    if (isAiSearching) return
+    setIsAiSearching(true)
+    setAiError(null)
+
+    try {
+      const rawEntry = await fetchAiDictionaryWord(aiConfig, wordToQuery)
+      if (!rawEntry) return
+      const wordItem = await dictionaryLoader.convertRawEntryToWordItem(rawEntry)
+      setCurrentResult({
+        word: wordItem,
+        sourceBookId: 'ai_dict',
+        sourceBookName: 'AI 字典即时解析',
+        isCurrentBook: false,
+      })
+      setNotFoundQuery(null)
+      audioEngine.playPronunciation(wordItem.name, phoneticPreference)
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'AI 字典解析失败，请检查模型配置与网络'
+      setAiError(msg)
+    } finally {
+      setIsAiSearching(false)
+    }
+  }
 
   // 搜索框输入变化并防抖获取联想
   const handleSearchChange = (text: string) => {
@@ -172,6 +211,9 @@ export default function DictionaryPage() {
                 setSearchQuery(word)
                 handleSearchSubmit(word)
               }}
+              onAiLookup={hasAiKey ? handleAiLookup : undefined}
+              isAiSearching={isAiSearching}
+              aiError={aiError}
             />
           )}
         </div>

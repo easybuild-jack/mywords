@@ -33,10 +33,18 @@ import type { ShortcutConfig } from '@/types'
 
 type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync'
 
+const RECOMMENDED_MODELS: Record<string, string[]> = {
+  deepseek: ['deepseek-chat', 'deepseek-reasoner'],
+  doubao: ['doubao-1-5-pro-32k', 'doubao-1-5-lite-32k'],
+  openai: ['gpt-4o', 'gpt-4o-mini'],
+  qwen: ['qwen-plus', 'qwen-turbo'],
+}
+
 export function SettingsModal() {
   const {
     isSettingsModalOpen,
     setSettingsModalOpen,
+    settingsInitialTab,
     keySoundPack,
     setKeySoundPack,
     keySoundVolume,
@@ -57,6 +65,13 @@ export function SettingsModal() {
   } = useWorkspaceStore()
 
   const [activeTab, setActiveTab] = useState<SettingsTab>('audio')
+
+  // 若通过外部快捷方式或引导指定了初始 Tab，自动切换至对应设置页
+  useEffect(() => {
+    if (isSettingsModalOpen && settingsInitialTab) {
+      setActiveTab(settingsInitialTab)
+    }
+  }, [isSettingsModalOpen, settingsInitialTab])
   const [recordingAction, setRecordingAction] = useState<keyof ShortcutConfig | null>(null)
 
   // AI 大模型配置状态
@@ -134,7 +149,7 @@ export function SettingsModal() {
   if (!isSettingsModalOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
+    <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
       <div className="w-full max-w-5xl xl:max-w-6xl h-[680px] xl:h-[760px] 2xl:h-[820px] max-h-[92vh] min-h-[560px] rounded-3xl bg-sidebar border border-white/10 p-6 sm:p-8 shadow-2xl text-white flex flex-col overflow-hidden">
         {/* 顶部标题与关闭 */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
@@ -755,6 +770,29 @@ export function SettingsModal() {
                       placeholder={currentPreset.modelPlaceholder || currentPreset.defaultModel}
                       className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
                     />
+                    {/* 常用推荐模型快捷标签 */}
+                    {RECOMMENDED_MODELS[aiConfig.provider] && (
+                      <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                        <span className="text-xs text-muted-foreground">常用推荐：</span>
+                        {RECOMMENDED_MODELS[aiConfig.provider].map((m) => (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => {
+                              updateAiConfig({ model: m })
+                              setAiTestResult(null)
+                            }}
+                            className={`px-2 py-0.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                              aiConfig.model === m
+                                ? 'bg-primary/20 text-primary border border-primary/40 font-bold'
+                                : 'bg-white/5 text-muted-foreground hover:text-white hover:bg-white/10 border border-white/10'
+                            }`}
+                          >
+                            {m}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-sm text-muted-foreground leading-relaxed">
                       <span>
                         {aiConfig.provider === 'doubao' ? (
@@ -825,6 +863,46 @@ export function SettingsModal() {
                         )}
                       </div>
                     )}
+                  </div>
+                </div>
+
+                {/* AI 核心应用场景与提示词卡片 */}
+                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/20 text-primary border border-primary/30">
+                        场景一：智能问答
+                      </span>
+                      <h4 className="text-sm font-semibold text-white">MyWords Copilot 系统提示词 (System Prompt)</h4>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => updateAiConfig({ systemPrompt: DEFAULT_AI_CONFIG.systemPrompt })}
+                      className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors cursor-pointer"
+                      title="恢复默认系统提示词"
+                    >
+                      <RotateCcw className="size-3" />
+                      <span>恢复默认提示词</span>
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    内置高水准英语教学辅导提示词，专注于辅导英语词汇构词、语法难点、长难句结构拆解与写作润色，并坚决拒绝任何与英语学习无关的外部话题。
+                  </p>
+                  <textarea
+                    rows={5}
+                    value={aiConfig.systemPrompt}
+                    onChange={(e) => updateAiConfig({ systemPrompt: e.target.value })}
+                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-xs font-mono text-white/90 focus:outline-none focus:border-primary/60 leading-relaxed resize-none"
+                    placeholder="输入 MyWords Copilot 系统提示词..."
+                  />
+                  <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/20 text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5">
+                    <span className="text-primary font-bold text-sm">✨</span>
+                    <div>
+                      <strong className="text-white">场景二：AI 字典（结构化单词数据查询）</strong>
+                      <p className="mt-0.5 text-muted-foreground/90">
+                        在词典页面未收录或请求 AI 深度查词时，系统将以词库真实单词为参考示例，自动依照 word-data-builder skill 规则生成完整规范的单词 JSON 数据。
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

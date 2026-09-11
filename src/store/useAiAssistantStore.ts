@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { callAiChatCompletion, type AiChatMessage } from '@/lib/aiClient'
+import { callAiChatCompletion, streamAiChatCompletion, type AiChatMessage } from '@/lib/aiClient'
+import { AI_ENGLISH_TEACHER_SYSTEM_PROMPT } from '@/lib/aiPrompts'
+
+// 模块级保存当前活跃的流式请求控制器，支持随时终止流水输出
+let activeChatAbortController: AbortController | null = null
 
 export interface AiMessage {
   id: string
@@ -92,7 +96,7 @@ export const AI_PROVIDER_PRESETS: Record<AiProviderId, AiProviderPreset> = {
     officialUrl: 'https://ollama.com/',
     modelsDocUrl: 'https://ollama.com/library',
     modelPlaceholder: '输入服务端支持的模型标识，如 llama3、qwen2.5',
-    hidden: true, // 暂时隐藏，待本地/私有测试环境就绪后再开放
+    hidden: true,
   },
 }
 
@@ -113,17 +117,13 @@ export const DEFAULT_AI_CONFIG: AiModelConfig = {
   model: AI_PROVIDER_PRESETS.deepseek.defaultModel,
   temperature: 0.7,
   maxTokens: 4096,
-  systemPrompt: `你是一位专业、渊博且耐心的英语语言学导师与学习伙伴，属于 MyWords 英语单词学习软件的专属智能副驾（MyWords Copilot）。
-你的职责：
-1. 解答用户关于英语单词、词根词缀、搭配惯用法、语法疑难、长难句结构拆解、学术写作润色等问题；
-2. 回复力求准确、条理清晰、深入浅出，适度结合词源演变和肌肉记忆技巧；
-3. 支持并在合适的时候使用 Markdown 标题、列表、表格和代码块，使内容易于阅读与理解；
-4. 语言亲切专业、鼓励启发。`,
+  systemPrompt: AI_ENGLISH_TEACHER_SYSTEM_PROMPT,
 }
 
 interface AiAssistantState {
   isOpen: boolean
   isThinking: boolean
+  isStreaming: boolean
   inputPrompt: string
   activeTab: 'chat' | 'history'
   currentSessionId: string
@@ -142,6 +142,10 @@ interface AiAssistantState {
   clearMessages: () => void
   clearAllSessions: () => void
   sendMessage: (customText?: string) => Promise<void>
+  stopGeneration: () => void
+
+  isApiKeyPromptOpen: boolean
+  setApiKeyPromptOpen: (open: boolean) => void
 
   updateAiConfig: (partial: Partial<AiModelConfig>) => void
   resetAiConfig: () => void
@@ -155,7 +159,7 @@ const INITIAL_MESSAGES: AiMessage[] = [
     id: 'welcome-msg',
     role: 'assistant',
     content:
-      '你好！我是你的 **MyWords Copilot** ✨\n你可以随时向我提问关于英语语法疑难、长难句结构拆解、学术写作润色，或是任何复杂问题的深入探讨。',
+      '你好！我是你的专属 **MyWords Copilot** ✨\n\n你可以随时向我提问关于英语单词记忆、构词法拆解、语法疑难、长难句结构剖析或学术写作润色。\n\n> ⚠️ **温馨提示**：作为您的专属智能导师，我专注于英语学习与语言能力提升，会礼貌拒绝一切与英语学习无关的外部话题哦。',
     timestamp: Date.now(),
   },
 ]
@@ -163,7 +167,7 @@ const INITIAL_MESSAGES: AiMessage[] = [
 const INITIAL_SESSIONS: AiSession[] = [
   {
     id: DEFAULT_SESSION_ID,
-    title: '英语深度探讨与答疑',
+    title: '英语深度辅导与答疑',
     createdAt: Date.now() - 3600000,
     updatedAt: Date.now(),
     messages: INITIAL_MESSAGES,
@@ -175,6 +179,8 @@ export const useAiAssistantStore = create<AiAssistantState>()(
     (set, get) => ({
       isOpen: false,
       isThinking: false,
+      isStreaming: false,
+      isApiKeyPromptOpen: false,
       inputPrompt: '',
       activeTab: 'chat',
       currentSessionId: DEFAULT_SESSION_ID,
@@ -187,6 +193,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       toggleDrawer: () => set((state) => ({ isOpen: !state.isOpen })),
       setInputPrompt: (val: string) => set({ inputPrompt: val }),
       setActiveTab: (tab: 'chat' | 'history') => set({ activeTab: tab }),
+      setApiKeyPromptOpen: (open: boolean) => set({ isApiKeyPromptOpen: open }),
 
       updateAiConfig: (partial: Partial<AiModelConfig>) =>
         set((state) => ({
@@ -222,7 +229,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
               id: `welcome-${Date.now()}`,
               role: 'assistant',
               content:
-                '你好！我是你的 **MyWords Copilot** ✨\n新对话已开启，请问有什么可以协助你的？',
+                '你好！我是你的专属 **MyWords Copilot** ✨\n新对话已开启，请问在英语学习、语法词汇或长难句方面有什么可以协助你？',
               timestamp: Date.now(),
             },
           ],
@@ -238,11 +245,20 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       },
 
       switchSession: (sessionId: string) => {
+        if (sessionId === get().currentSessionId) return
+
+        if (activeChatAbortController) {
+          activeChatAbortController.abort()
+          activeChatAbortController = null
+        }
+
         const target = get().sessions.find((s) => s.id === sessionId)
         if (target) {
           set({
             currentSessionId: sessionId,
             messages: target.messages,
+            isThinking: false,
+            isStreaming: false,
             activeTab: 'chat',
           })
         }
@@ -250,6 +266,15 @@ export const useAiAssistantStore = create<AiAssistantState>()(
 
       deleteSession: (sessionId: string) => {
         const state = get()
+        const isCurrentDeleted = sessionId === state.currentSessionId
+
+        if (isCurrentDeleted) {
+          if (activeChatAbortController) {
+            activeChatAbortController.abort()
+            activeChatAbortController = null
+          }
+        }
+
         const remaining = state.sessions.filter((s) => s.id !== sessionId)
 
         if (remaining.length === 0) {
@@ -265,16 +290,19 @@ export const useAiAssistantStore = create<AiAssistantState>()(
             sessions: [freshSession],
             currentSessionId: freshId,
             messages: freshSession.messages,
+            isThinking: false,
+            isStreaming: false,
             activeTab: 'chat',
           })
           return
         }
 
-        const isCurrentDeleted = sessionId === state.currentSessionId
         const nextSession = isCurrentDeleted ? remaining[0] : null
 
         set({
           sessions: remaining,
+          isThinking: isCurrentDeleted ? false : state.isThinking,
+          isStreaming: isCurrentDeleted ? false : state.isStreaming,
           ...(nextSession
             ? {
                 currentSessionId: nextSession.id,
@@ -284,12 +312,25 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         })
       },
 
+      stopGeneration: () => {
+        if (activeChatAbortController) {
+          activeChatAbortController.abort()
+          activeChatAbortController = null
+        }
+        set({ isThinking: false, isStreaming: false })
+      },
+
       clearMessages: () => {
+        if (activeChatAbortController) {
+          activeChatAbortController.abort()
+          activeChatAbortController = null
+        }
+
         const state = get()
         const welcomeMsg: AiMessage = {
           id: `welcome-${Date.now()}`,
           role: 'assistant',
-          content: '当前会话已重置，您可以继续开启新的讨论。',
+          content: '当前会话已重置，您可以继续提出英语学习相关的问题。',
           timestamp: Date.now(),
         }
 
@@ -302,10 +343,17 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         set({
           messages: [welcomeMsg],
           sessions: updatedSessions,
+          isThinking: false,
+          isStreaming: false,
         })
       },
 
       clearAllSessions: () => {
+        if (activeChatAbortController) {
+          activeChatAbortController.abort()
+          activeChatAbortController = null
+        }
+
         const freshId = `session-${Date.now()}`
         const freshSession: AiSession = {
           id: freshId,
@@ -318,6 +366,8 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           sessions: [freshSession],
           currentSessionId: freshId,
           messages: freshSession.messages,
+          isThinking: false,
+          isStreaming: false,
           activeTab: 'chat',
         })
       },
@@ -326,6 +376,19 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         const state = get()
         const textToSend = (customText ?? state.inputPrompt).trim()
         if (!textToSend) return
+
+        // 场景一：智能问答场景，若未配置 API Key 直接弹框提示，静默不执行模拟生成
+        const hasApiKey = Boolean(state.aiConfig?.apiKey?.trim())
+        if (!hasApiKey) {
+          set({ isApiKeyPromptOpen: true, isThinking: false, isStreaming: false })
+          return
+        }
+
+        // 如果之前有正在进行的流式输出，先中止
+        if (activeChatAbortController) {
+          activeChatAbortController.abort()
+          activeChatAbortController = null
+        }
 
         const userMsgId = `user-${Date.now()}`
         const newUserMessage: AiMessage = {
@@ -347,7 +410,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         }
 
         const updatedTitle =
-          currentSess.title === '新对话' || currentSess.title === '英语深度探讨与答疑'
+          currentSess.title === '新对话' || currentSess.title === '英语深度辅导与答疑' || currentSess.title === '英语深度探讨与答疑'
             ? textToSend.slice(0, 20)
             : currentSess.title
 
@@ -363,56 +426,105 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           messages: updatedMessages,
           inputPrompt: '',
           isThinking: true,
+          isStreaming: false,
           isOpen: true,
           activeTab: 'chat',
         })
 
-        // 判断是否已配置真实 API Key
-        const hasApiKey = Boolean(state.aiConfig?.apiKey?.trim())
+        // 流水更新辅助：逐 chunk 实时渲染至 Assistant 消息
+        const assistantMsgId = `ai-${Date.now()}`
+        let accumulatedContent = ''
+        let hasAppendedAssistantMsg = false
 
-        if (hasApiKey) {
-          try {
-            // 组装前置 System Prompt 与近期历史记录（最近 10 条）
-            const chatPayload: AiChatMessage[] = [
-              { role: 'system', content: state.aiConfig.systemPrompt || DEFAULT_AI_CONFIG.systemPrompt },
-              ...updatedMessages.slice(-10).map((m) => ({
-                role: m.role as 'system' | 'user' | 'assistant',
-                content: m.content,
-              })),
-            ]
+        const handleIncomingChunk = (chunk: string) => {
+          accumulatedContent += chunk
+          const curMsgs = get().messages
+          const curSessions = get().sessions
 
-            const replyContent = await callAiChatCompletion(state.aiConfig, chatPayload)
-
-            const aiResponse: AiMessage = {
-              id: `ai-${Date.now()}`,
+          if (!hasAppendedAssistantMsg) {
+            hasAppendedAssistantMsg = true
+            const newAssistantMsg: AiMessage = {
+              id: assistantMsgId,
               role: 'assistant',
-              content: replyContent,
+              content: accumulatedContent,
               timestamp: Date.now(),
             }
-
-            const finalMessages = [...get().messages, aiResponse]
-            const finalSessions = get().sessions.map((s) =>
+            const nextMsgs = [...curMsgs, newAssistantMsg]
+            const nextSessions = curSessions.map((s) =>
               s.id === get().currentSessionId
-                ? { ...s, messages: finalMessages, updatedAt: Date.now() }
+                ? { ...s, messages: nextMsgs, updatedAt: Date.now() }
                 : s
             )
-
             set({
-              messages: finalMessages,
-              sessions: finalSessions,
               isThinking: false,
+              isStreaming: true,
+              messages: nextMsgs,
+              sessions: nextSessions,
             })
+          } else {
+            const nextMsgs = curMsgs.map((m) =>
+              m.id === assistantMsgId ? { ...m, content: accumulatedContent } : m
+            )
+            const nextSessions = curSessions.map((s) =>
+              s.id === get().currentSessionId
+                ? { ...s, messages: nextMsgs, updatedAt: Date.now() }
+                : s
+            )
+            set({
+              messages: nextMsgs,
+              sessions: nextSessions,
+            })
+          }
+        }
+
+        // 开始真实大模型流式调用
+        const controller = new AbortController()
+        activeChatAbortController = controller
+
+        try {
+          // 组装系统提示词（高级英语老师）与近期历史记录（最近 10 条）
+          const chatPayload: AiChatMessage[] = [
+            { role: 'system', content: state.aiConfig.systemPrompt || DEFAULT_AI_CONFIG.systemPrompt },
+            ...updatedMessages.slice(-10).map((m) => ({
+              role: m.role as 'system' | 'user' | 'assistant',
+              content: m.content,
+            })),
+          ]
+
+          // 对话场景：采用流式输出 (stream: true)
+          await streamAiChatCompletion(
+            state.aiConfig,
+            chatPayload,
+            (chunk) => handleIncomingChunk(chunk),
+            controller.signal
+          )
+
+          activeChatAbortController = null
+          set({
+            isThinking: false,
+            isStreaming: false,
+          })
+          return
+        } catch (err: unknown) {
+          activeChatAbortController = null
+
+          // 用户主动中断
+          if (controller.signal.aborted) {
+            set({ isThinking: false, isStreaming: false })
             return
-          } catch (err: unknown) {
-            const errorMsg = err instanceof Error ? err.message : '大模型请求异常'
-            const aiResponse: AiMessage = {
+          }
+
+          const errorMsg = err instanceof Error ? err.message : '大模型流式调用异常'
+
+          if (!hasAppendedAssistantMsg) {
+            const aiErrorResponse: AiMessage = {
               id: `ai-err-${Date.now()}`,
               role: 'assistant',
               content: `⚠️ **模型调用失败**：${errorMsg}\n\n💡 建议：请点击左下角「偏好设置 -> AI 模型配置」，检查 API Key、接口地址 (Endpoint) 或使用「测试连接」排查。`,
               timestamp: Date.now(),
             }
 
-            const finalMessages = [...get().messages, aiResponse]
+            const finalMessages = [...get().messages, aiErrorResponse]
             const finalSessions = get().sessions.map((s) =>
               s.id === get().currentSessionId
                 ? { ...s, messages: finalMessages, updatedAt: Date.now() }
@@ -423,31 +535,18 @@ export const useAiAssistantStore = create<AiAssistantState>()(
               messages: finalMessages,
               sessions: finalSessions,
               isThinking: false,
+              isStreaming: false,
             })
-            return
+          } else {
+            // 已经流水输出一部分后中断，附加轻量提示
+            handleIncomingChunk(`\n\n*(⚠️ 连接中断: ${errorMsg})*`)
+            set({ isThinking: false, isStreaming: false })
           }
         }
-
-        // 未配置 Key 时的智能模拟演示模式
-        setTimeout(() => {
-          const aiResponse = generateSimulatedAiResponse(textToSend)
-          const finalMessages = [...get().messages, aiResponse]
-          const finalSessions = get().sessions.map((s) =>
-            s.id === get().currentSessionId
-              ? { ...s, messages: finalMessages, updatedAt: Date.now() }
-              : s
-          )
-
-          set({
-            messages: finalMessages,
-            sessions: finalSessions,
-            isThinking: false,
-          })
-        }, 600)
       },
     }),
     {
-      name: 'mywords_ai_assistant_v5',
+      name: 'mywords_ai_assistant_v6',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         currentSessionId: state.currentSessionId,
@@ -468,125 +567,14 @@ export const useAiAssistantStore = create<AiAssistantState>()(
             state.aiConfig.endpoint = AI_PROVIDER_PRESETS.deepseek.defaultEndpoint
             state.aiConfig.model = AI_PROVIDER_PRESETS.deepseek.defaultModel
           }
+          // 同步确保系统提示词更新为最新的高级英语名师人设
+          if (!state.aiConfig.systemPrompt || state.aiConfig.systemPrompt.includes('专业、渊博且耐心的英语语言学导师')) {
+            state.aiConfig.systemPrompt = AI_ENGLISH_TEACHER_SYSTEM_PROMPT
+          }
         }
       },
     }
   )
 )
 
-/** 针对复杂问题与通用探讨的高质量响应生成器（未绑 Key 时的本地演示） */
-function generateSimulatedAiResponse(prompt: string): AiMessage {
-  const timestamp = Date.now()
-  const trimmed = prompt.trim()
 
-  // 1. 若用户询问 JSON 格式
-  if (/(json|结构化数据|数据格式)/i.test(trimmed)) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content: JSON.stringify(
-        {
-          module: 'vocabulary_analysis',
-          target: 'complex_word_inquiry',
-          status: 'success',
-          data: {
-            phonetic: '/kəmˈplɛks/',
-            level: 'IELTS / TOEFL',
-            definitions: [
-              { pos: 'adj', meaning: '复杂的；难懂的' },
-              { pos: 'n', meaning: '复合体；综合设施；情结' },
-            ],
-            synonyms: ['intricate', 'complicated', 'sophisticated'],
-            roots: {
-              prefix: 'com- (共同/完全)',
-              base: 'plectere (编织/折叠)',
-              literalMeaning: '编织交错在一起的',
-            },
-          },
-        },
-        null,
-        2
-      ),
-      timestamp,
-    }
-  }
-
-  // 2. 若用户询问 HTML 格式
-  if (/(html|网页|页面|样式模板)/i.test(trimmed)) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Word Flashcard</title>
-  <style>
-    .card { padding: 20px; border-radius: 12px; background: #161b22; color: #5eead4; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>Serendipity /ˌser.ənˈdɪp.ə.ti/</h2>
-    <p>The occurrence of events by chance in a happy or beneficial way.</p>
-  </div>
-</body>
-</html>`,
-      timestamp,
-    }
-  }
-
-  // 3. 若用户询问 Shell / 终端命令
-  if (/(shell|bash|脚本|命令行|终端|npm|git)/i.test(trimmed)) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content: `#!/bin/bash
-# 词库本地同步与备份脚本
-echo "正在备份 MyWords 学习进度..."
-mkdir -p ./backups
-curl -s -X POST https://api.mywords.local/sync \\
-  -H "Authorization: Bearer MYWORDS_TOKEN" \\
-  -o ./backups/words_$(date +%Y%m%d).json
-
-echo "备份完成！"`,
-      timestamp,
-    }
-  }
-
-  // 4. 纯文本回复
-  if (/^(hi|hello|hey|你好|哈喽|嗨)[!！\s]*$/i.test(trimmed)) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content:
-        '你好！我是你的 MyWords Copilot。你可以向我咨询任何问题，包括获取 HTML 模板、JSON 数据结构、Shell 命令行脚本、Markdown 笔记，或者讨论复杂的语法疑难。\n\n💡 提示：您也可以在「偏好设置 -> AI 模型配置」中配置 DeepSeek、豆包或 ChatGPT 的 API Key，开启真实大模型联网深度对话！',
-      timestamp,
-    }
-  }
-
-  // 通用 Markdown 回答
-  return {
-    id: `ai-${timestamp}`,
-    role: 'assistant',
-    content: `收到你的提问: **${trimmed}**
-
-对于这个问题，我们可以从核心逻辑、语法拆解与应用实践三个维度来深入探讨：
-
-### 1. 核心概念与词义脉络
-词汇在实际学术或职场语境中具有丰富的层次，建议结合**构词法拆解**（词根词缀）加深长期肌肉记忆。
-
-### 2. 经典语境搭配与辨析
-* **学术写作**: 常用于阐明因果、论据支撑或对比对照关系；
-* **口语表达**: 吐字节奏需配合重音与弱读音节；
-
-\`\`\`markdown
-# 学习要点速记
-- 音节划分: 注意主重音位置
-- 常用搭配: be associated with / contribute to
-\`\`\`
-
-> 💡 提示：您尚未绑定大模型 API Key，当前为本地演示应答。前往「偏好设置 -> AI 模型配置」绑定 DeepSeek、豆包或 ChatGPT 的 Key 即可解锁全量大模型智能问答！`,
-    timestamp,
-  }
-}

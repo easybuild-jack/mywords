@@ -7,9 +7,10 @@ import { AiContentRenderer } from './AiContentRenderer'
 
 interface AiMessageItemProps {
   message: AiMessage
+  isStreaming?: boolean
 }
 
-export function AiMessageItem({ message }: AiMessageItemProps) {
+export function AiMessageItem({ message, isStreaming = false }: AiMessageItemProps) {
   const isUser = message.role === 'user'
   const [copied, setCopied] = useState(false)
 
@@ -43,6 +44,11 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
           <span className="text-xs font-semibold text-foreground tracking-wide">
             MyWords Copilot
           </span>
+          {isStreaming && (
+            <span className="text-[10px] text-primary font-medium animate-pulse">
+              ● 正在生成...
+            </span>
+          )}
           <span className="text-[10px] text-muted-foreground font-mono">
             {formatTime(message.timestamp)}
           </span>
@@ -64,6 +70,12 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
       {/* 主回复卡片：支持 html, markdown, json, shell，无标记时默认纯文本展示 */}
       <div className="rounded-2xl rounded-tl-sm p-4 bg-card border border-border text-foreground text-sm leading-relaxed shadow-sm select-text">
         <AiContentRenderer content={message.content} />
+        {isStreaming && (
+          <span
+            className="inline-block w-1.5 h-3.5 ml-1 bg-primary align-middle animate-pulse rounded-xs shadow-xs"
+            title="流水输出中..."
+          />
+        )}
       </div>
     </div>
   )

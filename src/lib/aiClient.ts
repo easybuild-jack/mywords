@@ -1,7 +1,14 @@
 /**
  * OpenAI 兼容协议大模型客户端
  * 支持 DeepSeek、字节豆包 (Doubao/Ark)、ChatGPT/OpenAI、通义千问 (Qwen) 以及各类自定义中转/本地端点 (Ollama 等)
+ *
+ * 核心涵盖两大使用场景：
+ * 1. 智能问答场景 (高级英语老师，拒绝非英语学习话题)
+ * 2. 单词查询场景 (AI 字典，依照词库标准与规则生成结构化 JSON)
  */
+
+import type { RawDictEntry } from '@/core/dictionaryLoader'
+import { buildWordQueryMessages, extractJsonFromAiReply } from '@/lib/aiPrompts'
 
 export interface AiChatMessage {
   role: 'system' | 'user' | 'assistant'
@@ -29,7 +36,7 @@ export function resolveChatCompletionsUrl(rawEndpoint: string): string {
   return `${clean}/chat/completions`
 }
 
-/** 测试大模型连通性与 Key 有效性 */
+/** 测试大模型连通性与 Key 有效性 (含代理 fallback) */
 export async function testAiConnection(
   config: AiClientConfig
 ): Promise<{ success: boolean; latencyMs?: number; error?: string }> {
@@ -52,9 +59,7 @@ export async function testAiConnection(
       },
       body: JSON.stringify({
         model: config.model || 'deepseek-chat',
-        messages: [
-          { role: 'user', content: 'Hi' },
-        ],
+        messages: [{ role: 'user', content: 'Hi' }],
         max_tokens: 5,
         temperature: 0.1,
       }),
@@ -83,6 +88,24 @@ export async function testAiConnection(
 
     return { success: true, latencyMs }
   } catch (err: unknown) {
+    // 若浏览器直连出现网络故障/跨域错误，尝试走本地服务端安全代理
+    try {
+      const proxyRes = await fetch('/api/ai/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: config.endpoint,
+          apiKey: config.apiKey,
+          model: config.model,
+        }),
+      })
+      if (proxyRes.ok) {
+        return await proxyRes.json()
+      }
+    } catch {
+      // 忽略代理降级失败，保留原始异常
+    }
+
     const latencyMs = Date.now() - startTime
     if (err instanceof Error) {
       if (err.name === 'AbortError') {
@@ -94,7 +117,188 @@ export async function testAiConnection(
   }
 }
 
-/** 执行实际对话请求 */
+/**
+ * 从 SSE 数据流 (ReadableStream) 中实时逐行解析并触发 onChunk 回调
+ */
+export async function readSseStream(
+  response: Response,
+  onChunk: (chunk: string) => void
+): Promise<string> {
+  if (!response.body) {
+    throw new Error('未接收到流式响应数据')
+  }
+
+  const reader = response.body.getReader()
+  const decoder = new TextDecoder('utf-8')
+  let accumulated = ''
+  let buffer = ''
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() ?? ''
+
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith(':')) continue
+        if (trimmed === 'data: [DONE]') continue
+
+        if (trimmed.startsWith('data:')) {
+          const jsonStr = trimmed.slice(5).trim()
+          if (!jsonStr) continue
+          try {
+            const parsed = JSON.parse(jsonStr)
+            const delta = parsed?.choices?.[0]?.delta
+            const chunk = delta?.content ?? delta?.reasoning_content ?? ''
+            if (chunk) {
+              accumulated += chunk
+              onChunk(chunk)
+            }
+          } catch {
+            // 忽略未成完整 JSON 的片段行
+          }
+        }
+      }
+    }
+
+    // 读完后如果末尾仍有缓冲区数据
+    if (buffer.trim().startsWith('data:') && !buffer.includes('[DONE]')) {
+      try {
+        const parsed = JSON.parse(buffer.trim().slice(5).trim())
+        const chunk = parsed?.choices?.[0]?.delta?.content ?? parsed?.choices?.[0]?.delta?.reasoning_content ?? ''
+        if (chunk) {
+          accumulated += chunk
+          onChunk(chunk)
+        }
+      } catch {
+        // ignore
+      }
+    }
+  } finally {
+    reader.releaseLock()
+  }
+
+  return accumulated
+}
+
+/**
+ * 场景一：智能问答对话接口（流式输出 / 流水输出）
+ * 专供对话场景使用，通过 SSE 协议实现打字机逐字输出效果
+ */
+export async function streamAiChatCompletion(
+  config: AiClientConfig,
+  messages: AiChatMessage[],
+  onChunk: (chunk: string) => void,
+  signal?: AbortSignal
+): Promise<string> {
+  if (!config.apiKey?.trim()) {
+    throw new Error('未配置 API Key，请在偏好设置中绑定您的模型密钥。')
+  }
+
+  const url = resolveChatCompletionsUrl(config.endpoint)
+
+  // 1. 尝试直接请求远端大模型流式端点 (stream: true)
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${config.apiKey.trim()}`,
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages,
+        temperature: config.temperature ?? 0.7,
+        max_tokens: config.maxTokens ?? 4096,
+        stream: true,
+      }),
+      signal,
+    })
+
+    if (!res.ok) {
+      let errMsg = `接口返回状态码 ${res.status}`
+      try {
+        const errJson = await res.json()
+        errMsg = errJson?.error?.message || errJson?.message || errMsg
+      } catch {
+        const rawText = await res.text()
+        if (rawText) errMsg = rawText.slice(0, 150)
+      }
+      throw new Error(errMsg)
+    }
+
+    // 若远端返回的是 SSE 流或数据体
+    if (res.headers.get('content-type')?.includes('text/event-stream') || res.body) {
+      return await readSseStream(res, onChunk)
+    }
+
+    // 兜底：若远端强行返回了完整 JSON
+    const data = await res.json()
+    const content = data?.choices?.[0]?.message?.content || ''
+    if (content) {
+      onChunk(content)
+      return content
+    }
+    throw new Error('未获取到有效流式响应')
+  } catch (err: unknown) {
+    if (signal?.aborted) {
+      throw new Error('用户已中断生成')
+    }
+
+    // 2. 直连遇到跨域 CORS 或网络拦截时，降级通过本地 Next.js 服务端路由流式代理
+    try {
+      const proxyRes = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: config.endpoint,
+          apiKey: config.apiKey,
+          model: config.model,
+          messages,
+          temperature: config.temperature ?? 0.7,
+          maxTokens: config.maxTokens ?? 4096,
+          stream: true,
+        }),
+        signal,
+      })
+
+      if (proxyRes.ok) {
+        if (proxyRes.headers.get('content-type')?.includes('text/event-stream') || proxyRes.body) {
+          return await readSseStream(proxyRes, onChunk)
+        }
+        const data = await proxyRes.json()
+        const content = data?.choices?.[0]?.message?.content || ''
+        if (content) {
+          onChunk(content)
+          return content
+        }
+      } else {
+        const errJson = await proxyRes.json().catch(() => null)
+        if (errJson?.error?.message) {
+          throw new Error(errJson.error.message)
+        }
+      }
+    } catch (proxyErr) {
+      if (proxyErr instanceof Error && !proxyErr.message.includes('Failed to fetch')) {
+        throw proxyErr
+      }
+    }
+
+    if (err instanceof Error) {
+      throw err
+    }
+    throw new Error('网络请求异常，请检查接口与网络连接。')
+  }
+}
+
+/**
+ * 场景二：单词查询非流式请求接口（非流式 / 一次性返回）
+ * 专供词典场景或不需要打字机流式输出的结构化数据提取
+ */
 export async function callAiChatCompletion(
   config: AiClientConfig,
   messages: AiChatMessage[]
@@ -104,7 +308,6 @@ export async function callAiChatCompletion(
   }
 
   const url = resolveChatCompletionsUrl(config.endpoint)
-
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 60000)
 
@@ -120,7 +323,7 @@ export async function callAiChatCompletion(
         messages,
         temperature: config.temperature ?? 0.7,
         max_tokens: config.maxTokens ?? 4096,
-        stream: false,
+        stream: false, // 严格非流式
       }),
       signal: controller.signal,
     })
@@ -148,6 +351,41 @@ export async function callAiChatCompletion(
     return reply
   } catch (err: unknown) {
     clearTimeout(timeoutId)
+
+    // 若直连遇到跨域 CORS 或网络故障，自动通过本地 Next.js 服务端路由非流式代理
+    try {
+      const proxyRes = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          endpoint: config.endpoint,
+          apiKey: config.apiKey,
+          model: config.model,
+          messages,
+          temperature: config.temperature ?? 0.7,
+          maxTokens: config.maxTokens ?? 4096,
+          stream: false, // 严格非流式
+        }),
+      })
+
+      if (proxyRes.ok) {
+        const proxyData = await proxyRes.json()
+        const reply = proxyData?.choices?.[0]?.message?.content
+        if (typeof reply === 'string') {
+          return reply
+        }
+      } else {
+        const errJson = await proxyRes.json().catch(() => null)
+        if (errJson?.error?.message) {
+          throw new Error(errJson.error.message)
+        }
+      }
+    } catch (proxyErr) {
+      if (proxyErr instanceof Error && !proxyErr.message.includes('Failed to fetch')) {
+        throw proxyErr
+      }
+    }
+
     if (err instanceof Error) {
       if (err.name === 'AbortError') {
         throw new Error('模型响应超时 (超过 60 秒)，请重试或更换模型。')
@@ -156,4 +394,32 @@ export async function callAiChatCompletion(
     }
     throw new Error('网络请求异常，请检查接口与网络连接。')
   }
+}
+
+/**
+ * 场景二：单词查询接口
+ * 依据词库真实数据参考与 word-data-builder skill 规则，向大模型请求完整结构化单词数据
+ * 【注意】：词典场景严格采用非流式 (stream: false)，低温 0.1，确保单次返回完整的结构化 JSON
+ */
+export async function fetchAiDictionaryWord(
+  config: AiClientConfig,
+  word: string
+): Promise<RawDictEntry | null> {
+  // 字典场景：未配置 API Key 时静默不处理，不使用 AI 字典功能
+  if (!config.apiKey?.trim()) {
+    return null
+  }
+
+  const messages = buildWordQueryMessages(word)
+  // 词典场景严格非流式 (stream: false)，低温 (0.1) 保证 JSON 格式准确、严谨不胡编
+  const rawReply = await callAiChatCompletion(
+    {
+      ...config,
+      temperature: 0.1,
+      maxTokens: 2048,
+    },
+    messages
+  )
+
+  return extractJsonFromAiReply(rawReply)
 }

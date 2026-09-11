@@ -134,6 +134,7 @@ interface WorkspaceState {
   // 弹窗状态
   isImportModalOpen: boolean
   isSettingsModalOpen: boolean
+  settingsInitialTab: 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync' | null
 
   // 当前皮肤（仅配色，皮肤选择会被持久化）
   skinId: string
@@ -172,7 +173,7 @@ interface WorkspaceState {
   setShortcut: (action: keyof ShortcutConfig, keyStr: string) => void
   resetShortcuts: () => void
   setImportModalOpen: (open: boolean) => void
-  setSettingsModalOpen: (open: boolean) => void
+  setSettingsModalOpen: (open: boolean, tab?: 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync') => void
   setKeySoundPack: (pack: string) => void
   setKeySoundVolume: (vol: number) => void
   toggleKeySound: (enabled?: boolean) => void
@@ -302,6 +303,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       isImportModalOpen: false,
       isSettingsModalOpen: false,
+      settingsInitialTab: null,
       skinId: 'slate-mint',
       isErrorPracticeActive: false,
       conqueredErrorWordIds: [],
@@ -891,7 +893,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
       resetShortcuts: () => set({ shortcuts: DEFAULT_SHORTCUTS }),
       setImportModalOpen: (open: boolean) => set({ isImportModalOpen: open }),
-      setSettingsModalOpen: (open: boolean) => set({ isSettingsModalOpen: open }),
+      setSettingsModalOpen: (open: boolean, tab?: 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync') =>
+        set({ isSettingsModalOpen: open, settingsInitialTab: tab ?? null }),
       setSkinId: (skinId: string) => set({ skinId }),
       setKeySoundPack: (pack: string) => set({ keySoundPack: pack }),
       setKeySoundVolume: (vol: number) => set({ keySoundVolume: vol }),

@@ -4,6 +4,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { SkinApplier } from '@/components/layout/SkinApplier'
 import { ImportModal } from '@/components/modals/ImportModal'
 import { SettingsModal } from '@/components/modals/SettingsModal'
+import { AiApiKeyPromptModal } from '@/components/modals/AiApiKeyPromptModal'
 import { ExternalSyncManager } from '@/components/sync/ExternalSyncManager'
 import { AiAssistantDrawer } from '@/components/ai/AiAssistantDrawer'
 import { AiFloatingTrigger } from '@/components/ai/AiFloatingTrigger'
@@ -42,6 +43,7 @@ export default function RootLayout({
         {/* 全局弹窗 */}
         <ImportModal />
         <SettingsModal />
+        <AiApiKeyPromptModal />
 
         {/* 外部小工具实时同步监听器 */}
         <ExternalSyncManager />
