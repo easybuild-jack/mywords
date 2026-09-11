@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { WordItem } from '@/types'
+import { callAiChatCompletion, type AiChatMessage } from '@/lib/aiClient'
 
 export interface AiMessage {
   id: string
@@ -17,6 +17,110 @@ export interface AiSession {
   messages: AiMessage[]
 }
 
+export type AiProviderId = 'deepseek' | 'doubao' | 'openai' | 'qwen' | 'custom'
+
+export interface AiProviderPreset {
+  id: AiProviderId
+  name: string
+  tagline: string
+  defaultEndpoint: string
+  defaultModel: string
+  keyPlaceholder: string
+  officialUrl: string
+  modelsDocUrl: string
+  modelPlaceholder: string
+  helpUrl?: string
+  hidden?: boolean
+}
+
+export const AI_PROVIDER_PRESETS: Record<AiProviderId, AiProviderPreset> = {
+  deepseek: {
+    id: 'deepseek',
+    name: 'DeepSeek (深度求索)',
+    tagline: '国内高性价比卓越模型，官方直连 api.deepseek.com',
+    defaultEndpoint: 'https://api.deepseek.com',
+    defaultModel: 'deepseek-chat',
+    keyPlaceholder: 'sk-...',
+    officialUrl: 'https://www.deepseek.com/',
+    modelsDocUrl: 'https://api-docs.deepseek.com/zh-cn/',
+    modelPlaceholder: '例如: deepseek-chat 或最新模型代号',
+    helpUrl: 'https://platform.deepseek.com/',
+  },
+  doubao: {
+    id: 'doubao',
+    name: '豆包 Doubao (火山引擎)',
+    tagline: '字节跳动火山引擎官方大模型，高响应速度',
+    defaultEndpoint: 'https://ark.cn-beijing.volces.com/api/v3',
+    defaultModel: 'doubao-1-5-pro-32k',
+    keyPlaceholder: '输入火山引擎 API Key 或接入点密钥',
+    officialUrl: 'https://www.volcengine.com/product/ark',
+    modelsDocUrl: 'https://console.volcengine.com/ark/region:ark+cn-beijing/model',
+    modelPlaceholder: '例如: doubao-1-5-pro-32k 或专属接入点 ID (ep-xxxx)',
+    helpUrl: 'https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey',
+  },
+  openai: {
+    id: 'openai',
+    name: 'ChatGPT (OpenAI)',
+    tagline: '国际知名顶级大模型，支持官方或第三方镜像中转',
+    defaultEndpoint: 'https://api.openai.com/v1',
+    defaultModel: 'gpt-4o',
+    keyPlaceholder: 'sk-...',
+    officialUrl: 'https://openai.com/',
+    modelsDocUrl: 'https://platform.openai.com/docs/models',
+    modelPlaceholder: '例如: gpt-4o、gpt-4o-mini 或最新模型代号',
+    helpUrl: 'https://platform.openai.com/api-keys',
+  },
+  qwen: {
+    id: 'qwen',
+    name: '通义千问 (Qwen)',
+    tagline: '阿里云百炼官方大模型，中文与多语言能力均衡',
+    defaultEndpoint: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    defaultModel: 'qwen-plus',
+    keyPlaceholder: 'sk-...',
+    officialUrl: 'https://tongyi.aliyun.com/',
+    modelsDocUrl: 'https://help.aliyun.com/zh/model-studio/getting-started/models',
+    modelPlaceholder: '例如: qwen-plus、qwen-turbo 或百炼最新模型',
+    helpUrl: 'https://bailian.console.aliyun.com/?apiKey=1',
+  },
+  custom: {
+    id: 'custom',
+    name: '自定义 (OpenAI 兼容)',
+    tagline: '连接 Ollama、OneAPI、vLLM、LM Studio 或私有服务',
+    defaultEndpoint: 'http://localhost:11434/v1',
+    defaultModel: 'llama3',
+    keyPlaceholder: 'API Key (无鉴权或本地端点可任意填写)',
+    officialUrl: 'https://ollama.com/',
+    modelsDocUrl: 'https://ollama.com/library',
+    modelPlaceholder: '输入服务端支持的模型标识，如 llama3、qwen2.5',
+    hidden: true, // 暂时隐藏，待本地/私有测试环境就绪后再开放
+  },
+}
+
+export interface AiModelConfig {
+  provider: AiProviderId
+  apiKey: string
+  endpoint: string
+  model: string
+  temperature: number
+  maxTokens: number
+  systemPrompt: string
+}
+
+export const DEFAULT_AI_CONFIG: AiModelConfig = {
+  provider: 'deepseek',
+  apiKey: '',
+  endpoint: AI_PROVIDER_PRESETS.deepseek.defaultEndpoint,
+  model: AI_PROVIDER_PRESETS.deepseek.defaultModel,
+  temperature: 0.7,
+  maxTokens: 4096,
+  systemPrompt: `你是一位专业、渊博且耐心的英语语言学导师与学习伙伴，属于 MyWords 英语单词学习软件的专属智能副驾（MyWords Copilot）。
+你的职责：
+1. 解答用户关于英语单词、词根词缀、搭配惯用法、语法疑难、长难句结构拆解、学术写作润色等问题；
+2. 回复力求准确、条理清晰、深入浅出，适度结合词源演变和肌肉记忆技巧；
+3. 支持并在合适的时候使用 Markdown 标题、列表、表格和代码块，使内容易于阅读与理解；
+4. 语言亲切专业、鼓励启发。`,
+}
+
 interface AiAssistantState {
   isOpen: boolean
   isThinking: boolean
@@ -25,6 +129,7 @@ interface AiAssistantState {
   currentSessionId: string
   sessions: AiSession[]
   messages: AiMessage[]
+  aiConfig: AiModelConfig
 
   openDrawer: () => void
   closeDrawer: () => void
@@ -36,7 +141,11 @@ interface AiAssistantState {
   deleteSession: (sessionId: string) => void
   clearMessages: () => void
   clearAllSessions: () => void
-  sendMessage: (customText?: string) => void
+  sendMessage: (customText?: string) => Promise<void>
+
+  updateAiConfig: (partial: Partial<AiModelConfig>) => void
+  resetAiConfig: () => void
+  setAiProvider: (provider: AiProviderId) => void
 }
 
 const DEFAULT_SESSION_ID = 'session-default'
@@ -46,7 +155,7 @@ const INITIAL_MESSAGES: AiMessage[] = [
     id: 'welcome-msg',
     role: 'assistant',
     content:
-      '你好！我是你的 **MyWords 顾问** ✨\n你可以随时向我提问关于英语语法疑难、长难句结构拆解、学术写作润色，或是任何复杂问题的深入探讨。',
+      '你好！我是你的 **MyWords Copilot** ✨\n你可以随时向我提问关于英语语法疑难、长难句结构拆解、学术写作润色，或是任何复杂问题的深入探讨。',
     timestamp: Date.now(),
   },
 ]
@@ -67,10 +176,11 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       isOpen: false,
       isThinking: false,
       inputPrompt: '',
-      activeTab: 'chat', // 默认展示“当前对话”
+      activeTab: 'chat',
       currentSessionId: DEFAULT_SESSION_ID,
       sessions: INITIAL_SESSIONS,
       messages: INITIAL_MESSAGES,
+      aiConfig: DEFAULT_AI_CONFIG,
 
       openDrawer: () => set({ isOpen: true }),
       closeDrawer: () => set({ isOpen: false }),
@@ -78,7 +188,28 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       setInputPrompt: (val: string) => set({ inputPrompt: val }),
       setActiveTab: (tab: 'chat' | 'history') => set({ activeTab: tab }),
 
-      // 开启新对话
+      updateAiConfig: (partial: Partial<AiModelConfig>) =>
+        set((state) => ({
+          aiConfig: { ...state.aiConfig, ...partial },
+        })),
+
+      resetAiConfig: () =>
+        set({
+          aiConfig: DEFAULT_AI_CONFIG,
+        }),
+
+      setAiProvider: (provider: AiProviderId) => {
+        const preset = AI_PROVIDER_PRESETS[provider] || AI_PROVIDER_PRESETS.deepseek
+        set((state) => ({
+          aiConfig: {
+            ...state.aiConfig,
+            provider,
+            endpoint: preset.defaultEndpoint,
+            model: preset.defaultModel,
+          },
+        }))
+      },
+
       createNewSession: () => {
         const newId = `session-${Date.now()}`
         const newSession: AiSession = {
@@ -91,7 +222,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
               id: `welcome-${Date.now()}`,
               role: 'assistant',
               content:
-                '你好！我是你的 **MyWords 顾问** ✨\n新对话已开启，请问有什么可以协助你的？',
+                '你好！我是你的 **MyWords Copilot** ✨\n新对话已开启，请问有什么可以协助你的？',
               timestamp: Date.now(),
             },
           ],
@@ -106,10 +237,8 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         }))
       },
 
-      // 切换至指定历史会话
       switchSession: (sessionId: string) => {
-        const state = get()
-        const target = state.sessions.find((s) => s.id === sessionId)
+        const target = get().sessions.find((s) => s.id === sessionId)
         if (target) {
           set({
             currentSessionId: sessionId,
@@ -119,7 +248,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         }
       },
 
-      // 删除单条历史会话
       deleteSession: (sessionId: string) => {
         const state = get()
         const remaining = state.sessions.filter((s) => s.id !== sessionId)
@@ -156,13 +284,12 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         })
       },
 
-      // 清空当前会话内容
       clearMessages: () => {
         const state = get()
         const welcomeMsg: AiMessage = {
           id: `welcome-${Date.now()}`,
           role: 'assistant',
-          content: '当前对话已清空 ✨ 随时输入你想探讨的任何问题。',
+          content: '当前会话已重置，您可以继续开启新的讨论。',
           timestamp: Date.now(),
         }
 
@@ -178,7 +305,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         })
       },
 
-      // 清空全部历史记录
       clearAllSessions: () => {
         const freshId = `session-${Date.now()}`
         const freshSession: AiSession = {
@@ -196,7 +322,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         })
       },
 
-      sendMessage: (customText?: string) => {
+      sendMessage: async (customText?: string) => {
         const state = get()
         const textToSend = (customText ?? state.inputPrompt).trim()
         if (!textToSend) return
@@ -209,7 +335,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           timestamp: Date.now(),
         }
 
-        // 查找或创建当前会话
         let currentSess = state.sessions.find((s) => s.id === state.currentSessionId)
         if (!currentSess) {
           currentSess = {
@@ -221,7 +346,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           }
         }
 
-        // 若会话标题为默认，自动提炼首个问题作为会话标题
         const updatedTitle =
           currentSess.title === '新对话' || currentSess.title === '英语深度探讨与答疑'
             ? textToSend.slice(0, 20)
@@ -243,7 +367,68 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           activeTab: 'chat',
         })
 
-        // 模拟 AI 思考并生成纯净回复
+        // 判断是否已配置真实 API Key
+        const hasApiKey = Boolean(state.aiConfig?.apiKey?.trim())
+
+        if (hasApiKey) {
+          try {
+            // 组装前置 System Prompt 与近期历史记录（最近 10 条）
+            const chatPayload: AiChatMessage[] = [
+              { role: 'system', content: state.aiConfig.systemPrompt || DEFAULT_AI_CONFIG.systemPrompt },
+              ...updatedMessages.slice(-10).map((m) => ({
+                role: m.role as 'system' | 'user' | 'assistant',
+                content: m.content,
+              })),
+            ]
+
+            const replyContent = await callAiChatCompletion(state.aiConfig, chatPayload)
+
+            const aiResponse: AiMessage = {
+              id: `ai-${Date.now()}`,
+              role: 'assistant',
+              content: replyContent,
+              timestamp: Date.now(),
+            }
+
+            const finalMessages = [...get().messages, aiResponse]
+            const finalSessions = get().sessions.map((s) =>
+              s.id === get().currentSessionId
+                ? { ...s, messages: finalMessages, updatedAt: Date.now() }
+                : s
+            )
+
+            set({
+              messages: finalMessages,
+              sessions: finalSessions,
+              isThinking: false,
+            })
+            return
+          } catch (err: unknown) {
+            const errorMsg = err instanceof Error ? err.message : '大模型请求异常'
+            const aiResponse: AiMessage = {
+              id: `ai-err-${Date.now()}`,
+              role: 'assistant',
+              content: `⚠️ **模型调用失败**：${errorMsg}\n\n💡 建议：请点击左下角「偏好设置 -> AI 模型配置」，检查 API Key、接口地址 (Endpoint) 或使用「测试连接」排查。`,
+              timestamp: Date.now(),
+            }
+
+            const finalMessages = [...get().messages, aiResponse]
+            const finalSessions = get().sessions.map((s) =>
+              s.id === get().currentSessionId
+                ? { ...s, messages: finalMessages, updatedAt: Date.now() }
+                : s
+            )
+
+            set({
+              messages: finalMessages,
+              sessions: finalSessions,
+              isThinking: false,
+            })
+            return
+          }
+        }
+
+        // 未配置 Key 时的智能模拟演示模式
         setTimeout(() => {
           const aiResponse = generateSimulatedAiResponse(textToSend)
           const finalMessages = [...get().messages, aiResponse]
@@ -262,118 +447,146 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       },
     }),
     {
-      name: 'mywords_ai_assistant_v3',
+      name: 'mywords_ai_assistant_v5',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         currentSessionId: state.currentSessionId,
         sessions: state.sessions.slice(0, 40),
         messages: state.messages.slice(-30),
+        aiConfig: state.aiConfig,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.aiConfig) {
+          if (
+            state.aiConfig.provider === 'deepseek' &&
+            (!state.aiConfig.endpoint || state.aiConfig.endpoint === 'https://api.deepseek.com/v1')
+          ) {
+            state.aiConfig.endpoint = 'https://api.deepseek.com'
+          }
+          if (state.aiConfig.provider === 'custom') {
+            state.aiConfig.provider = 'deepseek'
+            state.aiConfig.endpoint = AI_PROVIDER_PRESETS.deepseek.defaultEndpoint
+            state.aiConfig.model = AI_PROVIDER_PRESETS.deepseek.defaultModel
+          }
+        }
+      },
     }
   )
 )
 
-/** 针对复杂问题与通用探讨的高质量响应生成器 */
+/** 针对复杂问题与通用探讨的高质量响应生成器（未绑 Key 时的本地演示） */
 function generateSimulatedAiResponse(prompt: string): AiMessage {
   const timestamp = Date.now()
   const trimmed = prompt.trim()
 
-  // JSON 代码或数据结构请求
-  if (trimmed.toLowerCase().includes('json')) {
+  // 1. 若用户询问 JSON 格式
+  if (/(json|结构化数据|数据格式)/i.test(trimmed)) {
     return {
       id: `ai-${timestamp}`,
       role: 'assistant',
-      content: `为你生成对应的 JSON 格式数据结构：\n\n\`\`\`json\n{\n  "status": "success",\n  "query": "${trimmed.replace(/"/g, '\\"')}",\n  "result": {\n    "language": "English",\n    "domain": "Linguistics & Lexicon",\n    "tags": ["grammar", "vocabulary", "syntax"],\n    "totalCount": 42,\n    "isActive": true\n  }\n}\n\`\`\`\n\n以上 JSON 符合标准 RFC 8259 规范，可直接复制或集成至项目配置中。`,
+      content: JSON.stringify(
+        {
+          module: 'vocabulary_analysis',
+          target: 'complex_word_inquiry',
+          status: 'success',
+          data: {
+            phonetic: '/kəmˈplɛks/',
+            level: 'IELTS / TOEFL',
+            definitions: [
+              { pos: 'adj', meaning: '复杂的；难懂的' },
+              { pos: 'n', meaning: '复合体；综合设施；情结' },
+            ],
+            synonyms: ['intricate', 'complicated', 'sophisticated'],
+            roots: {
+              prefix: 'com- (共同/完全)',
+              base: 'plectere (编织/折叠)',
+              literalMeaning: '编织交错在一起的',
+            },
+          },
+        },
+        null,
+        2
+      ),
       timestamp,
     }
   }
 
-  // Shell 命令或脚本请求
-  if (
-    trimmed.toLowerCase().includes('shell') ||
-    trimmed.toLowerCase().includes('bash') ||
-    trimmed.includes('脚本') ||
-    trimmed.includes('终端') ||
-    trimmed.includes('命令行')
-  ) {
+  // 2. 若用户询问 HTML 格式
+  if (/(html|网页|页面|样式模板)/i.test(trimmed)) {
     return {
       id: `ai-${timestamp}`,
       role: 'assistant',
-      content: `以下是常用的 Shell 命令行操作与配置脚本：\n\n\`\`\`shell\n#!/bin/bash\n# 初始化英语词汇分析任务\nset -euo pipefail\n\necho "Starting text analysis..."\ncurl -s https://api.dictionaryapi.dev/api/v2/entries/en/ephemeral | jq '.[0].meanings'\n\n# 检查工作目录状态\ngit status --short\n\`\`\`\n\n你可以直接点击右上角「复制」按钮在终端中执行。`,
+      content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Flashcard</title>
+  <style>
+    .card { padding: 20px; border-radius: 12px; background: #161b22; color: #5eead4; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Serendipity /ˌser.ənˈdɪp.ə.ti/</h2>
+    <p>The occurrence of events by chance in a happy or beneficial way.</p>
+  </div>
+</body>
+</html>`,
       timestamp,
     }
   }
 
-  // HTML 模板或片段请求
-  if (trimmed.toLowerCase().includes('html') || trimmed.includes('网页') || trimmed.includes('前端标签')) {
+  // 3. 若用户询问 Shell / 终端命令
+  if (/(shell|bash|脚本|命令行|终端|npm|git)/i.test(trimmed)) {
     return {
       id: `ai-${timestamp}`,
       role: 'assistant',
-      content: `以下是对应的语义化 HTML 结构代码：\n\n\`\`\`html\n<article class="word-card">\n  <header class="word-header">\n    <h1 class="word-title">ephemeral</h1>\n    <span class="badge">GRE Core</span>\n  </header>\n  <section class="word-content">\n    <p>Lasting for a very short time; transitory.</p>\n  </section>\n</article>\n\`\`\`\n\n该结构遵循 W3C 语义化标签规范。`,
+      content: `#!/bin/bash
+# 词库本地同步与备份脚本
+echo "正在备份 MyWords 学习进度..."
+mkdir -p ./backups
+curl -s -X POST https://api.mywords.local/sync \\
+  -H "Authorization: Bearer MYWORDS_TOKEN" \\
+  -o ./backups/words_$(date +%Y%m%d).json
+
+echo "备份完成！"`,
       timestamp,
     }
   }
 
-  // 显式 Markdown 格式请求
-  if (trimmed.toLowerCase().includes('markdown') || trimmed.toLowerCase().includes('md格式')) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content: `# 英语学习知识库指南\n\n> 语言学习的核心在于持续的真实语境输入与精准输出。\n\n## 推荐核心策略\n\n- **刻意练习**：针对易混淆近义词建立辨析卡片\n- **高频语料**：阅读经济学人或学术真题长句\n- **知识沉淀**：定期复盘生词本\n\n\`\`\`markdown\n# 笔记标题示例\n- 关键要点 A\n- 关键要点 B\n\`\`\`\n\n祝你学习高效！`,
-      timestamp,
-    }
-  }
-
-  // 语法或长难句分析
-  if (
-    trimmed.includes('语法') ||
-    trimmed.includes('长难句') ||
-    trimmed.includes('句式') ||
-    trimmed.includes('成分') ||
-    trimmed.includes('分析句子')
-  ) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content:
-        `针对你的句子与语法分析提问：\n\n“${trimmed}”\n\n**核心语法要点解析**：\n• **主谓核心**：建议先找句子的主谓核心，剥离从句与修饰成分。\n• **结构逻辑**：复合长句中常通过并列连词或从属连词实现多层递进。\n• **修改建议**：可通过非谓语分词短语或名词化来提升紧凑度与正式学术风格。`,
-      timestamp,
-    }
-  }
-
-  // 词义辨析或区别
-  if (
-    trimmed.includes('区别') ||
-    trimmed.includes('辨析') ||
-    trimmed.includes('不同') ||
-    trimmed.includes('近义')
-  ) {
-    return {
-      id: `ai-${timestamp}`,
-      role: 'assistant',
-      content:
-        `关于你提到的语义与用法辨析：\n\n“${trimmed}”\n\n**语感与适用场景差异**：\n1. **语域与正式度**：学术论文与正式报告偏好拉丁词源书面词，日常对话常用动词短语。\n2. **搭配习惯**：注意动宾搭配与介词固定搭配的排他性。\n3. **感情色彩**：有些词带有潜在的怀疑色彩，而相近词可能保持中性或褒义。`,
-      timestamp,
-    }
-  }
-
-  // 纯文本回复（当用户只是打招呼或简短询问时，不加任何 Markdown 符号、无粗体、无标题、无代码块，测试纯文本兜底）
+  // 4. 纯文本回复
   if (/^(hi|hello|hey|你好|哈喽|嗨)[!！\s]*$/i.test(trimmed)) {
     return {
       id: `ai-${timestamp}`,
       role: 'assistant',
       content:
-        '你好！我是你的 MyWords 顾问。你可以向我咨询任何问题，包括获取 HTML 模板、JSON 数据结构、Shell 命令行脚本、Markdown 笔记，或者讨论复杂的语法疑难。',
+        '你好！我是你的 MyWords Copilot。你可以向我咨询任何问题，包括获取 HTML 模板、JSON 数据结构、Shell 命令行脚本、Markdown 笔记，或者讨论复杂的语法疑难。\n\n💡 提示：您也可以在「偏好设置 -> AI 模型配置」中配置 DeepSeek、豆包或 ChatGPT 的 API Key，开启真实大模型联网深度对话！',
       timestamp,
     }
   }
 
-  // 通用回答
+  // 通用 Markdown 回答
   return {
     id: `ai-${timestamp}`,
     role: 'assistant',
-    content:
-      `收到你的提问：${trimmed}\n\n对于这个复杂问题，我们可以从核心逻辑、应用语境与实践建议三个维度来深入探讨。如有更具体的要求，欢迎随时输入！`,
+    content: `收到你的提问: **${trimmed}**
+
+对于这个问题，我们可以从核心逻辑、语法拆解与应用实践三个维度来深入探讨：
+
+### 1. 核心概念与词义脉络
+词汇在实际学术或职场语境中具有丰富的层次，建议结合**构词法拆解**（词根词缀）加深长期肌肉记忆。
+
+### 2. 经典语境搭配与辨析
+* **学术写作**: 常用于阐明因果、论据支撑或对比对照关系；
+* **口语表达**: 吐字节奏需配合重音与弱读音节；
+
+\`\`\`markdown
+# 学习要点速记
+- 音节划分: 注意主重音位置
+- 常用搭配: be associated with / contribute to
+\`\`\`
+
+> 💡 提示：您尚未绑定大模型 API Key，当前为本地演示应答。前往「偏好设置 -> AI 模型配置」绑定 DeepSeek、豆包或 ChatGPT 的 Key 即可解锁全量大模型智能问答！`,
     timestamp,
   }
 }

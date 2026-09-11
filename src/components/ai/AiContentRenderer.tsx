@@ -116,7 +116,7 @@ export function AiContentRenderer({ content }: AiContentRendererProps) {
   // 没有任何标记时，默认展示为纯文本
   if (analysis.format === 'plain') {
     return (
-      <div className="text-xs sm:text-sm text-gray-200 leading-relaxed whitespace-pre-wrap select-text font-sans">
+      <div className="text-xs sm:text-sm text-foreground leading-relaxed whitespace-pre-wrap select-text font-sans">
         {content}
       </div>
     )
@@ -416,20 +416,20 @@ function MarkdownRenderer({ content }: { content: string }) {
             const level = block.level || 1
             if (level === 1) {
               return (
-                <h1 key={idx} className="text-base font-bold text-white pt-2 pb-1 border-b border-white/10">
+                <h1 key={idx} className="text-base font-bold text-foreground pt-2 pb-1 border-b border-border">
                   <InlineTokens text={block.content} />
                 </h1>
               )
             }
             if (level === 2) {
               return (
-                <h2 key={idx} className="text-sm font-bold text-white pt-1.5 pb-0.5">
+                <h2 key={idx} className="text-sm font-bold text-foreground pt-1.5 pb-0.5">
                   <InlineTokens text={block.content} />
                 </h2>
               )
             }
             return (
-              <h3 key={idx} className="text-xs font-bold text-gray-100 pt-1">
+              <h3 key={idx} className="text-xs font-bold text-foreground pt-1">
                 <InlineTokens text={block.content} />
               </h3>
             )
@@ -439,7 +439,7 @@ function MarkdownRenderer({ content }: { content: string }) {
             return (
               <blockquote
                 key={idx}
-                className="pl-3 py-1 my-1 border-l-2 border-primary/50 text-gray-300 italic text-xs sm:text-sm bg-white/[0.02] rounded-r-lg"
+                className="pl-3 py-1 my-1 border-l-2 border-primary/50 text-muted-foreground italic text-xs sm:text-sm bg-muted/40 rounded-r-lg"
               >
                 <InlineTokens text={block.content} />
               </blockquote>
@@ -449,7 +449,7 @@ function MarkdownRenderer({ content }: { content: string }) {
             return (
               <div key={idx} className="space-y-1 my-1">
                 {block.items?.map((item, itemIdx) => (
-                  <div key={itemIdx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-200">
+                  <div key={itemIdx} className="flex items-start gap-2 text-xs sm:text-sm text-foreground">
                     <span className="text-primary font-bold select-none">•</span>
                     <span className="flex-1 leading-relaxed">
                       <InlineTokens text={item} />
@@ -463,8 +463,8 @@ function MarkdownRenderer({ content }: { content: string }) {
             return (
               <div key={idx} className="space-y-1 my-1">
                 {block.items?.map((item, itemIdx) => (
-                  <div key={itemIdx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-200">
-                    <span className="text-amber-300 font-mono text-xs font-semibold select-none">
+                  <div key={itemIdx} className="flex items-start gap-2 text-xs sm:text-sm text-foreground">
+                    <span className="text-amber-500 dark:text-amber-300 font-mono text-xs font-semibold select-none">
                       {itemIdx + 1}.
                     </span>
                     <span className="flex-1 leading-relaxed">
@@ -476,12 +476,12 @@ function MarkdownRenderer({ content }: { content: string }) {
             )
 
           case 'hr':
-            return <hr key={idx} className="border-white/10 my-3" />
+            return <hr key={idx} className="border-border my-3" />
 
           case 'paragraph':
           default:
             return (
-              <p key={idx} className="text-xs sm:text-sm text-gray-200 leading-relaxed">
+              <p key={idx} className="text-xs sm:text-sm text-foreground leading-relaxed">
                 <InlineTokens text={block.content} />
               </p>
             )
@@ -645,7 +645,7 @@ function InlineTokens({ text }: { text: string }) {
       {tokens.map((token, idx) => {
         if (token.startsWith('**') && token.endsWith('**')) {
           return (
-            <strong key={idx} className="font-bold text-white tracking-wide">
+            <strong key={idx} className="font-bold text-foreground tracking-wide">
               {token.slice(2, -2)}
             </strong>
           )
@@ -654,7 +654,7 @@ function InlineTokens({ text }: { text: string }) {
           return (
             <code
               key={idx}
-              className="px-1.5 py-0.5 mx-0.5 rounded bg-white/[0.08] text-primary font-mono text-[11px] border border-white/10"
+              className="px-1.5 py-0.5 mx-0.5 rounded bg-muted text-primary font-mono text-[11px] border border-border"
             >
               {token.slice(1, -1)}
             </code>
@@ -662,7 +662,7 @@ function InlineTokens({ text }: { text: string }) {
         }
         if (token.startsWith('*') && token.endsWith('*') && token.length > 2) {
           return (
-            <em key={idx} className="italic text-amber-200">
+            <em key={idx} className="italic text-amber-600 dark:text-amber-200">
               {token.slice(1, -1)}
             </em>
           )

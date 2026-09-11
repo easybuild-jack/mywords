@@ -478,7 +478,7 @@
 }
 
 /* 侧边栏与弹窗底色 */
-:root[data-skin="muted-parchment"] aside {
+:root[data-skin="muted-parchment"] aside[data-sidebar] {
   background-color: rgba(236, 230, 216, 0.95) !important;
   border-right-color: rgba(13, 118, 110, 0.18) !important;
 }
@@ -661,7 +661,7 @@
 }
 
 /* 侧边栏与弹窗底色 */
-:root[data-skin="avocado-cream"] aside {
+:root[data-skin="avocado-cream"] aside[data-sidebar] {
   background-color: rgba(238, 243, 210, 0.96) !important;
   border-right-color: rgba(110, 118, 108, 0.18) !important;
 }

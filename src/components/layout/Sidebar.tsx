@@ -17,12 +17,10 @@ import {
   BookA,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 
 export function Sidebar() {
   const pathname = usePathname()
   const { setSettingsModalOpen } = useWorkspaceStore()
-  const toggleAiDrawer = useAiAssistantStore((s) => s.toggleDrawer)
 
   const navItems = [
     { label: '单词查询', icon: BookA, href: '/dictionary' },
@@ -38,7 +36,7 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-sidebar/90 backdrop-blur-2xl z-40">
+    <aside data-sidebar="true" className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-sidebar/90 backdrop-blur-2xl z-40">
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">
@@ -93,19 +91,6 @@ export function Sidebar() {
 
       {/* 底部功能按钮（单词导入入口在词库页，此处不再重复） */}
       <div className="space-y-2 pt-6 border-t border-white/10">
-        <button
-          onClick={toggleAiDrawer}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all group cursor-pointer"
-        >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <img src="/logo.svg" alt="MyWords 顾问" className="size-5 shrink-0 object-contain group-hover:scale-110 transition-transform" />
-            <span className="group-hover:text-white transition-colors whitespace-nowrap font-medium">MyWords 顾问</span>
-          </div>
-          <span className="shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary border border-primary/25">
-            Ctrl+/
-          </span>
-        </button>
-
         <button
           onClick={() => setSettingsModalOpen(true)}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-base text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"

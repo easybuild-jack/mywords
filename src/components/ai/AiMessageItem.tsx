@@ -22,10 +22,10 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
   if (isUser) {
     return (
       <div className="flex flex-col items-end gap-1.5 my-3 pl-8">
-        <span className="text-[10px] text-gray-500 font-mono">
+        <span className="text-[10px] text-muted-foreground font-mono">
           {formatTime(message.timestamp)}
         </span>
-        <div className="max-w-[88%] rounded-2xl rounded-tr-sm px-4 py-2.5 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 text-gray-100 text-sm leading-relaxed shadow-lg">
+        <div className="max-w-[88%] rounded-2xl rounded-tr-sm px-4 py-2.5 bg-primary/15 border border-primary/30 text-foreground text-sm leading-relaxed shadow-sm">
           <p className="whitespace-pre-wrap select-text">{message.content}</p>
         </div>
       </div>
@@ -34,16 +34,16 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
 
   return (
     <div className="flex flex-col gap-1.5 my-3 pr-2">
-      {/* 顶部：顾问身份与操作栏 */}
+      {/* 顶部：Copilot 身份与操作栏 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="size-7 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center p-1 shadow-sm">
-            <img src="/logo.svg" alt="MyWords 顾问" className="size-full object-contain" />
+          <div className="size-7 rounded-lg bg-muted border border-border flex items-center justify-center p-1 shadow-sm">
+            <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
           </div>
-          <span className="text-xs font-semibold text-white tracking-wide">
-            MyWords 顾问
+          <span className="text-xs font-semibold text-foreground tracking-wide">
+            MyWords Copilot
           </span>
-          <span className="text-[10px] text-gray-500 font-mono">
+          <span className="text-[10px] text-muted-foreground font-mono">
             {formatTime(message.timestamp)}
           </span>
         </div>
@@ -51,10 +51,10 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
         <button
           onClick={handleCopy}
           title="复制回复"
-          className="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+          className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer"
         >
           {copied ? (
-            <Check className="size-3.5 text-emerald-400" />
+            <Check className="size-3.5 text-emerald-500" />
           ) : (
             <Copy className="size-3.5" />
           )}
@@ -62,7 +62,7 @@ export function AiMessageItem({ message }: AiMessageItemProps) {
       </div>
 
       {/* 主回复卡片：支持 html, markdown, json, shell，无标记时默认纯文本展示 */}
-      <div className="rounded-2xl rounded-tl-sm p-4 bg-white/[0.04] border border-white/10 text-gray-200 text-sm leading-relaxed shadow-xl backdrop-blur-md select-text">
+      <div className="rounded-2xl rounded-tl-sm p-4 bg-card border border-border text-foreground text-sm leading-relaxed shadow-sm select-text">
         <AiContentRenderer content={message.content} />
       </div>
     </div>
