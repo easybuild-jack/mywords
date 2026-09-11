@@ -15,7 +15,8 @@ import {
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
-import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook } from '@/db'
+import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook, deleteWordsFromAiCache } from '@/db'
+import { reconcileWordForImport, type ReconciledImportWord } from '@/core/dictionarySearch'
 import {
   buildCsvTemplate,
   parseEtymologyCell,
@@ -55,8 +56,8 @@ compile v. 编译；编纂`
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [uploadedFileName, setUploadedFileName] = useState<string>('')
 
-  // 解析与补全状态
-  const [parsedWords, setParsedWords] = useState<WordItem[]>([])
+  // 解析与补全状态（带溯源与比对结果）
+  const [parsedEntries, setParsedEntries] = useState<ReconciledImportWord[]>([])
   const [isParsing, setIsParsing] = useState(false)
   const [isParsed, setIsParsed] = useState(false)
   const [autoDeduplicate, setAutoDeduplicate] = useState(true)
@@ -82,13 +83,14 @@ compile v. 编译；编纂`
   // 提前告知会覆盖多少词，别让用户在不知情的情况下改掉已有数据
   const existingIds = new Set((targetBook?.words || []).map((w) => w.id))
   const overwriteCount =
-    targetMode === 'existing' ? parsedWords.filter((w) => existingIds.has(w.id)).length : 0
+    targetMode === 'existing' ? parsedEntries.filter((e) => existingIds.has(e.word.id)).length : 0
+  const aiCacheCount = parsedEntries.filter((e) => e.isFromAiCache).length
 
   // 1. 解析文本粘贴 (Tab 1)
-  const handleParseText = async () => {
+  const handleParseText = async (): Promise<ReconciledImportWord[]> => {
     setIsParsing(true)
     const lines = rawText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0)
-    const items: WordItem[] = []
+    const entries: ReconciledImportWord[] = []
     const seen = new Set<string>()
 
     for (const line of lines) {
@@ -98,13 +100,17 @@ compile v. 编译；编纂`
       seen.add(wordName.toLowerCase())
 
       const customMeaning = parts.length > 1 ? parts.slice(1).join(' ') : undefined
-      const enriched = await dictionaryLoader.enrichWord(wordName, { meaning: customMeaning })
-      items.push(enriched)
+      const reconciled = await reconcileWordForImport({
+        rawName: wordName,
+        customMeaning,
+      })
+      entries.push(reconciled)
     }
 
-    setParsedWords(items)
+    setParsedEntries(entries)
     setIsParsing(false)
     setIsParsed(true)
+    return entries
   }
 
   // 2. 解析上传的文件 (CSV, TXT, JSON) (Tab 2)
@@ -123,7 +129,7 @@ compile v. 编译；编纂`
         return
       }
 
-      const items: WordItem[] = []
+      const entries: ReconciledImportWord[] = []
       const seen = new Set<string>()
 
       if (file.name.endsWith('.json')) {
@@ -132,19 +138,19 @@ compile v. 编译；编纂`
           const list = Array.isArray(json) ? json : [json]
           for (const entry of list) {
             const name = entry.name || entry.word || ''
-            if (!name || seen.has(name.toLowerCase())) continue
+            if (!name || (autoDeduplicate && seen.has(name.toLowerCase()))) continue
             seen.add(name.toLowerCase())
             const meaning = entry.trans?.join(' ') || entry.meaning || entry.translation
-            const enriched = await dictionaryLoader.enrichWord(name, {
-              meaning,
-              phonetic: entry.usphone || entry.phonetic,
-              // JSON 里可以直接给结构化拆解，也允许沿用 CSV 那套字符串写法
-              syllables: Array.isArray(entry.syllables)
+            const reconciled = await reconcileWordForImport({
+              rawName: name,
+              customMeaning: meaning,
+              customPhonetic: entry.usphone || entry.phonetic,
+              customSyllables: Array.isArray(entry.syllables)
                 ? entry.syllables
                 : parseSyllablesCell(entry.syllables, name),
-              etymology: entry.etymology ?? parseEtymologyCell(entry.morphemes, entry.derivation),
+              customEtymology: entry.etymology ?? parseEtymologyCell(entry.morphemes, entry.derivation),
             })
-            items.push(enriched)
+            entries.push(reconciled)
           }
         } catch (err) {
           alert('JSON 解析失败，请检查文件格式')
@@ -186,17 +192,18 @@ compile v. 编译；编纂`
           if (!wordName || (autoDeduplicate && seen.has(wordName.toLowerCase()))) continue
           seen.add(wordName.toLowerCase())
 
-          const enriched = await dictionaryLoader.enrichWord(wordName, {
-            meaning,
-            phonetic,
-            syllables: parseSyllablesCell(rawSyllables, wordName),
-            etymology: parseEtymologyCell(rawMorphemes, rawDerivation),
+          const reconciled = await reconcileWordForImport({
+            rawName: wordName,
+            customMeaning: meaning,
+            customPhonetic: phonetic,
+            customSyllables: parseSyllablesCell(rawSyllables, wordName),
+            customEtymology: parseEtymologyCell(rawMorphemes, rawDerivation),
           })
-          items.push(enriched)
+          entries.push(reconciled)
         }
       }
 
-      setParsedWords(items)
+      setParsedEntries(entries)
       setIsParsing(false)
       setIsParsed(true)
     }
@@ -204,10 +211,7 @@ compile v. 编译；编纂`
     reader.readAsText(file)
   }
 
-  // 下载 CSV 模板。
-  // 用 Blob 而不是 data: URI：模板带上拆解列后长度可观，data: URI 有长度上限，
-  // 且部分浏览器对 data: 链接的 download 属性支持并不一致。
-  // 开头的 BOM 是给 Excel 认 UTF-8 用的，否则中文列会显示成乱码。
+  // 下载 CSV 模板
   const handleDownloadCsvTemplate = () => {
     const blob = new Blob(['\uFEFF' + buildCsvTemplate()], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -222,16 +226,19 @@ compile v. 编译；编纂`
 
   // 确认导入并持久化至 IndexedDB
   const handleConfirmImport = async () => {
-    let finalWords = parsedWords
-    if (!finalWords.length) {
-      if (activeTab === 'text') await handleParseText()
-      finalWords = parsedWords
+    let finalEntries = parsedEntries
+    if (!finalEntries.length) {
+      if (activeTab === 'text') {
+        finalEntries = await handleParseText()
+      }
     }
 
-    if (!finalWords.length) {
+    if (!finalEntries.length) {
       alert('未检测到有效单词，请检查输入或上传内容')
       return
     }
+
+    const finalWords = finalEntries.map((e) => e.word)
 
     if (targetMode === 'existing') {
       const result = await mergeWordsIntoBook(targetBookId, finalWords)
@@ -245,14 +252,26 @@ compile v. 编译；编纂`
       await setBookId(newBook.id)
     }
 
+    // ---- 核心闭环逻辑 ----
+    // 1. 若查询的单词来自 AI 缓存表，导入后删除缓存里的单词（因为有归属了，不应再存在于缓存里）
+    // 2. 若单词来自其他词库，则原词库里的单词不处理（一词多库共存为正常合法场景）
+    const aiCacheWordsToDelete = finalEntries
+      .filter((e) => e.isFromAiCache)
+      .map((e) => e.word.name)
+
+    if (aiCacheWordsToDelete.length > 0) {
+      await deleteWordsFromAiCache(aiCacheWordsToDelete)
+    }
+
     setImportModalOpen(false)
     setIsParsed(false)
     setUploadedFileName('')
   }
 
   const handleDeleteWord = (index: number) => {
-    setParsedWords((prev) => prev.filter((_, i) => i !== index))
+    setParsedEntries((prev) => prev.filter((_, i) => i !== index))
   }
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
@@ -481,9 +500,14 @@ compile v. 编译；编纂`
           /* 结构化智能补全预览表格 */
           <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-primary font-semibold flex items-center gap-1.5">
-                <CheckCircle2 className="size-4" />
-                已成功智能解析并补全 {parsedWords.length} 个单词（含权威音标、音节与词根）
+              <span className="text-primary font-semibold flex items-center gap-1.5 flex-wrap">
+                <CheckCircle2 className="size-4 text-primary shrink-0" />
+                <span>已成功智能解析并补全 {parsedEntries.length} 个单词</span>
+                {aiCacheCount > 0 && (
+                  <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    ⚡ 其中 {aiCacheCount} 个词来自 AI 缓存（导入后自动移出缓存）
+                  </span>
+                )}
               </span>
               <button onClick={() => setIsParsed(false)} className="text-muted-foreground hover:underline text-xs">
                 返回重新输入
@@ -493,6 +517,7 @@ compile v. 编译；编纂`
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02] text-muted-foreground font-mono">
                   <th className="py-2.5 px-3">单词</th>
+                  <th className="py-2.5 px-2">数据来源</th>
                   <th className="py-2.5 px-3">音节拆分</th>
                   <th className="py-2.5 px-3">音标 (US)</th>
                   <th className="py-2.5 px-3">智能匹配释义</th>
@@ -501,33 +526,60 @@ compile v. 编译；编纂`
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 font-mono">
-                {parsedWords.map((w, idx) => (
-                  <tr key={idx} className="hover:bg-white/[0.03] transition-colors">
-                    <td className="py-2.5 px-3 font-bold text-white text-sm">{w.name}</td>
-                    <td className="py-2.5 px-3 text-primary font-semibold">{w.syllables.join(' · ')}</td>
-                    <td className="py-2.5 px-3 text-gray-300">{w.phoneticUs}</td>
-                    <td className="py-2.5 px-3 text-gray-200 font-sans">
-                      <span className="text-accent mr-1 font-mono font-bold">{w.posList[0]?.pos}</span>
-                      {w.posList[0]?.means.join('； ')}
-                    </td>
-                    {/* 只填了词根词缀、没填语义推导时也要有回显，否则会被误认为没导入成功 */}
-                    <td
-                      className="py-2.5 px-3 text-gray-400 font-sans truncate max-w-[170px]"
-                      title={w.etymology?.derivation || describeMorphemes(w)}
-                    >
-                      {w.etymology?.derivation || describeMorphemes(w)}
-                    </td>
-                    <td className="py-2.5 px-2 text-right">
-                      <button
-                        onClick={() => handleDeleteWord(idx)}
-                        className="p-1 text-muted-foreground hover:text-destructive transition-colors"
-                        title="删除该词"
+                {parsedEntries.map((item, idx) => {
+                  const w = item.word
+                  return (
+                    <tr key={idx} className="hover:bg-white/[0.03] transition-colors">
+                      <td className="py-2.5 px-3 font-bold text-white text-sm">{w.name}</td>
+                      <td className="py-2.5 px-2">
+                        {item.isFromAiCache ? (
+                          <span
+                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 whitespace-nowrap"
+                            title="来自 AI 字典临时缓存，导入后将从缓存删除"
+                          >
+                            ⚡ AI 缓存
+                          </span>
+                        ) : item.sourceBookId.startsWith('book_') ? (
+                          <span
+                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 whitespace-nowrap max-w-[90px] truncate"
+                            title={`来自词库: ${item.sourceBookName || item.sourceBookId} (原词库不受影响)`}
+                          >
+                            📖 {item.sourceBookName || '已有词库'}
+                          </span>
+                        ) : item.sourceBookId === 'dict_extended' ? (
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap">
+                            📚 标准词典
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-white/10 text-gray-300 whitespace-nowrap">
+                            ✨ 新收录
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 text-primary font-semibold">{w.syllables.join(' · ')}</td>
+                      <td className="py-2.5 px-3 text-gray-300">{w.phoneticUs}</td>
+                      <td className="py-2.5 px-3 text-gray-200 font-sans">
+                        <span className="text-accent mr-1 font-mono font-bold">{w.posList[0]?.pos}</span>
+                        {w.posList[0]?.means.join('； ')}
+                      </td>
+                      <td
+                        className="py-2.5 px-3 text-gray-400 font-sans truncate max-w-[150px]"
+                        title={w.etymology?.derivation || describeMorphemes(w)}
                       >
-                        <Trash2 className="size-3.5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {w.etymology?.derivation || describeMorphemes(w)}
+                      </td>
+                      <td className="py-2.5 px-2 text-right">
+                        <button
+                          onClick={() => handleDeleteWord(idx)}
+                          className="p-1 text-muted-foreground hover:text-destructive transition-colors"
+                          title="删除该词"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

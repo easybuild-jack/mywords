@@ -106,7 +106,9 @@ export const db = new MyWordsDatabase()
 // 初始化默认词库
 if (typeof window !== 'undefined') {
   db.initializeDefaults().catch(console.error)
+  ;(window as any).__mywords_db = db
 }
+
 
 /**
  * 记录单词练习结果 (支持存储完整 wordItem 保证错词本跨词库独立展示与练习)
@@ -554,5 +556,41 @@ export async function clearAiWordCache(): Promise<void> {
     console.warn('Failed to clear AI word cache:', err)
   }
 }
+
+/**
+ * 从 AI 缓存表中删除指定单词（单词有了具体词库归属后移出缓存）
+ */
+export async function deleteWordFromAiCache(cleanWord: string): Promise<void> {
+  if (!cleanWord || typeof window === 'undefined') return
+  try {
+    const lower = cleanWord.trim().toLowerCase()
+    const directId = buildWordId(lower)
+    await db.aiWordCache.delete(directId)
+    // 防御性清除以 name 匹配的条目
+    await db.aiWordCache.filter((item) => item.name?.toLowerCase() === lower).delete()
+  } catch (err) {
+    console.warn('Failed to delete word from AI cache:', err)
+  }
+}
+
+/**
+ * 批量从 AI 缓存表中删除单词
+ */
+export async function deleteWordsFromAiCache(wordNames: string[]): Promise<void> {
+  if (!wordNames?.length || typeof window === 'undefined') return
+  try {
+    const lowerNames = wordNames.map((w) => w.trim().toLowerCase()).filter(Boolean)
+    if (!lowerNames.length) return
+
+    const ids = lowerNames.map((w) => buildWordId(w))
+    await db.aiWordCache.bulkDelete(ids)
+
+    const lowerSet = new Set(lowerNames)
+    await db.aiWordCache.filter((item) => lowerSet.has(item.name?.toLowerCase())).delete()
+  } catch (err) {
+    console.warn('Failed to bulk delete words from AI cache:', err)
+  }
+}
+
 
 

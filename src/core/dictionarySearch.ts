@@ -1,6 +1,7 @@
-import type { WordItem } from '@/types'
+import type { WordItem, WordEtymology } from '@/types'
 import { dictionaryLoader, OFFICIAL_BOOK_FILE_MAP } from '@/core/dictionaryLoader'
 import { db, getWordFromAiCache, searchWordsInAiCache } from '@/db'
+
 
 export interface DictSearchResult {
   word: WordItem
@@ -353,3 +354,106 @@ export async function searchWordSuggestions(
 
   return results
 }
+
+export interface ImportWordCandidate {
+  rawName: string
+  customMeaning?: string
+  customPhonetic?: string
+  customSyllables?: string[]
+  customEtymology?: WordEtymology
+}
+
+export interface ReconciledImportWord {
+  word: WordItem
+  sourceBookId: string // 'ai_cache' | 'book_xxx' | 'dict_extended' | 'new'
+  sourceBookName: string
+  isFromAiCache: boolean
+}
+
+/**
+ * 单词导入核心比对与补全流转：
+ * 1. 调用全局词典检索接口（优先查询 AI 缓存表、当前/其它各官方/自定义词库、词形还原与本地词库）
+ * 2. 对比导入数据，补齐缺失字段（音节拆分、词根词缀、例句短语等），修正错误格式（音标、词性格式）
+ * 3. 标记数据来源（特别标明是否源自 AI 缓存 'ai_cache'，以备后续入库后执行精准清理）
+ */
+export async function reconcileWordForImport(
+  candidate: ImportWordCandidate
+): Promise<ReconciledImportWord> {
+  const cleanName = candidate.rawName.trim()
+  const lowerName = cleanName.toLowerCase()
+
+  // 1. 调用全局查询接口查词（带 AI 缓存优先、所有词库、词形还原）
+  const queryResult = await searchWordAcrossDictionaries(cleanName)
+
+  if (queryResult) {
+    const baseWord = queryResult.word
+    const isFromAiCache = queryResult.sourceBookId === 'ai_cache'
+
+    // 2. 字段比对、补齐与纠偏
+    // 音标：如导入数据有自定义音标且格式合理则采纳，否则用查询结果
+    const customPhonetic = candidate.customPhonetic?.trim()
+    const phoneticUs = customPhonetic || baseWord.phoneticUs || baseWord.phoneticUk || `/ ${lowerName} /`
+    const phoneticUk = customPhonetic || baseWord.phoneticUk || baseWord.phoneticUs || `/ ${lowerName} /`
+
+    // 音节拆分：导入数据提供且无误（拼接等于原词）则优先保留，否则以权威查询结果补齐
+    let syllables = baseWord.syllables
+    if (
+      candidate.customSyllables?.length &&
+      candidate.customSyllables.join('').toLowerCase() === lowerName
+    ) {
+      syllables = candidate.customSyllables
+    }
+
+    // 词根词缀：以权威查询结果为底，若候选有自定义扩展则合并
+    const etymology = baseWord.etymology || candidate.customEtymology
+
+    // 释义与词性：若用户导入时提供了自定义释义，将其解析为 posList 并置顶融合
+    let posList = baseWord.posList
+    if (candidate.customMeaning?.trim()) {
+      const parsedUserPos = dictionaryLoader.parsePosAndMeans([candidate.customMeaning.trim()])
+      if (parsedUserPos.length > 0) {
+        posList = [
+          ...parsedUserPos,
+          ...baseWord.posList.filter(
+            (p) => !parsedUserPos.some((up) => up.pos.toLowerCase() === p.pos.toLowerCase())
+          ),
+        ]
+      }
+    }
+
+    const mergedWord: WordItem = {
+      ...baseWord,
+      name: cleanName,
+      phoneticUs,
+      phoneticUk,
+      syllables: syllables?.length ? syllables : [cleanName],
+      etymology,
+      posList: posList?.length ? posList : [{ pos: 'other', means: ['核心词义'] }],
+      examples: baseWord.examples?.length ? baseWord.examples : [],
+      phrases: baseWord.phrases?.length ? baseWord.phrases : [],
+    }
+
+    return {
+      word: mergedWord,
+      sourceBookId: queryResult.sourceBookId,
+      sourceBookName: queryResult.sourceBookName,
+      isFromAiCache,
+    }
+  }
+
+  // 3. 本地与词库未收录的单词，使用 dictionaryLoader.enrichWord 兜底补齐
+  const enriched = await dictionaryLoader.enrichWord(cleanName, {
+    meaning: candidate.customMeaning,
+    phonetic: candidate.customPhonetic,
+    syllables: candidate.customSyllables,
+    etymology: candidate.customEtymology,
+  })
+
+  return {
+    word: enriched,
+    sourceBookId: 'new',
+    sourceBookName: '',
+    isFromAiCache: false,
+  }
+}
+
