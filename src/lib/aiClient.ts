@@ -311,7 +311,8 @@ export async function callAiChatCompletion(
 
   const url = resolveChatCompletionsUrl(config.endpoint)
   const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), 60000)
+  // 延迟请求超时时间至 120 秒，为带思考推理的模型预留充足时间
+  const timeoutId = setTimeout(() => controller.abort(), 120000)
 
   try {
     const res = await fetch(url, {
@@ -415,7 +416,7 @@ export async function callAiChatCompletion(
 
     if (err instanceof Error) {
       if (err.name === 'AbortError') {
-        throw new Error('模型响应超时 (超过 60 秒)，请重试或更换模型。')
+        throw new Error('AI 词典生成请求响应超时 (超过 120 秒)，没有等到模型结果，请稍后再试。')
       }
       throw err
     }

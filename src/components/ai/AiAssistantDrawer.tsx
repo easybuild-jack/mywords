@@ -48,6 +48,8 @@ export function AiAssistantDrawer() {
   const [isResizing, setIsResizing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
 
+  const currentSession = sessions.find((s) => s.id === currentSessionId)
+
   // 默认宽度为浏览器宽度的 1/3 (min 360px)
   const [drawerWidth, setDrawerWidth] = useState<number>(() => {
     if (typeof window !== 'undefined') {
@@ -523,42 +525,58 @@ export function AiAssistantDrawer() {
           <div className="flex-1 min-h-0 flex flex-col">
             {activeTab === 'chat' ? (
               /* 当前对话模式 */
-              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
-                {messages.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
-                    <div className="size-14 rounded-2xl bg-card border border-border flex items-center justify-center p-2 mb-3 shadow-sm">
-                      <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
+              <>
+                {/* 会话标题条：保障当前提问主题始终可见，绝不丢失 */}
+                {currentSession && currentSession.title && currentSession.title !== '新对话' && (
+                  <div className="px-3.5 py-2 border-b border-border/60 bg-muted/20 flex items-center justify-between text-xs text-muted-foreground shrink-0 select-none">
+                    <div className="flex items-center gap-2 truncate min-w-0">
+                      <MessageCircle className="size-3.5 text-primary shrink-0" />
+                      <span className="font-semibold text-foreground truncate max-w-[260px]">
+                        {currentSession.title}
+                      </span>
                     </div>
-                    <p className="text-sm font-medium text-foreground mb-1">
-                      我是你的专属 MyWords Copilot ✨
-                    </p>
-                    <p className="text-xs text-muted-foreground max-w-[270px] leading-relaxed">
-                      专注解答英语词汇构词、语法疑难、长难句结构拆解与学术写作润色。
-                    </p>
-                    <div className="mt-3 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[11px] text-primary max-w-[270px] text-left leading-relaxed">
-                      ⚠️ <strong>教学专一原则</strong>：我只专注于英语学习领域，无法探讨与英语学习无关的外部话题哦。
-                    </div>
-                  </div>
-                ) : (
-                  messages.map((msg, idx) => (
-                    <AiMessageItem
-                      key={msg.id}
-                      message={msg}
-                      isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
-                    />
-                  ))
-                )}
-
-                {/* 思考等待状态 */}
-                {isThinking && (
-                  <div className="flex items-center gap-2.5 p-2.5 px-3 rounded-xl bg-card border border-border text-xs text-muted-foreground animate-pulse my-3 w-fit shadow-sm">
-                    <img src="/logo.svg" alt="思考中" className="size-3.5 object-contain animate-spin" />
-                    <span>MyWords Copilot 正在深入分析并组织回复...</span>
+                    <span className="text-[11px] font-mono text-muted-foreground/60 shrink-0">
+                      {messages.length} 条对话
+                    </span>
                   </div>
                 )}
+                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
+                  {messages.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
+                      <div className="size-14 rounded-2xl bg-card border border-border flex items-center justify-center p-2 mb-3 shadow-sm">
+                        <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
+                      </div>
+                      <p className="text-sm font-medium text-foreground mb-1">
+                        我是你的专属 MyWords Copilot ✨
+                      </p>
+                      <p className="text-xs text-muted-foreground max-w-[270px] leading-relaxed">
+                        专注解答英语词汇构词、语法疑难、长难句结构拆解与学术写作润色。
+                      </p>
+                      <div className="mt-3 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[11px] text-primary max-w-[270px] text-left leading-relaxed">
+                        ⚠️ <strong>教学专一原则</strong>：我只专注于英语学习领域，无法探讨与英语学习无关的外部话题哦。
+                      </div>
+                    </div>
+                  ) : (
+                    messages.map((msg, idx) => (
+                      <AiMessageItem
+                        key={msg.id}
+                        message={msg}
+                        isStreaming={isStreaming && idx === messages.length - 1 && msg.role === 'assistant'}
+                      />
+                    ))
+                  )}
 
-                <div ref={messagesEndRef} className="h-2" />
-              </div>
+                  {/* 思考等待状态 */}
+                  {isThinking && (
+                    <div className="flex items-center gap-2.5 p-2.5 px-3 rounded-xl bg-card border border-border text-xs text-muted-foreground animate-pulse my-3 w-fit shadow-sm">
+                      <img src="/logo.svg" alt="思考中" className="size-3.5 object-contain animate-spin" />
+                      <span>MyWords Copilot 正在深入分析并组织回复...</span>
+                    </div>
+                  )}
+
+                  <div ref={messagesEndRef} className="h-2" />
+                </div>
+              </>
             ) : (
               /* 历史记录模式 */
               <div className="flex-1 overflow-y-auto p-4 space-y-2.5">

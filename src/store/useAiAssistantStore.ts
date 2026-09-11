@@ -409,17 +409,27 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           }
         }
 
+        // 会话标题：若当前是初始默认标题或空标题，自动采用用户的问题作为永久标题，绝不丢失
         const updatedTitle =
-          currentSess.title === '新对话' || currentSess.title === '英语深度辅导与答疑' || currentSess.title === '英语深度探讨与答疑'
-            ? textToSend.slice(0, 20)
+          currentSess.title === '新对话' ||
+          currentSess.title === '英语深度辅导与答疑' ||
+          currentSess.title === '英语深度探讨与答疑' ||
+          !currentSess.title?.trim()
+            ? textToSend.slice(0, 24)
             : currentSess.title
 
         const updatedMessages = [...currentSess.messages, newUserMessage]
-        const updatedSessions = state.sessions.map((s) =>
-          s.id === currentSess!.id
-            ? { ...s, title: updatedTitle, messages: updatedMessages, updatedAt: Date.now() }
-            : s
-        )
+        const hasCurrentSession = state.sessions.some((s) => s.id === currentSess!.id)
+        const updatedSessions = hasCurrentSession
+          ? state.sessions.map((s) =>
+              s.id === currentSess!.id
+                ? { ...s, title: updatedTitle, messages: updatedMessages, updatedAt: Date.now() }
+                : s
+            )
+          : [
+              { ...currentSess, title: updatedTitle, messages: updatedMessages, updatedAt: Date.now() },
+              ...state.sessions,
+            ]
 
         set({
           sessions: updatedSessions,
@@ -452,7 +462,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
             const nextMsgs = [...curMsgs, newAssistantMsg]
             const nextSessions = curSessions.map((s) =>
               s.id === get().currentSessionId
-                ? { ...s, messages: nextMsgs, updatedAt: Date.now() }
+                ? { ...s, title: updatedTitle, messages: nextMsgs, updatedAt: Date.now() }
                 : s
             )
             set({
@@ -467,7 +477,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
             )
             const nextSessions = curSessions.map((s) =>
               s.id === get().currentSessionId
-                ? { ...s, messages: nextMsgs, updatedAt: Date.now() }
+                ? { ...s, title: updatedTitle, messages: nextMsgs, updatedAt: Date.now() }
                 : s
             )
             set({
@@ -477,9 +487,21 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           }
         }
 
-        // 开始真实大模型流式调用
+        // 开始真实大模型流式调用，并施加 60 秒心跳超时检测
         const controller = new AbortController()
         activeChatAbortController = controller
+        let isTimedOut = false
+
+        // 60 秒无响应心跳检测
+        let timeoutTimer: NodeJS.Timeout | null = null
+        const resetTimeout = () => {
+          if (timeoutTimer) clearTimeout(timeoutTimer)
+          timeoutTimer = setTimeout(() => {
+            isTimedOut = true
+            controller.abort()
+          }, 60000)
+        }
+        resetTimeout()
 
         try {
           // 组装系统提示词（高级英语老师）与近期历史记录（最近 10 条）
@@ -495,39 +517,31 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           await streamAiChatCompletion(
             state.aiConfig,
             chatPayload,
-            (chunk) => handleIncomingChunk(chunk),
+            (chunk) => {
+              resetTimeout()
+              handleIncomingChunk(chunk)
+            },
             controller.signal
           )
 
-          activeChatAbortController = null
-          set({
-            isThinking: false,
-            isStreaming: false,
-          })
-          return
-        } catch (err: unknown) {
+          if (timeoutTimer) clearTimeout(timeoutTimer)
           activeChatAbortController = null
 
-          // 用户主动中断
-          if (controller.signal.aborted) {
-            set({ isThinking: false, isStreaming: false })
-            return
-          }
-
-          const errorMsg = err instanceof Error ? err.message : '大模型流式调用异常'
-
-          if (!hasAppendedAssistantMsg) {
-            const aiErrorResponse: AiMessage = {
-              id: `ai-err-${Date.now()}`,
+          // 如果连接已结束但大模型未输出任何有效文本（没有结果）
+          if (!accumulatedContent.trim()) {
+            const noResultMsg: AiMessage = {
+              id: assistantMsgId,
               role: 'assistant',
-              content: `⚠️ **模型调用失败**：${errorMsg}\n\n💡 建议：请点击左下角「偏好设置 -> AI 模型配置」，检查 API Key、接口地址 (Endpoint) 或使用「测试连接」排查。`,
+              content: '网络超时，请重试',
               timestamp: Date.now(),
             }
+            const finalMessages = hasAppendedAssistantMsg
+              ? get().messages.map((m) => (m.id === assistantMsgId ? noResultMsg : m))
+              : [...get().messages, noResultMsg]
 
-            const finalMessages = [...get().messages, aiErrorResponse]
             const finalSessions = get().sessions.map((s) =>
               s.id === get().currentSessionId
-                ? { ...s, messages: finalMessages, updatedAt: Date.now() }
+                ? { ...s, title: updatedTitle, messages: finalMessages, updatedAt: Date.now() }
                 : s
             )
 
@@ -536,12 +550,57 @@ export const useAiAssistantStore = create<AiAssistantState>()(
               sessions: finalSessions,
               isThinking: false,
               isStreaming: false,
+              inputPrompt: textToSend, // 自动把问题再次填到输入框
             })
-          } else {
-            // 已经流水输出一部分后中断，附加轻量提示
-            handleIncomingChunk(`\n\n*(⚠️ 连接中断: ${errorMsg})*`)
-            set({ isThinking: false, isStreaming: false })
+            return
           }
+
+          set({
+            isThinking: false,
+            isStreaming: false,
+          })
+          return
+        } catch (err: unknown) {
+          if (timeoutTimer) clearTimeout(timeoutTimer)
+          activeChatAbortController = null
+
+          // 如果没有结果（无论是超时、网络中断还是未输出）
+          if (!accumulatedContent.trim()) {
+            const noResultMsg: AiMessage = {
+              id: assistantMsgId,
+              role: 'assistant',
+              content: '网络超时，请重试',
+              timestamp: Date.now(),
+            }
+
+            const curMsgs = get().messages
+            const finalMessages = hasAppendedAssistantMsg
+              ? curMsgs.map((m) => (m.id === assistantMsgId ? noResultMsg : m))
+              : [...curMsgs, noResultMsg]
+
+            const finalSessions = get().sessions.map((s) =>
+              s.id === get().currentSessionId
+                ? { ...s, title: updatedTitle, messages: finalMessages, updatedAt: Date.now() }
+                : s
+            )
+
+            set({
+              messages: finalMessages,
+              sessions: finalSessions,
+              isThinking: false,
+              isStreaming: false,
+              inputPrompt: textToSend, // 自动把问题再次填到输入框，方便用户重试
+            })
+            return
+          }
+
+          // 如果已经流式输出了部分内容后连接中断
+          handleIncomingChunk('\n\n*(网络超时，请重试)*')
+          set({
+            isThinking: false,
+            isStreaming: false,
+            inputPrompt: textToSend, // 自动把问题再次填到输入框
+          })
         }
       },
     }),

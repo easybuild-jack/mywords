@@ -73,7 +73,10 @@ export function analyzeContentFormat(rawText: string): {
   const hasItalic = /(^|[^\*])\*[^\*\s\n][^\*\n]*\*(?=[^\*]|$)/.test(text)
   const hasBlockquote = /(^|\n)>\s+\S+/.test(text)
   const hasList = /(^|\n)\s*([-*•]|\d+\.)\s+\S+/.test(text)
-  const hasTable = /(^|\n)\|.*?\|.*?\|\s*(\n|$)/.test(text)
+  const hasTable =
+    /(^|\n)\|.*?\|.*?\|\s*(\n|$)/.test(text) ||
+    /\|.*?\|.*?\-{3,}.*?\|/.test(text) ||
+    /\|\s*\|(?=[^|\n])/.test(text)
   const hasInlineCode = /`[^`\n]+`/.test(text)
   const hasLink = /\[[^\]\n]+\]\([^\)\n]+\)/.test(text)
   const hasHr = /(^|\n)(---|---|\*\*\*|___)\s*($|\n)/.test(text)
@@ -478,6 +481,54 @@ function MarkdownRenderer({ content }: { content: string }) {
           case 'hr':
             return <hr key={idx} className="border-border my-3" />
 
+          case 'table':
+            return (
+              <div
+                key={idx}
+                className="my-3 max-w-full overflow-x-auto rounded-xl border border-border/80 bg-card/50 shadow-sm backdrop-blur-sm"
+              >
+                <table className="w-full min-w-[380px] border-collapse text-left text-xs sm:text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/60 text-foreground">
+                      {block.headers?.map((header, hIdx) => {
+                        const align = block.alignments?.[hIdx] || 'left'
+                        return (
+                          <th
+                            key={hIdx}
+                            className="px-3.5 py-2.5 font-bold tracking-tight text-primary/95"
+                            style={{ textAlign: align }}
+                          >
+                            <InlineTokens text={header} />
+                          </th>
+                        )
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/40">
+                    {block.tableRows?.map((row, rIdx) => (
+                      <tr
+                        key={rIdx}
+                        className="transition-colors hover:bg-primary/[0.04] even:bg-white/[0.02] dark:even:bg-white/[0.01]"
+                      >
+                        {row.map((cell, cIdx) => {
+                          const align = block.alignments?.[cIdx] || 'left'
+                          return (
+                            <td
+                              key={cIdx}
+                              className="px-3.5 py-2.5 text-foreground/90 leading-relaxed align-top"
+                              style={{ textAlign: align }}
+                            >
+                              <InlineTokens text={cell} />
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+
           case 'paragraph':
           default:
             return (
@@ -492,16 +543,41 @@ function MarkdownRenderer({ content }: { content: string }) {
 }
 
 interface MarkdownBlock {
-  type: 'paragraph' | 'heading' | 'code' | 'blockquote' | 'list' | 'ordered-list' | 'hr'
+  type: 'paragraph' | 'heading' | 'code' | 'blockquote' | 'list' | 'ordered-list' | 'hr' | 'table'
   content: string
   level?: number
   language?: string
   items?: string[]
+  headers?: string[]
+  alignments?: ('left' | 'center' | 'right')[]
+  tableRows?: string[][]
+}
+
+/** 规范化单行或被紧凑压缩的 Markdown 表格文本 */
+function normalizeMarkdownTables(text: string): string {
+  // 将以 || 紧挨连接的被压缩在单行的表格行（两行合并处的 ||）拆开为换行
+  return text.replace(/\|\|+/g, '|\n|')
+}
+
+function isTableRow(line: string): boolean {
+  const t = line.trim()
+  return t.startsWith('|') && t.endsWith('|') && t.split('|').length >= 3
+}
+
+function isSeparatorRow(line: string): boolean {
+  const t = line.trim()
+  return /^\|(\s*:?-+:?\s*\|)+$/.test(t)
+}
+
+function parseTableRowCells(rowStr: string): string[] {
+  const inner = rowStr.trim().replace(/^\|/, '').replace(/\|$/, '')
+  return inner.split('|').map((c) => c.trim())
 }
 
 /** 将 Markdown 文本切分为独立区块 */
-function parseMarkdownBlocks(text: string): MarkdownBlock[] {
-  const lines = text.split('\n')
+function parseMarkdownBlocks(rawText: string): MarkdownBlock[] {
+  const normalized = normalizeMarkdownTables(rawText)
+  const lines = normalized.split('\n')
   const blocks: MarkdownBlock[] = []
   let currentParagraph: string[] = []
   let inCodeBlock = false
@@ -552,6 +628,40 @@ function parseMarkdownBlocks(text: string): MarkdownBlock[] {
     // 空行拆分段落
     if (!trimmed) {
       flushParagraph()
+      continue
+    }
+
+    // 2. 表格判定：当前行是表格行，且下一行是分隔线行
+    if (isTableRow(trimmed) && i + 1 < lines.length && isSeparatorRow(lines[i + 1])) {
+      flushParagraph()
+      const headerLine = trimmed
+      const sepLine = lines[i + 1].trim()
+      const headers = parseTableRowCells(headerLine)
+      const sepCells = parseTableRowCells(sepLine)
+
+      const alignments: ('left' | 'center' | 'right')[] = sepCells.map((sep) => {
+        const s = sep.trim()
+        if (s.startsWith(':') && s.endsWith(':')) return 'center'
+        if (s.endsWith(':')) return 'right'
+        return 'left'
+      })
+
+      const tableRows: string[][] = []
+      let j = i + 2
+      while (j < lines.length && isTableRow(lines[j]) && !isSeparatorRow(lines[j])) {
+        tableRows.push(parseTableRowCells(lines[j]))
+        j++
+      }
+
+      blocks.push({
+        type: 'table',
+        content: '',
+        headers,
+        alignments,
+        tableRows,
+      })
+
+      i = j - 1
       continue
     }
 

@@ -48,7 +48,42 @@ export function DictEmptyState({
     )
   }
 
-  // 2. 本地词库未收录（未配置 AI 或 AI 查询失败时的原生空状态）
+  // 2. 没有等到结果或 AI 生成失败时的友好重试状态
+  if (aiError) {
+    return (
+      <div className="relative w-full h-full flex flex-col items-center justify-center p-8 text-center select-none animate-in fade-in-50 duration-300">
+        <div className="relative mb-5">
+          <div className="size-16 xl:size-20 rounded-2xl xl:rounded-3xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 shadow-2xl relative z-10 backdrop-blur-xl">
+            <SearchX className="size-8 xl:size-10 text-amber-400" />
+          </div>
+          <div className="absolute -inset-2 bg-amber-500/15 blur-xl rounded-full -z-0" />
+        </div>
+
+        <h3 className="text-xl xl:text-2xl font-bold text-foreground tracking-tight mb-2.5">
+          没有等到结果，请稍后再试
+        </h3>
+
+        <p className="text-sm xl:text-base text-muted-foreground max-w-md leading-relaxed mb-4">
+          单词 <span className="text-foreground font-mono font-bold px-1.5 py-0.5 rounded bg-foreground/5 border border-foreground/10">{cleanWord || '目标词'}</span> 的 AI 词典解析遇到中断或网络延迟：
+          <span className="block mt-1 text-xs text-amber-300/80 font-mono">{aiError}</span>
+        </p>
+
+        {cleanWord && onAiLookup && (
+          <div className="flex items-center gap-3 mt-2">
+            <button
+              type="button"
+              onClick={() => onAiLookup(cleanWord)}
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+            >
+              <span>重新尝试解析</span>
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // 3. 本地词库未收录（普通未收录状态）
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center p-8 text-center select-none animate-in fade-in-50 duration-300">
       {/* 居中图标徽标 */}
@@ -74,22 +109,6 @@ export function DictEmptyState({
           '请检查单词拼写是否有误'
         )}
       </p>
-
-      {/* 错误或手动重试（如有） */}
-      {aiError && (
-        <div className="mt-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs max-w-md">
-          <p className="font-semibold mb-1">AI 解析提示：{aiError}</p>
-          {cleanWord && onAiLookup && (
-            <button
-              type="button"
-              onClick={() => onAiLookup(cleanWord)}
-              className="mt-2 px-3 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs transition-colors cursor-pointer"
-            >
-              点击重新尝试 AI 生成
-            </button>
-          )}
-        </div>
-      )}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { DictHeaderToolbar } from '@/components/dictionary/DictHeaderToolbar'
 import { DictWordCard } from '@/components/dictionary/DictWordCard'
 import { DictEmptyState } from '@/components/dictionary/DictEmptyState'
+import { DictSearchingCard } from '@/components/dictionary/DictSearchingCard'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import {
   searchWordAcrossDictionaries,
@@ -28,6 +29,7 @@ export default function DictionaryPage() {
   // AI 字典配置与状态
   const aiConfig = useAiAssistantStore((s) => s.aiConfig)
   const [isAiSearching, setIsAiSearching] = useState(false)
+  const [searchingWord, setSearchingWord] = useState<string>('')
   const [aiError, setAiError] = useState<string | null>(null)
 
   // 查词输入与状态
@@ -95,6 +97,11 @@ export default function DictionaryPage() {
         if (hasAiKey) {
           setIsSearching(false)
           setIsAiSearching(true)
+          setSearchingWord(trimmed)
+          setCurrentResult(null) // 立即清空旧卡片，进入全卡查询中骨架动画
+          setNotFoundQuery(null)
+          setAiError(null)
+
           try {
             const rawEntry = await fetchAiDictionaryWord(aiConfig, trimmed)
             if (rawEntry) {
@@ -110,38 +117,25 @@ export default function DictionaryPage() {
                 isCurrentBook: false,
               })
               setNotFoundQuery(null)
+              setAiError(null)
               audioEngine.playPronunciation(wordItem.name, phoneticPreference)
               return
             } else {
+              setAiError('模型未返回有效单词结构数据，没有等到结果，请稍后再试。')
               setCurrentResult(null)
               setNotFoundQuery(trimmed)
             }
           } catch (aiErr: unknown) {
-            console.warn('AI dictionary query failed, attempting offline dictionary fallback:', aiErr)
-            // 自动优雅降级到本地 50,000+ 离线大词库，确保用户始终能看到清晰的单词卡片，绝不卡死在报错上
-            try {
-              const enriched = await dictionaryLoader.enrichWord(trimmed)
-              if (
-                enriched &&
-                enriched.posList?.length > 0 &&
-                enriched.posList[0].means?.[0] &&
-                enriched.posList[0].means[0] !== '核心词义'
-              ) {
-                setCurrentResult({
-                  word: enriched,
-                  sourceBookId: 'dict_extended',
-                  sourceBookName: '', // 其他不要展示来源
-                  isCurrentBook: false,
-                })
-                setNotFoundQuery(null)
-                audioEngine.playPronunciation(enriched.name, phoneticPreference)
-                return
-              }
-            } catch (fallbackErr) {
-              console.warn('Offline fallback failed:', fallbackErr)
-            }
+            console.warn('AI dictionary query failed:', aiErr)
+            const isTimeout =
+              aiErr instanceof Error &&
+              (aiErr.name === 'AbortError' || aiErr.message.includes('超时'))
+            const msg = isTimeout
+              ? 'AI 词典响应超时（未在预期时间内返回数据），没有等到结果，请稍后再试。'
+              : aiErr instanceof Error
+              ? aiErr.message
+              : 'AI 字典生成失败，没有等到结果，请稍后再试。'
 
-            const msg = aiErr instanceof Error ? aiErr.message : 'AI 字典生成失败，请检查网络或配置'
             setAiError(msg)
             setCurrentResult(null)
             setNotFoundQuery(trimmed)
@@ -235,7 +229,9 @@ export default function DictionaryPage() {
       {/* 中部舞台：单词卡片展示区（垂直完美居中，彻底去除打字输入槽，底部无工具栏） */}
       <div className="flex-1 min-h-0 flex items-center justify-center relative w-full px-4 py-3">
         <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300">
-          {currentResult ? (
+          {isAiSearching ? (
+            <DictSearchingCard word={searchingWord || searchQuery || notFoundQuery || '目标词'} />
+          ) : currentResult ? (
             <DictWordCard
               word={currentResult.word}
               phoneticPreference={phoneticPreference}
@@ -250,7 +246,6 @@ export default function DictionaryPage() {
                 handleSearchSubmit(word)
               }}
               onAiLookup={hasAiKey ? (w) => handleSearchSubmit(w) : undefined}
-              isAiSearching={isAiSearching}
               aiError={aiError}
             />
           )}
