@@ -503,6 +503,29 @@ function findCutPoints(word: string, nuclei: VowelNucleus[]): number[] {
 }
 
 /**
+ * 特殊固定词典音节权威切分映射（最高优先级，优先于模型或启发式算法）
+ */
+export const KNOWN_SYLLABLE_OVERRIDES: Record<string, string[]> = {
+  'orange': ['o', 'range'],
+  'discover': ['dis', 'cov', 'er'],
+  'perspective': ['per', 'spec', 'tive'],
+  'international': ['in', 'ter', 'na', 'tion', 'al'],
+  'developer': ['de', 'vel', 'op', 'er'],
+  'education': ['ed', 'u', 'ca', 'tion'],
+  'computer': ['com', 'pu', 'ter'],
+  'algorithm': ['al', 'go', 'rithm'],
+  'vocabulary': ['vo', 'cab', 'u', 'lar', 'y'],
+  'application': ['ap', 'pli', 'ca', 'tion'],
+  'javascript': ['java', 'script'],
+  'kubernetes': ['ku', 'ber', 'ne', 'tes'],
+  'important': ['im', 'por', 'tant'],
+  'beautiful': ['beau', 'ti', 'ful'],
+  'understand': ['un', 'der', 'stand'],
+  'information': ['in', 'for', 'ma', 'tion'],
+  'experience': ['ex', 'pe', 'ri', 'ence'],
+}
+
+/**
  * 单词音节划分启发式算法 (Syllable Splitter)
  *
  * 先定位元音核，再在核之间分配辅音，因此每个音节必然含且仅含一个元音核——
@@ -514,28 +537,8 @@ export function splitIntoSyllables(word: string): string[] {
   if (!cleanWord) return []
   if (cleanWord.length <= 3) return [cleanWord]
 
-  // 特殊固定词典音节映射
-  const knownOverrides: Record<string, string[]> = {
-    'discover': ['dis', 'cov', 'er'],
-    'perspective': ['per', 'spec', 'tive'],
-    'international': ['in', 'ter', 'na', 'tion', 'al'],
-    'developer': ['de', 'vel', 'op', 'er'],
-    'education': ['ed', 'u', 'ca', 'tion'],
-    'computer': ['com', 'pu', 'ter'],
-    'algorithm': ['al', 'go', 'rithm'],
-    'vocabulary': ['vo', 'cab', 'u', 'lar', 'y'],
-    'application': ['ap', 'pli', 'ca', 'tion'],
-    'javascript': ['java', 'script'],
-    'kubernetes': ['ku', 'ber', 'ne', 'tes'],
-    'important': ['im', 'por', 'tant'],
-    'beautiful': ['beau', 'ti', 'ful'],
-    'understand': ['un', 'der', 'stand'],
-    'information': ['in', 'for', 'ma', 'tion'],
-    'experience': ['ex', 'pe', 'ri', 'ence'],
-  }
-
-  if (knownOverrides[cleanWord]) {
-    return knownOverrides[cleanWord]
+  if (KNOWN_SYLLABLE_OVERRIDES[cleanWord]) {
+    return KNOWN_SYLLABLE_OVERRIDES[cleanWord]
   }
 
   // 1. 复合词黄金切分法则：复合词优先在子词边界切分 (Divide between compound words)
@@ -598,6 +601,10 @@ export function isUsableSyllableSplit(name: string, syllables?: string[]): boole
  * 各自算一套的话会出现「拆分显示 di-rec-to-ry，上色却把 ir 当成一个单位」这种自相矛盾。
  */
 export function resolveSyllables(word: WordItem): string[] {
+  const clean = word.name.trim().toLowerCase()
+  if (KNOWN_SYLLABLE_OVERRIDES[clean]) {
+    return KNOWN_SYLLABLE_OVERRIDES[clean]
+  }
   return isUsableSyllableSplit(word.name, word.syllables) ? word.syllables : splitIntoSyllables(word.name)
 }
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
-import { getWordFromAiCache, mergeWordIntoAiCache } from '@/db'
+import { getWordFromAiCache, mergeWordIntoAiCache, saveWordOverride } from '@/db'
 import {
   fetchAiDictionaryWordExamples,
   fetchAiDictionaryWordStructure,
@@ -23,11 +23,21 @@ function configFingerprint(config: AiClientConfig) {
   return `${config.endpoint}::${config.model}::${config.apiKey}`
 }
 
-function isSectionReady(word: WordItem, section: AiWordSection) {
-  if (word.aiSections?.[section] !== 'ready') return false
-  return section === 'structure'
-    ? Boolean(word.phrases?.length)
-    : Boolean(word.examples?.length)
+export function isSectionReady(word: WordItem, section: AiWordSection): boolean {
+  if (section === 'structure') {
+    return Boolean(
+      word.etymology &&
+      word.phrases?.length &&
+      (!word.aiSections || word.aiSections.structure === 'ready')
+    )
+  }
+  if (section === 'examples') {
+    return Boolean(
+      word.examples?.length &&
+      (!word.aiSections || word.aiSections.examples === 'ready')
+    )
+  }
+  return false
 }
 
 function mergeSectionWord(
@@ -35,20 +45,21 @@ function mergeSectionWord(
   updated: WordItem,
   section: AiWordSection
 ): WordItem {
-  return section === 'structure'
-    ? {
-        ...current,
-        syllables: updated.syllables,
-        silentIndices: updated.silentIndices,
-        etymology: updated.etymology,
-        phrases: updated.phrases,
-        aiSections: updated.aiSections,
-      }
-    : {
-        ...current,
-        examples: updated.examples,
-        aiSections: updated.aiSections,
-      }
+  if (section === 'structure') {
+    return {
+      ...current,
+      syllables: updated.syllables,
+      silentIndices: updated.silentIndices,
+      etymology: updated.etymology,
+      phrases: updated.phrases ?? current.phrases,
+      aiSections: { ...current.aiSections, ...updated.aiSections },
+    }
+  }
+  return {
+    ...current,
+    examples: updated.examples,
+    aiSections: { ...current.aiSections, ...updated.aiSections },
+  }
 }
 
 function syncWorkspaceWord(word: WordItem, section: AiWordSection) {
@@ -68,7 +79,7 @@ async function generateSection(
 ): Promise<WordItem | null> {
   const cached = await getWordFromAiCache(snapshot.name)
   const word = cached || snapshot
-  if (!word.aiSections || isSectionReady(word, section)) return word
+  if (isSectionReady(word, section)) return word
 
   await mergeWordIntoAiCache({
     name: word.name,
@@ -88,6 +99,12 @@ async function generateSection(
       })
       if (!raw) throw new Error('构词数据为空')
       const converted = await dictionaryLoader.convertRawEntryToWordItem(raw)
+      await saveWordOverride(word.id, word.name, {
+        syllables: converted.syllables,
+        silentIndices: converted.silentIndices,
+        etymology: converted.etymology,
+        phrases: raw.phrases,
+      })
       return await mergeWordIntoAiCache({
         name: word.name,
         syllables: converted.syllables,
@@ -100,6 +117,7 @@ async function generateSection(
 
     const raw = await fetchAiDictionaryWordExamples(config, word.name, trans)
     if (!raw?.examples?.length) throw new Error('例句数据为空')
+    await saveWordOverride(word.id, word.name, { examples: raw.examples })
     return await mergeWordIntoAiCache({
       name: word.name,
       examples: raw.examples,
@@ -138,7 +156,7 @@ function ensureSection(
   return task
 }
 
-/** 在卡片实际需要某类富数据时才触发 AI 补全。 */
+/** 在卡片实际需要某类富数据时才触发 AI 补全（支持缺失自动触发）。 */
 export function useEnsureAiWordSections(
   word: WordItem,
   sections: readonly AiWordSection[]
@@ -163,7 +181,7 @@ export function useEnsureAiWordSections(
   }, [contextKey])
 
   useEffect(() => {
-    if (!word.aiSections || !aiConfig.apiKey?.trim()) return
+    if (!aiConfig.apiKey?.trim()) return
 
     for (const section of sectionsKey.split(',').filter(Boolean) as AiWordSection[]) {
       if (isSectionReady(word, section)) continue
@@ -191,12 +209,17 @@ export function useEnsureAiWordSections(
       ? { ...word, ...resolved.word }
       : word
 
-  if (!effectiveWord.aiSections) return effectiveWord
-  const pendingSections = { ...effectiveWord.aiSections }
+  const pendingSections = { ...(effectiveWord.aiSections || {}) }
+  let hasPending = false
   for (const section of sections) {
     if (!isSectionReady(effectiveWord, section)) {
-      pendingSections[section] = aiConfig.apiKey?.trim() ? 'pending' : 'error'
+      if (aiConfig.apiKey?.trim()) {
+        pendingSections[section] = 'pending'
+        hasPending = true
+      }
     }
   }
-  return { ...effectiveWord, aiSections: pendingSections }
+  return hasPending || effectiveWord.aiSections
+    ? { ...effectiveWord, aiSections: pendingSections }
+    : effectiveWord
 }

@@ -289,6 +289,9 @@ export default function DictionaryPage() {
             <DictWordCard
               word={currentResult.word}
               phoneticPreference={phoneticPreference}
+              onWordChange={(updatedWord) => {
+                setCurrentResult((prev) => prev ? { ...prev, word: updatedWord } : null)
+              }}
             />
           ) : (
             <DictEmptyState

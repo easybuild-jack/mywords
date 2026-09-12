@@ -335,6 +335,12 @@ class DictionaryLoader {
             if (override.silentIndices !== undefined) {
               enrichedList[i].silentIndices = override.silentIndices
             }
+            if (override.examples !== undefined && override.examples.length > 0) {
+              enrichedList[i].examples = override.examples
+            }
+            if (override.phrases !== undefined && override.phrases.length > 0) {
+              enrichedList[i].phrases = override.phrases
+            }
           }
         }
       } catch (err) {
@@ -414,6 +420,12 @@ class DictionaryLoader {
           }
           if (override.silentIndices !== undefined) {
             wordItem.silentIndices = override.silentIndices
+          }
+          if (override.examples !== undefined && override.examples.length > 0) {
+            wordItem.examples = override.examples
+          }
+          if (override.phrases !== undefined && override.phrases.length > 0) {
+            wordItem.phrases = override.phrases
           }
         }
       } catch {

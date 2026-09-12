@@ -33,8 +33,8 @@ export interface WordItem {
   examples?: WordExample[];                     // 3条左右经典例句
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
   aiSections?: {                                // AI 分阶段生成状态（仅 AI 缓存词使用）
-    structure: AiWordSectionStatus;
-    examples: AiWordSectionStatus;
+    structure?: AiWordSectionStatus;
+    examples?: AiWordSectionStatus;
   };
 }
 
@@ -117,6 +117,8 @@ export interface WordOverrideRecord {
   syllables?: string[];                         // 自定义音节拆分 (如 ["dis", "cov", "er"])
   etymology?: WordEtymology;                    // 自定义构词/词根词缀
   silentIndices?: number[];                     // 自定义不发音/哑音字母下标
+  examples?: WordExample[];                     // 自定义/补充例句
+  phrases?: { en: string; cn: string }[];       // 自定义/补充短语
   updatedAt: number;                            // 修改时间戳
 }
 

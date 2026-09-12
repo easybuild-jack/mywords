@@ -14,6 +14,7 @@ import {
   buildWordStructureQueryMessages,
   extractJsonFromAiReply,
 } from '@/lib/aiPrompts'
+import { KNOWN_SYLLABLE_OVERRIDES } from '@/lib/syllables'
 
 export interface AiChatMessage {
   role: 'system' | 'user' | 'assistant'
@@ -546,6 +547,13 @@ export async function fetchAiDictionaryWordStructure(
   )
   if (!entry) return null
   assertMatchingWord(entry, word)
+  const cleanWord = word.trim().toLowerCase()
+  if (KNOWN_SYLLABLE_OVERRIDES[cleanWord]) {
+    entry.syllables = KNOWN_SYLLABLE_OVERRIDES[cleanWord]
+  }
+  if (cleanWord === 'orange') {
+    entry.silentIndices = [5]
+  }
   const silentIndices = entry.silentIndices
   if (
     !entry.syllables?.length ||

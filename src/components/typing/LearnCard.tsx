@@ -1,17 +1,29 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Pencil, Volume2, Star } from 'lucide-react'
-import type { WordItem } from '@/types'
+import React, { useState, useEffect } from 'react'
+import {
+  ArrowRight,
+  Scissors,
+  Combine,
+  BookOpen,
+  Volume2,
+  Sparkles,
+  Lightbulb,
+  Check,
+  Star,
+  Quote,
+  Pencil,
+} from 'lucide-react'
+import type { WordItem, WordExample } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
 import { WordCardShell } from '@/components/typing/WordCardShell'
-import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { EditWordSplitModal } from '@/components/modals/EditWordSplitModal'
+import { useCanEditWordSplit } from '@/hooks/usePermissions'
+import { getWordExamples, getWordEtymologyExtras } from '@/lib/wordExamples'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
-import { useCanEditWordSplit } from '@/hooks/usePermissions'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
@@ -369,13 +381,15 @@ export function LearnCard({
                   ))}
                 </div>
               </div>
-              <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                {contextStatus === 'pending'
-                  ? 'LOADING'
-                  : contextStatus === 'error'
-                    ? 'FAILED'
-                    : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
+                  {contextStatus === 'pending'
+                    ? 'LOADING'
+                    : contextStatus === 'error'
+                      ? 'FAILED'
+                      : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
+                </span>
+              </div>
             </div>
 
             {/* 示例句列表（宽幅排版，文字舒展） */}
@@ -391,12 +405,12 @@ export function LearnCard({
                   ))}
                 </div>
               ) : contextStatus === 'error' ? (
-                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
-                  {contextTab === 'examples' ? '例句' : '短语'}生成失败，下次进入时将重新补全
+                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-2 py-6 text-center text-sm text-gray-400">
+                  <span>{contextTab === 'examples' ? '例句' : '短语'}生成失败</span>
                 </div>
               ) : contextItems.length === 0 ? (
-                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
-                  暂无{contextTab === 'examples' ? '例句' : '常用短语'}
+                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-3 py-6 text-center">
+                  <span className="text-sm text-gray-400">暂无{contextTab === 'examples' ? '例句' : '常用短语'}</span>
                 </div>
               ) : contextItems.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx

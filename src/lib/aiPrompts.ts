@@ -44,8 +44,8 @@ trans 按词性分组，格式为“词性. 释义；释义”，覆盖最常用
 美音和英音使用标准 IPA，不要带斜杠，保留重音符号。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的英语构词分析引擎。
-根据单词、音标和释义生成：
+export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的专业英语构词与音节分析引擎。
+根据给出的单词拼写、IPA 音标及中文释义生成完整的构词、音节与短语数据：
 {
   "status": "ok",
   "name": "discover",
@@ -62,10 +62,37 @@ export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的英语�
     { "en": "discover the truth", "cn": "查明真相" }
   ]
 }
-syllables.join('') 必须严格等于 name，音节数应符合美音音标。
-silentIndices 是不发音字母的 0-based 升序下标；无哑音时返回 []。
-词源必须可靠；没有可靠词根词缀时省略相应字段，严禁编造。
-phrases 生成 4–8 条最常见、最实用的固定搭配，并提供准确中文释义。
+
+【音节切分核心法则（必须严格依据音标发音对齐划分，一个元音音位对应一个音节）⭐】
+1. 音节是发音的单位，不是字面字母单位！切分必须严格依据给出的美音/英音音标中的元音音位数量与发音边界进行划分（音节数 == 音标元音数）。syllables.join('') 必须严格等于 name。
+2. 两元音夹单辅音（V-CV 原则 / 最大声母原则 Maximal Onset）：
+   - 当单个辅音夹在两个发音元音之间时，若该辅音在音标中作为后一个音节的发音起音声母（与后一元音相拼），该辅音【必须归入后一个音节】！
+   - ⚠️【绝对红线：元音 + r + 元音】：当字母 r 紧随元音且 r 后面跟发音元音时（如 orange 音标为 /ˈɔː.rɪndʒ/ 或 /ˈɒ.rɪndʒ/，/r/ 是第二音节的起音声母拼读 /ɪ/）：
+     - orange 必须切分为 ["o", "range"]，绝对严禁切成 ["or", "ange"]！
+     - 类似词切分示范：
+       - banana -> ["ba", "na", "na"]
+       - music -> ["mu", "sic"]
+       - hotel -> ["ho", "tel"]
+       - zero -> ["ze", "ro"]
+       - variable -> ["va", "ri", "a", "ble"]
+       - character -> ["cha", "rac", "ter"]
+       - parent -> ["pa", "rent"]
+       - story -> ["sto", "ry"]
+   - 只有当 r 后面接辅音或处于词尾时（r-controlled 元音，如 curly -> ["cur", "ly"]、garden -> ["gar", "den"]、morning -> ["mor", "ning"]），r 才归属前一个音节。
+3. 双辅音与复合词切分：
+   - 双写辅音（VC-CV，如 yel-low、hap-py、ap-ple、com-mand）：第一个辅音归前、第二个辅音归后。
+   - 双字母一音（th、sh、ch、ph、wh）：整体发一个音，不能拆开，按发音归后（如 tea-cher、fa-ther）。
+   - 复合词优先在子词边界切分（如 head-ache、pass-word、sun-flow-er）。
+
+【哑音字母规则（silentIndices）】
+- 不发音字母记录其在单词中的 0-based 升序下标；
+- 双写辅音：第一个辅音不发音，记为哑音（如 apple 中下标 1 的 p 为哑音 -> [1]，yellow 中下标 2 的 l 为哑音 -> [2]）；
+- 词尾不发音的 e（如 orange 词尾 e 下标 5 为哑音 -> [5]，cake 词尾 e 下标 3 为哑音 -> [3]）；
+- 无哑音时返回 []。
+
+【词源与短语规则】
+- 词源必须可靠；没有可靠词根词缀时省略相应字段，严禁编造。
+- phrases 生成 4–8 条最常见、最实用的固定搭配，并提供准确中文释义。
 ${JSON_ONLY_RULE}`
 
 export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。

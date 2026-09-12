@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowRight, Scissors, Combine, BookOpen, Quote, Volume2, Star } from 'lucide-react'
+import { ArrowRight, Scissors, Combine, BookOpen, Quote, Volume2, Star, Sparkles } from 'lucide-react'
 import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
@@ -17,6 +17,7 @@ import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
 interface DictWordCardProps {
   word: WordItem
   phoneticPreference: 'us' | 'uk'
+  onWordChange?: (updatedWord: WordItem) => void
 }
 
 function wordSizeClass(length: number) {
@@ -114,6 +115,7 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
 export function DictWordCard({
   word: sourceWord,
   phoneticPreference,
+  onWordChange,
 }: DictWordCardProps) {
   const word = useEnsureAiWordSections(sourceWord, FULL_AI_SECTIONS)
   const [isSplit, setIsSplit] = useState(false)
@@ -304,13 +306,15 @@ export function DictWordCard({
                   ))}
                 </div>
               </div>
-              <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                {contextStatus === 'pending'
-                  ? 'LOADING'
-                  : contextStatus === 'error'
-                    ? 'FAILED'
-                    : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
+                  {contextStatus === 'pending'
+                    ? 'LOADING'
+                    : contextStatus === 'error'
+                      ? 'FAILED'
+                      : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
+                </span>
+              </div>
             </div>
 
             <div className={`min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar ${
@@ -325,12 +329,12 @@ export function DictWordCard({
                   ))}
                 </div>
               ) : contextStatus === 'error' ? (
-                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
-                  {contextTab === 'examples' ? '例句' : '短语'}生成失败，重新查询可再次补全
+                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-2 py-6 text-center text-sm text-gray-400">
+                  <span>{contextTab === 'examples' ? '例句' : '短语'}生成失败</span>
                 </div>
               ) : contextItems.length === 0 ? (
-                <div className="col-span-2 h-full flex items-center justify-center text-sm text-gray-400">
-                  暂无{contextTab === 'examples' ? '例句' : '常用短语'}
+                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-3 py-6 text-center">
+                  <span className="text-sm text-gray-400">暂无{contextTab === 'examples' ? '例句' : '常用短语'}</span>
                 </div>
               ) : contextItems.map((item, idx) => {
                 const isPlaying = speakingSentenceIdx === idx

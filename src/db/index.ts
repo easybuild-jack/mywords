@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie'
-import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode } from '@/types'
+import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode, WordExample } from '@/types'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { buildWordId } from '@/lib/wordId'
 
@@ -399,19 +399,39 @@ export async function deleteCustomVocabularyBook(bookId: string): Promise<boolea
 export async function saveWordOverride(
   wordId: string,
   name: string,
-  overrides: { syllables?: string[]; etymology?: WordEtymology; silentIndices?: number[] }
+  overrides: {
+    syllables?: string[]
+    etymology?: WordEtymology
+    silentIndices?: number[]
+    examples?: WordExample[]
+    phrases?: { en: string; cn: string }[]
+  }
 ): Promise<WordOverrideRecord> {
   const cleanName = name.trim()
-  const record: WordOverrideRecord = {
+  let record: WordOverrideRecord = {
     wordId,
     name: cleanName,
     syllables: overrides.syllables,
     etymology: overrides.etymology,
     silentIndices: overrides.silentIndices,
+    examples: overrides.examples,
+    phrases: overrides.phrases,
     updatedAt: Date.now(),
   }
 
   try {
+    const existing = await db.wordOverrides.get(wordId)
+    record = {
+      ...existing,
+      wordId,
+      name: cleanName,
+      syllables: overrides.syllables !== undefined ? overrides.syllables : existing?.syllables,
+      etymology: overrides.etymology !== undefined ? overrides.etymology : existing?.etymology,
+      silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : existing?.silentIndices,
+      examples: overrides.examples !== undefined ? overrides.examples : existing?.examples,
+      phrases: overrides.phrases !== undefined ? overrides.phrases : existing?.phrases,
+      updatedAt: Date.now(),
+    }
     await db.wordOverrides.put(record)
 
     // 1. 同步更新 wordRecords 快照
@@ -420,9 +440,11 @@ export async function saveWordOverride(
       await db.wordRecords.update(wordId, {
         wordItem: {
           ...existingWordRecord.wordItem,
-          syllables: overrides.syllables || existingWordRecord.wordItem.syllables,
-          etymology: overrides.etymology !== undefined ? overrides.etymology : existingWordRecord.wordItem.etymology,
-          silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : existingWordRecord.wordItem.silentIndices,
+          syllables: record.syllables || existingWordRecord.wordItem.syllables,
+          etymology: record.etymology !== undefined ? record.etymology : existingWordRecord.wordItem.etymology,
+          silentIndices: record.silentIndices !== undefined ? record.silentIndices : existingWordRecord.wordItem.silentIndices,
+          examples: record.examples !== undefined ? record.examples : existingWordRecord.wordItem.examples,
+          phrases: record.phrases !== undefined ? record.phrases : existingWordRecord.wordItem.phrases,
         },
       })
     }
