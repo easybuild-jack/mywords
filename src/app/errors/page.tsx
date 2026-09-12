@@ -20,6 +20,7 @@ import {
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { getActiveTroubleWords, removeErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
+import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
 import type { WordMasteryRecord, WordItem } from '@/types'
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | '...')[] {
@@ -109,6 +110,7 @@ export default function TroubleWordsPage() {
   const handleStartPractice = (wordsToPractice?: WordItem[], startIdx: number = 0) => {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
+    startRouteProgressBar()
     startErrorLearnPractice(list, startIdx)
     router.push('/learn')
   }
@@ -117,6 +119,7 @@ export default function TroubleWordsPage() {
   const handleStartAnnihilation = (wordsToPractice?: WordItem[], startIdx: number = 0) => {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
+    startRouteProgressBar()
     startErrorPractice(list, startIdx)
     router.push('/dictation')
   }
@@ -205,7 +208,10 @@ export default function TroubleWordsPage() {
             </div>
             <div className="pt-2">
               <button
-                onClick={() => router.push('/learn')}
+                onClick={() => {
+                  startRouteProgressBar()
+                  router.push('/learn')
+                }}
                 className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow transition-all cursor-pointer"
               >
                 前往单词跟学继续练习 →

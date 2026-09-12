@@ -6,10 +6,16 @@ import { useTypingKeyboard } from '@/hooks/useTypingKeyboard'
 import { LearnCard } from '@/components/typing/LearnCard'
 import { PracticeStageFrame } from '@/components/typing/PracticeStageFrame'
 import { UnitCompleteCard } from '@/components/typing/UnitCompleteCard'
+import { UnitLoadingSkeleton } from '@/components/typing/UnitLoadingSkeleton'
+
+interface LearnStageProps {
+  isReady?: boolean
+}
 
 /** 跟学舞台：单词全程可见，专注拼读与构词法跟打 */
-export function LearnStage() {
+export function LearnStage({ isReady = true }: LearnStageProps) {
   const currentWord = useWorkspaceStore((s) => s.currentLoadedWords[s.activeWordIndex])
+  const isUnitLoading = useWorkspaceStore((s) => s.isUnitLoading)
   const currentInput = useWorkspaceStore((s) => s.currentInput)
   const hasTypo = useWorkspaceStore((s) => s.hasTypo)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
@@ -25,7 +31,9 @@ export function LearnStage() {
         <UnitCompleteCard />
       ) : (
         <PracticeStageFrame>
-          {currentWord && (
+          {!isReady || isUnitLoading || !currentWord ? (
+            <UnitLoadingSkeleton />
+          ) : (
             <LearnCard
               word={currentWord}
               currentInput={currentInput}

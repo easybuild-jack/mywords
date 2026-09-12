@@ -76,6 +76,11 @@ interface WorkspaceState {
   getBookModeUnit: (bookId: string, mode: PracticeMode) => number
   commitBookAndUnit: (bookId: string, unitIndex: number, targetMode: PracticeMode) => Promise<void>
   
+  // 单元与词库加载过渡控制
+  isUnitLoading: boolean
+  unitLoadingTarget: { bookName: string; unitIndex: number; mode: PracticeMode } | null
+  setIsUnitLoading: (loading: boolean, target?: { bookName: string; unitIndex: number; mode: PracticeMode } | null) => void
+  
   // 模式与做题控制
   mode: PracticeMode
   /** 当前页面生效的循环次数，切页时与 loopCounts 互相存取 */
@@ -323,6 +328,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       isDictationPhoneticEnabled: true,
       isDictationMeaningEnabled: true,
+      isUnitLoading: false,
+      unitLoadingTarget: null,
+      setIsUnitLoading: (loading: boolean, target = null) =>
+        set({ isUnitLoading: loading, unitLoadingTarget: target }),
       ...DICTATION_STEP_RESET,
 
       loadCurrentUnitWords: async () => {
@@ -567,6 +576,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           book = custom || BUILTIN_BOOKS[0]
         }
 
+        set({
+          isUnitLoading: true,
+          unitLoadingTarget: {
+            bookName: book.name,
+            unitIndex,
+            mode: targetMode,
+          },
+        })
+
         const bookModeProgress = { ...get().bookModeProgress }
         if (!bookModeProgress[book.id]) {
           bookModeProgress[book.id] = { learn: 0, dictation: 0, phonetic: 0 }
@@ -602,7 +620,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...DICTATION_STEP_RESET,
         })
 
+        const startTime = Date.now()
         await get().loadCurrentUnitWords()
+        const elapsed = Date.now() - startTime
+        if (elapsed < 450) {
+          await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
+        }
+
+        set({ isUnitLoading: false, unitLoadingTarget: null })
 
         const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
@@ -636,6 +661,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
 
         set({
+          isUnitLoading: true,
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
           cursors,
@@ -650,7 +676,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...restoreLoopCount(get),
           ...DICTATION_STEP_RESET,
         })
+
+        const startTime = Date.now()
         await get().loadCurrentUnitWords()
+        const elapsed = Date.now() - startTime
+        if (elapsed < 450) {
+          await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
+        }
+
+        set({ isUnitLoading: false })
 
         const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
@@ -676,6 +710,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
 
         if (get().mode === nextMode) return
+
+        set({ isUnitLoading: true })
 
         const cursors = saveActiveCursor(get)
         const currentBookId = get().currentBookId
@@ -724,6 +760,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (get().activeWordIndex > total - 1) {
           set({ activeWordIndex: Math.max(0, total - 1) })
         }
+        set({ isUnitLoading: false })
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {

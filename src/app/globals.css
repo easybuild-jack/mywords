@@ -710,3 +710,13 @@
 :root[data-skin="avocado-cream"] ::-webkit-scrollbar-thumb:hover {
   background: rgba(127, 169, 33, 0.45) !important;
 }
+
+/* 扫光流光关键帧动画 (用于骨架屏与卡片加载态) */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

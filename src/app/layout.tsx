@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Sidebar } from '@/components/layout/Sidebar'
+import { RouteProgressBar } from '@/components/layout/RouteProgressBar'
+import { PageTransitionWrapper } from '@/components/layout/PageTransitionWrapper'
 import { SkinApplier } from '@/components/layout/SkinApplier'
 import { ImportModal } from '@/components/modals/ImportModal'
 import { SettingsModal } from '@/components/modals/SettingsModal'
@@ -25,12 +27,15 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="dark">
       <body className="min-h-screen bg-background text-foreground flex antialiased overflow-hidden">
+        {/* 全局顶部路由流光进度条 */}
+        <RouteProgressBar />
+
         {/* 左侧全局常驻侧边栏 */}
         <Sidebar />
 
         {/* 右侧主内容区 */}
         <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden flex flex-col justify-between relative">
-          {children}
+          <PageTransitionWrapper>{children}</PageTransitionWrapper>
         </main>
 
         {/* 全局 AI 助手抽屉与右侧常驻触发器 */}

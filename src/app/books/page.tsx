@@ -7,6 +7,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { db } from '@/db'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
+import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
 import type { VocabularyBook, PracticeMode } from '@/types'
 
 function BooksHubContent() {
@@ -52,6 +53,8 @@ function BooksHubContent() {
   const [unitPage, setUnitPage] = useState(0)
   const [bookToDelete, setBookToDelete] = useState<VocabularyBook | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [loadingUnitIndex, setLoadingUnitIndex] = useState<number | null>(null)
+  const [isPreviewSwitching, setIsPreviewSwitching] = useState(false)
 
   // 当进入词库管理页或全局正在学习的词库就绪时，默认展示当前选中的词库
   useEffect(() => {
@@ -127,16 +130,27 @@ function BooksHubContent() {
 
   // 只有真正点击了某个具体的单元卡片，才将所选词库与单元生效并进入做题
   const handleSelectUnit = async (idx: number) => {
-    await commitBookAndUnit(activeBook.id, idx, targetMode)
-    router.push(targetRoute)
+    if (loadingUnitIndex !== null) return
+    setLoadingUnitIndex(idx)
+    startRouteProgressBar()
+    try {
+      await commitBookAndUnit(activeBook.id, idx, targetMode)
+      router.push(targetRoute)
+    } catch (err) {
+      console.error('Failed to select unit:', err)
+      setLoadingUnitIndex(null)
+    }
   }
 
-  // 切换词库卡片：仅更新当前页面的预览词库，不修改正在做题的状态数据
+  // 切换词库卡片：微动画平滑过渡预览词库
   const handleSelectPreviewBook = (bookId: string) => {
+    if (bookId === previewBookId) return
+    setIsPreviewSwitching(true)
     setPreviewBookId(bookId)
     const modeUnit = getBookModeUnit(bookId, progressMode)
     const targetPage = Math.floor(modeUnit / unitsPerPage)
     setUnitPage(targetPage)
+    setTimeout(() => setIsPreviewSwitching(false), 200)
   }
 
   const handleConfirmDelete = async () => {
@@ -313,29 +327,39 @@ function BooksHubContent() {
           )}
         </div>
 
-        <div className="h-[336px] min-h-[336px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start overflow-y-auto pr-1">
+        <div className={`h-[336px] min-h-[336px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start overflow-y-auto pr-1 transition-all duration-200 ${
+          isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
+        }`}>
           {currentUnits.map((idx) => {
             const isMastered = idx < activeModeUnit
             const isCurrent = idx === activeModeUnit
+            const isLoadingThisUnit = loadingUnitIndex === idx
 
             return (
               <div
                 key={idx}
                 onClick={() => handleSelectUnit(idx)}
-                className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col justify-between group h-[76px] ${
-                  isCurrent
-                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70'
+                className={`p-3 rounded-xl border transition-all flex flex-col justify-between group h-[76px] ${
+                  isLoadingThisUnit
+                    ? 'border-primary bg-primary/20 ring-2 ring-primary/40 shadow-[0_0_20px_rgba(var(--primary-rgb)/0.3)] animate-pulse cursor-wait scale-[1.02]'
+                    : isCurrent
+                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70 cursor-pointer'
                     : isMastered
-                    ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05]'
-                    : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]'
-                }`}
+                    ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05] cursor-pointer'
+                    : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05] cursor-pointer'
+                } ${loadingUnitIndex !== null && !isLoadingThisUnit ? 'opacity-40 pointer-events-none' : ''}`}
               >
                 {/* 顶部标题与状态标签 */}
                 <div className="flex items-center justify-between gap-1">
-                  <span className={`font-bold text-sm ${isCurrent ? 'text-accent' : 'text-white'}`}>
+                  <span className={`font-bold text-sm ${isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-white'}`}>
                     Unit {idx + 1}
                   </span>
-                  {isCurrent ? (
+                  {isLoadingThisUnit ? (
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30 flex items-center gap-1 leading-none">
+                      <Loader2 className="size-2.5 animate-spin text-primary" />
+                      准备中
+                    </span>
+                  ) : isCurrent ? (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none">
                       进行中
                     </span>
@@ -357,7 +381,12 @@ function BooksHubContent() {
                     {unitSize} 词
                   </span>
                   
-                  {isCurrent ? (
+                  {isLoadingThisUnit ? (
+                    <span className="text-[11px] font-bold text-primary flex items-center gap-1 leading-none">
+                      <Loader2 className="size-3 animate-spin text-primary shrink-0" />
+                      <span>载入中...</span>
+                    </span>
+                  ) : isCurrent ? (
                     <span className="text-[11px] font-bold text-accent flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
                       <Play className="size-2.5 fill-current" />
                       进入

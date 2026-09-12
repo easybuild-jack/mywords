@@ -8,10 +8,12 @@ import { formatShortcutDisplay } from '@/lib/shortcuts'
 interface PracticeFooterProps {
   /** 学习页单词常驻可见，不提示偷看键 */
   showPeekHint?: boolean
+  /** 页面数据就绪标识 */
+  isReady?: boolean
 }
 
 /** 练习页面底部的进度与快捷键提示条 */
-export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
+export function PracticeFooter({ showPeekHint = false, isReady = true }: PracticeFooterProps) {
   const {
     activeWordIndex,
     currentLoadedWords,
@@ -26,6 +28,7 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
     mode,
     starredWordIds,
     starCurrentWord,
+    isUnitLoading,
   } = useWorkspaceStore()
 
   const total = currentLoadedWords.length || 20
@@ -35,13 +38,17 @@ export function PracticeFooter({ showPeekHint = false }: PracticeFooterProps) {
   const currentWord = currentLoadedWords[activeWordIndex]
   const isStarred = Boolean(currentWord && starredWordIds?.includes(currentWord.id))
 
+  const isPreparing = !isReady || isUnitLoading
+
   return (
     <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30">
       {/* 尺寸以 HeaderToolbar 为准：同样的 px-5 py-2.5 到 xl:px-7 xl:py-3.5，两条工具栏等高并同步放大 */}
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
         <div className="flex items-center gap-2">
           <span className="font-mono text-primary font-bold text-sm xl:text-base">
-            {isDictationError
+            {isPreparing
+              ? '···'
+              : isDictationError
               ? `${conqueredErrorWordIds?.length || 0} / ${total}`
               : `${currentNum} / ${total}`}
           </span>

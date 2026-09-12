@@ -6,10 +6,16 @@ import { isShortcutMatch, DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 import { PhoneticCard } from '@/components/typing/PhoneticCard'
 import { PracticeStageFrame } from '@/components/typing/PracticeStageFrame'
 import { UnitCompleteCard } from '@/components/typing/UnitCompleteCard'
+import { UnitLoadingSkeleton } from '@/components/typing/UnitLoadingSkeleton'
+
+interface PhoneticStageProps {
+  isReady?: boolean
+}
 
 /** 默写音标舞台：根据单词与释义默写出音标，点选输入附带键盘辅助 */
-export function PhoneticStage() {
+export function PhoneticStage({ isReady = true }: PhoneticStageProps) {
   const currentWord = useWorkspaceStore((s) => s.currentLoadedWords[s.activeWordIndex])
+  const isUnitLoading = useWorkspaceStore((s) => s.isUnitLoading)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
   const currentWordRemainingLoops = useWorkspaceStore((s) => s.currentWordRemainingLoops)
   const isUnitFinished = useWorkspaceStore((s) => s.isUnitFinished)
@@ -118,7 +124,9 @@ export function PhoneticStage() {
         <UnitCompleteCard />
       ) : (
         <PracticeStageFrame>
-          {currentWord && (
+          {!isReady || isUnitLoading || !currentWord ? (
+            <UnitLoadingSkeleton />
+          ) : (
             <PhoneticCard
               word={currentWord}
               phoneticPreference={phoneticPreference}

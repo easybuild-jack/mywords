@@ -214,23 +214,36 @@ export function DictWordCard({
     >
       {/* 上半区（音标 + 单词 + 音节拆分 + 释义）无跟打输入槽 */}
       <div className="space-y-2 xl:space-y-3 pt-2">
-        {/* 音标栏 */}
-        <div className="h-8 xl:h-9 flex items-center justify-center gap-x-5">
+        {/* 音标栏：支持用户手动点击播放对应口音发音 */}
+        <div className="h-8 xl:h-9 flex items-center justify-center gap-x-3 sm:gap-x-4">
           {phonetics.map((entry) => (
-            <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
+            <button
+              key={entry.label ?? 'single'}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                audioEngine.playPronunciation(
+                  word.name,
+                  entry.label === '英' ? 'uk' : 'us'
+                )
+              }}
+              className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"
+              title={`点击播放 ${entry.label || ''} 读音`}
+            >
               {entry.label && (
-                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280]">
+                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280] group-hover:text-primary transition-colors">
                   {entry.label}
                 </span>
               )}
               <span
-                className={`font-mono tracking-wide text-gray-300 ${
+                className={`font-mono tracking-wide text-gray-300 group-hover:text-white transition-colors flex items-center gap-1.5 ${
                   phonetics.length > 1 ? 'text-lg xl:text-xl' : 'text-xl xl:text-2xl'
                 }`}
               >
-                {entry.text}
+                <span>{entry.text}</span>
+                <Volume2 className="size-3.5 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
               </span>
-            </span>
+            </button>
           ))}
         </div>
 

@@ -115,7 +115,7 @@ export default function DictionaryPage() {
           })
           setNotFoundQuery(null)
           setIsSearching(false)
-          audioEngine.playPronunciation(cachedWord.name, phoneticPreference)
+          // 单词查询页不自动发音，保留卡片右上角喇叭按钮与音标点击手动播放
           return
         }
 
@@ -144,7 +144,7 @@ export default function DictionaryPage() {
               setIsAiSearching(false)
               setNotFoundQuery(null)
               setAiError(null)
-              audioEngine.playPronunciation(wordItem.name, phoneticPreference)
+              // 单词查询页不自动发音，等待用户手动点击播放
               return
             } else {
               setAiError('模型未返回有效单词结构数据，没有等到结果，请稍后再试。')
@@ -200,7 +200,6 @@ export default function DictionaryPage() {
       }
     },
     [
-      phoneticPreference,
       hasAiKey,
       aiConfig,
     ]

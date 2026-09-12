@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { CheckCircle2, RotateCcw, ArrowRight, Sparkles } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
 
 /** 学习页与默写页共用的通关结算卡片，文案按当前场景切换 */
 export function UnitCompleteCard() {
@@ -133,6 +134,7 @@ export function UnitCompleteCard() {
             <button
               ref={exitToErrorsButtonRef}
               onClick={async () => {
+                startRouteProgressBar()
                 await exitErrorPractice()
                 router.push('/errors')
               }}
@@ -144,6 +146,7 @@ export function UnitCompleteCard() {
               <button
                 ref={dictationButtonRef}
                 onClick={() => {
+                  startRouteProgressBar()
                   startErrorPractice(currentLoadedWords, 0)
                   router.push('/dictation')
                 }}
@@ -155,6 +158,7 @@ export function UnitCompleteCard() {
             <button
               ref={nextButtonRef}
               onClick={async () => {
+                startRouteProgressBar()
                 await exitErrorPractice()
                 router.push(mode === 'learn' ? '/learn' : '/dictation')
               }}
@@ -178,7 +182,10 @@ export function UnitCompleteCard() {
             {mode === 'learn' && (
               <button
                 ref={dictationButtonRef}
-                onClick={() => router.push('/dictation')}
+                onClick={() => {
+                  startRouteProgressBar()
+                  router.push('/dictation')
+                }}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
               >
                 <span>去默写检验</span>

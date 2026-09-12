@@ -6,10 +6,16 @@ import { useTypingKeyboard } from '@/hooks/useTypingKeyboard'
 import { DictationCard } from '@/components/typing/DictationCard'
 import { PracticeStageFrame } from '@/components/typing/PracticeStageFrame'
 import { UnitCompleteCard } from '@/components/typing/UnitCompleteCard'
+import { UnitLoadingSkeleton } from '@/components/typing/UnitLoadingSkeleton'
+
+interface DictationStageProps {
+  isReady?: boolean
+}
 
 /** 默写单词舞台：英文遮蔽，听音/看译文 → 拼写盲打 */
-export function DictationStage() {
+export function DictationStage({ isReady = true }: DictationStageProps) {
   const currentWord = useWorkspaceStore((s) => s.currentLoadedWords[s.activeWordIndex])
+  const isUnitLoading = useWorkspaceStore((s) => s.isUnitLoading)
   const currentInput = useWorkspaceStore((s) => s.currentInput)
   const hasTypo = useWorkspaceStore((s) => s.hasTypo)
   const isPeeking = useWorkspaceStore((s) => s.isPeeking)
@@ -26,7 +32,9 @@ export function DictationStage() {
         <UnitCompleteCard />
       ) : (
         <PracticeStageFrame>
-          {currentWord && (
+          {!isReady || isUnitLoading || !currentWord ? (
+            <UnitLoadingSkeleton />
+          ) : (
             <DictationCard
               word={currentWord}
               currentInput={currentInput}
