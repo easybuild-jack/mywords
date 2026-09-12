@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie'
-import type { VocabularyBook, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode, WordExample } from '@/types'
+import type { VocabularyBook, VocabularyUnit, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode, WordExample } from '@/types'
 import { BUILTIN_BOOKS } from '@/resources/books'
 import { buildWordId } from '@/lib/wordId'
 
@@ -17,6 +17,21 @@ const STORE_SCHEMA_V3: Record<string, string> = {
 const STORE_SCHEMA_V4: Record<string, string> = {
   ...STORE_SCHEMA_V3,
   aiWordCache: 'id, name',
+}
+
+const UNITS_SCHEMA = 'id, bookId, [bookId+order]'
+
+// IndexedDB 不能原地修改主键，因此先删除旧的空进度表，再按新主键重建。
+const STORE_SCHEMA_V5 = {
+  ...STORE_SCHEMA_V4,
+  units: UNITS_SCHEMA,
+  unitProgress: null,
+}
+
+const STORE_SCHEMA_V6 = {
+  ...STORE_SCHEMA_V4,
+  units: UNITS_SCHEMA,
+  unitProgress: '[unitId+mode], unitId, bookId, mode, status, lastStudiedAt',
 }
 
 /**
@@ -39,8 +54,9 @@ function mergeMasteryRecords(a: WordMasteryRecord, b: WordMasteryRecord): WordMa
 
 export class MyWordsDatabase extends Dexie {
   books!: Table<VocabularyBook, string>
+  units!: Table<VocabularyUnit, string>
   wordRecords!: Table<WordMasteryRecord, string>
-  unitProgress!: Table<UnitProgressRecord, string>
+  unitProgress!: Table<UnitProgressRecord, [string, PracticeMode]>
   wordOverrides!: Table<WordOverrideRecord, string>
   aiWordCache!: Table<WordItem, string>
 
@@ -89,6 +105,10 @@ export class MyWordsDatabase extends Dexie {
 
     // v4: 增加 AI 字典单词本地缓存表
     this.version(4).stores(STORE_SCHEMA_V4)
+
+    // v5-v6: 增加单元表，并把进度主键从单元序号改为稳定的 unitId + mode
+    this.version(5).stores(STORE_SCHEMA_V5)
+    this.version(6).stores(STORE_SCHEMA_V6)
   }
 
   async initializeDefaults() {

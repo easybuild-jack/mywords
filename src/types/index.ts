@@ -76,6 +76,16 @@ export interface VocabularyBook {
   updatedAt: number;
 }
 
+export interface VocabularyUnit {
+  id: string;
+  bookId: string;                               // 所属词库
+  order: number;                                // 词库内排序，从 0 开始
+  name: string;                                 // 可编辑的单元名称
+  wordCount: number;                            // 当前归属该单元的单词数量
+  createdAt: number;
+  updatedAt: number;
+}
+
 // ==========================================
 // 3. 用户做题掌握度与持久化模型 (IndexedDB)
 // ==========================================
@@ -104,11 +114,16 @@ export interface WordMasteryRecord {
 }
 
 export interface UnitProgressRecord {
+  unitId: string;
   bookId: string;
-  unitIndex: number;
-  isFinished: boolean;                          // 单元是否已 100% 通关
-  completedWordIds: string[];                   // 已掌握单词 ID
-  activeRetryWordIds: string[];                 // 本单元当前仍待重考的错词 ID 队列
+  mode: PracticeMode;
+  status: 'not_started' | 'in_progress' | 'completed';
+  currentWordIndex: number;
+  completedWordIds: string[];
+  retryWordIds: string[];
+  startedAt?: number;
+  lastStudiedAt?: number;
+  completedAt?: number;
 }
 
 export interface WordOverrideRecord {

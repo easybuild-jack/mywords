@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "bookId": "book_basewords",
+  "totalWords": 3845,
+  "units": [
+    {
+      "id": "base_grammar_function",
+      "name": "核心语法与功能词",
+      "order": 0,
+      "wordCount": 161
+    },
+    {
+      "id": "base_colors_shapes",
+      "name": "颜色、形状与外观",
+      "order": 1,
+      "wordCount": 40
+    },
+    {
+      "id": "base_clothing_accessories",
+      "name": "服饰与配件",
+      "order": 2,
+      "wordCount": 37
+    },
+    {
+      "id": "base_shopping_business",
+      "name": "购物、商业与金融",
+      "order": 3,
+      "wordCount": 76
+    },
+    {
+      "id": "base_food_cooking",
+      "name": "饮食与烹饪",
+      "order": 4,
+      "wordCount": 81
+    },
+    {
+      "id": "base_fruits",
+      "name": "水果",
+      "order": 5,
+      "wordCount": 11
+    },
+    {
+      "id": "base_vegetables",
+      "name": "蔬菜",
+      "order": 6,
+      "wordCount": 14
+    },
+    {
+      "id": "base_home_household",
+      "name": "家居与生活用品",
+      "order": 7,
+      "wordCount": 54
+    },
+    {
+      "id": "base_time_numbers",
+      "name": "时间、数字与度量",
+      "order": 8,
+      "wordCount": 158
+    },
+    {
+      "id": "base_family_people",
+      "name": "家庭、人物与关系",
+      "order": 9,
+      "wordCount": 60
+    },
+    {
+      "id": "base_body_health",
+      "name": "身体、健康与医疗",
+      "order": 10,
+      "wordCount": 90
+    },
+    {
+      "id": "base_emotions_character",
+      "name": "情绪、性格与品格",
+      "order": 11,
+      "wordCount": 147
+    },
+    {
+      "id": "base_physical_actions",
+      "name": "身体动作与日常操作",
+      "order": 12,
+      "wordCount": 402
+    },
+    {
+      "id": "base_actions_processes",
+      "name": "行为、过程与应对",
+      "order": 13,
+      "wordCount": 402
+    },
+    {
+      "id": "base_sports_games",
+      "name": "运动、游戏与竞赛",
+      "order": 14,
+      "wordCount": 47
+    },
+    {
+      "id": "base_travel_transport",
+      "name": "旅行、交通与方向",
+      "order": 15,
+      "wordCount": 96
+    },
+    {
+      "id": "base_arts_entertainment",
+      "name": "艺术、文学与娱乐",
+      "order": 16,
+      "wordCount": 98
+    },
+    {
+      "id": "base_communication_language",
+      "name": "语言、交流与表达",
+      "order": 17,
+      "wordCount": 119
+    },
+    {
+      "id": "base_work_professions",
+      "name": "职业、工作与组织",
+      "order": 18,
+      "wordCount": 119
+    },
+    {
+      "id": "base_education_learning",
+      "name": "学校、教育与学习",
+      "order": 19,
+      "wordCount": 93
+    },
+    {
+      "id": "base_nature_ecology",
+      "name": "自然、植物与生态",
+      "order": 20,
+      "wordCount": 103
+    },
+    {
+      "id": "base_animals",
+      "name": "动物世界",
+      "order": 21,
+      "wordCount": 66
+    },
+    {
+      "id": "base_buildings_facilities",
+      "name": "建筑与公共设施",
+      "order": 22,
+      "wordCount": 39
+    },
+    {
+      "id": "base_culture_society",
+      "name": "世界、文化与公共社会",
+      "order": 23,
+      "wordCount": 137
+    },
+    {
+      "id": "base_science_technology",
+      "name": "科学、研究与科技",
+      "order": 24,
+      "wordCount": 130
+    },
+    {
+      "id": "base_thinking_decisions",
+      "name": "思考、认知与决策",
+      "order": 25,
+      "wordCount": 113
+    },
+    {
+      "id": "base_qualities_states",
+      "name": "性质、状态与评价",
+      "order": 26,
+      "wordCount": 272
+    },
+    {
+      "id": "base_change_results",
+      "name": "变化、发展与结果",
+      "order": 27,
+      "wordCount": 272
+    },
+    {
+      "id": "base_objects_materials",
+      "name": "物品、工具与材料",
+      "order": 28,
+      "wordCount": 223
+    },
+    {
+      "id": "base_common_abstract",
+      "name": "通用与抽象",
+      "order": 29,
+      "wordCount": 185
+    }
+  ]
+}
