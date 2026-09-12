@@ -7,11 +7,11 @@ import { DictEmptyState } from '@/components/dictionary/DictEmptyState'
 import { DictSearchingCard } from '@/components/dictionary/DictSearchingCard'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import {
-  searchWordAcrossDictionaries,
   searchWordSuggestions,
   type DictSearchResult,
   type DictSuggestionItem,
 } from '@/core/dictionarySearch'
+import { getWordFromAiCache } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { queryAiWordCore } from '@/lib/aiWordCore'
 import { getWordValidationError, isLikelyEnglishWord } from '@/lib/wordValidation'
@@ -28,7 +28,6 @@ export default function DictionaryPage() {
   // AI 字典配置与状态
   const aiConfig = useAiAssistantStore((s) => s.aiConfig)
   const [isAiSearching, setIsAiSearching] = useState(false)
-  const [searchingWord, setSearchingWord] = useState<string>('')
   const [aiError, setAiError] = useState<string | null>(null)
   const [aiWordNotFound, setAiWordNotFound] = useState(false)
 
@@ -58,11 +57,16 @@ export default function DictionaryPage() {
       })
       setSearchQuery(activeWord.name)
     } else {
-      // 默认 fallback 查 CET4 第一个词
+      // 不主动消耗 AI；已有缓存时才恢复默认展示词
       const sequence = searchSequenceRef.current
-      searchWordAcrossDictionaries('discover', currentBook?.id, currentBook?.name).then((res) => {
-        if (res && searchSequenceRef.current === sequence) {
-          setCurrentResult(res)
+      getWordFromAiCache('discover').then((word) => {
+        if (word && searchSequenceRef.current === sequence) {
+          setCurrentResult({
+            word,
+            sourceBookId: 'ai_cache',
+            sourceBookName: '',
+            isCurrentBook: false,
+          })
           setSearchQuery('discover')
         }
       })
@@ -74,7 +78,7 @@ export default function DictionaryPage() {
 
   useEffect(() => () => aiAbortRef.current?.abort(), [])
 
-  // 执行检索（自顶向下：AI 缓存表 -> 本地各词库 -> 自动触发 AI 查询并缓存）
+  // 主动查词只走 AI 缓存，未命中时查询 AI 基础数据并写回缓存
   const handleSearchSubmit = useCallback(
     async (queryText: string) => {
       const trimmed = queryText.trim()
@@ -99,27 +103,26 @@ export default function DictionaryPage() {
       setAiWordNotFound(false)
 
       try {
-        // 步骤 1：本地检索（首先查 AI 单词缓存表，其次查当前词库、其他词库与词形还原）
-        const localResult = await searchWordAcrossDictionaries(
-          trimmed,
-          currentBook?.id || 'book_cet4',
-          currentBook?.name || 'CET-4 核心词库'
-        )
+        const cachedWord = await getWordFromAiCache(trimmed)
         if (searchSequenceRef.current !== sequence) return
 
-        if (localResult) {
-          setCurrentResult(localResult)
+        if (cachedWord) {
+          setCurrentResult({
+            word: cachedWord,
+            sourceBookId: 'ai_cache',
+            sourceBookName: '',
+            isCurrentBook: false,
+          })
           setNotFoundQuery(null)
           setIsSearching(false)
-          audioEngine.playPronunciation(localResult.word.name, phoneticPreference)
+          audioEngine.playPronunciation(cachedWord.name, phoneticPreference)
           return
         }
 
-        // 步骤 2：本地完全查询不到时，检测是否具备 AI 能力
+        // 缓存未命中时才调用 AI
         if (hasAiKey) {
           setIsSearching(false)
           setIsAiSearching(true)
-          setSearchingWord(trimmed)
           setCurrentResult(null) // 立即清空旧卡片，进入全卡查询中骨架动画
           setNotFoundQuery(null)
           setAiError(null)
@@ -197,7 +200,6 @@ export default function DictionaryPage() {
       }
     },
     [
-      currentBook,
       phoneticPreference,
       hasAiKey,
       aiConfig,
@@ -279,11 +281,11 @@ export default function DictionaryPage() {
         validationError={searchValidationError}
       />
 
-      {/* 中部舞台：单词卡片展示区（垂直完美居中，彻底去除打字输入槽，底部无工具栏） */}
-      <div className="flex-1 min-h-0 flex items-center justify-center relative w-full px-4 py-3">
+      {/* 中部舞台：单词卡片展示区（尺寸与内边距与单词学习完全一致） */}
+      <div className="flex-1 min-h-0 flex items-center justify-center relative w-full px-4">
         <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300">
           {isAiSearching ? (
-            <DictSearchingCard word={searchingWord || searchQuery || notFoundQuery || '目标词'} />
+            <DictSearchingCard />
           ) : currentResult ? (
             <DictWordCard
               word={currentResult.word}
@@ -305,6 +307,16 @@ export default function DictionaryPage() {
           )}
         </div>
       </div>
+
+      {/* 底部占位平衡区：尺寸与 PracticeFooter 严格一致，确保中部卡片垂直定位与单词学习完全对齐 */}
+      <footer
+        className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-none opacity-0 select-none invisible"
+        aria-hidden="true"
+      >
+        <div className="rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center text-sm xl:text-base border border-transparent">
+          <div className="h-7 xl:h-8 flex items-center">&nbsp;</div>
+        </div>
+      </footer>
     </div>
   )
 }

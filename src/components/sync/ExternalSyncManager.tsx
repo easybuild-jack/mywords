@@ -4,11 +4,13 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Sparkles, ArrowRight, X, BookMarked } from 'lucide-react'
 import { db, mergeWordsIntoBook } from '@/db'
-import { searchWordAcrossDictionaries } from '@/core/dictionarySearch'
 import { buildWordId } from '@/lib/wordId'
 import { audioEngine } from '@/core/audioEngine'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import type { WordMasteryRecord, VocabularyBook } from '@/types'
+import { useAiAssistantStore } from '@/store/useAiAssistantStore'
+import { queryAiWordCore } from '@/lib/aiWordCore'
+import { AiDictionaryLookupError } from '@/lib/aiPrompts'
+import type { WordItem, WordMasteryRecord, VocabularyBook } from '@/types'
 
 export const COLLECTED_BOOK_ID = 'book_custom_collected'
 
@@ -23,6 +25,7 @@ interface SyncToastItem {
 
 export function ExternalSyncManager() {
   const router = useRouter()
+  const aiConfig = useAiAssistantStore((state) => state.aiConfig)
   const [toasts, setToasts] = useState<SyncToastItem[]>([])
   const isPollingRef = useRef(false)
 
@@ -62,20 +65,25 @@ export function ExternalSyncManager() {
           continue
         }
 
-        // 步骤 2：不存在生错词里，走 MyWords 通用的查词接口在词库中检索
-        const searchResult = await searchWordAcrossDictionaries(cleanWord)
-        if (!searchResult?.word) {
-          // 词库中未检索到该单词，跳过
+        // 步骤 2：只查 AI 缓存；未命中时调用 AI 基础查询
+        let targetWord: WordItem | null
+        try {
+          targetWord = await queryAiWordCore(aiConfig, cleanWord)
+        } catch (error) {
+          if (!(error instanceof AiDictionaryLookupError)) {
+            console.warn('[ExternalSyncManager] AI lookup failed:', error)
+          }
           continue
         }
-
-        const targetWord = searchResult.word
+        if (!targetWord) {
+          continue
+        }
 
         // 步骤 3：检索到了，直接加入生错词（标记 isStarred: true）
         if (!existingRecord) {
           const newRecord: WordMasteryRecord = {
             wordId: targetWord.id,
-            bookId: searchResult.sourceBookId || COLLECTED_BOOK_ID,
+            bookId: COLLECTED_BOOK_ID,
             wordName: targetWord.name,
             wordItem: targetWord,
             isMastered: false,
@@ -149,7 +157,7 @@ export function ExternalSyncManager() {
     } finally {
       isPollingRef.current = false
     }
-  }, [])
+  }, [aiConfig])
 
   // 监听窗口激活与定时轮询
   useEffect(() => {

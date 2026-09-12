@@ -500,7 +500,8 @@ export async function getWordFromAiCache(cleanWord: string): Promise<WordItem | 
 
     // 2. 备选：根据 name 字段做大小写不敏感匹配
     const byName = await db.aiWordCache
-      .filter((item) => item.name?.toLowerCase() === lower)
+      .where('name')
+      .equalsIgnoreCase(lower)
       .first()
 
     return byName || null
@@ -612,7 +613,8 @@ export async function searchWordsInAiCache(
   try {
     const lower = prefix.trim().toLowerCase()
     return await db.aiWordCache
-      .filter((item) => Boolean(item.name?.toLowerCase().startsWith(lower)))
+      .where('name')
+      .startsWithIgnoreCase(lower)
       .limit(limit)
       .toArray()
   } catch {
@@ -633,7 +635,7 @@ export async function clearAiWordCache(): Promise<void> {
 }
 
 /**
- * 从 AI 缓存表中删除指定单词（单词有了具体词库归属后移出缓存）
+ * 手动维护能力：正常查询、收藏和导入流程不会调用。
  */
 export async function deleteWordFromAiCache(cleanWord: string): Promise<void> {
   if (!cleanWord || typeof window === 'undefined') return

@@ -29,6 +29,7 @@ export function queryAiWordCore(
   const task = (async () => {
     const cached = await getWordFromAiCache(word)
     if (cached) return cached
+    if (!config.apiKey?.trim()) return null
 
     const raw = await fetchAiDictionaryWordCore(config, word)
     if (!raw) return null

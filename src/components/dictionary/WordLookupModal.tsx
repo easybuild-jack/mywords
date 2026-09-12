@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import { Volume2, Star, X, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
-import { searchWordAcrossDictionaries, type DictSearchResult } from '@/core/dictionarySearch'
+import type { DictSearchResult } from '@/core/dictionarySearch'
 import { audioEngine } from '@/core/audioEngine'
 import { toggleStarWord } from '@/db'
 import { formatMeaningText } from '@/lib/wordDisplay'
@@ -48,7 +48,6 @@ export function WordLookupModal({
     placement: 'top',
   })
 
-  const currentBook = useWorkspaceStore((s) => s.currentBook)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
   const starredWordIds = useWorkspaceStore((s) => s.starredWordIds)
   const aiConfig = useAiAssistantStore((s) => s.aiConfig)
@@ -111,23 +110,15 @@ export function WordLookupModal({
 
     void (async () => {
       try {
-        let lookupResult = await searchWordAcrossDictionaries(
-          cleanWord,
-          currentBook?.id || 'book_cet4',
-          currentBook?.name || 'CET-4 核心词库'
-        )
-
-        if (!lookupResult && aiConfig.apiKey?.trim()) {
-          const wordItem = await queryAiWordCore(aiConfig, cleanWord)
-          if (wordItem) {
-            lookupResult = {
+        const wordItem = await queryAiWordCore(aiConfig, cleanWord)
+        const lookupResult: DictSearchResult | null = wordItem
+          ? {
               word: wordItem,
-              sourceBookId: 'ai_live',
+              sourceBookId: 'ai_cache',
               sourceBookName: '',
               isCurrentBook: false,
             }
-          }
-        }
+          : null
 
         if (!isCancelled) {
           setResult(lookupResult)
@@ -154,8 +145,6 @@ export function WordLookupModal({
     }
   }, [
     aiConfig,
-    currentBook?.id,
-    currentBook?.name,
     isOpen,
     phoneticPreference,
     wordQuery,

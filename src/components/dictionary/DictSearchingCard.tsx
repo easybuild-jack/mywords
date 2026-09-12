@@ -1,21 +1,17 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Sparkles, Loader2, Volume2, BookOpen, Quote, Cpu } from 'lucide-react'
-
-interface DictSearchingCardProps {
-  word: string
-}
+import { Sparkles, Loader2, Volume2, Quote, Cpu } from 'lucide-react'
 
 const PARSING_STAGES = [
-  '正在连接模型并解析核心概念...',
-  '正在计算 IPA 音标与自然拼读音节拆分...',
-  '正在深入追溯拉丁/希腊词源与词根词缀...',
-  '正在生成地道双语语境例句与高频搭配...',
-  '正在校验词库数据完整性并进行最终渲染...',
+  '正在连接 AI 词典模型...',
+  '正在严格校验单词拼写...',
+  '正在生成美英 IPA 音标...',
+  '正在整理词性与中文释义...',
+  '正在校验基础数据格式...',
 ]
 
-export function DictSearchingCard({ word }: DictSearchingCardProps) {
+export function DictSearchingCard() {
   const [elapsed, setElapsed] = useState(0)
 
   useEffect(() => {
@@ -31,10 +27,6 @@ export function DictSearchingCard({ word }: DictSearchingCardProps) {
 
   return (
     <div className="relative w-full h-full flex flex-col justify-between text-center select-none pt-5 pb-6 px-7 xl:pt-6 xl:pb-7 xl:px-10 2xl:pt-8 2xl:pb-8 2xl:px-12 overflow-hidden">
-      {/* 顶部背景微光扫描与粒子光晕 */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-primary/20 blur-3xl rounded-full pointer-events-none animate-pulse" />
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent animate-pulse" />
-
       {/* 顶部左侧：AI 状态徽标 */}
       <div className="absolute top-4 left-4 xl:top-5 xl:left-5 2xl:top-6 2xl:left-6 flex items-center gap-2.5 z-20">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/25 text-primary text-xs font-semibold backdrop-blur-md shadow-sm">
@@ -54,15 +46,9 @@ export function DictSearchingCard({ word }: DictSearchingCardProps) {
         </div>
       </div>
 
-      {/* 中上部：单词大字、音标骨架与音节骨架 */}
+      {/* 中上部：查询结果返回前只显示中性骨架，不提前展示输入内容 */}
       <div className="flex flex-col items-center mt-6 xl:mt-7 2xl:mt-8">
-        {/* 目标词：大字流光脉冲 */}
-        <div className="relative inline-block my-1">
-          <h2 className="text-4xl sm:text-5xl xl:text-6xl 2xl:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-primary/90 to-white/90 animate-pulse font-serif drop-shadow-sm">
-            {word}
-          </h2>
-          <div className="absolute -inset-x-4 -inset-y-2 bg-primary/10 blur-xl rounded-full -z-10" />
-        </div>
+        <div className="h-12 xl:h-16 w-64 xl:w-80 rounded-xl bg-white/[0.05] animate-pulse" />
 
         {/* 音标与发音骨架条 */}
         <div className="mt-3 flex items-center justify-center gap-3">

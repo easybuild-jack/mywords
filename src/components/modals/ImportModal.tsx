@@ -15,8 +15,7 @@ import {
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
-import { dictionaryLoader } from '@/core/dictionaryLoader'
-import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook, deleteWordsFromAiCache } from '@/db'
+import { getCustomBooks, mergeWordsIntoBook, saveCustomVocabularyBook } from '@/db'
 import { reconcileWordForImport, type ReconciledImportWord } from '@/core/dictionarySearch'
 import {
   buildCsvTemplate,
@@ -252,17 +251,6 @@ compile v. 编译；编纂`
     } else {
       const newBook = await saveCustomVocabularyBook(bookName, '用户自定义导入词库', finalWords)
       await setBookId(newBook.id)
-    }
-
-    // ---- 核心闭环逻辑 ----
-    // 1. 若查询的单词来自 AI 缓存表，导入后删除缓存里的单词（因为有归属了，不应再存在于缓存里）
-    // 2. 若单词来自其他词库，则原词库里的单词不处理（一词多库共存为正常合法场景）
-    const aiCacheWordsToDelete = finalEntries
-      .filter((e) => e.isFromAiCache)
-      .map((e) => e.word.name)
-
-    if (aiCacheWordsToDelete.length > 0) {
-      await deleteWordsFromAiCache(aiCacheWordsToDelete)
     }
 
     setImportModalOpen(false)
@@ -507,7 +495,7 @@ compile v. 编译；编纂`
                 <span>已成功智能解析并补全 {parsedEntries.length} 个单词</span>
                 {aiCacheCount > 0 && (
                   <span className="text-[11px] font-normal px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                    ⚡ 其中 {aiCacheCount} 个词来自 AI 缓存（导入后自动移出缓存）
+                    ⚡ 其中 {aiCacheCount} 个词已保存在 AI 缓存
                   </span>
                 )}
               </span>
@@ -537,7 +525,7 @@ compile v. 编译；编纂`
                         {item.isFromAiCache ? (
                           <span
                             className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 whitespace-nowrap"
-                            title="来自 AI 字典临时缓存，导入后将从缓存删除"
+                            title="来自 AI 字典持久缓存，导入后继续保留"
                           >
                             ⚡ AI 缓存
                           </span>
