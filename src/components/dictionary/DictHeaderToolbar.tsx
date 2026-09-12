@@ -63,7 +63,7 @@ export function DictHeaderToolbar({
   }
 
   return (
-    <header className="w-full flex items-center justify-center p-4 xl:p-6 sticky top-0 z-50 pointer-events-auto">
+    <header className="w-full flex items-center justify-center p-4 xl:p-6 relative z-50 pointer-events-auto shrink-0">
       <div className="glass-card rounded-2xl xl:rounded-3xl px-4 xl:px-6 py-2 xl:py-2.5 flex items-center gap-3.5 xl:gap-5 text-sm xl:text-base w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300 justify-between">
         {/* 搜索输入栏（自然舒展填充剩余宽度） */}
         <div ref={containerRef} className="relative flex-1">

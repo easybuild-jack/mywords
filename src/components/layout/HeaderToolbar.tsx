@@ -40,7 +40,7 @@ export function HeaderToolbar() {
   } = useWorkspaceStore()
 
   return (
-    <header className="w-full flex items-center justify-center p-4 xl:p-6 sticky top-0 z-30 pointer-events-auto">
+    <header className="w-full flex items-center justify-center p-4 xl:p-6 relative z-30 pointer-events-auto shrink-0">
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-5 text-sm xl:text-base max-w-5xl xl:max-w-6xl 2xl:max-w-7xl shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300">
         {/* 1. 词书与章节快速入口 / 生错词攻坚模式指示 */}
         {isErrorPracticeActive ? (

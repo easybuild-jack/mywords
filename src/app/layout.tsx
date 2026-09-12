@@ -34,7 +34,7 @@ export default function RootLayout({
         <Sidebar />
 
         {/* 右侧主内容区 */}
-        <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden flex flex-col justify-between relative">
+        <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden flex flex-col relative custom-scrollbar">
           <PageTransitionWrapper>{children}</PageTransitionWrapper>
         </main>
 

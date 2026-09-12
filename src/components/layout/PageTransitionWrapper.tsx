@@ -16,7 +16,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
   const isLoading = useNavigationStore((s) => s.isLoading)
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col justify-between h-full relative">
+    <div className="flex-1 min-h-full flex flex-col justify-between relative">
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -49,7 +49,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
       </AnimatePresence>
 
       {/* 真实页面内容：稳态渲染在底层，等遮罩淡出后已完全就绪 */}
-      <div className="flex-1 min-h-0 flex flex-col justify-between h-full relative">
+      <div className="flex-1 min-h-full flex flex-col justify-between relative">
         {children}
       </div>
     </div>

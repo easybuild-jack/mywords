@@ -19,7 +19,7 @@ export function RootsHeaderToolbar() {
   const currentTabLabel = ROOT_TAB_LABELS[rootTab] || '词根'
 
   return (
-    <header className="w-full flex items-center justify-center p-4 xl:p-6 sticky top-0 z-30 pointer-events-auto">
+    <header className="w-full flex items-center justify-center p-4 xl:p-6 relative z-30 pointer-events-auto shrink-0">
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-3 xl:gap-4 text-sm xl:text-base shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 w-auto flex-wrap justify-center transition-all duration-300">
         {/* 1. Tab 切换 (词根 / 前缀 / 后缀) */}
         <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/10 shrink-0">

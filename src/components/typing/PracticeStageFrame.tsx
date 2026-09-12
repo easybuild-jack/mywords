@@ -19,8 +19,8 @@ export function PracticeStageFrame({ children }: { children: React.ReactNode }) 
         <ArrowLeft className="size-5 xl:size-6" />
       </button>
 
-      <div className="relative flex flex-col items-center">
-        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300">
+      <div className="relative flex flex-col items-center shrink-0">
+        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300 shrink-0">
           {children}
         </div>
       </div>

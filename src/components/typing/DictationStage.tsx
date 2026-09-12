@@ -27,7 +27,7 @@ export function DictationStage({ isReady = true }: DictationStageProps) {
   useTypingKeyboard({ enablePeek: true })
 
   return (
-    <div className="relative w-full flex-1 min-h-0 flex items-center justify-center gap-6">
+    <div className="relative w-full flex items-center justify-center gap-4 xl:gap-6 shrink-0">
       {isUnitFinished ? (
         <UnitCompleteCard />
       ) : (

@@ -41,7 +41,7 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
   const isPreparing = !isReady || isUnitLoading
 
   return (
-    <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30">
+    <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30 shrink-0">
       {/* 尺寸以 HeaderToolbar 为准：同样的 px-5 py-2.5 到 xl:px-7 xl:py-3.5，两条工具栏等高并同步放大 */}
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
         <div className="flex items-center gap-2">

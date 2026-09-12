@@ -268,7 +268,7 @@ export default function DictionaryPage() {
   }, [currentResult, phoneticPreference])
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col justify-between h-full relative">
+    <div className="flex-1 min-h-full flex flex-col justify-between relative py-1">
       {/* 顶部工具栏：仅保留搜索输入框、发音口音切换与皮肤选择 */}
       <DictHeaderToolbar
         searchQuery={searchQuery}
@@ -281,8 +281,8 @@ export default function DictionaryPage() {
       />
 
       {/* 中部舞台：单词卡片展示区（尺寸与内边距与单词学习完全一致） */}
-      <div className="flex-1 min-h-0 flex items-center justify-center relative w-full px-4">
-        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300">
+      <div className="flex-1 flex items-center justify-center relative w-full px-4 py-2 my-auto shrink-0">
+        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300 shrink-0">
           {isAiSearching ? (
             <DictSearchingCard />
           ) : currentResult ? (
@@ -311,7 +311,7 @@ export default function DictionaryPage() {
 
       {/* 底部占位平衡区：尺寸与 PracticeFooter 严格一致，确保中部卡片垂直定位与单词学习完全对齐 */}
       <footer
-        className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-none opacity-0 select-none invisible"
+        className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-none opacity-0 select-none invisible shrink-0"
         aria-hidden="true"
       >
         <div className="rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center text-sm xl:text-base border border-transparent">
