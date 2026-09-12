@@ -189,7 +189,7 @@ function BooksHubContent() {
                 : 'text-[#9CA3AF] hover:text-white'
             }`}
           >
-            官方词库
+            内置词库
           </button>
           <button
             onClick={() => setActiveTab('custom')}
@@ -500,7 +500,7 @@ function BooksHubContent() {
               <p>• 该词库包含的 <strong className="text-rose-300 font-mono">{bookToDelete.totalWords}</strong> 个单词条目将被永久清除。</p>
               <p>• 对应章节的学习进度数据将被一并删除。</p>
               {currentBook?.id === bookToDelete.id && (
-                <p className="text-accent">• 当前正在学习该词库，删除后将自动为您切回默认官方词库。</p>
+                <p className="text-accent">• 当前正在学习该词库，删除后将自动为您切回默认内置词库。</p>
               )}
             </div>
 

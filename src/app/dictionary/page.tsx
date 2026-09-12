@@ -289,7 +289,6 @@ export default function DictionaryPage() {
             <DictWordCard
               word={currentResult.word}
               phoneticPreference={phoneticPreference}
-              sourceBookName={currentResult.sourceBookName}
             />
           ) : (
             <DictEmptyState

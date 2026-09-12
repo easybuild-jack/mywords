@@ -17,7 +17,6 @@ import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
 interface DictWordCardProps {
   word: WordItem
   phoneticPreference: 'us' | 'uk'
-  sourceBookName?: string
 }
 
 function wordSizeClass(length: number) {
@@ -115,7 +114,6 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
 export function DictWordCard({
   word: sourceWord,
   phoneticPreference,
-  sourceBookName,
 }: DictWordCardProps) {
   const word = useEnsureAiWordSections(sourceWord, FULL_AI_SECTIONS)
   const [isSplit, setIsSplit] = useState(false)
@@ -194,22 +192,11 @@ export function DictWordCard({
     </button>
   )
 
-  const sourceBookBadge = sourceBookName ? (
-    <div
-      className="h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border border-white/10 bg-white/5 text-gray-300 flex items-center gap-2 text-xs xl:text-sm font-medium select-none shadow-sm backdrop-blur-md"
-      title={`所在词库：${sourceBookName}`}
-    >
-      <BookOpen className="size-3.5 xl:size-4 text-primary" />
-      <span className="truncate max-w-[160px] xl:max-w-[220px]">{sourceBookName}</span>
-    </div>
-  ) : null
-
   return (
     <WordCardShell
       word={word}
       phoneticPreference={phoneticPreference}
       remainingLoops={1}
-      headerLeft={sourceBookBadge}
       headerActions={starButton}
     >
       {/* 上半区（音标 + 单词 + 音节拆分 + 释义）无跟打输入槽 */}

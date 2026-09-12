@@ -126,21 +126,10 @@ export function DictHeaderToolbar({
                     <span className="text-white font-mono font-bold text-sm xl:text-base group-hover:text-primary transition-colors">
                       {item.name}
                     </span>
-                    <span className="text-xs text-muted-foreground truncate max-w-[200px] xl:max-w-[260px]">
+                    <span className="text-xs text-muted-foreground truncate max-w-[280px] xl:max-w-[340px]">
                       {item.meaning}
                     </span>
                   </div>
-                  {item.sourceBookName ? (
-                    <span
-                      className={`text-[10px] xl:text-[11px] font-mono px-2 py-0.5 rounded-md shrink-0 border ${
-                        item.isCurrentBook
-                          ? 'bg-primary/10 text-primary border-primary/20'
-                          : 'bg-white/5 text-gray-400 border-white/10'
-                      }`}
-                    >
-                      {item.sourceBookName}
-                    </span>
-                  ) : null}
                 </button>
               ))}
             </div>
