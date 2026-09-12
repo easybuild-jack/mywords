@@ -357,18 +357,6 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     updatedAt: Date.now()
   },
   {
-    id: 'book_coder',
-    name: '程序员词库',
-    description: '程序员常见高频英语词汇、计算机基础术语、开发与系统运维核心词库',
-    category: 'developer',
-    isCustom: false,
-    unitSize: 20,
-    totalWords: 1700,
-    words: INITIAL_SAMPLE_WORDS,
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  },
-  {
     id: 'book_ielts',
     name: '雅思词汇',
     description: '剑桥雅思官方听说读写核心必考词库',
@@ -376,6 +364,18 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     isCustom: false,
     unitSize: 20,
     totalWords: 4500,
+    words: INITIAL_SAMPLE_WORDS,
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  },
+  {
+    id: 'book_coder',
+    name: '程序员词库',
+    description: '程序员常见高频英语词汇、计算机基础术语、开发与系统运维核心词库',
+    category: 'developer',
+    isCustom: false,
+    unitSize: 20,
+    totalWords: 1700,
     words: INITIAL_SAMPLE_WORDS,
     createdAt: Date.now(),
     updatedAt: Date.now()
