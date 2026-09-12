@@ -11,8 +11,8 @@ export default function RootsPage() {
       {/* 头部专属精简工具栏（含词根进度、全局搜索、掌握标记、皮肤与Restart） */}
       <RootsHeaderToolbar />
 
-      {/* 核心词根卡片研习舞台 */}
-      <div className="flex-1 min-h-0 flex items-center justify-center w-full px-4">
+      {/* 核心词根卡片研习舞台：全高展开，杜绝查询时卡片高度塌陷 */}
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center w-full h-full px-4">
         <RootsStage />
       </div>
 
