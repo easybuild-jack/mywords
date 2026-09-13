@@ -949,6 +949,19 @@ export async function clearAiWordCache(): Promise<void> {
 }
 
 /**
+ * 获取本地离线单词缓存表中的总条目数
+ */
+export async function getAiWordCacheCount(): Promise<number> {
+  if (typeof window === 'undefined') return 0
+  try {
+    return await db.aiWordCache.count()
+  } catch (err) {
+    console.warn('Failed to count AI word cache:', err)
+    return 0
+  }
+}
+
+/**
  * 手动维护能力：正常查询、收藏和导入流程不会调用。
  */
 export async function deleteWordFromAiCache(cleanWord: string): Promise<void> {

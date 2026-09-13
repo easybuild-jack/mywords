@@ -17,7 +17,13 @@ import {
   Activity,
   ExternalLink,
   Loader2,
+  Database,
+  RefreshCw,
+  BookOpen,
+  CheckCircle,
 } from 'lucide-react'
+import { db } from '@/db'
+import { DICT_CACHE_VERSION_KEY } from '@/core/offlineDictionaryInitializer'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import {
   useAiAssistantStore,
@@ -31,7 +37,7 @@ import { SKINS } from '@/lib/skins'
 import { isAuthorSyncToken } from '@/lib/permissions'
 import type { ShortcutConfig } from '@/types'
 
-type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync'
+type SettingsTab = 'audio' | 'voice' | 'appearance' | 'shortcuts' | 'learn' | 'ai' | 'sync' | 'dictionary'
 
 const RECOMMENDED_MODELS: Record<string, string[]> = {
   deepseek: ['deepseek-chat', 'deepseek-reasoner'],
@@ -116,6 +122,36 @@ export function SettingsModal() {
         localStorage.removeItem('mywords_sync_token')
       }
       window.dispatchEvent(new Event('mywords_sync_token_changed'))
+    }
+  }
+
+  // 离线词库状态
+  const [offlineWordsCount, setOfflineWordsCount] = useState<number | null>(null)
+  const [isLoadingWordCount, setIsLoadingWordCount] = useState(false)
+
+  const refreshWordCount = async () => {
+    setIsLoadingWordCount(true)
+    try {
+      const count = await db.aiWordCache.count()
+      setOfflineWordsCount(count)
+    } catch (err) {
+      console.error('Failed to get cache count:', err)
+    } finally {
+      setIsLoadingWordCount(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isSettingsModalOpen && activeTab === 'dictionary') {
+      refreshWordCount()
+    }
+  }, [isSettingsModalOpen, activeTab])
+
+  const handleRebuildDictionaryCache = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(DICT_CACHE_VERSION_KEY)
+      setSettingsModalOpen(false)
+      window.dispatchEvent(new Event('mywords_rebuild_dict_cache'))
     }
   }
 
@@ -246,6 +282,16 @@ export function SettingsModal() {
             >
               <Link2 className="size-4.5 shrink-0" />
               <span>外部工具同步</span>
+            </button>
+
+            <button
+              onClick={() => { setRecordingAction(null); setActiveTab('dictionary') }}
+              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'dictionary' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              }`}
+            >
+              <Database className="size-4.5 shrink-0" />
+              <span>离线词库与缓存</span>
             </button>
           </div>
 
@@ -953,6 +999,117 @@ export function SettingsModal() {
                       <span>已识别为系统作者身份（享有官方词库音节切分与词根构词维护权限）</span>
                     </div>
                   )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'dictionary' && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-base font-bold text-foreground uppercase tracking-wider">
+                    离线大词库与本地缓存 (Offline Dictionary & Cache)
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                    系统在本地 IndexedDB 高速存储了超过 10,000 个核心词汇，背词、查词与拼读均在本地 0 毫秒完成，无惧断网且零 AI Token 消耗。
+                  </p>
+                </div>
+
+                {/* 词库概况状态卡片 */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      本地常驻核心词汇
+                    </span>
+                    <div className="flex items-baseline gap-2 mt-3">
+                      <span className="text-3xl font-black font-mono text-primary">
+                        {isLoadingWordCount ? (
+                          <Loader2 className="size-6 animate-spin text-primary inline-block" />
+                        ) : (
+                          offlineWordsCount !== null ? offlineWordsCount.toLocaleString() : '--'
+                        )}
+                      </span>
+                      <span className="text-xs text-muted-foreground">词</span>
+                    </div>
+                    <div className="mt-2 text-xs text-emerald-400/90 flex items-center gap-1.5 font-medium">
+                      <CheckCircle className="size-3.5" />
+                      <span>跨词库智能去重与聚合</span>
+                    </div>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      内置词库覆盖体系
+                    </span>
+                    <div className="text-2xl font-black font-mono text-foreground mt-3">
+                      5 <span className="text-xs font-normal text-muted-foreground">套权威大词典</span>
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      四六级 · 考研 · 4000词 · IT · 基础
+                    </div>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      离线查询响应延迟
+                    </span>
+                    <div className="text-2xl font-black font-mono text-foreground mt-3">
+                      &lt; 5 <span className="text-xs font-normal text-muted-foreground">毫秒</span>
+                    </div>
+                    <div className="mt-2 text-xs text-emerald-400/90 flex items-center gap-1.5 font-medium">
+                      <span>⚡ 本地 IndexedDB 事务级检索</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 词库详细覆盖说明 */}
+                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="size-5 text-primary" />
+                      <h4 className="text-base font-bold text-foreground">融合词典特色与构成</h4>
+                    </div>
+                    <button
+                      onClick={refreshWordCount}
+                      disabled={isLoadingWordCount}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-muted-foreground hover:text-white transition-all cursor-pointer"
+                    >
+                      <RefreshCw className={`size-3.5 ${isLoadingWordCount ? 'animate-spin' : ''}`} />
+                      <span>刷新统计</span>
+                    </button>
+                  </div>
+                  <ul className="text-xs sm:text-sm text-muted-foreground space-y-2.5 leading-relaxed">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">1.</span>
+                      <span><strong>自然拼读音节切分：</strong>全量支持国际自然拼读划分，包含辅音丛与元音连读规则。</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">2.</span>
+                      <span><strong>词根词缀构词法：</strong>智能合并前缀、词根、后缀与中文衍生逻辑，举一反三快速扩充词汇量。</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-bold">3.</span>
+                      <span><strong>AI 额度节省保护：</strong>用户日常背词或查询系统已收录单词时，优先直接读取本地离线库，无需发起任何 AI 大模型请求。</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* 重新构建/修复离线词库操作 */}
+                <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <h4 className="text-base font-bold text-white flex items-center gap-2">
+                      <span>重新同步与构建离线词库</span>
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
+                      如果内置词库有更新，或本地缓存出现缺失，可随时触发全量重新构建。这不会清空您的错词本和已学数据。
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleRebuildDictionaryCache}
+                    className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold transition-all cursor-pointer hover:bg-primary-hover active:scale-95 shadow-md shadow-primary/20"
+                  >
+                    <RefreshCw className="size-4" />
+                    <span>立即重构离线词库</span>
+                  </button>
                 </div>
               </div>
             )}

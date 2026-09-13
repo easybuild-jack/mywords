@@ -348,7 +348,7 @@ class DictionaryLoader {
   /**
    * 把一条原始词条转成标准 WordItem（不含用户在 IndexedDB 里的覆盖）
    */
-  private buildWordItemFromEntry(entry: RawDictEntry): WordItem {
+  public buildWordItemFromEntry(entry: RawDictEntry): WordItem {
     const name = entry.name || ''
     const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
     const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)

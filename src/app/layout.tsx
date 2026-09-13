@@ -11,6 +11,7 @@ import { AiApiKeyPromptModal } from '@/components/modals/AiApiKeyPromptModal'
 import { ExternalSyncManager } from '@/components/sync/ExternalSyncManager'
 import { AiAssistantDrawer } from '@/components/ai/AiAssistantDrawer'
 import { AiFloatingTrigger } from '@/components/ai/AiFloatingTrigger'
+import { InitialDictionaryDataLoader } from '@/components/layout/InitialDictionaryDataLoader'
 
 export const metadata: Metadata = {
   title: 'MyWords — 您的私人专属英语单词学习搭子',
@@ -55,6 +56,9 @@ export default function RootLayout({
 
         {/* 外部小工具实时同步监听器 */}
         <ExternalSyncManager />
+
+        {/* 全局离线词库游戏风格加载器（进度条 + 小象向右奔跑） */}
+        <InitialDictionaryDataLoader />
       </body>
     </html>
   )
