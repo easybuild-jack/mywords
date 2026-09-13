@@ -4,6 +4,7 @@ import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { getWordFromAiCache, getWordOverride, mergeWordIntoAiCache, saveWordOverride } from '@/db'
 import {
   fetchAiDictionaryWordCore,
+  getAiConfigFingerprint,
   type AiClientConfig,
 } from '@/lib/aiClient'
 import { isLikelyEnglishWord } from '@/lib/wordValidation'
@@ -12,18 +13,14 @@ import type { WordItem, WordOverrideRecord } from '@/types'
 
 const inFlightCore = new Map<string, Promise<WordItem | null>>()
 
-function configFingerprint(config: AiClientConfig) {
-  return `${config.enabled !== false}::${config.endpoint}::${config.model}::${config.apiKey}`
-}
-
-export function isAiPhoneticReady(word: string, value?: string): boolean {
+function isAiPhoneticReady(word: string, value?: string): boolean {
   const normalizedName = word.trim().toLowerCase()
   const raw = value?.trim() || ''
   const normalized = raw.replace(/^\/+|\/+$/g, '').trim()
   return Boolean(normalized && raw.toLowerCase() !== `/ ${normalizedName} /`)
 }
 
-export function isAiMeaningReady(posList: WordItem['posList']): boolean {
+function isAiMeaningReady(posList: WordItem['posList']): boolean {
   return Boolean(posList?.some(({ means }) =>
     means.some((meaning) => {
       const normalized = meaning.trim()
@@ -61,7 +58,7 @@ export function queryAiWordCore(
 ): Promise<WordItem | null> {
   if (!isLikelyEnglishWord(word)) return Promise.resolve(null)
 
-  const key = `${configFingerprint(config)}::${word.trim().toLowerCase()}`
+  const key = `${getAiConfigFingerprint(config)}::${word.trim().toLowerCase()}`
   const existing = inFlightCore.get(key)
   if (existing) return existing
 

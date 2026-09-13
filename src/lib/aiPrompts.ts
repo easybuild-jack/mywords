@@ -32,7 +32,7 @@ const JSON_ONLY_RULE = `必须且仅输出合法的单个 JSON 对象，不要�
 所有字段必须在同一个 JSON 对象内部完整闭合，严禁在 JSON 内输出省略号或占位符（如 [...] 或 {...}），严禁在 JSON 外部追加任何说明。
 如果无法确认该拼写是有效英文单词，必须原样返回：${WORD_NOT_FOUND_JSON}`
 
-export const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
+const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
 只生成查询首屏所需的基础数据：
 {
   "status": "ok",
@@ -45,7 +45,7 @@ trans 按词性分组，格式为“词性. 释义；释义”，覆盖最常用
 美音和英音使用标准 IPA，不要带斜杠，保留重音符号。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_SYLLABLES_SYSTEM_PROMPT = `你是 MyWords 的专业英语拼读拆分引擎。
+const AI_DICTIONARY_SYLLABLES_SYSTEM_PROMPT = `你是 MyWords 的专业英语拼读拆分引擎。
 只生成单词的音节切分和哑音字母下标：
 {
   "status": "ok",
@@ -83,7 +83,7 @@ export const AI_DICTIONARY_SYLLABLES_SYSTEM_PROMPT = `你是 MyWords 的专业�
 严禁输出释义、例句、短语或词根词源字段。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_PHRASES_SYSTEM_PROMPT = `你是 MyWords 的英语常用短语生成引擎。
+const AI_DICTIONARY_PHRASES_SYSTEM_PROMPT = `你是 MyWords 的英语常用短语生成引擎。
 只生成当前单词最常见、最实用的固定搭配：
 {
   "status": "ok",
@@ -96,7 +96,7 @@ export const AI_DICTIONARY_PHRASES_SYSTEM_PROMPT = `你是 MyWords 的英语常�
 严禁输出音标、释义、音节、例句或词根词源字段。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_ETYMOLOGY_SYSTEM_PROMPT = `你是 MyWords 的专业英语词根词源分析引擎。
+const AI_DICTIONARY_ETYMOLOGY_SYSTEM_PROMPT = `你是 MyWords 的专业英语词根词源分析引擎。
 只生成词根、词缀、语义推导、词源和记忆线索：
 {
   "status": "ok",
@@ -113,7 +113,7 @@ export const AI_DICTIONARY_ETYMOLOGY_SYSTEM_PROMPT = `你是 MyWords 的专业�
 严禁输出音标、释义、音节、例句或短语字段。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
+const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
 根据给定单词及中文释义生成：
 {
   "status": "ok",
@@ -182,7 +182,7 @@ export function buildWordExamplesQueryMessages(word: string, trans: string[]) {
 /**
  * 清理大模型生成的常见非标准 JSON 占位符、注释与尾部逗号
  */
-export function sanitizeJsonPlaceholders(str: string): string {
+function sanitizeJsonPlaceholders(str: string): string {
   let s = str
   // 替换占位符 [...] 或 [ ... ] 为 []
   s = s.replace(/\[\s*\.\.\.\s*\]/g, '[]')
@@ -239,7 +239,7 @@ function extractOutermostJsonObject(str: string): string | null {
 /**
  * 智能修复被截断的不完整 JSON 字符串（例如模型受 max_tokens 限制或网络中断未闭合尾部）
  */
-export function repairTruncatedJson(raw: string): string {
+function repairTruncatedJson(raw: string): string {
   let s = sanitizeJsonPlaceholders(raw.trim())
   const start = s.indexOf('{')
   if (start === -1) return s
@@ -318,7 +318,7 @@ export function repairTruncatedJson(raw: string): string {
 /**
  * 从非结构化文本、Markdown 列表或思考草稿中抢救短语数据
  */
-export function extractPhrasesFromText(text: string): { en: string; cn: string }[] {
+function extractPhrasesFromText(text: string): { en: string; cn: string }[] {
   const phrases: { en: string; cn: string }[] = []
   const seen = new Set<string>()
 

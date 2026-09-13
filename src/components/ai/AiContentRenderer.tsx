@@ -7,13 +7,13 @@ interface AiContentRendererProps {
   content: string
 }
 
-export type SupportedFormat = 'html' | 'markdown' | 'json' | 'shell' | 'plain'
+type SupportedFormat = 'html' | 'markdown' | 'json' | 'shell' | 'plain'
 
 /**
  * 检测内容是否包含支持的格式标记 (html, markdown, json, shell)
  * 若无任何标记，则判定为纯文本 (plain)
  */
-export function analyzeContentFormat(rawText: string): {
+function analyzeContentFormat(rawText: string): {
   format: SupportedFormat
   isPureJson: boolean
   isPureHtml: boolean
@@ -151,7 +151,7 @@ export function AiContentRenderer({ content }: AiContentRendererProps) {
 }
 
 /** 专门的代码块渲染组件，支持一键复制代码与多语言语法高亮 */
-export function CodeBlock({
+function CodeBlock({
   code,
   language = 'text',
 }: {

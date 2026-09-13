@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { callAiChatCompletion, streamAiChatCompletion, type AiChatMessage } from '@/lib/aiClient'
+import { streamAiChatCompletion, type AiChatMessage, type AiClientConfig } from '@/lib/aiClient'
 import { AI_ENGLISH_TEACHER_SYSTEM_PROMPT } from '@/lib/aiPrompts'
 
 // 模块级保存当前活跃的流式请求控制器，支持随时终止流水输出
@@ -21,9 +21,9 @@ export interface AiSession {
   messages: AiMessage[]
 }
 
-export type AiProviderId = 'deepseek' | 'doubao' | 'openai' | 'qwen' | 'custom'
+type AiProviderId = 'deepseek' | 'doubao' | 'openai' | 'qwen' | 'custom'
 
-export interface AiProviderPreset {
+interface AiProviderPreset {
   id: AiProviderId
   name: string
   tagline: string
@@ -100,12 +100,9 @@ export const AI_PROVIDER_PRESETS: Record<AiProviderId, AiProviderPreset> = {
   },
 }
 
-export interface AiModelConfig {
+interface AiModelConfig extends AiClientConfig {
   enabled: boolean
   provider: AiProviderId
-  apiKey: string
-  endpoint: string
-  model: string
   temperature: number
   maxTokens: number
   systemPrompt: string
@@ -133,7 +130,6 @@ interface AiAssistantState {
   messages: AiMessage[]
   aiConfig: AiModelConfig
 
-  openDrawer: () => void
   closeDrawer: () => void
   toggleDrawer: () => void
   setInputPrompt: (val: string) => void
@@ -141,8 +137,6 @@ interface AiAssistantState {
   createNewSession: () => void
   switchSession: (sessionId: string) => void
   deleteSession: (sessionId: string) => void
-  clearMessages: () => void
-  clearAllSessions: () => void
   sendMessage: (customText?: string) => Promise<void>
   stopGeneration: () => void
 
@@ -190,7 +184,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       messages: INITIAL_MESSAGES,
       aiConfig: DEFAULT_AI_CONFIG,
 
-      openDrawer: () => set({ isOpen: true }),
       closeDrawer: () => set({ isOpen: false }),
       toggleDrawer: () => set((state) => ({ isOpen: !state.isOpen })),
       setInputPrompt: (val: string) => set({ inputPrompt: val }),
@@ -320,58 +313,6 @@ export const useAiAssistantStore = create<AiAssistantState>()(
           activeChatAbortController = null
         }
         set({ isThinking: false, isStreaming: false })
-      },
-
-      clearMessages: () => {
-        if (activeChatAbortController) {
-          activeChatAbortController.abort()
-          activeChatAbortController = null
-        }
-
-        const state = get()
-        const welcomeMsg: AiMessage = {
-          id: `welcome-${Date.now()}`,
-          role: 'assistant',
-          content: '当前会话已重置，您可以继续提出英语学习相关的问题。',
-          timestamp: Date.now(),
-        }
-
-        const updatedSessions = state.sessions.map((s) =>
-          s.id === state.currentSessionId
-            ? { ...s, messages: [welcomeMsg], updatedAt: Date.now() }
-            : s
-        )
-
-        set({
-          messages: [welcomeMsg],
-          sessions: updatedSessions,
-          isThinking: false,
-          isStreaming: false,
-        })
-      },
-
-      clearAllSessions: () => {
-        if (activeChatAbortController) {
-          activeChatAbortController.abort()
-          activeChatAbortController = null
-        }
-
-        const freshId = `session-${Date.now()}`
-        const freshSession: AiSession = {
-          id: freshId,
-          title: '新对话',
-          createdAt: Date.now(),
-          updatedAt: Date.now(),
-          messages: INITIAL_MESSAGES,
-        }
-        set({
-          sessions: [freshSession],
-          currentSessionId: freshId,
-          messages: freshSession.messages,
-          isThinking: false,
-          isStreaming: false,
-          activeTab: 'chat',
-        })
       },
 
       sendMessage: async (customText?: string) => {

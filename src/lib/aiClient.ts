@@ -31,6 +31,11 @@ export interface AiClientConfig {
   temperature?: number
   maxTokens?: number
 }
+
+export function getAiConfigFingerprint(config: AiClientConfig): string {
+  return `${config.enabled !== false}::${config.endpoint}::${config.model}::${config.apiKey}`
+}
+
 /** 规范化拼接 chat/completions 端点 */
 export function resolveChatCompletionsUrl(rawEndpoint: string): string {
   let clean = (rawEndpoint || '').trim().replace(/\/+$/, '')
@@ -95,20 +100,37 @@ export async function testAiConnection(
 
     return { success: true, latencyMs }
   } catch (err: unknown) {
-    // 若浏览器直连出现网络故障/跨域错误，尝试走本地服务端安全代理
+    // 若浏览器直连出现网络故障/跨域错误，复用通用非流式代理。
     try {
-      const proxyRes = await fetch('/api/ai/test', {
+      const proxyController = new AbortController()
+      const proxyTimeoutId = setTimeout(() => proxyController.abort(), 12000)
+      const proxyRes = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           endpoint: config.endpoint,
           apiKey: config.apiKey,
           model: config.model,
+          messages: [{ role: 'user', content: 'Hi' }],
+          maxTokens: 5,
+          temperature: 0.1,
+          stream: false,
         }),
+        signal: proxyController.signal,
       })
-      if (proxyRes.ok) {
-        return await proxyRes.json()
+      clearTimeout(proxyTimeoutId)
+      const latencyMs = Date.now() - startTime
+      const data = await proxyRes.json()
+      if (!proxyRes.ok) {
+        return {
+          success: false,
+          error: data?.error?.message || `HTTP ${proxyRes.status}`,
+          latencyMs,
+        }
       }
+      return data?.choices?.length
+        ? { success: true, latencyMs }
+        : { success: false, error: '响应格式不符合预期，未返回 choices', latencyMs }
     } catch {
       // 忽略代理降级失败，保留原始异常
     }
@@ -127,7 +149,7 @@ export async function testAiConnection(
 /**
  * 从 SSE 数据流 (ReadableStream) 中实时逐行解析并触发 onChunk 回调
  */
-export async function readSseStream(
+async function readSseStream(
   response: Response,
   onChunk: (chunk: string) => void
 ): Promise<string> {

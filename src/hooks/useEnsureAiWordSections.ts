@@ -8,6 +8,7 @@ import {
   fetchAiDictionaryWordExamples,
   fetchAiDictionaryWordPhrases,
   fetchAiDictionaryWordSyllables,
+  getAiConfigFingerprint,
   hasValidEtymology,
   type AiClientConfig,
 } from '@/lib/aiClient'
@@ -23,11 +24,7 @@ const inFlightSections = new Map<
   { fingerprint: string; promise: Promise<WordItem | null> }
 >()
 
-function configFingerprint(config: AiClientConfig) {
-  return `${config.enabled !== false}::${config.endpoint}::${config.model}::${config.apiKey}`
-}
-
-export function isSectionReady(word: WordItem, section: AiWordSection): boolean {
+function isSectionReady(word: WordItem, section: AiWordSection): boolean {
   if (section === 'core') return isAiWordCoreReady(word)
   if (section === 'syllables') {
     return Boolean(
@@ -235,7 +232,7 @@ function ensureSection(
   word: WordItem,
   section: AiWordSection
 ): Promise<WordItem | null> {
-  const fingerprint = configFingerprint(config)
+  const fingerprint = getAiConfigFingerprint(config)
   const key = `${word.name.toLowerCase()}::${section}`
   const existing = inFlightSections.get(key)
   if (existing) {
@@ -260,7 +257,7 @@ export function useEnsureAiWordSections(
   sections: readonly AiWordSection[]
 ): WordItem {
   const aiConfig = useAiAssistantStore((state) => state.aiConfig)
-  const fingerprint = configFingerprint(aiConfig)
+  const fingerprint = getAiConfigFingerprint(aiConfig)
   const [resolved, setResolved] = useState<{
     fingerprint: string
     word: WordItem
