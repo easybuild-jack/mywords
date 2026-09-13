@@ -237,28 +237,46 @@ export function LearnCard({
       phoneticPreference={phoneticPreference}
       remainingLoops={remainingLoops}
       headerActions={starButton}
+      showAudioButton={false}
+      className="pt-1 sm:pt-1.5 xl:pt-2 pb-4 sm:pb-5 xl:pb-6 px-6 sm:px-7 xl:px-10 2xl:px-12"
     >
       {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
-      <div className="space-y-1 xl:space-y-2">
-        {/* 音标栏 */}
-        <div className="h-8 xl:h-9 flex items-center justify-center gap-x-5">
+      <div className="space-y-0.5 sm:space-y-1">
+        {/* 音标栏：参考查询页设计，发音图标紧随音标，可点击发音 */}
+        <div className="h-6 sm:h-7 xl:h-7 flex items-center justify-center gap-x-3 sm:gap-x-4">
           {phonetics.map((entry) => (
-            <span key={entry.label ?? 'single'} className="inline-flex items-baseline gap-1.5">
+            <button
+              key={entry.label ?? 'single'}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                audioEngine.playPronunciation(
+                  word.name,
+                  entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
+                )
+              }}
+              className="group inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"
+              title={`点击播放 ${entry.label ? `${entry.label}音` : ''}读音 (Ctrl+J)`}
+            >
               {entry.label && (
-                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280]">{entry.label}</span>
+                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280] group-hover:text-primary transition-colors">
+                  {entry.label}
+                </span>
               )}
               <span
-                className={`font-mono tracking-wide text-gray-300 ${phonetics.length > 1 ? 'text-lg xl:text-xl' : 'text-xl xl:text-2xl'
-                  }`}
+                className={`font-mono tracking-wide text-gray-300 group-hover:text-white transition-colors flex items-center gap-1.5 ${
+                  phonetics.length > 1 ? 'text-base sm:text-lg xl:text-xl' : 'text-lg sm:text-xl xl:text-2xl'
+                }`}
               >
-                {entry.text}
+                <span>{entry.text}</span>
+                <Volume2 className="size-3.5 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
               </span>
-            </span>
+            </button>
           ))}
         </div>
 
-        {/* 单词主体展示与音节切分切换 */}
-        <div className="h-16 xl:h-20 2xl:h-24 flex items-center justify-center relative">
+        {/* 单词主体展示与音节切分切换（紧凑排版） */}
+        <div className="h-13 sm:h-15 xl:h-17 flex items-center justify-center relative">
           <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3 xl:gap-4">
             <h2
               className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
@@ -297,61 +315,115 @@ export function LearnCard({
           </div>
         </div>
 
-        {/* 单词释义 */}
-        <div className="h-9 xl:h-10 flex items-center justify-center px-4">
-          <p className="text-sm sm:text-base xl:text-lg 2xl:text-xl text-gray-300 font-medium line-clamp-1">
+        {/* 单词释义：预留稳定的两行自适应空间，防止译文过多换两行时挤压跟打槽与下半区 */}
+        <div className="min-h-[44px] sm:min-h-[48px] xl:min-h-[52px] flex items-center justify-center px-4 py-0.5">
+          <p className="text-sm sm:text-base xl:text-lg 2xl:text-xl text-gray-300 font-medium line-clamp-2 leading-normal sm:leading-relaxed text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
             {meaningText}
           </p>
         </div>
 
-        {/* 跟打输入槽 */}
+        {/* 跟打输入槽：英语练习册 4 线格风格（无红线，4线三格，字母紧凑自然排版，光标贴合输入末尾） */}
         <div className="relative w-full pt-1">
-          <div
-            className={`h-14 xl:h-16 2xl:h-18 flex items-center justify-center overflow-hidden tracking-widest font-mono text-4xl xl:text-5xl font-bold rounded-2xl border-2 px-6 transition-all ${
-              hasTypo
-                ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
-                : 'border-primary/45 bg-primary/[0.05]'
-            }`}
-          >
-            {currentInput && (
-              <span className="mr-1 inline-flex items-center">
-                {currentInput.split('').map((char, idx) => {
-                  const targetChar = word.name[idx]
-                  const isCharCorrect = targetChar && char.toLowerCase() === targetChar.toLowerCase()
+          {(() => {
+            const wordLength = word.name.length
+            const totalSlots = Math.max(wordLength, currentInput.length)
+            const fontClass =
+              totalSlots <= 6
+                ? 'text-4xl sm:text-5xl xl:text-6xl'
+                : totalSlots <= 9
+                ? 'text-3xl sm:text-4xl xl:text-5xl'
+                : 'text-2xl sm:text-3xl xl:text-4xl'
 
-                  if (isCharCorrect) {
-                    return (
-                      <span key={idx} className="text-primary">
-                        {char}
-                      </span>
-                    )
-                  }
+            return (
+              <div
+                className={`relative flex items-center justify-center py-2.5 sm:py-3 xl:py-3.5 px-4 sm:px-6 overflow-hidden font-mono rounded-2xl border-2 transition-all shadow-inner ${
+                  hasTypo
+                    ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
+                    : 'border-primary/40 bg-white/[0.02]'
+                }`}
+              >
+                {/* 4 线格打字区与光标 */}
+                <div className="relative w-full h-16 sm:h-18 xl:h-20 flex items-center justify-center">
+                  {/* 4 线格参考线：顶线、中虚线、基准底线（同色软蓝无红线）、下延底线（最后的横线） */}
+                  <div className="absolute inset-x-4 inset-y-1.5 pointer-events-none flex flex-col justify-between opacity-70 z-0">
+                    {/* 第 1 线：顶线 */}
+                    <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                    {/* 第 2 线：中线（虚线） */}
+                    <div className="w-full border-b border-dashed border-sky-400/45 dark:border-sky-400/30" />
+                    {/* 第 3 线：基准线（实线，与参考线统一青蓝色，无红线） */}
+                    <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                    {/* 第 4 线：下延底线（最后的横线） */}
+                    <div className="w-full border-b border-sky-400/25 dark:border-sky-400/15" />
+                  </div>
 
-                  return (
-                    <span
-                      key={idx}
-                      className="text-destructive font-black animate-error-flash mx-0.5 px-1 py-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]"
-                      title="输入错误，请按退格键 (Backspace) 修正"
-                    >
-                      {char}
-                    </span>
-                  )
-                })}
-              </span>
-            )}
-            <span
-              className={`inline-block w-0.5 h-9 xl:h-10 animate-cursor shrink-0 ${
-                hasTypo ? 'bg-destructive' : 'bg-primary'
-              }`}
-            />
-            <span
-              className={`ml-1 font-normal ${
-                hasTypo ? 'text-destructive/40' : 'text-primary/35'
-              }`}
-            >
-              {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
-            </span>
-          </div>
+                  {/* 字母与光标槽列表：字间距紧凑贴合，光标精确贴合在已输入字符末尾 */}
+                  <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
+                    {Array.from({ length: totalSlots }).map((_, idx) => {
+                      const targetChar = word.name[idx]
+                      const typedChar = currentInput[idx]
+                      const isTyped = idx < currentInput.length
+                      const isCurrent = idx === currentInput.length
+                      const isCorrect =
+                        isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
+
+                      return (
+                        <div
+                          key={idx}
+                          style={{ width: '1.05ch' }}
+                          className="relative w-[1.05ch] h-full flex items-center justify-center"
+                        >
+                          {/* 光标：精确处于当前未打字母的左边缘起始位置 */}
+                          {isCurrent && (
+                            <span
+                              className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
+                                hasTypo ? 'bg-destructive' : 'bg-primary'
+                              }`}
+                            />
+                          )}
+
+                          {/* 已输入字符（坐落在基准线之上） */}
+                          {isTyped && (
+                            <span
+                              className={`${fontClass} font-extrabold -translate-y-1.5 sm:-translate-y-2 ${
+                                isCorrect
+                                  ? 'text-primary'
+                                  : 'text-destructive font-black animate-error-flash px-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]'
+                              }`}
+                              title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
+                            >
+                              {typedChar}
+                            </span>
+                          )}
+
+                          {/* 占位的 _ ：精确坐落在最后的横线（第 4 线）上 */}
+                          <span
+                            className={`absolute -bottom-1 sm:-bottom-1.5 font-mono text-xl sm:text-2xl xl:text-3xl font-black select-none pointer-events-none transition-opacity ${
+                              isTyped
+                                ? 'opacity-0'
+                                : hasTypo
+                                ? 'text-destructive/40'
+                                : 'text-primary/45'
+                            }`}
+                          >
+                            _
+                          </span>
+                        </div>
+                      )
+                    })}
+
+                    {/* 全部输入完成后，光标显示在末尾 */}
+                    {currentInput.length >= totalSlots && (
+                      <span
+                        className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
+                          hasTypo ? 'bg-destructive' : 'bg-primary'
+                        }`}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </div>
 

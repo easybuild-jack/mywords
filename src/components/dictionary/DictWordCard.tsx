@@ -205,11 +205,13 @@ export function DictWordCard({
       phoneticPreference={phoneticPreference}
       remainingLoops={1}
       headerActions={starButton}
+      showAudioButton={false}
+      className="pt-1.5 sm:pt-2 xl:pt-2.5 pb-4 sm:pb-5 xl:pb-6 px-6 sm:px-7 xl:px-10 2xl:px-12"
     >
       {/* 上半区（音标 + 单词 + 音节拆分 + 释义）无跟打输入槽 */}
-      <div className="space-y-2 xl:space-y-3 pt-2">
-        {/* 音标栏：支持用户手动点击播放对应口音发音 */}
-        <div className="h-8 xl:h-9 flex items-center justify-center gap-x-3 sm:gap-x-4">
+      <div className="space-y-1 sm:space-y-1.5 xl:space-y-2">
+        {/* 音标栏：支持用户手动点击播放对应口音发音，紧凑贴近顶部 */}
+        <div className="h-6 sm:h-7 xl:h-7 flex items-center justify-center gap-x-3 sm:gap-x-4">
           {phonetics.map((entry) => (
             <button
               key={entry.label ?? 'single'}
@@ -218,7 +220,7 @@ export function DictWordCard({
                 e.stopPropagation()
                 audioEngine.playPronunciation(
                   word.name,
-                  entry.label === '英' ? 'uk' : 'us'
+                  entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
                 )
               }}
               className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"

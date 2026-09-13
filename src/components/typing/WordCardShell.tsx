@@ -11,6 +11,7 @@ interface WordCardShellProps {
   remainingLoops?: number
   headerLeft?: React.ReactNode
   headerActions?: React.ReactNode
+  showAudioButton?: boolean
   className?: string
   children: React.ReactNode
 }
@@ -22,6 +23,7 @@ export function WordCardShell({
   remainingLoops = 1,
   headerLeft,
   headerActions,
+  showAudioButton = true,
   className,
   children,
 }: WordCardShellProps) {
@@ -49,13 +51,15 @@ export function WordCardShell({
       {/* 顶部右侧区域：加星收藏与发音控件 */}
       <div className="absolute top-4 right-4 xl:top-5 xl:right-5 2xl:top-6 2xl:right-6 flex items-center gap-2 xl:gap-2.5 z-20">
         {headerActions}
-        <button
-          onClick={speak}
-          className="size-10 xl:size-11 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center hover:bg-primary/20 active:scale-95 transition-all cursor-pointer shadow-sm"
-          title="发音 (Ctrl+J)"
-        >
-          <Volume2 className="size-4.5 xl:size-5" />
-        </button>
+        {showAudioButton && (
+          <button
+            onClick={speak}
+            className="size-10 xl:size-11 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center hover:bg-primary/20 active:scale-95 transition-all cursor-pointer shadow-sm"
+            title="发音 (Ctrl+J)"
+          >
+            <Volume2 className="size-4.5 xl:size-5" />
+          </button>
+        )}
       </div>
 
       {children}

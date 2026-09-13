@@ -204,64 +204,118 @@ export function DictationCard({
               样式与学习页的跟打槽保持一致（霓虹绿描边 + 48px 字号 + 剩余字母下划线），
               只多一个未解锁态，改动要两边同步 */}
           <div className="relative w-full">
-            <div
-              className={`h-16 sm:h-18 xl:h-20 2xl:h-22 flex items-center justify-center overflow-hidden tracking-widest font-mono text-5xl xl:text-6xl font-bold rounded-2xl border-2 px-6 transition-all ${
-                !isSpellingUnlocked
-                  ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60'
-                  : hasTypo
-                  ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
-                  : 'border-primary/45 bg-primary/[0.05]'
-              }`}
-            >
-              {!isSpellingUnlocked ? (
-                <div className="flex items-center gap-2 text-sm font-sans font-normal text-muted-foreground">
-                  <Lock className="size-4 text-accent/80" />
-                  <span>请先完成上方译文输入后开启拼写</span>
-                </div>
-              ) : (
-                <>
-                  {currentInput && (
-                    <span className="mr-1 inline-flex items-center">
-                      {currentInput.split('').map((char, idx) => {
-                        const targetChar = word.name[idx]
-                        const isCharCorrect = targetChar && char.toLowerCase() === targetChar.toLowerCase()
+            {(() => {
+              const wordLength = word.name.length
+              const totalSlots = Math.max(wordLength, currentInput.length)
+              const fontClass =
+                totalSlots <= 6
+                  ? 'text-4xl sm:text-5xl xl:text-6xl'
+                  : totalSlots <= 9
+                  ? 'text-3xl sm:text-4xl xl:text-5xl'
+                  : 'text-2xl sm:text-3xl xl:text-4xl'
 
-                        if (isCharCorrect) {
-                          return (
-                            <span key={idx} className="text-primary">
-                              {char}
-                            </span>
-                          )
-                        }
+              return (
+                <div
+                  className={`relative flex items-center justify-center py-2.5 sm:py-3 xl:py-3.5 px-4 sm:px-6 overflow-hidden font-mono rounded-2xl border-2 transition-all shadow-inner ${
+                    !isSpellingUnlocked
+                      ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60 min-h-[88px]'
+                      : hasTypo
+                      ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
+                      : 'border-primary/40 bg-white/[0.02]'
+                  }`}
+                >
+                  {!isSpellingUnlocked ? (
+                    <div className="flex items-center justify-center gap-2 text-sm font-sans font-normal text-muted-foreground h-16">
+                      <Lock className="size-4 text-accent/80" />
+                      <span>请先完成上方译文输入后开启拼写</span>
+                    </div>
+                  ) : (
+                    <>
+                      {/* 4 线格打字区与光标 */}
+                      <div className="relative w-full h-16 sm:h-18 xl:h-20 flex items-center justify-center">
+                        {/* 4 线格参考线：顶线、中虚线、基准底线（同色软蓝无红线）、下延底线（最后的横线） */}
+                        <div className="absolute inset-x-4 inset-y-1.5 pointer-events-none flex flex-col justify-between opacity-70 z-0">
+                          {/* 第 1 线：顶线 */}
+                          <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                          {/* 第 2 线：中线（虚线） */}
+                          <div className="w-full border-b border-dashed border-sky-400/45 dark:border-sky-400/30" />
+                          {/* 第 3 线：基准线（实线，与参考线统一青蓝色，无红线） */}
+                          <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                          {/* 第 4 线：下延底线（最后的横线） */}
+                          <div className="w-full border-b border-sky-400/25 dark:border-sky-400/15" />
+                        </div>
 
-                        return (
-                          <span
-                            key={idx}
-                            className="text-destructive font-black animate-error-flash mx-0.5 px-1 py-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]"
-                            title="输入错误，请按退格键 (Backspace) 修正"
-                          >
-                            {char}
-                          </span>
-                        )
-                      })}
-                    </span>
+                        {/* 字母与光标槽列表：字间距紧凑贴合，光标精确贴合在已输入字符末尾 */}
+                        <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
+                          {Array.from({ length: totalSlots }).map((_, idx) => {
+                            const targetChar = word.name[idx]
+                            const typedChar = currentInput[idx]
+                            const isTyped = idx < currentInput.length
+                            const isCurrent = idx === currentInput.length
+                            const isCorrect =
+                              isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
+
+                            return (
+                              <div
+                                key={idx}
+                                style={{ width: '1.05ch' }}
+                                className="relative w-[1.05ch] h-full flex items-center justify-center"
+                              >
+                                {/* 光标：精确处于当前未打字母的左边缘起始位置 */}
+                                {isCurrent && (
+                                  <span
+                                    className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
+                                      hasTypo ? 'bg-destructive' : 'bg-primary'
+                                    }`}
+                                  />
+                                )}
+
+                                {/* 已输入字符（坐落在基准线之上） */}
+                                {isTyped && (
+                                  <span
+                                    className={`${fontClass} font-extrabold -translate-y-1.5 sm:-translate-y-2 ${
+                                      isCorrect
+                                        ? 'text-primary'
+                                        : 'text-destructive font-black animate-error-flash px-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]'
+                                    }`}
+                                    title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
+                                  >
+                                    {typedChar}
+                                  </span>
+                                )}
+
+                                {/* 占位的 _ ：精确坐落在最后的横线（第 4 线）上 */}
+                                <span
+                                  className={`absolute -bottom-1 sm:-bottom-1.5 font-mono text-xl sm:text-2xl xl:text-3xl font-black select-none pointer-events-none transition-opacity ${
+                                    isTyped
+                                      ? 'opacity-0'
+                                      : hasTypo
+                                      ? 'text-destructive/40'
+                                      : 'text-primary/45'
+                                  }`}
+                                >
+                                  _
+                                </span>
+                              </div>
+                            )
+                          })}
+
+                          {/* 全部输入完成后，光标显示在末尾 */}
+                          {currentInput.length >= totalSlots && (
+                            <span
+                              className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
+                                hasTypo ? 'bg-destructive' : 'bg-primary'
+                              }`}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </>
                   )}
-                  <span
-                    className={`inline-block w-0.5 h-10 sm:h-11 xl:h-13 animate-cursor shrink-0 ${
-                      hasTypo ? 'bg-destructive' : 'bg-primary'
-                    }`}
-                  />
-                  {/* 下划线只铺剩余字母，敲一个顶掉一个，打字途中底线不会消失 */}
-                  <span
-                    className={`ml-1 font-normal ${
-                      hasTypo ? 'text-destructive/40' : 'text-primary/35'
-                    }`}
-                  >
-                    {'_'.repeat(Math.max(0, word.name.length - currentInput.length))}
-                  </span>
-                </>
-              )}
-            </div>
+                </div>
+              )
+            })()}
+          </div>
 
             <div className="h-5 mt-1">
               {hasTypo && (
@@ -272,7 +326,6 @@ export function DictationCard({
               )}
             </div>
           </div>
-        </div>
 
         {/* 下半区：语境双语例句（挖空填空线索，看译文与听音模式保持完全一致） */}
         {(examples.length > 0 || examplesStatus === 'pending' || examplesStatus === 'error') && (
