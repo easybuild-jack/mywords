@@ -890,5 +890,4730 @@
         }
       }
     ]
+  },
+  {
+    "id": "root_viv",
+    "form": "viv / vit / vitat",
+    "type": "root",
+    "phonetic": "/vɪv/",
+    "meaning": "生命 / 生存 / 鲜活",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 vivere（活）与 vita（生命）。rom vita 直接塑造了法语 vie、英语 vital 等再生词族。",
+    "derivationNote": "搭配 super-（超越）+ viv → survive 幸存；re-（再次）+ viv → revive 复活。",
+    "words": [
+      {
+        "name": "vivid",
+        "phonetic": "/ˈvɪvɪd/",
+        "breakdown": "viv (活) + -id (…的)",
+        "meaning": "adj. 生动的；鲜明的",
+        "example": {
+          "en": "She gave a vivid description of her trip to Iceland.",
+          "cn": "她对自己冰岛之旅的描述生动鲜活。"
+        }
+      },
+      {
+        "name": "vital",
+        "phonetic": "/ˈvaɪtl/",
+        "breakdown": "vit (生命) + -al",
+        "meaning": "adj. 至关重要的；生命的",
+        "example": {
+          "en": "Water is vital to all forms of life.",
+          "cn": "水对所有生命形式都至关重要。"
+        }
+      },
+      {
+        "name": "survive",
+        "phonetic": "/sərˈvaɪv/",
+        "breakdown": "super- (超越) + viv (活)",
+        "meaning": "v. 幸存；活下来",
+        "example": {
+          "en": "Only a few passengers survived the plane crash.",
+          "cn": "只有少数乘客在空难中幸存。"
+        }
+      },
+      {
+        "name": "revive",
+        "phonetic": "/rɪˈvaɪv/",
+        "breakdown": "re- (再) + viv (活)",
+        "meaning": "v. 复苏；重新使用",
+        "example": {
+          "en": "The coach tried to revive the team's morale.",
+          "cn": "教练试图重振队伍士气。"
+        }
+      },
+      {
+        "name": "vitamin",
+        "phonetic": "/ˈvɪtəmɪn/",
+        "breakdown": "vit (生命) + amin (胺)",
+        "meaning": "n. 维生素",
+        "example": {
+          "en": "Eating fresh fruit provides essential vitamins.",
+          "cn": "吃新鲜水果可补充必需的维生素。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_solv",
+    "form": "solv / solut",
+    "type": "root",
+    "phonetic": "/sɑːlv/",
+    "meaning": "解决 / 松开 / 溶解",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 solvere（松开、付款、解决）。原意为松开绳结，引申为解决难题、偿清债务。",
+    "derivationNote": "搭配 dis-（分开）+ solv → dissolve 分解；ab-（远离）+ solv → absolve 赦免。",
+    "words": [
+      {
+        "name": "solve",
+        "phonetic": "/sɑːlv/",
+        "breakdown": "solv (解开)",
+        "meaning": "v. 解决；解答",
+        "example": {
+          "en": "She solved the puzzle in under five minutes.",
+          "cn": "她在五分钟内解开了这道谜题。"
+        }
+      },
+      {
+        "name": "solution",
+        "phonetic": "/səˈluːʃn/",
+        "breakdown": "solut (解开) + -ion",
+        "meaning": "n. 解决方案；溶液",
+        "example": {
+          "en": "They proposed a practical solution to the traffic problem.",
+          "cn": "他们提出了一个实际可行的交通方案。"
+        }
+      },
+      {
+        "name": "dissolve",
+        "phonetic": "/dɪˈzɑːlv/",
+        "breakdown": "dis- (分开) + solv (松)",
+        "meaning": "v. 溶解；解散；解除",
+        "example": {
+          "en": "Sugar dissolves quickly in hot water.",
+          "cn": "糖在热水中迅速溶解。"
+        }
+      },
+      {
+        "name": "absolute",
+        "phonetic": "/ˈæbsəluːt/",
+        "breakdown": "ab- (远离) + solut (松)",
+        "meaning": "adj. 绝对的；纯粹的",
+        "example": {
+          "en": "There is no absolute truth in ethics.",
+          "cn": "伦理中没有绝对的真理。"
+        }
+      },
+      {
+        "name": "resolve",
+        "phonetic": "/rɪˈzɑːlv/",
+        "breakdown": "re- (再) + solv (解)",
+        "meaning": "v./n. 决心；解决；决议",
+        "example": {
+          "en": "She made a firm resolve to study harder.",
+          "cn": "她下定决心要更努力学习。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_pon",
+    "form": "pon / pos / pound",
+    "type": "root",
+    "phonetic": "/pɒn/",
+    "meaning": "放置 / 摆放 / 提出",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 ponere（放置）和 positus（放置的）。从空间上的摆放，引申至思想主张、位置立场。",
+    "derivationNote": "搭配 post-（在之后）+ pon → postpone 推迟；com-（共同）+ pon → component 组成。",
+    "words": [
+      {
+        "name": "position",
+        "phonetic": "/pəˈzɪʃn/",
+        "breakdown": "pos (置) + -ition",
+        "meaning": "n. 位置；职位；立场",
+        "example": {
+          "en": "Please indicate your position on the agreement.",
+          "cn": "请表明您对协议的立场。"
+        }
+      },
+      {
+        "name": "postpone",
+        "phonetic": "/poʊstˈpoʊn/",
+        "breakdown": "post- (在之后) + pon (置)",
+        "meaning": "v. 延期；推迟",
+        "example": {
+          "en": "We had to postpone the outdoor wedding due to rain.",
+          "cn": "我们不得不因雨推迟户外婚礼。"
+        }
+      },
+      {
+        "name": "opponent",
+        "phonetic": "/əˈpoʊnənt/",
+        "breakdown": "op- (对面) + pon (置) + -ent",
+        "meaning": "n. 对手；反对者",
+        "example": {
+          "en": "He defeated his strongest opponent in the finals.",
+          "cn": "他在决赛中击败了最强对手。"
+        }
+      },
+      {
+        "name": "compose",
+        "phonetic": "/kəmˈpoʊz/",
+        "breakdown": "com- (共同) + pos (置)",
+        "meaning": "v. 创作；组成；使平静",
+        "example": {
+          "en": "She composed a beautiful melody in 10 minutes.",
+          "cn": "她在十分钟内创作了一首优美的旋律。"
+        }
+      },
+      {
+        "name": "propose",
+        "phonetic": "/prəˈpoʊz/",
+        "breakdown": "pro- (向前) + pos (置)",
+        "meaning": "v. 建议；求婚；提议",
+        "example": {
+          "en": "He proposed marriage to her in Paris.",
+          "cn": "他在巴黎向她求婚了。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ten",
+    "form": "ten / tin / tent",
+    "type": "root",
+    "phonetic": "/tɛn/",
+    "meaning": "持有 / 维持 / 内容",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 tenere（持有、抓稳）。从物理握住，扩散至记忆、内容与坚持的精神占据。",
+    "derivationNote": "搭配 con-（共同）+ tin → contain 包含；re-（回）+ tin → retain 保留；ab-（远离）+ ten → absent 缺席。",
+    "words": [
+      {
+        "name": "contain",
+        "phonetic": "/kənˈteɪn/",
+        "breakdown": "con- (共同) + tain (持)",
+        "meaning": "v. 包含；容纳；抑制",
+        "example": {
+          "en": "This bottle contains 500ml of water.",
+          "cn": "这个瓶子装有 500 毫升水。"
+        }
+      },
+      {
+        "name": "retain",
+        "phonetic": "/rɪˈteɪn/",
+        "breakdown": "re- (回) + tain (持)",
+        "meaning": "v. 保留；保持",
+        "example": {
+          "en": "The company retains the right to modify its terms.",
+          "cn": "公司保留修改条款的权利。"
+        }
+      },
+      {
+        "name": "obtain",
+        "phonetic": "/əbˈteɪn/",
+        "breakdown": "ob- (近) + tain (持)",
+        "meaning": "v. 获得；得到",
+        "example": {
+          "en": "She obtained her degree from a prestigious university.",
+          "cn": "她从一所名校获得学位。"
+        }
+      },
+      {
+        "name": "tenant",
+        "phonetic": "/ˈtɛnənt/",
+        "breakdown": "ten (持) + -ant (人)",
+        "meaning": "n. 租户；房客",
+        "example": {
+          "en": "The tenant complained about the leaking roof.",
+          "cn": "租户投诉屋顶漏水。"
+        }
+      },
+      {
+        "name": "tenure",
+        "phonetic": "/ˈtɛnjər/",
+        "breakdown": "ten (持) + -ure",
+        "meaning": "n. 任期；终身职位",
+        "example": {
+          "en": "He achieved tenure after years of dedicated research.",
+          "cn": "多年专心研究后，他获得了终身教职。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_fer",
+    "form": "fer / lat (fer-/ferre)",
+    "type": "root",
+    "phonetic": "/fɜːr/",
+    "meaning": "携带 / 运送 / 承担",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 ferre（携带、承担、生产），与希腊语 pherein 同源。从空间运输，到社会承担，再到字典里的 reference 引用，皆一脉相承。",
+    "derivationNote": "搭配 con-（共同）+ fer → confer 商议；re-（回）+ fer → refer 提及；trans-（跨）+ fer → transfer 转移。",
+    "words": [
+      {
+        "name": "transfer",
+        "phonetic": "/trænsˈfɜːr/",
+        "breakdown": "trans- (跨) + fer (运)",
+        "meaning": "v./n. 转移；转让",
+        "example": {
+          "en": "He transferred all his data to the new laptop.",
+          "cn": "他把所有数据转移到新笔记本上。"
+        }
+      },
+      {
+        "name": "refer",
+        "phonetic": "/rɪˈfɜːr/",
+        "breakdown": "re- (回) + fer (带)",
+        "meaning": "v. 参考；提到；提交",
+        "example": {
+          "en": "Please refer to page 56 for the full explanation.",
+          "cn": "完整解释请查阅第 56 页。"
+        }
+      },
+      {
+        "name": "confer",
+        "phonetic": "/kənˈfɜːr/",
+        "breakdown": "con- (共同) + fer (带)",
+        "meaning": "v. 协商；授予",
+        "example": {
+          "en": "The committee conferred for hours without consensus.",
+          "cn": "委员会协商数小时仍未达成共识。"
+        }
+      },
+      {
+        "name": "infer",
+        "phonetic": "/ɪnˈfɜːr/",
+        "breakdown": "in- (入) + fer (带)",
+        "meaning": "v. 推断；推理",
+        "example": {
+          "en": "We can infer the meaning from the context.",
+          "cn": "我们可以从上下文推断含义。"
+        }
+      },
+      {
+        "name": "differ",
+        "phonetic": "/ˈdɪfər/",
+        "breakdown": "dif- (分开) + fer (带)",
+        "meaning": "v. 不同；有分歧",
+        "example": {
+          "en": "The two witnesses differ on what they saw.",
+          "cn": "两位目击者对所见陈述不一致。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_jac",
+    "form": "jac / jact / ject",
+    "type": "root",
+    "phonetic": "/dʒækt/",
+    "meaning": "投掷 / 投射 / 抛",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 iacere（投掷）。与之对应的形容词 iactus、过去分词 iectus 衍生出英语海量的 ject- 词族。",
+    "derivationNote": "搭配 e-（出）→ eject 喷出；in-（入）→ inject 注入；re-（回）→ reject 拒绝；pro-（向前）→ project 投射。",
+    "words": [
+      {
+        "name": "project",
+        "phonetic": "/ˈprɑːdʒekt/",
+        "breakdown": "pro- (向前) + ject (投)",
+        "meaning": "v./n. 投射；工程；项目",
+        "example": {
+          "en": "The new project will start in September.",
+          "cn": "新项目将于九月开始。"
+        }
+      },
+      {
+        "name": "reject",
+        "phonetic": "/rɪˈdʒekt/",
+        "breakdown": "re- (回) + ject (投)",
+        "meaning": "v. 拒绝；排斥",
+        "example": {
+          "en": "The proposal was unanimously rejected by the board.",
+          "cn": "该提案被董事会一致否决。"
+        }
+      },
+      {
+        "name": "inject",
+        "phonetic": "/ɪnˈdʒekt/",
+        "breakdown": "in- (入) + ject (投)",
+        "meaning": "v. 注射；注入",
+        "example": {
+          "en": "She injected insulin before each meal.",
+          "cn": "她每餐前注射胰岛素。"
+        }
+      },
+      {
+        "name": "eject",
+        "phonetic": "/iːˈdʒekt/",
+        "breakdown": "e- (出) + ject (投)",
+        "meaning": "v. 喷出；弹出；逐出",
+        "example": {
+          "en": "He was ejected from the game for fighting.",
+          "cn": "他因打架被逐出比赛。"
+        }
+      },
+      {
+        "name": "subject",
+        "phonetic": "/ˈsʌbdʒɪkt/",
+        "breakdown": "sub- (在下) + ject (投)",
+        "meaning": "n. 主题；科目；主语",
+        "example": {
+          "en": "Mathematics is her favorite subject.",
+          "cn": "数学是她最喜欢的科目。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_flex",
+    "form": "flex / flect",
+    "type": "root",
+    "phonetic": "/flɛks/",
+    "meaning": "弯曲 / 折弯 / 折弯处",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 flectere（弯曲、转向）。原意为身体弯曲，如屈膝；引申至物理折弯、语气缓和。",
+    "derivationNote": "搭配 in-（向内）+ flect → inflect 使曲折（语言里的变格变位）；de-（向下）+ flex → deflect 偏转。",
+    "words": [
+      {
+        "name": "flex",
+        "phonetic": "/flɛks/",
+        "breakdown": "flex (弯)",
+        "meaning": "v./n. 弯曲；伸缩",
+        "example": {
+          "en": "He flexed his arms to show his muscles.",
+          "cn": "他弯曲手臂展示自己的肌肉。"
+        }
+      },
+      {
+        "name": "flexible",
+        "phonetic": "/ˈflɛksəbl/",
+        "breakdown": "flex (弯) + -ible",
+        "meaning": "adj. 灵活的；柔韧的",
+        "example": {
+          "en": "We offer flexible working hours for parents.",
+          "cn": "我们为家长提供弹性工作时间。"
+        }
+      },
+      {
+        "name": "reflect",
+        "phonetic": "/rɪˈflɛkt/",
+        "breakdown": "re- (回) + flect (弯)",
+        "meaning": "v. 反映；反射；深思",
+        "example": {
+          "en": "Mirrors reflect light very efficiently.",
+          "cn": "镜子高效反射光线。"
+        }
+      },
+      {
+        "name": "inflection",
+        "phonetic": "/ɪnˈflɛkʃn/",
+        "breakdown": "in- (入) + flect (弯) + -ion",
+        "meaning": "n. 词形变化；变调",
+        "example": {
+          "en": "Chinese has very few verbal inflections.",
+          "cn": "中文动词的词形变化很少。"
+        }
+      },
+      {
+        "name": "deflect",
+        "phonetic": "/dɪˈflɛkt/",
+        "breakdown": "de- (向下) + flect (弯)",
+        "meaning": "v. 使偏离；转向",
+        "example": {
+          "en": "The wind deflected the arrow from its target.",
+          "cn": "风使箭偏离了目标。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_plic",
+    "form": "plic / plex / ploy",
+    "type": "root",
+    "phonetic": "/plɪk/",
+    "meaning": "折叠 / 编结 / 重叠",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 plicare（折叠）和 plectere（编结）。从具体折叠纸张、辫子，到抽象复杂、牵连关系。",
+    "derivationNote": "搭配 com-（共同）+ plic → complicate 复杂化；ex-（出）+ plic → explicate 解释。",
+    "words": [
+      {
+        "name": "complex",
+        "phonetic": "/ˈkɑːmplɛks/",
+        "breakdown": "com- (共同) + plex (折)",
+        "meaning": "adj. 复杂的；n. 综合体",
+        "example": {
+          "en": "The puzzle proved too complex for the children.",
+          "cn": "这道谜题对孩子来说过于复杂。"
+        }
+      },
+      {
+        "name": "apply",
+        "phonetic": "/əˈplaɪ/",
+        "breakdown": "ap- (靠近) + ply (折)",
+        "meaning": "v. 申请；应用；涂",
+        "example": {
+          "en": "You need to apply for the visa at least three months before travel.",
+          "cn": "出行前至少三个月申请签证。"
+        }
+      },
+      {
+        "name": "reply",
+        "phonetic": "/rɪˈplaɪ/",
+        "breakdown": "re- (回) + ply (折)",
+        "meaning": "v./n. 回答；回应",
+        "example": {
+          "en": "She didn't reply to my last message.",
+          "cn": "她没有回复我上一条信息。"
+        }
+      },
+      {
+        "name": "imply",
+        "phonetic": "/ɪmˈplaɪ/",
+        "breakdown": "im- (入) + ply (折)",
+        "meaning": "v. 暗示；意味",
+        "example": {
+          "en": "His silence implies agreement with the decision.",
+          "cn": "他的沉默暗示着对此决定的同意。"
+        }
+      },
+      {
+        "name": "complicate",
+        "phonetic": "/ˈkɑːmplɪkeɪt/",
+        "breakdown": "com- (共同) + plic (折) + -ate",
+        "meaning": "v. 使复杂化",
+        "example": {
+          "en": "Don't complicate an already difficult situation.",
+          "cn": "别让本已困难的局面更加复杂。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_press",
+    "form": "press / prim",
+    "type": "root",
+    "phonetic": "/prɛs/",
+    "meaning": "压 / 按 / 催逼",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 pressare（反复压）与 premere（压）。从物理上挤水、压榨，到精神上的压抑与紧迫。",
+    "derivationNote": "搭配 ex-（出）+ press → express 表达；com-（共同）+ press → compress 压缩；im-（入）+ press → impress 留下印象。",
+    "words": [
+      {
+        "name": "press",
+        "phonetic": "/prɛs/",
+        "breakdown": "press (压)",
+        "meaning": "v./n. 按；压；媒体",
+        "example": {
+          "en": "Press the red button to start the machine.",
+          "cn": "按红色按钮启动机器。"
+        }
+      },
+      {
+        "name": "express",
+        "phonetic": "/ɪkˈsprɛs/",
+        "breakdown": "ex- (出) + press (压)",
+        "meaning": "v./adj. 表达；快速的",
+        "example": {
+          "en": "Words cannot express how grateful I am.",
+          "cn": "言语无法表达我的感激之情。"
+        }
+      },
+      {
+        "name": "impress",
+        "phonetic": "/ɪmˈprɛs/",
+        "breakdown": "im- (入) + press (压)",
+        "meaning": "v. 给…深刻印象；盖印",
+        "example": {
+          "en": "The speaker impressed everyone with his insights.",
+          "cn": "演讲者的见地给所有人留下深刻印象。"
+        }
+      },
+      {
+        "name": "compress",
+        "phonetic": "/kəmˈprɛs/",
+        "breakdown": "com- (共同) + press (压)",
+        "meaning": "v. 压缩；压紧",
+        "example": {
+          "en": "Compressed files take up less storage space.",
+          "cn": "压缩文件占用更少的存储空间。"
+        }
+      },
+      {
+        "name": "depressed",
+        "phonetic": "/dɪˈprɛst/",
+        "breakdown": "de- (下) + press (压) + -ed",
+        "meaning": "adj. 沮丧的；萧条的",
+        "example": {
+          "en": "She felt deeply depressed after the bad news.",
+          "cn": "她听到坏消息后深感沮丧。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_spec",
+    "form": "spec / spi / spis",
+    "type": "root",
+    "phonetic": "/spɛk/",
+    "meaning": "看 / 观察 / 镜像",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 specere（看见、注视）。与 root_spect 同源，spec 在拼写上更出现在科技缩写（spec = specification）。",
+    "derivationNote": "搭配 de-（向下）+ spis → despise 轻视；con-（共同）+ spec → conspire 共谋。",
+    "words": [
+      {
+        "name": "special",
+        "phonetic": "/ˈspɛʃl/",
+        "breakdown": "spec (看/种类) + -ial",
+        "meaning": "adj. 特别的；专门的",
+        "example": {
+          "en": "This dish is a regional specialty from Sichuan.",
+          "cn": "这道菜是四川的地方特色菜。"
+        }
+      },
+      {
+        "name": "specific",
+        "phonetic": "/spəˈsɪfɪk/",
+        "breakdown": "spec (形) + -ific (做)",
+        "meaning": "adj. 具体的；特定的",
+        "example": {
+          "en": "Please give a specific example to support your claim.",
+          "cn": "请给出具体例子来支持你的论断。"
+        }
+      },
+      {
+        "name": "specimen",
+        "phonetic": "/ˈspɛsɪmən/",
+        "breakdown": "spec (看) + -imen (物)",
+        "meaning": "n. 标本；样本",
+        "example": {
+          "en": "They collected rock specimens for lab analysis.",
+          "cn": "他们采集岩石标本供实验室分析。"
+        }
+      },
+      {
+        "name": "despise",
+        "phonetic": "/dɪˈspaɪz/",
+        "breakdown": "de- (向下) + spis (看)",
+        "meaning": "v. 轻视；鄙视",
+        "example": {
+          "en": "Honest people despise those who cheat on tests.",
+          "cn": "正直的人鄙视考试作弊者。"
+        }
+      },
+      {
+        "name": "despite",
+        "phonetic": "/dɪˈspaɪt/",
+        "breakdown": "de- (向下) + spit (看)",
+        "meaning": "prep. 尽管；不管",
+        "example": {
+          "en": "Despite the rain, the festival continued as planned.",
+          "cn": "尽管下雨，节日仍按计划举行。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_sta",
+    "form": "sta / stat / sti / sist",
+    "type": "root",
+    "phonetic": "/stæt/",
+    "meaning": "站立 / 停留 / 状态",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 stare（站立、停顿）、sistere（安置）。从物理上站立，到国家、城市、身份的稳定状态，皆立足于此。",
+    "derivationNote": "搭配 in-（进入）+ stit → institute 设立；con-（共同）+ stant → constant 恒定的；re-（回）+ stit → restitution 归还。",
+    "words": [
+      {
+        "name": "stable",
+        "phonetic": "/ˈsteɪbl/",
+        "breakdown": "sta (站) + -ble",
+        "meaning": "adj. 稳定的；n. 马厩",
+        "example": {
+          "en": "Patients are now in stable condition after the surgery.",
+          "cn": "术后患者目前病情稳定。"
+        }
+      },
+      {
+        "name": "station",
+        "phonetic": "/ˈsteɪʃn/",
+        "breakdown": "sta (站) + -tion",
+        "meaning": "n. 车站；站；岗位",
+        "example": {
+          "en": "The train will arrive at Platform 3 at this station.",
+          "cn": "本次列车将在本站 3 站台到达。"
+        }
+      },
+      {
+        "name": "status",
+        "phonetic": "/ˈstætəs/",
+        "breakdown": "stat (站) + -us",
+        "meaning": "n. 地位；身份；状态",
+        "example": {
+          "en": "She holds senior status within the organization.",
+          "cn": "她在该机构中担任高级职务。"
+        }
+      },
+      {
+        "name": "instant",
+        "phonetic": "/ˈɪnstənt/",
+        "breakdown": "in- (在…中) + sta (立) + -nt",
+        "meaning": "adj./n. 立即的；瞬间",
+        "example": {
+          "en": "The success was not instant; it took years of effort.",
+          "cn": "成功并非一蹴而就，而是多年努力的结果。"
+        }
+      },
+      {
+        "name": "obstacle",
+        "phonetic": "/ˈɑːbstəkl/",
+        "breakdown": "ob- (对面) + sta (站) + -cle",
+        "meaning": "n. 障碍；绊脚石",
+        "example": {
+          "en": "Lack of funding remains the main obstacle to the project.",
+          "cn": "资金不足仍是该项目的主要障碍。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ven",
+    "form": "ven / vent / vene",
+    "type": "root",
+    "phonetic": "/vɛn/",
+    "meaning": "来 / 到来 / 进行",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 venire（来）。语义从远道而来，自然延伸至接近、介入、摸索、发起等动词。",
+    "derivationNote": "搭配 ad-（向）+ ven → adventure 冒险；in-（向内）+ vent → invent 创造；inter-（之间）+ ven → intervene 干预。",
+    "words": [
+      {
+        "name": "venture",
+        "phonetic": "/ˈvɛntʃər/",
+        "breakdown": "vent (来) + -ure",
+        "meaning": "n./v. 风险项目；冒险",
+        "example": {
+          "en": "He made a fortune through his early web ventures.",
+          "cn": "他通过早年的互联网创业赚了大钱。"
+        }
+      },
+      {
+        "name": "intervene",
+        "phonetic": "/ˌɪntərˈviːn/",
+        "breakdown": "inter- (中间) + ven (来)",
+        "meaning": "v. 干预；介入",
+        "example": {
+          "en": "The government may intervene to stabilize prices.",
+          "cn": "政府可能会干预以稳定物价。"
+        }
+      },
+      {
+        "name": "convene",
+        "phonetic": "/kənˈviːn/",
+        "breakdown": "con- (共同) + ven (来)",
+        "meaning": "v. 召集；集合",
+        "example": {
+          "en": "The council convened to discuss the budget cut.",
+          "cn": "市议会召开会议讨论预算削减。"
+        }
+      },
+      {
+        "name": "revenue",
+        "phonetic": "/ˈrɛvənuː/",
+        "breakdown": "re- (回) + ven (来) + -ue",
+        "meaning": "n. 收入；收益",
+        "example": {
+          "en": "Annual revenue exceeded 10 million dollars.",
+          "cn": "年收入超过 1000 万美元。"
+        }
+      },
+      {
+        "name": "eventual",
+        "phonetic": "/iˈvɛntʃuəl/",
+        "breakdown": "e- (出) + vent (来) + -ual",
+        "meaning": "adj. 最终的；结果发生的",
+        "example": {
+          "en": "The eventual outcome surprised everyone.",
+          "cn": "最终的结果出乎所有人意料。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_cla",
+    "form": "cla / clud / clus",
+    "type": "root",
+    "phonetic": "/kloʊs/",
+    "meaning": "关闭 / 包含 / 密合",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 claudere（关闭）。从物理关门，到排除外人、结束议题、纳入总结，皆为关门动作的抽象化。",
+    "derivationNote": "搭配 ex-（外）+ clud → exclude 排除；con-（共同）+ clud → conclude 结束；in-（内）+ clud → include 包括。",
+    "words": [
+      {
+        "name": "close",
+        "phonetic": "/kloʊz/",
+        "breakdown": "clos (关闭)",
+        "meaning": "v. 关；结束；adj. 近的",
+        "example": {
+          "en": "Please close the door quietly behind you.",
+          "cn": "请轻轻地把身后的门关上。"
+        }
+      },
+      {
+        "name": "include",
+        "phonetic": "/ɪnˈkluːd/",
+        "breakdown": "in- (内) + clud (关)",
+        "meaning": "v. 包括；包含",
+        "example": {
+          "en": "All teams must include a backup player.",
+          "cn": "所有队伍都必须含有一名替补球员。"
+        }
+      },
+      {
+        "name": "exclude",
+        "phonetic": "/ɪkˈskluːd/",
+        "breakdown": "ex- (外) + clud (关)",
+        "meaning": "v. 排除；拒绝",
+        "example": {
+          "en": "Please exclude nuts from my diet plan.",
+          "cn": "我的饮食方案中请排除坚果。"
+        }
+      },
+      {
+        "name": "conclude",
+        "phonetic": "/kənˈkluːd/",
+        "breakdown": "con- (共同) + clud (关)",
+        "meaning": "v. 结束；结论；推断",
+        "example": {
+          "en": "The researchers concluded their experiment last month.",
+          "cn": "研究人员上月结束了实验。"
+        }
+      },
+      {
+        "name": "enclose",
+        "phonetic": "/ɪnˈkloʊz/",
+        "breakdown": "en- (内) + clos (关)",
+        "meaning": "v. 围住；封入",
+        "example": {
+          "en": "Please enclose a photo with your application.",
+          "cn": "请在申请中附上一张照片。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_grad",
+    "form": "grad / gress",
+    "type": "root",
+    "phonetic": "/ɡræd/",
+    "meaning": "走 / 步 / 行动",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 gradi（走）与 gradus（步、级）。从物理行走、迈步，到学业进阶与语言侵袭，全由脚步一脉相承。",
+    "derivationNote": "搭配 ag-（进行）+ grad → aggressive 侵略；di-（分开）+ gress → digress 离题；pro-（向前）+ gress → progress 进步。",
+    "words": [
+      {
+        "name": "grade",
+        "phonetic": "/ɡreɪd/",
+        "breakdown": "grad (步/级)",
+        "meaning": "n. 年级；等级；分数",
+        "example": {
+          "en": "She achieved the highest grade in the exam.",
+          "cn": "她在考试中获得了最高分。"
+        }
+      },
+      {
+        "name": "gradual",
+        "phonetic": "/ˈɡrædʒuəl/",
+        "breakdown": "grad (步) + -ual",
+        "meaning": "adj. 逐渐的；渐进的",
+        "example": {
+          "en": "The climate shows a gradual change over decades.",
+          "cn": "气候在数十年间呈现渐进的变化。"
+        }
+      },
+      {
+        "name": "progress",
+        "phonetic": "/ˈprɑːɡrɛs/",
+        "breakdown": "pro- (向前) + gress (走)",
+        "meaning": "v./n. 进步；进展",
+        "example": {
+          "en": "Progress on the new bridge is ahead of schedule.",
+          "cn": "新桥的建设进度快于预期。"
+        }
+      },
+      {
+        "name": "aggressive",
+        "phonetic": "/əˈɡrɛsɪv/",
+        "breakdown": "ag- (向) + gress (走) + -ive",
+        "meaning": "adj. 侵略的；进取的",
+        "example": {
+          "en": "The company launched an aggressive marketing campaign.",
+          "cn": "公司发起了一场积极的营销活动。"
+        }
+      },
+      {
+        "name": "congress",
+        "phonetic": "/ˈkɑːŋɡrəs/",
+        "breakdown": "con- (共同) + gress (走)",
+        "meaning": "n. 国会；代表大会",
+        "example": {
+          "en": "The Congress passed the new bill yesterday.",
+          "cn": "国会昨天通过了这项新法案。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_junct",
+    "form": "junct / nect",
+    "type": "root",
+    "phonetic": "/dʒʌŋkt/",
+    "meaning": "连接 / 联结 / 结点",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 iungere（连接）和 nexus（结）。语义从打结连接，过渡到抽象的人事、逻辑、叙事联系。",
+    "derivationNote": "搭配 ad-（靠近）+ nect → annex 兼并；dis-（分开）+ junct → disjunct 分离；con-（共同）+ junct → conjunction 连接词。",
+    "words": [
+      {
+        "name": "connect",
+        "phonetic": "/kəˈnɛkt/",
+        "breakdown": "con- (共同) + nect (结)",
+        "meaning": "v. 连接；联系",
+        "example": {
+          "en": "Please connect the printer to your laptop.",
+          "cn": "请将打印机连接到你的笔记本。"
+        }
+      },
+      {
+        "name": "junction",
+        "phonetic": "/ˈdʒʌŋkʃn/",
+        "breakdown": "junct (连) + -ion",
+        "meaning": "n. 交叉点；连接处",
+        "example": {
+          "en": "Turn left at the next junction.",
+          "cn": "在下一个交叉路口左转。"
+        }
+      },
+      {
+        "name": "disconnect",
+        "phonetic": "/ˌdɪskəˈnɛkt/",
+        "breakdown": "dis- (分开) + con- (共同) + nect (结)",
+        "meaning": "v. 断连；失联",
+        "example": {
+          "en": "The call dropped because we got disconnected.",
+          "cn": "电话断了，因为我们失联了。"
+        }
+      },
+      {
+        "name": "annex",
+        "phonetic": "/ˈænɛks/",
+        "breakdown": "ad- (向) + nex (系)",
+        "meaning": "n./v. 附件；兼并",
+        "example": {
+          "en": "The company annexed several smaller competitors.",
+          "cn": "该公司兼并了几家规模较小的竞争对手。"
+        }
+      },
+      {
+        "name": "conjunction",
+        "phonetic": "/kənˈdʒʌŋkʃn/",
+        "breakdown": "con- (共同) + junct (连) + -ion",
+        "meaning": "n. 联合；连词",
+        "example": {
+          "en": "‘And’ is the most common conjunction in English.",
+          "cn": "“and”是英语中最常见的连词。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_sent",
+    "form": "sent / sens",
+    "type": "root",
+    "phonetic": "/sɛns/",
+    "meaning": "感觉 / 感受 / 感知",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 sentire（感觉、感受）。从物理五感的察觉，过渡到社交情绪、判断与同意。",
+    "derivationNote": "搭配 con-（共同）+ sent → consent 同意；dis-（分开）+ sent → dissent 异议；pre-（先）+ sent → present 出示。",
+    "words": [
+      {
+        "name": "sense",
+        "phonetic": "/sɛns/",
+        "breakdown": "sens (感觉)",
+        "meaning": "n. 感官；感觉；意义",
+        "example": {
+          "en": "Animals have a strong sense of smell.",
+          "cn": "动物拥有敏锐的嗅觉。"
+        }
+      },
+      {
+        "name": "sensible",
+        "phonetic": "/ˈsɛnsəbl/",
+        "breakdown": "sens (感觉) + -ible",
+        "meaning": "adj. 明智的；合理的",
+        "example": {
+          "en": "It is sensible to save money for emergencies.",
+          "cn": "为应急攒钱是明智之举。"
+        }
+      },
+      {
+        "name": "sentence",
+        "phonetic": "/ˈsɛntəns/",
+        "breakdown": "sent (感觉/判断) + -ence",
+        "meaning": "n. 句子；判决",
+        "example": {
+          "en": "She wrote a long sentence about the weather.",
+          "cn": "她写了一个关于天气长句子。"
+        }
+      },
+      {
+        "name": "sensitive",
+        "phonetic": "/ˈsɛnsətɪv/",
+        "breakdown": "sens (感觉) + -itive",
+        "meaning": "adj. 敏感的；灵敏的",
+        "example": {
+          "en": "Children are highly sensitive to family tension.",
+          "cn": "儿童对家庭紧张氛围非常敏感。"
+        }
+      },
+      {
+        "name": "nonsense",
+        "phonetic": "/ˈnɑːnsɛns/",
+        "breakdown": "non- (无) + sense (意义)",
+        "meaning": "n. 胡说；废话",
+        "example": {
+          "en": "His excuse sounded like total nonsense.",
+          "cn": "他的借口听起来完全是胡说。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_sci",
+    "form": "sci",
+    "type": "root",
+    "phonetic": "/saɪ/",
+    "meaning": "知道 / 知识 / 认知",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 scire（知道）。无论科学（science）、良心（conscience），还是无意识的 unconscious，皆从「知」衍生。",
+    "derivationNote": "搭配 con-（共）+ sci → conscience 良心；pre-（先）+ sci → prescient 预知的。",
+    "words": [
+      {
+        "name": "science",
+        "phonetic": "/ˈsaɪəns/",
+        "breakdown": "sci (知) + -ence",
+        "meaning": "n. 科学；自然科学",
+        "example": {
+          "en": "Modern science has transformed our daily lives.",
+          "cn": "现代科学已经改变了我们的日常生活。"
+        }
+      },
+      {
+        "name": "scientific",
+        "phonetic": "/ˌsaɪənˈtɪfɪk/",
+        "breakdown": "scien (知) + -tific",
+        "meaning": "adj. 科学的；精确的",
+        "example": {
+          "en": "They conducted a scientific study on sleep.",
+          "cn": "他们对睡眠进行了一项科学研究。"
+        }
+      },
+      {
+        "name": "conscience",
+        "phonetic": "/ˈkɑːnʃəns/",
+        "breakdown": "con- (共) + sci (知) + -ence",
+        "meaning": "n. 良心；良知",
+        "example": {
+          "en": "He couldn't sleep because his conscience was troubled.",
+          "cn": "他因为良心不安而难以入眠。"
+        }
+      },
+      {
+        "name": "conscious",
+        "phonetic": "/ˈkɑːnʃəs/",
+        "breakdown": "con- (共) + sci (知) + -ous",
+        "meaning": "adj. 意识到的；有意的",
+        "example": {
+          "en": "She became conscious of the strange smell.",
+          "cn": "她察觉到了那股奇怪的气味。"
+        }
+      },
+      {
+        "name": "omniscient",
+        "phonetic": "/ɑːmˈnɪʃnt/",
+        "breakdown": "omni- (全) + sci (知) + -ent",
+        "meaning": "adj. 全知的；无所不知的",
+        "example": {
+          "en": "The detective seemed almost omniscient in his investigations.",
+          "cn": "侦探在调查中似乎几乎无所不知。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_phil",
+    "form": "phil",
+    "type": "root",
+    "phonetic": "/fɪl/",
+    "meaning": "爱 / 喜好 / 偏好",
+    "category": "core",
+    "categoryLabel": "通识高频词根",
+    "origin": "源自希腊语 philos（爱、爱好），与 philos 复合的阳光与人体双词根。philosophy（哲学）便是「爱智慧」之意。",
+    "derivationNote": "单独 phil 较少单独成词；常与 sophia（智慧）、anthrop（人）等组成复合派生词。",
+    "words": [
+      {
+        "name": "philosophy",
+        "phonetic": "/fəˈlɑːsəfi/",
+        "breakdown": "phil (爱) + soph (智慧) + -y",
+        "meaning": "n. 哲学；人生哲学",
+        "example": {
+          "en": "He studied philosophy at one of Europe's top universities.",
+          "cn": "他在欧洲一所顶尖大学攻读哲学。"
+        }
+      },
+      {
+        "name": "philosopher",
+        "phonetic": "/fəˈlɑːsəfər/",
+        "breakdown": "philos (爱智) + -opher (人)",
+        "meaning": "n. 哲学家",
+        "example": {
+          "en": "Plato was a famous philosopher of ancient Greece.",
+          "cn": "柏拉图是古希腊的著名哲学家。"
+        }
+      },
+      {
+        "name": "philanthropy",
+        "phonetic": "/fɪˈlænθrəpi/",
+        "breakdown": "phil (爱) + anthrop (人) + -y",
+        "meaning": "n. 慈善；慈善事业",
+        "example": {
+          "en": "She devoted her life to philanthropy after retiring.",
+          "cn": "她在退休后将自己的毕生献给慈善事业。"
+        }
+      },
+      {
+        "name": "bibliophile",
+        "phonetic": "/ˈbɪblioʊfaɪl/",
+        "breakdown": "biblio (书) + phil (爱)",
+        "meaning": "n. 书籍爱好者",
+        "example": {
+          "en": "As a bibliophile, she owned over five thousand books.",
+          "cn": "作为一个书迷，她拥有超过五千本书。"
+        }
+      },
+      {
+        "name": "philology",
+        "phonetic": "/fɪˈlɑːlədʒi/",
+        "breakdown": "phil (爱) + log (言) + -y",
+        "meaning": "n. 文献学；语文学",
+        "example": {
+          "en": "He earned a doctorate in philology and ancient languages.",
+          "cn": "他获得了文献学和古语言的博士学位。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_soph",
+    "form": "soph",
+    "type": "root",
+    "phonetic": "/sɑːf/",
+    "meaning": "智慧 / 学问 / 精明",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 sophia（智慧） 与 sophos（聪明的）。在希腊哲学中 sophia 指对事物本质的洞察，与实践的技巧 phronesis 不同。",
+    "derivationNote": "单独 soph 常以 -sophy / -sophic 形式出现；亦可与 phil（爱）合为 philosophy。",
+    "words": [
+      {
+        "name": "philosophy",
+        "phonetic": "/fəˈlɑːsəfi/",
+        "breakdown": "phil (爱) + soph (智慧) + -y",
+        "meaning": "n. 哲学；哲学体系",
+        "example": {
+          "en": "Eastern philosophy emphasizes harmony with nature.",
+          "cn": "东方哲学强调与自然和谐相处。"
+        }
+      },
+      {
+        "name": "sophomore",
+        "phonetic": "/ˈsɑːfɔːmɔːr/",
+        "breakdown": "soph (智慧) + moros (蠢)",
+        "meaning": "n. 大学二年级学生",
+        "example": {
+          "en": "She is a sophomore majoring in computer science.",
+          "cn": "她是计算机专业的大二学生。"
+        }
+      },
+      {
+        "name": "sophisticated",
+        "phonetic": "/səˈfɪstɪkeɪtɪd/",
+        "breakdown": "sophistic + -ated",
+        "meaning": "adj. 老练的；复杂的",
+        "example": {
+          "en": "The restaurant serves sophisticated international cuisine.",
+          "cn": "这家餐厅供应精致的国际料理。"
+        }
+      },
+      {
+        "name": "pansophic",
+        "phonetic": "/pænˈsɑːfɪk/",
+        "breakdown": "pan (全) + soph (智慧) + -ic",
+        "meaning": "adj. 全部智慧的",
+        "example": {
+          "en": "The library held a pansophic exhibition on universal knowledge.",
+          "cn": "图书馆举办了一场关于普遍知识的博学展。"
+        }
+      },
+      {
+        "name": "theosophical",
+        "phonetic": "/ˌθiːəˈsɑːfɪkl/",
+        "breakdown": "theo (神) + soph (智慧) + -ical",
+        "meaning": "adj. 神智学的",
+        "example": {
+          "en": "He wrote a theosophical treatise on divine wisdom.",
+          "cn": "他写了一篇关于神圣智慧的神智学论文。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_fug",
+    "form": "fug / fugit",
+    "type": "root",
+    "phonetic": "/fjuːɡ/",
+    "meaning": "逃走 / 逃避 / 消失",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 fugere（逃走）与 fuga（逃跑）。罗马史上的火与剑、难民的逃亡，皆以此根为词。",
+    "derivationNote": "搭配 ef-（出）→ effuse 喷出；re-（回）→ refuge 避难所；sub-（在…下）→ subterfuge 借口。",
+    "words": [
+      {
+        "name": "refuge",
+        "phonetic": "/ˈrɛfjuːdʒ/",
+        "breakdown": "re- (回) + fug (逃)",
+        "meaning": "n. 避难所；庇护",
+        "example": {
+          "en": "The small town offered refuge to displaced families.",
+          "cn": "小镇为难民家庭提供了庇护所。"
+        }
+      },
+      {
+        "name": "refugee",
+        "phonetic": "/ˌrɛfjuˈdʒiː/",
+        "breakdown": "refug (逃) + -ee (人)",
+        "meaning": "n. 难民；逃难者",
+        "example": {
+          "en": "Refugees lined up at the border for food and water.",
+          "cn": "难民在边境排队领取食物和水。"
+        }
+      },
+      {
+        "name": "fugitive",
+        "phonetic": "/ˈfjuːdʒətɪv/",
+        "breakdown": "fugit (逃) + -ive",
+        "meaning": "n./adj. 逃亡者；短暂的",
+        "example": {
+          "en": "The fugitive was finally captured by the police.",
+          "cn": "逃亡者最终被警方抓获。"
+        }
+      },
+      {
+        "name": "centrifuge",
+        "phonetic": "/ˈsɛntrɪfjuːdʒ/",
+        "breakdown": "centri (中心) + fug (逃)",
+        "meaning": "n. 离心机",
+        "example": {
+          "en": "A centrifuge separates substances by density.",
+          "cn": "离心机按密度分离物质。"
+        }
+      },
+      {
+        "name": "subterfuge",
+        "phonetic": "/ˈsʌbtərfjuːdʒ/",
+        "breakdown": "subter- (在…下) + fug (逃)",
+        "meaning": "n. 托词；花招",
+        "example": {
+          "en": "He obtained the data through cunning subterfuge.",
+          "cn": "他用狡猾的花招获取了数据。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_aud",
+    "form": "aud / audit",
+    "type": "root",
+    "phonetic": "/ɔːd/",
+    "meaning": "听 / 听觉 / 听众",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 audire（听见）与 auditare（反复听见），经由古法语衍生至英语。从单纯的听觉接收，到后来引申为倾听、审议与社群旁听的多层认知动作。",
+    "derivationNote": "搭配 ob-（对面听）、sub-（在下面偷听）可衍生出 obedience 与 eavesdrop 等社会关系词。",
+    "words": [
+      {
+        "name": "audience",
+        "phonetic": "/ˈɔːdiəns/",
+        "breakdown": "aud (听) + -ience (名词)",
+        "meaning": "n. 观众；听众；读者",
+        "example": {
+          "en": "The audience applauded the orchestra enthusiastically.",
+          "cn": "观众热情地为管弦乐队鼓掌。"
+        }
+      },
+      {
+        "name": "audio",
+        "phonetic": "/ˈɔːdioʊ/",
+        "breakdown": "aud (听) + -io",
+        "meaning": "n./adj. 音频(的)；声音(的)",
+        "example": {
+          "en": "This device supports high-resolution audio playback.",
+          "cn": "该设备支持高解析度音频播放。"
+        }
+      },
+      {
+        "name": "audit",
+        "phonetic": "/ˈɔːdɪt/",
+        "breakdown": "aud (听) + -it",
+        "meaning": "v./n. 旁听；审计；查账",
+        "example": {
+          "en": "Internal auditors audited the company's financial records.",
+          "cn": "内部审计员核查了该公司的财务记录。"
+        }
+      },
+      {
+        "name": "audible",
+        "phonetic": "/ˈɔːdəbl/",
+        "breakdown": "aud (听) + -ible (可…的)",
+        "meaning": "adj. 听得见的；可听到的",
+        "example": {
+          "en": "Her voice was barely audible above the noise.",
+          "cn": "在噪音中她的声音几乎听不见。"
+        }
+      },
+      {
+        "name": "audition",
+        "phonetic": "/ɔːˈdɪʃn/",
+        "breakdown": "aud (听) + -ition (动作结果)",
+        "meaning": "n. 试音；试听；试演",
+        "example": {
+          "en": "She passed the audition and got the lead role.",
+          "cn": "她通过了试镜，获得了主角。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_cred",
+    "form": "cred",
+    "type": "root",
+    "phonetic": "/krɛd/",
+    "meaning": "信任 / 信念 / 信用",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 credere（相信、托付），与古希腊语 kardia（心）同源。信任不仅是社交关系，更是契约、信用与信仰的精神基石。",
+    "derivationNote": "加上 ac-（加强）构成 accent，dis-（不）+ cred → discredit 贬损信用。",
+    "words": [
+      {
+        "name": "credit",
+        "phonetic": "/ˈkrɛdɪt/",
+        "breakdown": "cred (信) + -it",
+        "meaning": "n. 信用；学分；赞扬",
+        "example": {
+          "en": "He deserves credit for successfully leading the project.",
+          "cn": "值得称赞的是他成功领导了该项目。"
+        }
+      },
+      {
+        "name": "credentials",
+        "phonetic": "/krəˈdɛnʃlz/",
+        "breakdown": "cred (信) + -ential + -s",
+        "meaning": "n. 资历；资格证书",
+        "example": {
+          "en": "Please show your credentials before entering the lab.",
+          "cn": "进入实验室前请出示你的资格证书。"
+        }
+      },
+      {
+        "name": "credible",
+        "phonetic": "/ˈkrɛdəbl/",
+        "breakdown": "cred (信) + -ible",
+        "meaning": "adj. 可信的；可靠的",
+        "example": {
+          "en": "The witness provided a credible account of the incident.",
+          "cn": "目击者提供了对事件的可靠叙述。"
+        }
+      },
+      {
+        "name": "incredible",
+        "phonetic": "/ɪnˈkrɛdəbl/",
+        "breakdown": "in- (不) + cred (信) + -ible",
+        "meaning": "adj. 难以置信的；惊人的",
+        "example": {
+          "en": "The view from the summit was absolutely incredible.",
+          "cn": "山顶的景色简直令人难以置信。"
+        }
+      },
+      {
+        "name": "creed",
+        "phonetic": "/kriːd/",
+        "breakdown": "cred (信念)",
+        "meaning": "n. 信条；教义；纲领",
+        "example": {
+          "en": "Tolerance is a key element of his personal creed.",
+          "cn": "宽容是他个人信条的关键要素。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_jur",
+    "form": "jur / juris",
+    "type": "root",
+    "phonetic": "/dʒʊər/",
+    "meaning": "法律 / 权利 / 宣誓",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 ius / iuris（法、权）。罗马法传统中 ius 即为公民权利与秩序的源头，与 oaths 宣誓共同支撑着西方法治文明。",
+    "derivationNote": "搭配 ob-（绑定）+ jur → ob 不可绕开，再加上 -or / -y 拉成名词职业。",
+    "words": [
+      {
+        "name": "jury",
+        "phonetic": "/ˈdʒʊəri/",
+        "breakdown": "jur (宣誓) + -y",
+        "meaning": "n. 陪审团",
+        "example": {
+          "en": "The jury reached a unanimous verdict after three hours.",
+          "cn": "陪审团在三小时后达成了一致裁决。"
+        }
+      },
+      {
+        "name": "jurisdiction",
+        "phonetic": "/ˌdʒʊərɪsˈdɪkʃn/",
+        "breakdown": "juris (法律) + dict (说)",
+        "meaning": "n. 司法权；管辖范围",
+        "example": {
+          "en": "Federal courts have jurisdiction over interstate disputes.",
+          "cn": "联邦法院对跨州纠纷具有管辖权。"
+        }
+      },
+      {
+        "name": "juror",
+        "phonetic": "/ˈdʒʊərər/",
+        "breakdown": "jur (宣誓) + -or (人)",
+        "meaning": "n. 陪审员；评审员",
+        "example": {
+          "en": "Each juror takes an oath before the trial begins.",
+          "cn": "每位陪审员在审判开始前宣誓。"
+        }
+      },
+      {
+        "name": "injury",
+        "phonetic": "/ˈɪndʒəri/",
+        "breakdown": "in- (不) + jur (法/权)",
+        "meaning": "n. 伤害；损害；侵权",
+        "example": {
+          "en": "She suffered a head injury in the car accident.",
+          "cn": "她在车祸中头部受了伤。"
+        }
+      },
+      {
+        "name": "perjury",
+        "phonetic": "/ˈpɜːrdʒəri/",
+        "breakdown": "per- (假) + jur (宣誓)",
+        "meaning": "n. 伪证；假誓",
+        "example": {
+          "en": "Giving false testimony is a crime of perjury.",
+          "cn": "提供虚假证词构成伪证罪。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_reg",
+    "form": "reg / regi / reign",
+    "type": "root",
+    "phonetic": "/rɛdʒ/",
+    "meaning": "统治 / 王权 / 规则",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 regere（引导、纠正、统治），rex（王）与 regnum（王国）皆出同源。从具体的王朝统治，再到抽象的端正、规则。",
+    "derivationNote": "搭配 dir-（直引）→ dirge 直引→ direge 管，引出 direction / direct；inter-（相互管）→ interregnum 过渡期。",
+    "words": [
+      {
+        "name": "regulate",
+        "phonetic": "/ˈrɛɡjuleɪt/",
+        "breakdown": "regul (规则) + -ate (使)",
+        "meaning": "v. 规范；管制；调节",
+        "example": {
+          "en": "The new law regulates online content distribution.",
+          "cn": "新法律规范了在线内容分发。"
+        }
+      },
+      {
+        "name": "region",
+        "phonetic": "/ˈriːdʒən/",
+        "breakdown": "reg (统治/区域) + -ion",
+        "meaning": "n. 地区；区域；范围",
+        "example": {
+          "en": "The Polar region is covered by ice year-round.",
+          "cn": "极地地区终年被冰雪覆盖。"
+        }
+      },
+      {
+        "name": "regime",
+        "phonetic": "/reɪˈʒiːm/",
+        "breakdown": "reg (统治) + -ime",
+        "meaning": "n. 政体；管理制度",
+        "example": {
+          "en": "The new economic regime targets inflation control.",
+          "cn": "新经济制度的目标是抑制通胀。"
+        }
+      },
+      {
+        "name": "royal",
+        "phonetic": "/ˈrɔɪəl/",
+        "breakdown": "reg (王) + -al",
+        "meaning": "adj. 王室的；盛大的",
+        "example": {
+          "en": "The royal wedding attracted viewers worldwide.",
+          "cn": "王室婚礼吸引了全球观众。"
+        }
+      },
+      {
+        "name": "sovereign",
+        "phonetic": "/ˈsɑːvrɪn/",
+        "breakdown": "super- (上) + regn (统治) + -ain",
+        "meaning": "adj./n. 独立的；主权(国家)",
+        "example": {
+          "en": "Each sovereign state has the right to manage its own affairs.",
+          "cn": "每个主权国家都有权管理自身事务。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_mort",
+    "form": "mort / mor",
+    "type": "root",
+    "phonetic": "/mɔːrt/",
+    "meaning": "死亡 / 必死 / 死亡状态",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 mors / mortis（死亡）与 mori（去死）。mors 与希腊语 mythos（故事）同源：每个人都是为后世讲述的故事，故此人生必死。",
+    "derivationNote": "搭配 im-（彻底）+ mort → immortal 不死；am-（爱）+ mor → amor（爱），由死亡对偶而至爱。",
+    "words": [
+      {
+        "name": "mortal",
+        "phonetic": "/ˈmɔːrtl/",
+        "breakdown": "mort (死) + -al",
+        "meaning": "adj. 终有一死的；致命的",
+        "example": {
+          "en": "All human beings are mortal and must accept that.",
+          "cn": "所有人都终有一死，必须接受这个事实。"
+        }
+      },
+      {
+        "name": "immortal",
+        "phonetic": "/ɪˈmɔːrtl/",
+        "breakdown": "im- (不) + mort (死) + -al",
+        "meaning": "adj. 不死的；永生的",
+        "example": {
+          "en": "Some classics have earned an immortal status in literature.",
+          "cn": "一些经典在文学中获得不朽地位。"
+        }
+      },
+      {
+        "name": "mortgage",
+        "phonetic": "/ˈmɔːrɡɪdʒ/",
+        "breakdown": "mort (死) + gage (抵押)",
+        "meaning": "n. 抵押贷款",
+        "example": {
+          "en": "They took out a 30-year mortgage to buy the house.",
+          "cn": "他们申请了 30 年期抵押贷款买房。"
+        }
+      },
+      {
+        "name": "morbid",
+        "phonetic": "/ˈmɔːrbɪd/",
+        "breakdown": "morb (病/死) + -id",
+        "meaning": "adj. 病态的；阴森的",
+        "example": {
+          "en": "He has a morbid fascination with horror stories.",
+          "cn": "他对恐怖故事有一种病态的迷恋。"
+        }
+      },
+      {
+        "name": "mortuary",
+        "phonetic": "/ˈmɔːrtʃueri/",
+        "breakdown": "mort (死) + -uary (场所)",
+        "meaning": "n. 殡仪馆；停尸房",
+        "example": {
+          "en": "Funeral arrangements are made at the mortuary.",
+          "cn": "殡仪馆负责安排葬礼事宜。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_log",
+    "form": "log / logu",
+    "type": "root",
+    "phonetic": "/lɑːɡ/",
+    "meaning": "说 / 话语 / 道理",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 logos（话语、理性、规律）。logos 一词在希腊哲学中地位核心，从赫拉克利特到斯多葛学派，皆指宇宙背后的理性秩序。",
+    "derivationNote": "常与 eu-（好）、dia-（贯穿）、cata-（下）、ana-（回）等组合，形成 logo-, dialogue, catalog, apology 等庞大词族。",
+    "words": [
+      {
+        "name": "logic",
+        "phonetic": "/ˈlɑːdʒɪk/",
+        "breakdown": "log (道理) + -ic",
+        "meaning": "n. 逻辑；推理",
+        "example": {
+          "en": "Her argument lacks basic logic.",
+          "cn": "她的论点缺乏基本逻辑。"
+        }
+      },
+      {
+        "name": "dialogue",
+        "phonetic": "/ˈdaɪəlɔːɡ/",
+        "breakdown": "dia- (贯穿) + logu (说)",
+        "meaning": "n. 对话；交流",
+        "example": {
+          "en": "The film is built around a quiet dialogue.",
+          "cn": "这部电影围绕一段安静的对话展开。"
+        }
+      },
+      {
+        "name": "catalog",
+        "phonetic": "/ˈkætəlɔːɡ/",
+        "breakdown": "cata- (向下) + log (数)",
+        "meaning": "n. 目录；v. 编目",
+        "example": {
+          "en": "The new fall catalog features over 200 items.",
+          "cn": "新的秋季目录收录了 200 多件商品。"
+        }
+      },
+      {
+        "name": "apology",
+        "phonetic": "/əˈpɑːlədʒi/",
+        "breakdown": "apo- (远离) + log (说) + -y",
+        "meaning": "n. 道歉；辩解",
+        "example": {
+          "en": "I owe you a sincere apology for my mistake.",
+          "cn": "我为自己的错误向你诚恳道歉。"
+        }
+      },
+      {
+        "name": "monologue",
+        "phonetic": "/ˈmɑːnəlɔːɡ/",
+        "breakdown": "mono- (单一) + logu (说)",
+        "meaning": "n. 独白；长篇演说",
+        "example": {
+          "en": "His opening monologue got the audience laughing.",
+          "cn": "他开场独白逗得观众大笑。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_logy",
+    "form": "logy / ology",
+    "type": "root",
+    "phonetic": "/lədʒi/",
+    "meaning": "学 / 学科 / 学说",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 logia（学说），与 logos（理性）同根。后缀 -logy 在英语中以学科命名出现频率极高。",
+    "derivationNote": "通常缀在一个名词后构成学科名：biology (生物), geology (地质), psychology (心理), sociology (社会学)。",
+    "words": [
+      {
+        "name": "biology",
+        "phonetic": "/baɪˈɑːlədʒi/",
+        "breakdown": "bio (生命) + -logy (学)",
+        "meaning": "n. 生物学",
+        "example": {
+          "en": "She studied marine biology in Hawaii.",
+          "cn": "她在夏威夷研习海洋生物学。"
+        }
+      },
+      {
+        "name": "geology",
+        "phonetic": "/dʒiˈɑːlədʒi/",
+        "breakdown": "geo (地) + -logy",
+        "meaning": "n. 地质学",
+        "example": {
+          "en": "The geology of the region includes ancient rock formations.",
+          "cn": "该地区的地质结构包含古老的岩层。"
+        }
+      },
+      {
+        "name": "psychology",
+        "phonetic": "/saɪˈkɑːlədʒi/",
+        "breakdown": "psych (精神) + -ology",
+        "meaning": "n. 心理学",
+        "example": {
+          "en": "She is pursuing a master's in child psychology.",
+          "cn": "她在攻读儿童心理学硕士。"
+        }
+      },
+      {
+        "name": "anthropology",
+        "phonetic": "/ˌænθrəˈpɑːlədʒi/",
+        "breakdown": "anthrop (人) + -ology",
+        "meaning": "n. 人类学",
+        "example": {
+          "en": "Cultural anthropology explores human societies.",
+          "cn": "文化人类学研究人类社会。"
+        }
+      },
+      {
+        "name": "ideology",
+        "phonetic": "/ˌaɪdiˈɑːlədʒi/",
+        "breakdown": "ideo (理念) + -ology",
+        "meaning": "n. 意识形态；思想体系",
+        "example": {
+          "en": "Their political ideology shaped every decision.",
+          "cn": "他们的政治意识形态决定了每一个决策。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_nym",
+    "form": "nym / onym",
+    "type": "root",
+    "phonetic": "/nɪm/",
+    "meaning": "名字 / 命名 / 词",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 onyma / onoma（名字）。希腊的命名传统强调「名即本质」，即 onoma 与 logos（理）同源。",
+    "derivationNote": "搭配 an-（无）+ onym → anonymous 匿名；eu-（好）+ onym → euphony 悦耳；syn-（同）+ onym → synonym 同义词。",
+    "words": [
+      {
+        "name": "anonymous",
+        "phonetic": "/əˈnɑːnɪməs/",
+        "breakdown": "an- (无) + onym (名) + -ous",
+        "meaning": "adj. 匿名的；无名的",
+        "example": {
+          "en": "The donor wished to remain anonymous.",
+          "cn": "捐赠者希望保持匿名。"
+        }
+      },
+      {
+        "name": "synonym",
+        "phonetic": "/ˈsɪnənɪm/",
+        "breakdown": "syn- (同) + onym (名)",
+        "meaning": "n. 同义词",
+        "example": {
+          "en": "“Big” and “large” are synonyms.",
+          "cn": "“big”和“large”是同义词。"
+        }
+      },
+      {
+        "name": "antonym",
+        "phonetic": "/ˈæntənɪm/",
+        "breakdown": "ant- (对抗) + onym (名)",
+        "meaning": "n. 反义词",
+        "example": {
+          "en": "“Hot” is the antonym of “cold”.",
+          "cn": "“hot”是“cold”的反义词。"
+        }
+      },
+      {
+        "name": "pseudonym",
+        "phonetic": "/ˈsuːdənɪm/",
+        "breakdown": "pseudo (假) + nym (名)",
+        "meaning": "n. 笔名；假名",
+        "example": {
+          "en": "Samuel Clemens wrote under the pseudonym Mark Twain.",
+          "cn": "塞缪尔·克莱门斯以笔名马克·吐温写作。"
+        }
+      },
+      {
+        "name": "acronym",
+        "phonetic": "/ˈækrənɪm/",
+        "breakdown": "acro (尖端) + nym (名)",
+        "meaning": "n. 首字母缩略词",
+        "example": {
+          "en": "“NASA” is an acronym for National Aeronautics and Space Administration.",
+          "cn": "“NASA”是 National Aeronautics and Space Administration 的首字母缩写。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_phon",
+    "form": "phon / phen / fan",
+    "type": "root",
+    "phonetic": "/fəʊn/",
+    "meaning": "声音 / 声调 / 发声",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 phone（声音、出声）。古希腊人视声音为第一感觉，认为发声即存在。",
+    "derivationNote": "常以 phono-, -phone, -phonics 等形式出现，也与 sax/eur/euphony 关联。",
+    "words": [
+      {
+        "name": "phone",
+        "phonetic": "/foʊn/",
+        "breakdown": "phon (声音)",
+        "meaning": "n. 电话；v. 打电话",
+        "example": {
+          "en": "I phoned my parents last night.",
+          "cn": "我昨晚给父母打了电话。"
+        }
+      },
+      {
+        "name": "microphone",
+        "phonetic": "/ˈmaɪkrəfoʊn/",
+        "breakdown": "micro (小) + phon (声)",
+        "meaning": "n. 麦克风；话筒",
+        "example": {
+          "en": "She spoke clearly into the microphone.",
+          "cn": "她对着麦克风清晰地讲话。"
+        }
+      },
+      {
+        "name": "symphony",
+        "phonetic": "/ˈsɪmfəni/",
+        "breakdown": "sym- (同) + phon (声) + -y",
+        "meaning": "n. 交响乐；交响曲",
+        "example": {
+          "en": "Beethoven's Ninth Symphony remains timeless.",
+          "cn": "贝多芬第九交响曲历久弥新。"
+        }
+      },
+      {
+        "name": "euphony",
+        "phonetic": "/ˈjuːfəni/",
+        "breakdown": "eu- (好) + phon (声) + -y",
+        "meaning": "n. 悦耳之音；和谐",
+        "example": {
+          "en": "Poets often pursue euphony in their verses.",
+          "cn": "诗人常在诗句中追求音韵和谐。"
+        }
+      },
+      {
+        "name": "phonetics",
+        "phonetic": "/fəˈnɛtɪks/",
+        "breakdown": "phon (声) + -et + -ics",
+        "meaning": "n. 语音学",
+        "example": {
+          "en": "Linguistics students learn phonetics in their first year.",
+          "cn": "语言学学生第一年学习语音学。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_phot",
+    "form": "phot / phos",
+    "type": "root",
+    "phonetic": "/foʊt/",
+    "meaning": "光 / 光亮 / 摄影",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 phos / photos（光）。光的本原问题在希腊哲学里有形而上学意义，启蒙运动后期更将 photo 借用到光学与摄影。",
+    "derivationNote": "常以 photo- 前缀出现：photography, photosynthesis, photocell。",
+    "words": [
+      {
+        "name": "photograph",
+        "phonetic": "/ˈfoʊtəɡræf/",
+        "breakdown": "phot (光) + o + graph (写)",
+        "meaning": "n. 照片；v. 拍照",
+        "example": {
+          "en": "He took a stunning photograph of the sunset.",
+          "cn": "他拍了一张令人惊艳的日落照片。"
+        }
+      },
+      {
+        "name": "photography",
+        "phonetic": "/fəˈtɑːɡrəfi/",
+        "breakdown": "phot (光) + o + graphy (写)",
+        "meaning": "n. 摄影；摄影术",
+        "example": {
+          "en": "Travel photography demands patience and curiosity.",
+          "cn": "旅行摄影需要耐心和好奇心。"
+        }
+      },
+      {
+        "name": "photosynthesis",
+        "phonetic": "/ˌfoʊtoʊˈsɪnθəsɪs/",
+        "breakdown": "phot (光) + o + synthesis (合成)",
+        "meaning": "n. 光合作用",
+        "example": {
+          "en": "Plants depend on photosynthesis to create energy.",
+          "cn": "植物依赖光合作用来制造能量。"
+        }
+      },
+      {
+        "name": "photon",
+        "phonetic": "/ˈfoʊtɑːn/",
+        "breakdown": "phot (光) + -on (微粒)",
+        "meaning": "n. 光子",
+        "example": {
+          "en": "A single photon can travel billions of years.",
+          "cn": "单个光子可以飞行数十亿年。"
+        }
+      },
+      {
+        "name": "phosphorescent",
+        "phonetic": "/ˌfɑːsfəˈrɛsnt/",
+        "breakdown": "phosph (磷光) + or + -escent",
+        "meaning": "adj. 磷光的；发淡光的",
+        "example": {
+          "en": "The waves turned phosphorescent under the moon.",
+          "cn": "月光下的海浪泛着磷光。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_chrom",
+    "form": "chrom / chromat",
+    "type": "root",
+    "phonetic": "/kroʊm/",
+    "meaning": "颜色 / 色素 / 染色",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 chroma（颜色、肤色）。希腊人视 chroma 为物体表面的显现，与表面同根源于皮肤层。",
+    "derivationNote": "常以 chromo-, -chrome 出现；也指染色体（chromosome）因为它们对染料敏感。",
+    "words": [
+      {
+        "name": "chrome",
+        "phonetic": "/kroʊm/",
+        "breakdown": "chrom (颜色/光)",
+        "meaning": "n. 铬；adj. 光亮如银的",
+        "example": {
+          "en": "The car's chrome bumper gleamed in the sun.",
+          "cn": "汽车的镀铬保险杠在阳光下闪闪发光。"
+        }
+      },
+      {
+        "name": "monochrome",
+        "phonetic": "/ˈmɑːnəkroʊm/",
+        "breakdown": "mono- (单一) + chrom (色)",
+        "meaning": "adj. 单色的；n. 单色画",
+        "example": {
+          "en": "The artist prefers monochrome paintings.",
+          "cn": "这位艺术家更喜欢单色画作。"
+        }
+      },
+      {
+        "name": "chromosome",
+        "phonetic": "/ˈkroʊməsoʊm/",
+        "breakdown": "chromo (色素) + some (体)",
+        "meaning": "n. 染色体",
+        "example": {
+          "en": "Humans have 23 pairs of chromosomes.",
+          "cn": "人类有 23 对染色体。"
+        }
+      },
+      {
+        "name": "chromatic",
+        "phonetic": "/kroʊˈmætɪk/",
+        "breakdown": "chrom (色) + -atic",
+        "meaning": "adj. 彩色的；半音的",
+        "example": {
+          "en": "The chromatic scale uses all twelve notes.",
+          "cn": "半音音阶使用了全部十二个音符。"
+        }
+      },
+      {
+        "name": "polychrome",
+        "phonetic": "/ˈpɑːlikroʊm/",
+        "breakdown": "poly- (多) + chrom (色)",
+        "meaning": "adj. 多彩的；n. 彩饰",
+        "example": {
+          "en": "The temple has an impressive polychrome façade.",
+          "cn": "这座寺庙有着令人印象深刻的多彩外立面。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_scop",
+    "form": "scop",
+    "type": "root",
+    "phonetic": "/skoʊp/",
+    "meaning": "看 / 视野 / 范围",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 skopos（瞭望者、看管人）与 scopein（看）。原意是远距离观察，引申至研究范围与仪器。",
+    "derivationNote": "常以 -scope / -scopy 后缀出现：microscope（显微镜）, telescope（望远镜），microscopy（显微术）。",
+    "words": [
+      {
+        "name": "scope",
+        "phonetic": "/skoʊp/",
+        "breakdown": "scop (看)",
+        "meaning": "n. 范围；余地；机会",
+        "example": {
+          "en": "The project allows plenty of creative scope.",
+          "cn": "这个项目允许充分的创意空间。"
+        }
+      },
+      {
+        "name": "microscope",
+        "phonetic": "/ˈmaɪkrəskoʊp/",
+        "breakdown": "micro (小) + scop (看)",
+        "meaning": "n. 显微镜",
+        "example": {
+          "en": "Look at the sample under the microscope.",
+          "cn": "把样本放在显微镜下观察。"
+        }
+      },
+      {
+        "name": "telescope",
+        "phonetic": "/ˈtɛlɪskoʊp/",
+        "breakdown": "tele (远) + scop (看)",
+        "meaning": "n. 望远镜",
+        "example": {
+          "en": "Galileo built his own telescope in 1609.",
+          "cn": "伽利略在 1609 年自制了望远镜。"
+        }
+      },
+      {
+        "name": "periscope",
+        "phonetic": "/ˈpɛrɪskoʊp/",
+        "breakdown": "peri (周围) + scop (看)",
+        "meaning": "n. 潜望镜",
+        "example": {
+          "en": "The submarine raised its periscope to scan the surface.",
+          "cn": "潜艇升起潜望镜扫描水面。"
+        }
+      },
+      {
+        "name": "horoscope",
+        "phonetic": "/ˈhɔːrəskoʊp/",
+        "breakdown": "horo (时辰) + scop (看)",
+        "meaning": "n. 占星术；星座运势",
+        "example": {
+          "en": "She reads her horoscope every morning.",
+          "cn": "她每天早上都读自己的星座运势。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_graph",
+    "form": "graph / gram",
+    "type": "root",
+    "phonetic": "/ɡræf/",
+    "meaning": "写 / 画 / 记录",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 graphein（写、画）。希腊人将书写视作文明的支柱；graph 亦可指「图表」。",
+    "derivationNote": "前后皆可组合：-graphy 学科（geography）, bio- + graphy biography, para- + graph paragraph, photo- + graph photograph。",
+    "words": [
+      {
+        "name": "graphic",
+        "phonetic": "/ˈɡræfɪk/",
+        "breakdown": "graph (写) + -ic",
+        "meaning": "adj. 生动的；图形的",
+        "example": {
+          "en": "The witness gave a graphic account of the scene.",
+          "cn": "目击者对场景进行了生动的描述。"
+        }
+      },
+      {
+        "name": "paragraph",
+        "phonetic": "/ˈpærəɡræf/",
+        "breakdown": "para- (旁边) + graph (写)",
+        "meaning": "n. 段落",
+        "example": {
+          "en": "Please read the first paragraph again.",
+          "cn": "请再读一遍第一段。"
+        }
+      },
+      {
+        "name": "geography",
+        "phonetic": "/dʒiˈɑːɡrəfi/",
+        "breakdown": "geo (地) + graph (写) + -y",
+        "meaning": "n. 地理；地形",
+        "example": {
+          "en": "She teaches geography at the high school.",
+          "cn": "她在高中教授地理。"
+        }
+      },
+      {
+        "name": "biography",
+        "phonetic": "/baɪˈɑːɡrəfi/",
+        "breakdown": "bio (生命) + graphy (写)",
+        "meaning": "n. 传记；传记文学",
+        "example": {
+          "en": "He just finished a biography of Steve Jobs.",
+          "cn": "他刚完成了乔布斯传记。"
+        }
+      },
+      {
+        "name": "autograph",
+        "phonetic": "/ˈɔːtəɡræf/",
+        "breakdown": "auto (自己) + graph (写)",
+        "meaning": "n./v. 亲笔签名",
+        "example": {
+          "en": "The fan asked for his autograph on a poster.",
+          "cn": "粉丝请他在海报上签名。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_morph",
+    "form": "morph",
+    "type": "root",
+    "phonetic": "/mɔːrf/",
+    "meaning": "形态 / 形状 / 变形",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 morphe（形状）。希腊神话中睡神 Hypnos 与梦神 Oneiroi 通过 morphe 显现各种幻象。",
+    "derivationNote": "常见组合：meta-（变化）+ morph → metamorphosis 变形；morpho- 进入生物学分类（morphology 形态学）。",
+    "words": [
+      {
+        "name": "morphology",
+        "phonetic": "/mɔːrˈfɑːlədʒi/",
+        "breakdown": "morph (形) + -ology (学)",
+        "meaning": "n. 形态学；词法",
+        "example": {
+          "en": "The morphology of the cell was altered by the drug.",
+          "cn": "药物改变了细胞的形态。"
+        }
+      },
+      {
+        "name": "metamorphosis",
+        "phonetic": "/ˌmɛtəˈmɔːrfəsɪs/",
+        "breakdown": "meta- (变化) + morph (形) + -osis",
+        "meaning": "n. 变形；变质",
+        "example": {
+          "en": "Caterpillars undergo metamorphosis into butterflies.",
+          "cn": "毛毛虫经历变形后变成蝴蝶。"
+        }
+      },
+      {
+        "name": "morph",
+        "phonetic": "/mɔːrf/",
+        "breakdown": "morph (形)",
+        "meaning": "v./n. 变形；变体",
+        "example": {
+          "en": "The video easily morphed into a meme online.",
+          "cn": "这段视频在网上轻松变形为表情包。"
+        }
+      },
+      {
+        "name": "anthropomorphic",
+        "phonetic": "/ˌænθrəpəˈmɔːrfɪk/",
+        "breakdown": "anthrop (人) + o + morph (形) + -ic",
+        "meaning": "adj. 拟人化的",
+        "example": {
+          "en": "The children's book features anthropomorphic animals.",
+          "cn": "这本儿童书里有拟人化的动物。"
+        }
+      },
+      {
+        "name": "polymorphic",
+        "phonetic": "/ˌpɑːliˈmɔːrfɪk/",
+        "breakdown": "poly- (多) + morph (形) + -ic",
+        "meaning": "adj. 多形的；多态的",
+        "example": {
+          "en": "Some viruses are polymorphic and adapt quickly.",
+          "cn": "一些病毒是多态的，能迅速适应。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_arch",
+    "form": "arch / archos",
+    "type": "root",
+    "phonetic": "/ɑːrk/",
+    "meaning": "首 / 主 / 起源 / 统治",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 archos（首领、统治者）。arch 原意为「最开始的」，引申出首领、建筑学与原型等交叉含义。",
+    "derivationNote": "前缀 mono-（单一）+ arch → monarch 君主；前缀 archeo-（古）→ archaeology 考古学。",
+    "words": [
+      {
+        "name": "archaeology",
+        "phonetic": "/ˌɑːrkiˈɑːlədʒi/",
+        "breakdown": "archeo (古) + -logy (学)",
+        "meaning": "n. 考古学",
+        "example": {
+          "en": "She teaches archaeology at the university.",
+          "cn": "她在大学教考古学。"
+        }
+      },
+      {
+        "name": "monarch",
+        "phonetic": "/ˈmɑːnərk/",
+        "breakdown": "mon- (单一) + arch (主)",
+        "meaning": "n. 君主；帝王",
+        "example": {
+          "en": "The monarch addressed the nation on national TV.",
+          "cn": "君主通过国家电视台向全国发表讲话。"
+        }
+      },
+      {
+        "name": "architect",
+        "phonetic": "/ˈɑːrkɪtɛkt/",
+        "breakdown": "archi (首) + tect (建造)",
+        "meaning": "n. 建筑师；设计师",
+        "example": {
+          "en": "She dreams of becoming a famous architect.",
+          "cn": "她梦想成为著名建筑师。"
+        }
+      },
+      {
+        "name": "anarchy",
+        "phonetic": "/ˈænərki/",
+        "breakdown": "an- (无) + arch (统治)",
+        "meaning": "n. 无政府状态；混乱",
+        "example": {
+          "en": "The country descended into anarchy after the coup.",
+          "cn": "政变后该国陷入无政府状态。"
+        }
+      },
+      {
+        "name": "archive",
+        "phonetic": "/ˈɑːrkaɪv/",
+        "breakdown": "arch (主) + -ive",
+        "meaning": "n. 档案；档案馆",
+        "example": {
+          "en": "The city keeps its archives in a climate-controlled vault.",
+          "cn": "该市将档案保存在温控保险库中。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_anthrop",
+    "form": "anthrop",
+    "type": "root",
+    "phonetic": "/ˈænθrəp/",
+    "meaning": "人 / 人类 / 人类之性",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 anthropos（人）。在希腊哲学中，anthropos 是衡量万物的尺度（Protagoras），泛指「会思考的存在」。",
+    "derivationNote": "常与 phil（爱）+ y 组合成为 philanthropy 慈善；anthropology 人类学。",
+    "words": [
+      {
+        "name": "anthropology",
+        "phonetic": "/ˌænθrəˈpɑːlədʒi/",
+        "breakdown": "anthrop (人) + -ology (学)",
+        "meaning": "n. 人类学",
+        "example": {
+          "en": "Cultural anthropology explores kinship systems.",
+          "cn": "文化人类学探讨亲属关系。"
+        }
+      },
+      {
+        "name": "misanthrope",
+        "phonetic": "/ˈmɪsənθroʊp/",
+        "breakdown": "mis- (厌) + anthrop (人)",
+        "meaning": "n. 厌世者；愤世嫉俗者",
+        "example": {
+          "en": "After his betrayal, he became a misanthrope.",
+          "cn": "在被背叛后，他变得愤世嫉俗。"
+        }
+      },
+      {
+        "name": "philanthropy",
+        "phonetic": "/fɪˈlænθrəpi/",
+        "breakdown": "phil (爱) + anthrop (人) + -y",
+        "meaning": "n. 慈善；善心",
+        "example": {
+          "en": "Her foundation supports global philanthropy programs.",
+          "cn": "她的基金会支持全球慈善项目。"
+        }
+      },
+      {
+        "name": "anthropoid",
+        "phonetic": "/ˈænθrəpɔɪd/",
+        "breakdown": "anthrop (人) + -oid (像)",
+        "meaning": "adj. 似人的；类人的",
+        "example": {
+          "en": "Gorillas are anthropoid apes with rich social behavior.",
+          "cn": "大猩猩是具有丰富社会行为的类人猿。"
+        }
+      },
+      {
+        "name": "anthropology",
+        "phonetic": "/ˌænθrəˈpɑːlədʒi/",
+        "breakdown": "anthrop (人) + -ology (学)",
+        "meaning": "n. 人类学（重)",
+        "example": {
+          "en": "He studies cultural anthropology to understand traditions.",
+          "cn": "他研究文化人类学以理解传统。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ist",
+    "form": "ist / -ist",
+    "type": "root",
+    "phonetic": "/ɪst/",
+    "meaning": "行动者 / 信仰 / 主义",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "来自希腊语 -istes，作动词执行者后缀。-ist 在英语中构成职业、信仰、政治派别的核心标记。",
+    "derivationNote": "任何名词/动词加 -ist 即得对应职业或信仰派：art → artist 艺术家；tour → tourist 游客；capital → capitalist 资本家。",
+    "words": [
+      {
+        "name": "artist",
+        "phonetic": "/ˈɑːrtɪst/",
+        "breakdown": "art (艺) + -ist (人)",
+        "meaning": "n. 艺术家；画家",
+        "example": {
+          "en": "Every artist brings a unique perspective to their work.",
+          "cn": "每位艺术家都给作品带来独特视角。"
+        }
+      },
+      {
+        "name": "scientist",
+        "phonetic": "/ˈsaɪəntɪst/",
+        "breakdown": "scien (知) + -ist (人)",
+        "meaning": "n. 科学家",
+        "example": {
+          "en": "The scientist published her findings in Nature.",
+          "cn": "这位科学家在《自然》期刊发表研究成果。"
+        }
+      },
+      {
+        "name": "optimist",
+        "phonetic": "/ˈɑːptɪmɪst/",
+        "breakdown": "optim (最好) + -ist",
+        "meaning": "n. 乐观主义者",
+        "example": {
+          "en": "An optimist sees opportunity in every difficulty.",
+          "cn": "乐观的人在每个困境中都看到机会。"
+        }
+      },
+      {
+        "name": "pessimist",
+        "phonetic": "/ˈpɛsɪmɪst/",
+        "breakdown": "pessim (最坏) + -ist",
+        "meaning": "n. 悲观主义者",
+        "example": {
+          "en": "Even a pessimist admits the weather is beautiful today.",
+          "cn": "连悲观主义者也承认今天天气很好。"
+        }
+      },
+      {
+        "name": "tourist",
+        "phonetic": "/ˈtʊərɪst/",
+        "breakdown": "tour (游) + -ist (人)",
+        "meaning": "n. 游客；观光者",
+        "example": {
+          "en": "Tourists flocked to the cherry blossom festival.",
+          "cn": "游客涌入樱花节。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ite",
+    "form": "ite / -ite",
+    "type": "root",
+    "phonetic": "/aɪt/",
+    "meaning": "信/支持者 / 居民 / 产物",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "来自希腊语 -ites，作名词「信徒/居民/产物」。-ite 同时表示支持者（laborite 劳工派）、化石产物（ammonite 菊石）和矿物（graphite 石墨）。",
+    "derivationNote": "无独立成型，更多作为派生后缀使用。",
+    "words": [
+      {
+        "name": "favorite",
+        "phonetic": "/ˈfeɪvərɪt/",
+        "breakdown": "favor (喜爱) + -ite",
+        "meaning": "adj./n. 特别喜爱的；最喜爱的人/物",
+        "example": {
+          "en": "Blue is her favorite color.",
+          "cn": "蓝色是她最喜欢的颜色。"
+        }
+      },
+      {
+        "name": "granite",
+        "phonetic": "/ˈɡrænɪt/",
+        "breakdown": "gran (粒) + -ite",
+        "meaning": "n. 花岗岩",
+        "example": {
+          "en": "The mountain is composed mostly of granite.",
+          "cn": "这座山主要由花岗岩构成。"
+        }
+      },
+      {
+        "name": "opposite",
+        "phonetic": "/ˈɑːpəzɪt/",
+        "breakdown": "op- (对) + pos (置) + -ite",
+        "meaning": "adj./n. 对面的；相反的",
+        "example": {
+          "en": "His opinion is opposite to mine.",
+          "cn": "他的观点与我相反。"
+        }
+      },
+      {
+        "name": "elite",
+        "phonetic": "/iˈliːt/",
+        "breakdown": "e- (出) + lit (挑选) + -e",
+        "meaning": "n. 精英；精锐",
+        "example": {
+          "en": "The elite squad trains for months before deployment.",
+          "cn": "这支精锐小队在部署前训练了数月。"
+        }
+      },
+      {
+        "name": "ite",
+        "phonetic": "/aɪt/",
+        "breakdown": "ite (后缀示例)",
+        "meaning": "后缀。表 群体/产物",
+        "example": {
+          "en": "Words ending in -ite often mean a follower or product.",
+          "cn": "以 -ite 结尾的词通常表示追随者或产物。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_uni",
+    "form": "uni / unus",
+    "type": "root",
+    "phonetic": "/ˈjuːni/",
+    "meaning": "一 / 单一 / 唯一",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 unus（一）。uni- 在英语中既为「独一无二」(unique)，又是度量前缀「单」，组合出 union / university / universe 等关键词。",
+    "derivationNote": "前缀 uni- 既可单独表「一」(uniform)，又与 -fy / -tion 派生（unify 统一, unification 联合）。",
+    "words": [
+      {
+        "name": "unique",
+        "phonetic": "/juˈniːk/",
+        "breakdown": "uni (一) + -que (的)",
+        "meaning": "adj. 独特的；独一无二的",
+        "example": {
+          "en": "Every snowflake has a unique pattern.",
+          "cn": "每一片雪花都有独特的形状。"
+        }
+      },
+      {
+        "name": "unite",
+        "phonetic": "/juˈnaɪt/",
+        "breakdown": "uni (一) + -te",
+        "meaning": "v. 联合；团结",
+        "example": {
+          "en": "The two countries united to fight common threats.",
+          "cn": "两国联合应对共同威胁。"
+        }
+      },
+      {
+        "name": "universe",
+        "phonetic": "/ˈjuːnɪvɜːrs/",
+        "breakdown": "uni (一) + verse (转)",
+        "meaning": "n. 宇宙；万物",
+        "example": {
+          "en": "The universe contains billions of galaxies.",
+          "cn": "宇宙包含数十亿个星系。"
+        }
+      },
+      {
+        "name": "uniform",
+        "phonetic": "/ˈjuːnɪfɔːrm/",
+        "breakdown": "uni (一) + form (形)",
+        "meaning": "n./adj. 制服；统一的",
+        "example": {
+          "en": "All students wear the same uniform in this school.",
+          "cn": "这所学校的所有学生都穿同样的校服。"
+        }
+      },
+      {
+        "name": "unicorn",
+        "phonetic": "/ˈjuːnɪkɔːrn/",
+        "breakdown": "uni (一) + corn (角)",
+        "meaning": "n. 独角兽；幻象公司",
+        "example": {
+          "en": "Legends describe a unicorn with a single horn.",
+          "cn": "传说中独角兽头上有一只角。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_bi",
+    "form": "bi / duo",
+    "type": "root",
+    "phonetic": "/baɪ/",
+    "meaning": "二 / 两 / 双",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 bi-（二）和 duo（二）。bi- 在英语中表「每两」或「双面」，如 biennial 两年一次的。",
+    "derivationNote": "搭配 bi-（每两）+ annual → biennial；bi-（双）+ cycle → bicycle。",
+    "words": [
+      {
+        "name": "bicycle",
+        "phonetic": "/ˈbaɪsɪkl/",
+        "breakdown": "bi (二) + cycle (圈)",
+        "meaning": "n. 自行车",
+        "example": {
+          "en": "She rides her bicycle to work every day.",
+          "cn": "她每天骑自行车上班。"
+        }
+      },
+      {
+        "name": "binary",
+        "phonetic": "/ˈbaɪnəri/",
+        "breakdown": "bin (二) + -ary",
+        "meaning": "adj. 二元的；二进制的",
+        "example": {
+          "en": "Computers use binary code consisting of zeros and ones.",
+          "cn": "计算机使用由 0 和 1 组成的二进制代码。"
+        }
+      },
+      {
+        "name": "biscuit",
+        "phonetic": "/ˈbɪskɪt/",
+        "breakdown": "bi (二) + cuit (烤)",
+        "meaning": "n. 饼干",
+        "example": {
+          "en": "She had biscuits with her afternoon tea.",
+          "cn": "她在下午茶时吃了几块饼干。"
+        }
+      },
+      {
+        "name": "bilingual",
+        "phonetic": "/baɪˈlɪŋɡwəl/",
+        "breakdown": "bi (双) + lingual (语言)",
+        "meaning": "adj. 双语的",
+        "example": {
+          "en": "She grew up in a bilingual household.",
+          "cn": "她在双语家庭长大。"
+        }
+      },
+      {
+        "name": "biannual",
+        "phonetic": "/baɪˈænjuəl/",
+        "breakdown": "bi (每二) + annual (年)",
+        "meaning": "adj. 一年两次的",
+        "example": {
+          "en": "The biannual summit brings world leaders together.",
+          "cn": "两年一度的峰会汇集了世界领导人。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_tri",
+    "form": "tri / tres",
+    "type": "root",
+    "phonetic": "/traɪ/",
+    "meaning": "三 / 三角 / 三方",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 tres（三）和 tri- 前缀（三角的）。tri- 在英语中常用于数学、几何与社会学三元结构。",
+    "derivationNote": "tri- + angle → triangle; tri- + pod → tripod 三脚架; tri- + cept → concept 三概念。",
+    "words": [
+      {
+        "name": "triangle",
+        "phonetic": "/ˈtraɪæŋɡl/",
+        "breakdown": "tri (三) + angle (角)",
+        "meaning": "n. 三角形；三件套",
+        "example": {
+          "en": "An equilateral triangle has three equal sides.",
+          "cn": "等边三角形有三条相等的边。"
+        }
+      },
+      {
+        "name": "tripod",
+        "phonetic": "/ˈtraɪpɑːd/",
+        "breakdown": "tri (三) + pod (脚)",
+        "meaning": "n. 三脚架",
+        "example": {
+          "en": "He set up his camera on a sturdy tripod.",
+          "cn": "他把相机架在稳固的三脚架上。"
+        }
+      },
+      {
+        "name": "triple",
+        "phonetic": "/ˈtrɪpl/",
+        "breakdown": "tri (三) + -ple",
+        "meaning": "adj./v. 三倍的；三倍于",
+        "example": {
+          "en": "The recipe is triple the size of the original.",
+          "cn": "这个食谱量是原版的三倍。"
+        }
+      },
+      {
+        "name": "trilogy",
+        "phonetic": "/ˈtrɪlədʒi/",
+        "breakdown": "tri (三) + -logy (集)",
+        "meaning": "n. 三部曲",
+        "example": {
+          "en": "He wrote a trilogy about the Roman Republic.",
+          "cn": "他写了一个关于罗马共和国的三部曲。"
+        }
+      },
+      {
+        "name": "trio",
+        "phonetic": "/ˈtriːoʊ/",
+        "breakdown": "tri (三) + -o",
+        "meaning": "n. 三人组；三件套",
+        "example": {
+          "en": "The jazz trio performed at the local club.",
+          "cn": "爵士三乐组在当地俱乐部演出。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_multi",
+    "form": "multi / multus",
+    "type": "root",
+    "phonetic": "/ˈmʌlti/",
+    "meaning": "多 / 多重 / 多次",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 multus（多）。multi- 在英语中既表「多」，又形容复合与多元文化。多媒体、多任务处理已是现代日常词。",
+    "derivationNote": "multi- + tasking 多任务；multi- + media 多媒体；multi- + national 多国的。",
+    "words": [
+      {
+        "name": "multiple",
+        "phonetic": "/ˈmʌltɪpl/",
+        "breakdown": "multi (多) + -ple (倍)",
+        "meaning": "adj. 多重的；n. 倍数",
+        "example": {
+          "en": "She suffered multiple injuries in the accident.",
+          "cn": "她在事故中多处受伤。"
+        }
+      },
+      {
+        "name": "multiply",
+        "phonetic": "/ˈmʌltɪplaɪ/",
+        "breakdown": "multi (多) + ply (折)",
+        "meaning": "v. 乘；繁殖；增加",
+        "example": {
+          "en": "Five multiplied by six is thirty.",
+          "cn": "5 乘以 6 等于 30。"
+        }
+      },
+      {
+        "name": "multitude",
+        "phonetic": "/ˈmʌltɪtuːd/",
+        "breakdown": "multi (多) + tude (状态)",
+        "meaning": "n. 大量；众多",
+        "example": {
+          "en": "A multitude of fans queued at the stadium.",
+          "cn": "大量粉丝在体育场外排队。"
+        }
+      },
+      {
+        "name": "multimedia",
+        "phonetic": "/ˌmʌltiˈmiːdiə/",
+        "breakdown": "multi (多) + media (媒介)",
+        "meaning": "adj. 多媒体的",
+        "example": {
+          "en": "The library provides multimedia learning tools.",
+          "cn": "图书馆提供多媒体学习工具。"
+        }
+      },
+      {
+        "name": "multilingual",
+        "phonetic": "/ˌmʌltiˈlɪŋɡwəl/",
+        "breakdown": "multi (多) + lingual (语言)",
+        "meaning": "adj. 多种语言的",
+        "example": {
+          "en": "She works as a multilingual conference interpreter.",
+          "cn": "她的工作是多语会议口译。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_semi",
+    "form": "semi / semi-",
+    "type": "root",
+    "phonetic": "/ˈsɛmi/",
+    "meaning": "半 / 部分 / 不完全",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 semi-，表「一半」。在英语中常见 semicircle, semifinal, semiconductor 等词语。",
+    "derivationNote": "semi- + circle → semicircle 半圆；semi- + nal → semifinal 半决赛。",
+    "words": [
+      {
+        "name": "semicircle",
+        "phonetic": "/ˈsɛmiˌsɜːrkl/",
+        "breakdown": "semi (半) + circle (圆)",
+        "meaning": "n. 半圆；半圆形",
+        "example": {
+          "en": "The students sat in a semicircle around the teacher.",
+          "cn": "学生们围成半圆形坐在老师周围。"
+        }
+      },
+      {
+        "name": "semifinal",
+        "phonetic": "/ˌsɛmiˈfaɪnl/",
+        "breakdown": "semi (半) + final (决赛)",
+        "meaning": "n. 半决赛",
+        "example": {
+          "en": "Our team easily won the semifinal.",
+          "cn": "我们的队伍轻松赢了半决赛。"
+        }
+      },
+      {
+        "name": "semicond_uctor",
+        "phonetic": "/ˌsɛmikənˈdʌktər/",
+        "breakdown": "semi (半) + conductor (导体)",
+        "meaning": "n. 半导体",
+        "example": {
+          "en": "Silicon is widely used in semiconductors.",
+          "cn": "硅广泛用于半导体材料。"
+        }
+      },
+      {
+        "name": "semiannual",
+        "phonetic": "/ˌsɛmiˈænjuəl/",
+        "breakdown": "semi (半) + annual (年)",
+        "meaning": "adj. 半年一次的",
+        "example": {
+          "en": "The semiannual report was released in March.",
+          "cn": "半年度报告于三月发布。"
+        }
+      },
+      {
+        "name": "semitone",
+        "phonetic": "/ˈsɛmitoʊn/",
+        "breakdown": "semi (半) + tone (音)",
+        "meaning": "n. 半音",
+        "example": {
+          "en": "A semitone is the smallest interval in Western music.",
+          "cn": "半音是西方音乐中最小的音程。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_dec",
+    "form": "dec / deca",
+    "type": "root",
+    "phonetic": "/dɛk/",
+    "meaning": "十 / 十个 / 十年",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 deka（十）。dec- 既指数字 10，也指代十年（decade），同时是十进制（decimal）的关键标记。",
+    "derivationNote": "dec- + ade → decade 十年；dec- + i + mal → decimal 十进制；dec- + ade + nt → decadent 颓废的。",
+    "words": [
+      {
+        "name": "decade",
+        "phonetic": "/ˈdɛkeɪd/",
+        "breakdown": "dec (十) + -ade",
+        "meaning": "n. 十年；十年期",
+        "example": {
+          "en": "The company has grown steadily over the past decade.",
+          "cn": "公司在过去十年里稳步增长。"
+        }
+      },
+      {
+        "name": "decimal",
+        "phonetic": "/ˈdɛsɪml/",
+        "breakdown": "dec (十) + -imal",
+        "meaning": "adj. 十进制的；n. 小数",
+        "example": {
+          "en": "Pi to five decimal places is 3.14159.",
+          "cn": "圆周率保留五位小数是 3.14159。"
+        }
+      },
+      {
+        "name": "December",
+        "phonetic": "/dɪˈsɛmbər/",
+        "breakdown": "dec (十) + ember (月)",
+        "meaning": "n. 十二月",
+        "example": {
+          "en": "December is the last month of the year.",
+          "cn": "十二月是一年中的最后一个月。"
+        }
+      },
+      {
+        "name": "decathlon",
+        "phonetic": "/dɪˈkæθlɑːn/",
+        "breakdown": "dec (十) + athlon (运动)",
+        "meaning": "n. 十项全能",
+        "example": {
+          "en": "He trained for two years to compete in the decathlon.",
+          "cn": "他训练了两年去参加十项全能比赛。"
+        }
+      },
+      {
+        "name": "decibel",
+        "phonetic": "/ˈdɛsɪbɛl/",
+        "breakdown": "deci (十分之一) + bel (贝)",
+        "meaning": "n. 分贝",
+        "example": {
+          "en": "The concert reached 100 decibels at the peak.",
+          "cn": "音乐会音量在峰值达到了 100 分贝。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_mono",
+    "form": "mono / monos",
+    "type": "root",
+    "phonetic": "/ˈmɑːnoʊ/",
+    "meaning": "一 / 单独 / 单一",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 monos（独、单），与拉丁 uni- 同义。mono- 在科学术语中常表「单」，如 monoxide 一氧化碳。",
+    "derivationNote": "mono- + tone → monotone 单调；mono- + logue → monologue 独白；mono- + poly 反义。",
+    "words": [
+      {
+        "name": "monarch",
+        "phonetic": "/ˈmɑːnərk/",
+        "breakdown": "mon- (单一) + arch (主)",
+        "meaning": "n. 君主；元首",
+        "example": {
+          "en": "The British monarch reigns over the Commonwealth.",
+          "cn": "英国君主统御英联邦。"
+        }
+      },
+      {
+        "name": "monotone",
+        "phonetic": "/ˈmɑːnətoʊn/",
+        "breakdown": "mono (单一) + tone (音)",
+        "meaning": "n./adj. 单调；单调的",
+        "example": {
+          "en": "He spoke in a flat monotone for hours.",
+          "cn": "他单调地连续讲了几个小时。"
+        }
+      },
+      {
+        "name": "monopoly",
+        "phonetic": "/məˈnɑːpəli/",
+        "breakdown": "mono (独) + poly (卖)",
+        "meaning": "n. 垄断；专卖权",
+        "example": {
+          "en": "The government banned any monopoly in the industry.",
+          "cn": "政府禁止该行业任何垄断。"
+        }
+      },
+      {
+        "name": "monogamy",
+        "phonetic": "/məˈnɑːɡəmi/",
+        "breakdown": "mono (单) + gamy (婚)",
+        "meaning": "n. 一夫一妻制",
+        "example": {
+          "en": "Many cultures traditionally practiced monogamy.",
+          "cn": "许多文化传统上一夫一妻。"
+        }
+      },
+      {
+        "name": "monoxide",
+        "phonetic": "/məˈnɑːksaɪd/",
+        "breakdown": "mono (一) + ox (氧) + -ide",
+        "meaning": "n. 一氧化物",
+        "example": {
+          "en": "Carbon monoxide is an odorless poisonous gas.",
+          "cn": "一氧化碳是无色有毒气体。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_hemi",
+    "form": "hemi",
+    "type": "root",
+    "phonetic": "/ˈhɛmi/",
+    "meaning": "半 / 一半",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 hemi-（半），与 semi- 同义但来源于希腊语。常见于数学解剖学科：hemisphere 半球、hemoglobin 血红蛋白。",
+    "derivationNote": "hemi- + sphere → hemisphere 半球；hemi- + plegia → hemiplegia 偏瘫。",
+    "words": [
+      {
+        "name": "hemisphere",
+        "phonetic": "/ˈhɛmɪsfɪər/",
+        "breakdown": "hemi (半) + sphere (球)",
+        "meaning": "n. 半球；大脑半球",
+        "example": {
+          "en": "The Northern Hemisphere experiences winter in December.",
+          "cn": "北半球在 12 月经历冬季。"
+        }
+      },
+      {
+        "name": "hemoglobin",
+        "phonetic": "/ˈhiːməɡloʊbɪn/",
+        "breakdown": "hemo (血) + glob (球) + in",
+        "meaning": "n. 血红蛋白",
+        "example": {
+          "en": "Hemoglobin carries oxygen through the bloodstream.",
+          "cn": "血红蛋白通过血液运输氧气。"
+        }
+      },
+      {
+        "name": "hemicycle",
+        "phonetic": "/ˌhɛmiˈsaɪkl/",
+        "breakdown": "hemi (半) + cycle (圆)",
+        "meaning": "n. 半圆形",
+        "example": {
+          "en": "The amphitheater was built as a hemicycle.",
+          "cn": "这座露天剧场被建成半圆形。"
+        }
+      },
+      {
+        "name": "hemistich",
+        "phonetic": "/ˈhɛmɪstɪk/",
+        "breakdown": "hemi (半) + stich (诗行)",
+        "meaning": "n. 诗的半行",
+        "example": {
+          "en": "The poem's second hemistich is highly rhetorical.",
+          "cn": "这首诗的第二半行极具修辞性。"
+        }
+      },
+      {
+        "name": "hemiplegia",
+        "phonetic": "/ˌhɛmɪˈpliːdʒə/",
+        "breakdown": "hemi (半) + plegia (瘫痪)",
+        "meaning": "n. 偏瘫；半身不遂",
+        "example": {
+          "en": "Stroke can cause hemiplegia on one side of the body.",
+          "cn": "中风可能导致身体一侧偏瘫。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_poly",
+    "form": "poly",
+    "type": "root",
+    "phonetic": "/ˈpɑːli/",
+    "meaning": "多 / 多个 / 多元",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 polys（多）。poly- 在英语中产出 religion（polygon 多边形）、polygamy 一夫多妻、polytechnic 综合技术。",
+    "derivationNote": "poly- + gon → polygon 多边形；poly- + technic → polytechnic；poly- + glot → polyglot 通多语者。",
+    "words": [
+      {
+        "name": "polygon",
+        "phonetic": "/ˈpɑːliɡɑːn/",
+        "breakdown": "poly (多) + gon (角)",
+        "meaning": "n. 多边形",
+        "example": {
+          "en": "A hexagon is a polygon with six sides.",
+          "cn": "六边形是有六条边的多边形。"
+        }
+      },
+      {
+        "name": "polyglot",
+        "phonetic": "/ˈpɑːliɡlɑːt/",
+        "breakdown": "poly (多) + glot (语言)",
+        "meaning": "adj. 通数种语言的",
+        "example": {
+          "en": "The polyglot interpreter spoke five languages fluently.",
+          "cn": "这位通晓数门语言的口译员能流利说五种语言。"
+        }
+      },
+      {
+        "name": "polygamy",
+        "phonetic": "/pəˈlɪɡəmi/",
+        "breakdown": "poly (多) + gamy (婚)",
+        "meaning": "n. 一夫多妻制",
+        "example": {
+          "en": "Polygamy is illegal in many countries.",
+          "cn": "一夫多妻制在许多国家是非法的。"
+        }
+      },
+      {
+        "name": "polytechnic",
+        "phonetic": "/ˌpɑːliˈtɛknɪk/",
+        "breakdown": "poly (多) + techn (技术) + -ic",
+        "meaning": "n. 工艺专科学校",
+        "example": {
+          "en": "He earned his engineering degree at the polytechnic.",
+          "cn": "他在理工学院获得工程学位。"
+        }
+      },
+      {
+        "name": "polynomial",
+        "phonetic": "/ˌpɑːliˈnoʊmiəl/",
+        "breakdown": "poly (多) + nomial (项)",
+        "meaning": "n./adj. 多项式（的)",
+        "example": {
+          "en": "Polynomial equations have multiple terms.",
+          "cn": "多项式方程有多个项。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_kilo",
+    "form": "kilo / chilioi",
+    "type": "root",
+    "phonetic": "/ˈkɪloʊ/",
+    "meaning": "千 / 一千倍 / 千米",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 chilioi（一千）。kilo- 在 SI 单位中表示「× 1000」：kilometer, kilogram, kilowatt。",
+    "derivationNote": "kilo- + meter → kilometer 千米；kilo- + gram → kilogram 千克；kilo- + byte → kilobyte 千字节。",
+    "words": [
+      {
+        "name": "kilometer",
+        "phonetic": "/kɪˈlɑːmɪtər/",
+        "breakdown": "kilo (千) + meter (米)",
+        "meaning": "n. 千米；公里",
+        "example": {
+          "en": "The park is about five kilometers from here.",
+          "cn": "公园距此约五公里。"
+        }
+      },
+      {
+        "name": "kilogram",
+        "phonetic": "/ˈkɪləɡræm/",
+        "breakdown": "kilo (千) + gram (克)",
+        "meaning": "n. 千克；公斤",
+        "example": {
+          "en": "She lost three kilograms over the summer.",
+          "cn": "她夏天减了三公斤。"
+        }
+      },
+      {
+        "name": "kilowatt",
+        "phonetic": "/ˈkɪləwɑːt/",
+        "breakdown": "kilo (千) + watt (瓦)",
+        "meaning": "n. 千瓦",
+        "example": {
+          "en": "Each panel produces 400 kilowatts of power.",
+          "cn": "每块电池板产生 400 千瓦电力。"
+        }
+      },
+      {
+        "name": "kilojoule",
+        "phonetic": "/ˈkɪlədʒuːl/",
+        "breakdown": "kilo (千) + joule (焦耳)",
+        "meaning": "n. 千焦",
+        "example": {
+          "en": "One candy bar contains about 800 kilojoules.",
+          "cn": "一块巧克力棒约含 800 千焦。"
+        }
+      },
+      {
+        "name": "kilobyte",
+        "phonetic": "/ˈkɪləbaɪt/",
+        "breakdown": "kilo (千) + byte (字节)",
+        "meaning": "n. 千字节",
+        "example": {
+          "en": "The text file was less than twenty kilobytes.",
+          "cn": "这个文本文件不到 20 千字节。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_chron",
+    "form": "chron / tempus",
+    "type": "root",
+    "phonetic": "/krɒn/",
+    "meaning": "时间 / 岁月 / 长期",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 chronos（时间）。希腊神话中 Chronos 是时间之神，与丰产之神 Cronus 同名。chrono 在科学术语里表「时间」。",
+    "derivationNote": "chrono- + logy → chronology 年代学；syn- + chron + ize → synchronize 同步；ana- + chron → anachronism 年代错误。",
+    "words": [
+      {
+        "name": "chronicle",
+        "phonetic": "/ˈkrɑːnɪkl/",
+        "breakdown": "chron (时) + -icle (小)",
+        "meaning": "n. 编年史；v. 记述",
+        "example": {
+          "en": "He chronicles local sports for the regional paper.",
+          "cn": "他为地区报纸报道本地体育。"
+        }
+      },
+      {
+        "name": "chronology",
+        "phonetic": "/krəˈnɑːlədʒi/",
+        "breakdown": "chron (时) + -ology (学)",
+        "meaning": "n. 年代学；年表",
+        "example": {
+          "en": "The book's chronology is hard to follow at first.",
+          "cn": "书的年表乍看难以跟进。"
+        }
+      },
+      {
+        "name": "synchronize",
+        "phonetic": "/ˈsɪŋkrənaɪz/",
+        "breakdown": "syn- (同) + chron (时) + -ize",
+        "meaning": "v. 同步；同时发生",
+        "example": {
+          "en": "Synchronize your watches before the operation.",
+          "cn": "行动前先把表对好。"
+        }
+      },
+      {
+        "name": "anachronism",
+        "phonetic": "/əˈnækrənɪzəm/",
+        "breakdown": "ana- (背) + chron (时) + -ism",
+        "meaning": "n. 年代错误；过时之人/物",
+        "example": {
+          "en": "Showing a cellphone in a medieval film is an anachronism.",
+          "cn": "中世纪电影里出现手机是年代错误。"
+        }
+      },
+      {
+        "name": "chronic",
+        "phonetic": "/ˈkrɑːnɪk/",
+        "breakdown": "chron (时) + -ic",
+        "meaning": "adj. 慢性的；长期的",
+        "example": {
+          "en": "He suffers from chronic back pain.",
+          "cn": "他长期受背痛折磨。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_epi",
+    "form": "epi / epi-",
+    "type": "root",
+    "phonetic": "/ˈɛpi/",
+    "meaning": "在…上 / 在…外 / 在…中",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 epi（在上、外、伴随）。epi- 在英语中既表「在…之上」又引申为「相互/追加」。",
+    "derivationNote": "epi- + demic → epidemic 流行；epi- + sode → episode 插曲；epi- + centre → epicenter 震中。",
+    "words": [
+      {
+        "name": "epidemic",
+        "phonetic": "/ˌɛpɪˈdɛmɪk/",
+        "breakdown": "epi (在…中) + dem (民) + -ic",
+        "meaning": "n. 流行病；adj. 流行性的",
+        "example": {
+          "en": "The flu epidemic spread to dozens of cities.",
+          "cn": "这场流感疫情蔓延至数十个城市。"
+        }
+      },
+      {
+        "name": "episode",
+        "phonetic": "/ˈɛpɪsoʊd/",
+        "breakdown": "epi (在…外) + sode (进)",
+        "meaning": "n. 插曲；一集",
+        "example": {
+          "en": "Tomorrow's episode will feature a surprise guest.",
+          "cn": "明天的剧集会有神秘嘉宾。"
+        }
+      },
+      {
+        "name": "epicenter",
+        "phonetic": "/ˈɛpɪˌsɛntər/",
+        "breakdown": "epi (在…上) + center (心)",
+        "meaning": "n. 震中；中心点",
+        "example": {
+          "en": "The epicenter was located near the coast.",
+          "cn": "震中位于沿海附近。"
+        }
+      },
+      {
+        "name": "epilogue",
+        "phonetic": "/ˈɛpɪlɔːɡ/",
+        "breakdown": "epi (在…后) + logue (说)",
+        "meaning": "n. 尾声；后记",
+        "example": {
+          "en": "The novel's epilogue reveals the character's future.",
+          "cn": "小说的尾声揭示了人物的未来。"
+        }
+      },
+      {
+        "name": "epidermis",
+        "phonetic": "/ˌɛpɪˈdɜːrmɪs/",
+        "breakdown": "epi (在…上) + dermis (皮)",
+        "meaning": "n. 表皮；外皮",
+        "example": {
+          "en": "The epidermis protects the deeper skin layers.",
+          "cn": "表皮保护着深层皮肤。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_pre",
+    "form": "pre / pri / prae",
+    "type": "root",
+    "phonetic": "/priː/",
+    "meaning": "在前 / 预先 / 等级在前",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 prae（在前）。时间上的优先、空间上的靠前、等级上的高位，皆由 pre- 前缀承载。",
+    "derivationNote": "pre- + view 预览；pre- + dict 预言；pre- + position 前提 / 位置前置。",
+    "words": [
+      {
+        "name": "predict",
+        "phonetic": "/prɪˈdɪkt/",
+        "breakdown": "pre (预先) + dict (说)",
+        "meaning": "v. 预言；预报",
+        "example": {
+          "en": "Scientists can predict the weather with some accuracy.",
+          "cn": "科学家能较准确地预报天气。"
+        }
+      },
+      {
+        "name": "prepare",
+        "phonetic": "/prɪˈpɛər/",
+        "breakdown": "pre (预先) + par (备)",
+        "meaning": "v. 准备；预备",
+        "example": {
+          "en": "We prepared carefully for the final exam.",
+          "cn": "我们为期末考试做了仔细准备。"
+        }
+      },
+      {
+        "name": "preserve",
+        "phonetic": "/prɪˈzɜːrv/",
+        "breakdown": "pre (预先) + serve (存)",
+        "meaning": "v. 保存；保护",
+        "example": {
+          "en": "The museum preserves thousands of ancient artifacts.",
+          "cn": "博物馆保存了数千件古老文物。"
+        }
+      },
+      {
+        "name": "precede",
+        "phonetic": "/prɪˈsiːd/",
+        "breakdown": "pre (在前) + cede (走)",
+        "meaning": "v. 先于…发生",
+        "example": {
+          "en": "A short speech preceded the dinner.",
+          "cn": "晚宴前先进行了一场简短的演讲。"
+        }
+      },
+      {
+        "name": "premium",
+        "phonetic": "/ˈpriːmiəm/",
+        "breakdown": "pre (在前) + mium (价)",
+        "meaning": "n. 保险费；溢价",
+        "example": {
+          "en": "The premium for this policy is 50 dollars per month.",
+          "cn": "该保单的保费为每月 50 美元。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_post",
+    "form": "post / posteri",
+    "type": "root",
+    "phonetic": "/poʊst/",
+    "meaning": "在后 / 之后 / 后续",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 post（在后）。既指时间上的滞后，也指位置上的后方。",
+    "derivationNote": "post- + war 战后；post- + pone 后置。",
+    "words": [
+      {
+        "name": "postpone",
+        "phonetic": "/poʊstˈpoʊn/",
+        "breakdown": "post (在后) + pone (放)",
+        "meaning": "v. 推迟；延迟",
+        "example": {
+          "en": "We postponed the meeting until next Tuesday.",
+          "cn": "我们将会议推迟到下周二。"
+        }
+      },
+      {
+        "name": "postwar",
+        "phonetic": "/ˌpoʊstˈwɔːr/",
+        "breakdown": "post (后) + war (战争)",
+        "meaning": "adj. 战后的",
+        "example": {
+          "en": "Postwar Europe rebuilt its infrastructure quickly.",
+          "cn": "战后的欧洲迅速重建了基础设施。"
+        }
+      },
+      {
+        "name": "posterior",
+        "phonetic": "/pɑːˈstɪriər/",
+        "breakdown": "poster (后) + -ior",
+        "meaning": "adj. 后面的；n. 臀部",
+        "example": {
+          "en": "The posterior muscles help maintain posture.",
+          "cn": "后背肌肉有助于维持姿势。"
+        }
+      },
+      {
+        "name": "posterity",
+        "phonetic": "/pɑːˈstɛrəti/",
+        "breakdown": "post (之后) + -er + ity",
+        "meaning": "n. 后代；后世",
+        "example": {
+          "en": "We owe our freedom to those who fought for it in past wars.",
+          "cn": "我们的自由要归功于历代先辈。"
+        }
+      },
+      {
+        "name": "postscript",
+        "phonetic": "/ˈpoʊstskrɪpt/",
+        "breakdown": "post (后) + script (写)",
+        "meaning": "n. 附言；补充说明",
+        "example": {
+          "en": "He added a heartfelt postscript to his letter.",
+          "cn": "他在信末加了一段感人的附言。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_inter",
+    "form": "inter / inter-",
+    "type": "root",
+    "phonetic": "/ˈɪntər/",
+    "meaning": "在…之间 / 相互 / 干预",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 inter（在…之间、相互）。空间上的夹层，时间上的介入，皆由此根扩展。",
+    "derivationNote": "inter- + national 国际的；inter- + ven 干预；inter- + rupt 破裂。",
+    "words": [
+      {
+        "name": "interact",
+        "phonetic": "/ˌɪntərˈækt/",
+        "breakdown": "inter (相互) + act (做)",
+        "meaning": "v. 互动；相互作用",
+        "example": {
+          "en": "Children learn by interacting with their peers.",
+          "cn": "孩子通过与同伴互动学习。"
+        }
+      },
+      {
+        "name": "intervene",
+        "phonetic": "/ˌɪntərˈviːn/",
+        "breakdown": "inter (中) + vene (来)",
+        "meaning": "v. 干预；调停",
+        "example": {
+          "en": "The mediator intervened to break the deadlock.",
+          "cn": "调停人出面打破僵局。"
+        }
+      },
+      {
+        "name": "international",
+        "phonetic": "/ˌɪntərˈnæʃnəl/",
+        "breakdown": "inter (国与国) + national (国家)",
+        "meaning": "adj. 国际的",
+        "example": {
+          "en": "Trade barriers affect international commerce.",
+          "cn": "贸易壁垒影响国际商业。"
+        }
+      },
+      {
+        "name": "interrupt",
+        "phonetic": "/ˌɪntəˈrʌpt/",
+        "breakdown": "inter (中) + rupt (破)",
+        "meaning": "v. 打断；中断",
+        "example": {
+          "en": "Don't interrupt the speaker while he's talking.",
+          "cn": "演讲者讲话时不要打断。"
+        }
+      },
+      {
+        "name": "interim",
+        "phonetic": "/ˈɪntərɪm/",
+        "breakdown": "inter (中) + -im",
+        "meaning": "n./adj. 临时；过渡",
+        "example": {
+          "en": "He served as the interim manager for six months.",
+          "cn": "他担任了六个月临时经理。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_intra",
+    "form": "intra / intro",
+    "type": "root",
+    "phonetic": "/ˈɪntrə/",
+    "meaning": "在内 / 向内 / 进入",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 intra（在…内）与 intro（向内）。intra 表静态「内含」，intro 表动态「进入」。",
+    "derivationNote": "intra- + net 内网；intro- + duce 引入；intra- + muscular 肌内的。",
+    "words": [
+      {
+        "name": "introduce",
+        "phonetic": "/ˌɪntrəˈduːs/",
+        "breakdown": "intro (向内) + duce (引)",
+        "meaning": "v. 介绍；引入；推行",
+        "example": {
+          "en": "Let me introduce our new team member.",
+          "cn": "请允许我介绍我们的新同事。"
+        }
+      },
+      {
+        "name": "intranet",
+        "phonetic": "/ˈɪntrənɛt/",
+        "breakdown": "intra (内) + net (网)",
+        "meaning": "n. 内联网",
+        "example": {
+          "en": "Company documents are only available on the intranet.",
+          "cn": "公司文件仅在内部网络可用。"
+        }
+      },
+      {
+        "name": "introvert",
+        "phonetic": "/ˈɪntrəvɜːrt/",
+        "breakdown": "intro (内) + vert (转)",
+        "meaning": "n. 内向者",
+        "example": {
+          "en": "As an introvert, she prefers one-on-one conversations.",
+          "cn": "作为内向者，她更喜欢一对一的谈话。"
+        }
+      },
+      {
+        "name": "introspect",
+        "phonetic": "/ˌɪntrəˈspɛkt/",
+        "breakdown": "intro (内) + spect (看)",
+        "meaning": "v. 内省；反思",
+        "example": {
+          "en": "He sat down to introspect after a long day.",
+          "cn": "漫长一天后他坐下来反思。"
+        }
+      },
+      {
+        "name": "intramural",
+        "phonetic": "/ˌɪntrəˈmjʊərəl/",
+        "breakdown": "intra (内) + mur (墙) + -al",
+        "meaning": "adj. 校内的；内部的",
+        "example": {
+          "en": "The intramural league attracts many students.",
+          "cn": "校内联赛吸引了许多学生。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_sub",
+    "form": "sub / sup / suc-",
+    "type": "root",
+    "phonetic": "/sʌb/",
+    "meaning": "在…下 / 次于 / 接近",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 sub（在…下）。sub- 既保留字面「下方」之意，又扩展出次于、几乎、秘密等多层语义。",
+    "derivationNote": "sub- + marine 海下的；sub- + ordinate 顺从的；sub- + way 地道。",
+    "words": [
+      {
+        "name": "submarine",
+        "phonetic": "/ˌsʌbməˈriːn/",
+        "breakdown": "sub (在…下) + marine (海)",
+        "meaning": "n. 潜艇；adj. 海面下的",
+        "example": {
+          "en": "Submarine cables carry global internet traffic.",
+          "cn": "海底电缆承担全球互联网流量。"
+        }
+      },
+      {
+        "name": "subject",
+        "phonetic": "/ˈsʌbdʒɪkt/",
+        "breakdown": "sub (在下) + ject (投)",
+        "meaning": "n. 主题；主语；学科",
+        "example": {
+          "en": "Try changing the subject if the conversation gets tense.",
+          "cn": "谈话气氛紧张时可试着转换话题。"
+        }
+      },
+      {
+        "name": "substitute",
+        "phonetic": "/ˈsʌbstɪtuːt/",
+        "breakdown": "sub (代替) + stitute (站)",
+        "meaning": "n./v. 代替品；取代",
+        "example": {
+          "en": "Butter substitutes work well in most recipes.",
+          "cn": "黄油替代品在大多数食谱中效果不错。"
+        }
+      },
+      {
+        "name": "subtle",
+        "phonetic": "/ˈsʌtl/",
+        "breakdown": "sub (细) + -tle",
+        "meaning": "adj. 微妙的；细致的",
+        "example": {
+          "en": "His subtle humor is hard to detect.",
+          "cn": "他微妙的幽默很难察觉。"
+        }
+      },
+      {
+        "name": "suburb",
+        "phonetic": "/ˈsʌbɜːrb/",
+        "breakdown": "sub (在…外) + urb (城市)",
+        "meaning": "n. 郊区；近郊外",
+        "example": {
+          "en": "They moved to the suburb to find more space.",
+          "cn": "他们搬到郊区以获得更多空间。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_super",
+    "form": "super / supra",
+    "type": "root",
+    "phonetic": "/ˈsuːpər/",
+    "meaning": "在上 / 超越 / 超级",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 super（在…上）与 supra（在上方）。既指物理位置的高处，也指地位、程度的卓越。",
+    "derivationNote": "super- + sonic 超声；super- + market 超市；supra- + national 超国家的。",
+    "words": [
+      {
+        "name": "superior",
+        "phonetic": "/suːˈpɪriər/",
+        "breakdown": "super (上) + -ior (的)",
+        "meaning": "adj. 优越的；上级的",
+        "example": {
+          "en": "The new laptop is far superior to the old model.",
+          "cn": "新笔记本远超旧机型。"
+        }
+      },
+      {
+        "name": "supervise",
+        "phonetic": "/ˈsuːpərvaɪz/",
+        "breakdown": "super (上) + vise (看)",
+        "meaning": "v. 监督；管理",
+        "example": {
+          "en": "She supervises a team of twenty engineers.",
+          "cn": "她管理着一支 20 人的工程师团队。"
+        }
+      },
+      {
+        "name": "supernatural",
+        "phonetic": "/ˌsuːpərˈnætʃərəl/",
+        "breakdown": "super (超越) + natural (自然)",
+        "meaning": "adj. 超自然的",
+        "example": {
+          "en": "Ghosts are often portrayed as supernatural beings.",
+          "cn": "鬼魂常被描述为超自然存在。"
+        }
+      },
+      {
+        "name": "supreme",
+        "phonetic": "/suˈpriːm/",
+        "breakdown": "suprem (最高)",
+        "meaning": "adj. 最高的；至高无上的",
+        "example": {
+          "en": "It was a moment of supreme confidence for him.",
+          "cn": "那是他最为自信的一刻。"
+        }
+      },
+      {
+        "name": "superb",
+        "phonetic": "/suːˈpɜːrb/",
+        "breakdown": "super (极) + b (好)",
+        "meaning": "adj. 极佳的；上乘的",
+        "example": {
+          "en": "She gave a superb performance at the concert.",
+          "cn": "她在音乐会上表现出色。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_circum",
+    "form": "circum / circa",
+    "type": "root",
+    "phonetic": "/ˈsɜːrkəm/",
+    "meaning": "环绕 / 周围 / 圆周",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 circum（在…周围）和 circulus（小圆）。",
+    "derivationNote": "circum- + navigate 环航；circum- + stance 处境；circum- + ference 边缘。",
+    "words": [
+      {
+        "name": "circumstance",
+        "phonetic": "/ˈsɜːrkəmstæns/",
+        "breakdown": "circum (周围) + stance (站)",
+        "meaning": "n. 情况；环境",
+        "example": {
+          "en": "Under no circumstance should you reveal the password.",
+          "cn": "任何情况下都不要透露密码。"
+        }
+      },
+      {
+        "name": "circulate",
+        "phonetic": "/ˈsɜːrkjəleɪt/",
+        "breakdown": "circul (圆) + -ate",
+        "meaning": "v. 循环；流通",
+        "example": {
+          "en": "The rumors circulated quickly through the office.",
+          "cn": "谣言很快在办公室里流传。"
+        }
+      },
+      {
+        "name": "circuit",
+        "phonetic": "/ˈsɜːrkɪt/",
+        "breakdown": "circu (绕) + -it",
+        "meaning": "n. 电路；环行路线",
+        "example": {
+          "en": "Make sure the circuit is disconnected before repair.",
+          "cn": "维修前确保切断电路。"
+        }
+      },
+      {
+        "name": "circumvent",
+        "phonetic": "/ˌsɜːrkəmˈvɛnt/",
+        "breakdown": "circum (绕) + vent (来)",
+        "meaning": "v. 规避；绕过",
+        "example": {
+          "en": "He circumvented the rule by exploiting a loophole.",
+          "cn": "他利用漏洞规避了规则。"
+        }
+      },
+      {
+        "name": "circus",
+        "phonetic": "/ˈsɜːrkəs/",
+        "breakdown": "circ (圆) + -us",
+        "meaning": "n. 马戏团；圆形广场",
+        "example": {
+          "en": "The children watched the circus in awe.",
+          "cn": "孩子们惊叹地观看着马戏团表演。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_peri",
+    "form": "peri / peri-",
+    "type": "root",
+    "phonetic": "/ˈpɛri/",
+    "meaning": "周围 / 围绕 / 周边",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 peri（周围）。peri- 在医学、地理与几何术语里高频出现。",
+    "derivationNote": "peri- + meter 周长；peri- + od- 路；peri- + scope 潜望镜。",
+    "words": [
+      {
+        "name": "perimeter",
+        "phonetic": "/pəˈrɪmɪtər/",
+        "breakdown": "peri (周围) + meter (量)",
+        "meaning": "n. 周长；周边",
+        "example": {
+          "en": "Guards patrol the perimeter of the compound.",
+          "cn": "警卫在基地四周巡逻。"
+        }
+      },
+      {
+        "name": "period",
+        "phonetic": "/ˈpɪriəd/",
+        "breakdown": "peri (绕) + od (路)",
+        "meaning": "n. 时期；周期",
+        "example": {
+          "en": "She studied abroad for a period of two years.",
+          "cn": "她在国外留学了两年。"
+        }
+      },
+      {
+        "name": "periscope",
+        "phonetic": "/ˈpɛrɪskoʊp/",
+        "breakdown": "peri (周围) + scope (看)",
+        "meaning": "n. 潜望镜",
+        "example": {
+          "en": "Soldiers in the bunker use a periscope to see outside.",
+          "cn": "掩体里的士兵用潜望镜观察外部。"
+        }
+      },
+      {
+        "name": "peripheral",
+        "phonetic": "/pəˈrɪfərəl/",
+        "breakdown": "peri (周围) + pher (带) + -al",
+        "meaning": "adj. 周边的；次要的",
+        "example": {
+          "en": "Online shopping is no longer a peripheral activity.",
+          "cn": "网购已不再是边缘活动。"
+        }
+      },
+      {
+        "name": "perimeter",
+        "phonetic": "/pəˈrɪmɪtər/",
+        "breakdown": "peri (周围) + meter (量)",
+        "meaning": "n. 周长（同上)",
+        "example": {
+          "en": "The perimeter is twice the radius times pi.",
+          "cn": "周长等于半径乘以 π 再乘以 2。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_trans",
+    "form": "trans / tra-",
+    "type": "root",
+    "phonetic": "/træns/",
+    "meaning": "跨越 / 转移 / 横过",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 trans（越过、横过）。从物理的跨越与运输，到抽象的转折、变形。",
+    "derivationNote": "trans- + port 运输；trans- + fer 转交；trans- + form 变形。",
+    "words": [
+      {
+        "name": "transfer",
+        "phonetic": "/trænsˈfɜːr/",
+        "breakdown": "trans (跨) + fer (带)",
+        "meaning": "v./n. 转移；传递",
+        "example": {
+          "en": "He transferred to the Berlin branch last year.",
+          "cn": "他去年调到了柏林分公司。"
+        }
+      },
+      {
+        "name": "transform",
+        "phonetic": "/trænsˈfɔːrm/",
+        "breakdown": "trans (跨) + form (形)",
+        "meaning": "v. 转变；变形",
+        "example": {
+          "en": "The artist transformed trash into beautiful sculptures.",
+          "cn": "这位艺术家把垃圾变成了美丽的雕塑。"
+        }
+      },
+      {
+        "name": "translate",
+        "phonetic": "/trænsˈleɪt/",
+        "breakdown": "trans (跨) + late (带)",
+        "meaning": "v. 翻译；转化",
+        "example": {
+          "en": "The book has been translated into 30 languages.",
+          "cn": "这本书已被翻译成 30 种语言。"
+        }
+      },
+      {
+        "name": "transparent",
+        "phonetic": "/trænsˈpɛrənt/",
+        "breakdown": "trans (穿) + parent (显)",
+        "meaning": "adj. 透明的；坦白的",
+        "example": {
+          "en": "The company operates with transparent policies.",
+          "cn": "该公司运作机制透明公开。"
+        }
+      },
+      {
+        "name": "transport",
+        "phonetic": "/ˈtrænspɔːrt/",
+        "breakdown": "trans (跨) + port (运)",
+        "meaning": "v./n. 运输；交通工具",
+        "example": {
+          "en": "Trucks transport goods across the country.",
+          "cn": "卡车在全国范围内运送货物。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_para",
+    "form": "para / par-",
+    "type": "root",
+    "phonetic": "/ˈpærə/",
+    "meaning": "旁边 / 接近 / 平行",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 para（在…旁边、近似）。para- 既指位置上的并排，也指关系上的准、近。",
+    "derivationNote": "para- + graph 段落；para- + legal 半合法的；para- + site 旁站。",
+    "words": [
+      {
+        "name": "paragraph",
+        "phonetic": "/ˈpærəɡræf/",
+        "breakdown": "para (旁) + graph (写)",
+        "meaning": "n. 段落",
+        "example": {
+          "en": "Read the first paragraph carefully.",
+          "cn": "仔细阅读第一段。"
+        }
+      },
+      {
+        "name": "parallel",
+        "phonetic": "/ˈpærəlɛl/",
+        "breakdown": "para (并) + allel (彼此)",
+        "meaning": "adj. 平行的；n. 对比",
+        "example": {
+          "en": "These roads run parallel to the river.",
+          "cn": "这些道路与河流平行。"
+        }
+      },
+      {
+        "name": "paraphrase",
+        "phonetic": "/ˈpærəfreɪz/",
+        "breakdown": "para (近似) + phrase (措辞)",
+        "meaning": "v./n. 意译；改述",
+        "example": {
+          "en": "Try to paraphrase the thesis in your own words.",
+          "cn": "试着用自己的话意译这段论点。"
+        }
+      },
+      {
+        "name": "paradigm",
+        "phonetic": "/ˈpærədaɪm/",
+        "breakdown": "para (旁) + digm (示)",
+        "meaning": "n. 范例；范式",
+        "example": {
+          "en": "Quantum physics changed our scientific paradigm.",
+          "cn": "量子物理改变了我们的科学范式。"
+        }
+      },
+      {
+        "name": "paradox",
+        "phonetic": "/ˈpærədɑːks/",
+        "breakdown": "para (反) + dox (观点)",
+        "meaning": "n. 悖论；矛盾之事",
+        "example": {
+          "en": "It's a paradox that the less we sleep, the more tired we become.",
+          "cn": "我们越睡得少反而越累，这很矛盾。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_meta",
+    "form": "meta / meth-",
+    "type": "root",
+    "phonetic": "/ˈmɛtə/",
+    "meaning": "之后 / 变化 / 在…之间",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 meta（之后、变化、之间）。meta- 在哲学（metaphysics）与科学（metabolism）里出现频率极高。",
+    "derivationNote": "meta- + physics 形而上学；meta- + morph 变形；meta- + bolic 代谢的；meta- + data 元数据。",
+    "words": [
+      {
+        "name": "metaphysics",
+        "phonetic": "/ˌmɛtəˈfɪzɪks/",
+        "breakdown": "meta (之后) + physics (自然)",
+        "meaning": "n. 形而上学；玄学",
+        "example": {
+          "en": "Aristotle wrote extensively on metaphysics.",
+          "cn": "亚里士多德在形而上学方面著述丰富。"
+        }
+      },
+      {
+        "name": "metabolism",
+        "phonetic": "/məˈtæbəlɪzəm/",
+        "breakdown": "meta (变化) + bol (投) + -ism",
+        "meaning": "n. 新陈代谢",
+        "example": {
+          "en": "Exercise boosts your metabolism.",
+          "cn": "运动能促进新陈代谢。"
+        }
+      },
+      {
+        "name": "metamorphosis",
+        "phonetic": "/ˌmɛtəˈmɔːrfəsɪs/",
+        "breakdown": "meta (变) + morph (形) + -osis",
+        "meaning": "n. 变形；变质",
+        "example": {
+          "en": "The caterpillar's metamorphosis took three weeks.",
+          "cn": "毛毛虫的变形过程持续了三周。"
+        }
+      },
+      {
+        "name": "metaphor",
+        "phonetic": "/ˈmɛtəfɔːr/",
+        "breakdown": "meta (上) + phor (带)",
+        "meaning": "n. 隐喻；比喻",
+        "example": {
+          "en": "Time is a common metaphor in poetry.",
+          "cn": "时间是诗歌中常见的隐喻。"
+        }
+      },
+      {
+        "name": "metadata",
+        "phonetic": "/ˈmɛtədeɪtə/",
+        "breakdown": "meta (超) + data (数据)",
+        "meaning": "n. 元数据；描述性信息",
+        "example": {
+          "en": "Metadata helps search engines index images.",
+          "cn": "元数据帮助搜索引擎给图片做索引。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_sym",
+    "form": "sym / syn / sys",
+    "type": "root",
+    "phonetic": "/sɪm/",
+    "meaning": "共同 / 一起 / 同时",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 syn（一起、共同）。syn- 因与 s/l/m/n 等唇音相邻而演变为 sym- / sys-。",
+    "derivationNote": "syn- + chron 同步；sym- + pathy 同情；syn- + thesis 综合。",
+    "words": [
+      {
+        "name": "synchronize",
+        "phonetic": "/ˈsɪŋkrənaɪz/",
+        "breakdown": "syn (同) + chron (时) + -ize",
+        "meaning": "v. 同步；同步发生",
+        "example": {
+          "en": "Synchronize your clocks before we start.",
+          "cn": "开始前先把时钟同步好。"
+        }
+      },
+      {
+        "name": "symphony",
+        "phonetic": "/ˈsɪmfəni/",
+        "breakdown": "sym (同) + phon (声) + -y",
+        "meaning": "n. 交响曲",
+        "example": {
+          "en": "She plays violin in the city symphony.",
+          "cn": "她在市交响乐团演奏小提琴。"
+        }
+      },
+      {
+        "name": "sympathy",
+        "phonetic": "/ˈsɪmpəθi/",
+        "breakdown": "sym (同) + path (感) + -y",
+        "meaning": "n. 同情；赞同",
+        "example": {
+          "en": "He expressed sympathy for the disaster victims.",
+          "cn": "他对灾民表达了同情。"
+        }
+      },
+      {
+        "name": "synthesis",
+        "phonetic": "/ˈsɪnθəsɪs/",
+        "breakdown": "syn (共) + the (置) + -sis",
+        "meaning": "n. 综合；合成",
+        "example": {
+          "en": "The thesis is a synthesis of multiple theories.",
+          "cn": "这篇论文是多种理论的综合。"
+        }
+      },
+      {
+        "name": "system",
+        "phonetic": "/ˈsɪstəm/",
+        "breakdown": "sys (共) + tem (立)",
+        "meaning": "n. 系统；体系",
+        "example": {
+          "en": "This cooling system reduces energy use.",
+          "cn": "这个冷却系统减少了能源消耗。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_anti",
+    "form": "anti / ant-",
+    "type": "root",
+    "phonetic": "/ˈænti/",
+    "meaning": "反对 / 相对 / 抗",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 anti（反对、相对）。anti- 在英语中是高频反义与对抗前缀。",
+    "derivationNote": "anti- + body 抗体；anti- + thesis 对立主张；anti- + social 反社交。",
+    "words": [
+      {
+        "name": "antibody",
+        "phonetic": "/ˈæntibɑːdi/",
+        "breakdown": "anti (抗) + body (体)",
+        "meaning": "n. 抗体",
+        "example": {
+          "en": "Vaccines stimulate antibody production.",
+          "cn": "疫苗刺激抗体的产生。"
+        }
+      },
+      {
+        "name": "antithesis",
+        "phonetic": "/ænˈtɪθəsɪs/",
+        "breakdown": "anti (对) + thesis (立)",
+        "meaning": "n. 对立；对照",
+        "example": {
+          "en": "Her calm was the antithesis of his panic.",
+          "cn": "她的冷静恰恰是他的惊慌的对立面。"
+        }
+      },
+      {
+        "name": "antonym",
+        "phonetic": "/ˈæntənɪm/",
+        "breakdown": "ant (对) + onym (名)",
+        "meaning": "n. 反义词",
+        "example": {
+          "en": "“Light” and “dark” are common antonyms.",
+          "cn": "“light”和“dark”是常见反义词。"
+        }
+      },
+      {
+        "name": "antiseptic",
+        "phonetic": "/ˌæntiˈsɛptɪk/",
+        "breakdown": "anti (抗) + sept (腐)",
+        "meaning": "n./adj. 抗菌剂；防腐的",
+        "example": {
+          "en": "Apply an antiseptic to the wound before bandaging.",
+          "cn": "包扎前先在伤口上涂抗菌剂。"
+        }
+      },
+      {
+        "name": "antisocial",
+        "phonetic": "/ˌæntiˈsoʊʃl/",
+        "breakdown": "anti (反) + social (社交)",
+        "meaning": "adj. 反社会的；不合群的",
+        "example": {
+          "en": "He was labeled antisocial for avoiding parties.",
+          "cn": "他因躲避聚会被称为不合群。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_contra",
+    "form": "contra / contro",
+    "type": "root",
+    "phonetic": "/ˈkɑːntrə/",
+    "meaning": "反对 / 对抗 / 相对",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 contra（反对、对面）。contra- 在英语里多以 controversial、contrast 等词出现。",
+    "derivationNote": "contra- + dict 矛盾；contra- + st 反对；contra- + ry 相反。",
+    "words": [
+      {
+        "name": "contradict",
+        "phonetic": "/ˌkɑːntrəˈdɪkt/",
+        "breakdown": "contra (反) + dict (说)",
+        "meaning": "v. 反驳；矛盾",
+        "example": {
+          "en": "Don't contradict the manager in front of staff.",
+          "cn": "不要在员工面前反驳经理。"
+        }
+      },
+      {
+        "name": "contrast",
+        "phonetic": "/ˈkɑːntræst/",
+        "breakdown": "contra (对) + stant (立)",
+        "meaning": "v./n. 对比；反差",
+        "example": {
+          "en": "Her calm tone contrasts with his loud anger.",
+          "cn": "她平静的语气与他愤怒的高声形成对比。"
+        }
+      },
+      {
+        "name": "controversy",
+        "phonetic": "/ˈkɑːntrəvɜːrsi/",
+        "breakdown": "contro (反) + vers (转) + -y",
+        "meaning": "n. 争论；争议",
+        "example": {
+          "en": "The new policy sparked widespread controversy.",
+          "cn": "新政策引发了广泛的争议。"
+        }
+      },
+      {
+        "name": "contrary",
+        "phonetic": "/ˈkɑːntrɛri/",
+        "breakdown": "contrari (相对)",
+        "meaning": "adj. 相反的；n. 反面",
+        "example": {
+          "en": "His plan is contrary to standard practices.",
+          "cn": "他的计划与通常做法相悖。"
+        }
+      },
+      {
+        "name": "control",
+        "phonetic": "/kənˈtroʊl/",
+        "breakdown": "contr (反) + rol (转)",
+        "meaning": "n./v. 控制；管理",
+        "example": {
+          "en": "Parents should control children's screen time.",
+          "cn": "家长应控制儿童看屏幕的时间。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_dis",
+    "form": "dis / dif-",
+    "type": "root",
+    "phonetic": "/dɪs/",
+    "meaning": "不 / 分开 / 远离",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 dis（分开、不、远离）。dis- 同时是反向和分散的语法前缀。",
+    "derivationNote": "dis- + appear 消失；dis- + cuss 讨论；dis- + connect 断开。",
+    "words": [
+      {
+        "name": "discover",
+        "phonetic": "/dɪˈskʌvər/",
+        "breakdown": "dis (去除) + cover (盖)",
+        "meaning": "v. 发现；发觉",
+        "example": {
+          "en": "Scientists discovered a new species in the ocean.",
+          "cn": "科学家在海洋中发现了一个新物种。"
+        }
+      },
+      {
+        "name": "discuss",
+        "phonetic": "/dɪˈskʌs/",
+        "breakdown": "dis (分开) + cuss (击)",
+        "meaning": "v. 讨论；商议",
+        "example": {
+          "en": "Let's discuss the project timeline.",
+          "cn": "我们讨论一下项目时间表吧。"
+        }
+      },
+      {
+        "name": "dismiss",
+        "phonetic": "/dɪsˈmɪs/",
+        "breakdown": "dis (远离) + miss (送)",
+        "meaning": "v. 解散；驳回；解雇",
+        "example": {
+          "en": "The judge dismissed the case for lack of evidence.",
+          "cn": "法官以证据不足驳回案件。"
+        }
+      },
+      {
+        "name": "disappear",
+        "phonetic": "/ˌdɪsəˈpɪər/",
+        "breakdown": "dis (不) + appear (出现)",
+        "meaning": "v. 消失；不见",
+        "example": {
+          "en": "The sun disappeared behind the clouds.",
+          "cn": "太阳消失在云层之后。"
+        }
+      },
+      {
+        "name": "disorder",
+        "phonetic": "/dɪsˈɔːrdər/",
+        "breakdown": "dis (无) + order (秩序)",
+        "meaning": "n. 混乱；失调",
+        "example": {
+          "en": "Eating disorders require medical attention.",
+          "cn": "饮食失调需要医疗干预。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_cent",
+    "form": "cent / centi",
+    "type": "root",
+    "phonetic": "/sɛnt/",
+    "meaning": "百 / 百分之 / 中心",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 centum（一百）。cent 同时引申出「中心」（centre），因为「一百」是罗马军队的核心编制。",
+    "derivationNote": "cent- + i + ped 百分之一；cent- + ury 世纪；cent- + ral 中心。",
+    "words": [
+      {
+        "name": "century",
+        "phonetic": "/ˈsɛntʃəri/",
+        "breakdown": "cent (百) + -ury",
+        "meaning": "n. 世纪；百年",
+        "example": {
+          "en": "We are living in the 21st century.",
+          "cn": "我们正生活在 21 世纪。"
+        }
+      },
+      {
+        "name": "percent",
+        "phonetic": "/pərˈsɛnt/",
+        "breakdown": "per (每) + cent (百)",
+        "meaning": "n. 百分比",
+        "example": {
+          "en": "Only ten percent of applicants were accepted.",
+          "cn": "只有 10% 的申请人被录取。"
+        }
+      },
+      {
+        "name": "centipede",
+        "phonetic": "/ˈsɛntɪpiːd/",
+        "breakdown": "centi (百) + pede (脚)",
+        "meaning": "n. 蜈蚣",
+        "example": {
+          "en": "The centipede scurried under the rock.",
+          "cn": "蜈蚣在石头下迅速爬行。"
+        }
+      },
+      {
+        "name": "center",
+        "phonetic": "/ˈsɛntər/",
+        "breakdown": "cent (中心)",
+        "meaning": "n. 中心；v. 居中",
+        "example": {
+          "en": "Please center the heading on the page.",
+          "cn": "请把标题居中显示。"
+        }
+      },
+      {
+        "name": "centrifuge",
+        "phonetic": "/ˈsɛntrɪfjuːdʒ/",
+        "breakdown": "centri (中心) + fug (逃)",
+        "meaning": "n. 离心机",
+        "example": {
+          "en": "A centrifuge spins samples at high speed.",
+          "cn": "离心机高速旋转样品。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_par",
+    "form": "par / peer",
+    "type": "root",
+    "phonetic": "/pær/",
+    "meaning": "平等 / 同等 / 同伴",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 par（相等的、相同的）。同根的 lap 在古英语里则是同侪伙伴。",
+    "derivationNote": "par- + equal 同等；par- + ent 父母（平等的造物主）；im/par + ity 公正。",
+    "words": [
+      {
+        "name": "compare",
+        "phonetic": "/kəmˈpɛər/",
+        "breakdown": "com (共同) + par (等)",
+        "meaning": "v. 比较；比作",
+        "example": {
+          "en": "Let's compare the prices of both laptops.",
+          "cn": "我们比较一下两台笔记本的价格。"
+        }
+      },
+      {
+        "name": "pair",
+        "phonetic": "/pɛər/",
+        "breakdown": "par (同)",
+        "meaning": "n. 一对；v. 配对",
+        "example": {
+          "en": "These two shoes make a perfect pair.",
+          "cn": "这两只鞋是一双配对的。"
+        }
+      },
+      {
+        "name": "par",
+        "phonetic": "/pɑːr/",
+        "breakdown": "par (等)",
+        "meaning": "n. 标准；平价",
+        "example": {
+          "en": "Her writing is on par with the professionals.",
+          "cn": "她的写作水平与专业人士相当。"
+        }
+      },
+      {
+        "name": "disparity",
+        "phonetic": "/dɪˈspærəti/",
+        "breakdown": "dis (不) + par (等) + -ity",
+        "meaning": "n. 不一致；差异",
+        "example": {
+          "en": "There's a wide disparity in income across regions.",
+          "cn": "各地区收入差距很大。"
+        }
+      },
+      {
+        "name": "peer",
+        "phonetic": "/pɪər/",
+        "breakdown": "par (等同者)",
+        "meaning": "n. 同龄人；v. 凝视",
+        "example": {
+          "en": "Children learn social skills from their peers.",
+          "cn": "孩子们从同伴那里学习社交技能。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_homo",
+    "form": "homo / homeo",
+    "type": "root",
+    "phonetic": "/ˈhoʊmoʊ/",
+    "meaning": "相同 / 同一 / 类似",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 homos（相同的）。homo- 在英语里既表「同」也指古拉丁意义上的「人」（homo sapiens 智人）。",
+    "derivationNote": "homo- + graphy 同形字；homo- + geneous 同质的。",
+    "words": [
+      {
+        "name": "homogeneous",
+        "phonetic": "/ˌhoʊməˈdʒiːniəs/",
+        "breakdown": "homo (同) + gen (生) + -eous",
+        "meaning": "adj. 同质的；同类的",
+        "example": {
+          "en": "Milk is a homogeneous mixture of fat and water.",
+          "cn": "牛奶是脂肪和水的均匀混合物。"
+        }
+      },
+      {
+        "name": "homonym",
+        "phonetic": "/ˈhɑːmənɪm/",
+        "breakdown": "hom (同) + onym (名)",
+        "meaning": "n. 同音异义词",
+        "example": {
+          "en": "“Bow” is a famous English homonym.",
+          "cn": "“bow”是英语中著名的同音异义词。"
+        }
+      },
+      {
+        "name": "homophone",
+        "phonetic": "/ˈhɑːməfoʊn/",
+        "breakdown": "homo (同) + phone (音)",
+        "meaning": "n. 同音词",
+        "example": {
+          "en": "“To,” “too,” and “two” are homophones.",
+          "cn": "“to”、“too”和“two”是同音词。"
+        }
+      },
+      {
+        "name": "homosexual",
+        "phonetic": "/ˌhoʊməˈsɛkʃuəl/",
+        "breakdown": "homo (同) + sexual (性)",
+        "meaning": "adj./n. 同性恋（的)",
+        "example": {
+          "en": "He is an activist advocating homosexual rights.",
+          "cn": "他是倡导同性恋权益的活动家。"
+        }
+      },
+      {
+        "name": "homograph",
+        "phonetic": "/ˈhɑːməɡræf/",
+        "breakdown": "homo (同) + graph (写)",
+        "meaning": "n. 同形异义词",
+        "example": {
+          "en": "“Lead” (metal) and “lead” (to guide) are homographs.",
+          "cn": "“lead”（金属）和“lead”（引导）是同形异义词。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_hetero",
+    "form": "hetero",
+    "type": "root",
+    "phonetic": "/ˈhɛtəroʊ/",
+    "meaning": "不同 / 异 / 杂",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 heteros（其他的、不同的）。与 homos（相同的）相对。",
+    "derivationNote": "hetero- + sexual 异性的；hetero- + geneous 异质的。",
+    "words": [
+      {
+        "name": "heterogeneous",
+        "phonetic": "/ˌhɛtərəˈdʒiːniəs/",
+        "breakdown": "hetero (异) + gen (生) + -eous",
+        "meaning": "adj. 异质的；混杂的",
+        "example": {
+          "en": "The country is a heterogeneous mix of cultures.",
+          "cn": "这个国家是多元文化的混合体。"
+        }
+      },
+      {
+        "name": "heterosexual",
+        "phonetic": "/ˌhɛtəroʊˈsɛkʃuəl/",
+        "breakdown": "hetero (异) + sexual (性)",
+        "meaning": "adj./n. 异性恋（的)",
+        "example": {
+          "en": "In some societies, heterosexual marriage is the norm.",
+          "cn": "在某些社会，异性婚姻是常态。"
+        }
+      },
+      {
+        "name": "heteronym",
+        "phonetic": "/ˈhɛtərənɪm/",
+        "breakdown": "heter (异) + onym (名)",
+        "meaning": "n. 同形异音异义词",
+        "example": {
+          "en": "“Bow” is a heteronym with two distinct pronunciations.",
+          "cn": "“bow”是一个有两种发音的同形异音词。"
+        }
+      },
+      {
+        "name": "heterodox",
+        "phonetic": "/ˈhɛtərədɑːks/",
+        "breakdown": "hetero (异) + dox (观点)",
+        "meaning": "adj. 非正统的；异端的",
+        "example": {
+          "en": "He held heterodox views on religion.",
+          "cn": "他对宗教持有非传统观点。"
+        }
+      },
+      {
+        "name": "heterosexual",
+        "phonetic": "/ˌhɛtəroʊˈsɛkʃuəl/",
+        "breakdown": "hetero (异) + sexual (性)",
+        "meaning": "adj./n. 异性恋（的）（同上)",
+        "example": {
+          "en": "Most census forms allow heterosexual or other options.",
+          "cn": "大多数人口普查表允许选择异性恋或其它。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_auto",
+    "form": "auto / autos",
+    "type": "root",
+    "phonetic": "/ˈɔːtoʊ/",
+    "meaning": "自己 / 自动 / 独自",
+    "category": "greek",
+    "categoryLabel": "希腊核心词根",
+    "origin": "源自希腊语 autos（自己的）。auto- 在英语里是自动驾驶、自动化的最常用前缀。",
+    "derivationNote": "auto- + bio + graphy 自传；auto- + nom + ous 自主；auto- + mobile 汽车。",
+    "words": [
+      {
+        "name": "automobile",
+        "phonetic": "/ˈɔːtəmoʊbiːl/",
+        "breakdown": "auto (自) + mobile (动)",
+        "meaning": "n. 汽车",
+        "example": {
+          "en": "She drove her automobile to the coast.",
+          "cn": "她把车开到了海岸边。"
+        }
+      },
+      {
+        "name": "autonomous",
+        "phonetic": "/ɔːˈtɑːnəməs/",
+        "breakdown": "auto (自) + nom (治) + -ous",
+        "meaning": "adj. 自治的；自主的",
+        "example": {
+          "en": "Each province has an autonomous government.",
+          "cn": "每个省都有自己的自治政府。"
+        }
+      },
+      {
+        "name": "autobiography",
+        "phonetic": "/ˌɔːtəbaɪˈɑːɡrəfi/",
+        "breakdown": "auto (自己) + bio (生命) + graphy (写)",
+        "meaning": "n. 自传",
+        "example": {
+          "en": "She published her autobiography last month.",
+          "cn": "她上个月出版了自传。"
+        }
+      },
+      {
+        "name": "automatic",
+        "phonetic": "/ˌɔːtəˈmætɪk/",
+        "breakdown": "auto (自) + mat (动) + -ic",
+        "meaning": "adj. 自动的；n. 自动装置",
+        "example": {
+          "en": "Modern cars come with automatic braking systems.",
+          "cn": "现代汽车配备自动刹车系统。"
+        }
+      },
+      {
+        "name": "autopsy",
+        "phonetic": "/ˈɔːtɑːpsi/",
+        "breakdown": "auto (自) + opsis (看)",
+        "meaning": "n. 尸体解剖",
+        "example": {
+          "en": "The autopsy revealed the cause of death.",
+          "cn": "尸检揭示了死因。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ultra",
+    "form": "ultra / ulter",
+    "type": "root",
+    "phonetic": "/ˈʌltrə/",
+    "meaning": "超越 / 极端 / 在…之外",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 ultra（在…之外、超出）。ultra- 表程度之极与空间之远。",
+    "derivationNote": "ultra- + violet 紫外线；ultra- + sound 超声；ultra- + modern 超现代。",
+    "words": [
+      {
+        "name": "ultraviolet",
+        "phonetic": "/ˌʌltrəˈvaɪələt/",
+        "breakdown": "ultra (超) + violet (紫色)",
+        "meaning": "adj./n. 紫外的；紫外线",
+        "example": {
+          "en": "Ultraviolet rays can damage skin.",
+          "cn": "紫外线会损伤皮肤。"
+        }
+      },
+      {
+        "name": "ultrasonic",
+        "phonetic": "/ˌʌltrəˈsɑːnɪk/",
+        "breakdown": "ultra (超) + sonic (声)",
+        "meaning": "adj. 超声的",
+        "example": {
+          "en": "Ultrasonic sensors measure distance with sound waves.",
+          "cn": "超声波传感器通过声波测量距离。"
+        }
+      },
+      {
+        "name": "ultimate",
+        "phonetic": "/ˈʌltɪmət/",
+        "breakdown": "ultim (最远) + -ate",
+        "meaning": "adj. 最终的；最高的",
+        "example": {
+          "en": "Her ultimate goal is to run a marathon.",
+          "cn": "她的最终目标是跑完马拉松。"
+        }
+      },
+      {
+        "name": "ultimatum",
+        "phonetic": "/ˌʌltɪˈmeɪtəm/",
+        "breakdown": "ultim (最终) + -atum",
+        "meaning": "n. 最后通牒",
+        "example": {
+          "en": "They issued an ultimatum for the hostage release.",
+          "cn": "他们发出释放人质的最后通牒。"
+        }
+      },
+      {
+        "name": "ultra",
+        "phonetic": "/ˈʌltrə/",
+        "breakdown": "ultra (极端)",
+        "meaning": "n. 极端主义者；adj. 极端的",
+        "example": {
+          "en": "Ultra-athletes push their bodies to extremes.",
+          "cn": "极限运动员把身体推到极限。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_equ",
+    "form": "equ / aequ",
+    "type": "root",
+    "phonetic": "/iːkw/",
+    "meaning": "相等 / 平等 / 公正",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 aequus（相等的、公正的）。equ- 在英语里多以 equal、equity、adequate 形式出现。",
+    "derivationNote": "equ- + al 同等的；equ- + ity 公平；in- + equ + ate 平等分配。",
+    "words": [
+      {
+        "name": "equal",
+        "phonetic": "/ˈiːkwəl/",
+        "breakdown": "equ (等) + -al",
+        "meaning": "adj. 相等的；n. 同辈",
+        "example": {
+          "en": "All people are equal before the law.",
+          "cn": "法律面前人人平等。"
+        }
+      },
+      {
+        "name": "equity",
+        "phonetic": "/ˈɛkwəti/",
+        "breakdown": "equ (公正) + -ity",
+        "meaning": "n. 公平；股权",
+        "example": {
+          "en": "The company sold 60% equity to foreign investors.",
+          "cn": "公司向外国投资者出售了 60% 股权。"
+        }
+      },
+      {
+        "name": "adequate",
+        "phonetic": "/ˈædɪkwət/",
+        "breakdown": "ad- (向) + equ (适合) + -ate",
+        "meaning": "adj. 足够的；适当的",
+        "example": {
+          "en": "The salary is adequate for a modest lifestyle.",
+          "cn": "这份工资足以维持简朴生活。"
+        }
+      },
+      {
+        "name": "equation",
+        "phonetic": "/ɪˈkweɪʒn/",
+        "breakdown": "equ (使相等) + -ation",
+        "meaning": "n. 方程；平衡",
+        "example": {
+          "en": "Each side of the equation must balance.",
+          "cn": "方程两边必须平衡。"
+        }
+      },
+      {
+        "name": "equivalent",
+        "phonetic": "/ɪˈkwɪvələnt/",
+        "breakdown": "equ (等) + val (值) + -ent",
+        "meaning": "adj. 等价的；n. 等价物",
+        "example": {
+          "en": "One dollar is roughly equivalent to seven yuan.",
+          "cn": "1 美元大约相当于 7 元人民币。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_simil",
+    "form": "simil / simul",
+    "type": "root",
+    "phonetic": "/ˈsɪmɪl/",
+    "meaning": "相似 / 同样 / 同时",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 similis（相似的）和 simul（一起）。两词虽都表相似，但分别用于形容词与副词场景。",
+    "derivationNote": "sim- + ul + ate 模拟；sim- + il + ar 相似的；sim- + ul + taneous 同时的。",
+    "words": [
+      {
+        "name": "similar",
+        "phonetic": "/ˈsɪmɪlər/",
+        "breakdown": "simil (似) + -ar",
+        "meaning": "adj. 相似的",
+        "example": {
+          "en": "The two designs are similar in shape.",
+          "cn": "这两个设计在形状上相似。"
+        }
+      },
+      {
+        "name": "simulate",
+        "phonetic": "/ˈsɪmjəleɪt/",
+        "breakdown": "simul (相似) + -ate",
+        "meaning": "v. 模拟；假装",
+        "example": {
+          "en": "The software simulates earthquake damage.",
+          "cn": "该软件模拟地震造成的破坏。"
+        }
+      },
+      {
+        "name": "simultaneous",
+        "phonetic": "/ˌsɪmlˈteɪniəs/",
+        "breakdown": "simul (同时) + t (起) + -aneous",
+        "meaning": "adj. 同时发生的",
+        "example": {
+          "en": "There were simultaneous explosions in two cities.",
+          "cn": "两座城市同时发生了爆炸。"
+        }
+      },
+      {
+        "name": "assimilate",
+        "phonetic": "/əˈsɪmɪleɪt/",
+        "breakdown": "as- (向) + simil (似) + -ate",
+        "meaning": "v. 吸收；同化",
+        "example": {
+          "en": "Immigrants often assimilate into the new culture.",
+          "cn": "移民常常融入新的文化。"
+        }
+      },
+      {
+        "name": "resemble",
+        "phonetic": "/rɪˈzɛmbl/",
+        "breakdown": "re- (再) + semble (似)",
+        "meaning": "v. 像；类似",
+        "example": {
+          "en": "She resembles her mother in many ways.",
+          "cn": "她在很多方面像她的母亲。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ann",
+    "form": "ann / anni / annu",
+    "type": "root",
+    "phonetic": "/æn/",
+    "meaning": "年 / 一年 / 周年",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 annus（年）。annual、anniversary 都是日常核心词。",
+    "derivationNote": "ann- + ual 一年一次的；ann- + i + vers + ary 周年纪念；bi- + enn- + ial 两年一次。",
+    "words": [
+      {
+        "name": "annual",
+        "phonetic": "/ˈænjuəl/",
+        "breakdown": "annu (年) + -al",
+        "meaning": "adj. 每年的；n. 年报",
+        "example": {
+          "en": "The annual meeting will be held next Monday.",
+          "cn": "年会将在下周一举行。"
+        }
+      },
+      {
+        "name": "anniversary",
+        "phonetic": "/ˌænɪˈvɜːrsəri/",
+        "breakdown": "anni (年) + vers (转) + -ary",
+        "meaning": "n. 周年纪念日",
+        "example": {
+          "en": "We celebrated their wedding anniversary with a dinner.",
+          "cn": "我们用晚餐庆祝了他们的结婚纪念日。"
+        }
+      },
+      {
+        "name": "annals",
+        "phonetic": "/ˈænlz/",
+        "breakdown": "ann (年) + -als",
+        "meaning": "n. 编年史；年鉴",
+        "example": {
+          "en": "This event will be recorded in the annals of history.",
+          "cn": "这一事件将被载入史册。"
+        }
+      },
+      {
+        "name": "biennial",
+        "phonetic": "/baɪˈɛniəl/",
+        "breakdown": "bi (二) + enni (年) + -al",
+        "meaning": "adj. 两年一次的",
+        "example": {
+          "en": "The biennial competition drew entries from 30 countries.",
+          "cn": "两年一次的赛事收到了 30 个国家的参赛作品。"
+        }
+      },
+      {
+        "name": "millennium",
+        "phonetic": "/mɪˈlɛniəm/",
+        "breakdown": "mill (千) + enn (年) + -ium",
+        "meaning": "n. 千年；千禧年",
+        "example": {
+          "en": "We just celebrated the millennium in 2000.",
+          "cn": "我们刚在 2000 年庆祝了千禧年。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "root_ante",
+    "form": "ante / ant-",
+    "type": "root",
+    "phonetic": "/ˈænti/",
+    "meaning": "之前 / 前面",
+    "category": "latin",
+    "categoryLabel": "拉丁核心词根",
+    "origin": "源自拉丁语 ante（在…之前）。区别于 pre（前），ante 多用在空间之前或顺序之前。",
+    "derivationNote": "ante- + room 候机厅；ante- + cede 让步；ante- + natal 出生前的。",
+    "words": [
+      {
+        "name": "antecedent",
+        "phonetic": "/ˌæntɪˈsiːdnt/",
+        "breakdown": "ante (前) + ced (走) + -ent",
+        "meaning": "n. 前事；adj. 先行的",
+        "example": {
+          "en": "The historical antecedents explain the present conflict.",
+          "cn": "历史前因解释了当前的冲突。"
+        }
+      },
+      {
+        "name": "antenna",
+        "phonetic": "/ænˈtɛnə/",
+        "breakdown": "ante (前) + nna (帆桁)",
+        "meaning": "n. 触角；天线",
+        "example": {
+          "en": "He adjusted the antenna for better signal.",
+          "cn": "他调整天线以获得更好的信号。"
+        }
+      },
+      {
+        "name": "anterior",
+        "phonetic": "/ænˈtɪriər/",
+        "breakdown": "anter (前) + -ior",
+        "meaning": "adj. 在前的；前面的",
+        "example": {
+          "en": "The anterior chamber of the eye holds fluid.",
+          "cn": "眼前房中有液体。"
+        }
+      },
+      {
+        "name": "antecedent",
+        "phonetic": "/ˌæntɪˈsiːdnt/",
+        "breakdown": "ante (前) + ced (走) + -ent",
+        "meaning": "n. 前事（同上)",
+        "example": {
+          "en": "Review the antecedents before drawing conclusions.",
+          "cn": "下结论前先审视前因。"
+        }
+      },
+      {
+        "name": "antechamber",
+        "phonetic": "/ˈæntɪtʃeɪmbər/",
+        "breakdown": "ante (前) + chamber (室)",
+        "meaning": "n. 前厅；接待室",
+        "example": {
+          "en": "The visitors waited in the antechamber.",
+          "cn": "来访者在接待室等候。"
+        }
+      }
+    ]
   }
 ]

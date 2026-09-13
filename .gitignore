@@ -44,3 +44,5 @@ next-env.d.ts
 *.py
 *.bak
 /data
+# audit scripts for roots
+.audit-roots-*
