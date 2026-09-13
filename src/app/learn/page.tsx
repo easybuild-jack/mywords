@@ -15,15 +15,29 @@ export default function LearnPage() {
 
   // 模式由路由声明；进入学习页会退出错词攻坚并载入学习页自己的进度
   useEffect(() => {
+    let cancelled = false
     setIsReady(false)
-    syncStarredWordIds()
-    enterMode('learn')
-      .then(() => loadCurrentUnitWords())
-      .then(() => playCurrentWordAudio())
-      .finally(() => {
-        // 数据就绪并完成游标对齐后开放展示，彻底消除第一词瞬切到当前在学词的闪烁
-        setIsReady(true)
-      })
+    void syncStarredWordIds()
+
+    void (async () => {
+      try {
+        await enterMode('learn')
+        if (cancelled) return
+
+        const loadSequence = await loadCurrentUnitWords()
+        if (cancelled) return
+        if (loadSequence === null && !useWorkspaceStore.getState().isErrorPracticeActive) return
+
+        playCurrentWordAudio()
+      } finally {
+        // 只有最后一次仍存活的初始化才能开放页面，旧请求不能发音或回写 ready。
+        if (!cancelled) setIsReady(true)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
   }, [enterMode, loadCurrentUnitWords, playCurrentWordAudio, syncStarredWordIds])
 
   return (

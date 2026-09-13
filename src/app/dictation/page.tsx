@@ -15,13 +15,27 @@ export default function DictationPage() {
   // 错词攻坚同样落在本页，此时 enterMode 会保留攻坚现场与它自己的词表。
   // 词表就位后再补线索，否则听音模式下的第一个词会既没有发音也没有释义。
   useEffect(() => {
+    let cancelled = false
     setIsReady(false)
-    enterMode('dictation')
-      .then(() => loadCurrentUnitWords())
-      .then(() => playDictationCue())
-      .finally(() => {
-        setIsReady(true)
-      })
+
+    void (async () => {
+      try {
+        await enterMode('dictation')
+        if (cancelled) return
+
+        const loadSequence = await loadCurrentUnitWords()
+        if (cancelled) return
+        if (loadSequence === null && !useWorkspaceStore.getState().isErrorPracticeActive) return
+
+        playDictationCue()
+      } finally {
+        if (!cancelled) setIsReady(true)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
   }, [enterMode, loadCurrentUnitWords, playDictationCue])
 
   return (

@@ -12,12 +12,21 @@ export default function PhoneticsPage() {
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
 
   useEffect(() => {
+    let cancelled = false
     setIsReady(false)
-    enterMode('phonetic')
-      .then(() => loadCurrentUnitWords())
-      .finally(() => {
-        setIsReady(true)
-      })
+
+    void (async () => {
+      try {
+        await enterMode('phonetic')
+        if (!cancelled) await loadCurrentUnitWords()
+      } finally {
+        if (!cancelled) setIsReady(true)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
   }, [enterMode, loadCurrentUnitWords])
 
   return (
