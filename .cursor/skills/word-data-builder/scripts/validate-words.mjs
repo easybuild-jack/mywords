@@ -59,7 +59,7 @@ function vowelCount(phoneNorm, lowerName) {
 }
 
 // ---------- 校验 ----------
-const FIELD_ORDER = ['name', 'trans', 'usphone', 'ukphone', 'syllables', 'etymology', 'silentIndices', 'examples', 'phrases']
+const FIELD_ORDER = ['name', 'trans', 'usphone', 'ukphone', 'syllables', 'etymology', 'silentIndices', 'examples', 'phrases', 'unitId']
 const POS_RE = /^(n|v|vt|vi|adj|adv|prep|conj|pron|num|int|interj|art|aux|det|abbr|phr|modal|prefix|suffix|inf|pl)\.\s*\S/
 const isPair = (x) => x && typeof x.en === 'string' && x.en.trim() && typeof x.cn === 'string' && x.cn.trim()
 
