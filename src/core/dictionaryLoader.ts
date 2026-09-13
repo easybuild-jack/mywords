@@ -33,10 +33,10 @@ export interface RawDictEntry {
 // 官方内置大词库文件映射关系
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
   'book_basewords': { path: '/dicts/basewords.json', totalWords: 4427, name: '基础词汇' },
-  'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
+  'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2607, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
-  'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: '程序员词库' },
+  'book_coder': { path: '/dicts/it-words.json', totalWords: 3824, name: '程序员词库' },
 }
 
 /**
@@ -45,11 +45,8 @@ export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: 
  */
 export const OFFICIAL_BOOK_UNITS_FILE_MAP: Record<string, string> = {
   'book_basewords': '/dicts/basewords.units.json',
-}
-
-/** 没有语义目录的词库也需要稳定单元 ID，供进度表关联。 */
-export function buildFixedUnitId(bookId: string, unitIndex: number): string {
-  return `${bookId}_unit_${Math.max(0, unitIndex)}`
+  'book_cet4': '/dicts/cet4.units.json',
+  'book_coder': '/dicts/it-words.units.json',
 }
 
 function formatPhonetic(rawPhone?: string): string | undefined {
@@ -223,7 +220,7 @@ class DictionaryLoader {
       }
 
       return {
-        trans,
+        trans: trans.length ? trans : ['核心词义'],
         usphone,
         ukphone,
       }
@@ -264,8 +261,8 @@ class DictionaryLoader {
       if (localMatch) {
         if (!customMeaning && localMatch.trans.length) transList = localMatch.trans
         if (!customPhonetic) {
-          usPhone = localMatch.usphone
-          ukPhone = localMatch.ukphone
+          usPhone = localMatch.usphone || `/ ${lowerName} /`
+          ukPhone = localMatch.ukphone || localMatch.usphone || `/ ${lowerName} /`
         }
       }
     }
@@ -280,12 +277,17 @@ class DictionaryLoader {
       }
     }
 
-    // 3. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
+    // 3. 兜底处理
+    if (!transList.length) transList = ['核心词义']
+    if (!usPhone) usPhone = `/ ${lowerName} /`
+    if (!ukPhone) ukPhone = `/ ${lowerName} /`
+
+    // 4. 音节与构词法：人工拆解优先，没填才按字母启发式推导（两者都不涉及读音）
     let syllables = customSyllables?.length ? customSyllables : splitIntoSyllables(cleanName)
     let etymology = customEtymology ?? undefined
     let silentIndices: number[] | undefined = customSilentIndices
 
-    // 4. 检查本地 DB 中的用户修改覆盖
+    // 5. 检查本地 DB 中的用户修改覆盖
     if (typeof window !== 'undefined' && !customSyllables && !customEtymology) {
       try {
         const savedOverride = await db.wordOverrides.get(wordId)
@@ -304,8 +306,8 @@ class DictionaryLoader {
       name: cleanName,
       unitId: customUnitId,
       syllables,
-      phoneticUs: usPhone || '',
-      phoneticUk: ukPhone || '',
+      phoneticUs: usPhone,
+      phoneticUk: ukPhone,
       posList,
       etymology,
       silentIndices,
@@ -341,18 +343,18 @@ class DictionaryLoader {
    */
   private buildWordItemFromEntry(entry: RawDictEntry): WordItem {
     const name = entry.name || ''
-    const rawTrans = entry.trans || (entry.translation ? [entry.translation] : [])
+    const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
     const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)
     const rawUk = formatPhonetic(entry.ukphone) || formatPhonetic(entry.phone) || rawUs
-    const usphone = rawUs || ''
-    const ukphone = rawUk || ''
+    const usphone = rawUs || `/ ${name.toLowerCase()} /`
+    const ukphone = rawUk || usphone
 
     // 词表自带的拆解优先，但音节仍要过一遍校验：拼不回原词的分段会让学习卡高亮错位
     const curatedSyllables = entry.syllables
     const syllables =
       curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
         ? curatedSyllables
-        : []
+        : splitIntoSyllables(name)
 
     return {
       id: buildWordId(name),
@@ -369,7 +371,7 @@ class DictionaryLoader {
     }
   }
 
-  /** 批量套用用户或 AI 生成的字段覆盖。 */
+  /** 批量套用用户自定义覆盖（音节拆分/构词/例句/短语） */
   private async applyUserOverrides(words: WordItem[]): Promise<WordItem[]> {
     if (typeof window === 'undefined' || words.length === 0) return words
     try {
@@ -377,9 +379,6 @@ class DictionaryLoader {
       for (let i = 0; i < words.length; i++) {
         const override = overrides[i]
         if (!override) continue
-        if (override.phoneticUs) words[i].phoneticUs = override.phoneticUs
-        if (override.phoneticUk) words[i].phoneticUk = override.phoneticUk
-        if (override.posList?.length) words[i].posList = override.posList
         if (override.syllables && override.syllables.length) {
           words[i].syllables = override.syllables
         }
@@ -434,34 +433,6 @@ class DictionaryLoader {
    */
   public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
     return this.fetchBookRawWords(bookId)
-  }
-
-  /**
-   * 返回当前词库定义下每个单元的准确成员 ID，用于校准内容变更后的历史进度。
-   */
-  public async loadBookUnitWordIds(bookId: string, unitSize: number = 20): Promise<Record<string, string[]>> {
-    const allRawWords = await this.fetchBookRawWords(bookId)
-    if (!allRawWords.length) return {}
-
-    const units = await this.loadBookUnits(bookId)
-    if (units.length) {
-      const result = Object.fromEntries(units.map((unit) => [unit.id, [] as string[]]))
-      for (const entry of allRawWords) {
-        if (entry.unitId && result[entry.unitId]) {
-          result[entry.unitId].push(this.buildWordItemFromEntry(entry).id)
-        }
-      }
-      return result
-    }
-
-    const result: Record<string, string[]> = {}
-    for (let start = 0; start < allRawWords.length; start += unitSize) {
-      const unitIndex = Math.floor(start / unitSize)
-      result[buildFixedUnitId(bookId, unitIndex)] = allRawWords
-        .slice(start, start + unitSize)
-        .map((entry) => this.buildWordItemFromEntry(entry).id)
-    }
-    return result
   }
 
   /**
