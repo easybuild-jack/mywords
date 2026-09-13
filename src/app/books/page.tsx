@@ -353,19 +353,59 @@ function BooksHubContent() {
     (_, i) => unitPage * unitsPerPage + i
   )
 
-  // 完成度只认 unitProgress；当前浏览到第几个单元不代表前面的单元已经完成。
-  const masteredUnits = Array.from({ length: totalUnits }, (_, index) => {
+  // 累计全书各单元进度与已学词量（即使单元处于进行中，也按已完成单词数如实计入全书总进度）
+  let totalCompletedWords = 0
+  let totalBookCapacity = 0
+  let masteredUnitsCount = 0
+
+  for (let index = 0; index < totalUnits; index++) {
     const unitMeta = activeUnits?.[index]
     const unitId = unitMeta?.id ?? buildFixedUnitId(activeBook.id, index)
     const progress = unitProgressById[unitId]
-    return progress?.status === 'completed'
-  }).filter(Boolean).length
-  const progressPercent = totalUnits > 0 ? Math.min(100, Math.max(0, Math.round((masteredUnits / totalUnits) * 100))) : 0
+    const expectedCount =
+      unitWordCountById[unitId] ??
+      unitMeta?.wordCount ??
+      Math.min(unitSize, Math.max(0, (activeBook?.totalWords || 0) - index * unitSize))
+
+    totalBookCapacity += expectedCount
+
+    if (progress?.status === 'completed') {
+      masteredUnitsCount += 1
+      totalCompletedWords += expectedCount
+    } else if (progress?.completedWordIds?.length) {
+      totalCompletedWords += Math.min(expectedCount, progress.completedWordIds.length)
+    }
+  }
+
+  const effectiveTotalWords = totalBookCapacity > 0 ? totalBookCapacity : (activeBook?.totalWords || 1)
+  const rawProgressPercent = totalCompletedWords > 0
+    ? Math.min(100, (totalCompletedWords / effectiveTotalWords) * 100)
+    : 0
+
+  // 格式化总进度百分比显示：
+  // 1. 如果完全未开始，显示 0%
+  // 2. 如果已有练习数据但未满 1%，显示 1 位小数（如 0.3%），避免因四舍五入为 0% 导致用户感觉进度丢失
+  // 3. 如果在 1% ~ 10% 之间，显示 1 位小数（如 4.6%），提供更灵敏的正向反馈
+  // 4. 达到 10% 后，以整数显示（如 15%、80%、100%）
+  let formattedProgressPercent: string
+  if (totalCompletedWords === 0) {
+    formattedProgressPercent = '0'
+  } else if (rawProgressPercent < 1) {
+    const dec = rawProgressPercent.toFixed(1)
+    formattedProgressPercent = dec === '0.0' ? '0.1' : dec
+  } else if (rawProgressPercent < 10) {
+    formattedProgressPercent = rawProgressPercent.toFixed(1)
+  } else {
+    formattedProgressPercent = Math.min(100, Math.round(rawProgressPercent)).toString()
+  }
 
   // SVG 进度环参数 (r=38, 周长约 238.76)
   const strokeRadius = 38
   const strokeCircumference = 2 * Math.PI * strokeRadius
-  const strokeDashoffset = strokeCircumference - (strokeCircumference * progressPercent) / 100
+  const ringProgressPercent = totalCompletedWords > 0
+    ? Math.max(0.6, Math.min(100, rawProgressPercent))
+    : 0
+  const strokeDashoffset = strokeCircumference - (strokeCircumference * ringProgressPercent) / 100
 
   // 当切换浏览词书或初始加载时，自动翻到该词库在当前模式下正在学的单元所在页
   useEffect(() => {
@@ -504,6 +544,12 @@ function BooksHubContent() {
                   <span className="text-primary font-bold text-base sm:text-lg">{activeBook?.totalWords} 词</span>
                 </div>
                 <div className="flex items-baseline gap-1.5">
+                  <span className="text-muted-foreground text-xs sm:text-sm font-sans">已学词量：</span>
+                  <span className="text-emerald-400 font-bold text-base sm:text-lg">
+                    {totalCompletedWords} <span className="text-xs font-normal text-muted-foreground font-sans">词</span>
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1.5">
                   <span className="text-muted-foreground text-xs sm:text-sm font-sans">总单元：</span>
                   <span className="text-white font-bold text-base sm:text-lg">{totalUnits} 单元</span>
                 </div>
@@ -548,7 +594,7 @@ function BooksHubContent() {
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
                   <span className="text-xl sm:text-2xl font-extrabold font-mono text-primary leading-none">
-                    {progressPercent}%
+                    {formattedProgressPercent}%
                   </span>
                   <p className="text-[11px] text-muted-foreground uppercase font-medium mt-1">{progressTitle}</p>
                 </div>

@@ -29,6 +29,7 @@ const WORD_NOT_FOUND_JSON =
   '{"status":"error","error":{"code":"WORD_NOT_FOUND","message":"未找到严格匹配的英文单词"}}'
 const JSON_ONLY_RULE = `必须且仅输出合法的单个 JSON 对象，不要输出解释、Markdown 或推导过程。
 必须严格查询用户给出的原始单词，不得纠正拼写、联想近似词、替换为词形相近的单词或编造释义。
+所有字段必须在同一个 JSON 对象内部完整闭合，严禁在 JSON 内输出省略号或占位符（如 [...] 或 {...}），严禁在 JSON 外部追加任何说明。
 如果无法确认该拼写是有效英文单词，必须原样返回：${WORD_NOT_FOUND_JSON}`
 
 export const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
@@ -91,8 +92,8 @@ export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的专业�
 - 无哑音时返回 []。
 
 【词源与短语规则】
-- 词源必须可靠；没有可靠词根词缀时省略相应字段，严禁编造。
-- phrases 生成 4–8 条最常见、最实用的固定搭配，并提供准确中文释义。
+- 词源必须可靠；对于无明显英语词根词缀的外来词或基础词（如 mango、coffee、tea、banana、dog 等），etymology 中严禁强行拆解 prefix/root/suffix，直接省略这些字段（或设为 null），重点提供 origin（来源语言及演变）与 memoryHook（简明记忆线索）即可，严禁编造。
+- phrases 必须直接在 JSON 数组中输出 4–8 条最常见、最实用的固定搭配（包含 en 与 cn 释义），严禁使用省略号占位符。
 ${JSON_ONLY_RULE}`
 
 export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
@@ -142,7 +143,26 @@ export function buildWordExamplesQueryMessages(word: string, trans: string[]) {
 }
 
 /**
- * 从文本中寻找首个括号平衡的最外层完整 JSON 对象
+ * 清理大模型生成的常见非标准 JSON 占位符、注释与尾部逗号
+ */
+export function sanitizeJsonPlaceholders(str: string): string {
+  let s = str
+  // 替换占位符 [...] 或 [ ... ] 为 []
+  s = s.replace(/\[\s*\.\.\.\s*\]/g, '[]')
+  // 替换占位符 {...} 为 {}
+  s = s.replace(/\{\s*\.\.\.\s*\}/g, '{}')
+  // 移除尾部占位符及逗号，如 "key": [...], 或 "key": ...
+  s = s.replace(/,\s*\.\.\.\s*([\]}])/g, '$1')
+  // 移除多行注释和单行注释
+  s = s.replace(/\/\*[\s\S]*?\*\//g, '')
+  s = s.replace(/(^|[^:])\/\/[^\r\n]*/g, '$1')
+  // 移除闭合括号前的多余逗号，如 [1, 2, ] -> [1, 2] 或 {"a": 1, } -> {"a": 1}
+  s = s.replace(/,\s*([\]}])/g, '$1')
+  return s
+}
+
+/**
+ * 从文本中提取括号平衡的最外层完整 JSON 对象
  */
 function extractOutermostJsonObject(str: string): string | null {
   const start = str.indexOf('{')
@@ -180,37 +200,10 @@ function extractOutermostJsonObject(str: string): string | null {
 }
 
 /**
- * 寻找包含 "name" 属性的最外层单词 JSON 对象（避免误匹配杂乱思考文本中的内部对象）
- */
-function findWordJsonObject(text: string): string | null {
-  const nameMatch = text.search(/"name"\s*:/i)
-  if (nameMatch === -1) {
-    return extractOutermostJsonObject(text)
-  }
-
-  let startIndex = -1
-  for (let i = nameMatch; i >= 0; i--) {
-    if (text[i] === '{') {
-      startIndex = i
-      break
-    }
-  }
-
-  if (startIndex === -1) {
-    return extractOutermostJsonObject(text)
-  }
-
-  const candidate = extractOutermostJsonObject(text.slice(startIndex))
-  if (candidate) return candidate
-
-  return text.slice(startIndex)
-}
-
-/**
  * 智能修复被截断的不完整 JSON 字符串（例如模型受 max_tokens 限制或网络中断未闭合尾部）
  */
 export function repairTruncatedJson(raw: string): string {
-  let s = raw.trim()
+  let s = sanitizeJsonPlaceholders(raw.trim())
   const start = s.indexOf('{')
   if (start === -1) return s
   s = s.slice(start)
@@ -252,7 +245,7 @@ export function repairTruncatedJson(raw: string): string {
     s += '"'
   }
 
-  // 2. 循环清理末尾多余逗号或孤立键值对（如 `"incompleteKey":` 或 `...,`）
+  // 2. 循环清理末尾多余逗号、孤立键值对或残存标点
   s = s.trimEnd()
   let modified = true
   while (modified) {
@@ -261,8 +254,16 @@ export function repairTruncatedJson(raw: string): string {
       s = s.slice(0, -1).trimEnd()
       modified = true
     }
+    if (s.endsWith('-')) {
+      s = s.slice(0, -1).trimEnd()
+      modified = true
+    }
     if (/:\s*$/.test(s)) {
       s = s.replace(/,?\s*"[^"]*"\s*:\s*$/, '').trimEnd()
+      modified = true
+    }
+    if (/,\s*-[^,\]}]*$/.test(s)) {
+      s = s.replace(/,\s*-[^,\]}]*$/, '').trimEnd()
       modified = true
     }
   }
@@ -275,6 +276,43 @@ export function repairTruncatedJson(raw: string): string {
   }
 
   return s
+}
+
+/**
+ * 从非结构化文本、Markdown 列表或思考草稿中抢救短语数据
+ */
+export function extractPhrasesFromText(text: string): { en: string; cn: string }[] {
+  const phrases: { en: string; cn: string }[] = []
+  const seen = new Set<string>()
+
+  const addPhrase = (en: string, cn: string) => {
+    const cleanEn = en.trim().replace(/^["'`]|["'`]$/g, '').trim()
+    const cleanCn = cn.trim().replace(/^["'`]|["'`]$/g, '').trim()
+    if (cleanEn && cleanCn && !seen.has(cleanEn.toLowerCase())) {
+      seen.add(cleanEn.toLowerCase())
+      phrases.push({ en: cleanEn, cn: cleanCn })
+    }
+  }
+
+  // 1. 匹配 {"en": "...", "cn": "..."}
+  const jsonPhraseRegex = /\{\s*"en"\s*:\s*"([^"]+)"\s*,\s*"cn"\s*:\s*"([^"]+)"\s*\}/g
+  let jsonMatch: RegExpExecArray | null
+  while ((jsonMatch = jsonPhraseRegex.exec(text)) !== null) {
+    addPhrase(jsonMatch[1], jsonMatch[2])
+  }
+
+  // 2. 匹配 Markdown 列表：- mango juice 芒果汁 或 1. mango tree: 芒果树
+  const lineRegex = /(?:^|\n)\s*(?:[-*•]|\d+\.)\s*([a-zA-Z][a-zA-Z\s'/-]+?)\s*(?:[:：\-—–]\s*|\s+)([^\x00-\x7F][^\n\r]*)/g
+  let lineMatch: RegExpExecArray | null
+  while ((lineMatch = lineRegex.exec(text)) !== null) {
+    const enPart = lineMatch[1].trim()
+    const cnPart = lineMatch[2].trim()
+    if (enPart.length >= 2 && cnPart.length >= 1) {
+      addPhrase(enPart, cnPart)
+    }
+  }
+
+  return phrases
 }
 
 export class AiDictionaryLookupError extends Error {
@@ -311,8 +349,40 @@ function parseDictionaryPayload(json: string): RawDictEntry | null {
   return null
 }
 
+function tryParseOrRepair(rawCandidate: string): RawDictEntry | null {
+  if (!rawCandidate || !rawCandidate.trim()) return null
+
+  // 1. 尝试直接解析
+  try {
+    const direct = parseDictionaryPayload(rawCandidate)
+    if (direct) return direct
+  } catch (err) {
+    if (err instanceof AiDictionaryLookupError) throw err
+  }
+
+  // 2. 尝试清洗占位符与微小语法瑕疵后解析
+  const sanitized = sanitizeJsonPlaceholders(rawCandidate)
+  try {
+    const cleanParsed = parseDictionaryPayload(sanitized)
+    if (cleanParsed) return cleanParsed
+  } catch (err) {
+    if (err instanceof AiDictionaryLookupError) throw err
+  }
+
+  // 3. 尝试截断补全与语法修复后解析
+  try {
+    const repaired = repairTruncatedJson(sanitized)
+    const repParsed = parseDictionaryPayload(repaired)
+    if (repParsed) return repParsed
+  } catch (err) {
+    if (err instanceof AiDictionaryLookupError) throw err
+  }
+
+  return null
+}
+
 /**
- * 从大模型回复中提取并解析 JSON 对象（带抗截断与思考标签过滤的高鲁棒性解析器）
+ * 从大模型回复中提取并解析 JSON 对象（带抗截断、推理思考草稿过滤与智能短语抢救的高鲁棒性解析器）
  */
 export function extractJsonFromAiReply(reply: string): RawDictEntry {
   if (!reply || !reply.trim()) {
@@ -324,56 +394,82 @@ export function extractJsonFromAiReply(reply: string): RawDictEntry {
   // 1. 彻底剔除 <think> ... </think> 标签（兼容 DeepSeek R1 等推理思考模型）
   cleaned = cleaned.replace(/<think>[\s\S]*?(?:<\/think>|$)/gi, '').trim()
 
-  // 2. 剔除 markdown ```json ... ``` 标记（即使尾部 ``` 被截断也能匹配）
-  if (cleaned.includes('```')) {
-    const match = cleaned.match(/```(?:json)?\s*([\s\S]*?)(?:```|$)/i)
-    if (match && match[1]) {
-      cleaned = match[1].trim()
+  const candidates: string[] = []
+
+  // 2. 优先从 markdown ```json ... ``` 代码块中提取（逆序，优先采纳最后一个成型代码块）
+  const codeBlockRegex = /```(?:json)?\s*([\s\S]*?)(?:```|$)/gi
+  let cbMatch: RegExpExecArray | null
+  const blocks: string[] = []
+  while ((cbMatch = codeBlockRegex.exec(cleaned)) !== null) {
+    if (cbMatch[1]?.trim()) {
+      blocks.push(cbMatch[1].trim())
+    }
+  }
+  for (let i = blocks.length - 1; i >= 0; i--) {
+    const block = blocks[i]
+    if (/"name"\s*:/i.test(block) || /"error"\s*:/i.test(block)) {
+      candidates.push(block)
     }
   }
 
-  // 3. 首选方案：寻找包含 "name" 单词根对象的最外层完整 JSON 对象
-  const outermost = findWordJsonObject(cleaned)
-  if (outermost) {
-    try {
-      const parsed = parseDictionaryPayload(outermost)
-      if (parsed) return parsed
-    } catch (error) {
-      if (error instanceof AiDictionaryLookupError) throw error
-      // 若提取的最外层包含微小语法问题，继续尝试修复
+  // 3. 从所有 "name": 出现位置向前寻找包裹对象的 '{'
+  const nameRegex = /"name"\s*:/gi
+  const nameIndices: number[] = []
+  let nMatch: RegExpExecArray | null
+  while ((nMatch = nameRegex.exec(cleaned)) !== null) {
+    nameIndices.push(nMatch.index)
+  }
+
+  // 逆序查找（越靠后的 name 越可能是最终输出，而非前期思考草稿）
+  for (let i = nameIndices.length - 1; i >= 0; i--) {
+    const idx = nameIndices[i]
+    let braceIndex = -1
+    for (let j = idx; j >= 0; j--) {
+      if (cleaned[j] === '{') {
+        braceIndex = j
+        break
+      }
+    }
+    if (braceIndex !== -1) {
+      const sliceText = cleaned.slice(braceIndex)
+      const outermost = extractOutermostJsonObject(sliceText)
+      if (outermost) {
+        candidates.push(outermost)
+      }
+      candidates.push(sliceText)
     }
   }
 
-
-  // 4. 次选方案：寻找第一个 { 开始尝试直接解析
+  // 4. 兜底首个 '{' 开始的切片（用于处理无 "name" 字段的 error 对象或特殊返回）
   const firstBrace = cleaned.indexOf('{')
-  if (firstBrace === -1) {
-    throw new Error('模型返回内容中未检测到合法的 JSON 格式')
+  if (firstBrace !== -1) {
+    const sliceText = cleaned.slice(firstBrace)
+    const outermost = extractOutermostJsonObject(sliceText)
+    if (outermost) candidates.push(outermost)
+    candidates.push(sliceText)
   }
 
-  const candidateJson = cleaned.slice(firstBrace)
-
-  // 尝试直接解析
-  try {
-    const parsed = parseDictionaryPayload(candidateJson)
-    if (parsed) return parsed
-  } catch (error) {
-    if (error instanceof AiDictionaryLookupError) throw error
-    // 5. 兜底容错：模型输出在末尾被截断，执行智能语法修复
+  // 逐一尝试候选片段
+  for (const cand of candidates) {
     try {
-      const repaired = repairTruncatedJson(candidateJson)
-      const parsed = parseDictionaryPayload(repaired)
+      const parsed = tryParseOrRepair(cand)
       if (parsed) {
-        console.warn('AI dictionary reply was truncated by token limit and successfully auto-repaired.')
+        // 成功提取！若 phrases 缺失或为空，从原始回复周围文本中抢救短语列表
+        if (!parsed.phrases || parsed.phrases.length === 0) {
+          const extracted = extractPhrasesFromText(reply)
+          if (extracted.length > 0) {
+            parsed.phrases = extracted
+          }
+        }
         return parsed
       }
-    } catch (repairError) {
-      if (repairError instanceof AiDictionaryLookupError) throw repairError
-      console.error('Failed to repair truncated AI JSON:', candidateJson)
-      throw new Error('模型生成的词典数据格式不完整或受截断，请重试或检查 API 配置。')
+    } catch (err) {
+      if (err instanceof AiDictionaryLookupError) throw err
     }
   }
 
-  throw new Error('模型返回数据缺少必要的单词字段 name')
+  console.error('Failed to repair truncated AI JSON:', cleaned.slice(0, 500))
+  throw new Error('模型生成的词典数据格式不完整或受截断，请重试或检查 API 配置。')
 }
+
 

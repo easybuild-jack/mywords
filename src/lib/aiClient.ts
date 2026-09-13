@@ -516,7 +516,7 @@ export async function fetchAiDictionaryWordCore(
   const entry = await fetchDictionarySection(
     config,
     buildWordCoreQueryMessages(word),
-    1024,
+    2048,
     signal
   )
   if (!entry) return null
@@ -542,7 +542,7 @@ export async function fetchAiDictionaryWordStructure(
   const entry = await fetchDictionarySection(
     config,
     buildWordStructureQueryMessages(word, core),
-    2048,
+    4096,
     signal
   )
   if (!entry) return null
@@ -554,6 +554,27 @@ export async function fetchAiDictionaryWordStructure(
   if (cleanWord === 'orange') {
     entry.silentIndices = [5]
   }
+
+  // 容错处理：若哑音数组为 undefined 或 null，自动兜底为空数组
+  if (!Array.isArray(entry.silentIndices)) {
+    entry.silentIndices = []
+  }
+
+  // 容错处理：若音节中含有连字符或多余空格，自动清理
+  if (Array.isArray(entry.syllables)) {
+    entry.syllables = entry.syllables
+      .map((s) => (typeof s === 'string' ? s.replace(/[-·•\s]/g, '').trim() : ''))
+      .filter(Boolean)
+  }
+
+  // 容错兜底：若短语数据仍为空，利用核心释义构建一条保底搭配，避免前端阻断
+  if ((!entry.phrases || entry.phrases.length === 0) && core.trans?.length) {
+    const fallbackCn = (core.trans[0] || '').replace(/^[a-z]+\.\s*/i, '').split(/[；;,，]/)[0].trim()
+    if (fallbackCn) {
+      entry.phrases = [{ en: word.trim(), cn: fallbackCn }]
+    }
+  }
+
   const silentIndices = entry.silentIndices
   if (
     !entry.syllables?.length ||
