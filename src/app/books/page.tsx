@@ -591,7 +591,7 @@ function BooksHubContent() {
           )}
         </div>
 
-        <div className={`min-h-[400px] lg:h-[400px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 content-start overflow-y-auto pr-1 transition-all duration-200 ${
+        <div className={`min-h-[400px] lg:h-[400px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 content-start overflow-y-auto p-1 -m-1 transition-all duration-200 ${
           isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
         }`}>
           {currentUnits.map((idx) => {
@@ -616,14 +616,14 @@ function BooksHubContent() {
               <div
                 key={idx}
                 onClick={() => handleSelectUnit(idx)}
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all flex flex-col justify-between group h-[124px] ${
+                className={`p-3.5 sm:p-4 rounded-xl border transition-all duration-200 ease-out flex flex-col justify-between group h-[124px] transform-gpu hover:z-10 hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-md ${
                   isLoadingThisUnit
                     ? 'border-primary bg-primary/20 ring-2 ring-primary/40 shadow-[0_0_20px_rgba(var(--primary-rgb)/0.3)] animate-pulse cursor-wait scale-[1.02]'
                     : isCurrent
-                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70 cursor-pointer'
+                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70 cursor-pointer hover:border-accent hover:shadow-[0_4px_16px_rgba(var(--accent-rgb,234_179_8)/0.15)]'
                     : isMastered
-                    ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05] cursor-pointer'
-                    : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05] cursor-pointer'
+                    ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05] hover:shadow-[0_4px_16px_rgba(var(--primary-rgb)/0.12)] cursor-pointer'
+                    : 'border-white/10 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.05] hover:shadow-sm cursor-pointer'
                 } ${loadingUnitIndex !== null && !isLoadingThisUnit ? 'opacity-40 pointer-events-none' : ''}`}
               >
                 {/* 顶部序号与状态标签 */}
