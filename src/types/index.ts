@@ -141,6 +141,7 @@ export interface UnitProgressRecord {
   currentWordIndex: number;
   completedWordIds: string[];
   retryWordIds: string[];
+  isRetrying?: boolean;                         // 是否已进入单元末尾的错词重考阶段
   startedAt?: number;
   lastStudiedAt?: number;
   completedAt?: number;

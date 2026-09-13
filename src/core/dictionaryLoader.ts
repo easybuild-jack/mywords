@@ -47,6 +47,11 @@ export const OFFICIAL_BOOK_UNITS_FILE_MAP: Record<string, string> = {
   'book_basewords': '/dicts/basewords.units.json',
 }
 
+/** 没有语义目录的词库也需要稳定单元 ID，供进度表关联。 */
+export function buildFixedUnitId(bookId: string, unitIndex: number): string {
+  return `${bookId}_unit_${Math.max(0, unitIndex)}`
+}
+
 function formatPhonetic(rawPhone?: string): string | undefined {
   if (!rawPhone) return undefined
   const cleaned = rawPhone.replace(/^\/+|\/+$/g, '').trim()
@@ -431,6 +436,34 @@ class DictionaryLoader {
    */
   public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
     return this.fetchBookRawWords(bookId)
+  }
+
+  /**
+   * 返回当前词库定义下每个单元的准确成员 ID，用于校准内容变更后的历史进度。
+   */
+  public async loadBookUnitWordIds(bookId: string, unitSize: number = 20): Promise<Record<string, string[]>> {
+    const allRawWords = await this.fetchBookRawWords(bookId)
+    if (!allRawWords.length) return {}
+
+    const units = await this.loadBookUnits(bookId)
+    if (units.length) {
+      const result = Object.fromEntries(units.map((unit) => [unit.id, [] as string[]]))
+      for (const entry of allRawWords) {
+        if (entry.unitId && result[entry.unitId]) {
+          result[entry.unitId].push(this.buildWordItemFromEntry(entry).id)
+        }
+      }
+      return result
+    }
+
+    const result: Record<string, string[]> = {}
+    for (let start = 0; start < allRawWords.length; start += unitSize) {
+      const unitIndex = Math.floor(start / unitSize)
+      result[buildFixedUnitId(bookId, unitIndex)] = allRawWords
+        .slice(start, start + unitSize)
+        .map((entry) => this.buildWordItemFromEntry(entry).id)
+    }
+    return result
   }
 
   /**

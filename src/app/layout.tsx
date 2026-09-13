@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import './globals.css'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { RouteProgressBar } from '@/components/layout/RouteProgressBar'
@@ -28,7 +29,9 @@ export default function RootLayout({
     <html lang="zh-CN" className="dark">
       <body className="min-h-screen bg-background text-foreground flex antialiased overflow-hidden">
         {/* 全局顶部路由流光进度条 */}
-        <RouteProgressBar />
+        <Suspense fallback={null}>
+          <RouteProgressBar />
+        </Suspense>
 
         {/* 左侧全局常驻侧边栏 */}
         <Sidebar />

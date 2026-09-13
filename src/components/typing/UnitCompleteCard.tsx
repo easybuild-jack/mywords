@@ -21,7 +21,9 @@ export function UnitCompleteCard() {
   const {
     mode,
     currentBookId,
+    currentBook,
     currentUnitIndex,
+    unitSize,
     currentUnitMeta,
     isErrorPracticeActive,
     currentLoadedWords,
@@ -31,8 +33,21 @@ export function UnitCompleteCard() {
     setUnitIndex,
   } = useWorkspaceStore()
 
-  // 带语义单元目录的词库在最后一个单元时不再有「下一单元」，避免点了原地重载
-  const unitCount = dictionaryLoader.getCachedBookUnits(currentBookId)?.length ?? 0
+  const fallbackUnitCount = Math.max(1, Math.ceil(currentBook.totalWords / unitSize))
+  const [unitCount, setUnitCount] = React.useState(
+    dictionaryLoader.getCachedBookUnits(currentBookId)?.length ?? fallbackUnitCount
+  )
+
+  React.useEffect(() => {
+    let cancelled = false
+    dictionaryLoader.getBookUnitCount(currentBookId).then((count) => {
+      if (!cancelled) setUnitCount(count > 0 ? count : fallbackUnitCount)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [currentBookId, fallbackUnitCount])
+
   const isLastUnit = unitCount > 0 && currentUnitIndex >= unitCount - 1
 
   React.useEffect(() => {

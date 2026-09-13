@@ -26,7 +26,7 @@ export function PracticeStageFrame({ children }: { children: React.ReactNode }) 
       </div>
 
       <button
-        onClick={nextWord}
+        onClick={() => nextWord()}
         className="shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 transition-all cursor-pointer"
         title="下一词 (→)"
       >

@@ -428,6 +428,97 @@ export async function getUnitProgressRecord(
   }
 }
 
+/** 词库内容更新后，用当前单元成员修剪历史进度并重新计算完成状态。 */
+export async function reconcileUnitProgressRecord(params: {
+  bookId: string
+  unitId: string
+  mode: PracticeMode
+  unitWordIds: string[]
+}): Promise<UnitProgressRecord | undefined> {
+  const { bookId, unitId, mode, unitWordIds } = params
+  if (!unitId || unitWordIds.length === 0 || typeof window === 'undefined') return undefined
+
+  try {
+    return await db.transaction('rw', db.unitProgress, async () => {
+      const existing = await db.unitProgress.get([unitId, mode])
+      if (!existing) return undefined
+
+      const currentIds = new Set(unitWordIds)
+      const completedWordIds = existing.completedWordIds.filter((id) => currentIds.has(id))
+      const retryWordIds = existing.retryWordIds.filter((id) => currentIds.has(id))
+      const completed = new Set(completedWordIds)
+      const isCompleted =
+        retryWordIds.length === 0 && unitWordIds.every((id) => completed.has(id))
+      const record: UnitProgressRecord = {
+        ...existing,
+        bookId,
+        status: isCompleted ? 'completed' : 'in_progress',
+        currentWordIndex: Math.min(existing.currentWordIndex, unitWordIds.length - 1),
+        completedWordIds,
+        retryWordIds,
+        isRetrying: !isCompleted && retryWordIds.length > 0 && existing.isRetrying === true,
+        completedAt: isCompleted ? existing.completedAt : undefined,
+      }
+      await db.unitProgress.put(record)
+      return record
+    })
+  } catch (err) {
+    console.error('Failed to reconcile unit progress:', err)
+    return undefined
+  }
+}
+
+/** 读取一本词库在指定模式下的全部真实单元进度。 */
+export async function getBookUnitProgressRecords(
+  bookId: string,
+  mode: PracticeMode
+): Promise<UnitProgressRecord[]> {
+  if (!bookId || typeof window === 'undefined') return []
+  try {
+    const records = await db.unitProgress.where('bookId').equals(bookId).toArray()
+    return records.filter((record) => record.mode === mode)
+  } catch (err) {
+    console.error('Failed to get book unit progress:', err)
+    return []
+  }
+}
+
+/** 将默写出错或偷看的单词放回本单元待重考队列。 */
+export async function markUnitWordForRetry(params: {
+  bookId: string
+  unitId: string
+  mode: PracticeMode
+  wordId: string
+  wordIndex: number
+}): Promise<UnitProgressRecord | null> {
+  const { bookId, unitId, mode, wordId, wordIndex } = params
+  if (!unitId || !wordId || typeof window === 'undefined') return null
+
+  try {
+    return await db.transaction('rw', db.unitProgress, async () => {
+      const existing = await db.unitProgress.get([unitId, mode])
+      const now = Date.now()
+      const record: UnitProgressRecord = {
+        unitId,
+        bookId,
+        mode,
+        status: 'in_progress',
+        currentWordIndex: Math.max(existing?.currentWordIndex ?? 0, wordIndex),
+        completedWordIds: (existing?.completedWordIds ?? []).filter((id) => id !== wordId),
+        retryWordIds: Array.from(new Set([...(existing?.retryWordIds ?? []), wordId])),
+        isRetrying: existing?.isRetrying ?? false,
+        startedAt: existing?.startedAt ?? now,
+        lastStudiedAt: now,
+      }
+      await db.unitProgress.put(record)
+      return record
+    })
+  } catch (err) {
+    console.error('Failed to mark unit word for retry:', err)
+    return null
+  }
+}
+
 /**
  * 标记单元内的一个单词「真正被敲完」。
  *
@@ -444,24 +535,43 @@ export async function markUnitWordCompleted(params: {
   wordId: string
   /** 该词在单元内的下标，用来推进断点 */
   wordIndex: number
-  /** 单元总词数，用来判断整个单元是否已经全部敲完 */
-  totalWords: number
+  /** 当前单元的实际词 ID，用集合覆盖而非历史计数判断完成 */
+  unitWordIds: string[]
+  /** 首轮出错的词暂不计完成，留到单元末尾重考 */
+  deferForRetry?: boolean
 }): Promise<UnitProgressRecord | null> {
-  const { bookId, unitId, mode, wordId, wordIndex, totalWords } = params
-  if (!unitId || !wordId || totalWords <= 0 || typeof window === 'undefined') return null
+  const { bookId, unitId, mode, wordId, wordIndex, unitWordIds, deferForRetry = false } = params
+  if (!unitId || !wordId || unitWordIds.length === 0 || typeof window === 'undefined') return null
 
   try {
     return await db.transaction('rw', db.unitProgress, async () => {
       const existing = await db.unitProgress.get([unitId, mode])
       const now = Date.now()
+      const currentWordIds = new Set(unitWordIds)
+      const completed = new Set(
+        (existing?.completedWordIds ?? []).filter((id) => currentWordIds.has(id))
+      )
+      const retry = new Set(
+        (existing?.retryWordIds ?? []).filter((id) => currentWordIds.has(id))
+      )
 
-      const completedBefore = existing?.completedWordIds ?? []
-      const completedWordIds = completedBefore.includes(wordId)
-        ? completedBefore
-        : [...completedBefore, wordId]
+      if (deferForRetry) {
+        completed.delete(wordId)
+        retry.add(wordId)
+      } else {
+        completed.add(wordId)
+        retry.delete(wordId)
+      }
 
-      const isUnitCompleted = completedWordIds.length >= totalWords
-      const nextWordIndex = Math.min(wordIndex + 1, totalWords - 1)
+      const completedWordIds = Array.from(completed)
+      const retryWordIds = Array.from(retry)
+      const isUnitCompleted =
+        retryWordIds.length === 0 && unitWordIds.every((id) => completed.has(id))
+      const nextWordIndex = Math.min(wordIndex + 1, unitWordIds.length - 1)
+      const isRetrying =
+        !isUnitCompleted &&
+        (existing?.isRetrying === true ||
+          (wordIndex >= unitWordIds.length - 1 && retryWordIds.length > 0))
 
       const record: UnitProgressRecord = {
         unitId,
@@ -471,7 +581,8 @@ export async function markUnitWordCompleted(params: {
         // 断点只前进不后退：回头重练前面的词不会把存档拉回去
         currentWordIndex: Math.max(existing?.currentWordIndex ?? 0, nextWordIndex),
         completedWordIds,
-        retryWordIds: (existing?.retryWordIds ?? []).filter((id) => id !== wordId),
+        retryWordIds,
+        isRetrying,
         startedAt: existing?.startedAt ?? now,
         lastStudiedAt: now,
         completedAt: isUnitCompleted ? existing?.completedAt ?? now : undefined,

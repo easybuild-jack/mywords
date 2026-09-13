@@ -5,10 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { BookOpen, Upload, Search, X, CheckCircle2, Play, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_BOOKS } from '@/resources/books'
-import { db } from '@/db'
-import { dictionaryLoader } from '@/core/dictionaryLoader'
+import { db, getBookUnitProgressRecords, reconcileUnitProgressRecord } from '@/db'
+import { buildFixedUnitId, dictionaryLoader } from '@/core/dictionaryLoader'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
-import type { DictUnit, VocabularyBook, PracticeMode } from '@/types'
+import type { DictUnit, UnitProgressRecord, VocabularyBook, PracticeMode } from '@/types'
 
 function BooksHubContent() {
   const router = useRouter()
@@ -56,7 +56,15 @@ function BooksHubContent() {
   const [loadingUnitIndex, setLoadingUnitIndex] = useState<number | null>(null)
   const [isPreviewSwitching, setIsPreviewSwitching] = useState(false)
   /** 当前浏览词库的语义单元目录；为 null 表示该词库按固定词数切章 */
-  const [activeUnits, setActiveUnits] = useState<DictUnit[] | null>(null)
+  const [unitCatalog, setUnitCatalog] = useState<{ bookId: string; units: DictUnit[] | null }>({
+    bookId: '',
+    units: null,
+  })
+  const [progressSnapshot, setProgressSnapshot] = useState<{
+    key: string
+    progressById: Record<string, UnitProgressRecord>
+    wordCountById: Record<string, number>
+  }>({ key: '', progressById: {}, wordCountById: {} })
 
   // 当进入词库管理页或全局正在学习的词库就绪时，默认展示当前选中的词库
   useEffect(() => {
@@ -99,6 +107,12 @@ function BooksHubContent() {
 
   // 当前正在浏览/查看的词库对象（优先使用 previewBookId）
   const activeBook = allBooks.find((b) => b.id === previewBookId) || currentBook || BUILTIN_BOOKS[0]
+  const activeUnits = unitCatalog.bookId === activeBook.id ? unitCatalog.units : null
+  const progressSnapshotKey = `${activeBook.id}|${progressMode}`
+  const unitProgressById =
+    progressSnapshot.key === progressSnapshotKey ? progressSnapshot.progressById : {}
+  const unitWordCountById =
+    progressSnapshot.key === progressSnapshotKey ? progressSnapshot.wordCountById : {}
 
   // 拉取当前浏览词库的语义单元目录（只有基础词汇这类按词义归类的词库才有）
   useEffect(() => {
@@ -106,15 +120,79 @@ function BooksHubContent() {
     dictionaryLoader
       .loadBookUnits(activeBook.id)
       .then((units) => {
-        if (!cancelled) setActiveUnits(units.length ? units : null)
+        if (!cancelled) setUnitCatalog({ bookId: activeBook.id, units: units.length ? units : null })
       })
       .catch(() => {
-        if (!cancelled) setActiveUnits(null)
+        if (!cancelled) setUnitCatalog({ bookId: activeBook.id, units: null })
       })
     return () => {
       cancelled = true
     }
   }, [activeBook.id])
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadAccurateProgress() {
+      const unitSize = activeBook.unitSize || 20
+      const [records, builtinMembership] = await Promise.all([
+        getBookUnitProgressRecords(activeBook.id, progressMode),
+        activeBook.isCustom
+          ? Promise.resolve<Record<string, string[]>>({})
+          : dictionaryLoader.loadBookUnitWordIds(activeBook.id, unitSize),
+      ])
+
+      const membership = activeBook.isCustom
+        ? Object.fromEntries(
+            Array.from(
+              { length: Math.ceil((activeBook.words?.length ?? 0) / unitSize) },
+              (_, index) => [
+                buildFixedUnitId(activeBook.id, index),
+                (activeBook.words ?? []).slice(index * unitSize, (index + 1) * unitSize).map((word) => word.id),
+              ]
+            )
+          )
+        : builtinMembership
+
+      const reconciled = await Promise.all(
+        records.map((record) => {
+          const currentWordIds = membership[record.unitId]
+          return currentWordIds?.length
+            ? reconcileUnitProgressRecord({
+                bookId: activeBook.id,
+                unitId: record.unitId,
+                mode: progressMode,
+                unitWordIds: currentWordIds,
+              })
+            : Promise.resolve(undefined)
+        })
+      )
+
+      if (cancelled) return
+      setProgressSnapshot({
+        key: `${activeBook.id}|${progressMode}`,
+        wordCountById: Object.fromEntries(
+          Object.entries(membership).map(([unitId, wordIds]) => [unitId, wordIds.length])
+        ),
+        progressById: Object.fromEntries(
+          reconciled
+            .filter((record): record is UnitProgressRecord => Boolean(record))
+            .map((record) => [record.unitId, record])
+        ),
+      })
+    }
+    loadAccurateProgress().catch(() => {
+      if (!cancelled) {
+        setProgressSnapshot({
+          key: `${activeBook.id}|${progressMode}`,
+          progressById: {},
+          wordCountById: {},
+        })
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [activeBook.id, activeBook.isCustom, activeBook.totalWords, activeBook.unitSize, activeBook.words, progressMode])
 
   // 该词库在当前对应模式（学习 vs 默写）下的单元进度
   const rawModeUnit = getBookModeUnit(activeBook.id, progressMode)
@@ -134,8 +212,13 @@ function BooksHubContent() {
     (_, i) => unitPage * unitsPerPage + i
   )
 
-  // 进度百分比计算 (已完成单元比例)
-  const masteredUnits = Math.min(totalUnits, activeModeUnit)
+  // 完成度只认 unitProgress；当前浏览到第几个单元不代表前面的单元已经完成。
+  const masteredUnits = Array.from({ length: totalUnits }, (_, index) => {
+    const unitMeta = activeUnits?.[index]
+    const unitId = unitMeta?.id ?? buildFixedUnitId(activeBook.id, index)
+    const progress = unitProgressById[unitId]
+    return progress?.status === 'completed'
+  }).filter(Boolean).length
   const progressPercent = totalUnits > 0 ? Math.min(100, Math.max(0, Math.round((masteredUnits / totalUnits) * 100))) : 0
 
   // SVG 进度环参数 (r=38, 周长约 238.76)
@@ -358,10 +441,22 @@ function BooksHubContent() {
           isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
         }`}>
           {currentUnits.map((idx) => {
-            const isMastered = idx < activeModeUnit
+            const unitMeta = activeUnits?.[idx]
+            const unitId = unitMeta?.id ?? buildFixedUnitId(activeBook.id, idx)
+            const unitProgress = unitProgressById[unitId]
+            const expectedCount =
+              unitWordCountById[unitId] ??
+              unitMeta?.wordCount ??
+              Math.min(unitSize, activeBook.totalWords - idx * unitSize)
+            const isMastered = unitProgress?.status === 'completed'
+            const isStarted = unitProgress?.status === 'in_progress'
             const isCurrent = idx === activeModeUnit
             const isLoadingThisUnit = loadingUnitIndex === idx
-            const unitMeta = activeUnits?.[idx]
+            const unitProgressPercent = isMastered
+              ? 100
+              : unitProgress
+                ? Math.min(99, Math.round((unitProgress.completedWordIds.length / Math.max(1, expectedCount)) * 100))
+                : 0
 
             return (
               <div
@@ -387,14 +482,14 @@ function BooksHubContent() {
                       <Loader2 className="size-2.5 animate-spin text-primary" />
                       准备中
                     </span>
-                  ) : isCurrent ? (
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none shrink-0">
-                      进行中
-                    </span>
                   ) : isMastered ? (
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary font-bold border border-primary/25 flex items-center gap-1 leading-none shrink-0">
                       <CheckCircle2 className="size-3 text-primary" />
                       已完成
+                    </span>
+                  ) : isCurrent || isStarted ? (
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none shrink-0">
+                      进行中
                     </span>
                   ) : (
                     <span className="text-[10px] font-mono text-muted-foreground/60 leading-none shrink-0">
@@ -426,14 +521,18 @@ function BooksHubContent() {
                       <Loader2 className="size-3 animate-spin text-primary shrink-0" />
                       <span>载入中...</span>
                     </span>
+                  ) : isMastered ? (
+                    <span className="text-[10px] font-mono text-primary/80 font-semibold">
+                      100%
+                    </span>
+                  ) : isStarted ? (
+                    <span className="text-[10px] font-mono text-accent font-semibold">
+                      {unitProgressPercent}%
+                    </span>
                   ) : isCurrent ? (
                     <span className="text-[11px] font-bold text-accent flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
                       <Play className="size-2.5 fill-current" />
                       进入
-                    </span>
-                  ) : isMastered ? (
-                    <span className="text-[10px] font-mono text-primary/80 font-semibold">
-                      100%
                     </span>
                   ) : (
                     <span className="text-[11px] text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors">

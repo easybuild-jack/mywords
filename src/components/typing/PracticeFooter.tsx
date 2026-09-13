@@ -129,7 +129,7 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
               </button>
               <button
                 type="button"
-                onClick={nextWord}
+                onClick={() => nextWord()}
                 title={`下一个单词 (${formatShortcutDisplay(shortcuts.nextWord)})`}
                 className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
               >

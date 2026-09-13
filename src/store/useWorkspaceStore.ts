@@ -4,9 +4,9 @@ import type { DictUnit, DictationCueMode, PracticeMode, WordItem, VocabularyBook
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { BUILTIN_ROOTS, ROOT_DATA_MAP, type RootTabType } from '@/resources/roots'
-import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook, getUnitProgressRecord, markUnitWordCompleted, clearUnitProgress } from '@/db'
+import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook, reconcileUnitProgressRecord, markUnitWordCompleted, markUnitWordForRetry, clearUnitProgress } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
-import { dictionaryLoader } from '@/core/dictionaryLoader'
+import { buildFixedUnitId, dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 import { validatePhonetic, validateMeaning } from '@/lib/dictationValidator'
 import { isCurrentAuthor, getSyncToken } from '@/lib/permissions'
@@ -28,16 +28,26 @@ interface PracticeCursor {
   unitIndex: number
   activeWordIndex: number
   isUnitFinished: boolean
+  hasLiveState: boolean
+  retryWordIds: string[]
+  isUnitRetrying: boolean
 }
 
-const EMPTY_CURSOR: PracticeCursor = { unitIndex: 0, activeWordIndex: 0, isUnitFinished: false }
+const EMPTY_CURSOR: PracticeCursor = {
+  unitIndex: 0,
+  activeWordIndex: 0,
+  isUnitFinished: false,
+  hasLiveState: false,
+  retryWordIds: [],
+  isUnitRetrying: false,
+}
 
 function createFreshCursors(initialUnits?: Partial<Record<PracticeMode, number>>): Record<PracticeCursorKey, PracticeCursor> {
   return {
-    learn: { unitIndex: initialUnits?.learn ?? 0, activeWordIndex: 0, isUnitFinished: false },
-    dictation: { unitIndex: initialUnits?.dictation ?? 0, activeWordIndex: 0, isUnitFinished: false },
-    phonetic: { unitIndex: initialUnits?.phonetic ?? 0, activeWordIndex: 0, isUnitFinished: false },
-    error: { unitIndex: 0, activeWordIndex: 0, isUnitFinished: false },
+    learn: { ...EMPTY_CURSOR, unitIndex: initialUnits?.learn ?? 0 },
+    dictation: { ...EMPTY_CURSOR, unitIndex: initialUnits?.dictation ?? 0 },
+    phonetic: { ...EMPTY_CURSOR, unitIndex: initialUnits?.phonetic ?? 0 },
+    error: { ...EMPTY_CURSOR },
   }
 }
 
@@ -63,8 +73,16 @@ async function resolveUnitResumeState(params: {
   words: WordItem[]
   liveIndex: number
   liveFinished: boolean
+  liveRetryWords: WordItem[]
+  liveIsRetrying: boolean
   loadedUnitKey: string | null
-}): Promise<{ activeWordIndex: number; isUnitFinished: boolean; loadedUnitKey: string | null } | null> {
+}): Promise<{
+  activeWordIndex: number
+  isUnitFinished: boolean
+  retryWordQueue: WordItem[]
+  isUnitRetrying: boolean
+  loadedUnitKey: string | null
+} | null> {
   const { bookId, mode, unitMeta, words } = params
   if (!unitMeta || words.length === 0) return null
 
@@ -76,41 +94,96 @@ async function resolveUnitResumeState(params: {
     return {
       activeWordIndex: clampIndex(params.liveIndex),
       isUnitFinished: params.liveFinished,
+      retryWordQueue: params.liveRetryWords,
+      isUnitRetrying: params.liveIsRetrying,
       loadedUnitKey: unitKey,
     }
   }
 
-  const record = await getUnitProgressRecord(unitMeta.id, mode)
-  if (!record?.completedWordIds?.length) {
-    return { activeWordIndex: 0, isUnitFinished: false, loadedUnitKey: unitKey }
+  const record = await reconcileUnitProgressRecord({
+    bookId,
+    unitId: unitMeta.id,
+    mode,
+    unitWordIds: words.map((word) => word.id),
+  })
+  if (!record) {
+    return {
+      activeWordIndex: 0,
+      isUnitFinished: false,
+      retryWordQueue: [],
+      isUnitRetrying: false,
+      loadedUnitKey: unitKey,
+    }
   }
 
-  const firstPending = words.findIndex((word) => !record.completedWordIds.includes(word.id))
+  const completedIds = new Set(record.completedWordIds)
+  const retryIds = new Set(record.retryWordIds)
+  const retryWordQueue = words.filter((word) => retryIds.has(word.id))
+  const firstPending = words.findIndex((word) => !completedIds.has(word.id))
   // 单元里的词确实全被敲完过：直接落在结算卡上，想再练一遍要点「重做本单元」
   if (firstPending === -1) {
-    return { activeWordIndex: words.length - 1, isUnitFinished: true, loadedUnitKey: unitKey }
+    return {
+      activeWordIndex: words.length - 1,
+      isUnitFinished: true,
+      retryWordQueue: [],
+      isUnitRetrying: false,
+      loadedUnitKey: unitKey,
+    }
   }
 
-  return { activeWordIndex: firstPending, isUnitFinished: false, loadedUnitKey: unitKey }
+  const savedIndex = clampIndex(record.currentWordIndex)
+  const isUnitRetrying = record.isRetrying === true && retryWordQueue.length > 0
+  const activeWordIndex = isUnitRetrying
+    ? words.findIndex((word) => retryIds.has(word.id))
+    : retryWordQueue.length > 0
+      ? savedIndex
+      : firstPending
+
+  return {
+    activeWordIndex: activeWordIndex >= 0 ? activeWordIndex : firstPending,
+    isUnitFinished: false,
+    retryWordQueue,
+    isUnitRetrying,
+    loadedUnitKey: unitKey,
+  }
 }
 
 /**
  * 把「敲完一个词」记进单元断点存档。
  *
- * 错词攻坚、自定义词库、以及还没配语义单元的官方词库都没有单元可记，直接跳过。
- * 不 await：练词的节奏不该等一次 IndexedDB 写入。
+ * 错词攻坚不属于常规单元，直接跳过；其他词库都有语义或固定切片单元 ID。
  */
-function persistCompletedWord(get: () => WorkspaceState, wordId: string, wordIndex: number) {
-  const { isErrorPracticeActive, currentBookId, currentUnitMeta, mode, currentLoadedWords } = get()
-  if (isErrorPracticeActive || !currentUnitMeta) return
+async function persistCompletedWord(get: () => WorkspaceState, wordId: string, wordIndex: number) {
+  const state = get()
+  const { isErrorPracticeActive, currentBookId, currentUnitMeta, mode, currentLoadedWords } = state
+  if (isErrorPracticeActive || !currentUnitMeta) return null
 
-  void markUnitWordCompleted({
+  const deferForRetry =
+    mode === 'dictation' &&
+    !state.isUnitRetrying &&
+    state.retryWordQueue.some((word) => word.id === wordId)
+  const record = await markUnitWordCompleted({
     bookId: currentBookId,
     unitId: currentUnitMeta.id,
     mode,
     wordId,
     wordIndex,
-    totalWords: currentLoadedWords.length,
+    unitWordIds: currentLoadedWords.map((word) => word.id),
+    deferForRetry,
+  })
+  // 即使 IndexedDB 写入失败，也保留本次本地推进所需的重考语义。
+  return { record, deferForRetry }
+}
+
+function persistRetryWord(get: () => WorkspaceState, wordId: string, wordIndex: number) {
+  const { isErrorPracticeActive, currentBookId, currentUnitMeta, mode } = get()
+  if (isErrorPracticeActive || !currentUnitMeta || mode !== 'dictation') return
+  void markUnitWordForRetry({
+    bookId: currentBookId,
+    unitId: currentUnitMeta.id,
+    mode,
+    wordId,
+    wordIndex,
   })
 }
 
@@ -123,6 +196,8 @@ const DEFAULT_LOOP_COUNTS: Record<PracticeMode, 1 | 2 | 3 | 5> = {
 
 /** 校验失败的抖动提示持续时长 */
 const VALIDATION_ERROR_FLASH_MS = 900
+let latestUnitLoadSequence = 0
+let latestPracticeActionSequence = 0
 
 /** 切词与切页时都要清掉的默写闯关中间态 */
 const DICTATION_STEP_RESET = {
@@ -143,7 +218,7 @@ interface WorkspaceState {
   unitSize: number
   activeWordIndex: number
   currentLoadedWords: WordItem[]
-  /** 当前单元的语义定义：只有带单元目录的词库（如基础词汇的 30 个语义单元）才有 */
+  /** 当前单元定义；无语义目录的词库会生成稳定的固定切片单元 ID */
   currentUnitMeta: DictUnit | null
   /**
    * 当前已载入的单元标识 `${bookId}|${unitId}|${mode}`。
@@ -152,7 +227,7 @@ interface WorkspaceState {
    */
   loadedUnitKey: string | null
   cursors: Record<PracticeCursorKey, PracticeCursor>
-  /** 各词库在各做题模式下的独立单元进度存档 */
+  /** 各词库在各做题模式下最后访问的单元序号 */
   bookModeProgress: Record<string, BookModeUnitRecord>
   getBookModeUnit: (bookId: string, mode: PracticeMode) => number
   commitBookAndUnit: (bookId: string, unitIndex: number, targetMode: PracticeMode) => Promise<void>
@@ -198,6 +273,7 @@ interface WorkspaceState {
   
   // 本章错词闭环重考队列 (In-Chapter Retry Queue)
   retryWordQueue: WordItem[]
+  isUnitRetrying: boolean
   
   // 音效与多媒体配置
   isAutoPlayAudio: boolean
@@ -230,7 +306,8 @@ interface WorkspaceState {
   setBookId: (bookId: string) => Promise<void>
   deleteCustomBook: (bookId: string) => Promise<boolean>
   setUnitIndex: (unitIndex: number) => Promise<void>
-  loadCurrentUnitWords: () => Promise<void>
+  /** 返回本次实际应用的加载序号；null 表示请求已过期或处于错词练习 */
+  loadCurrentUnitWords: () => Promise<number | null>
   startErrorPractice: (words: WordItem[], startIndex?: number) => void
   startErrorLearnPractice: (words: WordItem[], startIndex?: number) => void
   exitErrorPractice: () => Promise<void>
@@ -274,9 +351,13 @@ interface WorkspaceState {
   starCurrentWord: () => Promise<boolean>
   starredWordIds: string[]
   syncStarredWordIds: () => Promise<void>
-  nextWord: () => void
+  nextWord: (result?: {
+    completedCurrentWord?: boolean
+    unitCompleted?: boolean
+    completedWordIds?: string[]
+  }) => void
   prevWord: () => void
-  restartUnit: () => void
+  restartUnit: () => Promise<void>
 
   // 词根学习状态 (Roots Module)
   rootTab: RootTabType
@@ -305,6 +386,11 @@ interface WorkspaceState {
 
   getUnitWords: () => WordItem[]
   getCurrentWord: () => WordItem | undefined
+}
+
+function practiceContextKey(state: WorkspaceState): string {
+  const unitKey = state.currentUnitMeta?.id ?? String(state.currentUnitIndex)
+  return `${state.currentBookId}|${unitKey}|${state.mode}|${state.isErrorPracticeActive ? 'error' : 'regular'}`
 }
 
 /** 错词攻坚借用默写页的全部逻辑，但进度单独存档，退出后默写页回到原来的位置 */
@@ -344,6 +430,9 @@ function saveActiveCursor(get: () => WorkspaceState): Record<PracticeCursorKey, 
       unitIndex: get().currentUnitIndex,
       activeWordIndex: get().activeWordIndex,
       isUnitFinished: get().isUnitFinished,
+      hasLiveState: true,
+      retryWordIds: get().retryWordQueue.map((word) => word.id),
+      isUnitRetrying: get().isUnitRetrying,
     },
   }
 }
@@ -377,6 +466,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       isPeeking: false,
       isUnitFinished: false,
       retryWordQueue: [],
+      isUnitRetrying: false,
       
       isAutoPlayAudio: true,
       audioRate: 1.0,
@@ -421,18 +511,48 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         get().syncStarredWordIds()
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting, mode } = get()
         // 错词攻坚模式下不被常规章节覆盖
-        if (isErrorPracticeActive) return
+        if (isErrorPracticeActive) return null
+        const loadSequence = ++latestUnitLoadSequence
 
         if (currentBook?.isCustom && currentBook.words?.length) {
-          const start = currentUnitIndex * unitSize
-          const slice = currentBook.words.slice(start, start + unitSize)
-          set({
-            currentLoadedWords: slice.length ? slice : currentBook.words,
-            currentWordRemainingLoops: loopCountSetting,
-            currentUnitMeta: null,
-            loadedUnitKey: null,
+          const unitCount = Math.max(1, Math.ceil(currentBook.words.length / unitSize))
+          const safeUnitIndex = clampUnitIndex(currentUnitIndex, unitCount)
+          const start = safeUnitIndex * unitSize
+          const nextWords = currentBook.words.slice(start, start + unitSize)
+          const unitMeta: DictUnit = {
+            id: buildFixedUnitId(currentBookId, safeUnitIndex),
+            name: `单元 ${safeUnitIndex + 1}`,
+            order: safeUnitIndex,
+            wordCount: nextWords.length,
+          }
+          const bookModeProgress = { ...get().bookModeProgress }
+          if (safeUnitIndex !== currentUnitIndex) {
+            bookModeProgress[currentBookId] = {
+              ...(bookModeProgress[currentBookId] ?? { learn: 0, dictation: 0, phonetic: 0 }),
+              [mode]: safeUnitIndex,
+            }
+          }
+          const resume = await resolveUnitResumeState({
+            bookId: currentBookId,
+            mode,
+            unitMeta,
+            words: nextWords,
+            liveIndex: get().activeWordIndex,
+            liveFinished: get().isUnitFinished,
+            liveRetryWords: get().retryWordQueue,
+            liveIsRetrying: get().isUnitRetrying,
+            loadedUnitKey: get().loadedUnitKey,
           })
-          return
+          if (loadSequence !== latestUnitLoadSequence) return null
+          set({
+            currentUnitIndex: safeUnitIndex,
+            currentLoadedWords: nextWords,
+            currentWordRemainingLoops: loopCountSetting,
+            currentUnitMeta: unitMeta,
+            bookModeProgress,
+            ...(resume ?? {}),
+          })
+          return loadSequence
         }
 
         // 官方大词库动态加载
@@ -441,9 +561,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         // 带单元目录的词库里序号必须落在目录范围内：
         // 旧版本按「每 20 词一章」存下的进度在新目录下会越界，越界就读出空单元
         const safeUnitIndex = hasCatalog ? clampUnitIndex(currentUnitIndex, units.length) : currentUnitIndex
-        const unitMeta = hasCatalog ? units[safeUnitIndex] : null
-
         const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, safeUnitIndex, unitSize)
+        const unitMeta: DictUnit = hasCatalog
+          ? units[safeUnitIndex]
+          : {
+              id: buildFixedUnitId(currentBookId, safeUnitIndex),
+              name: `单元 ${safeUnitIndex + 1}`,
+              order: safeUnitIndex,
+              wordCount: loaded.length,
+            }
         const dynamicTotal = await dictionaryLoader.getBookTotalWords(currentBookId)
         const builtin = BUILTIN_BOOKS.find((b) => b.id === currentBookId)
 
@@ -459,23 +585,24 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }
         }
 
-        set({
-          currentUnitIndex: safeUnitIndex,
-          currentUnitMeta: unitMeta,
-          bookModeProgress,
-        })
+        const nextWords = loaded
 
-        if (currentBook) {
+        // 加载失败或固定切片越界时绝不能拿示例词校准真实进度。
+        if (loaded.length === 0) {
+          if (loadSequence !== latestUnitLoadSequence) return null
           set({
-            currentBook: {
-              ...currentBook,
-              name: builtin ? builtin.name : currentBook.name,
-              description: builtin ? builtin.description : currentBook.description,
-              totalWords: dynamicTotal > 0 ? dynamicTotal : currentBook.totalWords,
-            },
+            currentUnitIndex: safeUnitIndex,
+            currentUnitMeta: unitMeta,
+            bookModeProgress,
+            currentLoadedWords: [],
+            activeWordIndex: 0,
+            isUnitFinished: false,
+            retryWordQueue: [],
+            isUnitRetrying: false,
+            loadedUnitKey: null,
           })
+          return loadSequence
         }
-        const nextWords = loaded.length > 0 ? loaded : INITIAL_SAMPLE_WORDS
 
         // 断点续学：只有逐字敲完的词才进 unitProgress，所以第一处未完成的词
         // 就是上次真正练到的地方，浏览翻过去的词不会被算成进度
@@ -486,18 +613,37 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           words: nextWords,
           liveIndex: get().activeWordIndex,
           liveFinished: get().isUnitFinished,
+          liveRetryWords: get().retryWordQueue,
+          liveIsRetrying: get().isUnitRetrying,
           loadedUnitKey: get().loadedUnitKey,
         })
 
+        if (loadSequence !== latestUnitLoadSequence) return null
         set({
+          currentUnitIndex: safeUnitIndex,
+          currentUnitMeta: unitMeta,
+          bookModeProgress,
+          ...(currentBook
+            ? {
+                currentBook: {
+                  ...currentBook,
+                  name: builtin ? builtin.name : currentBook.name,
+                  description: builtin ? builtin.description : currentBook.description,
+                  totalWords: dynamicTotal > 0 ? dynamicTotal : currentBook.totalWords,
+                },
+              }
+            : {}),
           currentLoadedWords: nextWords,
           currentWordRemainingLoops: loopCountSetting,
           ...(resume ?? {}),
         })
+        return loadSequence
       },
 
       startErrorPractice: (words: WordItem[], startIndex: number = 0) => {
         if (!words.length) return
+        latestUnitLoadSequence += 1
+        latestPracticeActionSequence += 1
         const entryIndex = Math.min(Math.max(startIndex, 0), words.length - 1)
 
         const wasActive = get().isErrorPracticeActive
@@ -510,7 +656,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           cursors: {
             ...saveActiveCursor(get),
-            error: { unitIndex: 0, activeWordIndex: entryIndex, isUnitFinished: false },
+            error: { ...EMPTY_CURSOR, activeWordIndex: entryIndex, hasLiveState: true },
           },
           isErrorPracticeActive: true,
           mode: 'dictation',
@@ -527,6 +673,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           currentWordRemainingLoops: 3,
           ...DICTATION_STEP_RESET,
         })
@@ -534,6 +681,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       startErrorLearnPractice: (words: WordItem[], startIndex: number = 0) => {
         if (!words.length) return
+        latestUnitLoadSequence += 1
+        latestPracticeActionSequence += 1
         const entryIndex = Math.min(Math.max(startIndex, 0), words.length - 1)
 
         const wasActive = get().isErrorPracticeActive
@@ -546,7 +695,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         set({
           cursors: {
             ...saveActiveCursor(get),
-            error: { unitIndex: 0, activeWordIndex: entryIndex, isUnitFinished: false },
+            error: { ...EMPTY_CURSOR, activeWordIndex: entryIndex, hasLiveState: true },
           },
           isErrorPracticeActive: true,
           mode: 'learn',
@@ -560,12 +709,15 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           isUnitFinished: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           currentWordRemainingLoops: learnLoop,
           ...DICTATION_STEP_RESET,
         })
       },
 
       exitErrorPractice: async () => {
+        latestPracticeActionSequence += 1
+        const actionSequence = latestPracticeActionSequence
         // 攻坚或错词练习结束回到对应模式原来的位置与循环次数，攻坚存档位清空
         const currentMode = get().mode
         const targetKey: PracticeCursorKey = currentMode === 'dictation' ? 'dictation' : (currentMode === 'phonetic' ? 'phonetic' : 'learn')
@@ -578,19 +730,27 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentInput: '',
           hasTypo: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
+          loadedUnitKey: null,
           ...restoreLoopCount(get),
           ...DICTATION_STEP_RESET,
         })
 
-        await get().loadCurrentUnitWords()
+        const loadSequence = await get().loadCurrentUnitWords()
+        if (
+          loadSequence === null ||
+          loadSequence !== latestUnitLoadSequence ||
+          actionSequence !== latestPracticeActionSequence
+        ) return
 
-        // 回到原页面的游标位置：词数可能少于存档下来的位置，越界就退回最后一个词。
-        // 放在加载之后，保证错词练习不会污染单元的断点定位。
-        const total = get().currentLoadedWords.length
-        set({
-          activeWordIndex: Math.min(Math.max(0, restored.activeWordIndex), Math.max(0, total - 1)),
-          isUnitFinished: restored.isUnitFinished,
-        })
+        // 语义/固定单元以 IndexedDB 断点为准；没有单元元数据的旧词库才退回内存游标。
+        if (!get().currentUnitMeta) {
+          const total = get().currentLoadedWords.length
+          set({
+            activeWordIndex: Math.min(Math.max(0, restored.activeWordIndex), Math.max(0, total - 1)),
+            isUnitFinished: restored.isUnitFinished,
+          })
+        }
       },
 
       getUnitWords: () => {
@@ -603,6 +763,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setBookId: async (bookId: string) => {
+        latestPracticeActionSequence += 1
+        const actionSequence = latestPracticeActionSequence
         const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId)
         let book: VocabularyBook
         if (builtin) {
@@ -615,6 +777,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           const custom = await db.books.get(bookId)
           book = custom || BUILTIN_BOOKS[0]
         }
+        if (actionSequence !== latestPracticeActionSequence) return
 
         const bookModeProgress = { ...get().bookModeProgress }
         if (!bookModeProgress[book.id]) {
@@ -640,10 +803,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           // 换书直接中断攻坚，循环次数一并还原
           isErrorPracticeActive: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           ...restoreLoopCount(get),
           ...DICTATION_STEP_RESET,
         })
-        await get().loadCurrentUnitWords()
+        const loadSequence = await get().loadCurrentUnitWords()
+        if (
+          loadSequence === null ||
+          loadSequence !== latestUnitLoadSequence ||
+          actionSequence !== latestPracticeActionSequence
+        ) return
 
         const { isAutoPlayAudio, mode, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
@@ -688,6 +857,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       commitBookAndUnit: async (bookId: string, unitIndex: number, targetMode: PracticeMode) => {
+        latestPracticeActionSequence += 1
+        const actionSequence = latestPracticeActionSequence
         const builtin = BUILTIN_BOOKS.find((b) => b.id === bookId)
         let book: VocabularyBook
         if (builtin) {
@@ -697,6 +868,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           const custom = await db.books.get(bookId)
           book = custom || BUILTIN_BOOKS[0]
         }
+        if (actionSequence !== latestPracticeActionSequence) return
 
         set({
           isUnitLoading: true,
@@ -718,9 +890,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         const cursors = { ...get().cursors }
         cursors[targetMode] = {
+          ...EMPTY_CURSOR,
           unitIndex,
-          activeWordIndex: 0,
-          isUnitFinished: false,
         }
 
         set({
@@ -740,18 +911,22 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isEditWordSplitModalOpen: false,
           isErrorPracticeActive: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           ...restoreLoopCount(get),
           ...DICTATION_STEP_RESET,
         })
 
         const startTime = Date.now()
-        await get().loadCurrentUnitWords()
+        const loadSequence = await get().loadCurrentUnitWords()
+        if (loadSequence === null) return
         const elapsed = Date.now() - startTime
         if (elapsed < 450) {
           await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
         }
 
+        if (loadSequence !== latestUnitLoadSequence) return
         set({ isUnitLoading: false, unitLoadingTarget: null })
+        if (actionSequence !== latestPracticeActionSequence) return
 
         const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
@@ -766,6 +941,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setUnitIndex: async (unitIndex: number) => {
+        latestPracticeActionSequence += 1
+        const actionSequence = latestPracticeActionSequence
         const { currentBookId, mode, isErrorPracticeActive, bookModeProgress } = get()
         const targetMode = isErrorPracticeActive ? 'dictation' : mode
         const updatedProgress = { ...bookModeProgress }
@@ -779,9 +956,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         const cursors = { ...get().cursors }
         cursors[targetMode] = {
+          ...EMPTY_CURSOR,
           unitIndex,
-          activeWordIndex: 0,
-          isUnitFinished: false,
         }
 
         set({
@@ -799,18 +975,22 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isEditWordSplitModalOpen: false,
           isErrorPracticeActive: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           ...restoreLoopCount(get),
           ...DICTATION_STEP_RESET,
         })
 
         const startTime = Date.now()
-        await get().loadCurrentUnitWords()
+        const loadSequence = await get().loadCurrentUnitWords()
+        if (loadSequence === null) return
         const elapsed = Date.now() - startTime
         if (elapsed < 450) {
           await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
         }
 
+        if (loadSequence !== latestUnitLoadSequence) return
         set({ isUnitLoading: false })
+        if (actionSequence !== latestPracticeActionSequence) return
 
         const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
         const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
@@ -837,6 +1017,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         if (get().mode === nextMode) return
 
+        latestPracticeActionSequence += 1
+        const actionSequence = latestPracticeActionSequence
         set({ isUnitLoading: true })
 
         const cursors = saveActiveCursor(get)
@@ -874,16 +1056,34 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           hasTypo: false,
           isPeeking: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
+          loadedUnitKey: null,
           currentWordRemainingLoops: nextLoopCount,
           ...DICTATION_STEP_RESET,
         })
 
+        let loadSequence: number | null = latestUnitLoadSequence
         if (isUnitDifferent || get().currentLoadedWords.length === 0) {
-          await get().loadCurrentUnitWords()
+          loadSequence = await get().loadCurrentUnitWords()
+        }
+        if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
+        if (actionSequence !== latestPracticeActionSequence) {
+          set({ isUnitLoading: false })
+          return
         }
 
         const total = get().currentLoadedWords.length
-        if (get().activeWordIndex > total - 1) {
+        if (targetCursor?.hasLiveState && get().mode === nextMode && get().currentUnitIndex === targetUnitIndex) {
+          const retryIds = new Set(targetCursor.retryWordIds)
+          const unitMeta = get().currentUnitMeta
+          set({
+            activeWordIndex: Math.min(Math.max(0, targetCursor.activeWordIndex), Math.max(0, total - 1)),
+            isUnitFinished: targetCursor.isUnitFinished,
+            retryWordQueue: get().currentLoadedWords.filter((word) => retryIds.has(word.id)),
+            isUnitRetrying: targetCursor.isUnitRetrying,
+            loadedUnitKey: unitMeta ? `${currentBookId}|${unitMeta.id}|${nextMode}` : null,
+          })
+        } else if (get().activeWordIndex > total - 1) {
           set({ activeWordIndex: Math.max(0, total - 1) })
         }
         set({ isUnitLoading: false })
@@ -1010,8 +1210,26 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             }, 300)
           } else {
             recordWordAttempt(currentWord.id, currentBookId, true, 'phonetic', currentWord)
-            setTimeout(() => {
-              get().nextWord()
+            const completedIndex = get().activeWordIndex
+            const completedId = currentWord.id
+            const completionContext = practiceContextKey(get())
+            const completionActionSequence = latestPracticeActionSequence
+            const progressPromise = persistCompletedWord(get, completedId, completedIndex)
+            setTimeout(async () => {
+              const saved = await progressPromise
+              const latest = get()
+              if (
+                completionActionSequence === latestPracticeActionSequence &&
+                practiceContextKey(latest) === completionContext &&
+                latest.activeWordIndex === completedIndex &&
+                latest.getCurrentWord()?.id === completedId
+              ) {
+                latest.nextWord({
+                  completedCurrentWord: true,
+                  unitCompleted: saved?.record?.status === 'completed',
+                  completedWordIds: saved?.record?.completedWordIds,
+                })
+              }
             }, 350)
           }
           return true
@@ -1150,19 +1368,44 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               const needsConfirmAudio = mode === 'dictation' && !isAutoAudioMuted(mode, dictationCueMode)
               const completedIndex = get().activeWordIndex
               const completedId = currentWord.id
+              const completionContext = practiceContextKey(get())
+              const completionActionSequence = latestPracticeActionSequence
+              const progressPromise = persistCompletedWord(get, completedId, completedIndex)
 
               // 单元进度唯一的写入点：只有逐字敲完整词、打满循环次数才算完成。
               // 浏览、按切换键翻词、加星、重放发音都不产生学习进度。
-              persistCompletedWord(get, completedId, completedIndex)
-
               setTimeout(async () => {
+                const saved = await progressPromise
+                let latest = get()
+                if (
+                  completionActionSequence !== latestPracticeActionSequence ||
+                  practiceContextKey(latest) !== completionContext ||
+                  latest.activeWordIndex !== completedIndex ||
+                  latest.getCurrentWord()?.id !== completedId
+                ) {
+                  return
+                }
+                if (saved && !saved.deferForRetry) {
+                  set((state) => ({
+                    retryWordQueue: state.retryWordQueue.filter((word) => word.id !== completedId),
+                  }))
+                }
                 if (needsConfirmAudio) {
                   await audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
                 }
                 // 正音期间用户可能已经手动切词，此时不能再多跳一个
-                const latest = get()
-                if (latest.activeWordIndex === completedIndex && latest.getCurrentWord()?.id === completedId) {
-                  latest.nextWord()
+                latest = get()
+                if (
+                  completionActionSequence === latestPracticeActionSequence &&
+                  practiceContextKey(latest) === completionContext &&
+                  latest.activeWordIndex === completedIndex &&
+                  latest.getCurrentWord()?.id === completedId
+                ) {
+                  latest.nextWord({
+                    completedCurrentWord: true,
+                    unitCompleted: saved?.record?.status === 'completed',
+                    completedWordIds: saved?.record?.completedWordIds,
+                  })
                 }
               }, 200)
             }
@@ -1180,6 +1423,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
           if (mode === 'dictation') {
             recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
+            persistRetryWord(get, currentWord.id, get().activeWordIndex)
             set((state) => {
               const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
               return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
@@ -1227,6 +1471,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }
           if (mode === 'dictation') {
             recordWordAttempt(currentWord.id, currentBookId, false, mode, currentWord)
+            persistRetryWord(get, currentWord.id, get().activeWordIndex)
             set((state) => {
               const inQueue = state.retryWordQueue.some((w) => w.id === currentWord.id)
               return inQueue ? {} : { retryWordQueue: [...state.retryWordQueue, currentWord] }
@@ -1269,7 +1514,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
        * 翻到下一个词：纯浏览行为，不写单元进度。
        * 只有 handleCharacterInput 里逐字敲完整词那一次才计入 unitProgress。
        */
-      nextWord: () => {
+      nextWord: (result = {}) => {
+        if (result.completedCurrentWord !== true) {
+          latestPracticeActionSequence += 1
+        }
         const unitWords = get().getUnitWords()
         const {
           activeWordIndex,
@@ -1280,10 +1528,13 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           conqueredErrorWordIds,
           mode,
           dictationCueMode,
+          retryWordQueue,
+          isUnitRetrying,
         } = get()
+        const completedCurrentWord = result.completedCurrentWord === true
+        const unitCompleted = result.unitCompleted === true
 
         if (!unitWords.length) {
-          set({ isUnitFinished: true })
           return
         }
 
@@ -1342,6 +1593,49 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         // ==========================================
         // 常规章节学习逻辑 (以及错词跟学练习模式)
         // ==========================================
+        if (isUnitRetrying) {
+          const retryIds = new Set(retryWordQueue.map((word) => word.id))
+          const retryIndexes = unitWords
+            .map((word, index) => (retryIds.has(word.id) ? index : -1))
+            .filter((index) => index >= 0)
+          const nextRetryIndex =
+            retryIndexes.find((index) => index > activeWordIndex) ?? retryIndexes[0] ?? -1
+
+          if (nextRetryIndex >= 0) {
+            set({
+              activeWordIndex: nextRetryIndex,
+              currentInput: '',
+              hasTypo: false,
+              isPeeking: false,
+              currentWordRemainingLoops: loopCountSetting,
+              ...DICTATION_STEP_RESET,
+            })
+            const nextRetryWord = unitWords[nextRetryIndex]
+            if (nextRetryWord && canPlayAudio) {
+              audioEngine.playPronunciation(nextRetryWord.name, phoneticPreference)
+            }
+          } else if (
+            completedCurrentWord &&
+            (unitCompleted || result.completedWordIds === undefined)
+          ) {
+            set({ isUnitFinished: true, isUnitRetrying: false })
+          } else if (completedCurrentWord) {
+            const completedIds = new Set(result.completedWordIds ?? [])
+            const firstPendingIndex = unitWords.findIndex((word) => !completedIds.has(word.id))
+            if (firstPendingIndex >= 0) {
+              set({
+                activeWordIndex: firstPendingIndex,
+                currentInput: '',
+                hasTypo: false,
+                isUnitRetrying: false,
+                currentWordRemainingLoops: loopCountSetting,
+                ...DICTATION_STEP_RESET,
+              })
+            }
+          }
+          return
+        }
+
         if (activeWordIndex < unitWords.length - 1) {
           const nextIndex = activeWordIndex + 1
           set({
@@ -1365,13 +1659,42 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           if (prefetchTarget) {
             audioEngine.prefetchWordAudio(prefetchTarget.name, phoneticPreference)
           }
-        } else {
-          set({ isUnitFinished: true })
+        } else if (completedCurrentWord) {
+          if (retryWordQueue.length > 0) {
+            const retryIds = new Set(retryWordQueue.map((word) => word.id))
+            const firstRetryIndex = unitWords.findIndex((word) => retryIds.has(word.id))
+            if (firstRetryIndex >= 0) {
+              set({
+                activeWordIndex: firstRetryIndex,
+                currentInput: '',
+                hasTypo: false,
+                isPeeking: false,
+                isUnitRetrying: true,
+                currentWordRemainingLoops: loopCountSetting,
+                ...DICTATION_STEP_RESET,
+              })
+            }
+          } else if (unitCompleted || result.completedWordIds === undefined) {
+            set({ isUnitFinished: true })
+          } else {
+            const completedIds = new Set(result.completedWordIds ?? [])
+            const firstPendingIndex = unitWords.findIndex((word) => !completedIds.has(word.id))
+            if (firstPendingIndex >= 0) {
+              set({
+                activeWordIndex: firstPendingIndex,
+                currentInput: '',
+                hasTypo: false,
+                currentWordRemainingLoops: loopCountSetting,
+                ...DICTATION_STEP_RESET,
+              })
+            }
+          }
         }
       },
 
       /** 翻到上一个词：同样是纯浏览，不写单元进度 */
       prevWord: () => {
+        latestPracticeActionSequence += 1
         const unitWords = get().getUnitWords()
         const {
           activeWordIndex,
@@ -1418,14 +1741,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
       },
 
-      restartUnit: () => {
+      restartUnit: async () => {
+        latestPracticeActionSequence += 1
         const { isErrorPracticeActive, mode: currentMode, currentUnitMeta } = get()
         const isDictationError = isErrorPracticeActive && currentMode === 'dictation'
 
-        // 「重做本单元」把断点存档一起清掉，否则重做到一半刷新会被旧存档顶回重做前的词
-        if (!isDictationError && currentUnitMeta) {
-          void clearUnitProgress(currentUnitMeta.id, currentMode)
-        }
+        // 先提交清理，再立即重置当前 UI；清理完成后不再回写状态，避免覆盖期间切换到的新单元。
+        const clearPromise =
+          !isDictationError && currentUnitMeta
+            ? clearUnitProgress(currentUnitMeta.id, currentMode)
+            : Promise.resolve()
 
         set({
           activeWordIndex: 0,
@@ -1435,6 +1760,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isCurrentWordSplit: false,
           isEditWordSplitModalOpen: false,
           retryWordQueue: [],
+          isUnitRetrying: false,
           currentWordRemainingLoops: isDictationError ? 3 : get().loopCountSetting,
           conqueredErrorWordIds: [],
           ...DICTATION_STEP_RESET,
@@ -1450,6 +1776,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         if (nextWord) {
           audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
         }
+        await clearPromise
       },
 
       // 词根模块专属操作
