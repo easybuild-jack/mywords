@@ -155,6 +155,7 @@
 
 /* 放进 components 层，才能被 border-primary/30 这类工具类覆盖 */
 @layer components {
+
   /* 全局背景纯色深底，消除光圈光晕对文本清晰度的干扰 */
   .bg-easybuild-radial {
     background-color: var(--background);
@@ -246,11 +247,14 @@
     opacity: 0.55;
     filter: brightness(0.8);
   }
+
   35% {
     opacity: 1;
     filter: brightness(1.2) drop-shadow(0 0 6px rgb(var(--primary-rgb) / 0.45));
   }
-  65%, 100% {
+
+  65%,
+  100% {
     opacity: 0.85;
     filter: brightness(1);
   }
@@ -258,36 +262,63 @@
 
 /* 错误震动动画 */
 @keyframes shake-animation {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-8px); }
-  40%, 80% { transform: translateX(8px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
 }
 
 /* 校验失败：边框红闪两下，无刺眼光晕 */
 @keyframes border-flash-animation {
-  0%, 50%, 100% {
+
+  0%,
+  50%,
+  100% {
     border-color: var(--destructive);
   }
-  25%, 75% {
+
+  25%,
+  75% {
     border-color: rgba(255, 95, 87, 0.2);
   }
 }
 
 /* 呼吸光标动画 */
 @keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* 输入错误字母红光闪烁提示 */
 @keyframes error-letter-flash {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     color: #ef4444;
     text-shadow: 0 0 14px rgba(239, 68, 68, 0.95);
     border-color: rgba(239, 68, 68, 0.8);
     background-color: rgba(239, 68, 68, 0.25);
   }
+
   50% {
     opacity: 0.35;
     color: #f87171;
@@ -299,10 +330,13 @@
 
 /* 错误输入槽外框红色呼吸提示 */
 @keyframes error-box-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     border-color: rgba(239, 68, 68, 0.8);
     box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
   }
+
   50% {
     border-color: rgba(239, 68, 68, 0.3);
     box-shadow: none;
@@ -404,12 +438,15 @@
 :root[data-skin="muted-parchment"] .text-primary {
   color: var(--primary) !important;
 }
+
 :root[data-skin="muted-parchment"] .text-destructive {
   color: #DC2626 !important;
 }
+
 :root[data-skin="muted-parchment"] .text-destructive\/40 {
   color: rgba(220, 38, 38, 0.45) !important;
 }
+
 :root[data-skin="muted-parchment"] .text-primary\/35 {
   color: rgba(13, 118, 110, 0.4) !important;
 }
@@ -420,8 +457,8 @@
 :root[data-skin="muted-parchment"] .border-white\/15,
 :root[data-skin="muted-parchment"] .border-white\/20,
 :root[data-skin="muted-parchment"] [class*="border-white/"],
-:root[data-skin="muted-parchment"] .divide-white\/5 > * + *,
-:root[data-skin="muted-parchment"] .divide-white\/10 > * + * {
+:root[data-skin="muted-parchment"] .divide-white\/5>*+*,
+:root[data-skin="muted-parchment"] .divide-white\/10>*+* {
   border-color: rgba(13, 118, 110, 0.22) !important;
 }
 
@@ -597,12 +634,15 @@
 :root[data-skin="avocado-cream"] .text-primary {
   color: #7FA921 !important;
 }
+
 :root[data-skin="avocado-cream"] .text-destructive {
   color: #DC2626 !important;
 }
+
 :root[data-skin="avocado-cream"] .text-destructive\/40 {
   color: rgba(220, 38, 38, 0.45) !important;
 }
+
 :root[data-skin="avocado-cream"] .text-primary\/35 {
   color: rgba(127, 169, 33, 0.4) !important;
 }
@@ -613,8 +653,8 @@
 :root[data-skin="avocado-cream"] .border-white\/15,
 :root[data-skin="avocado-cream"] .border-white\/20,
 :root[data-skin="avocado-cream"] [class*="border-white/"],
-:root[data-skin="avocado-cream"] .divide-white\/5 > * + *,
-:root[data-skin="avocado-cream"] .divide-white\/10 > * + * {
+:root[data-skin="avocado-cream"] .divide-white\/5>*+*,
+:root[data-skin="avocado-cream"] .divide-white\/10>*+* {
   border-color: rgba(110, 118, 108, 0.20) !important;
 }
 
@@ -720,6 +760,7 @@
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
