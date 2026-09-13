@@ -1,5 +1,5 @@
-import type { WordEtymology, WordExample, WordItem } from '@/types'
-import { splitIntoSyllables, analyzeEtymology, isUsableSyllableSplit } from '@/lib/syllables'
+import type { DictUnit, DictUnitCatalog, WordEtymology, WordExample, WordItem } from '@/types'
+import { splitIntoSyllables, isUsableSyllableSplit } from '@/lib/syllables'
 import { buildWordId } from '@/lib/wordId'
 import { db } from '@/db'
 
@@ -10,10 +10,13 @@ export interface WordEnrichOverrides {
   syllables?: string[]
   etymology?: WordEtymology
   silentIndices?: number[]
+  unitId?: string
 }
 
 export interface RawDictEntry {
   name: string
+  /** 语义单元 ID (基础词汇带，如 "base_animals")；其他词库缺省 */
+  unitId?: string
   trans?: string[]
   usphone?: string
   ukphone?: string
@@ -29,11 +32,19 @@ export interface RawDictEntry {
 
 // 官方内置大词库文件映射关系
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
-  'book_basewords': { path: '/dicts/basewords.json', totalWords: 1195, name: '基础词汇' },
+  'book_basewords': { path: '/dicts/basewords.json', totalWords: 4427, name: '基础词汇' },
   'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2600, name: 'CET-4 核心词库' },
   'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
   'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
   'book_coder': { path: '/dicts/it-words.json', totalWords: 1700, name: '程序员词库' },
+}
+
+/**
+ * 带语义单元目录的词库：单元不再按固定词数切片，而是由 unitId 归类而成。
+ * 没有登记在这里的词库走「每 unitSize 个词一章」的老逻辑。
+ */
+export const OFFICIAL_BOOK_UNITS_FILE_MAP: Record<string, string> = {
+  'book_basewords': '/dicts/basewords.units.json',
 }
 
 function formatPhonetic(rawPhone?: string): string | undefined {
@@ -45,10 +56,52 @@ function formatPhonetic(rawPhone?: string): string | undefined {
 class DictionaryLoader {
   private localLexiconMap: Map<string, { trans: string[]; usphone?: string; ukphone?: string }> = new Map()
   private bookJsonCache: Map<string, RawDictEntry[]> = new Map()
+  private bookUnitsCache: Map<string, DictUnit[]> = new Map()
   private isIndexInitialized = false
 
   public clearCache() {
     this.bookJsonCache.clear()
+    this.bookUnitsCache.clear()
+  }
+
+  /**
+   * 加载词库的语义单元目录（仅登记在 OFFICIAL_BOOK_UNITS_FILE_MAP 的词库有）。
+   * 没有目录的词库返回空数组，调用方据此回退到固定词数切片。
+   */
+  public async loadBookUnits(bookId: string): Promise<DictUnit[]> {
+    const unitsPath = OFFICIAL_BOOK_UNITS_FILE_MAP[bookId]
+    if (!unitsPath) return []
+
+    const cached = this.bookUnitsCache.get(bookId)
+    if (cached) return cached
+    if (typeof window === 'undefined') return []
+
+    try {
+      const res = await fetch(unitsPath)
+      if (!res.ok) return []
+      const catalog: DictUnitCatalog = await res.json()
+      const units = Array.isArray(catalog?.units)
+        ? [...catalog.units].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        : []
+      if (units.length) this.bookUnitsCache.set(bookId, units)
+      return units
+    } catch (err) {
+      console.error('Failed to load book units file:', unitsPath, err)
+      return []
+    }
+  }
+
+  /** 已经加载过的单元目录（同步读取，供渲染使用，未加载时返回 null） */
+  public getCachedBookUnits(bookId: string): DictUnit[] | null {
+    return this.bookUnitsCache.get(bookId) || null
+  }
+
+  /**
+   * 词库的单元总数：有语义单元目录时取目录长度，否则返回 0（表示按词数切片）
+   */
+  public async getBookUnitCount(bookId: string): Promise<number> {
+    const units = await this.loadBookUnits(bookId)
+    return units.length
   }
 
   /**
@@ -187,6 +240,7 @@ class DictionaryLoader {
       syllables: customSyllables,
       etymology: customEtymology,
       silentIndices: customSilentIndices,
+      unitId: customUnitId,
     } = overrides
 
     const cleanName = name.trim()
@@ -248,6 +302,7 @@ class DictionaryLoader {
     return {
       id: wordId,
       name: cleanName,
+      unitId: customUnitId,
       syllables,
       phoneticUs: usPhone,
       phoneticUk: ukPhone,
@@ -257,128 +312,34 @@ class DictionaryLoader {
     }
   }
 
-  /**
-   * 动态加载官方词书指定章节的 20 个单词
-   */
-  public async loadBookUnitWords(bookId: string, unitIndex: number, unitSize: number = 20): Promise<WordItem[]> {
-    const config = OFFICIAL_BOOK_FILE_MAP[bookId] || OFFICIAL_BOOK_FILE_MAP['book_cet4']
-
-    let allRawWords = this.bookJsonCache.get(config.path)
-    if (!allRawWords && typeof window !== 'undefined') {
-      try {
-        const res = await fetch(config.path)
-        if (res.ok) {
-          allRawWords = await res.json()
-          if (allRawWords) {
-            this.bookJsonCache.set(config.path, allRawWords)
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load book json file:', config.path, err)
-      }
-    }
-
-    if (!allRawWords || !allRawWords.length) {
-      return []
-    }
-
-    const startIndex = unitIndex * unitSize
-    const rawSlice = allRawWords.slice(startIndex, startIndex + unitSize)
-
-    // 批量补全并转化为标准 WordItem
-    const enrichedList: WordItem[] = rawSlice.map((entry) => {
-      const name = entry.name || ''
-      const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
-      const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)
-      const rawUk = formatPhonetic(entry.ukphone) || formatPhonetic(entry.phone) || rawUs
-      const usphone = rawUs || `/ ${name.toLowerCase()} /`
-      const ukphone = rawUk || usphone
-
-      // 词表自带的拆解优先，但音节仍要过一遍校验：拼不回原词的分段会让学习卡高亮错位
-      const curatedSyllables = entry.syllables
-      const syllables =
-        curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
-          ? curatedSyllables
-          : splitIntoSyllables(name)
-      const etymology = entry.etymology
-      const silentIndices = entry.silentIndices
-      const posList = this.parsePosAndMeans(rawTrans)
-
-      return {
-        id: buildWordId(name),
-        name,
-        syllables,
-        phoneticUs: usphone,
-        phoneticUk: ukphone,
-        posList,
-        etymology,
-        silentIndices,
-        examples: entry.examples,
-        phrases: entry.phrases,
-      }
-    })
-
-    // 应用用户自定义覆盖
-    if (typeof window !== 'undefined' && enrichedList.length > 0) {
-      try {
-        const ids = enrichedList.map((w) => w.id)
-        const overrides = await db.wordOverrides.bulkGet(ids)
-        for (let i = 0; i < enrichedList.length; i++) {
-          const override = overrides[i]
-          if (override) {
-            if (override.syllables && override.syllables.length) {
-              enrichedList[i].syllables = override.syllables
-            }
-            if (override.etymology !== undefined) {
-              enrichedList[i].etymology = override.etymology
-            }
-            if (override.silentIndices !== undefined) {
-              enrichedList[i].silentIndices = override.silentIndices
-            }
-            if (override.examples !== undefined && override.examples.length > 0) {
-              enrichedList[i].examples = override.examples
-            }
-            if (override.phrases !== undefined && override.phrases.length > 0) {
-              enrichedList[i].phrases = override.phrases
-            }
-          }
-        }
-      } catch (err) {
-        // 容错处理
-      }
-    }
-
-    return enrichedList
-  }
-
-  /**
-   * 加载官方词库的全部原始词条数据（带内存缓存）
-   */
-  public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
+  /** 拉取并缓存官方词库的原始词条数组 */
+  private async fetchBookRawWords(bookId: string): Promise<RawDictEntry[]> {
     const config = OFFICIAL_BOOK_FILE_MAP[bookId] || OFFICIAL_BOOK_FILE_MAP['book_cet4']
     if (!config) return []
 
-    let allRawWords = this.bookJsonCache.get(config.path)
-    if (!allRawWords && typeof window !== 'undefined') {
-      try {
-        const res = await fetch(config.path)
-        if (res.ok) {
-          allRawWords = await res.json()
-          if (allRawWords) {
-            this.bookJsonCache.set(config.path, allRawWords)
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load book json file:', config.path, err)
+    const cached = this.bookJsonCache.get(config.path)
+    if (cached) return cached
+    if (typeof window === 'undefined') return []
+
+    try {
+      const res = await fetch(config.path)
+      if (!res.ok) return []
+      const data: RawDictEntry[] = await res.json()
+      if (Array.isArray(data)) {
+        this.bookJsonCache.set(config.path, data)
+        return data
       }
+      return []
+    } catch (err) {
+      console.error('Failed to load book json file:', config.path, err)
+      return []
     }
-    return allRawWords || []
   }
 
   /**
-   * 将单个 RawDictEntry 转换为带有音节、发音、构词法与用户覆盖的标准 WordItem
+   * 把一条原始词条转成标准 WordItem（不含用户在 IndexedDB 里的覆盖）
    */
-  public async convertRawEntryToWordItem(entry: RawDictEntry): Promise<WordItem> {
+  private buildWordItemFromEntry(entry: RawDictEntry): WordItem {
     const name = entry.name || ''
     const rawTrans = entry.trans || (entry.translation ? [entry.translation] : ['核心词义'])
     const rawUs = formatPhonetic(entry.usphone) || formatPhonetic(entry.phone)
@@ -386,53 +347,97 @@ class DictionaryLoader {
     const usphone = rawUs || `/ ${name.toLowerCase()} /`
     const ukphone = rawUk || usphone
 
+    // 词表自带的拆解优先，但音节仍要过一遍校验：拼不回原词的分段会让学习卡高亮错位
     const curatedSyllables = entry.syllables
     const syllables =
       curatedSyllables && isUsableSyllableSplit(name, curatedSyllables)
         ? curatedSyllables
         : splitIntoSyllables(name)
-    const etymology = entry.etymology
-    const silentIndices = entry.silentIndices
-    const posList = this.parsePosAndMeans(rawTrans)
 
-    const wordItem: WordItem = {
+    return {
       id: buildWordId(name),
       name,
+      unitId: entry.unitId,
       syllables,
       phoneticUs: usphone,
       phoneticUk: ukphone,
-      posList,
-      etymology,
-      silentIndices,
+      posList: this.parsePosAndMeans(rawTrans),
+      etymology: entry.etymology,
+      silentIndices: entry.silentIndices,
       examples: entry.examples,
       phrases: entry.phrases,
     }
+  }
 
-    if (typeof window !== 'undefined') {
-      try {
-        const override = await db.wordOverrides.get(wordItem.id)
-        if (override) {
-          if (override.syllables && override.syllables.length) {
-            wordItem.syllables = override.syllables
-          }
-          if (override.etymology !== undefined) {
-            wordItem.etymology = override.etymology
-          }
-          if (override.silentIndices !== undefined) {
-            wordItem.silentIndices = override.silentIndices
-          }
-          if (override.examples !== undefined && override.examples.length > 0) {
-            wordItem.examples = override.examples
-          }
-          if (override.phrases !== undefined && override.phrases.length > 0) {
-            wordItem.phrases = override.phrases
-          }
+  /** 批量套用用户自定义覆盖（音节拆分/构词/例句/短语） */
+  private async applyUserOverrides(words: WordItem[]): Promise<WordItem[]> {
+    if (typeof window === 'undefined' || words.length === 0) return words
+    try {
+      const overrides = await db.wordOverrides.bulkGet(words.map((w) => w.id))
+      for (let i = 0; i < words.length; i++) {
+        const override = overrides[i]
+        if (!override) continue
+        if (override.syllables && override.syllables.length) {
+          words[i].syllables = override.syllables
         }
-      } catch {
-        // 容错
+        if (override.etymology !== undefined) {
+          words[i].etymology = override.etymology
+        }
+        if (override.silentIndices !== undefined) {
+          words[i].silentIndices = override.silentIndices
+        }
+        if (override.examples !== undefined && override.examples.length > 0) {
+          words[i].examples = override.examples
+        }
+        if (override.phrases !== undefined && override.phrases.length > 0) {
+          words[i].phrases = override.phrases
+        }
       }
+    } catch (err) {
+      // 容错处理
+    }
+    return words
+  }
+
+  /**
+   * 加载词库中某个单元的单词。
+   *
+   * - 登记了语义单元目录的词库（如基础词汇）：一个单元 = 该 unitId 下的全部单词，
+   *   与 unitSize 无关；unitIndex 越界会钳到最后一个单元，避免旧进度读出空单元。
+   * - 其他词库：维持「第 unitIndex 个 unitSize 词的切片」。
+   */
+  public async loadBookUnitWords(bookId: string, unitIndex: number, unitSize: number = 20): Promise<WordItem[]> {
+    const allRawWords = await this.fetchBookRawWords(bookId)
+    if (!allRawWords.length) return []
+
+    const units = await this.loadBookUnits(bookId)
+    let rawSlice: RawDictEntry[]
+
+    if (units.length) {
+      const safeIndex = Math.min(Math.max(0, unitIndex), units.length - 1)
+      const targetUnitId = units[safeIndex].id
+      rawSlice = allRawWords.filter((entry) => entry.unitId === targetUnitId)
+    } else {
+      const startIndex = Math.max(0, unitIndex) * unitSize
+      rawSlice = allRawWords.slice(startIndex, startIndex + unitSize)
     }
 
+    const enrichedList = rawSlice.map((entry) => this.buildWordItemFromEntry(entry))
+    return this.applyUserOverrides(enrichedList)
+  }
+
+  /**
+   * 加载官方词库的全部原始词条数据（带内存缓存）
+   */
+  public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
+    return this.fetchBookRawWords(bookId)
+  }
+
+  /**
+   * 将单个 RawDictEntry 转换为带有音节、发音、构词法与用户覆盖的标准 WordItem
+   */
+  public async convertRawEntryToWordItem(entry: RawDictEntry): Promise<WordItem> {
+    const [wordItem] = await this.applyUserOverrides([this.buildWordItemFromEntry(entry)])
     return wordItem
   }
 
@@ -442,21 +447,8 @@ class DictionaryLoader {
   public async getBookTotalWords(bookId: string): Promise<number> {
     const config = OFFICIAL_BOOK_FILE_MAP[bookId]
     if (!config) return 0
-    let allRawWords = this.bookJsonCache.get(config.path)
-    if (!allRawWords && typeof window !== 'undefined') {
-      try {
-        const res = await fetch(config.path)
-        if (res.ok) {
-          allRawWords = await res.json()
-          if (allRawWords) {
-            this.bookJsonCache.set(config.path, allRawWords)
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load book json file:', config.path, err)
-      }
-    }
-    return allRawWords?.length || config.totalWords
+    const allRawWords = await this.fetchBookRawWords(bookId)
+    return allRawWords.length || config.totalWords
   }
 }
 

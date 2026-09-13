@@ -327,7 +327,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     category: 'daily',
     isCustom: false,
     unitSize: 20,
-    totalWords: 1195,
+    totalWords: 4427,
     words: INITIAL_SAMPLE_WORDS,
     createdAt: Date.now(),
     updatedAt: Date.now()

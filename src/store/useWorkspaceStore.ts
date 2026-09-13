@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import type { DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig, WordEtymology } from '@/types'
+import type { DictUnit, DictationCueMode, PracticeMode, WordItem, VocabularyBook, ShortcutConfig, WordEtymology } from '@/types'
 import { isAutoAudioMuted, isMeaningStepActive } from '@/lib/dictationCue'
 import { BUILTIN_BOOKS, INITIAL_SAMPLE_WORDS } from '@/resources/books'
 import { BUILTIN_ROOTS, ROOT_DATA_MAP, type RootTabType } from '@/resources/roots'
-import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook } from '@/db'
+import { db, recordWordAttempt, toggleStarWord, eliminateErrorWord, saveWordOverride, deleteCustomVocabularyBook, getUnitProgressRecord, markUnitWordCompleted, clearUnitProgress } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
@@ -41,6 +41,79 @@ function createFreshCursors(initialUnits?: Partial<Record<PracticeMode, number>>
   }
 }
 
+/** 把单元序号夹到 [0, count-1]：旧进度是按「每 20 词一章」存的，在语义单元目录下可能越界 */
+function clampUnitIndex(unitIndex: number, count: number): number {
+  if (count <= 0) return 0
+  return Math.min(Math.max(0, unitIndex), count - 1)
+}
+
+/**
+ * 算出进入单元后该落到第几个词。
+ *
+ * unitProgress 只记录「逐字敲完」的词，所以第一个未完成的词就是真正的断点 ——
+ * 浏览时用切换键翻过去的词不在存档里，刷新后不会被当成学习进度。
+ *
+ * 返回 null 表示这次加载不需要动位置（没有语义单元的词库没有断点可恢复，
+ * 同一个单元重复加载也保留页面内现场）。
+ */
+async function resolveUnitResumeState(params: {
+  bookId: string
+  mode: PracticeMode
+  unitMeta: DictUnit | null
+  words: WordItem[]
+  liveIndex: number
+  liveFinished: boolean
+  loadedUnitKey: string | null
+}): Promise<{ activeWordIndex: number; isUnitFinished: boolean; loadedUnitKey: string | null } | null> {
+  const { bookId, mode, unitMeta, words } = params
+  if (!unitMeta || words.length === 0) return null
+
+  const unitKey = `${bookId}|${unitMeta.id}|${mode}`
+  const clampIndex = (index: number) => Math.min(Math.max(0, index), words.length - 1)
+
+  // 同一个单元+模式还在练：保留现场（页面内翻词的位置也是现场的一部分）
+  if (params.loadedUnitKey === unitKey) {
+    return {
+      activeWordIndex: clampIndex(params.liveIndex),
+      isUnitFinished: params.liveFinished,
+      loadedUnitKey: unitKey,
+    }
+  }
+
+  const record = await getUnitProgressRecord(unitMeta.id, mode)
+  if (!record?.completedWordIds?.length) {
+    return { activeWordIndex: 0, isUnitFinished: false, loadedUnitKey: unitKey }
+  }
+
+  const firstPending = words.findIndex((word) => !record.completedWordIds.includes(word.id))
+  // 单元里的词确实全被敲完过：直接落在结算卡上，想再练一遍要点「重做本单元」
+  if (firstPending === -1) {
+    return { activeWordIndex: words.length - 1, isUnitFinished: true, loadedUnitKey: unitKey }
+  }
+
+  return { activeWordIndex: firstPending, isUnitFinished: false, loadedUnitKey: unitKey }
+}
+
+/**
+ * 把「敲完一个词」记进单元断点存档。
+ *
+ * 错词攻坚、自定义词库、以及还没配语义单元的官方词库都没有单元可记，直接跳过。
+ * 不 await：练词的节奏不该等一次 IndexedDB 写入。
+ */
+function persistCompletedWord(get: () => WorkspaceState, wordId: string, wordIndex: number) {
+  const { isErrorPracticeActive, currentBookId, currentUnitMeta, mode, currentLoadedWords } = get()
+  if (isErrorPracticeActive || !currentUnitMeta) return
+
+  void markUnitWordCompleted({
+    bookId: currentBookId,
+    unitId: currentUnitMeta.id,
+    mode,
+    wordId,
+    wordIndex,
+    totalWords: currentLoadedWords.length,
+  })
+}
+
 /** 跟学时单词就在眼前，抄一遍即可；默写要靠三连对建立肌肉记忆 */
 const DEFAULT_LOOP_COUNTS: Record<PracticeMode, 1 | 2 | 3 | 5> = {
   learn: 1,
@@ -70,6 +143,14 @@ interface WorkspaceState {
   unitSize: number
   activeWordIndex: number
   currentLoadedWords: WordItem[]
+  /** 当前单元的语义定义：只有带单元目录的词库（如基础词汇的 30 个语义单元）才有 */
+  currentUnitMeta: DictUnit | null
+  /**
+   * 当前已载入的单元标识 `${bookId}|${unitId}|${mode}`。
+   * 同一个单元被重复加载（路由来回切、开发环境重复挂载）时据此跳过断点恢复，
+   * 免得把页面内已经翻到的位置顶掉；换了单元/词库/模式才按 unitProgress 重新定位。
+   */
+  loadedUnitKey: string | null
   cursors: Record<PracticeCursorKey, PracticeCursor>
   /** 各词库在各做题模式下的独立单元进度存档 */
   bookModeProgress: Record<string, BookModeUnitRecord>
@@ -277,6 +358,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       unitSize: 20,
       activeWordIndex: 0,
       currentLoadedWords: INITIAL_SAMPLE_WORDS,
+      currentUnitMeta: null,
+      loadedUnitKey: null,
       cursors: createFreshCursors(),
       bookModeProgress: {},
       
@@ -336,7 +419,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       loadCurrentUnitWords: async () => {
         get().syncStarredWordIds()
-        const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting } = get()
+        const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting, mode } = get()
         // 错词攻坚模式下不被常规章节覆盖
         if (isErrorPracticeActive) return
 
@@ -346,34 +429,71 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           set({
             currentLoadedWords: slice.length ? slice : currentBook.words,
             currentWordRemainingLoops: loopCountSetting,
+            currentUnitMeta: null,
+            loadedUnitKey: null,
           })
-        } else {
-          // 官方大词库动态加载
-          const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, currentUnitIndex, unitSize)
-          const dynamicTotal = await dictionaryLoader.getBookTotalWords(currentBookId)
-          const builtin = BUILTIN_BOOKS.find((b) => b.id === currentBookId)
-          if (currentBook) {
-            set({
-              currentBook: {
-                ...currentBook,
-                name: builtin ? builtin.name : currentBook.name,
-                description: builtin ? builtin.description : currentBook.description,
-                totalWords: dynamicTotal > 0 ? dynamicTotal : currentBook.totalWords,
-              },
-            })
+          return
+        }
+
+        // 官方大词库动态加载
+        const units = await dictionaryLoader.loadBookUnits(currentBookId)
+        const hasCatalog = units.length > 0
+        // 带单元目录的词库里序号必须落在目录范围内：
+        // 旧版本按「每 20 词一章」存下的进度在新目录下会越界，越界就读出空单元
+        const safeUnitIndex = hasCatalog ? clampUnitIndex(currentUnitIndex, units.length) : currentUnitIndex
+        const unitMeta = hasCatalog ? units[safeUnitIndex] : null
+
+        const loaded = await dictionaryLoader.loadBookUnitWords(currentBookId, safeUnitIndex, unitSize)
+        const dynamicTotal = await dictionaryLoader.getBookTotalWords(currentBookId)
+        const builtin = BUILTIN_BOOKS.find((b) => b.id === currentBookId)
+
+        // 序号被夹回来过一次就顺手纠正存档，否则词库页的「当前单元」高亮会和实际加载的对不上
+        const bookModeProgress = { ...get().bookModeProgress }
+        if (hasCatalog && safeUnitIndex !== currentUnitIndex) {
+          if (!bookModeProgress[currentBookId]) {
+            bookModeProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
           }
-          if (loaded.length > 0) {
-            set({
-              currentLoadedWords: loaded,
-              currentWordRemainingLoops: loopCountSetting,
-            })
-          } else {
-            set({
-              currentLoadedWords: INITIAL_SAMPLE_WORDS,
-              currentWordRemainingLoops: loopCountSetting,
-            })
+          bookModeProgress[currentBookId] = {
+            ...bookModeProgress[currentBookId],
+            [mode]: safeUnitIndex,
           }
         }
+
+        set({
+          currentUnitIndex: safeUnitIndex,
+          currentUnitMeta: unitMeta,
+          bookModeProgress,
+        })
+
+        if (currentBook) {
+          set({
+            currentBook: {
+              ...currentBook,
+              name: builtin ? builtin.name : currentBook.name,
+              description: builtin ? builtin.description : currentBook.description,
+              totalWords: dynamicTotal > 0 ? dynamicTotal : currentBook.totalWords,
+            },
+          })
+        }
+        const nextWords = loaded.length > 0 ? loaded : INITIAL_SAMPLE_WORDS
+
+        // 断点续学：只有逐字敲完的词才进 unitProgress，所以第一处未完成的词
+        // 就是上次真正练到的地方，浏览翻过去的词不会被算成进度
+        const resume = await resolveUnitResumeState({
+          bookId: currentBookId,
+          mode,
+          unitMeta,
+          words: nextWords,
+          liveIndex: get().activeWordIndex,
+          liveFinished: get().isUnitFinished,
+          loadedUnitKey: get().loadedUnitKey,
+        })
+
+        set({
+          currentLoadedWords: nextWords,
+          currentWordRemainingLoops: loopCountSetting,
+          ...(resume ?? {}),
+        })
       },
 
       startErrorPractice: (words: WordItem[], startIndex: number = 0) => {
@@ -455,8 +575,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isErrorPracticeActive: false,
           conqueredErrorWordIds: [],
           cursors: { ...get().cursors, error: { ...EMPTY_CURSOR } },
-          activeWordIndex: restored.activeWordIndex,
-          isUnitFinished: restored.isUnitFinished,
           currentInput: '',
           hasTypo: false,
           retryWordQueue: [],
@@ -466,11 +584,13 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         await get().loadCurrentUnitWords()
 
-        // 章节词数可能少于存档下来的位置，越界就退回最后一个词
+        // 回到原页面的游标位置：词数可能少于存档下来的位置，越界就退回最后一个词。
+        // 放在加载之后，保证错词练习不会污染单元的断点定位。
         const total = get().currentLoadedWords.length
-        if (get().activeWordIndex > total - 1) {
-          set({ activeWordIndex: Math.max(0, total - 1) })
-        }
+        set({
+          activeWordIndex: Math.min(Math.max(0, restored.activeWordIndex), Math.max(0, total - 1)),
+          isUnitFinished: restored.isUnitFinished,
+        })
       },
 
       getUnitWords: () => {
@@ -508,6 +628,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentBook: book,
           currentUnitIndex: restoredUnitIndex,
           activeWordIndex: 0,
+          // 换书等于重新进入一个单元，让下面的加载按新单元的断点重新定位
+          loadedUnitKey: null,
           cursors: createFreshCursors(bookModeProgress[book.id]),
           bookModeProgress,
           currentInput: '',
@@ -607,6 +729,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           mode: targetMode,
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
+          // 从词库页点进来就是「进入这个单元」，按它的断点重新定位
+          loadedUnitKey: null,
           cursors,
           bookModeProgress,
           currentInput: '',
@@ -664,6 +788,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           isUnitLoading: true,
           currentUnitIndex: unitIndex,
           activeWordIndex: 0,
+          // 显式切单元也算重新进入，点了当前单元同样回到断点而不是停在原地
+          loadedUnitKey: null,
           cursors,
           bookModeProgress: updatedProgress,
           currentInput: '',
@@ -1025,6 +1151,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               const completedIndex = get().activeWordIndex
               const completedId = currentWord.id
 
+              // 单元进度唯一的写入点：只有逐字敲完整词、打满循环次数才算完成。
+              // 浏览、按切换键翻词、加星、重放发音都不产生学习进度。
+              persistCompletedWord(get, completedId, completedIndex)
+
               setTimeout(async () => {
                 if (needsConfirmAudio) {
                   await audioEngine.playPronunciationOnce(currentWord.name, get().phoneticPreference, get().audioRate)
@@ -1135,6 +1265,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
       },
 
+      /**
+       * 翻到下一个词：纯浏览行为，不写单元进度。
+       * 只有 handleCharacterInput 里逐字敲完整词那一次才计入 unitProgress。
+       */
       nextWord: () => {
         const unitWords = get().getUnitWords()
         const {
@@ -1236,6 +1370,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }
       },
 
+      /** 翻到上一个词：同样是纯浏览，不写单元进度 */
       prevWord: () => {
         const unitWords = get().getUnitWords()
         const {
@@ -1284,7 +1419,14 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       restartUnit: () => {
-        const isDictationError = get().isErrorPracticeActive && get().mode === 'dictation'
+        const { isErrorPracticeActive, mode: currentMode, currentUnitMeta } = get()
+        const isDictationError = isErrorPracticeActive && currentMode === 'dictation'
+
+        // 「重做本单元」把断点存档一起清掉，否则重做到一半刷新会被旧存档顶回重做前的词
+        if (!isDictationError && currentUnitMeta) {
+          void clearUnitProgress(currentUnitMeta.id, currentMode)
+        }
+
         set({
           activeWordIndex: 0,
           currentInput: '',

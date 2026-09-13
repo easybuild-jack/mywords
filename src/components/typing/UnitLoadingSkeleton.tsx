@@ -3,6 +3,7 @@
 import React from 'react'
 import { Sparkles, BookOpen, Volume2, Loader2 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { dictionaryLoader } from '@/core/dictionaryLoader'
 
 /**
  * 单词练习舞台专属骨架屏
@@ -11,11 +12,15 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
  */
 export function UnitLoadingSkeleton() {
   const currentBook = useWorkspaceStore((s) => s.currentBook)
+  const currentBookId = useWorkspaceStore((s) => s.currentBookId)
   const currentUnitIndex = useWorkspaceStore((s) => s.currentUnitIndex)
   const unitLoadingTarget = useWorkspaceStore((s) => s.unitLoadingTarget)
 
   const bookName = unitLoadingTarget?.bookName || currentBook?.name || '当前词库'
-  const unitNumber = (unitLoadingTarget?.unitIndex ?? currentUnitIndex) + 1
+  const targetUnitIndex = unitLoadingTarget?.unitIndex ?? currentUnitIndex
+  const unitNumber = targetUnitIndex + 1
+  // 目录已在词库页加载过，这里同步读缓存即可拿到单元名，避免骨架屏只显示「Unit N」
+  const unitName = dictionaryLoader.getCachedBookUnits(currentBookId)?.[targetUnitIndex]?.name
 
   return (
     <div className="relative w-full h-full flex flex-col justify-between text-center select-none pt-5 pb-6 px-7 xl:pt-6 xl:pb-7 xl:px-10 2xl:pt-8 2xl:pb-8 2xl:px-12 overflow-hidden">
@@ -23,7 +28,7 @@ export function UnitLoadingSkeleton() {
       <div className="absolute top-4 left-4 xl:top-5 xl:left-5 2xl:top-6 2xl:left-6 flex items-center gap-2.5 z-20">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/25 text-primary text-xs font-semibold backdrop-blur-md shadow-sm">
           <BookOpen className="size-3.5 text-primary animate-pulse" />
-          <span>{bookName} · Unit {unitNumber}</span>
+          <span>{unitName ? `${bookName} · ${unitName}` : `${bookName} · Unit ${unitNumber}`}</span>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/10 text-xs text-muted-foreground font-mono">
           <Loader2 className="size-3 animate-spin text-primary" />

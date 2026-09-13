@@ -21,6 +21,7 @@ export type AiWordSectionStatus = 'pending' | 'ready' | 'error';
 export interface WordItem {
   id: string;                                   // 唯一ID
   name: string;                                 // 拼写 (如 "discover")
+  unitId?: string;                              // 所属语义单元 ID (基础词汇按词义归类，如 "base_animals")
   syllables: string[];                          // 音节切分 (如 ["dis", "cov", "er"])
   phoneticUk?: string;                          // 英音 (如 "/dɪˈskʌvə(r)/")
   phoneticUs?: string;                          // 美音 (如 "/dɪˈskʌvər/")
@@ -74,6 +75,25 @@ export interface VocabularyBook {
   words: WordItem[];                            // 单词列表
   createdAt: number;
   updatedAt: number;
+}
+
+/**
+ * 词库自带的语义单元定义（来自 public/dicts/*.units.json）。
+ * 与 VocabularyUnit 的区别：这里是只读的静态定义，由词库数据文件提供，
+ * 单元内的单词通过 WordItem.unitId 关联，而不是按顺序切片。
+ */
+export interface DictUnit {
+  id: string;                                   // 单元 ID (如 "base_animals")
+  name: string;                                 // 单元名称 (如 "动物世界")
+  order: number;                                // 词库内排序，从 0 开始
+  wordCount: number;                            // 该单元包含的单词数量
+}
+
+export interface DictUnitCatalog {
+  schemaVersion?: number;
+  bookId: string;                               // 所属词库
+  totalWords?: number;                          // 目录声明的总词数
+  units: DictUnit[];
 }
 
 export interface VocabularyUnit {

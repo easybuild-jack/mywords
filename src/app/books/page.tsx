@@ -8,7 +8,7 @@ import { BUILTIN_BOOKS } from '@/resources/books'
 import { db } from '@/db'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
-import type { VocabularyBook, PracticeMode } from '@/types'
+import type { DictUnit, VocabularyBook, PracticeMode } from '@/types'
 
 function BooksHubContent() {
   const router = useRouter()
@@ -55,6 +55,8 @@ function BooksHubContent() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [loadingUnitIndex, setLoadingUnitIndex] = useState<number | null>(null)
   const [isPreviewSwitching, setIsPreviewSwitching] = useState(false)
+  /** 当前浏览词库的语义单元目录；为 null 表示该词库按固定词数切章 */
+  const [activeUnits, setActiveUnits] = useState<DictUnit[] | null>(null)
 
   // 当进入词库管理页或全局正在学习的词库就绪时，默认展示当前选中的词库
   useEffect(() => {
@@ -98,12 +100,33 @@ function BooksHubContent() {
   // 当前正在浏览/查看的词库对象（优先使用 previewBookId）
   const activeBook = allBooks.find((b) => b.id === previewBookId) || currentBook || BUILTIN_BOOKS[0]
 
-  // 该词库在当前对应模式（学习 vs 默写）下的单元进度
-  const activeModeUnit = getBookModeUnit(activeBook.id, progressMode)
+  // 拉取当前浏览词库的语义单元目录（只有基础词汇这类按词义归类的词库才有）
+  useEffect(() => {
+    let cancelled = false
+    dictionaryLoader
+      .loadBookUnits(activeBook.id)
+      .then((units) => {
+        if (!cancelled) setActiveUnits(units.length ? units : null)
+      })
+      .catch(() => {
+        if (!cancelled) setActiveUnits(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [activeBook.id])
 
-  // 计算单元总数与分页
+  // 该词库在当前对应模式（学习 vs 默写）下的单元进度
+  const rawModeUnit = getBookModeUnit(activeBook.id, progressMode)
+
+  // 计算单元总数与分页：带语义单元目录的词库按目录长度算，其余按固定词数切章算
   const unitSize = activeBook?.unitSize || 20
-  const totalUnits = Math.max(1, Math.ceil((activeBook?.totalWords || 2600) / unitSize))
+  const totalUnits = activeUnits
+    ? activeUnits.length
+    : Math.max(1, Math.ceil((activeBook?.totalWords || 2600) / unitSize))
+
+  // 旧进度是按「每 20 词一章」存下来的，换成语义单元后序号可能越界，越界就从第一个单元看起
+  const activeModeUnit = rawModeUnit >= 0 && rawModeUnit < totalUnits ? rawModeUnit : 0
   const unitsPerPage = 24
   const totalUnitPages = Math.ceil(totalUnits / unitsPerPage)
   const currentUnits = Array.from(
@@ -252,8 +275,12 @@ function BooksHubContent() {
               <span className="text-white font-bold">{totalUnits} 单元</span>
             </div>
             <div>
-              <span className="text-muted-foreground">单章容量：</span>
-              <span className="text-accent font-bold">{unitSize} 词/章</span>
+              <span className="text-muted-foreground">{activeUnits ? '平均每单元：' : '单章容量：'}</span>
+              <span className="text-accent font-bold">
+                {activeUnits
+                  ? `${Math.round((activeBook?.totalWords || 0) / Math.max(1, totalUnits))} 词`
+                  : `${unitSize} 词/章`}
+              </span>
             </div>
           </div>
         </div>
@@ -300,7 +327,7 @@ function BooksHubContent() {
       <div className="space-y-3">
         <div className="flex items-center justify-between min-h-[28px]">
           <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wider font-mono">
-            章节单元列表 (第 {unitPage + 1}/{totalUnitPages} 页，共 {totalUnits} 单元)
+            {activeUnits ? '语义单元列表' : '章节单元列表'} (第 {unitPage + 1}/{totalUnitPages} 页，共 {totalUnits} 单元)
           </h3>
           
           {/* 翻页控制器 */}
@@ -327,19 +354,20 @@ function BooksHubContent() {
           )}
         </div>
 
-        <div className={`h-[336px] min-h-[336px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start overflow-y-auto pr-1 transition-all duration-200 ${
+        <div className={`h-[420px] min-h-[420px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start overflow-y-auto pr-1 transition-all duration-200 ${
           isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
         }`}>
           {currentUnits.map((idx) => {
             const isMastered = idx < activeModeUnit
             const isCurrent = idx === activeModeUnit
             const isLoadingThisUnit = loadingUnitIndex === idx
+            const unitMeta = activeUnits?.[idx]
 
             return (
               <div
                 key={idx}
                 onClick={() => handleSelectUnit(idx)}
-                className={`p-3 rounded-xl border transition-all flex flex-col justify-between group h-[76px] ${
+                className={`p-3 rounded-xl border transition-all flex flex-col justify-between group h-[96px] ${
                   isLoadingThisUnit
                     ? 'border-primary bg-primary/20 ring-2 ring-primary/40 shadow-[0_0_20px_rgba(var(--primary-rgb)/0.3)] animate-pulse cursor-wait scale-[1.02]'
                     : isCurrent
@@ -349,36 +377,48 @@ function BooksHubContent() {
                     : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05] cursor-pointer'
                 } ${loadingUnitIndex !== null && !isLoadingThisUnit ? 'opacity-40 pointer-events-none' : ''}`}
               >
-                {/* 顶部标题与状态标签 */}
+                {/* 顶部序号与状态标签 */}
                 <div className="flex items-center justify-between gap-1">
-                  <span className={`font-bold text-sm ${isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-white'}`}>
-                    Unit {idx + 1}
+                  <span className={`font-mono text-[11px] font-bold shrink-0 ${isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-[#9CA3AF]'}`}>
+                    {unitMeta ? `UNIT ${idx + 1}` : `Unit ${idx + 1}`}
                   </span>
                   {isLoadingThisUnit ? (
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30 flex items-center gap-1 leading-none">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30 flex items-center gap-1 leading-none shrink-0">
                       <Loader2 className="size-2.5 animate-spin text-primary" />
                       准备中
                     </span>
                   ) : isCurrent ? (
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none shrink-0">
                       进行中
                     </span>
                   ) : isMastered ? (
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary font-bold border border-primary/25 flex items-center gap-1 leading-none">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/15 text-primary font-bold border border-primary/25 flex items-center gap-1 leading-none shrink-0">
                       <CheckCircle2 className="size-3 text-primary" />
                       已完成
                     </span>
                   ) : (
-                    <span className="text-[10px] font-mono text-muted-foreground/60 leading-none">
+                    <span className="text-[10px] font-mono text-muted-foreground/60 leading-none shrink-0">
                       未开始
                     </span>
                   )}
                 </div>
 
+                {/* 中部：语义单元名称（仅按词义归类的词库有） */}
+                {unitMeta && (
+                  <p
+                    className={`text-[12px] font-bold leading-snug line-clamp-2 mt-0.5 ${
+                      isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-white'
+                    }`}
+                    title={unitMeta.name}
+                  >
+                    {unitMeta.name}
+                  </p>
+                )}
+
                 {/* 底部词数与操作提示 */}
                 <div className="flex items-center justify-between text-xs pt-1">
                   <span className="text-[#9CA3AF] text-[11px] font-mono">
-                    {unitSize} 词
+                    {unitMeta ? `${unitMeta.wordCount} 词` : `${unitSize} 词`}
                   </span>
                   
                   {isLoadingThisUnit ? (

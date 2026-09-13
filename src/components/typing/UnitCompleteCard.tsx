@@ -7,6 +7,7 @@ import confetti from 'canvas-confetti'
 import { CheckCircle2, RotateCcw, ArrowRight, Sparkles } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
+import { dictionaryLoader } from '@/core/dictionaryLoader'
 
 /** 学习页与默写页共用的通关结算卡片，文案按当前场景切换 */
 export function UnitCompleteCard() {
@@ -19,7 +20,9 @@ export function UnitCompleteCard() {
 
   const {
     mode,
+    currentBookId,
     currentUnitIndex,
+    currentUnitMeta,
     isErrorPracticeActive,
     currentLoadedWords,
     startErrorPractice,
@@ -27,6 +30,10 @@ export function UnitCompleteCard() {
     exitErrorPractice,
     setUnitIndex,
   } = useWorkspaceStore()
+
+  // 带语义单元目录的词库在最后一个单元时不再有「下一单元」，避免点了原地重载
+  const unitCount = dictionaryLoader.getCachedBookUnits(currentBookId)?.length ?? 0
+  const isLastUnit = unitCount > 0 && currentUnitIndex >= unitCount - 1
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return
@@ -119,7 +126,11 @@ export function UnitCompleteCard() {
         </div>
       ) : (
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">🎉 恭喜完成第 {currentUnitIndex + 1} 单元！</h2>
+          <h2 className="text-2xl font-bold text-white">
+            {currentUnitMeta
+              ? `🎉 恭喜完成「${currentUnitMeta.name}」！`
+              : `🎉 恭喜完成第 ${currentUnitIndex + 1} 单元！`}
+          </h2>
           <p className="text-sm text-[#9CA3AF]">
             {mode === 'learn'
               ? '本单元所有单词均已跟学拼读完成，接下来可以到默写页检验记忆。'
@@ -192,14 +203,28 @@ export function UnitCompleteCard() {
               </button>
             )}
 
-            <button
-              ref={nextButtonRef}
-              onClick={() => setUnitIndex(currentUnitIndex + 1)}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
-            >
-              <span>下一单元</span>
-              <ArrowRight className="size-4" />
-            </button>
+            {isLastUnit ? (
+              <button
+                ref={nextButtonRef}
+                onClick={() => {
+                  startRouteProgressBar()
+                  router.push('/books')
+                }}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
+              >
+                <span>已是最后一个单元 · 返回词库</span>
+                <ArrowRight className="size-4" />
+              </button>
+            ) : (
+              <button
+                ref={nextButtonRef}
+                onClick={() => setUnitIndex(currentUnitIndex + 1)}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
+              >
+                <span>下一单元</span>
+                <ArrowRight className="size-4" />
+              </button>
+            )}
           </>
         )}
       </div>

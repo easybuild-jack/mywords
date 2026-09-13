@@ -411,6 +411,96 @@ export async function deleteCustomVocabularyBook(bookId: string): Promise<boolea
 }
 
 /**
+ * 读取某个语义单元在某个练习模式下的断点存档。
+ *
+ * 返回 undefined 代表这个单元从没被真正练过（只浏览过不算）。
+ */
+export async function getUnitProgressRecord(
+  unitId: string,
+  mode: PracticeMode
+): Promise<UnitProgressRecord | undefined> {
+  if (!unitId || typeof window === 'undefined') return undefined
+  try {
+    return await db.unitProgress.get([unitId, mode])
+  } catch (err) {
+    console.error('Failed to get unit progress:', err)
+    return undefined
+  }
+}
+
+/**
+ * 标记单元内的一个单词「真正被敲完」。
+ *
+ * 这是 unitProgress 唯一的写入入口：只有用户在练习区逐字拼对这个词、
+ * 并打满当前循环次数（与「达到消灭标准」同一时刻）才会调用。
+ * 单纯浏览、按切换键翻词、加星、重放发音、偷看提示都不经过这里。
+ *
+ * 读改写放在一个事务里，避免连续完成多个词时互相覆盖。
+ */
+export async function markUnitWordCompleted(params: {
+  bookId: string
+  unitId: string
+  mode: PracticeMode
+  wordId: string
+  /** 该词在单元内的下标，用来推进断点 */
+  wordIndex: number
+  /** 单元总词数，用来判断整个单元是否已经全部敲完 */
+  totalWords: number
+}): Promise<UnitProgressRecord | null> {
+  const { bookId, unitId, mode, wordId, wordIndex, totalWords } = params
+  if (!unitId || !wordId || totalWords <= 0 || typeof window === 'undefined') return null
+
+  try {
+    return await db.transaction('rw', db.unitProgress, async () => {
+      const existing = await db.unitProgress.get([unitId, mode])
+      const now = Date.now()
+
+      const completedBefore = existing?.completedWordIds ?? []
+      const completedWordIds = completedBefore.includes(wordId)
+        ? completedBefore
+        : [...completedBefore, wordId]
+
+      const isUnitCompleted = completedWordIds.length >= totalWords
+      const nextWordIndex = Math.min(wordIndex + 1, totalWords - 1)
+
+      const record: UnitProgressRecord = {
+        unitId,
+        bookId,
+        mode,
+        status: isUnitCompleted ? 'completed' : 'in_progress',
+        // 断点只前进不后退：回头重练前面的词不会把存档拉回去
+        currentWordIndex: Math.max(existing?.currentWordIndex ?? 0, nextWordIndex),
+        completedWordIds,
+        retryWordIds: (existing?.retryWordIds ?? []).filter((id) => id !== wordId),
+        startedAt: existing?.startedAt ?? now,
+        lastStudiedAt: now,
+        completedAt: isUnitCompleted ? existing?.completedAt ?? now : undefined,
+      }
+
+      await db.unitProgress.put(record)
+      return record
+    })
+  } catch (err) {
+    console.error('Failed to mark unit word completed:', err)
+    return null
+  }
+}
+
+/**
+ * 清空某个单元在某个模式下的练习存档，「重做本单元」时调用。
+ *
+ * 不清的话，重做过程中刷新页面会被旧存档顶回重做前的位置。
+ */
+export async function clearUnitProgress(unitId: string, mode: PracticeMode): Promise<void> {
+  if (!unitId || typeof window === 'undefined') return
+  try {
+    await db.unitProgress.delete([unitId, mode])
+  } catch (err) {
+    console.error('Failed to clear unit progress:', err)
+  }
+}
+
+/**
  * 保存单个单词的用户自定义切分与构词覆盖
  * 1. 写入 wordOverrides 表
  * 2. 同步更新 wordRecords 中已有的离线快照
