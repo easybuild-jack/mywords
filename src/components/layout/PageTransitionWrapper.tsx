@@ -30,7 +30,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
             className="fixed top-0 bottom-0 left-0 md:left-64 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
             style={{ backgroundColor: 'var(--background)', willChange: 'opacity' }}
           >
-            <div className="glass-card px-8 py-6 rounded-3xl border border-border shadow-[0_24px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_60px_rgba(0,0,0,0.8)] flex flex-col items-center gap-4">
+            <div className="px-8 py-6 rounded-2xl bg-sidebar border border-white/10 shadow-xl shadow-black/25 flex flex-col items-center gap-4">
               <div className="relative flex items-center justify-center">
                 <div className="size-11 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
                 <Sparkles className="size-4.5 text-primary absolute animate-pulse" />

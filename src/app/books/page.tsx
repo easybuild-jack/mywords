@@ -574,8 +574,8 @@ function BooksHubContent() {
                     cy="48"
                     r={strokeRadius}
                     fill="transparent"
-                    stroke="rgba(255, 255, 255, 0.08)"
                     strokeWidth="6"
+                    className="progress-ring-track transition-colors duration-300"
                   />
                   {/* 真实动态进度环 */}
                   <circle
@@ -637,7 +637,7 @@ function BooksHubContent() {
           )}
         </div>
 
-        <div className={`min-h-[400px] lg:h-[400px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 content-start overflow-y-auto p-1 -m-1 transition-all duration-200 ${
+        <div className={`min-h-[404px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 content-start p-1 -m-1 transition-all duration-200 ${
           isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
         }`}>
           {currentUnits.map((idx) => {
@@ -742,7 +742,7 @@ function BooksHubContent() {
                   </div>
 
                   {/* 横条进度条 */}
-                  <div className="w-full h-1.5 sm:h-2 bg-white/[0.08] rounded-full overflow-hidden border border-white/5">
+                  <div className="w-full h-1.5 sm:h-2 progress-track rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         isMastered

@@ -221,6 +221,16 @@
     -webkit-backdrop-filter: blur(16px);
   }
 
+  /* 进度条与进度环未完成底槽/底轨规范（深色默认） */
+  .progress-track {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .progress-ring-track {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+
   .animate-shake {
     animation: shake-animation 0.22s ease-in-out;
   }
@@ -527,6 +537,16 @@
   background: rgba(13, 118, 110, 0.35) !important;
 }
 
+/* 进度环与进度条未完成底槽在晨曦纸墨（浅色）下的高对比度适配 */
+:root[data-skin="muted-parchment"] .progress-track {
+  background-color: rgba(13, 118, 110, 0.12) !important;
+  border-color: rgba(13, 118, 110, 0.22) !important;
+}
+
+:root[data-skin="muted-parchment"] .progress-ring-track {
+  stroke: rgba(13, 118, 110, 0.18) !important;
+}
+
 /* ---------------------------------------------------------------------------
    酪梨青灰（avocado-cream）潮流高级感浅色模式专属适配规则
    核心三色：豆汁黄(#F9FBE6) + 青灰(#6E766C) + 牛油果绿(#7FA921)
@@ -709,6 +729,16 @@
 
 :root[data-skin="avocado-cream"] ::-webkit-scrollbar-thumb:hover {
   background: rgba(127, 169, 33, 0.45) !important;
+}
+
+/* 进度环与进度条未完成底槽在酪梨青灰（浅色）下的高对比度适配 */
+:root[data-skin="avocado-cream"] .progress-track {
+  background-color: rgba(110, 118, 108, 0.14) !important;
+  border-color: rgba(110, 118, 108, 0.22) !important;
+}
+
+:root[data-skin="avocado-cream"] .progress-ring-track {
+  stroke: rgba(110, 118, 108, 0.20) !important;
 }
 
 /* 扫光流光关键帧动画 (用于骨架屏与卡片加载态) */
