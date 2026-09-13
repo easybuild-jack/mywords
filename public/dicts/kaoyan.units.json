@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "bookId": "book_kaoyan",
+  "totalWords": 6705,
+  "units": [
+    {
+      "id": "kaoyan_grammar_function",
+      "name": "语法功能词",
+      "order": 0,
+      "wordCount": 164
+    },
+    {
+      "id": "kaoyan_time_quantity",
+      "name": "时间、数量与度量",
+      "order": 1,
+      "wordCount": 186
+    },
+    {
+      "id": "kaoyan_people_relations",
+      "name": "人物、家庭与社会关系",
+      "order": 2,
+      "wordCount": 87
+    },
+    {
+      "id": "kaoyan_body_health",
+      "name": "身体、健康与医疗",
+      "order": 3,
+      "wordCount": 104
+    },
+    {
+      "id": "kaoyan_emotions_character",
+      "name": "情感、性格与心理",
+      "order": 4,
+      "wordCount": 354
+    },
+    {
+      "id": "kaoyan_food_drink",
+      "name": "饮食与食物",
+      "order": 5,
+      "wordCount": 55
+    },
+    {
+      "id": "kaoyan_clothing_home",
+      "name": "服饰、家居与住所",
+      "order": 6,
+      "wordCount": 66
+    },
+    {
+      "id": "kaoyan_animals_plants",
+      "name": "动植物与农业",
+      "order": 7,
+      "wordCount": 57
+    },
+    {
+      "id": "kaoyan_nature_environment",
+      "name": "自然、环境与地理",
+      "order": 8,
+      "wordCount": 96
+    },
+    {
+      "id": "kaoyan_transport_travel",
+      "name": "交通、旅行与运输",
+      "order": 9,
+      "wordCount": 68
+    },
+    {
+      "id": "kaoyan_sports_leisure",
+      "name": "运动、休闲与娱乐",
+      "order": 10,
+      "wordCount": 55
+    },
+    {
+      "id": "kaoyan_education_academic",
+      "name": "教育、学术与研究",
+      "order": 11,
+      "wordCount": 87
+    },
+    {
+      "id": "kaoyan_work_career",
+      "name": "工作、职业与职场",
+      "order": 12,
+      "wordCount": 76
+    },
+    {
+      "id": "kaoyan_economy_business",
+      "name": "经济、商业与金融",
+      "order": 13,
+      "wordCount": 106
+    },
+    {
+      "id": "kaoyan_politics_law",
+      "name": "政治、法律与社会",
+      "order": 14,
+      "wordCount": 158
+    },
+    {
+      "id": "kaoyan_culture_media",
+      "name": "文化、艺术与媒体",
+      "order": 15,
+      "wordCount": 112
+    },
+    {
+      "id": "kaoyan_science_tech",
+      "name": "科学、技术与工程",
+      "order": 16,
+      "wordCount": 127
+    },
+    {
+      "id": "kaoyan_language_expression",
+      "name": "语言、言语与表达",
+      "order": 17,
+      "wordCount": 210
+    },
+    {
+      "id": "kaoyan_thought_logic",
+      "name": "思维、逻辑与哲学",
+      "order": 18,
+      "wordCount": 264
+    },
+    {
+      "id": "kaoyan_action_change",
+      "name": "动作、变化与因果",
+      "order": 19,
+      "wordCount": 719
+    },
+    {
+      "id": "kaoyan_quality_degree",
+      "name": "性质、程度与评价",
+      "order": 20,
+      "wordCount": 534
+    },
+    {
+      "id": "kaoyan_abstract_general",
+      "name": "通用抽象与高频概念",
+      "order": 21,
+      "wordCount": 3020
+    }
+  ]
+}

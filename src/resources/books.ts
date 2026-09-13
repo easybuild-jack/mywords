@@ -351,7 +351,7 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     category: 'exam',
     isCustom: false,
     unitSize: 20,
-    totalWords: 3700,
+    totalWords: 6705,
     words: INITIAL_SAMPLE_WORDS,
     createdAt: Date.now(),
     updatedAt: Date.now()
