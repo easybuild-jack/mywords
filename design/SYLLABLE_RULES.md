@@ -277,10 +277,10 @@
 | 词库 | 词数 | 处理工具 |
 |---|---|---|
 | basewords（基础词汇）| 1195 | `scripts/rebuild-basewords-syllables.mjs` |
-| CET4_T（四级）| 2607 | `scripts/rebuild-dict-syllables.mjs` |
+| CET_4_6（四六级）| 2607 | `scripts/rebuild-dict-syllables.mjs` |
 | it-words（IT 编程）| 1700 | `scripts/rebuild-dict-syllables.mjs` |
-| 2025KaoYanHongBaoShu（考研）| 6705 | `scripts/rebuild-dict-syllables.mjs` |
-| 4000_Essential_English_Words（核心 4000）| 3600 | `scripts/rebuild-dict-syllables.mjs` |
+| kaoyan（考研）| 6705 | `scripts/rebuild-dict-syllables.mjs` |
+| essential4000（核心 4000）| 3600 | `scripts/rebuild-dict-syllables.mjs` |
 
 所有词库已按本规范生成 syllables；复合词/缩写（含空格、连字符、全大写）保持原样。
 规则调整后：`node scripts/rebuild-dict-syllables.mjs`（可加 `--dry-run` 预览）、

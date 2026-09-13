@@ -24,10 +24,10 @@ const LOG_PATH = logIdx >= 0 ? args[logIdx + 1] : null
 const TARGETS = args.filter((a, i) => !a.startsWith('--') && !(logIdx >= 0 && i === logIdx + 1))
 
 const DICT_FILES = {
-  'CET4_T': 'CET4_T.json',
+  'CET_4_6': 'CET_4_6.json',
   'it-words': 'it-words.json',
-  '2025KaoYanHongBaoShu': '2025KaoYanHongBaoShu.json',
-  '4000_Essential_English_Words-meaning': '4000_Essential_English_Words-meaning.json',
+  kaoyan: 'kaoyan.json',
+  essential4000: 'essential4000.json',
   basewords: 'basewords.json',
 }
 
@@ -85,7 +85,7 @@ const vowelCount = (phoneNorm, lower) => countPhoneticVowels(phoneNorm, lower) +
 function loadLexicon() {
   const lex = new Set()
   const phones = new Map()
-  const order = [...Object.entries(DICT_FILES)].sort(([a], [b]) => (a === 'CET4_T') - (b === 'CET4_T'))
+  const order = [...Object.entries(DICT_FILES)].sort(([a], [b]) => (a === 'CET_4_6') - (b === 'CET_4_6'))
   for (const [key, file] of order) {
     const p = path.join(ROOT, 'public', 'dicts', file)
     if (!fs.existsSync(p)) continue
@@ -94,7 +94,7 @@ function loadLexicon() {
       if (!/^[a-z]+$/.test(n)) continue
       lex.add(n)
       const ph = normalizePhone(w.usphone || w.ukphone)
-      if (ph && !phones.has(n)) phones.set(n, { p: ph, loose: key === 'CET4_T' })
+      if (ph && !phones.has(n)) phones.set(n, { p: ph, loose: key === 'CET_4_6' })
     }
   }
   return { lex, phones }

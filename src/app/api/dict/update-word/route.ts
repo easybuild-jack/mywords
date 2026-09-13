@@ -6,18 +6,18 @@ import { AUTHOR_SYNC_TOKEN } from '@/lib/permissions'
 
 const OFFICIAL_FILES = [
   'basewords.json',
-  'CET4_T.json',
-  '2025KaoYanHongBaoShu.json',
+  'CET_4_6.json',
+  'kaoyan.json',
   'it-words.json',
-  '4000_Essential_English_Words-meaning.json',
+  'essential4000.json',
 ]
 
 const BOOK_ID_TO_FILE: Record<string, string> = {
   'book_basewords': 'basewords.json',
-  'book_cet4': 'CET4_T.json',
-  'book_kaoyan': '2025KaoYanHongBaoShu.json',
+  'book_cet4': 'CET_4_6.json',
+  'book_kaoyan': 'kaoyan.json',
   'book_coder': 'it-words.json',
-  'book_ielts': '4000_Essential_English_Words-meaning.json',
+  'book_ielts': 'essential4000.json',
 }
 
 interface UpdateWordPayload {

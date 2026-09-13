@@ -334,8 +334,8 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
   },
   {
     id: 'book_cet4',
-    name: 'CET-4 核心词库',
-    description: '全国大学英语四级核心高频词汇精选，覆盖核心词根词缀与经典考题',
+    name: '四六级词库',
+    description: '全国大学英语四六级核心高频词汇精选，覆盖核心词根词缀与经典考题',
     category: 'exam',
     isCustom: false,
     unitSize: 20,
@@ -381,6 +381,19 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     updatedAt: Date.now()
   }
 ]
+
+export const DEFAULT_SAMPLE_CUSTOM_BOOK: VocabularyBook = {
+  id: 'book_custom_sample',
+  name: '我的生词本（示例）',
+  description: '自定义专属词库示例，支持从文本或 CSV 导入生词、专属章节规划与个性化词义记忆。',
+  category: 'custom',
+  isCustom: true,
+  unitSize: 20,
+  totalWords: INITIAL_SAMPLE_WORDS.length,
+  words: INITIAL_SAMPLE_WORDS,
+  createdAt: 1700000000000,
+  updatedAt: 1700000000000,
+}
 
 /**
  * 转换纯文本或外部 JSON 格式为标准 WordItem

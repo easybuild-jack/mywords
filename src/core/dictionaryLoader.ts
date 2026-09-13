@@ -33,9 +33,9 @@ export interface RawDictEntry {
 // 官方内置大词库文件映射关系
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
   'book_basewords': { path: '/dicts/basewords.json', totalWords: 4427, name: '基础词汇' },
-  'book_cet4': { path: '/dicts/CET4_T.json', totalWords: 2607, name: 'CET-4 核心词库' },
-  'book_kaoyan': { path: '/dicts/2025KaoYanHongBaoShu.json', totalWords: 3700, name: '考研英语 2025 高频词' },
-  'book_ielts': { path: '/dicts/4000_Essential_English_Words-meaning.json', totalWords: 4000, name: '核心高频 4000 词' },
+  'book_cet4': { path: '/dicts/CET_4_6.json', totalWords: 2607, name: '四六级词库' },
+  'book_kaoyan': { path: '/dicts/kaoyan.json', totalWords: 3700, name: '考研英语 2025 高频词' },
+  'book_ielts': { path: '/dicts/essential4000.json', totalWords: 4000, name: '核心高频 4000 词' },
   'book_coder': { path: '/dicts/it-words.json', totalWords: 3824, name: '程序员词库' },
 }
 
@@ -47,6 +47,11 @@ export const OFFICIAL_BOOK_UNITS_FILE_MAP: Record<string, string> = {
   'book_basewords': '/dicts/basewords.units.json',
   'book_cet4': '/dicts/cet4.units.json',
   'book_coder': '/dicts/it-words.units.json',
+}
+
+/** 没有语义目录的词库也需要稳定单元 ID，供进度表关联。 */
+export function buildFixedUnitId(bookId: string, unitIndex: number): string {
+  return `${bookId}_unit_${Math.max(0, unitIndex)}`
 }
 
 function formatPhonetic(rawPhone?: string): string | undefined {
@@ -113,7 +118,7 @@ class DictionaryLoader {
     if (this.isIndexInitialized || typeof window === 'undefined') return
     try {
       const [resCet4, resIt] = await Promise.all([
-        fetch('/dicts/CET4_T.json').catch(() => null),
+        fetch('/dicts/CET_4_6.json').catch(() => null),
         fetch('/dicts/it-words.json').catch(() => null),
       ])
 
@@ -433,6 +438,34 @@ class DictionaryLoader {
    */
   public async loadAllBookRawWords(bookId: string): Promise<RawDictEntry[]> {
     return this.fetchBookRawWords(bookId)
+  }
+
+  /**
+   * 返回当前词库定义下每个单元的准确成员 ID，用于校准内容变更后的历史进度。
+   */
+  public async loadBookUnitWordIds(bookId: string, unitSize: number = 20): Promise<Record<string, string[]>> {
+    const allRawWords = await this.fetchBookRawWords(bookId)
+    if (!allRawWords.length) return {}
+
+    const units = await this.loadBookUnits(bookId)
+    if (units.length) {
+      const result = Object.fromEntries(units.map((unit) => [unit.id, [] as string[]]))
+      for (const entry of allRawWords) {
+        if (entry.unitId && result[entry.unitId]) {
+          result[entry.unitId].push(this.buildWordItemFromEntry(entry).id)
+        }
+      }
+      return result
+    }
+
+    const result: Record<string, string[]> = {}
+    for (let start = 0; start < allRawWords.length; start += unitSize) {
+      const unitIndex = Math.floor(start / unitSize)
+      result[buildFixedUnitId(bookId, unitIndex)] = allRawWords
+        .slice(start, start + unitSize)
+        .map((entry) => this.buildWordItemFromEntry(entry).id)
+    }
+    return result
   }
 
   /**
