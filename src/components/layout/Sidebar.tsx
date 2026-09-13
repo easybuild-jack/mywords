@@ -41,7 +41,7 @@ export function Sidebar() {
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">
           <div className="size-10 shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
-            <img src="/logo.png" alt="MyWords" className="size-full object-contain" />
+            <img src="/logo111.png" alt="MyWords" className="size-full object-contain" />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-white">MyWords</h1>

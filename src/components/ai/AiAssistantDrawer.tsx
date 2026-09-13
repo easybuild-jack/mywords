@@ -549,8 +549,8 @@ export function AiAssistantDrawer() {
                 <div className="flex-1 overflow-y-auto px-4 py-3 space-y-1">
                   {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
-                      <div className="size-14 rounded-2xl bg-card border border-border flex items-center justify-center p-2 mb-3 shadow-sm">
-                        <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
+                      <div className="size-14 rounded-2xl bg-card border border-border flex items-center justify-center p-2 mb-3 shadow-sm group/welcome cursor-pointer">
+                        <img src="/logo222.png" alt="MyWords Copilot" className="size-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.34,1.4,0.64,1)] group-hover/welcome:rotate-[360deg] group-hover/welcome:scale-110" />
                       </div>
                       <p className="text-sm font-medium text-foreground mb-1">
                         我是你的专属 MyWords Copilot ✨
@@ -575,7 +575,7 @@ export function AiAssistantDrawer() {
                   {/* 思考等待状态 */}
                   {isThinking && (
                     <div className="flex items-center gap-2.5 p-2.5 px-3 rounded-xl bg-card border border-border text-xs text-muted-foreground animate-pulse my-3 w-fit shadow-sm">
-                      <img src="/logo.svg" alt="思考中" className="size-3.5 object-contain animate-spin" />
+                      <img src="/logo222.png" alt="思考中" className="size-3.5 object-contain animate-spin" />
                       <span>MyWords Copilot 正在深入分析并组织回复...</span>
                     </div>
                   )}

@@ -38,8 +38,8 @@ export function AiMessageItem({ message, isStreaming = false }: AiMessageItemPro
       {/* 顶部：Copilot 身份与操作栏 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="size-7 rounded-lg bg-muted border border-border flex items-center justify-center p-1 shadow-sm">
-            <img src="/logo.svg" alt="MyWords Copilot" className="size-full object-contain" />
+          <div className="size-8 rounded-xl bg-muted border border-border flex items-center justify-center p-0.5 shadow-sm cursor-pointer">
+            <img src="/logo222.png" alt="MyWords Copilot" className="size-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.34,1.4,0.64,1)] hover:rotate-[360deg] hover:scale-110" />
           </div>
           <span className="text-xs font-semibold text-foreground tracking-wide">
             MyWords Copilot
