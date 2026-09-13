@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "bookId": "book_coder",
+  "totalWords": 3979,
+  "units": [
+    {
+      "id": "it_general_it",
+      "name": "通用 IT 操作与概念",
+      "order": 0,
+      "wordCount": 2581
+    },
+    {
+      "id": "it_file_data",
+      "name": "文件、数据格式与 I/O",
+      "order": 1,
+      "wordCount": 80
+    },
+    {
+      "id": "it_office_editor",
+      "name": "办公与编辑器操作",
+      "order": 2,
+      "wordCount": 73
+    },
+    {
+      "id": "it_database",
+      "name": "数据库与数据查询",
+      "order": 3,
+      "wordCount": 127
+    },
+    {
+      "id": "it_web_frontend",
+      "name": "Web 前端开发",
+      "order": 4,
+      "wordCount": 79
+    },
+    {
+      "id": "it_web_backend",
+      "name": "Web 后端、API 与中间件",
+      "order": 5,
+      "wordCount": 59
+    },
+    {
+      "id": "it_ui_ux",
+      "name": "UI/UX 设计",
+      "order": 6,
+      "wordCount": 31
+    },
+    {
+      "id": "it_networking",
+      "name": "网络协议与通信",
+      "order": 7,
+      "wordCount": 93
+    },
+    {
+      "id": "it_security",
+      "name": "网络与系统安全",
+      "order": 8,
+      "wordCount": 39
+    },
+    {
+      "id": "it_data_structures",
+      "name": "数据结构",
+      "order": 9,
+      "wordCount": 73
+    },
+    {
+      "id": "it_algorithms",
+      "name": "算法与复杂度",
+      "order": 10,
+      "wordCount": 51
+    },
+    {
+      "id": "it_performance",
+      "name": "性能、扩展与调优",
+      "order": 11,
+      "wordCount": 44
+    },
+    {
+      "id": "it_concurrency",
+      "name": "并发与并行",
+      "order": 12,
+      "wordCount": 28
+    },
+    {
+      "id": "it_hardware",
+      "name": "硬件、设备与外设",
+      "order": 13,
+      "wordCount": 91
+    },
+    {
+      "id": "it_os",
+      "name": "操作系统与进程管理",
+      "order": 14,
+      "wordCount": 44
+    },
+    {
+      "id": "it_cloud",
+      "name": "云计算与虚拟化",
+      "order": 15,
+      "wordCount": 26
+    },
+    {
+      "id": "it_dev_tools",
+      "name": "开发工具与构建链",
+      "order": 16,
+      "wordCount": 51
+    },
+    {
+      "id": "it_engineering",
+      "name": "软件工程与项目实践",
+      "order": 17,
+      "wordCount": 82
+    },
+    {
+      "id": "it_devops",
+      "name": "运维、CI/CD 与监控",
+      "order": 18,
+      "wordCount": 119
+    },
+    {
+      "id": "it_ai_ml_core",
+      "name": "人工智能与机器学习核心",
+      "order": 19,
+      "wordCount": 167
+    },
+    {
+      "id": "it_llm_agent",
+      "name": "大模型、智能体与提示工程",
+      "order": 20,
+      "wordCount": 41
+    }
+  ]
+}
