@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie'
 import type { VocabularyBook, VocabularyUnit, WordMasteryRecord, UnitProgressRecord, WordItem, WordOverrideRecord, WordEtymology, PracticeMode, WordExample } from '@/types'
-import { BUILTIN_BOOKS } from '@/resources/books'
+import { BUILTIN_BOOKS, DEFAULT_SAMPLE_CUSTOM_BOOK } from '@/resources/books'
 import { buildWordId } from '@/lib/wordId'
 
 const STORE_SCHEMA_V1: Record<string, string> = {
@@ -316,10 +316,36 @@ export async function toggleStarWord(wordId: string, bookId: string, wordItem?: 
 export async function getCustomBooks(): Promise<VocabularyBook[]> {
   try {
     const all = await db.books.toArray()
-    return all.filter((b) => b.isCustom).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+    const custom = all.filter((b) => b.isCustom).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+
+    // 检查是否全为历史测试产生的多余重复默认生词本（如开发测试时产生的多个同名“我的自定义生词本”或临时记录）
+    const isRedundantLegacyTest =
+      custom.length > 1 &&
+      custom.every(
+        (b) =>
+          b.name === '我的自定义生词本' ||
+          b.id === 'book_custom_collected' ||
+          b.id === DEFAULT_SAMPLE_CUSTOM_BOOK.id
+      )
+
+    // 若无数据或仅有旧测试产生的冗余条目，仅保留并呈现 1 个官方标准示例词库
+    if (custom.length === 0 || isRedundantLegacyTest) {
+      if (isRedundantLegacyTest) {
+        for (const b of custom) {
+          if (b.id !== DEFAULT_SAMPLE_CUSTOM_BOOK.id) {
+            await db.books.delete(b.id).catch(() => {})
+            await db.unitProgress.where('bookId').equals(b.id).delete().catch(() => {})
+          }
+        }
+      }
+      await db.books.put(DEFAULT_SAMPLE_CUSTOM_BOOK)
+      return [DEFAULT_SAMPLE_CUSTOM_BOOK]
+    }
+
+    return custom
   } catch (err) {
     console.error('Failed to load custom books:', err)
-    return []
+    return [DEFAULT_SAMPLE_CUSTOM_BOOK]
   }
 }
 

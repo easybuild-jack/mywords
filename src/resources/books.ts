@@ -322,8 +322,8 @@ export const INITIAL_SAMPLE_WORDS: WordItem[] = [
 export const BUILTIN_BOOKS: VocabularyBook[] = [
   {
     id: 'book_basewords',
-    name: '英语基础词汇',
-    description: '英语基础词汇，涵盖小学到高中常见词汇，英语单词的基础',
+    name: '基础词汇',
+    description: '基础词汇，涵盖小学到高中常见词汇，英语单词的基础',
     category: 'daily',
     isCustom: false,
     unitSize: 20,
@@ -381,6 +381,19 @@ export const BUILTIN_BOOKS: VocabularyBook[] = [
     updatedAt: Date.now()
   }
 ]
+
+export const DEFAULT_SAMPLE_CUSTOM_BOOK: VocabularyBook = {
+  id: 'book_custom_sample',
+  name: '我的生词本（示例）',
+  description: '自定义专属词库示例，支持从文本或 CSV 导入生词、专属章节规划与个性化词义记忆。',
+  category: 'custom',
+  isCustom: true,
+  unitSize: 20,
+  totalWords: INITIAL_SAMPLE_WORDS.length,
+  words: INITIAL_SAMPLE_WORDS,
+  createdAt: 1700000000000,
+  updatedAt: 1700000000000,
+}
 
 /**
  * 转换纯文本或外部 JSON 格式为标准 WordItem
