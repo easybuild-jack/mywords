@@ -74,7 +74,7 @@ export default function DictionaryPage() {
   }, [currentBook?.id, currentBook?.name, currentLoadedWords, activeWordIndex, syncStarredWordIds])
 
   // 校验是否已配置有效的大模型 API Key（具备 AI 能力）
-  const hasAiKey = Boolean(aiConfig?.apiKey?.trim())
+  const hasAiKey = aiConfig.enabled !== false && Boolean(aiConfig?.apiKey?.trim())
 
   useEffect(() => () => aiAbortRef.current?.abort(), [])
 

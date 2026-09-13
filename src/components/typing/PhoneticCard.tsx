@@ -8,6 +8,8 @@ import { formatShortcutDisplay, DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { InlineIpaKeyboard } from '@/components/typing/InlineIpaKeyboard'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
+import { isAiWordCoreReady } from '@/lib/aiWordCore'
 
 interface PhoneticCardProps {
   word: WordItem
@@ -27,10 +29,12 @@ function cleanPhoneticDisplay(raw?: string): string {
  * 音标键盘直接平铺展示在默写框下方，采用点选方式录入。
  */
 export function PhoneticCard({
-  word,
+  word: sourceWord,
   phoneticPreference,
   remainingLoops = 1,
 }: PhoneticCardProps) {
+  const word = useEnsureAiWordSections(sourceWord, ['core'])
+  const isCoreReady = isAiWordCoreReady(word)
   const {
     dictationPhoneticInput,
     isPhoneticPassed,
@@ -137,6 +141,7 @@ export function PhoneticCard({
           </div>
         </div>
 
+        <fieldset disabled={!isCoreReady} className="contents">
         {/* 中间：音标默写回显槽与操作控制 */}
         <div className="w-full max-w-2xl mx-auto space-y-2">
           <div
@@ -164,7 +169,7 @@ export function PhoneticCard({
                   </span>
                 ) : (
                   <span className="text-xs sm:text-sm text-muted-foreground/60 font-sans font-normal truncate select-none">
-                    请点选下方键盘输入音标，按 Enter 校验...
+                    {isCoreReady ? '请点选下方键盘输入音标，按 Enter 校验...' : '正在补全音标与译文...'}
                   </span>
                 )}
               </div>
@@ -175,7 +180,7 @@ export function PhoneticCard({
               <button
                 type="button"
                 onClick={backspacePhonetic}
-                disabled={!dictationPhoneticInput}
+                disabled={!dictationPhoneticInput || !isCoreReady}
                 className="h-9 sm:h-10 px-2.5 sm:px-3 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] disabled:opacity-40 disabled:cursor-not-allowed border border-white/10 text-xs font-medium text-gray-200 hover:text-white transition-all active:scale-95 cursor-pointer flex items-center gap-1"
                 title="退格删除最后一个音标符号"
               >
@@ -211,6 +216,7 @@ export function PhoneticCard({
         <div className="w-full">
           <InlineIpaKeyboard onSelectSymbol={appendPhoneticSymbol} />
         </div>
+        </fieldset>
       </div>
     </WordCardShell>
   )

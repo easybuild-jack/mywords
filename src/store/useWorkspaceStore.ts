@@ -1191,7 +1191,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           phoneticPreference,
           audioRate,
         } = get()
-        if (!currentWord) return false
+        if (
+          !currentWord ||
+          (!currentWord.phoneticUs?.trim() && !currentWord.phoneticUk?.trim())
+        ) return false
         const isValid = validatePhonetic(dictationPhoneticInput, currentWord.phoneticUs, currentWord.phoneticUk)
         if (isValid) {
           if (isCorrectSoundEnabled) {

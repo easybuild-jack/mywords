@@ -15,10 +15,12 @@ import {
   GripHorizontal,
 } from 'lucide-react'
 import { useAiAssistantStore, type AiSession } from '@/store/useAiAssistantStore'
+import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { AiMessageItem } from './AiMessageItem'
 import { Tooltip } from '@/components/ui/Tooltip'
 
 export function AiAssistantDrawer() {
+  const setSettingsModalOpen = useWorkspaceStore((state) => state.setSettingsModalOpen)
   const {
     isOpen,
     closeDrawer,
@@ -353,6 +355,10 @@ export function AiAssistantDrawer() {
   const handleSend = () => {
     const text = inputPrompt.trim()
     if (!text) return
+    if (aiConfig.enabled === false) {
+      setSettingsModalOpen(true, 'ai')
+      return
+    }
     if (!aiConfig?.apiKey?.trim()) {
       setApiKeyPromptOpen(true)
       return

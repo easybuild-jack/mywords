@@ -27,7 +27,7 @@ import { formatShortcutDisplay } from '@/lib/shortcuts'
 import { audioEngine } from '@/core/audioEngine'
 import { InteractiveSentence } from '@/components/sentence/InteractiveSentence'
 import { WordLookupModal } from '@/components/dictionary/WordLookupModal'
-import { useEnsureAiWordSections } from '@/hooks/useEnsureAiWordSections'
+import { useEnsureAiWordSections, type AiWordSection } from '@/hooks/useEnsureAiWordSections'
 
 interface LearnCardProps {
   word: WordItem
@@ -51,8 +51,6 @@ const COMBO_KINDS = new Set<GraphemeKind>([
   'consonant-digraph',
   'suffix-chunk',
 ])
-const FULL_AI_SECTIONS = ['structure', 'examples'] as const
-
 const COMBO_TONES = ['text-accent', 'text-[#FDE68A]']
 
 function isCombo(segment: GraphemeSegment | undefined): boolean {
@@ -144,7 +142,6 @@ export function LearnCard({
   phoneticPreference,
   remainingLoops = 1,
 }: LearnCardProps) {
-  const word = useEnsureAiWordSections(sourceWord, FULL_AI_SECTIONS)
   const isSplit = useWorkspaceStore((s) => s.isCurrentWordSplit)
   const toggleSplit = useWorkspaceStore((s) => s.toggleCurrentWordSplit)
   const isEditModalOpen = useWorkspaceStore((s) => s.isEditWordSplitModalOpen)
@@ -155,6 +152,13 @@ export function LearnCard({
   const starCurrentWord = useWorkspaceStore((s) => s.starCurrentWord)
   const canEditWordSplit = useCanEditWordSplit()
   const [contextTab, setContextTab] = useState<'examples' | 'phrases'>('examples')
+  const requestedSections: AiWordSection[] = [
+    'core',
+    'etymology',
+    contextTab,
+    ...(isSplit ? ['syllables' as const] : []),
+  ]
+  const word = useEnsureAiWordSections(sourceWord, requestedSections)
 
   const isStarred = Boolean(starredWordIds?.includes(word.id))
 
@@ -165,20 +169,21 @@ export function LearnCard({
 
   const displayLength = word.name.length
 
-  const structureStatus = word.aiSections?.structure
+  const etymologyStatus = word.aiSections?.etymology
   const examplesStatus = word.aiSections?.examples
+  const phrasesStatus = word.aiSections?.phrases
   const examples =
     word.examples?.length
       ? word.examples
-      : word.aiSections
+      : word.aiSections?.examples
         ? []
         : getWordExamples(word)
   const phrases = word.phrases || []
   const contextItems = contextTab === 'examples' ? examples : phrases
   const contextStatus =
-    contextTab === 'examples' ? examplesStatus : structureStatus
+    contextTab === 'examples' ? examplesStatus : phrasesStatus
   const { origin, derivation } =
-    !structureStatus || structureStatus === 'ready'
+    !etymologyStatus || etymologyStatus === 'ready'
       ? getWordEtymologyExtras(word)
       : {}
 
@@ -477,9 +482,9 @@ export function LearnCard({
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
                 <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
-                  {structureStatus === 'pending'
+                  {etymologyStatus === 'pending'
                     ? 'LOADING'
-                    : structureStatus === 'error'
+                    : etymologyStatus === 'error'
                       ? 'FAILED'
                       : 'ROOTS'}
                 </span>
@@ -487,13 +492,13 @@ export function LearnCard({
             </div>
 
             {/* 词根拆解块或词源探究（字号全面放大） */}
-            {structureStatus === 'pending' ? (
+            {etymologyStatus === 'pending' ? (
               <div className="space-y-3 animate-pulse" aria-label="AI 构词分析中">
                 <div className="h-5 w-4/5 rounded bg-white/[0.06]" />
                 <div className="h-5 w-3/5 rounded bg-white/[0.06]" />
                 <div className="h-16 rounded-lg bg-white/[0.04]" />
               </div>
-            ) : structureStatus === 'error' ? (
+            ) : etymologyStatus === 'error' ? (
               <div className="h-full flex items-center justify-center text-sm text-gray-400">
                 构词分析失败，下次进入时将重新补全
               </div>

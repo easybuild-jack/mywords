@@ -10,8 +10,10 @@
 import type { RawDictEntry } from '@/core/dictionaryLoader'
 import {
   buildWordCoreQueryMessages,
+  buildWordEtymologyQueryMessages,
   buildWordExamplesQueryMessages,
-  buildWordStructureQueryMessages,
+  buildWordPhrasesQueryMessages,
+  buildWordSyllablesQueryMessages,
   extractJsonFromAiReply,
 } from '@/lib/aiPrompts'
 import { KNOWN_SYLLABLE_OVERRIDES } from '@/lib/syllables'
@@ -20,8 +22,8 @@ export interface AiChatMessage {
   role: 'system' | 'user' | 'assistant'
   content: string
 }
-
 export interface AiClientConfig {
+  enabled?: boolean
   endpoint: string
   apiKey: string
   model: string
@@ -29,8 +31,6 @@ export interface AiClientConfig {
   temperature?: number
   maxTokens?: number
 }
-
-
 /** 规范化拼接 chat/completions 端点 */
 export function resolveChatCompletionsUrl(rawEndpoint: string): string {
   let clean = (rawEndpoint || '').trim().replace(/\/+$/, '')
@@ -43,7 +43,6 @@ export function resolveChatCompletionsUrl(rawEndpoint: string): string {
   }
   return `${clean}/chat/completions`
 }
-
 /** 测试大模型连通性与 Key 有效性 (含代理 fallback) */
 export async function testAiConnection(
   config: AiClientConfig
@@ -203,8 +202,8 @@ export async function streamAiChatCompletion(
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<string> {
-  if (!config.apiKey?.trim()) {
-    throw new Error('未配置 API Key，请在偏好设置中绑定您的模型密钥。')
+  if (config.enabled === false || !config.apiKey?.trim()) {
+    throw new Error('AI 未启用或未配置 API Key。')
   }
 
   const url = resolveChatCompletionsUrl(config.endpoint)
@@ -312,8 +311,8 @@ export async function callAiChatCompletion(
   messages: AiChatMessage[],
   signal?: AbortSignal
 ): Promise<string> {
-  if (!config.apiKey?.trim()) {
-    throw new Error('未配置 API Key，请在偏好设置中绑定您的模型密钥。')
+  if (config.enabled === false || !config.apiKey?.trim()) {
+    throw new Error('AI 未启用或未配置 API Key。')
   }
 
   const url = resolveChatCompletionsUrl(config.endpoint)
@@ -467,7 +466,7 @@ async function fetchDictionarySection(
   maxTokens: number,
   signal?: AbortSignal
 ): Promise<RawDictEntry | null> {
-  if (!config.apiKey?.trim()) return null
+  if (config.enabled === false || !config.apiKey?.trim()) return null
   const rawReply = await callAiChatCompletion(
     resolveDictionaryConfig(config, maxTokens),
     messages,
@@ -482,8 +481,7 @@ function assertMatchingWord(entry: RawDictEntry, word: string) {
   }
 }
 
-function hasValidEtymology(value: RawDictEntry['etymology']): boolean {
-  if (value === undefined) return true
+export function hasValidEtymology(value: RawDictEntry['etymology']): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
 
   const hasValidPart = (part: unknown) => {
@@ -493,16 +491,24 @@ function hasValidEtymology(value: RawDictEntry['etymology']): boolean {
     return (
       typeof candidate.form === 'string' &&
       Boolean(candidate.form.trim()) &&
-      typeof candidate.meaning === 'string'
+      typeof candidate.meaning === 'string' &&
+      Boolean(candidate.meaning.trim())
     )
   }
 
-  return (
+  const textFields = [value.derivation, value.origin, value.memoryHook]
+  const hasContent =
+    [value.prefix, value.root, value.suffix].some(
+      (part) => part !== undefined && part !== null && hasValidPart(part)
+    ) ||
+    textFields.some((item) => typeof item === 'string' && Boolean(item.trim()))
+
+  return hasContent && (
     hasValidPart(value.prefix) &&
     hasValidPart(value.root) &&
     hasValidPart(value.suffix) &&
-    [value.derivation, value.origin, value.memoryHook].every(
-      (item) => item === undefined || typeof item === 'string'
+    textFields.every(
+      (item) => item === undefined || (typeof item === 'string' && Boolean(item.trim()))
     )
   )
 }
@@ -531,9 +537,8 @@ export async function fetchAiDictionaryWordCore(
   }
   return entry
 }
-
-/** 后台构词数据：音节、哑音与词源。 */
-export async function fetchAiDictionaryWordStructure(
+/** 单词拼读：只生成音节拆分与哑音下标。 */
+export async function fetchAiDictionaryWordSyllables(
   config: AiClientConfig,
   word: string,
   core: Pick<RawDictEntry, 'trans' | 'usphone' | 'ukphone'>,
@@ -541,8 +546,8 @@ export async function fetchAiDictionaryWordStructure(
 ): Promise<RawDictEntry | null> {
   const entry = await fetchDictionarySection(
     config,
-    buildWordStructureQueryMessages(word, core),
-    4096,
+    buildWordSyllablesQueryMessages(word, core),
+    2048,
     signal
   )
   if (!entry) return null
@@ -567,14 +572,6 @@ export async function fetchAiDictionaryWordStructure(
       .filter(Boolean)
   }
 
-  // 容错兜底：若短语数据仍为空，利用核心释义构建一条保底搭配，避免前端阻断
-  if ((!entry.phrases || entry.phrases.length === 0) && core.trans?.length) {
-    const fallbackCn = (core.trans[0] || '').replace(/^[a-z]+\.\s*/i, '').split(/[；;,，]/)[0].trim()
-    if (fallbackCn) {
-      entry.phrases = [{ en: word.trim(), cn: fallbackCn }]
-    }
-  }
-
   const silentIndices = entry.silentIndices
   if (
     !entry.syllables?.length ||
@@ -588,8 +585,28 @@ export async function fetchAiDictionaryWordStructure(
     ) ||
     silentIndices.some((index, position) =>
       position > 0 ? index <= silentIndices[position - 1] : false
-    ) ||
-    !hasValidEtymology(entry.etymology) ||
+    )
+  ) {
+    throw new Error('模型返回的拼读拆分数据不完整')
+  }
+  return entry
+}
+/** 单词短语：只生成常用固定搭配。 */
+export async function fetchAiDictionaryWordPhrases(
+  config: AiClientConfig,
+  word: string,
+  trans: string[],
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  const entry = await fetchDictionarySection(
+    config,
+    buildWordPhrasesQueryMessages(word, trans),
+    3072,
+    signal
+  )
+  if (!entry) return null
+  assertMatchingWord(entry, word)
+  if (
     !entry.phrases?.length ||
     entry.phrases.some(
       (phrase) =>
@@ -599,7 +616,28 @@ export async function fetchAiDictionaryWordStructure(
         !phrase.cn.trim()
     )
   ) {
-    throw new Error('模型返回的构词或短语数据不完整')
+    throw new Error('模型返回的短语数据不完整')
+  }
+  return entry
+}
+
+/** 词根词源：只生成构词法与词源信息。 */
+export async function fetchAiDictionaryWordEtymology(
+  config: AiClientConfig,
+  word: string,
+  trans: string[],
+  signal?: AbortSignal
+): Promise<RawDictEntry | null> {
+  const entry = await fetchDictionarySection(
+    config,
+    buildWordEtymologyQueryMessages(word, trans),
+    3072,
+    signal
+  )
+  if (!entry) return null
+  assertMatchingWord(entry, word)
+  if (!hasValidEtymology(entry.etymology)) {
+    throw new Error('模型返回的词根词源数据不完整')
   }
   return entry
 }
@@ -632,29 +670,4 @@ export async function fetchAiDictionaryWordExamples(
     throw new Error('模型返回的例句数据不完整')
   }
   return entry
-}
-
-/**
- * 一次等待完整单词数据的兼容接口。
- *
- * @deprecated 请优先调用 `fetchAiDictionaryWordCore`，并在页面实际需要时按分区补全。
- *
- * 性能警告：该接口会先请求基础数据，再并行请求构词/短语和例句。调用方必须等待
- * 所有模型输出完成，首屏响应更慢、Token 消耗更高，任一分区失败也会导致整次查询失败。
- * 仅限确实需要在单次操作中拿到完整离线数据的场景，不要用于查词弹窗、导入或页面首屏。
- */
-export async function fetchAiDictionaryWord(
-  config: AiClientConfig,
-  word: string,
-  signal?: AbortSignal
-): Promise<RawDictEntry | null> {
-  const core = await fetchAiDictionaryWordCore(config, word, signal)
-  if (!core) return null
-
-  const [structure, examples] = await Promise.all([
-    fetchAiDictionaryWordStructure(config, word, core, signal),
-    fetchAiDictionaryWordExamples(config, word, core.trans || [], signal),
-  ])
-
-  return { ...core, ...structure, ...examples, name: core.name }
 }

@@ -125,7 +125,7 @@ export default function TroubleWordsPage() {
   }
 
   return (
-    <div className="flex-1 min-h-full flex flex-col p-6 md:p-8 max-w-6xl mx-auto w-full space-y-4 text-white">
+    <div className="flex-1 min-h-full flex flex-col px-6 md:px-8 lg:px-10 py-6 max-w-[1440px] mx-auto w-full space-y-4 text-white">
       {/* 1. 顶部标题与筛选 */}
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">

@@ -33,7 +33,7 @@ interface DictationCardProps {
   remainingLoops?: number
 }
 
-const EXAMPLES_AI_SECTION = ['examples'] as const
+const DICTATION_AI_SECTIONS = ['core', 'examples'] as const
 /**
  * 默写卡片：英文全部遮蔽，按「音标 → 译文 → 拼写」三级闯关推进。
  *
@@ -49,7 +49,7 @@ export function DictationCard({
   phoneticPreference,
   remainingLoops = 1,
 }: DictationCardProps) {
-  const word = useEnsureAiWordSections(sourceWord, EXAMPLES_AI_SECTION)
+  const word = useEnsureAiWordSections(sourceWord, DICTATION_AI_SECTIONS)
   const {
     isDictationMeaningEnabled,
     toggleDictationMeaning,
@@ -71,7 +71,7 @@ export function DictationCard({
   const examples =
     word.examples?.length
       ? word.examples
-      : word.aiSections
+      : word.aiSections?.examples
         ? []
         : getWordExamples(word)
 

@@ -615,9 +615,22 @@ export function SettingsModal() {
                     </button>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                    支持火山引擎豆包 (Doubao)、DeepSeek、ChatGPT 与通义千问大模型。配置 API Key 后将直接调用对应大模型提供专业词汇深度精讲；未配置时将使用内置智能搭子离线回复。
+                    只有启用 AI 且配置 API Key 后，页面才会按当前显示模块补全缺失内容。
                   </p>
                 </div>
+
+                <label className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10 cursor-pointer">
+                  <div>
+                    <div className="text-sm font-semibold text-white">启用 AI 功能</div>
+                    <div className="text-xs text-muted-foreground mt-1">关闭后不会发起任何自动补全或智能问答请求</div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={aiConfig.enabled}
+                    onChange={(event) => updateAiConfig({ enabled: event.target.checked })}
+                    className="size-4.5 accent-primary rounded cursor-pointer"
+                  />
+                </label>
 
                 {/* 供应商预设网格选择 */}
                 <div className="space-y-3">

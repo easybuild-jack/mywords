@@ -59,7 +59,7 @@ export function RootsTableView({
   const paginatedItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col w-full h-full max-w-6xl xl:max-w-7xl 2xl:max-w-[1600px] mx-auto px-2 sm:px-4">
+    <div className="flex-1 min-h-0 flex flex-col w-full h-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10">
       {/* 现代化半透明毛玻璃大卡片容器：自适应宽幅展开并固定全高，杜绝查询时外框晃动 */}
       <div className="flex-1 min-h-0 flex flex-col w-full h-full glass-card rounded-2xl xl:rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden">
         {/* 滚动表格区域：使用 table-fixed 强锁定列宽，检索数据只填充内容，不改变列宽与结构 */}

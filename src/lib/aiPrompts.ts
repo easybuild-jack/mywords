@@ -45,23 +45,13 @@ trans 按词性分组，格式为“词性. 释义；释义”，覆盖最常用
 美音和英音使用标准 IPA，不要带斜杠，保留重音符号。
 ${JSON_ONLY_RULE}`
 
-export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的专业英语构词与音节分析引擎。
-根据给出的单词拼写、IPA 音标及中文释义生成完整的构词、音节与短语数据：
+export const AI_DICTIONARY_SYLLABLES_SYSTEM_PROMPT = `你是 MyWords 的专业英语拼读拆分引擎。
+只生成单词的音节切分和哑音字母下标：
 {
   "status": "ok",
   "name": "discover",
   "syllables": ["dis", "cov", "er"],
-  "silentIndices": [],
-  "etymology": {
-    "prefix": { "form": "dis-", "meaning": "去除" },
-    "root": { "form": "cover", "meaning": "覆盖" },
-    "derivation": "去除覆盖物 → 发现",
-    "origin": "可靠且简短的词源",
-    "memoryHook": "简明记忆线索"
-  },
-  "phrases": [
-    { "en": "discover the truth", "cn": "查明真相" }
-  ]
+  "silentIndices": []
 }
 
 【音节切分核心法则（必须严格依据音标发音对齐划分，一个元音音位对应一个音节）⭐】
@@ -90,10 +80,37 @@ export const AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT = `你是 MyWords 的专业�
 - 双写辅音：第一个辅音不发音，记为哑音（如 apple 中下标 1 的 p 为哑音 -> [1]，yellow 中下标 2 的 l 为哑音 -> [2]）；
 - 词尾不发音的 e（如 orange 词尾 e 下标 5 为哑音 -> [5]，cake 词尾 e 下标 3 为哑音 -> [3]）；
 - 无哑音时返回 []。
+严禁输出释义、例句、短语或词根词源字段。
+${JSON_ONLY_RULE}`
 
-【词源与短语规则】
+export const AI_DICTIONARY_PHRASES_SYSTEM_PROMPT = `你是 MyWords 的英语常用短语生成引擎。
+只生成当前单词最常见、最实用的固定搭配：
+{
+  "status": "ok",
+  "name": "discover",
+  "phrases": [
+    { "en": "discover the truth", "cn": "查明真相" }
+  ]
+}
+生成 4–8 条短语，每条必须包含自然的英文搭配和准确的中文释义。
+严禁输出音标、释义、音节、例句或词根词源字段。
+${JSON_ONLY_RULE}`
+
+export const AI_DICTIONARY_ETYMOLOGY_SYSTEM_PROMPT = `你是 MyWords 的专业英语词根词源分析引擎。
+只生成词根、词缀、语义推导、词源和记忆线索：
+{
+  "status": "ok",
+  "name": "discover",
+  "etymology": {
+    "prefix": { "form": "dis-", "meaning": "去除" },
+    "root": { "form": "cover", "meaning": "覆盖" },
+    "derivation": "去除覆盖物 → 发现",
+    "origin": "可靠且简短的词源",
+    "memoryHook": "简明记忆线索"
+  }
+}
 - 词源必须可靠；对于无明显英语词根词缀的外来词或基础词（如 mango、coffee、tea、banana、dog 等），etymology 中严禁强行拆解 prefix/root/suffix，直接省略这些字段（或设为 null），重点提供 origin（来源语言及演变）与 memoryHook（简明记忆线索）即可，严禁编造。
-- phrases 必须直接在 JSON 数组中输出 4–8 条最常见、最实用的固定搭配（包含 en 与 cn 释义），严禁使用省略号占位符。
+严禁输出音标、释义、音节、例句或短语字段。
 ${JSON_ONLY_RULE}`
 
 export const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生成引擎。
@@ -119,15 +136,35 @@ export function buildWordCoreQueryMessages(word: string) {
   ]
 }
 
-export function buildWordStructureQueryMessages(
+export function buildWordSyllablesQueryMessages(
   word: string,
   core: Pick<RawDictEntry, 'trans' | 'usphone' | 'ukphone'>
 ) {
   return [
-    { role: 'system' as const, content: AI_DICTIONARY_STRUCTURE_SYSTEM_PROMPT },
+    { role: 'system' as const, content: AI_DICTIONARY_SYLLABLES_SYSTEM_PROMPT },
     {
       role: 'user' as const,
-      content: `分析以下基础数据：${JSON.stringify({ name: word.trim(), ...core })}`,
+      content: `根据以下基础数据拆分拼读：${JSON.stringify({ name: word.trim(), ...core })}`,
+    },
+  ]
+}
+
+export function buildWordPhrasesQueryMessages(word: string, trans: string[]) {
+  return [
+    { role: 'system' as const, content: AI_DICTIONARY_PHRASES_SYSTEM_PROMPT },
+    {
+      role: 'user' as const,
+      content: `为以下单词及释义生成常用短语：${JSON.stringify({ name: word.trim(), trans })}`,
+    },
+  ]
+}
+
+export function buildWordEtymologyQueryMessages(word: string, trans: string[]) {
+  return [
+    { role: 'system' as const, content: AI_DICTIONARY_ETYMOLOGY_SYSTEM_PROMPT },
+    {
+      role: 'user' as const,
+      content: `分析以下单词的词根词源：${JSON.stringify({ name: word.trim(), trans })}`,
     },
   ]
 }

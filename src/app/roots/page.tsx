@@ -12,7 +12,7 @@ export default function RootsPage() {
       <RootsHeaderToolbar />
 
       {/* 核心词根卡片研习舞台：全高展开，杜绝查询时卡片高度塌陷 */}
-      <div className="flex-1 min-h-[480px] flex flex-col items-center justify-center w-full px-4 py-2 my-auto shrink-0">
+      <div className="flex-1 min-h-[480px] flex flex-col items-center justify-center w-full px-0 py-2 my-auto shrink-0">
         <RootsStage />
       </div>
 

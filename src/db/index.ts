@@ -647,17 +647,27 @@ export async function saveWordOverride(
   wordId: string,
   name: string,
   overrides: {
+    phoneticUs?: string
+    phoneticUk?: string
+    posList?: WordItem['posList']
     syllables?: string[]
     etymology?: WordEtymology
     silentIndices?: number[]
     examples?: WordExample[]
     phrases?: { en: string; cn: string }[]
+  },
+  guard?: {
+    keys: (keyof WordOverrideRecord)[]
+    snapshot: string
   }
 ): Promise<WordOverrideRecord> {
   const cleanName = name.trim()
   let record: WordOverrideRecord = {
     wordId,
     name: cleanName,
+    phoneticUs: overrides.phoneticUs,
+    phoneticUk: overrides.phoneticUk,
+    posList: overrides.posList,
     syllables: overrides.syllables,
     etymology: overrides.etymology,
     silentIndices: overrides.silentIndices,
@@ -667,56 +677,80 @@ export async function saveWordOverride(
   }
 
   try {
-    const existing = await db.wordOverrides.get(wordId)
-    record = {
-      ...existing,
-      wordId,
-      name: cleanName,
-      syllables: overrides.syllables !== undefined ? overrides.syllables : existing?.syllables,
-      etymology: overrides.etymology !== undefined ? overrides.etymology : existing?.etymology,
-      silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : existing?.silentIndices,
-      examples: overrides.examples !== undefined ? overrides.examples : existing?.examples,
-      phrases: overrides.phrases !== undefined ? overrides.phrases : existing?.phrases,
-      updatedAt: Date.now(),
-    }
-    await db.wordOverrides.put(record)
-
-    // 1. 同步更新 wordRecords 快照
-    const existingWordRecord = await db.wordRecords.get(wordId)
-    if (existingWordRecord?.wordItem) {
-      await db.wordRecords.update(wordId, {
-        wordItem: {
-          ...existingWordRecord.wordItem,
-          syllables: record.syllables || existingWordRecord.wordItem.syllables,
-          etymology: record.etymology !== undefined ? record.etymology : existingWordRecord.wordItem.etymology,
-          silentIndices: record.silentIndices !== undefined ? record.silentIndices : existingWordRecord.wordItem.silentIndices,
-          examples: record.examples !== undefined ? record.examples : existingWordRecord.wordItem.examples,
-          phrases: record.phrases !== undefined ? record.phrases : existingWordRecord.wordItem.phrases,
-        },
-      })
-    }
-
-    // 2. 同步更新自定义词库中的条目
-    const customBooks = await db.books.filter((b) => Boolean(b.isCustom)).toArray()
-    for (const book of customBooks) {
-      if (book.words?.some((w) => w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase())) {
-        const updatedWords = book.words.map((w) => {
-          if (w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase()) {
-            return {
-              ...w,
-              syllables: overrides.syllables || w.syllables,
-              etymology: overrides.etymology !== undefined ? overrides.etymology : w.etymology,
-              silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : w.silentIndices,
-            }
-          }
-          return w
-        })
-        await db.books.update(book.id, {
-          words: updatedWords,
+    await db.transaction('rw', db.wordOverrides, db.wordRecords, db.books, async () => {
+      const existing = await db.wordOverrides.get(wordId)
+      if (
+        guard &&
+        JSON.stringify(guard.keys.map((key) => existing?.[key])) !== guard.snapshot
+      ) {
+        record = existing ?? {
+          wordId,
+          name: cleanName,
           updatedAt: Date.now(),
+        }
+        return
+      }
+      record = {
+        ...existing,
+        wordId,
+        name: cleanName,
+        phoneticUs: overrides.phoneticUs !== undefined ? overrides.phoneticUs : existing?.phoneticUs,
+        phoneticUk: overrides.phoneticUk !== undefined ? overrides.phoneticUk : existing?.phoneticUk,
+        posList: overrides.posList !== undefined ? overrides.posList : existing?.posList,
+        syllables: overrides.syllables !== undefined ? overrides.syllables : existing?.syllables,
+        etymology: overrides.etymology !== undefined ? overrides.etymology : existing?.etymology,
+        silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : existing?.silentIndices,
+        examples: overrides.examples !== undefined ? overrides.examples : existing?.examples,
+        phrases: overrides.phrases !== undefined ? overrides.phrases : existing?.phrases,
+        updatedAt: Date.now(),
+      }
+      await db.wordOverrides.put(record)
+
+      // 1. 同步更新 wordRecords 快照
+      const existingWordRecord = await db.wordRecords.get(wordId)
+      if (existingWordRecord?.wordItem) {
+        await db.wordRecords.update(wordId, {
+          wordItem: {
+            ...existingWordRecord.wordItem,
+            phoneticUs: record.phoneticUs || existingWordRecord.wordItem.phoneticUs,
+            phoneticUk: record.phoneticUk || existingWordRecord.wordItem.phoneticUk,
+            posList: record.posList?.length ? record.posList : existingWordRecord.wordItem.posList,
+            syllables: record.syllables || existingWordRecord.wordItem.syllables,
+            etymology: record.etymology !== undefined ? record.etymology : existingWordRecord.wordItem.etymology,
+            silentIndices: record.silentIndices !== undefined ? record.silentIndices : existingWordRecord.wordItem.silentIndices,
+            examples: record.examples !== undefined ? record.examples : existingWordRecord.wordItem.examples,
+            phrases: record.phrases !== undefined ? record.phrases : existingWordRecord.wordItem.phrases,
+          },
         })
       }
-    }
+
+      // 2. 同步更新自定义词库中的条目
+      const customBooks = await db.books.filter((b) => Boolean(b.isCustom)).toArray()
+      for (const book of customBooks) {
+        if (book.words?.some((w) => w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase())) {
+          const updatedWords = book.words.map((w) => {
+            if (w.id === wordId || w.name.toLowerCase() === cleanName.toLowerCase()) {
+              return {
+                ...w,
+                phoneticUs: overrides.phoneticUs || w.phoneticUs,
+                phoneticUk: overrides.phoneticUk || w.phoneticUk,
+                posList: overrides.posList?.length ? overrides.posList : w.posList,
+                syllables: overrides.syllables || w.syllables,
+                etymology: overrides.etymology !== undefined ? overrides.etymology : w.etymology,
+                silentIndices: overrides.silentIndices !== undefined ? overrides.silentIndices : w.silentIndices,
+                examples: overrides.examples !== undefined ? overrides.examples : w.examples,
+                phrases: overrides.phrases !== undefined ? overrides.phrases : w.phrases,
+              }
+            }
+            return w
+          })
+          await db.books.update(book.id, {
+            words: updatedWords,
+            updatedAt: Date.now(),
+          })
+        }
+      }
+    })
   } catch (err) {
     console.error('Failed to save word override:', err)
   }
@@ -822,7 +856,7 @@ export async function mergeWordIntoAiCache(
       const mergeStatus = (
         current: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined,
         next: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined
-      ) => (current === 'ready' ? 'ready' : next ?? current ?? 'pending')
+      ) => next ?? current
 
       const merged: WordItem = {
         ...existing,
@@ -830,13 +864,21 @@ export async function mergeWordIntoAiCache(
         id: canonicalId,
         aiSections: patch.aiSections
           ? {
-              structure: mergeStatus(
-                existing.aiSections?.structure,
-                patch.aiSections.structure
+              syllables: mergeStatus(
+                existing.aiSections?.syllables,
+                patch.aiSections.syllables
               ),
               examples: mergeStatus(
                 existing.aiSections?.examples,
                 patch.aiSections.examples
+              ),
+              phrases: mergeStatus(
+                existing.aiSections?.phrases,
+                patch.aiSections.phrases
+              ),
+              etymology: mergeStatus(
+                existing.aiSections?.etymology,
+                patch.aiSections.etymology
               ),
             }
           : existing.aiSections,
@@ -852,6 +894,9 @@ export async function mergeWordIntoAiCache(
           name: merged.name,
           aiSections: merged.aiSections,
         }
+        if (override?.phoneticUs) recordWord.phoneticUs = override.phoneticUs
+        if (override?.phoneticUk) recordWord.phoneticUk = override.phoneticUk
+        if (override?.posList?.length) recordWord.posList = override.posList
         if (override?.syllables?.length) recordWord.syllables = override.syllables
         if (override?.etymology !== undefined) recordWord.etymology = override.etymology
         if (override?.silentIndices !== undefined) {

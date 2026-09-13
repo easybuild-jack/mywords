@@ -101,6 +101,7 @@ export const AI_PROVIDER_PRESETS: Record<AiProviderId, AiProviderPreset> = {
 }
 
 export interface AiModelConfig {
+  enabled: boolean
   provider: AiProviderId
   apiKey: string
   endpoint: string
@@ -111,6 +112,7 @@ export interface AiModelConfig {
 }
 
 export const DEFAULT_AI_CONFIG: AiModelConfig = {
+  enabled: true,
   provider: 'deepseek',
   apiKey: '',
   endpoint: AI_PROVIDER_PRESETS.deepseek.defaultEndpoint,
@@ -378,8 +380,11 @@ export const useAiAssistantStore = create<AiAssistantState>()(
         if (!textToSend) return
 
         // 场景一：智能问答场景，若未配置 API Key 直接弹框提示，静默不执行模拟生成
-        const hasApiKey = Boolean(state.aiConfig?.apiKey?.trim())
-        if (!hasApiKey) {
+        if (state.aiConfig.enabled === false) {
+          set({ isThinking: false, isStreaming: false })
+          return
+        }
+        if (!state.aiConfig?.apiKey?.trim()) {
           set({ isApiKeyPromptOpen: true, isThinking: false, isStreaming: false })
           return
         }
@@ -615,6 +620,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.aiConfig) {
+          state.aiConfig.enabled ??= true
           if (
             state.aiConfig.provider === 'deepseek' &&
             (!state.aiConfig.endpoint || state.aiConfig.endpoint === 'https://api.deepseek.com/v1')

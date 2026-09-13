@@ -34,8 +34,10 @@ export interface WordItem {
   examples?: WordExample[];                     // 3条左右经典例句
   phrases?: { en: string; cn: string }[];       // (二期预留) 常用短语搭配
   aiSections?: {                                // AI 分阶段生成状态（仅 AI 缓存词使用）
-    structure?: AiWordSectionStatus;
+    syllables?: AiWordSectionStatus;
     examples?: AiWordSectionStatus;
+    phrases?: AiWordSectionStatus;
+    etymology?: AiWordSectionStatus;
   };
 }
 
@@ -150,6 +152,9 @@ export interface UnitProgressRecord {
 export interface WordOverrideRecord {
   wordId: string;                               // 单词 ID
   name: string;                                 // 单词拼写
+  phoneticUs?: string;                          // AI 补全的美式音标
+  phoneticUk?: string;                          // AI 补全的英式音标
+  posList?: WordItem['posList'];                 // AI 补全的词性与译文
   syllables?: string[];                         // 自定义音节拆分 (如 ["dis", "cov", "er"])
   etymology?: WordEtymology;                    // 自定义构词/词根词缀
   silentIndices?: number[];                     // 自定义不发音/哑音字母下标
