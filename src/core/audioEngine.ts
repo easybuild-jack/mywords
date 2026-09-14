@@ -1,13 +1,11 @@
 import { Howl } from 'howler'
 import type { KeySoundOption } from '@/types'
 
-/** 内置 14 种经典机械键盘轴体清单 */
+/** 内置 12 种经典机械键盘轴体清单 */
 export const MECHANICAL_SWITCHES: KeySoundOption[] = [
   { id: 'Cherry MX Blues', name: 'Cherry MX Blue (青轴)', filename: 'Cherry MX Blues.mp3', switchType: '段落清脆' },
-  { id: 'Cherry MX Reds', name: 'Cherry MX Red (红轴)', filename: 'Cherry MX Reds.mp3', switchType: '轻盈线性' },
   { id: 'Cherry MX Browns', name: 'Cherry MX Brown (茶轴)', filename: 'Cherry MX Browns.mp3', switchType: '微段落舒适' },
   { id: 'Cherry MX Blacks', name: 'Cherry MX Black (黑轴)', filename: 'Cherry MX Blacks.mp3', switchType: '直上直下' },
-  { id: 'Holy Pandas', name: 'Holy Panda (圣熊猫)', filename: 'Holy Pandas.mp3', switchType: '复古木质段落' },
   { id: 'Alpacas', name: 'Alpacas (羊驼轴)', filename: 'Alpacas.mp3', switchType: '顺滑线性' },
   { id: 'Gateron Black Inks', name: 'Gateron Black Ink (黑曜石)', filename: 'Gateron Black Inks.mp3', switchType: '深沉顺滑' },
   { id: 'Gateron Red Inks', name: 'Gateron Red Ink (红晶)', filename: 'Gateron Red Inks.mp3', switchType: '轻柔线性' },

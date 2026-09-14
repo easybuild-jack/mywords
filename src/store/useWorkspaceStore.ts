@@ -500,7 +500,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       rootSearchQuery: '',
       isRootSearchModalOpen: false,
 
-      isDictationPhoneticEnabled: true,
+      isDictationPhoneticEnabled: false,
       isDictationMeaningEnabled: true,
       isUnitLoading: false,
       unitLoadingTarget: null,
@@ -1305,8 +1305,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           currentWordRemainingLoops,
           isCorrectSoundEnabled,
           isErrorPracticeActive,
-          isDictationPhoneticEnabled,
-          isPhoneticPassed,
           isDictationMeaningEnabled,
           isMeaningPassed,
           dictationCueMode,
@@ -1320,9 +1318,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           return
         }
 
-        // 默写模式下前置校验拦截
+        // 默写模式下前置校验拦截：若开启了译文输入环节，必须先通过译文校验后开启拼写
         if (mode === 'dictation') {
-          if (isDictationPhoneticEnabled && !isPhoneticPassed) return
           if (isMeaningStepActive(dictationCueMode, isDictationMeaningEnabled) && !isMeaningPassed) return
         }
 

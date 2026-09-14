@@ -301,7 +301,7 @@ export function SettingsModal() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-bold text-white uppercase tracking-wider text-muted-foreground">
-                    14 款经典机械键盘轴体选择
+                    {MECHANICAL_SWITCHES.length} 款经典机械键盘轴体选择
                   </h3>
                   <label className="flex items-center gap-2.5 text-base font-medium cursor-pointer text-primary">
                     <input
@@ -331,9 +331,15 @@ export function SettingsModal() {
                             : 'border-white/10 bg-white/[0.03] hover:border-white/20'
                         }`}
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-base font-bold text-white truncate max-w-[160px]">{sw.name}</span>
-                          {isSelected && <div className="size-4 rounded-full bg-primary/20 flex items-center justify-center"><div className="size-2.5 rounded-full bg-primary"></div></div>}
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <span className="text-sm sm:text-base font-bold text-white truncate" title={sw.name}>
+                            {sw.name}
+                          </span>
+                          {isSelected && (
+                            <div className="size-4 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                              <div className="size-2.5 rounded-full bg-primary" />
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-white/5 text-sm text-muted-foreground">
                           <span>{sw.switchType}</span>

@@ -89,9 +89,18 @@ export function DictationCard({
   // 拼写槽激活条件：开启的前置译文环节必须通过
   const isSpellingUnlocked = !isMeaningStepEnabled || isMeaningPassed
 
-  // 释义可能很长，输入框是多行文本域，但回车仍然是校验而不是换行
+  const meaningTextareaRef = React.useRef<HTMLTextAreaElement>(null)
+
+  // 听音默写开启译文环节时，切词或未通过状态下自动聚焦到译文输入框
+  React.useEffect(() => {
+    if (cueMode === 'listen' && isDictationMeaningEnabled && !isMeaningPassed) {
+      meaningTextareaRef.current?.focus()
+    }
+  }, [word.id, cueMode, isDictationMeaningEnabled, isMeaningPassed])
+
+  // 释义可能很长，输入框是多行文本域，但回车仍然是校验而不是换行。防范中文输入法合成阶段的回车冲突。
   const handleMeaningSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing && (e as any).keyCode !== 229) {
       e.preventDefault()
       submitMeaning()
     }
@@ -150,6 +159,7 @@ export function DictationCard({
                     </span>
                   ) : (
                     <textarea
+                      ref={meaningTextareaRef}
                       rows={3}
                       disabled={!isDictationMeaningEnabled}
                       value={dictationMeaningInput}
@@ -203,7 +213,18 @@ export function DictationCard({
           {/* 单词拼写盲打槽，前置完成后激活。
               样式与学习页的跟打槽保持一致（霓虹绿描边 + 48px 字号 + 剩余字母下划线），
               只多一个未解锁态，改动要两边同步 */}
-          <div className="relative w-full">
+          <div
+            className="relative w-full cursor-pointer"
+            onClick={() => {
+              if (!isSpellingUnlocked) {
+                meaningTextareaRef.current?.focus()
+              } else {
+                if (typeof document !== 'undefined' && document.activeElement && document.activeElement !== document.body) {
+                  (document.activeElement as HTMLElement).blur()
+                }
+              }
+            }}
+          >
             {(() => {
               const wordLength = word.name.length
               const totalSlots = Math.max(wordLength, currentInput.length)
