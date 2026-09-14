@@ -342,6 +342,7 @@ interface WorkspaceState {
   toggleKeySound: (enabled?: boolean) => void
   togglePhoneticSound: (enabled?: boolean) => void
   setPhoneticSoundVolume: (vol: number) => void
+  setAudioRate: (rate: number) => void
   
   // 练习与按键核心业务
   handleCharacterInput: (char: string) => void
@@ -1125,6 +1126,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       setPhoneticPreference: (pref: 'us' | 'uk') => {
         set({ phoneticPreference: pref })
+      },
+
+      setAudioRate: (rate: number) => {
+        set({ audioRate: rate })
       },
 
       toggleDictationPhonetic: (enabled?: boolean) => {

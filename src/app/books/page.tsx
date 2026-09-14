@@ -466,10 +466,10 @@ function BooksHubContent() {
     <div className="w-full text-foreground min-h-full flex flex-col">
       {/* 顶部吸顶固定区域：操作栏 + 选中词库看板卡片 */}
       <div
-        className={`sticky top-0 z-30 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-30 w-full bg-background transition-[border-color,box-shadow] duration-300 ${
           isScrolled
-            ? 'bg-background/90 backdrop-blur-xl border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
-            : 'bg-transparent border-b border-transparent shadow-none'
+            ? 'border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
+            : 'border-b border-transparent shadow-none'
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-5 pb-4 space-y-3.5">

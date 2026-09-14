@@ -15,6 +15,7 @@ import {
   Languages,
   Keyboard,
   BookA,
+  Headphones,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
@@ -26,6 +27,7 @@ export function Sidebar() {
     { label: '单词查询', icon: BookA, href: '/dictionary' },
     { label: '单词学习', icon: GraduationCap, href: '/learn' },
     { label: '单词默写', icon: PenLine, href: '/dictation' },
+    { label: '音标学习', icon: Headphones, href: '/phonetics/learn' },
     { label: '音标默写', icon: Keyboard, href: '/phonetics' },
     { label: '词库管理', icon: BookOpen, href: '/books' },
     { label: '生错词本', icon: AlertCircle, href: '/errors' },
