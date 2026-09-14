@@ -61,14 +61,14 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
         return (
           <div
             key={rule.id}
-            className="flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl space-y-4"
+            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-all duration-200 ease-out transform-gpu hover:z-10 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 active:scale-[0.98] backdrop-blur-xl space-y-4"
           >
             {/* 卡片头部：组合模式大字、分类徽标、对应发音音标徽章 */}
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5">
-                    <span className="font-mono text-3xl sm:text-4xl font-black text-amber-400 tracking-wide drop-shadow-[0_0_12px_rgba(251,191,36,0.25)]">
+                    <span className="font-mono text-3xl sm:text-4xl font-black text-amber-400 tracking-wide drop-shadow-[0_0_12px_rgba(251,191,36,0.25)] group-hover:scale-[1.03] transition-transform origin-left inline-block">
                       {rule.pattern}
                     </span>
 
@@ -138,12 +138,12 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
 
             {/* 代表例词列表 */}
             <div className="space-y-2 pt-1 border-t border-border/40">
-              <div className="flex items-center justify-between text-xs text-muted-foreground px-0.5">
-                <span className="font-semibold text-foreground/80">代表性例词</span>
-                <span className="text-xs font-mono text-muted-foreground/70">点击朗读</span>
+              <div className="flex items-center justify-between text-sm px-0.5">
+                <span className="font-bold text-gray-200">代表性例词</span>
+                <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {rule.examples.map((ex) => {
                   const isWordPlaying = playingWord === ex.word
 
@@ -153,26 +153,26 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
                       type="button"
                       onClick={(e) => handlePlayWord(e, ex)}
                       title={`朗读例词: ${ex.word} ${ex.phonetic} (${ex.meaning})`}
-                      className={`group/ex text-left px-3 py-2.5 rounded-xl border transition-all flex items-center justify-between gap-1 overflow-hidden ${
+                      className={`group/ex text-left px-3.5 py-3 rounded-xl border transition-all flex items-center justify-between gap-1.5 overflow-hidden ${
                         isWordPlaying
                           ? 'bg-primary/20 border-primary text-white shadow-sm'
-                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/40 text-foreground'
+                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm sm:text-[15px] font-bold font-mono truncate leading-tight flex items-center gap-1.5">
+                        <div className="text-base sm:text-lg font-black font-mono truncate leading-tight flex items-center gap-1.5 text-white tracking-wide">
                           {renderHighlightedWord(ex.word, ex.highlight)}
-                          <span className="text-xs font-normal text-muted-foreground font-mono">
+                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground/90 font-mono">
                             {ex.phonetic}
                           </span>
                         </div>
-                        <div className="text-xs text-muted-foreground truncate leading-snug mt-1">
+                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1.5">
                           {ex.meaning}
                         </div>
                       </div>
 
                       <Volume2
-                        className={`size-3.5 shrink-0 transition-opacity ml-1 ${
+                        className={`size-4 shrink-0 transition-opacity ml-1 ${
                           isWordPlaying
                             ? 'text-primary opacity-100 animate-pulse'
                             : 'text-muted-foreground opacity-0 group-hover/ex:opacity-100'

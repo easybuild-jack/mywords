@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import {
   Volume2,
-  Maximize2,
   Sparkles,
   ExternalLink,
   Check,
@@ -19,21 +18,21 @@ interface IpaMatrixViewProps {
 }
 
 /** 辅助函数：根据 highlight 字母将单词拆分并对组合部分加色加粗显示 */
-export function renderHighlightedWord(word: string, highlight: string) {
-  if (!highlight) return <span>{word}</span>
+export function renderHighlightedWord(word: string, highlight?: string) {
+  if (!highlight) return <span className="font-black text-white">{word}</span>
   const lowerWord = word.toLowerCase()
   const lowerHighlight = highlight.toLowerCase()
   const idx = lowerWord.indexOf(lowerHighlight)
-  if (idx === -1) return <span>{word}</span>
+  if (idx === -1) return <span className="font-black text-white">{word}</span>
 
   const before = word.slice(0, idx)
   const matched = word.slice(idx, idx + highlight.length)
   const after = word.slice(idx + highlight.length)
 
   return (
-    <span>
+    <span className="text-white font-black">
       {before}
-      <span className="text-amber-400 font-extrabold underline underline-offset-2 decoration-amber-400/60 drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]">
+      <span className="text-amber-400 dark:text-amber-300 font-black underline underline-offset-[5px] decoration-amber-400 decoration-[2.5px] drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">
         {matched}
       </span>
       {after}
@@ -68,7 +67,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
     return (
       <div className="w-full py-16 flex flex-col items-center justify-center text-center space-y-3 bg-white/[0.02] border border-white/10 rounded-2xl">
         <Sparkles className="size-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">没有找到匹配的国际音标，请尝试调整筛选或关键词</p>
+        <p className="text-base text-muted-foreground">没有找到匹配的国际音标，请尝试调整筛选或关键词</p>
       </div>
     )
   }
@@ -83,20 +82,20 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
           <div
             key={item.id}
             onClick={() => onSelectSymbol(item)}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/40 rounded-2xl p-4.5 transition-all duration-200 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] cursor-pointer backdrop-blur-xl"
+            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl"
           >
             {/* 顶部：音标大字、分类徽章、发音按钮与精读详情 */}
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2.5">
                   <div className="relative">
-                    <span className="font-mono text-3xl font-black tracking-wider text-primary group-hover:text-primary-focus transition-colors">
+                    <span className="font-mono text-3xl sm:text-4xl font-black tracking-wider text-primary group-hover:scale-[1.03] transition-transform origin-left inline-block">
                       /{item.symbol}/
                     </span>
                   </div>
 
                   <span
-                    className={`text-xs px-2.5 py-0.5 rounded-lg font-semibold border ${
+                    className={`text-xs sm:text-[13px] px-2.5 py-1 rounded-lg font-bold border ${
                       isVowel
                         ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
                         : item.isVoiced
@@ -114,38 +113,25 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                     type="button"
                     onClick={(e) => handlePlaySymbol(e, item)}
                     title="试听音标发音"
-                    className={`size-8.5 rounded-xl flex items-center justify-center border transition-all active:scale-90 ${
+                    className={`size-9 rounded-xl flex items-center justify-center border transition-colors ${
                       isSymbolPlaying
-                        ? 'bg-primary text-black border-primary shadow-sm scale-105'
+                        ? 'bg-primary text-black border-primary shadow-sm'
                         : 'bg-white/[0.05] hover:bg-primary/20 text-gray-300 hover:text-primary border-white/10'
                     }`}
                   >
-                    <Volume2 className={`size-4.5 ${isSymbolPlaying ? 'animate-pulse' : ''}`} />
-                  </button>
-
-                  {/* 沉浸精读展开 */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onSelectSymbol(item)
-                    }}
-                    title="展开精读详情"
-                    className="size-8.5 rounded-xl flex items-center justify-center bg-white/[0.05] hover:bg-white/[0.12] text-gray-400 hover:text-white border border-white/10 transition-all active:scale-90"
-                  >
-                    <Maximize2 className="size-4" />
+                    <Volume2 className={`size-5 ${isSymbolPlaying ? 'animate-pulse' : ''}`} />
                   </button>
                 </div>
               </div>
 
               {/* 发音要诀简述 */}
-              <p className="text-[13px] sm:text-sm text-foreground/85 line-clamp-2 leading-snug min-h-[38px]">
+              <p className="text-sm sm:text-[15px] text-foreground/90 line-clamp-2 leading-relaxed min-h-[44px]">
                 {item.articulationTip}
               </p>
 
-              {/* 常见字母组合标签 */}
-              <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
-                <span className="text-xs text-muted-foreground font-medium mr-0.5">常见字母:</span>
+              {/* 常见字母组合标签（显著加大英文字母与标签尺寸） */}
+              <div className="flex items-center flex-wrap gap-2 pt-0.5">
+                <span className="text-sm font-bold text-gray-200 mr-0.5">常见字母:</span>
                 {item.commonSpellings.map((sp) => (
                   <span
                     key={sp}
@@ -156,7 +142,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                       }
                     }}
                     title={`点击查看 ${sp} 组合规则`}
-                    className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-white/[0.07] hover:bg-primary/20 hover:text-primary border border-white/10 text-foreground transition-colors cursor-pointer"
+                    className="text-base sm:text-[17px] font-mono font-black px-3 py-1 rounded-lg bg-white/10 hover:bg-primary/25 hover:text-primary border border-white/20 text-white transition-all cursor-pointer shadow-xs"
                   >
                     {sp}
                   </span>
@@ -167,14 +153,14 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
             {/* 中间横线 */}
             <div className="h-px bg-border/40 my-3.5" />
 
-            {/* 底部：6个代表性单词网格 */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-muted-foreground px-0.5">
-                <span className="font-semibold text-foreground/80">6个代表性单词</span>
-                <span className="text-xs font-mono text-muted-foreground/70">点击朗读</span>
+            {/* 底部：6个代表性单词网格（英文字母加大加粗，释义清晰明亮） */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between text-sm px-0.5">
+                <span className="font-bold text-gray-200">6个代表性单词</span>
+                <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 {item.words.map((repWord) => {
                   const isWordPlaying = playingWord === repWord.word
 
@@ -184,23 +170,23 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                       type="button"
                       onClick={(e) => handlePlayWord(e, repWord)}
                       title={`朗读单词: ${repWord.word} ${repWord.phonetic} (${repWord.meaning})`}
-                      className={`group/word text-left px-2.5 py-2 rounded-xl border transition-all flex items-center justify-between gap-1 overflow-hidden ${
+                      className={`group/word text-left px-3.5 py-2.5 rounded-xl border transition-all flex items-center justify-between gap-1.5 overflow-hidden ${
                         isWordPlaying
                           ? 'bg-primary/20 border-primary text-white shadow-sm'
-                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/40 text-foreground'
+                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm sm:text-[15px] font-bold font-mono truncate leading-tight flex items-center gap-1">
+                        <div className="text-[17px] sm:text-lg xl:text-[19px] font-black font-mono truncate leading-tight flex items-center gap-1 tracking-wide">
                           {renderHighlightedWord(repWord.word, repWord.highlight)}
                         </div>
-                        <div className="text-xs text-muted-foreground truncate leading-snug mt-1">
+                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1.5">
                           {repWord.meaning}
                         </div>
                       </div>
 
                       <Volume2
-                        className={`size-3.5 shrink-0 transition-opacity ml-1 ${
+                        className={`size-4 shrink-0 transition-opacity ml-1 ${
                           isWordPlaying
                             ? 'text-primary opacity-100 animate-pulse'
                             : 'text-muted-foreground opacity-0 group-hover/word:opacity-100'

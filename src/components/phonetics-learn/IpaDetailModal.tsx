@@ -181,8 +181,8 @@ export function IpaDetailModal({
                 </div>
 
                 {/* 下面：常见对应字母组合 */}
-                <div className="pt-1.5 mt-auto shrink-0 border-t border-white/10 flex items-center gap-2 flex-wrap">
-                  <span className="text-primary font-medium text-xs sm:text-[13px] xl:text-sm leading-snug">
+                <div className="pt-2 mt-auto shrink-0 border-t border-white/10 flex items-center gap-2 flex-wrap">
+                  <span className="text-primary font-bold text-xs sm:text-sm xl:text-base leading-snug">
                     常见拼写对应：
                   </span>
                   {currentItem.commonSpellings.map((sp) => (
@@ -194,13 +194,13 @@ export function IpaDetailModal({
                           onJumpToCombo(sp)
                         }
                       }}
-                      className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-accent/15 text-accent border border-accent/25 select-none leading-none inline-block shrink-0 cursor-pointer hover:bg-accent/25 hover:scale-105 active:scale-95 transition-all"
+                      className="px-2.5 py-1 rounded-lg text-xs sm:text-sm font-mono font-black bg-accent/20 text-accent border border-accent/30 select-none leading-none inline-block shrink-0 cursor-pointer hover:bg-accent/30 hover:scale-105 active:scale-95 transition-all"
                       title={`查看 ${sp} 拼读规则`}
                     >
                       {sp}
                     </span>
                   ))}
-                  <span className="text-[11px] text-muted-foreground ml-auto hidden sm:inline">
+                  <span className="text-xs text-muted-foreground ml-auto hidden sm:inline">
                     (点击拼写可直通对应拼读规则)
                   </span>
                 </div>
@@ -213,10 +213,10 @@ export function IpaDetailModal({
               <div className="flex items-center justify-between mb-2 shrink-0 select-none">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded-full bg-primary" />
-                  <h3 className="text-xs sm:text-sm font-bold text-gray-300 tracking-wider">
+                  <h3 className="text-xs sm:text-sm font-bold text-gray-200 tracking-wider">
                     6个核心代表性单词
                   </h3>
-                  <span className="px-1.5 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white/10 text-gray-400">
+                  <span className="px-2 py-0.5 rounded-md text-xs font-mono font-bold bg-white/10 text-gray-300">
                     6
                   </span>
                 </div>
@@ -235,7 +235,7 @@ export function IpaDetailModal({
                     <Play className="size-3" />
                     <span>{isPlayingAll ? '正在连读中...' : '连读全部6词'}</span>
                   </button>
-                  <span className="text-[11px] text-gray-400 font-normal hidden sm:inline">
+                  <span className="text-xs text-gray-400 font-normal hidden sm:inline">
                     点击卡片或喇叭播放发音
                   </span>
                 </div>
@@ -255,12 +255,12 @@ export function IpaDetailModal({
                       {/* 第 1 行：单词拼写 + 音标 + 发音按钮 */}
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                          <span className="font-mono text-base sm:text-[17px] xl:text-lg font-bold text-white group-hover/item:text-primary transition-colors tracking-tight">
+                          <span className="font-mono text-lg sm:text-xl xl:text-2xl font-black text-white group-hover/item:text-primary transition-colors tracking-wide">
                             {renderHighlightedWord(wordItem.word, wordItem.highlight)}
                           </span>
 
                           {wordItem.phonetic && (
-                            <span className="font-mono text-xs text-gray-400 font-normal">
+                            <span className="font-mono text-xs sm:text-sm text-gray-300 font-semibold">
                               {wordItem.phonetic}
                             </span>
                           )}
@@ -272,7 +272,7 @@ export function IpaDetailModal({
                             e.stopPropagation()
                             playSingleWord(wordItem.word)
                           }}
-                          className={`size-6.5 sm:size-7 rounded-lg flex items-center justify-center transition-all cursor-pointer shrink-0 border ${
+                          className={`size-7 sm:size-8 rounded-lg flex items-center justify-center transition-all cursor-pointer shrink-0 border ${
                             isWordPlaying
                               ? 'bg-primary text-black border-primary shadow-xs'
                               : 'text-gray-400 group-hover/item:text-primary group-hover/item:bg-primary/10 hover:bg-primary/20 border-transparent group-hover/item:border-primary/20'
@@ -280,20 +280,20 @@ export function IpaDetailModal({
                           title={`发音 ${wordItem.word}`}
                           aria-label={`发音 ${wordItem.word}`}
                         >
-                          <Volume2 className="size-3.5 sm:size-4" />
+                          <Volume2 className="size-4" />
                         </button>
                       </div>
 
                       {/* 第 2 行：核心发音字母组合微胶囊 */}
-                      <div className="flex items-start gap-1.5 px-2.5 py-1 rounded-lg bg-primary/[0.07] border border-primary/15 text-xs sm:text-[12.5px] font-mono text-primary leading-snug group-hover/item:bg-primary/[0.12] group-hover/item:border-primary/25 transition-colors">
+                      <div className="flex items-start gap-1.5 px-2.5 py-1 rounded-lg bg-primary/[0.07] border border-primary/15 text-xs sm:text-[13px] font-mono text-primary leading-snug group-hover/item:bg-primary/[0.12] group-hover/item:border-primary/25 transition-colors">
                         <span className="text-accent font-bold select-none shrink-0 mt-0.5">→</span>
                         <span className="font-medium tracking-tight break-words">
-                          发音核心组合：<span className="text-amber-400 font-bold">{wordItem.highlight}</span> 发 /{currentItem.symbol}/
+                          发音核心组合：<span className="text-amber-400 font-black">{wordItem.highlight}</span> 发 /{currentItem.symbol}/
                         </span>
                       </div>
 
                       {/* 第 3 行：中文释义 */}
-                      <div className="text-xs sm:text-[13px] xl:text-sm font-semibold text-gray-100 leading-snug">
+                      <div className="text-xs sm:text-sm xl:text-[15px] font-semibold text-gray-100 leading-snug">
                         <span className="px-1.5 py-0.5 rounded text-[11px] font-mono font-bold bg-accent/15 text-accent border border-accent/25 select-none leading-none inline-block shrink-0 align-baseline shadow-xs mr-1.5">
                           释义
                         </span>
