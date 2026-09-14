@@ -73,7 +73,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 pb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-8">
       {items.map((item) => {
         const isSymbolPlaying = playingSymbol === item.symbol
         const isVowel = item.category === 'monophthong' || item.category === 'diphthong'
@@ -82,10 +82,10 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
           <div
             key={item.id}
             onClick={() => onSelectSymbol(item)}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl"
+            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl space-y-4"
           >
             {/* 顶部：音标大字、分类徽章、发音按钮与精读详情 */}
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2.5">
                   <div className="relative">
@@ -125,7 +125,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
               </div>
 
               {/* 发音要诀简述 */}
-              <p className="text-sm sm:text-[15px] text-foreground/90 line-clamp-2 leading-relaxed min-h-[44px]">
+              <p className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-[13px] sm:text-sm text-foreground/85 leading-relaxed">
                 {item.articulationTip}
               </p>
 
@@ -150,11 +150,8 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
               </div>
             </div>
 
-            {/* 中间横线 */}
-            <div className="h-px bg-border/40 my-3.5" />
-
             {/* 底部：6个代表性单词网格（英文字母加大加粗，释义清晰明亮） */}
-            <div className="space-y-2.5">
+            <div className="space-y-2 pt-1 border-t border-border/40">
               <div className="flex items-center justify-between text-sm px-0.5">
                 <span className="font-bold text-gray-200">6个代表性单词</span>
                 <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
@@ -170,15 +167,18 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                       type="button"
                       onClick={(e) => handlePlayWord(e, repWord)}
                       title={`朗读单词: ${repWord.word} ${repWord.phonetic} (${repWord.meaning})`}
-                      className={`group/word text-left px-3.5 py-2.5 rounded-xl border transition-all flex items-center justify-between gap-1.5 overflow-hidden ${
+                      className={`group/word text-left px-3.5 py-3 rounded-xl border transition-all flex items-center justify-between gap-1.5 overflow-hidden ${
                         isWordPlaying
                           ? 'bg-primary/20 border-primary text-white shadow-sm'
                           : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="text-[17px] sm:text-lg xl:text-[19px] font-black font-mono truncate leading-tight flex items-center gap-1 tracking-wide">
+                        <div className="text-base sm:text-lg font-black font-mono truncate leading-tight flex items-center gap-1.5 text-white tracking-wide">
                           {renderHighlightedWord(repWord.word, repWord.highlight)}
+                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground/90 font-mono">
+                            {repWord.phonetic}
+                          </span>
                         </div>
                         <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1.5">
                           {repWord.meaning}

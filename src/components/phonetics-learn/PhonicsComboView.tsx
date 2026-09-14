@@ -61,7 +61,7 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
         return (
           <div
             key={rule.id}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-all duration-200 ease-out transform-gpu hover:z-10 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 active:scale-[0.98] backdrop-blur-xl space-y-4"
+            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 backdrop-blur-xl space-y-4"
           >
             {/* 卡片头部：组合模式大字、分类徽标、对应发音音标徽章 */}
             <div className="space-y-3">
@@ -104,9 +104,9 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
                         type="button"
                         onClick={(e) => handlePlayIpa(e, ipa)}
                         title={`点击试听音标 ${ipa} 发音`}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded-xl border font-mono text-xs sm:text-sm font-bold transition-all active:scale-90 ${
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-xl border font-mono text-xs sm:text-sm font-bold transition-colors ${
                           isIpaPlaying
-                            ? 'bg-primary text-black border-primary shadow-sm scale-105'
+                            ? 'bg-primary text-black border-primary shadow-sm'
                             : 'bg-white/[0.06] hover:bg-primary/20 text-primary border-primary/30'
                         }`}
                       >
