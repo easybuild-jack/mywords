@@ -76,7 +76,6 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-8">
       {items.map((item) => {
         const isSymbolPlaying = playingSymbol === item.symbol
-        const isVowel = item.category === 'monophthong' || item.category === 'diphthong'
 
         return (
           <div
@@ -94,15 +93,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                     </span>
                   </div>
 
-                  <span
-                    className={`text-xs sm:text-[13px] px-2.5 py-1 rounded-lg font-bold border ${
-                      isVowel
-                        ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
-                        : item.isVoiced
-                        ? 'bg-accent/15 text-accent border-accent/25'
-                        : 'bg-blue-500/15 text-blue-300 border-blue-500/30'
-                    }`}
-                  >
+                  <span className="text-xs sm:text-[13px] px-2.5 py-1 rounded-lg font-bold border shrink-0 bg-primary/10 text-primary border-primary/30">
                     {item.subcategory}
                   </span>
                 </div>

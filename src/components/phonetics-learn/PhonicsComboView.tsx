@@ -55,9 +55,6 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-8">
       {items.map((rule) => {
-        const isVowelVowel = rule.category === 'vowel-vowel'
-        const isVowelConsonant = rule.category === 'vowel-consonant'
-
         return (
           <div
             key={rule.id}
@@ -72,15 +69,7 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
                     {rule.pattern}
                   </span>
 
-                  <span
-                    className={`text-xs px-2.5 py-0.5 rounded-lg font-semibold border shrink-0 ${
-                      isVowelVowel
-                        ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
-                        : isVowelConsonant
-                        ? 'bg-sky-500/20 text-sky-300 border-sky-500/30'
-                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                    }`}
-                  >
+                  <span className="text-xs px-2.5 py-0.5 rounded-lg font-semibold border shrink-0 bg-primary/10 text-primary border-primary/30">
                     {rule.categoryLabel}
                   </span>
                 </div>
