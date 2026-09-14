@@ -10,6 +10,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 import { queryAiWordCore } from '@/lib/aiWordCore'
 import { AiDictionaryLookupError } from '@/lib/aiPrompts'
+import { getSyncToken } from '@/lib/permissions'
 import type { WordItem, WordMasteryRecord, VocabularyBook } from '@/types'
 
 export const COLLECTED_BOOK_ID = 'book_custom_collected'
@@ -27,16 +28,34 @@ export function ExternalSyncManager() {
   const router = useRouter()
   const aiConfig = useAiAssistantStore((state) => state.aiConfig)
   const [toasts, setToasts] = useState<SyncToastItem[]>([])
+  const [syncToken, setSyncToken] = useState<string>('')
   const isPollingRef = useRef(false)
 
-  const syncPendingWords = useCallback(async () => {
+  // 监听 Token 变更（响应跨窗口 storage 事件及当前窗口 mywords_sync_token_changed 自定义事件）
+  useEffect(() => {
+    const updateToken = () => {
+      setSyncToken(getSyncToken().trim())
+    }
+    updateToken()
+
+    window.addEventListener('storage', updateToken)
+    window.addEventListener('mywords_sync_token_changed', updateToken)
+    return () => {
+      window.removeEventListener('storage', updateToken)
+      window.removeEventListener('mywords_sync_token_changed', updateToken)
+    }
+  }, [])
+
+  const syncPendingWords = useCallback(async (tokenParam?: string) => {
+    // 只有在配置了 token 之后才拉取，未配置的不拉取
+    const token = (tokenParam ?? getSyncToken()).trim()
+    if (!token) return
+
     if (isPollingRef.current) return
     isPollingRef.current = true
 
     try {
-      // 1. 获取用户自定义的 Token (若无则不传，由服务端处理默认)
-      const token = typeof window !== 'undefined' ? localStorage.getItem('mywords_sync_token') || '' : ''
-      const url = token ? `/api/words/pending?token=${encodeURIComponent(token)}` : '/api/words/pending'
+      const url = `/api/words/pending?token=${encodeURIComponent(token)}`
 
       const res = await fetch(url)
       if (!res.ok) {
@@ -159,27 +178,31 @@ export function ExternalSyncManager() {
     }
   }, [aiConfig])
 
-  // 监听窗口激活与定时轮询
+  // 监听窗口激活与定时轮询：只有在配置了 token 之后才启动，没配置的不拉取
   useEffect(() => {
-    // 首次加载立即同步一次
-    syncPendingWords()
+    if (!syncToken) {
+      return
+    }
 
-    // 窗口获得焦点时（例如从翻译小工具切换回浏览器）立即同步
+    // 首次配置/检测到有效 token 时立即同步一次
+    syncPendingWords(syncToken)
+
+    // 窗口获得焦点时（例如从外部小工具切换回网页）立即同步
     const handleFocus = () => {
-      syncPendingWords()
+      syncPendingWords(syncToken)
     }
     window.addEventListener('focus', handleFocus)
 
     // 每 20 秒轻量轮询一次
     const timer = setInterval(() => {
-      syncPendingWords()
+      syncPendingWords(syncToken)
     }, 20000)
 
     return () => {
       window.removeEventListener('focus', handleFocus)
       clearInterval(timer)
     }
-  }, [syncPendingWords])
+  }, [syncToken, syncPendingWords])
 
   // Toast 自动消退倒计时
   useEffect(() => {

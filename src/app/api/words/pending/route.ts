@@ -34,6 +34,13 @@ export async function GET(req: Request) {
   try {
     const token = extractToken(req)
 
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Token is required to pull pending words' },
+        { status: 401, headers: CORS_HEADERS }
+      )
+    }
+
     if (!isTokenValid(token)) {
       return NextResponse.json(
         { error: 'Unauthorized: Invalid token' },

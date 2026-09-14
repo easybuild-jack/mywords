@@ -978,19 +978,30 @@ export function SettingsModal() {
 
                 {/* 专属同步密钥 */}
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
-                  <div>
-                    <label className="text-base font-semibold text-foreground block">
-                      专属同步密钥 (Token / 选填)
-                    </label>
-                    <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                      若服务端设置了 <code className="text-primary font-mono font-bold">COLLECT_TOKEN</code> 作为通信暗号（例如阿里云 ECS 或 Vercel 环境变量），请在此填入相同密钥以授权拉取；本地免密模式可留空。
-                    </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <label className="text-base font-semibold text-foreground block">
+                        专属同步密钥 (Token)
+                      </label>
+                      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                        系统仅在配置了同步密钥后才会启动自动同步拉取；留空时将保持静默，不进行数据拉取。若服务端设置了 <code className="text-primary font-mono font-bold">COLLECT_TOKEN</code> 作为通信暗号，请在此填入相同密钥。
+                      </p>
+                    </div>
+                    <span
+                      className={`shrink-0 self-start sm:self-center px-3 py-1 rounded-full text-xs font-semibold border ${
+                        syncToken.trim()
+                          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                          : 'bg-white/5 text-muted-foreground border-white/10'
+                      }`}
+                    >
+                      {syncToken.trim() ? '● 已启动同步拉取' : '○ 未配置（未启动同步）'}
+                    </span>
                   </div>
                   <input
                     type="text"
                     value={syncToken}
                     onChange={(e) => handleUpdateToken(e.target.value)}
-                    placeholder="留空则为免密模式，若服务端设置了 COLLECT_TOKEN 请在此填入"
+                    placeholder="请输入同步密钥以启动实时同步拉取（未配置时不拉取）"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
                   />
                   {isAuthorSyncToken(syncToken) && (
