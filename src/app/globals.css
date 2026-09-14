@@ -363,6 +363,35 @@
 }
 
 /* ---------------------------------------------------------------------------
+   自然拼读与音标高亮发音字母（phonics-highlight）在各主题下的色彩优化
+   - 统一为经典暖琥珀色（#F59E0B / #D97706），暗色与浅色保持高度一致的暖琥珀质感
+   - 彻底移除所有 text-shadow、drop-shadow 与光晕效果，呈现清晰锐利的纯矢量字形
+   --------------------------------------------------------------------------- */
+.phonics-highlight {
+  color: #F59E0B;
+  text-decoration-color: #D97706;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.phonics-pattern-title {
+  color: #F59E0B;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .phonics-highlight,
+  :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .text-amber-400,
+  :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .text-amber-500 {
+    color: #B45309 !important;
+    text-shadow: none !important;
+    filter: none !important;
+    text-decoration-color: #D97706 !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    晨曦纸墨（muted-parchment）浅色纸质模式专属适配规则
    在不影响其他暗色皮肤的前提下，将页面内浅色文字映射为清晰墨色
    --------------------------------------------------------------------------- */
@@ -449,6 +478,22 @@
 
 :root[data-skin="muted-parchment"] .text-primary\/35 {
   color: rgba(13, 118, 110, 0.4) !important;
+}
+
+/* 浅色纸质模式下：例词高亮与组合拼读字母映射为高对比度深琥珀橙，解决浅色背景下看不清的问题 */
+:root[data-skin="muted-parchment"] .phonics-highlight,
+:root[data-skin="muted-parchment"] .text-amber-400,
+:root[data-skin="muted-parchment"] [class*="text-amber-400"],
+:root[data-skin="muted-parchment"] [class*="text-amber-300"] {
+  color: #B45309 !important;
+  text-shadow: none !important;
+  text-decoration-color: #D97706 !important;
+}
+
+:root[data-skin="muted-parchment"] .phonics-pattern-title {
+  color: #B45309 !important;
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 /* 边框在浅色下的感知染色 */
@@ -645,6 +690,22 @@
 
 :root[data-skin="avocado-cream"] .text-primary\/35 {
   color: rgba(127, 169, 33, 0.4) !important;
+}
+
+/* 浅色酪梨模式下：例词高亮与组合拼读字母映射为高对比度深琥珀橙 */
+:root[data-skin="avocado-cream"] .phonics-highlight,
+:root[data-skin="avocado-cream"] .text-amber-400,
+:root[data-skin="avocado-cream"] [class*="text-amber-400"],
+:root[data-skin="avocado-cream"] [class*="text-amber-300"] {
+  color: #B45309 !important;
+  text-shadow: none !important;
+  text-decoration-color: #D97706 !important;
+}
+
+:root[data-skin="avocado-cream"] .phonics-pattern-title {
+  color: #B45309 !important;
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 /* 边框映射：雅致青灰边框 */

@@ -68,7 +68,7 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
               {/* 第一行：左侧字母组合大字+分类标签，右侧音标发音按钮 */}
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="font-mono text-3xl sm:text-4xl font-black text-amber-400 tracking-wide drop-shadow-[0_0_12px_rgba(251,191,36,0.25)] group-hover:scale-[1.03] transition-transform origin-left inline-block">
+                  <span className="phonics-pattern-title font-mono text-3xl sm:text-4xl font-black tracking-wide group-hover:scale-[1.03] transition-transform origin-left inline-block">
                     {rule.pattern}
                   </span>
 
@@ -160,13 +160,13 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
                       }`}
                     >
                       <div className="min-w-0">
-                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-white tracking-wide">
+                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-foreground tracking-wide">
                           {renderHighlightedWord(ex.word, ex.highlight)}
-                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground/90 font-mono">
+                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground font-mono">
                             {ex.phonetic}
                           </span>
                         </div>
-                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1">
+                        <div className="text-xs sm:text-[13px] font-semibold text-foreground/80 truncate leading-snug mt-1">
                           {ex.meaning}
                         </div>
                       </div>

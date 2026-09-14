@@ -255,7 +255,7 @@ export function IpaDetailModal({
                       {/* 第 1 行：单词拼写 + 音标 + 发音按钮 */}
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                          <span className="font-mono text-lg sm:text-xl xl:text-2xl font-black text-white group-hover/item:text-primary transition-colors tracking-wide">
+                          <span className="font-mono text-lg sm:text-xl xl:text-2xl font-black text-foreground group-hover/item:text-primary transition-colors tracking-wide">
                             {renderHighlightedWord(wordItem.word, wordItem.highlight)}
                           </span>
 

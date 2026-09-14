@@ -19,20 +19,20 @@ interface IpaMatrixViewProps {
 
 /** 辅助函数：根据 highlight 字母将单词拆分并对组合部分加色加粗显示 */
 export function renderHighlightedWord(word: string, highlight?: string) {
-  if (!highlight) return <span className="font-black text-white">{word}</span>
+  if (!highlight) return <span className="font-black text-foreground">{word}</span>
   const lowerWord = word.toLowerCase()
   const lowerHighlight = highlight.toLowerCase()
   const idx = lowerWord.indexOf(lowerHighlight)
-  if (idx === -1) return <span className="font-black text-white">{word}</span>
+  if (idx === -1) return <span className="font-black text-foreground">{word}</span>
 
   const before = word.slice(0, idx)
   const matched = word.slice(idx, idx + highlight.length)
   const after = word.slice(idx + highlight.length)
 
   return (
-    <span className="text-white font-black">
+    <span className="text-foreground font-black">
       {before}
-      <span className="text-amber-400 dark:text-amber-300 font-black underline underline-offset-[5px] decoration-amber-400 decoration-[2.5px] drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">
+      <span className="phonics-highlight font-black underline underline-offset-[5px] decoration-amber-400 decoration-[2.5px] drop-shadow-[0_0_8px_rgba(253,224,71,0.45)]">
         {matched}
       </span>
       {after}
@@ -174,13 +174,13 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                       }`}
                     >
                       <div className="min-w-0">
-                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-white tracking-wide">
+                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-foreground tracking-wide">
                           {renderHighlightedWord(repWord.word, repWord.highlight)}
-                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground/90 font-mono">
+                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground font-mono">
                             {repWord.phonetic}
                           </span>
                         </div>
-                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1">
+                        <div className="text-xs sm:text-[13px] font-semibold text-foreground/80 truncate leading-snug mt-1">
                           {repWord.meaning}
                         </div>
                       </div>
