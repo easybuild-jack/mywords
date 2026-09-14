@@ -82,7 +82,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
           <div
             key={item.id}
             onClick={() => onSelectSymbol(item)}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-5 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl space-y-4"
+            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-3.5 sm:p-4 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl space-y-3.5"
           >
             {/* 顶部：音标大字、分类徽章、发音按钮与精读详情 */}
             <div className="space-y-3">
@@ -157,7 +157,7 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                 <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                 {item.words.map((repWord, index) => {
                   const isWordPlaying = playingWord === repWord.word
 
@@ -167,26 +167,26 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
                       type="button"
                       onClick={(e) => handlePlayWord(e, repWord)}
                       title={`朗读单词: ${repWord.word} ${repWord.phonetic} (${repWord.meaning})`}
-                      className={`group/word text-left px-3.5 py-3 rounded-xl border transition-all flex items-center justify-between gap-1.5 overflow-hidden ${
+                      className={`group/word relative text-left px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-xl border transition-all overflow-hidden ${
                         isWordPlaying
                           ? 'bg-primary/20 border-primary text-white shadow-sm'
                           : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
                       }`}
                     >
-                      <div className="min-w-0 flex-1">
-                        <div className="text-base sm:text-lg font-black font-mono truncate leading-tight flex items-center gap-1.5 text-white tracking-wide">
+                      <div className="min-w-0">
+                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-white tracking-wide">
                           {renderHighlightedWord(repWord.word, repWord.highlight)}
                           <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground/90 font-mono">
                             {repWord.phonetic}
                           </span>
                         </div>
-                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1.5">
+                        <div className="text-xs sm:text-[13px] font-semibold text-gray-200 truncate leading-snug mt-1">
                           {repWord.meaning}
                         </div>
                       </div>
 
                       <Volume2
-                        className={`size-4 shrink-0 transition-opacity ml-1 ${
+                        className={`size-3.5 absolute right-1.5 top-1.5 transition-opacity pointer-events-none ${
                           isWordPlaying
                             ? 'text-primary opacity-100 animate-pulse'
                             : 'text-muted-foreground opacity-0 group-hover/word:opacity-100'
