@@ -28,9 +28,11 @@ export const AI_ENGLISH_TEACHER_SYSTEM_PROMPT = `你是一位教学经验丰富�
 const WORD_NOT_FOUND_JSON =
   '{"status":"error","error":{"code":"WORD_NOT_FOUND","message":"未找到严格匹配的英文单词"}}'
 const JSON_ONLY_RULE = `必须且仅输出合法的单个 JSON 对象，不要输出解释、Markdown 或推导过程。
-必须严格查询用户给出的原始单词，不得纠正拼写、联想近似词、替换为词形相近的单词或编造释义。
+必须查询与用户原始输入拼写对应的词条，不得纠正拼写、联想近似词、替换为词形相近的词条或编造释义；名称大小写差异不视为拼写不匹配。
+有效词条包括普通英文单词，以及英语语境中实际使用的人名、地名、品牌名、产品名、作品名、机构名、缩略词和通行外来词。
+对于专有名词或名称，必须在释义中明确其类型及常见所指，不得虚构不存在的含义。
 所有字段必须在同一个 JSON 对象内部完整闭合，严禁在 JSON 内输出省略号或占位符（如 [...] 或 {...}），严禁在 JSON 外部追加任何说明。
-如果无法确认该拼写是有效英文单词，必须原样返回：${WORD_NOT_FOUND_JSON}`
+只有该拼写无法对应任何可确认的英语词条或专有名称时，才原样返回：${WORD_NOT_FOUND_JSON}`
 
 const AI_DICTIONARY_CORE_SYSTEM_PROMPT = `你是 MyWords 的专业英语词典引擎。
 只生成查询首屏所需的基础数据：
@@ -122,7 +124,10 @@ const AI_DICTIONARY_EXAMPLES_SYSTEM_PROMPT = `你是 MyWords 的英语例句生�
     { "en": "We must discover the truth.", "cn": "我们必须查明真相。" }
   ]
 }
-例句应覆盖给出的不同词性和主要义项；单义词至少生成两条。
+输入的 trans 数组中每一项都是一个独立译文。
+- 多个译文：严格按 trans 顺序为每个译文生成一条例句，例句总数必须等于 trans 数量。
+- 只有一个译文：为该译文生成两条例句。
+- 严禁为多个译文中的每个译文生成两条例句。
 每条例句简短、自然、适合英语学习，并准确提供中文翻译。
 ${JSON_ONLY_RULE}`
 

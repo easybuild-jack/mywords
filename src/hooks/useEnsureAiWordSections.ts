@@ -160,6 +160,9 @@ async function generateSection(
     const trans = word.posList.map(
       ({ pos, means }) => `${pos} ${means.join('；')}`
     )
+    const exampleTrans = word.posList.flatMap(({ pos, means }) =>
+      means.map((meaning) => `${pos} ${meaning}`)
+    )
     let patch: Partial<WordItem>
 
     if (section === 'syllables') {
@@ -175,7 +178,7 @@ async function generateSection(
         silentIndices: converted.silentIndices,
       }
     } else if (section === 'examples') {
-      const raw = await fetchAiDictionaryWordExamples(config, word.name, trans)
+      const raw = await fetchAiDictionaryWordExamples(config, word.name, exampleTrans)
       if (!raw?.examples?.length) throw new Error('例句数据为空')
       patch = { examples: raw.examples }
     } else if (section === 'phrases') {

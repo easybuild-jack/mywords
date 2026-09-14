@@ -679,8 +679,9 @@ export async function fetchAiDictionaryWordExamples(
   )
   if (!entry) return null
   assertMatchingWord(entry, word)
+  const expectedCount = trans.length === 1 ? 2 : trans.length
   if (
-    !entry.examples?.length ||
+    entry.examples?.length !== expectedCount ||
     entry.examples.some(
       (example) =>
         typeof example.en !== 'string' ||
@@ -689,7 +690,7 @@ export async function fetchAiDictionaryWordExamples(
         !example.cn.trim()
     )
   ) {
-    throw new Error('模型返回的例句数据不完整')
+    throw new Error(`模型返回的例句数据不完整，应生成 ${expectedCount} 条`)
   }
   return entry
 }
