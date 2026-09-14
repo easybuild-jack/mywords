@@ -242,77 +242,83 @@ export function LearnCard({
     >
       {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
       <div className="space-y-0.5 sm:space-y-1">
-        {/* 音标栏：参考查询页设计，发音图标紧随音标，可点击发音 */}
-        <div className="h-6 sm:h-7 xl:h-7 flex items-center justify-center gap-x-3 sm:gap-x-4">
-          {phonetics.map((entry) => (
-            <button
-              key={entry.label ?? 'single'}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                audioEngine.playPronunciation(
-                  word.name,
-                  entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
-                )
-              }}
-              className="group inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"
-              title={`点击播放 ${entry.label ? `${entry.label}音` : ''}读音 (Ctrl+J)`}
-            >
-              {entry.label && (
-                <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280] group-hover:text-primary transition-colors">
-                  {entry.label}
-                </span>
-              )}
-              <span
-                className={`font-mono tracking-wide text-gray-300 group-hover:text-white transition-colors flex items-center gap-1.5 ${
-                  phonetics.length > 1 ? 'text-base sm:text-lg xl:text-xl' : 'text-lg sm:text-xl xl:text-2xl'
-                }`}
+        {/* 音标栏：左侧音节切分/合并，中间音标发音，右侧切分与构词修改，高度以音标为准 */}
+        <div className="h-7 sm:h-8 flex items-center justify-center gap-2 sm:gap-2.5">
+          {/* 左侧：音节切分/合并切换按钮 */}
+          <button
+            type="button"
+            onClick={toggleSplit}
+            className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg border transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95 select-none ${
+              isSplit
+                ? 'border-primary/50 bg-primary/15 text-primary'
+                : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
+            }`}
+            title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
+            aria-label={isSplit ? '合并单词' : '音节切分'}
+          >
+            {isSplit ? <Combine className="size-3.5 sm:size-4" /> : <Scissors className="size-3.5 sm:size-4" />}
+          </button>
+
+          {/* 中间：音标（可点击播放发音） */}
+          <div className="flex items-center gap-x-2 sm:gap-x-3">
+            {phonetics.map((entry) => (
+              <button
+                key={entry.label ?? 'single'}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  audioEngine.playPronunciation(
+                    word.name,
+                    entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
+                  )
+                }}
+                className="group h-7 sm:h-8 inline-flex items-center gap-1.5 px-2.5 sm:px-3 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"
+                title={`点击播放 ${entry.label ? `${entry.label}音` : ''}读音 (Ctrl+J)`}
               >
-                <span>{entry.text}</span>
-                <Volume2 className="size-3.5 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
-              </span>
+                {entry.label && (
+                  <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280] group-hover:text-primary transition-colors">
+                    {entry.label}
+                  </span>
+                )}
+                <span
+                  className={`font-mono tracking-wide text-gray-300 group-hover:text-white transition-colors flex items-center gap-1.5 leading-none ${
+                    phonetics.length > 1 ? 'text-base sm:text-lg xl:text-xl' : 'text-lg sm:text-xl xl:text-2xl'
+                  }`}
+                >
+                  <span>{entry.text}</span>
+                  <Volume2 className="size-3.5 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* 右侧：修改单词切分与构词按钮（若无权限则保留等宽占位以保持绝对居中） */}
+          {canEditWordSplit ? (
+            <button
+              type="button"
+              onClick={() => setEditModalOpen(true)}
+              className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95 select-none"
+              title="修改单词切分与构词"
+              aria-label="修改单词切分与构词"
+            >
+              <Pencil className="size-3.5 sm:size-4" />
             </button>
-          ))}
+          ) : (
+            <div className="w-7 sm:w-8 h-7 sm:h-8 shrink-0 invisible pointer-events-none" aria-hidden="true" />
+          )}
         </div>
 
-        {/* 单词主体展示与音节切分切换（紧凑排版） */}
+        {/* 单词主体展示（紧凑排版，居中无按钮偏移） */}
         <div className="h-13 sm:h-15 xl:h-17 flex items-center justify-center relative">
-          <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3 xl:gap-4">
-            <h2
-              className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
-            >
-              {isSplit ? (
-                <MarkedSplitWord word={word} syllables={syllables} />
-              ) : (
-                <MarkedWord word={word} />
-              )}
-            </h2>
-            <div className="flex items-center gap-1.5 xl:gap-2">
-              <button
-                type="button"
-                onClick={toggleSplit}
-                className={`p-1.5 sm:p-2 xl:p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-center ${isSplit
-                    ? 'border-primary/50 bg-primary/15 text-primary'
-                    : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
-                  }`}
-                title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
-                aria-label={isSplit ? '合并单词' : '音节切分'}
-              >
-                {isSplit ? <Combine className="size-4 xl:size-5" /> : <Scissors className="size-4 xl:size-5" />}
-              </button>
-              {canEditWordSplit && (
-                <button
-                  type="button"
-                  onClick={() => setEditModalOpen(true)}
-                  className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center"
-                  title="修改单词切分与构词"
-                  aria-label="修改单词切分与构词"
-                >
-                  <Pencil className="size-4 xl:size-5" />
-                </button>
-              )}
-            </div>
-          </div>
+          <h2
+            className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
+          >
+            {isSplit ? (
+              <MarkedSplitWord word={word} syllables={syllables} />
+            ) : (
+              <MarkedWord word={word} />
+            )}
+          </h2>
         </div>
 
         {/* 单词释义：预留稳定的两行自适应空间，防止译文过多换两行时挤压跟打槽与下半区 */}
