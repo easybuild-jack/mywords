@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import {
   Volume2,
-  Headphones,
+  Mic,
   Keyboard,
   Search,
   X,
@@ -166,7 +166,7 @@ export function PhoneticsLearnHeader({
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <Headphones className="size-3.5 sm:size-4" />
+            <Mic className="size-3.5 sm:size-4" />
             <span>48个国际音标图谱</span>
             <span
               className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
