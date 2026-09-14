@@ -144,12 +144,12 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                {rule.examples.map((ex) => {
+                {rule.examples.map((ex, index) => {
                   const isWordPlaying = playingWord === ex.word
 
                   return (
                     <button
-                      key={ex.word}
+                      key={`${rule.id}-${index}`}
                       type="button"
                       onClick={(e) => handlePlayWord(e, ex)}
                       title={`朗读例词: ${ex.word} ${ex.phonetic} (${ex.meaning})`}

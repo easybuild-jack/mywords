@@ -158,12 +158,12 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                {item.words.map((repWord) => {
+                {item.words.map((repWord, index) => {
                   const isWordPlaying = playingWord === repWord.word
 
                   return (
                     <button
-                      key={repWord.word}
+                      key={`${item.id}-${index}`}
                       type="button"
                       onClick={(e) => handlePlayWord(e, repWord)}
                       title={`朗读单词: ${repWord.word} ${repWord.phonetic} (${repWord.meaning})`}
