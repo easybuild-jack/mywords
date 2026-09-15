@@ -458,8 +458,313 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// 2. Sentence Elements & Derivation (句子成分与层层递进推导)
+// 2. Sentence Elements & Progressive Growth (句子核心主干与渐进生长)
 // ---------------------------------------------------------------------------
+
+export interface SentenceCoreConcept {
+  id: string
+  titleZh: string
+  subtitleEn: string
+  coreQuestion: string
+  plainExplanation: string
+  formula: string
+  exampleEn: string
+  exampleZh: string
+  components: { code: string; nameZh: string; role: string; exampleWord: string }[]
+}
+
+export const SENTENCE_CORE_CONCEPTS: SentenceCoreConcept[] = [
+  {
+    id: 'action_backbone',
+    titleZh: '动作主干：谁在干什么？',
+    subtitleEn: 'Action Backbone (Subject + Verb + Object)',
+    coreQuestion: '核心回答：是谁发出了动作？做了什么动作？动作作用在谁身上？',
+    plainExplanation:
+      '这是英语中最常见的主干。比如“我吃苹果”、“汤姆看书”。只要说明了“谁 (主语)”、“做了什么动作 (谓语)”、“吃了或看了什么 (宾语)”，哪怕没有任何其他修饰词，这句话的意思就已经独立完整。',
+    formula: '主语 (Who) + 谓语动词 (Do) + 宾语 (What)',
+    exampleEn: 'I eat apples.',
+    exampleZh: '我吃苹果。',
+    components: [
+      { code: 'S', nameZh: '主语', role: '动作的发起者，说明“谁”', exampleWord: 'I (我)' },
+      { code: 'V', nameZh: '谓语动词', role: '发出的动作，说明“在干什么”', exampleWord: 'eat (吃)' },
+      { code: 'O', nameZh: '宾语', role: '动作承受的对象，说明“吃了什么”', exampleWord: 'apples (苹果)' },
+    ],
+  },
+  {
+    id: 'state_backbone',
+    titleZh: '状态主干：谁是什么状态 / 谁是谁？',
+    subtitleEn: 'State Backbone (Subject + Link Verb + Predicative)',
+    coreQuestion: '核心回答：某人或某物处于什么状态？是什么身份？',
+    plainExplanation:
+      '很多时候并没有具体“动作”，只是在描述一种状态。比如“苹果很甜”、“他是学生”。系动词（is / are / look）就像数学里的等号（=），把主语和它后面的状态或身份（表语）连接起来。',
+    formula: '主语 (Who) + 系动词 (=) + 表语 (State / Identity)',
+    exampleEn: 'The apple is sweet.',
+    exampleZh: '这个苹果很甜。',
+    components: [
+      { code: 'S', nameZh: '主语', role: '被描写的对象，说明“谁/什么”', exampleWord: 'The apple (苹果)' },
+      { code: 'V-link', nameZh: '系动词', role: '连接等号，本身没有动作，连接主语和状态', exampleWord: 'is (是)' },
+      { code: 'P', nameZh: '表语', role: '具体的属性、特征或身份，说明“怎么样”', exampleWord: 'sweet (甜的)' },
+    ],
+  },
+]
+
+export interface SentenceModifierConcept {
+  id: string
+  nameZh: string
+  nameEn: string
+  questionZh: string
+  plainExplanation: string
+  exampleEn: string
+  exampleZh: string
+  highlightWord: string
+}
+
+export const SENTENCE_MODIFIERS_DATA: SentenceModifierConcept[] = [
+  {
+    id: 'attributive',
+    nameZh: '定语 (修饰人或物)',
+    nameEn: 'Attributive',
+    questionZh: '回答：“什么样的？”',
+    plainExplanation:
+      '定语就像给名词穿衣服。只说 apple（苹果）太单调，加上 red（红色的），就成了 red apple（红苹果）。它专门用来修饰、描摹名词的特征。',
+    exampleEn: 'I eat red apples.',
+    exampleZh: '我吃红色的苹果。',
+    highlightWord: 'red',
+  },
+  {
+    id: 'adverbial',
+    nameZh: '状语 (修饰动作或全句)',
+    nameEn: 'Adverbial',
+    questionZh: '回答：“何时？何地？怎么做？”',
+    plainExplanation:
+      '状语用来交代动作发生的背景细节。比如“在哪里吃”（at home 在家里）、“什么时候吃”（on weekends 在周末）、“怎么吃”（happily 开心地）。',
+    exampleEn: 'I eat apples at home on weekends.',
+    exampleZh: '我周末在家里吃苹果。',
+    highlightWord: 'at home / on weekends',
+  },
+  {
+    id: 'complement',
+    nameZh: '补语 (补充说明结果状态)',
+    nameEn: 'Complement',
+    questionZh: '回答：“让其变成什么样了？接着做什么？”',
+    plainExplanation:
+      '有些动词只带宾语意思不完整，比如“香甜的苹果让我……”，必须加上“开心”才完整。这个补充说明宾语变成什么状态的词就叫补语（make me happy）。',
+    exampleEn: 'Sweet apples make me happy.',
+    exampleZh: '香甜的苹果让我感到开心。',
+    highlightWord: 'happy',
+  },
+]
+
+export interface SentenceGrowthStep {
+  step: number
+  titleZh: string
+  tagZh: string
+  pattern: string
+  addedElementDesc: string
+  whyAddIt: string
+  sentenceEn: string
+  sentenceZh: string
+  highlightWords: string[]
+  breakdown: { text: string; role: string; isNew?: boolean }[]
+  takeaway: string
+}
+
+export const APPLE_SENTENCE_GROWTH_STEPS: SentenceGrowthStep[] = [
+  {
+    step: 1,
+    titleZh: '第 01 步 · 极简动作主干（谁在干什么）',
+    tagZh: '核心主干 S + V + O',
+    pattern: 'Subject + Verb + Object',
+    addedElementDesc: '确立最基础的主谓宾骨架：谁 (I) + 干什么 (eat) + 对象 (apples)',
+    whyAddIt:
+      '任何长句子的生命起点。没有这个主干，后面的所有修饰都无处附着。一句话只要有主谓宾，即使只有3个词，意思也完全成立。',
+    sentenceEn: 'I eat apples.',
+    sentenceZh: '我吃苹果。',
+    highlightWords: ['eat'],
+    breakdown: [
+      { text: 'I', role: '主语（代词，表示动作的执行者“我”）' },
+      { text: 'eat', role: '谓语动词（表示动作“吃”，是句子的核心引擎）', isNew: true },
+      { text: 'apples', role: '宾语（名词，表示动作作用的对象“苹果”）' },
+    ],
+    takeaway: '句子第一原则：先找出“谁在干什么”，这就是整句话牢不可破的地基。',
+  },
+  {
+    step: 2,
+    titleZh: '第 02 步 · 加上定语（吃“什么样的”苹果）',
+    tagZh: '增加定语修饰宾语',
+    pattern: 'Subject + Verb + [Attributive] + Object',
+    addedElementDesc: '新增定语：red（红色的）',
+    whyAddIt:
+      '只说吃苹果太抽象。在名词 apples 前面加上形容词 red，回答了“吃什么样的苹果”，把事物的样子具体化。',
+    sentenceEn: 'I eat red apples.',
+    sentenceZh: '我吃红色的苹果。',
+    highlightWords: ['red'],
+    breakdown: [
+      { text: 'I', role: '主语（“我”）' },
+      { text: 'eat', role: '谓语动词（“吃”）' },
+      { text: 'red', role: '定语（形容词，修饰后面的名词 apples，说明是“红色的”）', isNew: true },
+      { text: 'apples', role: '宾语（“苹果”）' },
+    ],
+    takeaway: '定语就像给名词穿衣服，放在名词前面，专门回答“什么样的”。',
+  },
+  {
+    step: 3,
+    titleZh: '第 03 步 · 表达意图想法（不仅吃，而且“想吃”）',
+    tagZh: '增加动词意图与情态',
+    pattern: 'Subject + [Verb-Intent] + [Attributive] + Object',
+    addedElementDesc: '谓语动词升级：want to eat（想要吃）',
+    whyAddIt:
+      '从客观陈述“我吃苹果”，演进为表达说话人的主观愿望“我想吃苹果”。通过叠加动词短语，让句子的情感表达更细腻。',
+    sentenceEn: 'I want to eat red apples.',
+    sentenceZh: '我想吃红色的苹果。',
+    highlightWords: ['want to eat'],
+    breakdown: [
+      { text: 'I', role: '主语（“我”）' },
+      { text: 'want to eat', role: '复合谓语（want to 表达主观想法“想要”，eat 是核心动作）', isNew: true },
+      { text: 'red', role: '定语（“红色的”）' },
+      { text: 'apples', role: '宾语（“苹果”）' },
+    ],
+    takeaway: '动词可以扩展表达想法、打算或能力（如 want to eat, can eat），让动作有了思想。',
+  },
+  {
+    step: 4,
+    titleZh: '第 04 步 · 加上状语（“什么时候”、“在哪里”吃）',
+    tagZh: '增加时间状语与地点状语',
+    pattern: 'Subject + Verb + [Attributive] + Object + [Place Adverbial] + [Time Adverbial]',
+    addedElementDesc: '新增状语：at home（在家里·地点）与 on weekends（在周末·时间）',
+    whyAddIt:
+      '动作不能孤立存在于虚空中。加上时间和地点，交代了事情发生的具体场景与背景，信息量大幅增加。',
+    sentenceEn: 'I eat red apples at home on weekends.',
+    sentenceZh: '我周末在家里吃红苹果。',
+    highlightWords: ['at home', 'on weekends'],
+    breakdown: [
+      { text: 'I', role: '主语（“我”）' },
+      { text: 'eat', role: '谓语动词（“吃”）' },
+      { text: 'red', role: '定语（“红色的”，修饰 apples）' },
+      { text: 'apples', role: '宾语（“苹果”）' },
+      { text: 'at home', role: '地点状语（介词短语，放在句末，交代“在家里”）', isNew: true },
+      { text: 'on weekends', role: '时间状语（交代“在周末”，一般放在句末）', isNew: true },
+    ],
+    takeaway: '英语通常按“地点在前、时间在后”排列状语。时间状语一般放在句末；如果想特别强调时间，可以把它提前到句首。',
+  },
+  {
+    step: 5,
+    titleZh: '第 05 步 · 丰满长句（和谁一起、怎样地吃 —— 参天长句）',
+    tagZh: '主语并列 + 方式状语 + 多重定语',
+    pattern: '[Compound Subject] + [Manner Adv] + Verb + [Multiple Att] + Object + [Place Adv] + [Time Adv]',
+    addedElementDesc: '新增并列主语 my friends and I、方式状语 happily、多重定语 sweet',
+    whyAddIt:
+      '这是日常生活和文章中经常遇到的完整长句。虽然句子拉长到13个词，但只要剥掉定语和状语，它的核心依然是第1步的 I eat apples！',
+    sentenceEn: 'My friends and I happily eat sweet red apples at home on weekends.',
+    sentenceZh: '周末，我和我的朋友们在家里开心地吃着香甜的红苹果。',
+    highlightWords: ['my friends and I', 'sweet', 'happily'],
+    breakdown: [
+      { text: 'my friends and I', role: '并列主语（动作的共同发出者：我的朋友们和我）', isNew: true },
+      { text: 'happily', role: '方式状语（副词，说明吃苹果时的愉悦心情）', isNew: true },
+      { text: 'eat', role: '谓语动词（整个长句唯一的动作枢纽：“吃”）' },
+      { text: 'sweet red', role: '多重定语（形容词叠加，形容苹果“又甜又红”）', isNew: true },
+      { text: 'apples', role: '宾语（所有动作的最终落脚点：“苹果”）' },
+      { text: 'at home', role: '地点状语（交代地点：在家里）' },
+      { text: 'on weekends', role: '时间状语（交代时间，一般放在句末）' },
+    ],
+    takeaway: '时间状语一般放在句末，地点通常放在时间前面。如果想特别强调时间，可以写成 On weekends, my friends and I...，把时间提前到句首。',
+  },
+]
+
+export const LINKING_SENTENCE_GROWTH_STEPS: SentenceGrowthStep[] = [
+  {
+    step: 1,
+    titleZh: '第 01 步 · 最简单的主系表',
+    tagZh: '主语 + 系动词 + 表语',
+    pattern: 'Subject + Linking Verb + Predicative',
+    addedElementDesc: '先说清楚“谁是什么样的”：The apple（苹果）+ is（是）+ red（红的）',
+    whyAddIt: '主系表不表示一个动作，而是用来说明人或事物的身份、状态或特点。',
+    sentenceEn: 'The apple is red.',
+    sentenceZh: '这个苹果是红色的。',
+    highlightWords: ['is', 'red'],
+    breakdown: [
+      { text: 'The apple', role: '主语（我们正在说的事物：“这个苹果”）' },
+      { text: 'is', role: '系动词（把主语和它的特点连接起来）', isNew: true },
+      { text: 'red', role: '表语（说明苹果是什么样的：“红色的”）', isNew: true },
+    ],
+    takeaway: '看到 be 动词后先别找动作，它常常只是一座桥，后面的词才是在说明主语。',
+  },
+  {
+    step: 2,
+    titleZh: '第 02 步 · 加上程度',
+    tagZh: '程度副词 + 表语',
+    pattern: 'Subject + Linking Verb + Degree Adverb + Predicative',
+    addedElementDesc: '在 red 前加 very，说明苹果不是一般的红，而是“很红”',
+    whyAddIt: 'very 用来加强程度，让我们更准确地说明苹果红到什么程度。',
+    sentenceEn: 'The apple is very red.',
+    sentenceZh: '这个苹果很红。',
+    highlightWords: ['very'],
+    breakdown: [
+      { text: 'The apple', role: '主语（这个苹果）' },
+      { text: 'is', role: '系动词（连接主语和表语）' },
+      { text: 'very', role: '程度副词（说明“红”的程度）', isNew: true },
+      { text: 'red', role: '表语（说明苹果的颜色）' },
+    ],
+    takeaway: 'very 通常放在形容词前面：very red、very big、very happy。',
+  },
+  {
+    step: 3,
+    titleZh: '第 03 步 · 说清是哪种苹果',
+    tagZh: '定语 + 主语',
+    pattern: 'Attributive + Subject + Linking Verb + Degree Adverb + Predicative',
+    addedElementDesc: '在 apple 前加 big，把主语说得更具体',
+    whyAddIt: '当只有 apple 还不够具体时，可以用形容词放在名词前，说明它是大苹果还是小苹果。',
+    sentenceEn: 'The big apple is very red.',
+    sentenceZh: '这个大苹果很红。',
+    highlightWords: ['big'],
+    breakdown: [
+      { text: 'The', role: '冠词（表示特指这个苹果）' },
+      { text: 'big', role: '定语（放在名词前，说明苹果很大）', isNew: true },
+      { text: 'apple', role: '主语的中心词（苹果）' },
+      { text: 'is', role: '系动词（连接主语和表语）' },
+      { text: 'very red', role: '表语部分（说明苹果很红）' },
+    ],
+    takeaway: '名词前的形容词是在介绍“哪个、什么样的事物”；系动词后的形容词是在说明主语的状态。',
+  },
+  {
+    step: 4,
+    titleZh: '第 04 步 · 加上地点',
+    tagZh: '地点状语',
+    pattern: 'Subject + Linking Verb + Predicative + Place Adverbial',
+    addedElementDesc: '在句末加 on the table，交代苹果在哪里',
+    whyAddIt: '地点状语补充事情发生的位置，通常放在句子的后面。',
+    sentenceEn: 'The big apple is very red on the table.',
+    sentenceZh: '桌上的这个大苹果很红。',
+    highlightWords: ['on the table'],
+    breakdown: [
+      { text: 'The big apple', role: '主语（这个大苹果）' },
+      { text: 'is', role: '系动词（连接主语和表语）' },
+      { text: 'very red', role: '表语部分（说明苹果很红）' },
+      { text: 'on the table', role: '地点状语（说明苹果在桌子上）', isNew: true },
+    ],
+    takeaway: '地点通常放在核心句子之后：The apple is red + on the table。',
+  },
+  {
+    step: 5,
+    titleZh: '第 05 步 · 最后交代时间',
+    tagZh: '地点在前 + 时间在后',
+    pattern: 'Subject + Linking Verb + Predicative + Place Adverbial + Time Adverbial',
+    addedElementDesc: '在地点后加 today，说明我们说的是今天的情况',
+    whyAddIt: '需要同时交代地点和时间时，英语一般先说地点，再说时间。',
+    sentenceEn: 'The big apple is very red on the table today.',
+    sentenceZh: '桌上的这个大苹果今天很红。',
+    highlightWords: ['today'],
+    breakdown: [
+      { text: 'The big apple', role: '主语（这个大苹果）' },
+      { text: 'is', role: '系动词（连接主语和表语）' },
+      { text: 'very red', role: '表语部分（说明苹果很红）' },
+      { text: 'on the table', role: '地点状语（在桌子上）' },
+      { text: 'today', role: '时间状语（今天，一般放在句末）', isNew: true },
+    ],
+    takeaway: '常见顺序是“核心句子 + 地点 + 时间”。如果想强调时间，也可以写成 Today, the big apple is very red on the table.',
+  },
+]
+
 export interface SentenceElementMeta {
   id: string
   code: string

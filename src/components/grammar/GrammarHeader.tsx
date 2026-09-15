@@ -30,35 +30,30 @@ export function GrammarHeader({
     label: string
     sublabel: string
     icon: React.ComponentType<{ className?: string }>
-    badge?: string
   }[] = [
     {
       id: 'partsOfSpeech',
       label: '十大词类源流',
       sublabel: 'Parts of Speech',
       icon: BookMarked,
-      badge: '10 类',
     },
     {
       id: 'sentenceSyntax',
-      label: '句子成分与推导',
-      sublabel: 'Sentence Anatomy',
+      label: '句子结构演进',
+      sublabel: 'Sentence Structure',
       icon: Puzzle,
-      badge: '7 层递进',
     },
     {
       id: 'tenses',
       label: '时态全景坐标轴',
       sublabel: '16 Tenses Matrix',
       icon: Clock,
-      badge: '4×4 矩阵',
     },
     {
       id: 'prepositions',
       label: '介词认知空间图',
       sublabel: 'Spatial Prepositions',
       icon: Compass,
-      badge: '认知空间',
     },
   ]
   return (
@@ -127,17 +122,6 @@ export function GrammarHeader({
               <div className="flex flex-col text-left leading-tight">
                 <div className="flex items-center gap-1.5">
                   <span className={isActive ? 'font-semibold text-[#0B0C0E]' : ''}>{tab.label}</span>
-                  {tab.badge && (
-                    <span
-                      className={`text-xs px-1.5 py-0.5 rounded-full border ${
-                        isActive
-                          ? 'bg-black/15 text-[#0B0C0E] border-black/10 font-mono'
-                          : 'bg-white/5 text-gray-400 border-white/10'
-                      }`}
-                    >
-                      {tab.badge}
-                    </span>
-                  )}
                 </div>
                 <span className={`text-xs font-mono ${isActive ? 'text-[#0B0C0E]/70' : 'text-muted-foreground/80'}`}>
                   {tab.sublabel}
