@@ -5,6 +5,7 @@ import { DictHeaderToolbar } from '@/components/dictionary/DictHeaderToolbar'
 import { DictWordCard } from '@/components/dictionary/DictWordCard'
 import { DictEmptyState } from '@/components/dictionary/DictEmptyState'
 import { DictSearchingCard } from '@/components/dictionary/DictSearchingCard'
+import { DictPlaceholderSkeleton } from '@/components/dictionary/DictPlaceholderSkeleton'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import {
   searchWordSuggestions,
@@ -18,10 +19,34 @@ import { getWordValidationError, isLikelyEnglishWord } from '@/lib/wordValidatio
 import { AiDictionaryLookupError } from '@/lib/aiPrompts'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
 
+const LAST_LOOKUP_STORAGE_KEY = 'mywords_last_dict_lookup_v1'
+
+function saveLastLookup(result: DictSearchResult) {
+  if (!result?.word?.name || typeof window === 'undefined') return
+  try {
+    localStorage.setItem(LAST_LOOKUP_STORAGE_KEY, JSON.stringify(result))
+  } catch (err) {
+    console.warn('Failed to persist last lookup word:', err)
+  }
+}
+
+function loadLastLookup(): DictSearchResult | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(LAST_LOOKUP_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed?.word?.name && typeof parsed.word.name === 'string') {
+      return parsed as DictSearchResult
+    }
+  } catch (err) {
+    console.warn('Failed to load last lookup word:', err)
+  }
+  return null
+}
+
 export default function DictionaryPage() {
   const currentBook = useWorkspaceStore((s) => s.currentBook)
-  const currentLoadedWords = useWorkspaceStore((s) => s.currentLoadedWords)
-  const activeWordIndex = useWorkspaceStore((s) => s.activeWordIndex)
   const phoneticPreference = useWorkspaceStore((s) => s.phoneticPreference)
   const syncStarredWordIds = useWorkspaceStore((s) => s.syncStarredWordIds)
 
@@ -43,35 +68,37 @@ export default function DictionaryPage() {
   const aiAbortRef = useRef<AbortController | null>(null)
   const searchSequenceRef = useRef(0)
 
-  // 初始化：同步生词本，并默认展示当前学习中的单词条目（保证进入词典页面即有丰富内容）
+  // 初始化：仅恢复用户上一次查询的有效单词缓存；若从未查过词，则不加载任何词，保持占位骨架展示
   useEffect(() => {
     syncStarredWordIds()
 
-    const activeWord = currentLoadedWords[activeWordIndex]
-    if (activeWord) {
-      setCurrentResult({
-        word: activeWord,
-        sourceBookId: currentBook?.id || 'book_cet4',
-        sourceBookName: currentBook?.name || 'CET-4 核心词库',
-        isCurrentBook: true,
-      })
-      setSearchQuery(activeWord.name)
-    } else {
-      // 不主动消耗 AI；已有缓存时才恢复默认展示词
+    const cached = loadLastLookup()
+    if (cached?.word) {
+      setCurrentResult(cached)
+      setSearchQuery(cached.word.name)
+      setNotFoundQuery(null)
+
+      // 异步读取本地数据库的最新状态（保证发音/释义/生词本状态完全与数据库同步）
       const sequence = searchSequenceRef.current
-      getWordFromAiCache('discover').then((word) => {
-        if (word && searchSequenceRef.current === sequence) {
-          setCurrentResult({
-            word,
-            sourceBookId: 'ai_cache',
-            sourceBookName: '',
-            isCurrentBook: false,
+      getWordFromAiCache(cached.word.name).then((latest) => {
+        if (latest && searchSequenceRef.current === sequence) {
+          setCurrentResult((prev) => {
+            if (prev && prev.word.name.toLowerCase() === latest.name.toLowerCase()) {
+              const updated = { ...prev, word: latest }
+              saveLastLookup(updated)
+              return updated
+            }
+            return prev
           })
-          setSearchQuery('discover')
         }
       })
+    } else {
+      // 首次进入且从未查询过：不加载任何正在背诵的单词，保持占位骨架
+      setCurrentResult(null)
+      setSearchQuery('')
+      setNotFoundQuery(null)
     }
-  }, [currentBook?.id, currentBook?.name, currentLoadedWords, activeWordIndex, syncStarredWordIds])
+  }, [syncStarredWordIds])
 
   // 校验是否已配置有效的大模型 API Key（具备 AI 能力）
   const hasAiKey = aiConfig.enabled !== false && Boolean(aiConfig?.apiKey?.trim())
@@ -107,12 +134,14 @@ export default function DictionaryPage() {
         if (searchSequenceRef.current !== sequence) return
 
         if (cachedWord) {
-          setCurrentResult({
+          const result: DictSearchResult = {
             word: cachedWord,
             sourceBookId: 'ai_cache',
             sourceBookName: '',
             isCurrentBook: false,
-          })
+          }
+          setCurrentResult(result)
+          saveLastLookup(result)
           setNotFoundQuery(null)
           setIsSearching(false)
           // 单词查询页不自动发音，保留卡片右上角喇叭按钮与音标点击手动播放
@@ -135,12 +164,14 @@ export default function DictionaryPage() {
 
             if (wordItem) {
               // 基础数据一旦返回就立即渲染；富内容在后台分块补全
-              setCurrentResult({
+              const result: DictSearchResult = {
                 word: wordItem,
                 sourceBookId: 'ai_live',
                 sourceBookName: '',
                 isCurrentBook: false,
-              })
+              }
+              setCurrentResult(result)
+              saveLastLookup(result)
               setIsAiSearching(false)
               setNotFoundQuery(null)
               setAiError(null)
@@ -290,10 +321,15 @@ export default function DictionaryPage() {
               word={currentResult.word}
               phoneticPreference={phoneticPreference}
               onWordChange={(updatedWord) => {
-                setCurrentResult((prev) => prev ? { ...prev, word: updatedWord } : null)
+                setCurrentResult((prev) => {
+                  if (!prev) return null
+                  const updated = { ...prev, word: updatedWord }
+                  saveLastLookup(updated)
+                  return updated
+                })
               }}
             />
-          ) : (
+          ) : notFoundQuery || aiError || aiWordNotFound ? (
             <DictEmptyState
               query={notFoundQuery || searchQuery || '所搜单词'}
               currentBookName={currentBook?.name || '当前词库'}
@@ -305,6 +341,8 @@ export default function DictionaryPage() {
               aiError={aiError}
               wordNotFound={aiWordNotFound}
             />
+          ) : (
+            <DictPlaceholderSkeleton />
           )}
         </div>
       </div>

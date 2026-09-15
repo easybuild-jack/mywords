@@ -7,6 +7,7 @@ interface NavigationStore {
   startNavigation: () => void
   onRouteChanged: () => void
   finishNavigation: () => void
+  triggerInitialLoad: () => void
 }
 
 let activeSessionId = 0
@@ -135,5 +136,49 @@ export const useNavigationStore = create<NavigationStore>((set, get) => ({
         }, 200)
       }, 300)
     }, 480)
+  },
+
+  triggerInitialLoad: () => {
+    clearAllTimers()
+    const sessionId = ++activeSessionId
+
+    // 1. 首屏/地址栏直接打开页面时，拉起流光进度条与遮罩（起步 28%）
+    set({
+      isLoading: true,
+      isBarVisible: true,
+      progress: 28,
+    })
+
+    // 2. 平滑推进阶段，等待首屏组件挂载与本地缓存就绪
+    navTimer1 = setTimeout(() => {
+      if (activeSessionId !== sessionId) return
+      set({ progress: 68 })
+
+      navTimer2 = setTimeout(() => {
+        if (activeSessionId !== sessionId) return
+        set({ progress: 92 })
+
+        // 冲刺 100%
+        settleTimer = setTimeout(() => {
+          if (activeSessionId !== sessionId) return
+          set({ progress: 100 })
+
+          cleanupTimer = setTimeout(() => {
+            if (activeSessionId !== sessionId) return
+            set({ isLoading: false })
+
+            setTimeout(() => {
+              if (activeSessionId !== sessionId) return
+              set({ isBarVisible: false })
+
+              setTimeout(() => {
+                if (activeSessionId !== sessionId) return
+                set({ progress: 0 })
+              }, 200)
+            }, 320)
+          }, 360)
+        }, 160)
+      }, 160)
+    }, 140)
   },
 }))

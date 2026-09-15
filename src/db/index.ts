@@ -126,7 +126,7 @@ export const db = new MyWordsDatabase()
 // 初始化默认词库
 if (typeof window !== 'undefined') {
   db.initializeDefaults().catch(console.error)
-  ;(window as any).__mywords_db = db
+    ; (window as any).__mywords_db = db
 }
 
 
@@ -333,8 +333,8 @@ export async function getCustomBooks(): Promise<VocabularyBook[]> {
       if (isRedundantLegacyTest) {
         for (const b of custom) {
           if (b.id !== DEFAULT_SAMPLE_CUSTOM_BOOK.id) {
-            await db.books.delete(b.id).catch(() => {})
-            await db.unitProgress.where('bookId').equals(b.id).delete().catch(() => {})
+            await db.books.delete(b.id).catch(() => { })
+            await db.unitProgress.where('bookId').equals(b.id).delete().catch(() => { })
           }
         }
       }
@@ -850,20 +850,20 @@ export async function mergeWordIntoAiCache(
       db.wordRecords,
       db.wordOverrides,
       async () => {
-      const existing = (await db.aiWordCache.get(canonicalId)) || fallback
-      if (!existing) return null
+        const existing = (await db.aiWordCache.get(canonicalId)) || fallback
+        if (!existing) return null
 
-      const mergeStatus = (
-        current: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined,
-        next: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined
-      ) => next ?? current
+        const mergeStatus = (
+          current: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined,
+          next: NonNullable<WordItem['aiSections']>[keyof NonNullable<WordItem['aiSections']>] | undefined
+        ) => next ?? current
 
-      const merged: WordItem = {
-        ...existing,
-        ...patch,
-        id: canonicalId,
-        aiSections: patch.aiSections
-          ? {
+        const merged: WordItem = {
+          ...existing,
+          ...patch,
+          id: canonicalId,
+          aiSections: patch.aiSections
+            ? {
               syllables: mergeStatus(
                 existing.aiSections?.syllables,
                 patch.aiSections.syllables
@@ -881,33 +881,33 @@ export async function mergeWordIntoAiCache(
                 patch.aiSections.etymology
               ),
             }
-          : existing.aiSections,
-      }
-      await db.aiWordCache.put(merged)
-      const record = await db.wordRecords.get(canonicalId)
-      if (record?.wordItem) {
-        const override = await db.wordOverrides.get(canonicalId)
-        const recordWord: WordItem = {
-          ...record.wordItem,
-          ...patch,
-          id: canonicalId,
-          name: merged.name,
-          aiSections: merged.aiSections,
+            : existing.aiSections,
         }
-        if (override?.phoneticUs) recordWord.phoneticUs = override.phoneticUs
-        if (override?.phoneticUk) recordWord.phoneticUk = override.phoneticUk
-        if (override?.posList?.length) recordWord.posList = override.posList
-        if (override?.syllables?.length) recordWord.syllables = override.syllables
-        if (override?.etymology !== undefined) recordWord.etymology = override.etymology
-        if (override?.silentIndices !== undefined) {
-          recordWord.silentIndices = override.silentIndices
+        await db.aiWordCache.put(merged)
+        const record = await db.wordRecords.get(canonicalId)
+        if (record?.wordItem) {
+          const override = await db.wordOverrides.get(canonicalId)
+          const recordWord: WordItem = {
+            ...record.wordItem,
+            ...patch,
+            id: canonicalId,
+            name: merged.name,
+            aiSections: merged.aiSections,
+          }
+          if (override?.phoneticUs) recordWord.phoneticUs = override.phoneticUs
+          if (override?.phoneticUk) recordWord.phoneticUk = override.phoneticUk
+          if (override?.posList?.length) recordWord.posList = override.posList
+          if (override?.syllables?.length) recordWord.syllables = override.syllables
+          if (override?.etymology !== undefined) recordWord.etymology = override.etymology
+          if (override?.silentIndices !== undefined) {
+            recordWord.silentIndices = override.silentIndices
+          }
+          await db.wordRecords.update(canonicalId, {
+            wordName: merged.name,
+            wordItem: recordWord,
+          })
         }
-        await db.wordRecords.update(canonicalId, {
-          wordName: merged.name,
-          wordItem: recordWord,
-        })
-      }
-      return merged
+        return merged
       }
     )
   } catch (err) {

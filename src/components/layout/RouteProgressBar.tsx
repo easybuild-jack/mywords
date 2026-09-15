@@ -17,11 +17,18 @@ export function RouteProgressBar() {
   const progress = useNavigationStore((s) => s.progress)
   const startNavigation = useNavigationStore((s) => s.startNavigation)
   const onRouteChanged = useNavigationStore((s) => s.onRouteChanged)
+  const triggerInitialLoad = useNavigationStore((s) => s.triggerInitialLoad)
+  const isInitialMount = React.useRef(true)
 
-  // 路由变更时通知加载中心开始收尾冲刺
+  // 路由变更与首屏直接访问探测
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      triggerInitialLoad()
+      return
+    }
     onRouteChanged()
-  }, [pathname, searchParams, onRouteChanged])
+  }, [pathname, searchParams, onRouteChanged, triggerInitialLoad])
 
   // 全局拦截内部链接点击，在路由跳变前瞬间拉起加载，从根源杜绝页面首帧闪烁
   useEffect(() => {
