@@ -2,21 +2,10 @@
 
 import React, { useState } from 'react'
 import { PREPOSITIONS_DATA, SpatialDimension } from '@/resources/grammarData'
-import { Compass, Sparkles, Volume2, Lightbulb } from 'lucide-react'
+import { Compass, Sparkles, Lightbulb } from 'lucide-react'
 
 export function PrepositionView() {
   const [selectedDimension, setSelectedDimension] = useState<SpatialDimension | 'all'>('all')
-
-  // 发音辅助
-  const speakText = (text: string) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance(text)
-      utterance.lang = 'en-US'
-      utterance.rate = 0.95
-      window.speechSynthesis.speak(utterance)
-    }
-  }
 
   // 维度筛选
   const filteredList =
@@ -182,7 +171,7 @@ export function PrepositionView() {
             className="glass-card rounded-2xl border border-white/10 p-6 sm:p-7 flex flex-col gap-6"
           >
             {/* 卡片头部 */}
-            <header className="flex items-start justify-between gap-4">
+            <header>
               <div>
                 <div className="flex items-baseline gap-3 flex-wrap">
                   <h3 className="font-mono text-2xl font-extrabold text-foreground tracking-wide">
@@ -199,14 +188,6 @@ export function PrepositionView() {
                   几何本质：{item.geometricModel}
                 </p>
               </div>
-
-              <button
-                onClick={() => speakText(item.word)}
-                className="size-10 shrink-0 rounded-xl border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                title="发音"
-              >
-                <Volume2 className="size-5" />
-              </button>
             </header>
 
             {/* 核心空间感知 */}

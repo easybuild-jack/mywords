@@ -213,22 +213,13 @@ export function TenseMatrixView() {
             </h3>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10">
-              <span className="text-xs uppercase text-muted-foreground block font-mono">
-                结构公式 (Grammar Formula)
-              </span>
-              <span className="text-base font-mono font-bold text-primary">
-                {selectedTense.formula}
-              </span>
-            </div>
-            <button
-              onClick={() => speakText(selectedTense.examples[0]?.en ?? '')}
-              className="size-10 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
-              title="朗读例句"
-            >
-              <Volume2 className="size-5" />
-            </button>
+          <div className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10">
+            <span className="text-xs uppercase text-muted-foreground block font-mono">
+              结构公式 (Grammar Formula)
+            </span>
+            <span className="text-base font-mono font-bold text-primary">
+              {selectedTense.formula}
+            </span>
           </div>
         </div>
 
@@ -310,9 +301,19 @@ export function TenseMatrixView() {
                   {String(idx + 1).padStart(2, '0')}
                 </span>
                 <div className="min-w-0 flex-1 space-y-1.5">
-                  <p className="font-mono text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
-                    {renderSentenceWithVerbHighlight(example.en, example.verbPart)}
-                  </p>
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-mono text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                      {renderSentenceWithVerbHighlight(example.en, example.verbPart)}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => speakText(example.en)}
+                      title="朗读例句"
+                      className="mt-1.5 size-8 shrink-0 rounded-lg border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
+                    >
+                      <Volume2 className="size-4" />
+                    </button>
+                  </div>
                   <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
                     {example.zh}
                   </p>
