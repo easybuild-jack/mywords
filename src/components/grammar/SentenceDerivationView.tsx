@@ -186,33 +186,35 @@ function SentenceGrowthSeries({
             </header>
 
             <section className="border-t border-white/10 pt-4 space-y-3">
-              <div className="flex items-baseline gap-x-4 gap-y-1 flex-wrap">
+              {/* 句子与翻译紧随其后 */}
+              <div className="flex items-baseline gap-3 flex-wrap">
                 <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
                   {renderGrowthSentence(stepItem.sentenceEn, stepItem.highlightWords)}
                 </p>
-                <span className="text-base sm:text-lg text-muted-foreground">
-                  {stepItem.sentenceZh}
+                <span className="text-lg sm:text-xl text-muted-foreground">
+                  （{stepItem.sentenceZh}）
                 </span>
               </div>
 
-              <div className="divide-y divide-white/10 border-y border-white/10">
-                {stepItem.breakdown.map((token, idx) => (
-                  <div
-                    key={idx}
-                    className="grid grid-cols-[minmax(8rem,auto)_1fr] gap-4 py-2.5 leading-relaxed items-baseline"
-                  >
-                    <span
-                      className={`font-mono text-xl sm:text-2xl tracking-wide ${
-                        token.isNew
-                          ? 'grammar-keyword font-black'
-                          : 'text-foreground font-bold'
-                      }`}
-                    >
-                      {token.text}
-                    </span>
-                    <span className="text-base text-muted-foreground">{token.role}</span>
-                  </div>
-                ))}
+              {/* 分析直接放在例句下面，文字表述，不使用表格 */}
+              <div className="space-y-1.5 pt-1 text-base leading-relaxed">
+                <p className="text-sm font-semibold text-primary/90">成分分析：</p>
+                <div className="space-y-2">
+                  {stepItem.breakdown.map((token, idx) => (
+                    <p key={idx} className="flex items-baseline gap-2.5">
+                      <span
+                        className={`font-mono text-lg sm:text-xl tracking-wide shrink-0 ${
+                          token.isNew
+                            ? 'grammar-keyword font-black'
+                            : 'text-foreground font-bold'
+                        }`}
+                      >
+                        {token.text}
+                      </span>
+                      <span className="text-muted-foreground">：{token.role}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </section>
 
