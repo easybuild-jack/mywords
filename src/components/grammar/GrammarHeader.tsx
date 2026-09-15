@@ -61,29 +61,9 @@ export function GrammarHeader({
       badge: '认知空间',
     },
   ]
-  const [isScrolled, setIsScrolled] = React.useState(false)
-
-  React.useEffect(() => {
-    const scrollContainer = document.querySelector('main')
-    const handleScroll = () => setIsScrolled((scrollContainer?.scrollTop ?? window.scrollY) > 10)
-
-    handleScroll()
-    scrollContainer?.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => {
-      scrollContainer?.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
   return (
-    <header
-      className={`sticky top-0 z-30 w-full shrink-0 bg-background transition-[border-color,box-shadow] duration-300 ${
-        isScrolled
-          ? 'border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
-          : 'border-b border-transparent shadow-none'
-      }`}
-    >
+    <>
+      <header className="fixed top-0 left-64 right-0 z-30 bg-background border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-5 pb-4 space-y-3.5">
       {/* 顶部标题与快速搜索 */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -146,7 +126,7 @@ export function GrammarHeader({
               <Icon className={`size-4 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
               <div className="flex flex-col text-left leading-tight">
                 <div className="flex items-center gap-1.5">
-                  <span className={isActive ? 'font-semibold text-white' : ''}>{tab.label}</span>
+                  <span className={isActive ? 'font-semibold text-[#0B0C0E]' : ''}>{tab.label}</span>
                   {tab.badge && (
                     <span
                       className={`text-xs px-1.5 py-0.5 rounded-full border ${
@@ -168,6 +148,8 @@ export function GrammarHeader({
         })}
       </div>
       </div>
-    </header>
+      </header>
+      <div className="h-[210px] lg:h-[154px] shrink-0" aria-hidden="true" />
+    </>
   )
 }

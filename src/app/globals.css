@@ -829,6 +829,85 @@
   line-height: 1.25rem;
 }
 
+/* 语法页只保留主题主色与中性色，避免各模块各用一套装饰色 */
+.grammar-page :is(
+  [class*="text-emerald-"],
+  [class*="text-teal-"],
+  [class*="text-cyan-"],
+  [class*="text-sky-"],
+  [class*="text-blue-"],
+  [class*="text-indigo-"],
+  [class*="text-purple-"],
+  [class*="text-pink-"],
+  [class*="text-rose-"],
+  [class*="text-orange-"],
+  [class*="text-amber-"],
+  [class*="text-yellow-"],
+  [class*="text-lime-"]
+) {
+  color: var(--primary) !important;
+}
+
+.grammar-page :is(
+  [class*="bg-emerald-"],
+  [class*="bg-teal-"],
+  [class*="bg-cyan-"],
+  [class*="bg-sky-"],
+  [class*="bg-blue-"],
+  [class*="bg-indigo-"],
+  [class*="bg-purple-"],
+  [class*="bg-pink-"],
+  [class*="bg-rose-"],
+  [class*="bg-orange-"],
+  [class*="bg-amber-"],
+  [class*="bg-yellow-"],
+  [class*="bg-lime-"]
+) {
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent) !important;
+}
+
+.grammar-page :is(
+  [class*="border-emerald-"],
+  [class*="border-teal-"],
+  [class*="border-cyan-"],
+  [class*="border-sky-"],
+  [class*="border-blue-"],
+  [class*="border-indigo-"],
+  [class*="border-purple-"],
+  [class*="border-pink-"],
+  [class*="border-rose-"],
+  [class*="border-orange-"],
+  [class*="border-amber-"],
+  [class*="border-yellow-"],
+  [class*="border-lime-"]
+) {
+  border-color: color-mix(in srgb, var(--primary) 30%, transparent) !important;
+}
+
+/* 与音标学习页例词关键词颜色一致 (#F59E0B) - 无下划线 */
+.grammar-keyword,
+.grammar-page .grammar-keyword {
+  color: #F59E0B !important;
+  font-weight: 800;
+  text-decoration: none !important;
+}
+
+:root[data-skin="muted-parchment"] .grammar-keyword,
+:root[data-skin="avocado-cream"] .grammar-keyword,
+:root[data-skin="muted-parchment"] .grammar-page .grammar-keyword,
+:root[data-skin="avocado-cream"] .grammar-page .grammar-keyword {
+  color: #B45309 !important;
+  text-decoration: none !important;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .grammar-keyword,
+  :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .grammar-page .grammar-keyword {
+    color: #B45309 !important;
+    text-decoration: none !important;
+  }
+}
+
 /* 扫光流光关键帧动画 (用于骨架屏与卡片加载态) */
 @keyframes shimmer {
   0% {

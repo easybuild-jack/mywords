@@ -3,13 +3,8 @@
 import React, { useState } from 'react'
 import {
   Volume2,
-  ChevronDown,
-  ChevronUp,
-  History,
-  Sparkles,
   Info,
-  CheckCircle2,
-  Lightbulb,
+  AlertTriangle,
 } from 'lucide-react'
 import { PARTS_OF_SPEECH_DATA, PartOfSpeechItem } from '@/resources/grammarData'
 
@@ -17,8 +12,46 @@ interface PartsOfSpeechViewProps {
   searchQuery: string
 }
 
+/** 辅助函数：将例句中的关键词高亮，样式与音标学习页例词关键词保持完全一致 */
+function renderSentenceWithHighlights(sentence: string, highlightWords?: string[]) {
+  if (!highlightWords || highlightWords.length === 0) {
+    return <span className="font-semibold text-foreground">{sentence}</span>
+  }
+
+  // 排序优先匹配较长词汇，避免部分匹配截断
+  const sortedWords = [...highlightWords].sort((a, b) => b.length - a.length)
+  const pattern = sortedWords
+    .map((w) => {
+      const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const hasTrailingPunct = /[!.,?;:]$/.test(w)
+      return `\\b${escaped}${hasTrailingPunct ? '' : '\\b'}`
+    })
+    .join('|')
+
+  const regex = new RegExp(`(${pattern})`, 'gi')
+  const parts = sentence.split(regex)
+
+  return (
+    <span className="font-semibold text-foreground">
+      {parts.map((part, idx) => {
+        const isMatch = sortedWords.some((w) => w.toLowerCase() === part.toLowerCase())
+        if (isMatch) {
+          return (
+            <span
+              key={idx}
+              className="grammar-keyword font-black"
+            >
+              {part}
+            </span>
+          )
+        }
+        return <React.Fragment key={idx}>{part}</React.Fragment>
+      })}
+    </span>
+  )
+}
+
 export function PartsOfSpeechView({ searchQuery }: PartsOfSpeechViewProps) {
-  const [expandedOriginId, setExpandedOriginId] = useState<string | null>(null)
   const [activeSpeechId, setActiveSpeechId] = useState<string>('noun')
 
   // 发音辅助
@@ -40,17 +73,13 @@ export function PartsOfSpeechView({ searchQuery }: PartsOfSpeechViewProps) {
       item.name.toLowerCase().includes(q) ||
       item.nameZh.includes(q) ||
       item.abbr.toLowerCase().includes(q) ||
-      item.origin.etymology.toLowerCase().includes(q) ||
-      item.evolution.toLowerCase().includes(q) ||
-      item.commonWords.some((w) => w.word.toLowerCase().includes(q) || w.meaning.includes(q)) ||
+      item.functions.some((fn) => fn.toLowerCase().includes(q)) ||
+      item.positionRules.toLowerCase().includes(q) ||
       item.exampleSentence.en.toLowerCase().includes(q) ||
-      item.exampleSentence.zh.includes(q)
+      item.exampleSentence.zh.includes(q) ||
+      item.proTips.toLowerCase().includes(q)
     )
   })
-
-  const toggleOrigin = (id: string) => {
-    setExpandedOriginId((prev) => (prev === id ? null : id))
-  }
 
   return (
     <div className="space-y-6">
@@ -59,15 +88,15 @@ export function PartsOfSpeechView({ searchQuery }: PartsOfSpeechViewProps) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Module 01 · 语源与基石
+              Module 01 · 词性与句法
             </span>
             <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
               共 10 大词类
             </span>
           </div>
-          <h2 className="text-2xl font-extrabold text-white">英语十大词类：探寻从屈折到分析的千年演化</h2>
+          <h2 className="text-2xl font-extrabold text-white">英语十大词类：理解词性在句子中的作用</h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
-            传统语法常将词类当成死记硬背的标签。但在古英语向现代英语的演进中，格位词尾的脱落彻底改变了名词、动词与介词的共生关系。理解源流与功能，语法规则便能融会贯通。
+            通过核心句法功能、例句和句子成分解析，理解不同词性在真实句子中的位置与作用。
           </p>
         </div>
 
@@ -100,164 +129,99 @@ export function PartsOfSpeechView({ searchQuery }: PartsOfSpeechViewProps) {
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {filteredList.map((item) => {
-            const isOriginExpanded = expandedOriginId === item.id
-
-            return (
-              <div
-                key={item.id}
-                id={`pos-${item.id}`}
-                className={`rounded-2xl p-6 bg-surface/50 border border-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-md flex flex-col justify-between space-y-5 relative group shadow-lg shadow-black/20 ${item.borderColor}`}
-              >
-                {/* 顶部标题行 */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2.5 rounded-xl border ${item.badgeBg}`}>
-                      <span className="font-mono font-bold text-base">{item.abbr}</span>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
-                          {item.name}
-                        </h3>
-                        <span className="text-sm font-semibold text-gray-300">
-                          {item.nameZh}
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground font-mono mt-0.5">
-                        {item.origin.etymology} · <span className="text-gray-300">{item.origin.meaning}</span>
-                      </p>
-                    </div>
+          {filteredList.map((item) => (
+            <article
+              key={item.id}
+              id={`pos-${item.id}`}
+              className="glass-card rounded-2xl border border-white/10 p-6 sm:p-7 flex flex-col gap-6"
+            >
+              <header className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-mono text-lg font-bold text-primary">{item.abbr}</span>
+                    <h3 className="text-2xl font-extrabold text-foreground">{item.name}</h3>
+                    <span className="text-lg font-semibold text-muted-foreground">{item.nameZh}</span>
                   </div>
-
-                  {/* 朗读例句按钮 */}
-                  <button
-                    onClick={() => speakText(item.exampleSentence.en)}
-                    title="朗读典范例句"
-                    className="size-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-white hover:bg-white/10 transition-all"
-                  >
-                    <Volume2 className="size-4" />
-                  </button>
+                  <p className="mt-4 text-lg leading-relaxed text-foreground">
+                    {item.plainDescription}
+                  </p>
+                  <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+                    <strong className="text-foreground">常见语法位置：</strong>
+                    {item.positionRules}
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => speakText(item.exampleSentence.en)}
+                  title="朗读例句"
+                  className="size-10 shrink-0 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
+                >
+                  <Volume2 className="size-5" />
+                </button>
+              </header>
 
-                {/* 历史演变折叠卡 (Origin & Evolution) */}
-                <div className="rounded-xl bg-white/[0.03] border border-white/5 p-3.5 space-y-2">
-                  <button
-                    onClick={() => toggleOrigin(item.id)}
-                    className="w-full flex items-center justify-between text-xs font-semibold text-muted-foreground hover:text-white transition-colors"
-                  >
-                    <span className="flex items-center gap-1.5 text-emerald-400/90">
-                      <History className="size-3.5" />
-                      语源与历史演变透镜 (Etymology & Evolution)
-                    </span>
-                    {isOriginExpanded ? (
-                      <ChevronUp className="size-3.5" />
-                    ) : (
-                      <ChevronDown className="size-3.5" />
-                    )}
-                  </button>
+              <section className="border-t border-white/10 pt-5 space-y-4">
+                <h4 className="text-lg font-bold text-foreground">核心句法功能</h4>
+                <ol className="space-y-3">
+                  {item.functions.map((fn, idx) => (
+                    <li key={idx} className="grid grid-cols-[2rem_1fr] gap-3 text-base leading-relaxed">
+                      <span className="font-mono font-bold text-primary">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-foreground/85">{fn}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
 
-                  {isOriginExpanded && (
-                    <div className="pt-2 text-xs text-gray-300/90 leading-relaxed border-t border-white/5 animate-fadeIn">
-                      <p className="bg-black/20 p-3 rounded-lg border border-white/5 font-sans">
-                        {item.evolution}
-                      </p>
-                    </div>
+              <section className="border-t border-white/10 pt-5 space-y-4">
+                <div className="flex items-center justify-between gap-3">
+                  <h4 className="text-lg font-bold text-foreground">例句与句子解析</h4>
+                  <span className="text-base text-muted-foreground">高亮为当前词性</span>
+                </div>
+                <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                  {renderSentenceWithHighlights(
+                    item.exampleSentence.en,
+                    item.exampleSentence.highlightWords
                   )}
-                </div>
-
-                {/* 核心句法功能列表 */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase flex items-center gap-1.5">
-                    <Sparkles className="size-3 text-primary" />
-                    核心句法功能 (Syntactic Functions)
-                  </h4>
-                  <ul className="space-y-1.5 text-xs text-gray-300">
-                    {item.functions.map((fn, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="size-3.5 text-primary shrink-0 mt-0.5 opacity-80" />
-                        <span className="leading-snug">{fn}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* 高频核心词汇 */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-semibold text-muted-foreground tracking-wider uppercase">
-                    典型高频词汇 (Representative Words)
-                  </h4>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {item.commonWords.map((wordObj, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => speakText(wordObj.word)}
-                        className="group/word flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/10 hover:border-primary/40 hover:bg-white/[0.08] transition-all text-xs"
-                      >
-                        <span className="font-semibold text-white group-hover/word:text-primary">
-                          {wordObj.word}
-                        </span>
-                        {wordObj.phonetic && (
-                          <span className="text-[10px] font-mono text-muted-foreground/70">
-                            {wordObj.phonetic}
-                          </span>
-                        )}
-                        <span className="text-[11px] text-gray-400 font-sans">
-                          {wordObj.meaning}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 剖析例句卡片 */}
-                <div className="rounded-xl p-4 bg-black/30 border border-white/10 space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono uppercase text-muted-foreground tracking-wider">
-                      深度拆解例句 (Sentence Breakdown)
-                    </span>
-                    <span className="text-[11px] font-mono text-primary/80">
-                      位置规律: {item.positionRules.slice(0, 18)}...
-                    </span>
-                  </div>
-
-                  {/* 英文句子 */}
-                  <p className="text-sm font-medium text-white leading-relaxed">
-                    {item.exampleSentence.en}
-                  </p>
-                  <p className="text-xs text-gray-400 font-sans">
-                    {item.exampleSentence.zh}
-                  </p>
-
-                  {/* 词成分标签分解 */}
-                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                    {item.exampleSentence.breakdown.map((token, bIdx) => (
-                      <div
-                        key={bIdx}
-                        className={`text-[11px] px-2 py-0.5 rounded-md border flex items-center gap-1 ${
+                </p>
+                <p className="text-base sm:text-lg leading-relaxed text-muted-foreground">
+                  {item.exampleSentence.zh}
+                </p>
+                <div className="divide-y divide-white/10 border-y border-white/10">
+                  {item.exampleSentence.breakdown.map((token, idx) => (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-[minmax(8rem,auto)_1fr] gap-4 py-3.5 leading-relaxed items-baseline"
+                    >
+                      <span
+                        className={`font-mono text-xl sm:text-2xl tracking-wide ${
                           token.isHighlight
-                            ? 'bg-primary/20 text-primary border-primary/40 font-semibold shadow-sm shadow-primary/10'
-                            : 'bg-white/5 text-gray-400 border-white/5'
+                            ? 'grammar-keyword font-black'
+                            : 'text-foreground font-bold'
                         }`}
                       >
-                        <span className="font-mono text-white/90">{token.text}</span>
-                        <span className="text-[10px] opacity-75">· {token.role}</span>
-                      </div>
-                    ))}
-                  </div>
+                        {token.text}
+                      </span>
+                      <span className="text-base text-muted-foreground">
+                        {token.role}
+                      </span>
+                    </div>
+                  ))}
                 </div>
+              </section>
 
-                {/* 避坑提示与进阶窍门 */}
-                <div className="rounded-xl px-3.5 py-2.5 bg-amber-500/[0.06] border border-amber-500/20 text-xs text-amber-200/90 flex items-start gap-2.5">
-                  <Lightbulb className="size-4 text-amber-400 shrink-0 mt-0.5" />
-                  <div className="leading-relaxed">
-                    <span className="font-semibold text-amber-300">进阶秘籍: </span>
+              {item.proTips && (
+                <aside className="mt-auto pt-4 border-l-2 border-primary pl-4 flex items-start gap-3 min-h-[5.5rem]">
+                  <AlertTriangle className="size-5 shrink-0 text-primary mt-1" />
+                  <p className="text-base leading-relaxed text-foreground/85 min-h-[4.875rem]">
+                    <strong className="text-primary">重点提醒：</strong>
                     {item.proTips}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+                  </p>
+                </aside>
+              )}
+            </article>
+          ))}
         </div>
       )}
     </div>
