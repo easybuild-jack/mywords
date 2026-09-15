@@ -148,7 +148,7 @@ export function PhoneticsLearnHeader({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-sm"
           >
             <Keyboard className="size-3.5" />
-            <span>音标默写练习</span>
+            <span>前往音标练习</span>
             <ArrowRight className="size-3.5" />
           </Link>
         </div>

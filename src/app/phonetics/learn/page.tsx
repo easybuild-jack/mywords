@@ -166,7 +166,7 @@ export default function PhoneticsLearnPage() {
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 font-semibold transition-all hover:scale-[1.02] active:scale-95"
           >
             <Keyboard className="size-4" />
-            <span>前往音标默写强化练习</span>
+            <span>前往音标强化练习</span>
             <ArrowRight className="size-3.5" />
           </Link>
         </footer>

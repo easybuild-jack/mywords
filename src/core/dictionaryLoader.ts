@@ -33,7 +33,7 @@ export interface RawDictEntry {
 // 官方内置大词库文件映射关系
 export const OFFICIAL_BOOK_FILE_MAP: Record<string, { path: string; totalWords: number; name: string }> = {
   'book_basewords': { path: '/dicts/basewords.json', totalWords: 4427, name: '基础词库' },
-  'book_cet4': { path: '/dicts/CET_4_6.json', totalWords: 2607, name: '四六级词库' },
+  'book_cet4': { path: '/dicts/CET_4_6.json', totalWords: 5851, name: '四六级词库' },
   'book_kaoyan': { path: '/dicts/kaoyan.json', totalWords: 6705, name: '考研英语 2025 高频词' },
   'book_ielts': { path: '/dicts/essential4000.json', totalWords: 3600, name: '核心高频 4000 词' },
   'book_coder': { path: '/dicts/it-words.json', totalWords: 3824, name: '程序员词库' },

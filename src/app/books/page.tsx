@@ -133,7 +133,7 @@ function BooksHubContent() {
     targetMode = 'phonetic'
     targetRoute = '/phonetics'
     progressMode = 'phonetic'
-    progressTitle = '音标默写进度'
+    progressTitle = '音标练习进度'
   }
 
   const {

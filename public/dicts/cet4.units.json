@@ -1,121 +1,139 @@
 {
   "schemaVersion": 1,
   "bookId": "book_cet4",
-  "totalWords": 2607,
+  "totalWords": 5851,
   "units": [
     {
       "id": "cet4_time_numbers",
       "name": "时间、数字与度量",
       "order": 0,
-      "wordCount": 125
+      "wordCount": 176
     },
     {
       "id": "cet4_family_people",
       "name": "人物、家庭与社会关系",
       "order": 1,
-      "wordCount": 23
+      "wordCount": 59
     },
     {
       "id": "cet4_body_health",
       "name": "身体、健康与医疗",
       "order": 2,
-      "wordCount": 98
+      "wordCount": 133
     },
     {
       "id": "cet4_emotions_character",
       "name": "外貌、性格与情绪",
       "order": 3,
-      "wordCount": 126
+      "wordCount": 225
     },
     {
       "id": "cet4_daily_life",
       "name": "日常生活与起居",
       "order": 4,
-      "wordCount": 126
+      "wordCount": 156
     },
     {
       "id": "cet4_food_drink",
       "name": "饮食与餐饮",
       "order": 5,
-      "wordCount": 127
+      "wordCount": 162
     },
     {
       "id": "cet4_clothing_home",
       "name": "服饰、家居与住所",
       "order": 6,
-      "wordCount": 62
+      "wordCount": 92
     },
     {
       "id": "cet4_education",
       "name": "教育、学习与学术",
       "order": 7,
-      "wordCount": 67
+      "wordCount": 91
     },
     {
       "id": "cet4_work_career",
       "name": "工作、职业与职场",
       "order": 8,
-      "wordCount": 90
+      "wordCount": 110
     },
     {
       "id": "cet4_society_politics_law",
       "name": "社会、政治与法律",
       "order": 9,
-      "wordCount": 157
+      "wordCount": 198
     },
     {
       "id": "cet4_economy_business",
       "name": "经济、商业与金融",
       "order": 10,
-      "wordCount": 91
+      "wordCount": 111
     },
     {
       "id": "cet4_culture_media",
       "name": "文化、艺术与媒体",
       "order": 11,
-      "wordCount": 88
+      "wordCount": 122
     },
     {
       "id": "cet4_science_tech",
       "name": "科技、信息与互联网",
       "order": 12,
-      "wordCount": 165
+      "wordCount": 197
     },
     {
       "id": "cet4_nature_geography",
       "name": "环境、自然与地理",
       "order": 13,
-      "wordCount": 75
+      "wordCount": 107
     },
     {
       "id": "cet4_animals_plants",
       "name": "动植物与生态",
       "order": 14,
-      "wordCount": 108
+      "wordCount": 140
     },
     {
       "id": "cet4_transport_travel",
       "name": "交通、旅行与住宿",
       "order": 15,
-      "wordCount": 76
+      "wordCount": 110
     },
     {
       "id": "cet4_sports_leisure",
       "name": "运动、休闲与娱乐",
       "order": 16,
-      "wordCount": 68
+      "wordCount": 93
     },
     {
       "id": "cet4_communication_language",
       "name": "通信、语言与表达",
       "order": 17,
-      "wordCount": 121
+      "wordCount": 187
     },
     {
       "id": "cet4_thinking_abstract",
       "name": "思维、心理与抽象概念",
       "order": 18,
-      "wordCount": 814
+      "wordCount": 2959
+    },
+    {
+      "id": "cet4_grammar_function",
+      "name": "语法功能与连接词",
+      "order": 19,
+      "wordCount": 143
+    },
+    {
+      "id": "cet4_action_change",
+      "name": "动作、变化与因果",
+      "order": 20,
+      "wordCount": 162
+    },
+    {
+      "id": "cet4_quality_degree",
+      "name": "性质、程度与评价",
+      "order": 21,
+      "wordCount": 118
     }
   ]
 }

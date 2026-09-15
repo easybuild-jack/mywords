@@ -28,7 +28,7 @@ export function Sidebar() {
     { label: '单词学习', icon: GraduationCap, href: '/learn' },
     { label: '单词默写', icon: PenLine, href: '/dictation' },
     { label: '音标学习', icon: Mic, href: '/phonetics/learn' },
-    { label: '音标默写', icon: Keyboard, href: '/phonetics' },
+    { label: '音标练习', icon: Keyboard, href: '/phonetics' },
     { label: '词库管理', icon: BookOpen, href: '/books' },
     { label: '生错词本', icon: AlertCircle, href: '/errors' },
     { label: '词根词缀', icon: Sprout, href: '/roots' },
