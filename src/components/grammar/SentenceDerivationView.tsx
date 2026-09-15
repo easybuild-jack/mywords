@@ -313,12 +313,14 @@ export function SentenceDerivationView() {
           {SENTENCE_CORE_CONCEPTS.map((concept) => (
             <div
               key={concept.id}
-              className="rounded-xl bg-white/[0.02] border border-white/10 p-5 space-y-4 flex flex-col justify-between"
+              className="rounded-xl bg-white/[0.02] border border-white/10 p-5 flex flex-col gap-4"
             >
               <div className="space-y-2.5">
-                <div className="flex items-baseline justify-between gap-2">
+                <div className="space-y-1">
                   <h4 className="text-lg font-bold text-foreground">{concept.titleZh}</h4>
-                  <span className="font-mono text-xs text-primary font-semibold">{concept.formula}</span>
+                  <p className="font-mono text-xs text-primary font-semibold">
+                    {concept.formula}
+                  </p>
                 </div>
                 <p className="text-sm font-semibold text-primary/90">
                   {concept.coreQuestion}
@@ -329,21 +331,24 @@ export function SentenceDerivationView() {
               </div>
 
               {/* 拆解项 */}
-              <div className="border-t border-white/10 pt-4 space-y-2.5">
-                <div className="flex items-center justify-between text-base">
+              <div className="mt-auto border-t border-white/10 pt-4 space-y-2.5">
+                <div className="flex items-baseline justify-between gap-3 text-base">
                   <span className="font-mono text-xl font-bold text-foreground">
                     {concept.exampleEn}
                   </span>
                   <span className="text-muted-foreground">{concept.exampleZh}</span>
                 </div>
-                <div className="space-y-1.5 text-sm">
+                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
                   {concept.components.map((comp, idx) => (
-                    <div key={idx} className="flex items-center justify-between text-muted-foreground">
+                    <React.Fragment key={idx}>
                       <span className="font-mono font-bold text-primary">
                         {comp.code} ({comp.nameZh})
                       </span>
-                      <span>{comp.role} · 例：<strong className="text-foreground font-mono">{comp.exampleWord}</strong></span>
-                    </div>
+                      <span className="text-muted-foreground">
+                        {comp.role} · 例：
+                        <strong className="text-foreground font-mono">{comp.exampleWord}</strong>
+                      </span>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
@@ -358,22 +363,28 @@ export function SentenceDerivationView() {
             <span className="text-sm text-muted-foreground">剥离它们，句子依然成立；加上它们，意思更加丰富</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {SENTENCE_MODIFIERS_DATA.map((mod) => (
               <div
                 key={mod.id}
-                className="rounded-xl bg-white/[0.02] border border-white/10 p-4 space-y-2.5"
+                className="rounded-xl bg-white/[0.02] border border-white/10 p-4 flex flex-col gap-3"
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-base text-foreground">{mod.nameZh}</span>
-                  <span className="text-xs text-primary font-mono">{mod.questionZh}</span>
+                <div className="space-y-1">
+                  <span className="block font-bold text-base text-foreground">
+                    {mod.nameZh}
+                  </span>
+                  <span className="block text-xs text-primary font-mono">
+                    {mod.questionZh}
+                  </span>
                 </div>
                 <p className="text-sm leading-relaxed text-foreground/80">
                   {mod.plainExplanation}
                 </p>
-                <div className="pt-2 border-t border-white/10 text-sm flex items-center justify-between">
-                  <span className="font-mono font-semibold text-foreground">{mod.exampleEn}</span>
-                  <span className="text-xs text-muted-foreground">{mod.exampleZh}</span>
+                <div className="mt-auto pt-3 border-t border-white/10 space-y-1">
+                  <p className="font-mono font-semibold text-sm text-foreground">
+                    {mod.exampleEn}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{mod.exampleZh}</p>
                 </div>
               </div>
             ))}
