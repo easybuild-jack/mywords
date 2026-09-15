@@ -381,6 +381,7 @@
 }
 
 @media (prefers-color-scheme: light) {
+
   :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .phonics-highlight,
   :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .text-amber-400,
   :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .text-amber-500 {
@@ -828,8 +829,7 @@
 }
 
 /* 语法页只保留主题主色与中性色，避免各模块各用一套装饰色 */
-.grammar-page :is(
-  [class*="text-emerald-"],
+.grammar-page :is([class*="text-emerald-"],
   [class*="text-teal-"],
   [class*="text-cyan-"],
   [class*="text-sky-"],
@@ -841,13 +841,11 @@
   [class*="text-orange-"],
   [class*="text-amber-"],
   [class*="text-yellow-"],
-  [class*="text-lime-"]
-) {
+  [class*="text-lime-"]) {
   color: var(--primary) !important;
 }
 
-.grammar-page :is(
-  [class*="bg-emerald-"],
+.grammar-page :is([class*="bg-emerald-"],
   [class*="bg-teal-"],
   [class*="bg-cyan-"],
   [class*="bg-sky-"],
@@ -859,13 +857,11 @@
   [class*="bg-orange-"],
   [class*="bg-amber-"],
   [class*="bg-yellow-"],
-  [class*="bg-lime-"]
-) {
+  [class*="bg-lime-"]) {
   background-color: color-mix(in srgb, var(--primary) 12%, transparent) !important;
 }
 
-.grammar-page :is(
-  [class*="border-emerald-"],
+.grammar-page :is([class*="border-emerald-"],
   [class*="border-teal-"],
   [class*="border-cyan-"],
   [class*="border-sky-"],
@@ -877,8 +873,7 @@
   [class*="border-orange-"],
   [class*="border-amber-"],
   [class*="border-yellow-"],
-  [class*="border-lime-"]
-) {
+  [class*="border-lime-"]) {
   border-color: color-mix(in srgb, var(--primary) 30%, transparent) !important;
 }
 
@@ -899,6 +894,7 @@
 }
 
 @media (prefers-color-scheme: light) {
+
   :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .grammar-keyword,
   :root:not([data-skin="slate-mint"]):not([data-skin="classic-emerald"]):not([data-skin="sakura-pink"]):not([data-skin="peach-oolong"]):not([data-skin="oxford-twilight"]) .grammar-page .grammar-keyword {
     color: #B45309 !important;
