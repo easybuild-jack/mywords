@@ -16,14 +16,14 @@ export const SHORTCUT_DEFINITIONS: {
   desc: string
   defaultKey: string
 }[] = [
-  { key: 'peekHint', label: '偷看提示', desc: '按住快速窥看单词完整拼写与音节', defaultKey: 'Tab' },
-  { key: 'replayAudio', label: '发音朗读', desc: '重播当前单词真人原声发音', defaultKey: 'Ctrl+J' },
-  { key: 'prevWord', label: '上一个单词', desc: '切换至当前单元的上一个单词', defaultKey: 'ArrowLeft' },
-  { key: 'nextWord', label: '下一个单词', desc: '切换至当前单元的下一个单词', defaultKey: 'ArrowRight' },
-  { key: 'restartUnit', label: '重学本单元', desc: '重新开始当前单元从头练习', defaultKey: 'Ctrl+R' },
-  { key: 'toggleSplit', label: '切换音节切分', desc: '切换当前单词的音节拆分显示', defaultKey: 'Alt+S' },
-  { key: 'toggleStar', label: '加入生词本', desc: '一键将当前单词加入或移出生词本', defaultKey: 'Alt+W' },
-]
+    { key: 'peekHint', label: '偷看提示', desc: '按住快速窥看单词完整拼写与音节', defaultKey: 'Tab' },
+    { key: 'replayAudio', label: '发音朗读', desc: '重播当前单词真人原声发音', defaultKey: 'Ctrl+J' },
+    { key: 'prevWord', label: '上一个单词', desc: '切换至当前单元的上一个单词', defaultKey: 'ArrowLeft' },
+    { key: 'nextWord', label: '下一个单词', desc: '切换至当前单元的下一个单词', defaultKey: 'ArrowRight' },
+    { key: 'restartUnit', label: '重学本单元', desc: '重新开始当前单元从头练习', defaultKey: 'Ctrl+R' },
+    { key: 'toggleSplit', label: '切换音节切分', desc: '切换当前单词的音节拆分显示', defaultKey: 'Alt+S' },
+    { key: 'toggleStar', label: '加入生词本', desc: '一键将当前单词加入或移出生词本', defaultKey: 'Alt+W' },
+  ]
 
 /**
  * 将按键事件解析为标准快捷键字符串 (例如 "Ctrl+J", "Tab", "Alt+ArrowRight")
@@ -42,7 +42,6 @@ export function eventToShortcutString(e: KeyboardEvent): string | null {
   let keyName = e.key
   if (keyName === ' ') keyName = 'Space'
   else if (keyName.length === 1) keyName = keyName.toUpperCase()
-
   parts.push(keyName)
   return parts.join('+')
 }
