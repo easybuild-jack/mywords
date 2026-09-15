@@ -816,6 +816,19 @@
   stroke: rgba(110, 118, 108, 0.20) !important;
 }
 
+/* 语法研习页沿用词库管理页的可读字号下限 */
+.grammar-page [class~="text-[9px]"],
+.grammar-page [class~="text-[10px]"],
+.grammar-page [class~="text-[11px]"] {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.grammar-page [class~="text-xs"] {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 /* 扫光流光关键帧动画 (用于骨架屏与卡片加载态) */
 @keyframes shimmer {
   0% {
