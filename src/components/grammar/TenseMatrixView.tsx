@@ -1,21 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  TENSES_DATA,
-  TenseItem,
-  TimeDimension,
-  AspectDimension,
-} from '@/resources/grammarData'
+import { TENSES_DATA, TimeDimension, AspectDimension } from '@/resources/grammarData'
 import {
   Clock,
   Volume2,
   AlertTriangle,
 } from 'lucide-react'
-
-interface TenseMatrixViewProps {
-  searchQuery: string
-}
 
 /** 辅助函数：将例句中的核心动词形式高亮，样式与词性/句型页保持一致 */
 function renderSentenceWithVerbHighlight(sentence: string, verbPart?: string) {
@@ -42,7 +33,7 @@ function renderSentenceWithVerbHighlight(sentence: string, verbPart?: string) {
   )
 }
 
-export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
+export function TenseMatrixView() {
   const [onlyHighFrequency, setOnlyHighFrequency] = useState<boolean>(false)
   const [selectedTenseId, setSelectedTenseId] = useState<string>('present_perfect')
 
@@ -75,20 +66,6 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
     }
   }
 
-  // 搜索高亮过滤
-  const isMatchSearch = (item: TenseItem) => {
-    const q = searchQuery.trim().toLowerCase()
-    if (!q) return true
-    return (
-      item.nameEn.toLowerCase().includes(q) ||
-      item.nameZh.includes(q) ||
-      item.formula.toLowerCase().includes(q) ||
-      item.coreConcept.toLowerCase().includes(q) ||
-      item.signalWords.some((s) => s.toLowerCase().includes(q)) ||
-      item.exampleSentence.en.toLowerCase().includes(q)
-    )
-  }
-
   return (
     <div className="space-y-6">
       {/* 模块导引 */}
@@ -96,7 +73,7 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Module 03 · 时空坐标与矩阵
+              Module 04 · 时空坐标与矩阵
             </span>
             <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
               4 时间 × 4 动作体态 = 16 态
@@ -174,7 +151,6 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
 
                   const isSelected = selectedTenseId === tense.id
                   const isDimmed = onlyHighFrequency && !tense.isHighFrequency
-                  const isMatch = isMatchSearch(tense)
 
                   return (
                     <td
@@ -184,9 +160,7 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
                         isSelected
                           ? 'bg-primary/15 ring-1 ring-primary/40'
                           : 'hover:bg-white/[0.03]'
-                      } ${isDimmed ? 'opacity-25 grayscale' : ''} ${
-                        !isMatch ? 'opacity-20' : ''
-                      }`}
+                      } ${isDimmed ? 'opacity-25 grayscale' : ''}`}
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-1">
@@ -209,7 +183,7 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
                           {tense.formula}
                         </p>
                         <p className="text-sm font-mono text-muted-foreground/85 truncate">
-                          {tense.exampleSentence.verbPart}
+                          {tense.examples[0]?.verbPart}
                         </p>
                       </div>
                     </td>
@@ -249,9 +223,9 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
               </span>
             </div>
             <button
-              onClick={() => speakText(selectedTense.exampleSentence.en)}
+              onClick={() => speakText(selectedTense.examples[0]?.en ?? '')}
               className="size-10 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
-              title="朗读典范例句"
+              title="朗读例句"
             >
               <Volume2 className="size-5" />
             </button>
@@ -320,44 +294,48 @@ export function TenseMatrixView({ searchQuery }: TenseMatrixViewProps) {
           </p>
         </div>
 
-        {/* 标志词与典范例句 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 典型时间状语标志词 */}
-          <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
-            <span className="text-base font-bold text-foreground block">
-              典型时间标志词 (Time Signals)
+        {/* 例句 */}
+        <section className="border-t border-white/10 pt-5 space-y-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h4 className="text-base font-bold text-foreground">例句</h4>
+            <span className="text-sm font-semibold text-primary">
+              {selectedTense.nameZh} · {selectedTense.nameEn}
             </span>
-            <div className="flex items-center gap-2 flex-wrap">
-              {selectedTense.signalWords.map((word, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 rounded-lg bg-white/5 text-foreground/90 text-base font-mono border border-white/10"
-                >
-                  {word}
-                </span>
-              ))}
-            </div>
           </div>
 
-          {/* 典范例句 */}
-          <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-bold text-foreground">
-                典范语境例句 (Example Sentence)
+          <div className="space-y-4">
+            {selectedTense.examples.map((example, idx) => (
+              <div key={idx} className="flex items-start gap-3.5">
+                <span className="font-mono text-sm font-bold text-primary pt-1 shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <p className="font-mono text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                    {renderSentenceWithVerbHighlight(example.en, example.verbPart)}
+                  </p>
+                  <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                    {example.zh}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 典型时间状语标志词 */}
+        <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
+          <span className="text-base font-bold text-foreground block">
+            典型时间标志词 (Time Signals)
+          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            {selectedTense.signalWords.map((word, idx) => (
+              <span
+                key={idx}
+                className="px-2.5 py-1 rounded-lg bg-white/5 text-foreground/90 text-base font-mono border border-white/10"
+              >
+                {word}
               </span>
-              <span className="text-sm font-mono text-primary font-semibold">
-                动词形式: {selectedTense.exampleSentence.verbPart}
-              </span>
-            </div>
-            <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
-              {renderSentenceWithVerbHighlight(
-                selectedTense.exampleSentence.en,
-                selectedTense.exampleSentence.verbPart
-              )}
-            </p>
-            <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-              {selectedTense.exampleSentence.zh}
-            </p>
+            ))}
           </div>
         </div>
 

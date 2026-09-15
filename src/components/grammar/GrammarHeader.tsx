@@ -13,15 +13,11 @@ import { GrammarTabType } from '@/resources/grammarData'
 interface GrammarHeaderProps {
   activeTab: GrammarTabType
   onTabChange: (tab: GrammarTabType) => void
-  searchQuery: string
-  onSearchChange: (q: string) => void
 }
 
 export function GrammarHeader({
   activeTab,
   onTabChange,
-  searchQuery,
-  onSearchChange,
 }: GrammarHeaderProps) {
   const tabs: {
     id: GrammarTabType
@@ -31,27 +27,27 @@ export function GrammarHeader({
   }[] = [
     {
       id: 'partsOfSpeech',
-      label: '十大词类源流',
+      label: '十大词性',
       sublabel: 'Parts of Speech',
       icon: BookMarked,
     },
     {
+      id: 'prepositions',
+      label: '介词详解',
+      sublabel: 'Spatial Prepositions',
+      icon: Compass,
+    },
+    {
       id: 'sentenceSyntax',
-      label: '句子结构演进',
+      label: '语法结构',
       sublabel: 'Sentence Structure',
       icon: Puzzle,
     },
     {
       id: 'tenses',
-      label: '时态全景坐标轴',
+      label: '时态诠释',
       sublabel: '16 Tenses Matrix',
       icon: Clock,
-    },
-    {
-      id: 'prepositions',
-      label: '介词认知空间图',
-      sublabel: 'Spatial Prepositions',
-      icon: Compass,
     },
   ]
   return (
@@ -68,7 +64,7 @@ export function GrammarHeader({
               基础语法详解
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              从古英语源流到现代分析语 · 递进式句型解构 · 16时态动态坐标轴 · 空间认知介词图解
+              从古英语源流到现代分析语 · 空间认知介词图解 · 递进式句型解构 · 16时态动态坐标轴
             </p>
           </div>
         </div>

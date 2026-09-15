@@ -1406,6 +1406,14 @@ export const SENTENCE_DERIVATION_STEPS: DerivationStep[] = [
 export type TimeDimension = 'past' | 'present' | 'future' | 'past_future'
 export type AspectDimension = 'simple' | 'continuous' | 'perfect' | 'perfect_continuous'
 
+/** 单个时态的例句（面向初学者，动词部分单独标出以便高亮） */
+export interface TenseExample {
+  en: string
+  zh: string
+  /** 句中需要高亮的动词形式 */
+  verbPart: string
+}
+
 export interface TenseItem {
   id: string
   nameEn: string
@@ -1423,11 +1431,8 @@ export interface TenseItem {
   }
   coreConcept: string
   signalWords: string[]
-  exampleSentence: {
-    en: string
-    zh: string
-    verbPart: string
-  }
+  /** 该时态的两条简单例句 */
+  examples: TenseExample[]
   contrastTrap?: {
     vsTenseName: string
     differenceZh: string
@@ -1454,11 +1459,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '不表达此刻正在发生！而是表达“客观真理、常态习惯、普遍规律或既定性格”。',
     signalWords: ['always', 'usually', 'often', 'every day', 'seldom', 'never'],
-    exampleSentence: {
-      en: 'The Earth orbits the sun and completes one cycle every year.',
-      zh: '地球围绕太阳公转，每年完成一次公转周期。',
-      verbPart: 'orbits ... completes',
-    },
+    examples: [
+      {
+        en: 'I get up at seven every morning.',
+        zh: '我每天早上七点起床。',
+        verbPart: 'get up',
+      },
+      {
+        en: 'Water boils at 100°C.',
+        zh: '水在一百度时沸腾。',
+        verbPart: 'boils',
+      },
+    ],
     contrastTrap: {
       vsTenseName: 'Present Continuous (现在进行时)',
       differenceZh: '一般现在时表“恒常规律/习惯”，现在进行时表“此刻暂时状态/暂发偏离常轨”。',
@@ -1487,11 +1499,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '动作在说话当下正在展开；或表示阶段性的临时动作、亦可加 always 表达说话人的赞叹或抱怨情绪。',
     signalWords: ['now', 'at this moment', 'currently', 'look!', 'listen!'],
-    exampleSentence: {
-      en: 'Look! The engineers are testing the experimental engine right now.',
-      zh: '看！工程师们此刻正在测试这台实验性发动机。',
-      verbPart: 'are testing',
-    },
+    examples: [
+      {
+        en: 'I am reading a book now.',
+        zh: '我现在正在看书。',
+        verbPart: 'am reading',
+      },
+      {
+        en: 'Look! The baby is sleeping.',
+        zh: '看！宝宝正在睡觉。',
+        verbPart: 'is sleeping',
+      },
+    ],
   },
   {
     id: 'present_perfect',
@@ -1510,11 +1529,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '立足现在看过去！动作发生于过去，但说话人关心的绝对不是“发生于何时”，而是“该动作对现在的后果、影响或人生资历”。',
     signalWords: ['already', 'yet', 'just', 'ever', 'never', 'so far', 'since 2020', 'for 3 years'],
-    exampleSentence: {
-      en: 'Scientists have decrypted the genetic sequence, opening doors to new cures.',
-      zh: '科学家们已经破译了该基因序列（如今成果掌握在手，开辟了新疗法之路）。',
-      verbPart: 'have decrypted',
-    },
+    examples: [
+      {
+        en: 'I have finished my homework.',
+        zh: '我已经写完作业了。',
+        verbPart: 'have finished',
+      },
+      {
+        en: 'I have lived here for ten years.',
+        zh: '我在这里住了十年了。',
+        verbPart: 'have lived',
+      },
+    ],
     contrastTrap: {
       vsTenseName: 'Simple Past (一般过去时)',
       differenceZh: '一般过去时只关心“过去的既成事实”，对现在毫无羁绊；现在完成时核心在“现在的后果”。',
@@ -1543,11 +1569,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '动作从过去某时起始，一刻未停地持续至今，且此刻动作依然在火热进行中，极具过程沉浸感。',
     signalWords: ['all morning', 'for hours', 'how long', 'these past few days'],
-    exampleSentence: {
-      en: 'The author has been revising her breakthrough novel for six straight hours.',
-      zh: '这位作家已经连续整整六个小时在修订她的突破性长篇小说了（现在仍在写）。',
-      verbPart: 'has been revising',
-    },
+    examples: [
+      {
+        en: 'I have been waiting for an hour.',
+        zh: '我已经等了一个小时了。',
+        verbPart: 'have been waiting',
+      },
+      {
+        en: 'It has been raining all morning.',
+        zh: '一上午都在下雨。',
+        verbPart: 'has been raining',
+      },
+    ],
   },
 
   // --- 过去时 (Past) ---
@@ -1568,11 +1601,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '动作在过去发生并彻底结束，与此时此刻没有任何直接因果羁绊，常伴随明确的过去时间状语。',
     signalWords: ['yesterday', 'ago', 'in 1999', 'last night', 'just now'],
-    exampleSentence: {
-      en: 'Ancient Romans constructed monumental aqueducts that endured for centuries.',
-      zh: '古罗马人建造了跨越数个世纪的巨型高架引水桥。',
-      verbPart: 'constructed',
-    },
+    examples: [
+      {
+        en: 'I watched a movie yesterday.',
+        zh: '我昨天看了一部电影。',
+        verbPart: 'watched',
+      },
+      {
+        en: 'He was tired last night.',
+        zh: '他昨晚很累。',
+        verbPart: 'was',
+      },
+    ],
   },
   {
     id: 'past_continuous',
@@ -1591,11 +1631,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '在过去某一特定时刻（如昨晚八点）或某一动作发生时，另一个动作正在如火如荼地进行。',
     signalWords: ['at that time', 'at 8:00 yesterday', 'while', 'when sb knocked'],
-    exampleSentence: {
-      en: 'While we were debating the strategy, the power suddenly went out.',
-      zh: '正当我们激烈讨论战略方案时，大楼突然停电了。',
-      verbPart: 'were debating',
-    },
+    examples: [
+      {
+        en: 'I was sleeping at ten last night.',
+        zh: '昨晚十点我正在睡觉。',
+        verbPart: 'was sleeping',
+      },
+      {
+        en: 'They were talking when I came in.',
+        zh: '我进来的时候他们正在聊天。',
+        verbPart: 'were talking',
+      },
+    ],
   },
   {
     id: 'past_perfect',
@@ -1614,11 +1661,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '时间的相对论！只有在句子中存在一个“一般过去时作为参照基准”时，早于该基准的动作才使用过去完成时。',
     signalWords: ['by the time', 'before', 'hardly...when', 'no sooner...than'],
-    exampleSentence: {
-      en: 'By the time the rescue team arrived, the mountaineers had already reached safety.',
-      zh: '在救援队赶到之前，登山队员们早已脱险抵达了安全区域。',
-      verbPart: 'had already reached',
-    },
+    examples: [
+      {
+        en: 'The bus had left before I arrived.',
+        zh: '我到之前公交车已经开走了。',
+        verbPart: 'had left',
+      },
+      {
+        en: 'I had never seen the sea before that trip.',
+        zh: '那次旅行之前我从没见过大海。',
+        verbPart: 'had seen',
+      },
+    ],
   },
   {
     id: 'past_perfect_continuous',
@@ -1637,11 +1691,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '强调在过去某一节点之前，动作经历了极其漫长而连续的过程，且对当时的过去产生了明显痕迹。',
     signalWords: ['for weeks before', 'had been doing when'],
-    exampleSentence: {
-      en: 'He had been coding for twenty hours straight when the breakthrough algorithm finally compiled.',
-      zh: '当那道突破性算法终于编译成功时，他已经连续通宵编程了整整二十个小时。',
-      verbPart: 'had been coding',
-    },
+    examples: [
+      {
+        en: 'I had been waiting for two hours when the bus came.',
+        zh: '公交车来时我已经等了两个小时了。',
+        verbPart: 'had been waiting',
+      },
+      {
+        en: 'They had been playing for an hour before it got dark.',
+        zh: '天黑之前他们已经玩了一个小时了。',
+        verbPart: 'had been playing',
+      },
+    ],
   },
 
   // --- 将来时 (Future) ---
@@ -1662,11 +1723,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '表达说话时刻之后将要发生的动作或未来意愿。will 多表临时起意或客观预测；be going to 多表既定计划或有眼见迹象的发生。',
     signalWords: ['tomorrow', 'next week', 'soon', 'in the future', 'someday'],
-    exampleSentence: {
-      en: 'Artificial intelligence will reshape entire industries in the coming decade.',
-      zh: '人工智能将在未来的十年内彻底重塑各行各业。',
-      verbPart: 'will reshape',
-    },
+    examples: [
+      {
+        en: 'I will call you tomorrow.',
+        zh: '我明天给你打电话。',
+        verbPart: 'will call',
+      },
+      {
+        en: 'We are going to visit Grandma this weekend.',
+        zh: '这个周末我们打算去看奶奶。',
+        verbPart: 'are going to visit',
+      },
+    ],
   },
   {
     id: 'future_continuous',
@@ -1685,11 +1753,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '在未来某个具体时间点或时间段，动作预计正在展开中，常用于礼貌委婉询问或畅想未来情境。',
     signalWords: ['at this time tomorrow', 'this time next year'],
-    exampleSentence: {
-      en: 'This time next week, we will be flying high above the Pacific Ocean.',
-      zh: '下周的这个时候，我们将正翱翔在太平洋的高空之中。',
-      verbPart: 'will be flying',
-    },
+    examples: [
+      {
+        en: 'This time tomorrow, I will be flying to Beijing.',
+        zh: '明天的这个时候，我会正在飞往北京。',
+        verbPart: 'will be flying',
+      },
+      {
+        en: 'Do not call at eight — we will be having dinner.',
+        zh: '八点别打电话，那时我们正在吃晚饭。',
+        verbPart: 'will be having',
+      },
+    ],
   },
   {
     id: 'future_perfect',
@@ -1708,11 +1783,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '“到了将来的某个时间截止线时，某件事就已经完成闭环了”。',
     signalWords: ['by tomorrow', 'by the end of this year', 'by 2030'],
-    exampleSentence: {
-      en: 'By the end of this semester, you will have mastered over three thousand words.',
-      zh: '到了本学期结束之时，你将已经掌握了超过三千个单词。',
-      verbPart: 'will have mastered',
-    },
+    examples: [
+      {
+        en: 'I will have finished the book by Friday.',
+        zh: '到周五我会把这本书看完。',
+        verbPart: 'will have finished',
+      },
+      {
+        en: 'We will have learned 500 words by the end of the month.',
+        zh: '到月底我们将学完 500 个单词。',
+        verbPart: 'will have learned',
+      },
+    ],
   },
   {
     id: 'future_perfect_continuous',
@@ -1731,11 +1813,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '表达某动作从现在（甚至过去）开始，持续不断直到未来的某个节点，届时将达成一个跨度里程碑。',
     signalWords: ['by next month, for ... years'],
-    exampleSentence: {
-      en: 'By October, she will have been conducting research at this lab for a whole decade.',
-      zh: '到十月份时，她在这座实验室从事科学研究就将满整整十年了。',
-      verbPart: 'will have been conducting',
-    },
+    examples: [
+      {
+        en: 'By June, I will have been studying here for two years.',
+        zh: '到六月，我就在这里学习满两年了。',
+        verbPart: 'will have been studying',
+      },
+      {
+        en: 'Next month, he will have been working here for a year.',
+        zh: '下个月他就在这里工作满一年了。',
+        verbPart: 'will have been working',
+      },
+    ],
   },
 
   // --- 过去将来时 (Past Future) ---
@@ -1756,11 +1845,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '常见于宾语从句或间接引语中，主句是过去时，从句表达在当时看来将要发生的事情。',
     signalWords: ['he promised that', 'they knew that'],
-    exampleSentence: {
-      en: 'He promised that he would return as soon as the mission concluded.',
-      zh: '他当时许下诺言：一旦任务圆满结束，他就一定会归来。',
-      verbPart: 'would return',
-    },
+    examples: [
+      {
+        en: 'He said he would come.',
+        zh: '他说他会来。',
+        verbPart: 'would come',
+      },
+      {
+        en: 'She promised she would help me.',
+        zh: '她答应过会帮我。',
+        verbPart: 'would help',
+      },
+    ],
   },
   {
     id: 'past_future_continuous',
@@ -1779,11 +1875,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '叙述在过去某时看来，未来特定时刻应当正在发生的动作。',
     signalWords: ['he imagined that', 'at that coming hour'],
-    exampleSentence: {
-      en: 'She believed that by nightfall she would be relaxing by the ocean.',
-      zh: '她坚信到了黄昏入夜之时，自己就将正在海边悠闲地吹风放松了。',
-      verbPart: 'would be relaxing',
-    },
+    examples: [
+      {
+        en: 'He said he would be waiting at the gate.',
+        zh: '他说他会在门口等着。',
+        verbPart: 'would be waiting',
+      },
+      {
+        en: 'I thought she would be sleeping when I called.',
+        zh: '我以为我打电话时她会在睡觉。',
+        verbPart: 'would be sleeping',
+      },
+    ],
   },
   {
     id: 'past_future_perfect',
@@ -1802,11 +1905,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '常用于虚拟语气中，表达对过去的假想（“要是当年怎样，本就已经达成了”）。',
     signalWords: ['if we had known, we would have done'],
-    exampleSentence: {
-      en: 'Without your timely assistance, we would have failed the crucial evaluation.',
-      zh: '若是没有你及时的倾力相助，我们当时在那场关键评估中本已败北。',
-      verbPart: 'would have failed',
-    },
+    examples: [
+      {
+        en: 'I would have called you if I had known.',
+        zh: '要是我早知道，我就给你打电话了。',
+        verbPart: 'would have called',
+      },
+      {
+        en: 'We would have arrived earlier without the traffic.',
+        zh: '要不是堵车我们就早到了。',
+        verbPart: 'would have arrived',
+      },
+    ],
   },
   {
     id: 'past_future_perfect_continuous',
@@ -1825,11 +1935,18 @@ export const TENSES_DATA: TenseItem[] = [
     },
     coreConcept: '极少在日常出现，但极其严密地用于精密文学或学术推演，表示到过去某一未来点时，动作将已持续展开多久。',
     signalWords: ['by then, he would have been doing for...'],
-    exampleSentence: {
-      en: 'By that midnight, the team would have been debugging the system for thirty consecutive hours.',
-      zh: '到了那天的午夜，团队为该系统排错就将已经整整持续三十个小时了。',
-      verbPart: 'would have been debugging',
-    },
+    examples: [
+      {
+        en: 'He said he would have been teaching for 20 years by then.',
+        zh: '他说到那时他教书就满二十年了。',
+        verbPart: 'would have been teaching',
+      },
+      {
+        en: 'She thought she would have been living there for a decade.',
+        zh: '她以为到那时自己在那里已经住了十年。',
+        verbPart: 'would have been living',
+      },
+    ],
   },
 ]
 

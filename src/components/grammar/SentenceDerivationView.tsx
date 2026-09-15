@@ -1,14 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  Volume2,
-  Sparkles,
-  ArrowRight,
-  HelpCircle,
-  Lightbulb,
-  CheckCircle2,
-} from 'lucide-react'
+import { Volume2, Lightbulb } from 'lucide-react'
 import {
   SENTENCE_CORE_CONCEPTS,
   SENTENCE_MODIFIERS_DATA,
@@ -20,10 +13,6 @@ import {
   THERE_BE_SENTENCE_GROWTH_STEPS,
   type SentenceGrowthStep,
 } from '@/resources/grammarData'
-
-interface SentenceDerivationViewProps {
-  searchQuery?: string
-}
 
 const SENTENCE_GROWTH_SERIES = [
   {
@@ -232,7 +221,7 @@ function SentenceGrowthSeries({
   )
 }
 
-export function SentenceDerivationView({ searchQuery }: SentenceDerivationViewProps) {
+export function SentenceDerivationView() {
   const [activeStepId, setActiveStepId] = useState<number>(1)
   const [activeSeriesId, setActiveSeriesId] = useState<GrowthSeriesId>('svo')
   const activeSeries =
@@ -257,7 +246,7 @@ export function SentenceDerivationView({ searchQuery }: SentenceDerivationViewPr
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Module 02 · 句子主干与成分演进
+              Module 03 · 句子主干与成分演进
             </span>
             <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
               吃苹果推导法
