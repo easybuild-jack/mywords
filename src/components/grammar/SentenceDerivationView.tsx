@@ -14,6 +14,10 @@ import {
   SENTENCE_MODIFIERS_DATA,
   APPLE_SENTENCE_GROWTH_STEPS,
   LINKING_SENTENCE_GROWTH_STEPS,
+  SV_SENTENCE_GROWTH_STEPS,
+  SVOO_SENTENCE_GROWTH_STEPS,
+  SVOC_SENTENCE_GROWTH_STEPS,
+  THERE_BE_SENTENCE_GROWTH_STEPS,
   type SentenceGrowthStep,
 } from '@/resources/grammarData'
 
@@ -23,13 +27,13 @@ interface SentenceDerivationViewProps {
 
 const SENTENCE_GROWTH_SERIES = [
   {
-    id: 'svo',
-    tabLabel: '主谓宾',
-    tabSublabel: 'S + V + O',
-    title: '主谓宾推演：看着“吃苹果”一句话长大',
-    description: '从 I eat apples. 开始，每一步只增加一个成分。',
-    idPrefix: 'step',
-    steps: APPLE_SENTENCE_GROWTH_STEPS,
+    id: 'sv',
+    tabLabel: '主谓',
+    tabSublabel: 'S + V',
+    title: '主谓推演：看着“鸟会飞”一句话长大',
+    description: '从 Birds fly. 开始，理解不需要宾语也能成立的句子。',
+    idPrefix: 'sv-step',
+    steps: SV_SENTENCE_GROWTH_STEPS,
   },
   {
     id: 'svc',
@@ -40,7 +44,45 @@ const SENTENCE_GROWTH_SERIES = [
     idPrefix: 'linking-step',
     steps: LINKING_SENTENCE_GROWTH_STEPS,
   },
+  {
+    id: 'svo',
+    tabLabel: '主谓宾',
+    tabSublabel: 'S + V + O',
+    title: '主谓宾推演：看着“吃苹果”一句话长大',
+    description: '从 I eat apples. 开始，每一步只增加一个成分。',
+    idPrefix: 'step',
+    steps: APPLE_SENTENCE_GROWTH_STEPS,
+  },
+  {
+    id: 'svoo',
+    tabLabel: '主谓双宾',
+    tabSublabel: 'S + V + Oi + Od',
+    title: '主谓双宾推演：看着“妈妈给我一本书”一句话长大',
+    description: '从 Mom gives me a book. 开始，分清“给谁”和“给什么”。',
+    idPrefix: 'svoo-step',
+    steps: SVOO_SENTENCE_GROWTH_STEPS,
+  },
+  {
+    id: 'svoc',
+    tabLabel: '主谓宾宾补',
+    tabSublabel: 'S + V + O + C',
+    title: '主谓宾宾补推演：看着“消息让我开心”一句话长大',
+    description: '从 The news makes me happy. 开始，理解宾语后为什么还需要补充说明。',
+    idPrefix: 'svoc-step',
+    steps: SVOC_SENTENCE_GROWTH_STEPS,
+  },
+  {
+    id: 'there-be',
+    tabLabel: 'There be',
+    tabSublabel: 'There + be + N',
+    title: 'There be 推演：看着“有一本书”一句话长大',
+    description: '从 There is a book. 开始，学习如何表达某处存在某人或某物。',
+    idPrefix: 'there-be-step',
+    steps: THERE_BE_SENTENCE_GROWTH_STEPS,
+  },
 ] as const
+
+type GrowthSeriesId = (typeof SENTENCE_GROWTH_SERIES)[number]['id']
 
 /** 辅助函数：高亮本步新增的关键词，采用与音标例词一致的琥珀色 (#F59E0B)，无下划线 */
 function renderGrowthSentence(sentence: string, highlightWords: string[]) {
@@ -190,7 +232,7 @@ function SentenceGrowthSeries({
 
 export function SentenceDerivationView({ searchQuery }: SentenceDerivationViewProps) {
   const [activeStepId, setActiveStepId] = useState<number>(1)
-  const [activeSeriesId, setActiveSeriesId] = useState<'svo' | 'svc'>('svo')
+  const [activeSeriesId, setActiveSeriesId] = useState<GrowthSeriesId>('svo')
   const activeSeries =
     SENTENCE_GROWTH_SERIES.find((series) => series.id === activeSeriesId) ??
     SENTENCE_GROWTH_SERIES[0]
@@ -356,7 +398,7 @@ export function SentenceDerivationView({ searchQuery }: SentenceDerivationViewPr
         </aside>
       </article>
 
-      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.04] border border-white/10 w-fit">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.04] border border-white/10 w-fit max-w-full overflow-x-auto custom-scrollbar">
         {SENTENCE_GROWTH_SERIES.map((series) => {
           const isActive = activeSeriesId === series.id
           return (
