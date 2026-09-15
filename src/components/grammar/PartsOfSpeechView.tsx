@@ -108,7 +108,7 @@ export function PartsOfSpeechView() {
             id={`pos-${item.id}`}
             className="glass-card rounded-2xl border border-white/10 p-6 sm:p-7 flex flex-col gap-6"
           >
-            <header className="flex items-start justify-between gap-4">
+            <header>
               <div>
                 <div className="flex items-baseline gap-3">
                   <span className="font-mono text-lg font-bold text-primary">{item.abbr}</span>
@@ -123,14 +123,6 @@ export function PartsOfSpeechView() {
                   {item.positionRules}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => speakText(item.exampleSentence.en)}
-                title="朗读例句"
-                className="size-10 shrink-0 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
-              >
-                <Volume2 className="size-5" />
-              </button>
             </header>
 
             <section className="border-t border-white/10 pt-5 space-y-4">
@@ -149,39 +141,32 @@ export function PartsOfSpeechView() {
 
             <section className="border-t border-white/10 pt-5 space-y-4">
               <div className="flex items-center justify-between gap-3">
-                <h4 className="text-lg font-bold text-foreground">例句与句子解析</h4>
+                <h4 className="text-lg font-bold text-foreground">功能例句</h4>
                 <span className="text-base text-muted-foreground">高亮为当前词性</span>
               </div>
-              <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
-                {renderSentenceWithHighlights(
-                  item.exampleSentence.en,
-                  item.exampleSentence.highlightWords
-                )}
-              </p>
-              <p className="text-base sm:text-lg leading-relaxed text-muted-foreground">
-                {item.exampleSentence.zh}
-              </p>
-              <div className="divide-y divide-white/10 border-y border-white/10">
-                {item.exampleSentence.breakdown.map((token, idx) => (
-                  <div
-                    key={idx}
-                    className="grid grid-cols-[minmax(8rem,auto)_1fr] gap-4 py-3.5 leading-relaxed items-baseline"
-                  >
-                    <span
-                      className={`font-mono text-xl sm:text-2xl tracking-wide ${
-                        token.isHighlight
-                          ? 'grammar-keyword font-black'
-                          : 'text-foreground font-bold'
-                      }`}
-                    >
-                      {token.text}
-                    </span>
-                    <span className="text-base text-muted-foreground">
-                      {token.role}
-                    </span>
-                  </div>
+              <ul className="divide-y divide-white/10 border-y border-white/10">
+                {item.examples.map((ex, idx) => (
+                  <li key={idx} className="py-4 space-y-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-sm font-semibold text-primary">{ex.role}</span>
+                      <button
+                        type="button"
+                        onClick={() => speakText(ex.en)}
+                        title="朗读例句"
+                        className="size-8 shrink-0 rounded-lg border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
+                      >
+                        <Volume2 className="size-4" />
+                      </button>
+                    </div>
+                    <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                      {renderSentenceWithHighlights(ex.en, ex.highlightWords)}
+                    </p>
+                    <p className="text-base sm:text-lg leading-relaxed text-muted-foreground">
+                      {ex.zh}
+                    </p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
 
             {item.proTips && (

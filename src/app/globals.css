@@ -502,8 +502,7 @@
 :root[data-skin="muted-parchment"] .border-white\/15,
 :root[data-skin="muted-parchment"] .border-white\/20,
 :root[data-skin="muted-parchment"] [class*="border-white/"],
-:root[data-skin="muted-parchment"] .divide-white\/5>*+*,
-:root[data-skin="muted-parchment"] .divide-white\/10>*+* {
+:root[data-skin="muted-parchment"] [class*="divide-white/"]>* {
   border-color: rgba(13, 118, 110, 0.22) !important;
 }
 
@@ -714,8 +713,7 @@
 :root[data-skin="avocado-cream"] .border-white\/15,
 :root[data-skin="avocado-cream"] .border-white\/20,
 :root[data-skin="avocado-cream"] [class*="border-white/"],
-:root[data-skin="avocado-cream"] .divide-white\/5>*+*,
-:root[data-skin="avocado-cream"] .divide-white\/10>*+* {
+:root[data-skin="avocado-cream"] [class*="divide-white/"]>* {
   border-color: rgba(110, 118, 108, 0.20) !important;
 }
 

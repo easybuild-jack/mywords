@@ -46,3 +46,4 @@ next-env.d.ts
 /data
 # audit scripts for roots
 .audit-roots-*
+.workbuddy

@@ -256,15 +256,31 @@ export function PrepositionView() {
               <p className="text-base leading-relaxed text-foreground/85">
                 {item.metaphoricalTransfer.ruleZh}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
-                {item.metaphoricalTransfer.collocations.map((c, cIdx) => (
-                  <div key={cIdx} className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono text-base font-medium text-foreground">
-                      {c.en}
-                    </span>
-                    <span className="text-sm text-muted-foreground">{c.zh}</span>
-                  </div>
-                ))}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="py-2 pr-6 text-sm font-semibold text-muted-foreground">
+                        固定搭配
+                      </th>
+                      <th className="py-2 text-sm font-semibold text-muted-foreground">
+                        含义与隐喻
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {item.metaphoricalTransfer.collocations.map((c, cIdx) => (
+                      <tr key={cIdx}>
+                        <td className="py-2.5 pr-6 align-top font-mono text-base font-medium text-foreground lg:whitespace-nowrap">
+                          {c.en}
+                        </td>
+                        <td className="py-2.5 align-top text-sm leading-relaxed text-muted-foreground">
+                          {c.zh}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
 

@@ -8,6 +8,16 @@ export type GrammarTabType = 'partsOfSpeech' | 'sentenceSyntax' | 'tenses' | 'pr
 // ---------------------------------------------------------------------------
 // 1. Ten Parts of Speech (十大词类)
 // ---------------------------------------------------------------------------
+/** 词性的功能例句：一个句法功能对应一句，便于直接对照 functions */
+export interface PartOfSpeechExample {
+  /** 对应的句法功能（与 functions 顺序一致） */
+  role: string
+  en: string
+  zh: string
+  /** 句中需要高亮的、属于当前词性的词 */
+  highlightWords: string[]
+}
+
 export interface PartOfSpeechItem {
   id: string
   name: string
@@ -26,12 +36,8 @@ export interface PartOfSpeechItem {
   functions: string[] // 核心句法功能
   positionRules: string // 位置规则
   commonWords: { word: string; meaning: string; phonetic?: string }[]
-  exampleSentence: {
-    en: string
-    zh: string
-    highlightWords: string[]
-    breakdown: { text: string; role: string; isHighlight?: boolean }[]
-  }
+  /** 每个句法功能各配一句例句，数量与 functions 一致 */
+  examples: PartOfSpeechExample[]
   proTips: string // 避坑/进阶提示
 }
 
@@ -66,17 +72,32 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Architecture', meaning: '架构/建筑学', phonetic: '/ˈɑːkɪtektʃə/' },
       { word: 'Horizon', meaning: '地平线/视野', phonetic: '/həˈraɪzn/' },
     ],
-    exampleSentence: {
-      en: 'Tom has a cat.',
-      zh: '汤姆有一只猫。',
-      highlightWords: ['Tom', 'cat'],
-      breakdown: [
-        { text: 'Tom', role: '名词，表示一个人的名字，在句中作主语', isHighlight: true },
-        { text: 'has', role: '动词，表示“有”' },
-        { text: 'a', role: '冠词，表示“一只”' },
-        { text: 'cat', role: '名词，表示一种动物，在句中作宾语', isHighlight: true },
-      ],
-    },
+    examples: [
+      {
+        role: '主语 (Subject)',
+        en: 'The cat is sleeping.',
+        zh: '那只猫在睡觉。',
+        highlightWords: ['cat'],
+      },
+      {
+        role: '宾语 (Object)',
+        en: 'I have two books.',
+        zh: '我有两本书。',
+        highlightWords: ['books'],
+      },
+      {
+        role: '表语 (Predicative)',
+        en: 'She is a teacher.',
+        zh: '她是一名老师。',
+        highlightWords: ['teacher'],
+      },
+      {
+        role: '同位语 (Appositive)',
+        en: 'My friend Tom is here.',
+        zh: '我的朋友汤姆在这里。',
+        highlightWords: ['Tom'],
+      },
+    ],
     proTips: '区分“可数与不可数”是名词核心坑点。许多抽象名词（information, equipment, advice）在英语中绝对不可加 -s，需用 a piece of 修饰。',
   },
   {
@@ -109,16 +130,32 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Which', meaning: '哪个/关系代词', phonetic: '/wɪtʃ/' },
       { word: 'None', meaning: '全无/没有一个', phonetic: '/nʌn/' },
     ],
-    exampleSentence: {
-      en: 'She likes him.',
-      zh: '她喜欢他。',
-      highlightWords: ['She', 'him'],
-      breakdown: [
-        { text: 'She', role: '代词，代替一个女性的名字，在句中作主语', isHighlight: true },
-        { text: 'likes', role: '动词，表示“喜欢”' },
-        { text: 'him', role: '代词，代替一个男性的名字，在句中作宾语', isHighlight: true },
-      ],
-    },
+    examples: [
+      {
+        role: '指代名词',
+        en: 'She likes him.',
+        zh: '她喜欢他。',
+        highlightWords: ['She', 'him'],
+      },
+      {
+        role: '指引指示',
+        en: 'That is my house.',
+        zh: '那是我的房子。',
+        highlightWords: ['That'],
+      },
+      {
+        role: '关系连接',
+        en: 'The boy who won is my friend.',
+        zh: '赢了的那个男孩是我的朋友。',
+        highlightWords: ['who'],
+      },
+      {
+        role: '虚指功能',
+        en: 'It is raining.',
+        zh: '下雨了。',
+        highlightWords: ['It'],
+      },
+    ],
     proTips: '在比较级后注意格的用法：正式文体中用 “He is taller than I (am)”，非正式口语中常说 “than me”。但在学术写作中请尽量使用主格对应。',
   },
   {
@@ -150,17 +187,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Generate', meaning: '产生/引起', phonetic: '/ˈdʒenəreɪt/' },
       { word: 'Comprehend', meaning: '充分理解', phonetic: '/ˌkɒmprɪˈhend/' },
     ],
-    exampleSentence: {
-      en: 'She reads a book.',
-      zh: '她读一本书。',
-      highlightWords: ['reads'],
-      breakdown: [
-        { text: 'She', role: '代词，表示“她”，是动作的发出者，在句中作主语' },
-        { text: 'reads', role: '动词，说明她在做什么动作，是句子的核心谓语', isHighlight: true },
-        { text: 'a', role: '冠词，修饰名词 book，表示“一本”' },
-        { text: 'book', role: '名词，表示“书”，是动作作用的对象，在句中作宾语' },
-      ],
-    },
+    examples: [
+      {
+        role: '谓语核心 (Predicate)',
+        en: 'She reads a book.',
+        zh: '她读一本书。',
+        highlightWords: ['reads'],
+      },
+      {
+        role: '状态连接 (Linking Verb)',
+        en: 'He looks tired.',
+        zh: '他看起来很累。',
+        highlightWords: ['looks'],
+      },
+      {
+        role: '非谓语拓展 (Non-finite Verbs)',
+        en: 'I want to go home.',
+        zh: '我想回家。',
+        highlightWords: ['to go'],
+      },
+    ],
     proTips: '动词决定句型！及物动词 (Vt) 必须接宾语，不及物动词 (Vi) 不能直接接宾语（除非加介词），系动词必须接表语。抓住动词属性就抓住了句子的骨架。',
   },
   {
@@ -192,18 +238,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Innovative', meaning: '创新的', phonetic: '/ˈɪnəvətɪv/' },
       { word: 'Peculiar', meaning: '独特的/罕见的', phonetic: '/pɪˈkjuːliə/' },
     ],
-    exampleSentence: {
-      en: 'The red apple is sweet.',
-      zh: '这个红苹果很甜。',
-      highlightWords: ['red', 'sweet'],
-      breakdown: [
-        { text: 'The', role: '冠词，表示特指的苹果' },
-        { text: 'red', role: '形容词，说明苹果的颜色，放在名词前', isHighlight: true },
-        { text: 'apple', role: '名词，表示“苹果”' },
-        { text: 'is', role: '系动词，连接 apple 和 sweet' },
-        { text: 'sweet', role: '形容词，说明苹果的味道，放在系动词后', isHighlight: true },
-      ],
-    },
+    examples: [
+      {
+        role: '前置定语 (Attributive)',
+        en: 'She has a red car.',
+        zh: '她有一辆红色的车。',
+        highlightWords: ['red'],
+      },
+      {
+        role: '后置表语 (Predicative)',
+        en: 'The soup is hot.',
+        zh: '汤是热的。',
+        highlightWords: ['hot'],
+      },
+      {
+        role: '宾语补足语 (Object Complement)',
+        en: 'The news made him happy.',
+        zh: '这个消息让他很开心。',
+        highlightWords: ['happy'],
+      },
+    ],
     proTips: '多重形容词修饰同一名词时有固定的语序口诀：“美小圆清新国材”（观美、大小、形状、年龄/新旧、颜色、国籍/出处、材料）。',
   },
   {
@@ -235,16 +289,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Thoroughly', meaning: '彻底地/完全地', phonetic: '/ˈθʌrəli/' },
       { word: 'Spontaneously', meaning: '自发地/自然而然地', phonetic: '/spɒnˈteɪniəsli/' },
     ],
-    exampleSentence: {
-      en: 'Tom runs quickly.',
-      zh: '汤姆跑得很快。',
-      highlightWords: ['quickly'],
-      breakdown: [
-        { text: 'Tom', role: '名词，表示一个人的名字' },
-        { text: 'runs', role: '动词，表示“跑”' },
-        { text: 'quickly', role: '副词，说明 Tom 跑得怎么样', isHighlight: true },
-      ],
-    },
+    examples: [
+      {
+        role: '修饰动词 (Modify Verbs)',
+        en: 'Tom runs quickly.',
+        zh: '汤姆跑得很快。',
+        highlightWords: ['quickly'],
+      },
+      {
+        role: '修饰形容词或副词 (Intensify)',
+        en: 'This box is very heavy.',
+        zh: '这个箱子非常重。',
+        highlightWords: ['very'],
+      },
+      {
+        role: '修饰整个句子 (Sentence Adverb)',
+        en: 'Fortunately, he passed.',
+        zh: '幸运的是，他通过了。',
+        highlightWords: ['Fortunately'],
+      },
+    ],
     proTips: '警惕形似副词的形容词！比如 friendly, lovely, lonely, deadly 都是形容词。要表达“友好地”，需用介词短语 in a friendly manner。',
   },
   {
@@ -276,17 +340,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Despite', meaning: '尽管/不管', phonetic: '/dɪˈspaɪt/' },
       { word: 'Alongside', meaning: '在…旁边/并肩', phonetic: '/əˌlɒŋˈsaɪd/' },
     ],
-    exampleSentence: {
-      en: 'The book is on the table.',
-      zh: '书在桌子上。',
-      highlightWords: ['on'],
-      breakdown: [
-        { text: 'The book', role: '名词短语，表示“这本书”' },
-        { text: 'is', role: '动词，表示“处于”' },
-        { text: 'on', role: '介词，说明书和桌子是“在……上面”的关系', isHighlight: true },
-        { text: 'the table', role: '名词短语，表示“这张桌子”' },
-      ],
-    },
+    examples: [
+      {
+        role: '建立空间与时间坐标',
+        en: 'The book is on the table.',
+        zh: '书在桌子上。',
+        highlightWords: ['on'],
+      },
+      {
+        role: '介词短语作定语',
+        en: 'The key to success is hard work.',
+        zh: '成功的秘诀是努力。',
+        highlightWords: ['to'],
+      },
+      {
+        role: '介词短语作状语',
+        en: 'She spoke with confidence.',
+        zh: '她充满自信地说话。',
+        highlightWords: ['with'],
+      },
+    ],
     proTips: '介词不是死板的翻译对译，而是“空间心智图”！牢记核心空间几何感：at 是一个无维度的零维点，on 是一维线/二维面接触，in 是三维容器包围。',
   },
   {
@@ -318,16 +391,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Nevertheless', meaning: '然而/尽管如此', phonetic: '/ˌnevəðəˈles/' },
       { word: 'Since', meaning: '既然/自从', phonetic: '/sɪns/' },
     ],
-    exampleSentence: {
-      en: 'Tom is tired, but he works.',
-      zh: '汤姆很累，但他仍然工作。',
-      highlightWords: ['but'],
-      breakdown: [
-        { text: 'Tom is tired', role: '第一部分，说明 Tom 很累' },
-        { text: 'but', role: '连词，把前后两部分连起来，并表示转折', isHighlight: true },
-        { text: 'he works', role: '第二部分，说明他仍然工作' },
-      ],
-    },
+    examples: [
+      {
+        role: '并列连接 (Coordinating)',
+        en: 'Tom is tired, but he works.',
+        zh: '汤姆很累，但他仍然工作。',
+        highlightWords: ['but'],
+      },
+      {
+        role: '从属连接 (Subordinating)',
+        en: 'I stayed home because it rained.',
+        zh: '因为下雨，我待在家里。',
+        highlightWords: ['because'],
+      },
+      {
+        role: '关联搭配 (Correlative)',
+        en: 'He is not only smart but also kind.',
+        zh: '他不仅聪明，而且善良。',
+        highlightWords: ['not only', 'but also'],
+      },
+    ],
     proTips: '中文里的“因为…所以…”、“虽然…但是…”在英语中是严苛的语法大忌！英语一个主从复合句中，连词 because 与 so、although 与 but 绝对不可成对同时出现。',
   },
   {
@@ -358,16 +441,20 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Ouch', meaning: '哎哟 (突然感到疼痛)', phonetic: '/aʊtʃ/' },
       { word: 'Aha', meaning: '啊哈 (恍然大悟)', phonetic: '/ɑːˈhɑː/' },
     ],
-    exampleSentence: {
-      en: 'Wow! This is fun.',
-      zh: '哇！这很有趣。',
-      highlightWords: ['Wow!'],
-      breakdown: [
-        { text: 'Wow!', role: '感叹词，直接表达惊喜或赞叹', isHighlight: true },
-        { text: 'This', role: '代词，表示眼前的事物' },
-        { text: 'is fun', role: '说明这件事很有趣' },
-      ],
-    },
+    examples: [
+      {
+        role: '宣泄突发情绪',
+        en: 'Wow! This is fun.',
+        zh: '哇！这很有趣。',
+        highlightWords: ['Wow!'],
+      },
+      {
+        role: '语篇标记 (Discourse Marker)',
+        en: 'Well, let me think.',
+        zh: '嗯，让我想想。',
+        highlightWords: ['Well'],
+      },
+    ],
     proTips: '在正式的学术论文或商业分析报告中，应尽量避免使用情绪化的感叹词，但在小说、演讲、日常对话及剧本中，它们是语言灵魂与鲜活性格的催化剂。',
   },
   {
@@ -399,17 +486,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Twentieth', meaning: '第二十', phonetic: '/ˈtwentiəθ/' },
       { word: 'Fold', meaning: '倍数后缀(threefold)', phonetic: '/fəʊld/' },
     ],
-    exampleSentence: {
-      en: 'I have two books.',
-      zh: '我有两本书。',
-      highlightWords: ['two'],
-      breakdown: [
-        { text: 'I', role: '代词，表示“我”' },
-        { text: 'have', role: '动词，表示“有”' },
-        { text: 'two', role: '数词，准确说明书的数量是两本', isHighlight: true },
-        { text: 'books', role: '名词，表示“书”' },
-      ],
-    },
+    examples: [
+      {
+        role: '充当定语',
+        en: 'I have three apples.',
+        zh: '我有三个苹果。',
+        highlightWords: ['three'],
+      },
+      {
+        role: '充当主语或宾语',
+        en: 'Two of them survived.',
+        zh: '他们中有两人幸存下来。',
+        highlightWords: ['Two'],
+      },
+      {
+        role: '与代词及限定词融合',
+        en: 'Give me the first one.',
+        zh: '把第一个给我。',
+        highlightWords: ['first'],
+      },
+    ],
     proTips: '百、千、百万（hundred, thousand, million）前有具体数字时，绝对不能加 -s（three hundred people）；只有表示不确定泛指时，才加 -s 并加 of（hundreds of people）。',
   },
   {
@@ -441,18 +537,26 @@ export const PARTS_OF_SPEECH_DATA: PartOfSpeechItem[] = [
       { word: 'Neither', meaning: '两者都不', phonetic: '/ˈnaɪðə/' },
       { word: 'Any', meaning: '任何一个/些', phonetic: '/ˈeni/' },
     ],
-    exampleSentence: {
-      en: 'A cat is on the chair.',
-      zh: '一只猫在椅子上。',
-      highlightWords: ['A', 'the'],
-      breakdown: [
-        { text: 'A', role: '不定冠词，表示任意一只猫', isHighlight: true },
-        { text: 'cat', role: '名词，表示“猫”' },
-        { text: 'is on', role: '表示“在……上面”' },
-        { text: 'the', role: '定冠词，表示双方都知道的那把椅子', isHighlight: true },
-        { text: 'chair', role: '名词，表示“椅子”' },
-      ],
-    },
+    examples: [
+      {
+        role: '界定特指与泛指',
+        en: 'A cat is on the chair.',
+        zh: '一只猫在椅子上。',
+        highlightWords: ['A', 'the'],
+      },
+      {
+        role: '界定独一无二性',
+        en: 'The sun is bright today.',
+        zh: '今天太阳很亮。',
+        highlightWords: ['The'],
+      },
+      {
+        role: '名词化功能',
+        en: 'The rich should help the poor.',
+        zh: '富人应该帮助穷人。',
+        highlightWords: ['The rich', 'the poor'],
+      },
+    ],
     proTips: '判断用 a 还是 an 不看字母本身是辅音还是元音，而是取决于“首个发音音标”是否是元音音素！例如 an hour（/aʊə/ 元音发音用 an），a university（/juː/ 辅音发音用 a）。',
   },
 ]
