@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
 import { useNavigationStore } from '@/store/useNavigationStore'
 
 /**
@@ -14,6 +13,7 @@ import { useNavigationStore } from '@/store/useNavigationStore'
  */
 export function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
   const isLoading = useNavigationStore((s) => s.isLoading)
+  const loadingText = useNavigationStore((s) => s.loadingText) || '数据加载中...'
 
   return (
     <div className="flex-1 min-h-full flex flex-col relative">
@@ -30,19 +30,18 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
             className="fixed top-0 bottom-0 left-0 md:left-64 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
             style={{ backgroundColor: 'var(--background)', willChange: 'opacity' }}
           >
-            <div className="px-8 py-6 rounded-2xl bg-sidebar border border-white/10 shadow-xl shadow-black/25 flex flex-col items-center gap-4">
+            <div className="px-10 py-7 rounded-2xl bg-sidebar border border-white/10 shadow-2xl shadow-black/30 flex flex-col items-center gap-4.5 min-w-[180px]">
               <div className="relative flex items-center justify-center">
-                <div className="size-11 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
-                <Sparkles className="size-4.5 text-primary absolute animate-pulse" />
+                <div className="size-16 rounded-full border-[2.5px] border-primary/20 border-t-primary animate-spin" />
+                <img
+                  src="/logo111.png"
+                  alt="MyWords"
+                  className="size-9 object-contain absolute animate-pulse select-none pointer-events-none"
+                />
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <span className="font-mono text-foreground text-sm font-semibold tracking-wide">
-                  正在同步页面与词库数据...
-                </span>
-                <span className="text-[11px] font-mono text-muted-foreground">
-                  编排音节切分 · 构词释义 · 练习进度
-                </span>
-              </div>
+              <span className="text-foreground text-[15px] font-semibold tracking-wide">
+                {loadingText}
+              </span>
             </div>
           </motion.div>
         )}

@@ -4,7 +4,8 @@ interface NavigationStore {
   isLoading: boolean       // 页面加载遮罩是否显示（遮盖底层页面，防止切页抖动与闪烁）
   progress: number         // 顶部流光进度条当前百分比（0 - 100）
   isBarVisible: boolean    // 顶部流光进度条容器是否可见（控制整体淡入淡出）
-  startNavigation: () => void
+  loadingText: string      // 加载提示主标题
+  startNavigation: (text?: string) => void
   onRouteChanged: () => void
   finishNavigation: () => void
   triggerInitialLoad: () => void
@@ -33,8 +34,9 @@ export const useNavigationStore = create<NavigationStore>((set, get) => ({
   isLoading: false,
   progress: 0,
   isBarVisible: false,
+  loadingText: '数据加载中...',
 
-  startNavigation: () => {
+  startNavigation: (text?: string) => {
     clearAllTimers()
     const sessionId = ++activeSessionId
 
@@ -44,6 +46,7 @@ export const useNavigationStore = create<NavigationStore>((set, get) => ({
       isLoading: true,
       isBarVisible: true,
       progress: 18,
+      loadingText: text || '数据加载中...',
     })
 
     // 2. 进度条更沉稳、更平缓地向前推进（拒绝匆忙跳闪）
@@ -147,6 +150,7 @@ export const useNavigationStore = create<NavigationStore>((set, get) => ({
       isLoading: true,
       isBarVisible: true,
       progress: 28,
+      loadingText: '数据加载中...',
     })
 
     // 2. 平滑推进阶段，等待首屏组件挂载与本地缓存就绪
