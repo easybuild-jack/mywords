@@ -56,7 +56,7 @@ export default function PhoneticsPage() {
   }, [enterMode, loadCurrentUnitWords])
 
   return (
-    <div className="flex-1 min-h-full flex flex-col justify-between relative py-1">
+    <div className="flex-1 min-h-full flex flex-col justify-between relative pb-1">
       <HeaderToolbar />
 
       <div className="flex-1 flex items-center justify-center relative w-full px-4 py-2 my-auto shrink-0">

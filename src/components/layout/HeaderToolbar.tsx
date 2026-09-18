@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
@@ -40,8 +40,34 @@ export function HeaderToolbar() {
     restartUnit,
   } = useWorkspaceStore()
 
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  // 监听主滚动容器，只有在向下滚动时才显现吸顶底部分割线与阴影（参考词库管理页 books/page.tsx）
+  useEffect(() => {
+    const mainEl = document.querySelector('main')
+    const handleScroll = () => {
+      const top = mainEl ? mainEl.scrollTop : window.scrollY
+      setIsScrolled(top > 10)
+    }
+
+    handleScroll()
+    mainEl?.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      mainEl?.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
-    <header className="w-full flex items-center justify-center p-4 xl:p-6 relative z-30 pointer-events-auto shrink-0">
+    <header
+      className={`sticky top-0 z-30 w-full bg-background transition-[border-color,box-shadow,padding] duration-300 flex items-center justify-center px-4 xl:px-6 pointer-events-auto shrink-0 ${
+        isScrolled
+          ? 'py-2.5 xl:py-3 border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
+          : 'py-3.5 xl:py-5 border-b border-transparent shadow-none'
+      }`}
+    >
       {/* 宽度与单词卡（PracticeStageFrame）保持一致：w-[800px] xl:w-[940px] 2xl:w-[1060px] */}
       <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-5 text-sm xl:text-base w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] justify-between shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300">
         {/* 左区：词书 / 单元入口（flex-1 预留展示空间，长词书名、长单元名可完整显示） */}
