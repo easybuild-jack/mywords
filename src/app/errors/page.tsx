@@ -256,17 +256,35 @@ export default function TroubleWordsPage() {
 
           {/* 3. 生错词详细明细表格及分页控制 */}
           <div className="flex-1 min-h-0 flex flex-col glass-card rounded-2xl border border-white/10 shadow-lg overflow-hidden">
-            {/* 表格滚动容器：仅在此区域内产生纵向滚动条 */}
-            <div className="flex-1 min-h-0 overflow-y-auto">
-              <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 z-10 bg-[#12141a]/95 backdrop-blur-md border-b border-white/10 text-muted-foreground font-mono text-xs">
+            {/* 顶部独立固化表头：置于滚动条外部，贯穿卡片全宽，确保左右大圆角 100% 完整对称 */}
+            <div className="w-full bg-[#12141a]/95 backdrop-blur-md border-b border-white/10 text-muted-foreground font-mono text-xs select-none shadow-sm shrink-0 pr-1.5">
+              <table className="w-full table-fixed text-left border-collapse">
+                <colgroup>
+                  <col className="w-52" />
+                  <col className="w-48" />
+                  <col />
+                  <col className="w-44" />
+                </colgroup>
+                <thead>
                   <tr>
-                    <th className="py-2.5 px-4 w-52 font-semibold">单词拼写与来源</th>
-                    <th className="py-2.5 px-4 w-48 font-semibold">音标</th>
+                    <th className="py-2.5 px-4 font-semibold">单词拼写与来源</th>
+                    <th className="py-2.5 px-4 font-semibold">音标</th>
                     <th className="py-2.5 px-4 font-semibold">中文核心释义</th>
-                    <th className="py-2.5 px-4 w-44 text-right font-semibold">操作</th>
+                    <th className="py-2.5 px-4 text-right font-semibold">操作</th>
                   </tr>
                 </thead>
+              </table>
+            </div>
+
+            {/* 表格滚动容器：仅在此区域内产生纵向滚动条 */}
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+              <table className="w-full table-fixed text-left border-collapse">
+                <colgroup>
+                  <col className="w-52" />
+                  <col className="w-48" />
+                  <col />
+                  <col className="w-44" />
+                </colgroup>
                 <tbody className="divide-y divide-white/5 font-mono">
                   {paginatedList.map((item, idx) => {
                     const globalIdx = (currentPage - 1) * PAGE_SIZE + idx

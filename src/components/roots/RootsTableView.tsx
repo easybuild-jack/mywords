@@ -62,19 +62,16 @@ export function RootsTableView({
     <div className="flex-1 min-h-0 flex flex-col w-full h-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10">
       {/* 现代化半透明毛玻璃大卡片容器：自适应宽幅展开并固定全高，杜绝查询时外框晃动 */}
       <div className="flex-1 min-h-0 flex flex-col w-full h-full glass-card rounded-2xl xl:rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden">
-        {/* 滚动表格区域：使用 table-fixed 强锁定列宽，检索数据只填充内容，不改变列宽与结构 */}
-        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+        {/* 紧凑精致毛玻璃独立表头：置于滚动条外部，贯穿卡片全宽，确保左右大圆角 100% 完整对称 */}
+        <div className="w-full bg-[#12141a]/95 backdrop-blur-xl border-b border-white/10 text-xs font-semibold text-gray-300 select-none shadow-sm shrink-0 pr-1.5">
           <table className="w-full table-fixed text-left border-collapse">
-            {/* 固化列宽配比：杜绝字符长度变化导致表头与列水平窜动 */}
             <colgroup>
               <col className="w-[20%] min-w-[150px]" />
               <col className="w-[24%] min-w-[180px]" />
               <col className="w-[44%] min-w-[260px]" />
               <col className="w-[12%] min-w-[90px]" />
             </colgroup>
-
-            {/* 紧凑精致毛玻璃表头：永远稳态置顶，零抖动 */}
-            <thead className="sticky top-0 z-10 bg-[#12141a]/95 backdrop-blur-xl border-b border-white/10 text-xs font-semibold text-gray-300 select-none shadow-sm">
+            <thead>
               <tr>
                 <th className="py-2.5 px-5 sm:px-6">
                   <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
@@ -99,6 +96,19 @@ export function RootsTableView({
                 </th>
               </tr>
             </thead>
+          </table>
+        </div>
+
+        {/* 滚动表格区域：使用 table-fixed 强锁定列宽，检索数据只填充内容，滚动条始于表头下方，杜绝侵蚀顶部右上圆角 */}
+        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+          <table className="w-full table-fixed text-left border-collapse">
+            {/* 固化列宽配比：杜绝字符长度变化导致表头与列水平窜动 */}
+            <colgroup>
+              <col className="w-[20%] min-w-[150px]" />
+              <col className="w-[24%] min-w-[180px]" />
+              <col className="w-[44%] min-w-[260px]" />
+              <col className="w-[12%] min-w-[90px]" />
+            </colgroup>
 
             {/* 表格内容主体：保持结构不变，纯内容填充 */}
             <tbody className="divide-y divide-white/[0.05] font-sans">
