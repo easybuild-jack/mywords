@@ -47,6 +47,26 @@ export function DictHeaderToolbar({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  // 监听主滚动容器，只有在向下滚动时才显现吸顶底部分割线与阴影（参考词库管理页 books/page.tsx）
+  useEffect(() => {
+    const mainEl = document.querySelector('main')
+    const handleScroll = () => {
+      const top = mainEl ? mainEl.scrollTop : window.scrollY
+      setIsScrolled(top > 10)
+    }
+
+    handleScroll()
+    mainEl?.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      mainEl?.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setShowSuggestions(false)
@@ -63,7 +83,13 @@ export function DictHeaderToolbar({
   }
 
   return (
-    <header className="w-full flex items-center justify-center p-4 xl:p-6 relative z-50 pointer-events-auto shrink-0">
+    <header
+      className={`sticky top-0 z-50 w-full bg-background transition-[border-color,box-shadow,padding] duration-300 flex items-center justify-center px-4 xl:px-6 pointer-events-auto shrink-0 ${
+        isScrolled
+          ? 'py-2.5 xl:py-3 border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
+          : 'py-3.5 xl:py-5 border-b border-transparent shadow-none'
+      }`}
+    >
       <div className="glass-card rounded-2xl xl:rounded-3xl px-4 xl:px-6 py-2 xl:py-2.5 flex items-center gap-3.5 xl:gap-5 text-sm xl:text-base w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300 justify-between">
         {/* 搜索输入栏（自然舒展填充剩余宽度） */}
         <div ref={containerRef} className="relative flex-1">

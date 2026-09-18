@@ -299,7 +299,7 @@ export default function DictionaryPage() {
   }, [currentResult, phoneticPreference])
 
   return (
-    <div className="flex-1 min-h-full flex flex-col justify-between relative py-1">
+    <div className="flex-1 min-h-full flex flex-col justify-between relative pb-1">
       {/* 顶部工具栏：仅保留搜索输入框、发音口音切换与皮肤选择 */}
       <DictHeaderToolbar
         searchQuery={searchQuery}
