@@ -40,10 +40,10 @@ export function Sidebar() {
   return (
     <aside
       data-sidebar="true"
-      className="w-64 shrink-0 h-[calc(100vh-32px)] m-4 sticky top-4 flex flex-col justify-between p-5 rounded-[20px] border border-white/10 bg-sidebar/90 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.12)] z-40 overflow-y-auto custom-scrollbar"
+      className="w-64 shrink-0 h-[calc(100vh-32px)] m-4 sticky top-4 flex flex-col p-5 rounded-[20px] border border-white/10 bg-sidebar/90 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.12)] z-40 overflow-hidden"
     >
-      {/* 顶部 Logo 与品牌 */}
-      <div className="space-y-8">
+      {/* 顶部 Logo 与品牌：常驻吸顶，绝不参与滚动，右侧无滚动条滑块 */}
+      <div className="shrink-0 mb-6">
         <Link href="/learn" className="flex items-center gap-3 group">
           <div className="size-10 shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
             <img src="/logo111.png" alt="LinguaLoop" className="size-full object-contain" />
@@ -53,52 +53,53 @@ export function Sidebar() {
             <p className="text-xs text-muted-foreground">私人专属英语学习搭子</p>
           </div>
         </Link>
-
-        {/* 核心导航菜单 */}
-        <nav className="space-y-1.5">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-
-            if (item.comingSoon) {
-              return (
-                <div
-                  key={item.href}
-                  aria-disabled
-                  title="功能开发中，敬请期待"
-                  className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium text-[#9CA3AF]/40 cursor-not-allowed"
-                >
-                  <Icon className="size-5" />
-                  <span>{item.label}</span>
-                  <span className="ml-auto text-[11px] font-mono px-1.5 py-0.5 rounded border border-white/10 text-gray-600">
-                    待开放
-                  </span>
-                </div>
-              )
-            }
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium transition-all ${isActive
-                  ? 'bg-primary text-[#0B0C0E] font-bold'
-                  : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
-                  }`}
-              >
-                <Icon className={`size-5 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
-                <span>{item.label}</span>
-              </Link>
-            )
-          })}
-        </nav>
       </div>
 
-      {/* 底部功能按钮（单词导入入口在词库页，此处不再重复） */}
-      <div className="space-y-2 pt-6 border-t border-white/10">
+      {/* 核心导航菜单：独立纵向滚动区，滚动条紧贴侧边栏最右边 */}
+      <nav className="flex-1 min-h-0 overflow-y-auto custom-scrollbar -mr-5 pr-3 space-y-1.5">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const isActive = pathname === item.href
+
+          if (item.comingSoon) {
+            return (
+              <div
+                key={item.href}
+                aria-disabled
+                title="功能开发中，敬请期待"
+                className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium text-[#9CA3AF]/40 cursor-not-allowed"
+              >
+                <Icon className="size-5" />
+                <span>{item.label}</span>
+                <span className="ml-auto text-[11px] font-mono px-1.5 py-0.5 rounded border border-white/10 text-gray-600">
+                  待开放
+                </span>
+              </div>
+            )
+          }
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                isActive
+                  ? 'bg-primary text-[#0B0C0E] font-bold'
+                  : 'text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]'
+              }`}
+            >
+              <Icon className={`size-5 ${isActive ? 'text-[#0B0C0E]' : 'text-muted-foreground'}`} />
+              <span>{item.label}</span>
+            </Link>
+          )
+        })}
+      </nav>
+
+      {/* 底部功能按钮：常驻底部，不随菜单滚动 */}
+      <div className="shrink-0 pt-4 mt-2 border-t border-white/10">
         <button
           onClick={() => setSettingsModalOpen(true)}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-base text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-base text-[#9CA3AF] hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
         >
           <Settings className="size-5 text-muted-foreground" />
           <span>偏好设置</span>
