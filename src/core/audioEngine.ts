@@ -235,6 +235,9 @@ class AudioEngine {
     this.lastPronunciationKey = key
     this.lastPronunciationAt = now
 
+    // 发起新词发音时，废弃之前的挂起发音，避免旧词在后续手势中误播
+    this.pendingPlayback = null
+
     // 快速切词时打断上一条，避免两个词的发音叠在一起
     if (this.currentPronunciation) {
       this.currentPronunciation.pause()
@@ -252,6 +255,19 @@ class AudioEngine {
       console.warn('Online audio play failed, falling back to speech synthesis', err)
       this.playSpeechSynthesis(word, accent)
     })
+  }
+
+  /**
+   * 取消之前因自动播放受限而挂起的播放任务（例如切单元、切词时不再补播旧词）
+   */
+  public cancelPendingPlayback() {
+    this.pendingPlayback = null
+    this.isWaitingForGesture = false
+    this.lastPronunciationKey = ''
+    if (this.currentPronunciation) {
+      this.currentPronunciation.pause()
+      this.currentPronunciation.src = ''
+    }
   }
 
   /**

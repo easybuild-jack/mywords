@@ -4,12 +4,20 @@ import React, { useState, useEffect } from 'react'
 import { HeaderToolbar } from '@/components/layout/HeaderToolbar'
 import { LearnStage } from '@/components/typing/LearnStage'
 import { PracticeFooter } from '@/components/typing/PracticeFooter'
-import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { useWorkspaceStore, ensureWorkspaceHydrated } from '@/store/useWorkspaceStore'
 
 export default function LearnPage() {
   const [isReady, setIsReady] = useState(() => {
     const s = useWorkspaceStore.getState()
-    return s.mode === 'learn' && s.currentLoadedWords.length > 0 && !s.isUnitLoading
+    const isHydrated = s._hasHydrated || useWorkspaceStore.persist?.hasHydrated?.()
+    if (!isHydrated) return false
+    return (
+      s.mode === 'learn' &&
+      s.currentLoadedWords.length > 0 &&
+      s.currentUnitMeta !== null &&
+      s.currentUnitMeta.order === s.currentUnitIndex &&
+      !s.isUnitLoading
+    )
   })
   const enterMode = useWorkspaceStore((s) => s.enterMode)
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
@@ -23,26 +31,29 @@ export default function LearnPage() {
 
     void (async () => {
       try {
-        const s = useWorkspaceStore.getState()
-        const isCurrentUnitAlreadyLoaded =
-          s.mode === 'learn' &&
-          s.currentLoadedWords.length > 0 &&
-          !s.isUnitLoading
-
-        if (!isCurrentUnitAlreadyLoaded) {
-          setIsReady(false)
-        }
+        // 先确保本地持久化存储（localStorage）已水合到位，避免读到默认初始单元（Unit 0 am）
+        await ensureWorkspaceHydrated()
+        if (cancelled) return
 
         await enterMode('learn')
         if (cancelled) return
 
-        const currentStore = useWorkspaceStore.getState()
-        if (currentStore.currentLoadedWords.length === 0 || !currentStore.currentUnitMeta) {
+        const s = useWorkspaceStore.getState()
+        const isTargetUnitReady =
+          s.mode === 'learn' &&
+          s.currentLoadedWords.length > 0 &&
+          s.currentUnitMeta !== null &&
+          s.currentUnitMeta.order === s.currentUnitIndex &&
+          !s.isUnitLoading
+
+        if (!isTargetUnitReady) {
+          setIsReady(false)
           const loadSequence = await loadCurrentUnitWords()
           if (cancelled) return
           if (loadSequence === null && !useWorkspaceStore.getState().isErrorPracticeActive) return
         }
 
+        // 仅在当前加载的词表确认匹配目标单元且就绪时，才触发当前单词发音
         playCurrentWordAudio()
       } finally {
         // 只有最后一次仍存活的初始化才能开放页面，旧请求不能发音或回写 ready。

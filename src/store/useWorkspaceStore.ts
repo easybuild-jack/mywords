@@ -231,6 +231,8 @@ interface WorkspaceState {
   bookModeProgress: Record<string, BookModeUnitRecord>
   getBookModeUnit: (bookId: string, mode: PracticeMode) => number
   commitBookAndUnit: (bookId: string, unitIndex: number, targetMode: PracticeMode) => Promise<void>
+  _hasHydrated: boolean
+  setHasHydrated: (hydrated: boolean) => void
   
   // 单元与词库加载过渡控制
   isUnitLoading: boolean
@@ -452,6 +454,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       loadedUnitKey: null,
       cursors: createFreshCursors(),
       bookModeProgress: {},
+      _hasHydrated: false,
+      setHasHydrated: (hydrated: boolean) => set({ _hasHydrated: hydrated }),
       
       mode: 'learn',
       loopCountSetting: DEFAULT_LOOP_COUNTS.learn,
@@ -509,6 +513,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       ...DICTATION_STEP_RESET,
 
       loadCurrentUnitWords: async () => {
+        audioEngine.cancelPendingPlayback()
         get().syncStarredWordIds()
         const { isErrorPracticeActive, currentBookId, currentBook, currentUnitIndex, unitSize, loopCountSetting, mode } = get()
         // 错词攻坚模式下不被常规章节覆盖
@@ -928,11 +933,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
           if (actionSequence !== latestPracticeActionSequence) return
 
-          const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
-          const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
+          const { phoneticPreference } = get()
           const firstWord = get().getCurrentWord()
-          if (firstWord && canPlayAudio) {
-            audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+          if (firstWord) {
+            audioEngine.prefetchWordAudio(firstWord.name, phoneticPreference)
           }
           const nextWord = get().currentLoadedWords[1]
           if (nextWord) {
@@ -946,6 +950,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       setUnitIndex: async (unitIndex: number) => {
+        audioEngine.cancelPendingPlayback()
         latestPracticeActionSequence += 1
         const actionSequence = latestPracticeActionSequence
         const { currentBookId, mode, isErrorPracticeActive, bookModeProgress } = get()
@@ -1018,17 +1023,22 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           await get().exitErrorPractice()
         }
 
-        if (get().mode === nextMode) return
+        const currentBookId = get().currentBookId
+        const bookModeProgress = { ...get().bookModeProgress }
+        const targetCursor = get().cursors[nextMode]
+        const targetUnitIndex = bookModeProgress[currentBookId]?.[nextMode] ?? targetCursor?.unitIndex ?? 0
+        const isUnitDifferent = targetUnitIndex !== get().currentUnitIndex
 
+        if (get().mode === nextMode && !isUnitDifferent) return
+
+        audioEngine.cancelPendingPlayback()
         latestPracticeActionSequence += 1
         const actionSequence = latestPracticeActionSequence
         set({ isUnitLoading: true })
 
         try {
           const cursors = saveActiveCursor(get)
-          const currentBookId = get().currentBookId
           const prevMode = get().mode
-          const bookModeProgress = { ...get().bookModeProgress }
           if (!bookModeProgress[currentBookId]) {
             bookModeProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
           }
@@ -1038,10 +1048,6 @@ export const useWorkspaceStore = create<WorkspaceState>()(
               [prevMode]: get().currentUnitIndex,
             }
           }
-
-          const targetCursor = cursors[nextMode]
-          const targetUnitIndex = bookModeProgress[currentBookId]?.[nextMode] ?? targetCursor?.unitIndex ?? 0
-          const isUnitDifferent = targetUnitIndex !== get().currentUnitIndex
 
           // 循环次数与游标一样按页面存档：默写页的三连对不该跟着跑到学习页
           const loopCounts = withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
@@ -1915,6 +1921,13 @@ export const useWorkspaceStore = create<WorkspaceState>()(
     {
       name: 'mywords-workspace-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (!error && state) {
+            state.setHasHydrated(true)
+          }
+        }
+      },
       merge: (persistedState, currentState) => {
         const persisted = (persistedState as Partial<WorkspaceState>) || {}
         // 旧版本只有一个全局 loopCountSetting，把它接到学习页那一档，
@@ -1994,3 +2007,24 @@ export const useWorkspaceStore = create<WorkspaceState>()(
     }
   )
 )
+
+/**
+ * 等待 workspace store 完成本地持久化（localStorage）水合，
+ * 避免冷启动或切页时读到初始默认值（如 Unit 0 am）而发生发音与显示不一致。
+ */
+export const ensureWorkspaceHydrated = async (): Promise<void> => {
+  if (typeof window === 'undefined') return
+  if (useWorkspaceStore.getState()._hasHydrated || useWorkspaceStore.persist?.hasHydrated?.()) {
+    return
+  }
+  await new Promise<void>((resolve) => {
+    const unsub = useWorkspaceStore.persist.onFinishHydration(() => {
+      unsub()
+      resolve()
+    })
+    setTimeout(() => {
+      unsub()
+      resolve()
+    }, 150)
+  })
+}
