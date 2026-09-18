@@ -551,6 +551,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             currentWordRemainingLoops: loopCountSetting,
             currentUnitMeta: unitMeta,
             bookModeProgress,
+            isUnitLoading: false,
+            unitLoadingTarget: null,
             ...(resume ?? {}),
           })
           return loadSequence
@@ -601,6 +603,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             retryWordQueue: [],
             isUnitRetrying: false,
             loadedUnitKey: null,
+            isUnitLoading: false,
+            unitLoadingTarget: null,
           })
           return loadSequence
         }
@@ -636,6 +640,8 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             : {}),
           currentLoadedWords: nextWords,
           currentWordRemainingLoops: loopCountSetting,
+          isUnitLoading: false,
+          unitLoadingTarget: null,
           ...(resume ?? {}),
         })
         return loadSequence
@@ -880,64 +886,62 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           },
         })
 
-        const bookModeProgress = { ...get().bookModeProgress }
-        if (!bookModeProgress[book.id]) {
-          bookModeProgress[book.id] = { learn: 0, dictation: 0, phonetic: 0 }
-        }
-        bookModeProgress[book.id] = {
-          ...bookModeProgress[book.id],
-          [targetMode]: unitIndex,
-        }
+        try {
+          const bookModeProgress = { ...get().bookModeProgress }
+          if (!bookModeProgress[book.id]) {
+            bookModeProgress[book.id] = { learn: 0, dictation: 0, phonetic: 0 }
+          }
+          bookModeProgress[book.id] = {
+            ...bookModeProgress[book.id],
+            [targetMode]: unitIndex,
+          }
 
-        const cursors = { ...get().cursors }
-        cursors[targetMode] = {
-          ...EMPTY_CURSOR,
-          unitIndex,
-        }
+          const cursors = { ...get().cursors }
+          cursors[targetMode] = {
+            ...EMPTY_CURSOR,
+            unitIndex,
+          }
 
-        set({
-          currentBookId: book.id,
-          currentBook: book,
-          mode: targetMode,
-          currentUnitIndex: unitIndex,
-          activeWordIndex: 0,
-          // 从词库页点进来就是「进入这个单元」，按它的断点重新定位
-          loadedUnitKey: null,
-          cursors,
-          bookModeProgress,
-          currentInput: '',
-          hasTypo: false,
-          isUnitFinished: false,
-          isCurrentWordSplit: false,
-          isEditWordSplitModalOpen: false,
-          isErrorPracticeActive: false,
-          retryWordQueue: [],
-          isUnitRetrying: false,
-          ...restoreLoopCount(get),
-          ...DICTATION_STEP_RESET,
-        })
+          set({
+            currentBookId: book.id,
+            currentBook: book,
+            mode: targetMode,
+            currentUnitIndex: unitIndex,
+            activeWordIndex: 0,
+            // 从词库页点进来就是「进入这个单元」，按它的断点重新定位
+            loadedUnitKey: null,
+            cursors,
+            bookModeProgress,
+            currentInput: '',
+            hasTypo: false,
+            isUnitFinished: false,
+            isCurrentWordSplit: false,
+            isEditWordSplitModalOpen: false,
+            isErrorPracticeActive: false,
+            retryWordQueue: [],
+            isUnitRetrying: false,
+            ...restoreLoopCount(get),
+            ...DICTATION_STEP_RESET,
+          })
 
-        const startTime = Date.now()
-        const loadSequence = await get().loadCurrentUnitWords()
-        if (loadSequence === null) return
-        const elapsed = Date.now() - startTime
-        if (elapsed < 450) {
-          await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
-        }
+          const loadSequence = await get().loadCurrentUnitWords()
+          if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
+          if (actionSequence !== latestPracticeActionSequence) return
 
-        if (loadSequence !== latestUnitLoadSequence) return
-        set({ isUnitLoading: false, unitLoadingTarget: null })
-        if (actionSequence !== latestPracticeActionSequence) return
-
-        const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
-        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
-        const firstWord = get().getCurrentWord()
-        if (firstWord && canPlayAudio) {
-          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
-        }
-        const nextWord = get().currentLoadedWords[1]
-        if (nextWord) {
-          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+          const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
+          const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(targetMode, dictationCueMode)
+          const firstWord = get().getCurrentWord()
+          if (firstWord && canPlayAudio) {
+            audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+          }
+          const nextWord = get().currentLoadedWords[1]
+          if (nextWord) {
+            audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+          }
+        } finally {
+          if (actionSequence === latestPracticeActionSequence) {
+            set({ isUnitLoading: false, unitLoadingTarget: null })
+          }
         }
       },
 
@@ -981,27 +985,25 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ...DICTATION_STEP_RESET,
         })
 
-        const startTime = Date.now()
-        const loadSequence = await get().loadCurrentUnitWords()
-        if (loadSequence === null) return
-        const elapsed = Date.now() - startTime
-        if (elapsed < 450) {
-          await new Promise((resolve) => setTimeout(resolve, 450 - elapsed))
-        }
+        try {
+          const loadSequence = await get().loadCurrentUnitWords()
+          if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
+          if (actionSequence !== latestPracticeActionSequence) return
 
-        if (loadSequence !== latestUnitLoadSequence) return
-        set({ isUnitLoading: false })
-        if (actionSequence !== latestPracticeActionSequence) return
-
-        const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
-        const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
-        const firstWord = get().getCurrentWord()
-        if (firstWord && canPlayAudio) {
-          audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
-        }
-        const nextWord = get().currentLoadedWords[1]
-        if (nextWord) {
-          audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+          const { isAutoPlayAudio, dictationCueMode, phoneticPreference, audioRate } = get()
+          const canPlayAudio = isAutoPlayAudio && !isAutoAudioMuted(mode, dictationCueMode)
+          const firstWord = get().getCurrentWord()
+          if (firstWord && canPlayAudio) {
+            audioEngine.playPronunciation(firstWord.name, phoneticPreference, audioRate)
+          }
+          const nextWord = get().currentLoadedWords[1]
+          if (nextWord) {
+            audioEngine.prefetchWordAudio(nextWord.name, phoneticPreference)
+          }
+        } finally {
+          if (actionSequence === latestPracticeActionSequence) {
+            set({ isUnitLoading: false, unitLoadingTarget: null })
+          }
         }
       },
 
@@ -1022,72 +1024,74 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         const actionSequence = latestPracticeActionSequence
         set({ isUnitLoading: true })
 
-        const cursors = saveActiveCursor(get)
-        const currentBookId = get().currentBookId
-        const prevMode = get().mode
-        const bookModeProgress = { ...get().bookModeProgress }
-        if (!bookModeProgress[currentBookId]) {
-          bookModeProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
-        }
-        if (!get().isErrorPracticeActive) {
-          bookModeProgress[currentBookId] = {
-            ...bookModeProgress[currentBookId],
-            [prevMode]: get().currentUnitIndex,
+        try {
+          const cursors = saveActiveCursor(get)
+          const currentBookId = get().currentBookId
+          const prevMode = get().mode
+          const bookModeProgress = { ...get().bookModeProgress }
+          if (!bookModeProgress[currentBookId]) {
+            bookModeProgress[currentBookId] = { learn: 0, dictation: 0, phonetic: 0 }
+          }
+          if (!get().isErrorPracticeActive) {
+            bookModeProgress[currentBookId] = {
+              ...bookModeProgress[currentBookId],
+              [prevMode]: get().currentUnitIndex,
+            }
+          }
+
+          const targetCursor = cursors[nextMode]
+          const targetUnitIndex = bookModeProgress[currentBookId]?.[nextMode] ?? targetCursor?.unitIndex ?? 0
+          const isUnitDifferent = targetUnitIndex !== get().currentUnitIndex
+
+          // 循环次数与游标一样按页面存档：默写页的三连对不该跟着跑到学习页
+          const loopCounts = withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
+          const nextLoopCount = loopCounts[nextMode]
+
+          set({
+            mode: nextMode,
+            currentUnitIndex: targetUnitIndex,
+            cursors,
+            bookModeProgress,
+            loopCounts,
+            loopCountSetting: nextLoopCount,
+            activeWordIndex: isUnitDifferent ? 0 : (targetCursor?.activeWordIndex ?? 0),
+            isUnitFinished: isUnitDifferent ? false : (targetCursor?.isUnitFinished ?? false),
+            currentInput: '',
+            hasTypo: false,
+            isPeeking: false,
+            retryWordQueue: [],
+            isUnitRetrying: false,
+            loadedUnitKey: null,
+            currentWordRemainingLoops: nextLoopCount,
+            ...DICTATION_STEP_RESET,
+          })
+
+          let loadSequence: number | null = latestUnitLoadSequence
+          if (isUnitDifferent || get().currentLoadedWords.length === 0) {
+            loadSequence = await get().loadCurrentUnitWords()
+          }
+          if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
+          if (actionSequence !== latestPracticeActionSequence) return
+
+          const total = get().currentLoadedWords.length
+          if (targetCursor?.hasLiveState && get().mode === nextMode && get().currentUnitIndex === targetUnitIndex) {
+            const retryIds = new Set(targetCursor.retryWordIds)
+            const unitMeta = get().currentUnitMeta
+            set({
+              activeWordIndex: Math.min(Math.max(0, targetCursor.activeWordIndex), Math.max(0, total - 1)),
+              isUnitFinished: targetCursor.isUnitFinished,
+              retryWordQueue: get().currentLoadedWords.filter((word) => retryIds.has(word.id)),
+              isUnitRetrying: targetCursor.isUnitRetrying,
+              loadedUnitKey: unitMeta ? `${currentBookId}|${unitMeta.id}|${nextMode}` : null,
+            })
+          } else if (get().activeWordIndex > total - 1) {
+            set({ activeWordIndex: Math.max(0, total - 1) })
+          }
+        } finally {
+          if (actionSequence === latestPracticeActionSequence) {
+            set({ isUnitLoading: false, unitLoadingTarget: null })
           }
         }
-
-        const targetCursor = cursors[nextMode]
-        const targetUnitIndex = bookModeProgress[currentBookId]?.[nextMode] ?? targetCursor?.unitIndex ?? 0
-        const isUnitDifferent = targetUnitIndex !== get().currentUnitIndex
-
-        // 循环次数与游标一样按页面存档：默写页的三连对不该跟着跑到学习页
-        const loopCounts = withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
-        const nextLoopCount = loopCounts[nextMode]
-
-        set({
-          mode: nextMode,
-          currentUnitIndex: targetUnitIndex,
-          cursors,
-          bookModeProgress,
-          loopCounts,
-          loopCountSetting: nextLoopCount,
-          activeWordIndex: isUnitDifferent ? 0 : (targetCursor?.activeWordIndex ?? 0),
-          isUnitFinished: isUnitDifferent ? false : (targetCursor?.isUnitFinished ?? false),
-          currentInput: '',
-          hasTypo: false,
-          isPeeking: false,
-          retryWordQueue: [],
-          isUnitRetrying: false,
-          loadedUnitKey: null,
-          currentWordRemainingLoops: nextLoopCount,
-          ...DICTATION_STEP_RESET,
-        })
-
-        let loadSequence: number | null = latestUnitLoadSequence
-        if (isUnitDifferent || get().currentLoadedWords.length === 0) {
-          loadSequence = await get().loadCurrentUnitWords()
-        }
-        if (loadSequence === null || loadSequence !== latestUnitLoadSequence) return
-        if (actionSequence !== latestPracticeActionSequence) {
-          set({ isUnitLoading: false })
-          return
-        }
-
-        const total = get().currentLoadedWords.length
-        if (targetCursor?.hasLiveState && get().mode === nextMode && get().currentUnitIndex === targetUnitIndex) {
-          const retryIds = new Set(targetCursor.retryWordIds)
-          const unitMeta = get().currentUnitMeta
-          set({
-            activeWordIndex: Math.min(Math.max(0, targetCursor.activeWordIndex), Math.max(0, total - 1)),
-            isUnitFinished: targetCursor.isUnitFinished,
-            retryWordQueue: get().currentLoadedWords.filter((word) => retryIds.has(word.id)),
-            isUnitRetrying: targetCursor.isUnitRetrying,
-            loadedUnitKey: unitMeta ? `${currentBookId}|${unitMeta.id}|${nextMode}` : null,
-          })
-        } else if (get().activeWordIndex > total - 1) {
-          set({ activeWordIndex: Math.max(0, total - 1) })
-        }
-        set({ isUnitLoading: false })
       },
 
       setLoopCountSetting: (count: 1 | 2 | 3 | 5) => {

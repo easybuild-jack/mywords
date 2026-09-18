@@ -124,8 +124,18 @@ export function PhoneticStage({ isReady = true }: PhoneticStageProps) {
         <UnitCompleteCard />
       ) : (
         <PracticeStageFrame>
-          {!isReady || isUnitLoading || !currentWord ? (
+          {!isReady || isUnitLoading ? (
             <UnitLoadingSkeleton />
+          ) : !currentWord ? (
+            <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center select-none">
+              <p className="text-base text-muted-foreground mb-4">当前单元暂无单词或未能成功加载</p>
+              <button
+                onClick={() => useWorkspaceStore.getState().loadCurrentUnitWords()}
+                className="px-4 py-2 rounded-xl bg-primary/20 text-primary hover:bg-primary/30 text-sm font-medium transition-all cursor-pointer"
+              >
+                重新加载
+              </button>
+            </div>
           ) : (
             <PhoneticCard
               word={currentWord}

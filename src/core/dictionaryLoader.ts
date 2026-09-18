@@ -66,11 +66,19 @@ class DictionaryLoader {
   private localLexiconMap: Map<string, { trans: string[]; usphone?: string; ukphone?: string }> = new Map()
   private bookJsonCache: Map<string, RawDictEntry[]> = new Map()
   private bookUnitsCache: Map<string, DictUnit[]> = new Map()
+  private bookUnitEntriesCache: Map<string, Map<string, RawDictEntry[]>> = new Map()
+  private bookUnitWordIdsCache: Map<string, Record<string, string[]>> = new Map()
+  private inFlightBookFetches: Map<string, Promise<RawDictEntry[]>> = new Map()
+  private inFlightUnitsFetches: Map<string, Promise<DictUnit[]>> = new Map()
   private isIndexInitialized = false
 
   public clearCache() {
     this.bookJsonCache.clear()
     this.bookUnitsCache.clear()
+    this.bookUnitEntriesCache.clear()
+    this.bookUnitWordIdsCache.clear()
+    this.inFlightBookFetches.clear()
+    this.inFlightUnitsFetches.clear()
   }
 
   /**
@@ -85,19 +93,29 @@ class DictionaryLoader {
     if (cached) return cached
     if (typeof window === 'undefined') return []
 
-    try {
-      const res = await fetch(unitsPath)
-      if (!res.ok) return []
-      const catalog: DictUnitCatalog = await res.json()
-      const units = Array.isArray(catalog?.units)
-        ? [...catalog.units].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-        : []
-      if (units.length) this.bookUnitsCache.set(bookId, units)
-      return units
-    } catch (err) {
-      console.error('Failed to load book units file:', unitsPath, err)
-      return []
-    }
+    const inFlight = this.inFlightUnitsFetches.get(bookId)
+    if (inFlight) return inFlight
+
+    const fetchPromise = (async () => {
+      try {
+        const res = await fetch(unitsPath)
+        if (!res.ok) return []
+        const catalog: DictUnitCatalog = await res.json()
+        const units = Array.isArray(catalog?.units)
+          ? [...catalog.units].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          : []
+        if (units.length) this.bookUnitsCache.set(bookId, units)
+        return units
+      } catch (err) {
+        console.error('Failed to load book units file:', unitsPath, err)
+        return []
+      } finally {
+        this.inFlightUnitsFetches.delete(bookId)
+      }
+    })()
+
+    this.inFlightUnitsFetches.set(bookId, fetchPromise)
+    return fetchPromise
   }
 
   /** 已经加载过的单元目录（同步读取，供渲染使用，未加载时返回 null） */
@@ -330,19 +348,39 @@ class DictionaryLoader {
     if (cached) return cached
     if (typeof window === 'undefined') return []
 
-    try {
-      const res = await fetch(config.path)
-      if (!res.ok) return []
-      const data: RawDictEntry[] = await res.json()
-      if (Array.isArray(data)) {
-        this.bookJsonCache.set(config.path, data)
-        return data
+    const inFlight = this.inFlightBookFetches.get(config.path)
+    if (inFlight) return inFlight
+
+    const fetchPromise = (async () => {
+      try {
+        const res = await fetch(config.path)
+        if (!res.ok) return []
+        const data: RawDictEntry[] = await res.json()
+        if (Array.isArray(data)) {
+          this.bookJsonCache.set(config.path, data)
+          // 预建语义单元索引，避免每次切换单元都全量 filter 数千词
+          const unitMap = new Map<string, RawDictEntry[]>()
+          for (const entry of data) {
+            if (entry.unitId) {
+              const list = unitMap.get(entry.unitId)
+              if (list) list.push(entry)
+              else unitMap.set(entry.unitId, [entry])
+            }
+          }
+          this.bookUnitEntriesCache.set(bookId, unitMap)
+          return data
+        }
+        return []
+      } catch (err) {
+        console.error('Failed to load book json file:', config.path, err)
+        return []
+      } finally {
+        this.inFlightBookFetches.delete(config.path)
       }
-      return []
-    } catch (err) {
-      console.error('Failed to load book json file:', config.path, err)
-      return []
-    }
+    })()
+
+    this.inFlightBookFetches.set(config.path, fetchPromise)
+    return fetchPromise
   }
 
   /**
@@ -425,7 +463,8 @@ class DictionaryLoader {
     if (units.length) {
       const safeIndex = Math.min(Math.max(0, unitIndex), units.length - 1)
       const targetUnitId = units[safeIndex].id
-      rawSlice = allRawWords.filter((entry) => entry.unitId === targetUnitId)
+      const unitMap = this.bookUnitEntriesCache.get(bookId)
+      rawSlice = unitMap?.get(targetUnitId) || allRawWords.filter((entry) => entry.unitId === targetUnitId)
     } else {
       const startIndex = Math.max(0, unitIndex) * unitSize
       rawSlice = allRawWords.slice(startIndex, startIndex + unitSize)
@@ -446,6 +485,10 @@ class DictionaryLoader {
    * 返回当前词库定义下每个单元的准确成员 ID，用于校准内容变更后的历史进度。
    */
   public async loadBookUnitWordIds(bookId: string, unitSize: number = 20): Promise<Record<string, string[]>> {
+    const cacheKey = `${bookId}_${unitSize}`
+    const cached = this.bookUnitWordIdsCache.get(cacheKey)
+    if (cached) return cached
+
     const allRawWords = await this.fetchBookRawWords(bookId)
     if (!allRawWords.length) return {}
 
@@ -454,9 +497,11 @@ class DictionaryLoader {
       const result = Object.fromEntries(units.map((unit) => [unit.id, [] as string[]]))
       for (const entry of allRawWords) {
         if (entry.unitId && result[entry.unitId]) {
-          result[entry.unitId].push(this.buildWordItemFromEntry(entry).id)
+          // 直接通过 buildWordId 提取 ID，耗时从数百毫秒降至 <1 毫秒
+          result[entry.unitId].push(buildWordId(entry.name || ''))
         }
       }
+      this.bookUnitWordIdsCache.set(cacheKey, result)
       return result
     }
 
@@ -465,8 +510,9 @@ class DictionaryLoader {
       const unitIndex = Math.floor(start / unitSize)
       result[buildFixedUnitId(bookId, unitIndex)] = allRawWords
         .slice(start, start + unitSize)
-        .map((entry) => this.buildWordItemFromEntry(entry).id)
+        .map((entry) => buildWordId(entry.name || ''))
     }
+    this.bookUnitWordIdsCache.set(cacheKey, result)
     return result
   }
 

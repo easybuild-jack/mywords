@@ -7,18 +7,35 @@ import { PracticeFooter } from '@/components/typing/PracticeFooter'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
 export default function PhoneticsPage() {
-  const [isReady, setIsReady] = useState(false)
+  const [isReady, setIsReady] = useState(() => {
+    const s = useWorkspaceStore.getState()
+    return s.mode === 'phonetic' && s.currentLoadedWords.length > 0 && !s.isUnitLoading
+  })
   const enterMode = useWorkspaceStore((s) => s.enterMode)
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
 
   useEffect(() => {
     let cancelled = false
-    setIsReady(false)
 
     void (async () => {
       try {
+        const s = useWorkspaceStore.getState()
+        const isCurrentUnitAlreadyLoaded =
+          s.mode === 'phonetic' &&
+          s.currentLoadedWords.length > 0 &&
+          !s.isUnitLoading
+
+        if (!isCurrentUnitAlreadyLoaded) {
+          setIsReady(false)
+        }
+
         await enterMode('phonetic')
-        if (!cancelled) await loadCurrentUnitWords()
+        if (cancelled) return
+
+        const currentStore = useWorkspaceStore.getState()
+        if (currentStore.currentLoadedWords.length === 0 || !currentStore.currentUnitMeta) {
+          if (!cancelled) await loadCurrentUnitWords()
+        }
       } finally {
         if (!cancelled) setIsReady(true)
       }
