@@ -38,7 +38,10 @@ export function Sidebar() {
   ]
 
   return (
-    <aside data-sidebar="true" className="w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-5 border-r border-white/10 bg-sidebar/90 backdrop-blur-2xl z-40 overflow-y-auto custom-scrollbar">
+    <aside
+      data-sidebar="true"
+      className="w-64 shrink-0 h-[calc(100vh-32px)] m-4 sticky top-4 flex flex-col justify-between p-5 rounded-[20px] border border-white/10 bg-sidebar/90 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.12)] z-40 overflow-y-auto custom-scrollbar"
+    >
       {/* 顶部 Logo 与品牌 */}
       <div className="space-y-8">
         <Link href="/learn" className="flex items-center gap-3 group">

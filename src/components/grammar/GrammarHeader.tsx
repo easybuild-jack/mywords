@@ -52,7 +52,7 @@ export function GrammarHeader({
   ]
   return (
     <>
-      <header className="fixed top-0 left-64 right-0 z-30 bg-background border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
+      <header className="fixed top-0 left-72 right-0 z-30 bg-background border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
       <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-5 pb-4 space-y-3.5">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">

@@ -27,7 +27,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
               opacity: 0,
               transition: { duration: 0.28, ease: 'easeOut' },
             }}
-            className="fixed top-0 bottom-0 left-0 md:left-64 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
+            className="fixed top-0 bottom-0 left-0 md:left-72 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
             style={{ backgroundColor: 'var(--background)', willChange: 'opacity' }}
           >
             <div className="px-10 py-7 rounded-2xl bg-sidebar border border-white/10 shadow-2xl shadow-black/30 flex flex-col items-center gap-4.5 min-w-[180px]">

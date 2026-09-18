@@ -107,7 +107,7 @@ export function IpaDetailModal({
   return (
     <div
       onClick={onClose}
-      className="fixed top-0 bottom-0 left-0 md:left-64 right-0 z-40 flex items-center justify-center p-3 sm:p-5 xl:p-6 bg-black/80 backdrop-blur-sm animate-fade-in select-none"
+      className="fixed top-0 bottom-0 left-0 md:left-72 right-0 z-40 flex items-center justify-center p-3 sm:p-5 xl:p-6 bg-black/80 backdrop-blur-sm animate-fade-in select-none"
     >
       {/* 弹窗核心区域：左右翻页 + 居中自适应卡片（严格对齐词根词缀详情弹窗模式，非全屏） */}
       <div
