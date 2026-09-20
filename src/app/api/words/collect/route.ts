@@ -47,7 +47,7 @@ export async function GET(req: Request) {
   return NextResponse.json(
     {
       code: 0,
-      message: 'MyWords Word Collection API is running',
+      message: 'LinguaLoop Word Collection API is running',
       status: 'online',
       storageMode: getStorageMode(),
       tokenRequired: Boolean(process.env.COLLECT_TOKEN?.trim()),
