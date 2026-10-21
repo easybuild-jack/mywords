@@ -22,11 +22,19 @@ export function PwaRegistrar() {
     if (process.env.NODE_ENV === 'production') {
       register()
     } else {
-      const idle =
-        typeof window.requestIdleCallback === 'function'
-          ? window.requestIdleCallback
-          : (cb: () => void) => window.setTimeout(cb, 2000)
-      idle(() => register())
+      // 开发环境主动注销 Service Worker 并清空旧缓存，防止 Turbopack 动态编译的静态 chunk 被强缓存导致模块缺失报错
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const reg of registrations) {
+          reg.unregister()
+        }
+      })
+      if (typeof window !== 'undefined' && 'caches' in window) {
+        caches.keys().then((keys) => {
+          for (const key of keys) {
+            caches.delete(key)
+          }
+        })
+      }
     }
   }, [])
 

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
 import './globals.css'
-import { Sidebar } from '@/components/layout/Sidebar'
+import { AppSidebar } from '@/components/layout/AppSidebar'
 import { RouteProgressBar } from '@/components/layout/RouteProgressBar'
 import { PageTransitionWrapper } from '@/components/layout/PageTransitionWrapper'
 import { SkinApplier } from '@/components/layout/SkinApplier'
@@ -53,7 +53,7 @@ export default function RootLayout({
         </Suspense>
 
         {/* 左侧全局常驻侧边栏 */}
-        <Sidebar />
+        <AppSidebar />
 
         {/* 右侧主内容区 */}
         <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden flex flex-col relative custom-scrollbar">

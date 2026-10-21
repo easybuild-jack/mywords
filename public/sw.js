@@ -6,7 +6,7 @@
  *  - 公共静态资源       : 缓存优先（icons / sounds / dicts 等稳定资源）
  *  - 其余同源 GET     : 网络优先，失败时回退缓存
  */
-const CACHE_NAME = 'mywords-pwa-v2'
+const CACHE_NAME = 'mywords-pwa-v3'
 const PRECACHE_URLS = ['/', '/icons/icon-192.png', '/icons/icon-512.png']
 
 self.addEventListener('install', (event) => {
@@ -32,7 +32,6 @@ self.addEventListener('activate', (event) => {
 
 function isStaticAsset(pathname) {
   return (
-    pathname.startsWith('/_next/static/') ||
     pathname.startsWith('/icons/') ||
     pathname.startsWith('/sounds/') ||
     pathname.startsWith('/dicts/') ||
