@@ -13,8 +13,12 @@ import { RadioFilters } from '@/components/radio/RadioFilters'
 import { RadioMainPlayer } from '@/components/radio/RadioMainPlayer'
 import { RadioCardList } from '@/components/radio/RadioCardList'
 import { RadioUploadModal } from '@/components/radio/RadioUploadModal'
+import { ListMusic, PlayCircle, ArrowLeft } from 'lucide-react'
 
 export default function RadioPage() {
+  // 当前激活的 Tab：'list' (音视频列表页，默认) | 'player' (播放页)
+  const [activeTab, setActiveTab] = useState<'list' | 'player'>('list')
+
   // 电台媒体库列表（初始化为高质量内置原声范例）
   const [items, setItems] = useState<RadioItem[]>(() => DEFAULT_SAMPLE_RADIO_ITEMS)
   const [currentId, setCurrentId] = useState<string>(() => DEFAULT_SAMPLE_RADIO_ITEMS[0]?.id || '')
@@ -338,46 +342,125 @@ export default function RadioPage() {
           onOpenUpload={() => setIsUploadOpen(true)}
         />
 
-        {/* 场景分类与媒体类型筛选 */}
-        <RadioFilters
-          selectedScenario={selectedScenario}
-          onSelectScenario={setSelectedScenario}
-          selectedMediaType={selectedMediaType}
-          onSelectMediaType={setSelectedMediaType}
-          availableScenarios={availableScenarios}
-        />
+        {/* Tab 导航切换栏 (默认第一个是列表签页，第二个是播放页) */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
+          <div className="inline-flex p-1 rounded-xl bg-card border border-border/80 shadow-xs select-none">
+            {/* Tab 1: 音视频列表 (默认) */}
+            <button
+              onClick={() => setActiveTab('list')}
+              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'list'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+              }`}
+            >
+              <ListMusic className="size-4" />
+              <span>音视频列表</span>
+              <span
+                className={`text-[11px] px-2 py-0.5 rounded-full font-mono transition-colors ${
+                  activeTab === 'list'
+                    ? 'bg-primary-foreground/20 text-primary-foreground font-bold'
+                    : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                {filteredItems.length}
+              </span>
+            </button>
 
-        {/* 视听大舞台 (Main Stage) */}
-        <RadioMainPlayer
-          item={currentItem}
-          isPlaying={isPlaying}
-          onTogglePlay={handleTogglePlay}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          currentTime={currentTime}
-          duration={duration}
-          onSeek={handleSeek}
-          playbackRate={playbackRate}
-          onChangePlaybackRate={handleChangePlaybackRate}
-          playMode={playMode}
-          onChangePlayMode={setPlayMode}
-          volume={volume}
-          onChangeVolume={handleChangeVolume}
-          videoRef={videoRef}
-        />
+            {/* Tab 2: 播放页 */}
+            <button
+              onClick={() => setActiveTab('player')}
+              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === 'player'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+              }`}
+            >
+              <PlayCircle className="size-4" />
+              <span>播放页</span>
+              {isPlaying && (
+                <span className="flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono animate-pulse">
+                  <span className="size-1.5 rounded-full bg-emerald-400" />
+                  正在播放
+                </span>
+              )}
+            </button>
+          </div>
 
-        {/* 媒体片段曲库卡片列表 */}
-        <RadioCardList
-          items={filteredItems}
-          currentId={currentId}
-          isPlaying={isPlaying}
-          onSelectItem={(item) => {
-            setCurrentId(item.id)
-            setIsPlaying(true)
-          }}
-          onTogglePlay={handleTogglePlay}
-          onDeleteItem={handleDeleteItem}
-        />
+          {/* 右侧微提示 / 快捷跳转 */}
+          {activeTab === 'player' ? (
+            <button
+              onClick={() => setActiveTab('list')}
+              className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card border border-border/70 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="size-3.5" />
+              <span>返回列表选片</span>
+            </button>
+          ) : (
+            currentItem && (
+              <div
+                onClick={() => setActiveTab('player')}
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card/60 hover:bg-card border border-border/60 hover:border-primary/40 text-xs text-muted-foreground transition-all cursor-pointer group"
+                title="点击前往播放页"
+              >
+                <span className="text-muted-foreground/80">当前就绪:</span>
+                <span className="font-medium text-foreground truncate max-w-[200px] md:max-w-[280px]">
+                  {currentItem.title}
+                </span>
+                <span className="text-primary group-hover:translate-x-0.5 transition-transform font-medium">
+                  前往播放页 &rarr;
+                </span>
+              </div>
+            )
+          )}
+        </div>
+
+        {/* Tab 1 页面内容：音视频列表页 (默认展示) */}
+        <div className={activeTab === 'list' ? 'space-y-6 animate-fadeIn' : 'hidden'}>
+          {/* 场景分类与媒体类型筛选 */}
+          <RadioFilters
+            selectedScenario={selectedScenario}
+            onSelectScenario={setSelectedScenario}
+            selectedMediaType={selectedMediaType}
+            onSelectMediaType={setSelectedMediaType}
+            availableScenarios={availableScenarios}
+          />
+
+          {/* 媒体片段曲库卡片列表 */}
+          <RadioCardList
+            items={filteredItems}
+            currentId={currentId}
+            isPlaying={isPlaying}
+            onSelectItem={(item) => {
+              setCurrentId(item.id)
+              setIsPlaying(true)
+              setActiveTab('player')
+            }}
+            onTogglePlay={handleTogglePlay}
+            onDeleteItem={handleDeleteItem}
+          />
+        </div>
+
+        {/* Tab 2 页面内容：播放页 (独立剧场视听) */}
+        <div className={activeTab === 'player' ? 'space-y-6 animate-fadeIn' : 'hidden'}>
+          <RadioMainPlayer
+            item={currentItem}
+            isPlaying={isPlaying}
+            onTogglePlay={handleTogglePlay}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            currentTime={currentTime}
+            duration={duration}
+            onSeek={handleSeek}
+            playbackRate={playbackRate}
+            onChangePlaybackRate={handleChangePlaybackRate}
+            playMode={playMode}
+            onChangePlayMode={setPlayMode}
+            volume={volume}
+            onChangeVolume={handleChangeVolume}
+            videoRef={videoRef}
+          />
+        </div>
       </div>
 
       {/* 上传自定义音视频弹窗 */}
