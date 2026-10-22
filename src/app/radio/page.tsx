@@ -73,18 +73,7 @@ export default function RadioPage() {
     })
   }, [items, selectedScenario, selectedMediaType, searchQuery])
 
-  // 初始化纯音频播放器实例
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const audio = new Audio()
-    audio.preload = 'metadata'
-    audioRef.current = audio
 
-    return () => {
-      audio.pause()
-      audio.src = ''
-    }
-  }, [])
 
   // 同步媒体源切换
   useEffect(() => {
@@ -459,6 +448,7 @@ export default function RadioPage() {
             volume={volume}
             onChangeVolume={handleChangeVolume}
             videoRef={videoRef}
+            audioRef={audioRef}
           />
         </div>
       </div>
@@ -469,6 +459,9 @@ export default function RadioPage() {
         onClose={() => setIsUploadOpen(false)}
         onAddItem={handleAddItem}
       />
+
+      {/* 原生隐藏式音频播放节点 */}
+      <audio ref={audioRef} preload="auto" className="hidden" />
     </div>
   )
 }

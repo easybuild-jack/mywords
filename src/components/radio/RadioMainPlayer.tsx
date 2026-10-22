@@ -4,6 +4,7 @@ import React from 'react'
 import {
   type RadioItem,
   type PlayMode,
+  SCENARIO_ICONS,
 } from '@/resources/radioData'
 import {
   Play,
@@ -18,7 +19,13 @@ import {
   VolumeX,
   Maximize2,
   Disc3,
+  Radio,
+  Activity,
+  Wifi,
+  Sparkles,
 } from 'lucide-react'
+
+import { RadioStudioVisualizer } from './RadioStudioVisualizer'
 
 interface RadioMainPlayerProps {
   item: RadioItem | null
@@ -36,6 +43,7 @@ interface RadioMainPlayerProps {
   volume: number
   onChangeVolume: (vol: number) => void
   videoRef: React.RefObject<HTMLVideoElement | null>
+  audioRef?: React.RefObject<HTMLAudioElement | null>
 }
 
 function formatTime(seconds: number): string {
@@ -61,6 +69,7 @@ export function RadioMainPlayer({
   volume,
   onChangeVolume,
   videoRef,
+  audioRef,
 }: RadioMainPlayerProps) {
   if (!item) {
     return (
@@ -124,7 +133,7 @@ export function RadioMainPlayer({
       </div>
 
       {/* 超大影音主视听视窗 (Enlarged Player Screen) */}
-      <div className="relative w-full aspect-video min-h-[360px] md:min-h-[460px] lg:min-h-[540px] max-h-[640px] rounded-2xl bg-black border border-border/80 overflow-hidden shadow-lg flex items-center justify-center group">
+      <div className={`relative w-full aspect-video min-h-[360px] md:min-h-[460px] lg:min-h-[540px] max-h-[640px] rounded-2xl ${isVideo ? 'bg-black' : 'bg-card'} border border-border/80 overflow-hidden shadow-lg flex items-center justify-center group`}>
         {isVideo ? (
           /* 大屏视频播放器视图 */
           <div className="relative size-full flex items-center justify-center bg-black">
@@ -157,62 +166,17 @@ export function RadioMainPlayer({
             </button>
           </div>
         ) : (
-          /* 纯音频模式：宽幕黑胶唱机与律动频谱 (纯净黑色无光晕底色) */
-          <div className="relative size-full flex items-center justify-center overflow-hidden bg-black">
-            <div className="relative flex flex-col md:flex-row items-center gap-8 md:gap-12 z-10 p-8">
-              {/* 大尺寸黑胶转盘 */}
-              <div
-                onClick={onTogglePlay}
-                className={`relative size-36 sm:size-48 md:size-56 rounded-full bg-zinc-900 border-4 sm:border-[6px] border-zinc-950 shadow-2xl flex items-center justify-center cursor-pointer transition-transform duration-700 shrink-0 ${
-                  isPlaying ? 'animate-[spin_6s_linear_infinite]' : ''
-                }`}
-                title="点击播放 / 暂停"
-              >
-                {/* 唱片黑胶同心圆环 */}
-                <div className="absolute inset-2 sm:inset-3 rounded-full border border-white/[0.04]" />
-                <div className="absolute inset-5 sm:inset-8 rounded-full border border-white/[0.05]" />
-                <div className="absolute inset-9 sm:inset-14 rounded-full border border-white/[0.04]" />
-
-                {/* 唱片中心彩胶标签 */}
-                <div className="size-16 sm:size-20 md:size-24 rounded-full bg-primary border-2 border-black/40 flex items-center justify-center shadow-md">
-                  {isPlaying ? (
-                    <Pause className="size-7 sm:size-8 text-primary-foreground" />
-                  ) : (
-                    <Play className="size-7 sm:size-8 ml-1 text-primary-foreground fill-current" />
-                  )}
-                </div>
-              </div>
-
-              {/* 动态律动声波频谱柱与时间 */}
-              <div className="flex flex-col items-center md:items-start gap-4 text-center md:text-left">
-                <div className="flex items-center gap-2 h-12">
-                  {[40, 75, 55, 90, 30, 85, 60, 100, 45, 70, 95, 35, 80, 50, 65, 90].map((h, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        height: isPlaying ? `${Math.max(15, (h * Math.sin((currentTime + i) * 1.5) + 100) / 2)}%` : '20%',
-                        transition: 'height 0.15s ease',
-                      }}
-                      className="w-1.5 rounded-full bg-primary/70"
-                    />
-                  ))}
-                </div>
-
-                <div className="space-y-1">
-                  <div className="text-sm font-semibold text-foreground flex items-center gap-2">
-                    <span className="font-mono text-primary font-bold text-base">
-                      {formatTime(currentTime)}
-                    </span>
-                    <span>/</span>
-                    <span className="font-mono text-muted-foreground">{formatTime(duration)}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {isPlaying ? '🎧 正在高保真磨耳朵中...' : '⏸️ 暂停中 · 按空格键随时继续'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          /* 纯音频模式：专业级 60FPS 电台演播室视听控制台 (Canvas 流体示波器 + 机械双针 VU 表 + 驻留峰值声谱) */
+          <RadioStudioVisualizer
+            item={item}
+            isPlaying={isPlaying}
+            onTogglePlay={onTogglePlay}
+            currentTime={currentTime}
+            duration={duration}
+            volume={volume}
+            playbackRate={playbackRate}
+            audioRef={audioRef}
+          />
         )}
       </div>
 
@@ -287,6 +251,7 @@ export function RadioMainPlayer({
 
             {/* 播放 / 暂停 大按钮 */}
             <button
+              id="radio-main-play-btn"
               onClick={onTogglePlay}
               title={isPlaying ? '暂停 (空格键)' : '播放 (空格键)'}
               className="size-11 sm:size-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
