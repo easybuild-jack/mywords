@@ -230,7 +230,7 @@ export const useTranslateStore = create<TranslateState>()(
       onRehydrateStorage: () => (state) => {
         if (!state) return
         // 保证默认预置题库始终合并存在
-        const customBooks = state.books || []
+        const customBooks = (state.books || []).filter((b) => b.isCustom)
         state.books = [...DEFAULT_TRANSLATION_BOOKS, ...customBooks]
         if (!state.books.some((b) => b.id === state.currentBookId)) {
           state.currentBookId = DEFAULT_TRANSLATION_BOOKS[0].id

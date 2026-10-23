@@ -24,6 +24,7 @@ Where there is a will, there is a way. | 有志者事竟成。`
 export function TranslateImportModal() {
   const { isImportModalOpen, setImportModalOpen, addCustomBook } = useTranslateStore()
   const [bookName, setBookName] = useState('')
+  const [selectedScenario, setSelectedScenario] = useState('日常生活')
   const [rawText, setRawText] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const fileInputId = useId()
@@ -73,6 +74,7 @@ export function TranslateImportModal() {
       name: finalName,
       description: `用户自主导入的练习题库，共 ${parsedSentences.length} 句`,
       category: 'custom',
+      scenario: selectedScenario,
       isCustom: true,
       totalSentences: parsedSentences.length,
       sentences: parsedSentences,
@@ -119,18 +121,37 @@ export function TranslateImportModal() {
 
         {/* 表单内容 */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
-          {/* 句库名称 */}
-          <div>
-            <label className="block text-xs font-semibold text-foreground mb-1.5">
-              题库名称 (可选)
-            </label>
-            <input
-              type="text"
-              value={bookName}
-              onChange={(e) => setBookName(e.target.value)}
-              placeholder="例如：新概念英语第三册、考研真题长难句..."
-              className="w-full px-4 py-2.5 rounded-xl bg-muted/30 border border-border focus:border-primary focus:outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
-            />
+          {/* 句库名称与场景归属 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label className="block text-xs font-semibold text-foreground mb-1.5">
+                题库名称 (可选)
+              </label>
+              <input
+                type="text"
+                value={bookName}
+                onChange={(e) => setBookName(e.target.value)}
+                placeholder="例如：新概念英语第三册、考研长难句..."
+                className="w-full px-4 py-2.5 rounded-xl bg-muted/30 border border-border focus:border-primary focus:outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-foreground mb-1.5">
+                所属场景分类
+              </label>
+              <select
+                value={selectedScenario}
+                onChange={(e) => setSelectedScenario(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl bg-muted/30 border border-border focus:border-primary focus:outline-none text-sm text-foreground cursor-pointer"
+              >
+                <option value="日常生活">☕ 日常生活</option>
+                <option value="职场商务">💼 职场商务</option>
+                <option value="旅游出行">✈️ 旅游出行</option>
+                <option value="餐饮美食">🍽️ 餐饮美食</option>
+                <option value="购物消费">🛍️ 购物消费</option>
+              </select>
+            </div>
           </div>
 
           {/* 文本内容输入与文件上传 */}

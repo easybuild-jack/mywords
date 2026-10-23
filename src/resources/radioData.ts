@@ -1,11 +1,9 @@
 export type RadioScenario =
   | '日常生活'
   | '职场商务'
-  | '机场出行'
+  | '旅游出行'
   | '餐饮美食'
   | '购物消费'
-  | '影视原声'
-  | '播客访谈'
   | string
 
 export type RadioMediaType = 'video' | 'audio'
@@ -31,11 +29,9 @@ export const SCENARIO_ICONS: Record<string, string> = {
   全部: '✨',
   日常生活: '☕',
   职场商务: '💼',
-  机场出行: '✈️',
+  旅游出行: '✈️',
   餐饮美食: '🍽️',
   购物消费: '🛍️',
-  影视原声: '🎬',
-  播客访谈: '🎙️',
 }
 
 export const DEFAULT_SAMPLE_RADIO_ITEMS: RadioItem[] = [
@@ -105,7 +101,7 @@ export const DEFAULT_SAMPLE_RADIO_ITEMS: RadioItem[] = [
     type: 'audio',
     src: 'https://dict.youdao.com/dictvoice?audio=May+I+see+your+passport+and+boarding+pass%2C+please%3F+Do+you+have+any+luggage+to+check+in%3F&type=1',
     duration: 110,
-    scenario: '机场出行',
+    scenario: '旅游出行',
     description: '国际航班值机、托运行李重量确认、过道/靠窗选座及登机口引导全流程。',
     transcript:
       'Agent: Good morning! Where are you flying today?\nPassenger: Good morning, I’m flying to London Heathrow on flight BA168.\nAgent: May I see your passport and flight itinerary, please?\nPassenger: Here you go.\nAgent: Thank you. Are you checking any luggage today or just carry-on?\nPassenger: Just this one suitcase to check, and I have a small backpack with me.',
@@ -135,7 +131,7 @@ export const DEFAULT_SAMPLE_RADIO_ITEMS: RadioItem[] = [
     type: 'audio',
     src: 'https://dict.youdao.com/dictvoice?audio=The+hardest+part+about+building+a+startup+isn+t+the+technology%2C+it+s+staying+focused+when+everything+seems+chaotic.&type=2',
     duration: 145,
-    scenario: '播客访谈',
+    scenario: '职场商务',
     description: '深度访谈语流，探讨人工智能创业、敏捷迭代与心智模型，带有地道母语连音与短语表达。',
     transcript:
       'Host: What would you say was the biggest misconception you had when founding your first company?\nGuest: Honestly, I used to think the product was 90% of the game. But down the road, you realize distribution and staying power are what make or break you. If you can’t iterate at lightning speed while keeping team morale high, the market will simply pass you by.',

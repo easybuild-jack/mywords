@@ -1,116 +1,77 @@
 'use client'
 
 import React from 'react'
-import {
-  BookOpen,
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  Trash2,
-  Sparkles,
-  Layers,
-  ChevronDown,
-} from 'lucide-react'
-import { useTranslateStore } from '@/store/useTranslateStore'
+import { Languages, Plus, Search, BookOpen, Layers } from 'lucide-react'
 
-export function TranslateHeader() {
-  const {
-    books,
-    currentBookId,
-    currentSentenceIndex,
-    selectBook,
-    deleteCustomBook,
-    prevSentence,
-    nextSentence,
-    setImportModalOpen,
-  } = useTranslateStore()
+interface TranslateHeaderProps {
+  searchQuery: string
+  onSearchChange: (q: string) => void
+  totalGroupsCount: number
+  totalSentencesCount: number
+  onOpenImport: () => void
+}
 
-  const currentBook = books.find((b) => b.id === currentBookId) || books[0]
-  const totalSentences = currentBook?.sentences?.length || 0
-
+export function TranslateHeader({
+  searchQuery,
+  onSearchChange,
+  totalGroupsCount,
+  totalSentencesCount,
+  onOpenImport,
+}: TranslateHeaderProps) {
   return (
-    <header className="shrink-0 w-full px-4 sm:px-6 py-3 border-b border-border/70 bg-card/40 backdrop-blur-md flex flex-wrap items-center justify-between gap-3">
-      {/* 左侧：题库切换下拉与导入入口 */}
-      <div className="flex items-center gap-2.5">
-        <div className="relative group">
-          <select
-            value={currentBookId}
-            onChange={(e) => selectBook(e.target.value)}
-            className="appearance-none pl-9 pr-8 py-2 rounded-xl bg-card border border-border/80 text-foreground font-semibold text-xs sm:text-sm hover:border-primary/50 focus:border-primary focus:outline-none transition-all cursor-pointer shadow-xs"
-          >
-            {books.map((book) => (
-              <option key={book.id} value={book.id}>
-                {book.name} ({book.sentences.length} 句) {book.isCustom ? '· 自定义' : ''}
-              </option>
-            ))}
-          </select>
+    <div className="shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border/60 select-none">
+      {/* 标题与统计微标 */}
+      <div className="flex items-center gap-3.5">
+        <div className="size-12 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent border border-primary/30 flex items-center justify-center p-2.5 shadow-[0_0_20px_rgba(var(--primary-rgb),0.2)]">
+          <Languages className="size-6 text-primary" />
+        </div>
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              句子翻译
+              <span className="text-xs px-2 py-0.5 rounded-full font-mono bg-primary/10 border border-primary/30 text-primary font-medium">
+                Sentence Hub
+              </span>
+            </h1>
+          </div>
+          <p className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+            <span>核心实词热身 · 语境整句拼写 · 深度语法精解</span>
+            <span className="inline-block size-1 rounded-full bg-border" />
+            <span className="flex items-center gap-1 font-mono">
+              <Layers className="size-3 text-muted-foreground" /> {totalGroupsCount} 分组
+            </span>
+            <span className="inline-block size-1 rounded-full bg-border" />
+            <span className="flex items-center gap-1 font-mono">
+              <BookOpen className="size-3 text-muted-foreground" /> {totalSentencesCount} 句子
+            </span>
+          </p>
+        </div>
+      </div>
 
-          <Layers className="size-4 text-primary absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <ChevronDown className="size-3.5 text-muted-foreground absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+      {/* 搜索与导入主入口 */}
+      <div className="flex items-center gap-3">
+        {/* 分组/场景/句子搜索 */}
+        <div className="relative w-48 sm:w-56 md:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/60" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="搜索分组名称 / 场景 / 句子..."
+            className="w-full h-9.5 pl-9 pr-3.5 rounded-xl bg-card/80 border border-border/80 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/30 transition-all shadow-xs"
+          />
         </div>
 
-        {/* 导入语句按钮 */}
+        {/* 触发导入练习语句弹窗 */}
         <button
           type="button"
-          onClick={() => setImportModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-all cursor-pointer shadow-xs"
+          onClick={onOpenImport}
+          className="group flex items-center gap-2 h-9.5 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_4px_16px_rgba(var(--primary-rgb),0.35),0_1px_2px_rgba(0,0,0,0.15)] border border-white/20 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
         >
-          <Plus className="size-3.5" />
-          <span className="hidden sm:inline">导入练习语句</span>
-          <span className="sm:hidden">导入</span>
-        </button>
-
-        {/* 删除自定义题库 */}
-        {currentBook?.isCustom && (
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm(`确定删除自定义句库「${currentBook.name}」吗？`)) {
-                deleteCustomBook(currentBook.id)
-              }
-            }}
-            title="删除此自定义句库"
-            className="p-2 rounded-xl border border-border/60 hover:border-destructive/50 hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all cursor-pointer"
-          >
-            <Trash2 className="size-3.5" />
-          </button>
-        )}
-      </div>
-
-      {/* 右侧：翻页控制器与进度 */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs font-mono font-medium text-muted-foreground mr-1">
-          进度: <strong className="text-foreground">{currentSentenceIndex + 1}</strong> / {totalSentences}
-        </span>
-
-        <button
-          type="button"
-          onClick={prevSentence}
-          disabled={currentSentenceIndex <= 0}
-          title="上一句 (ArrowLeft)"
-          className={`p-2 rounded-xl border transition-all cursor-pointer ${
-            currentSentenceIndex > 0
-              ? 'border-border bg-card hover:bg-muted text-foreground'
-              : 'border-border/30 text-muted-foreground/30 cursor-not-allowed'
-          }`}
-        >
-          <ChevronLeft className="size-4" />
-        </button>
-
-        <button
-          type="button"
-          onClick={nextSentence}
-          disabled={currentSentenceIndex >= totalSentences - 1}
-          title="下一句 (ArrowRight)"
-          className={`p-2 rounded-xl border transition-all cursor-pointer ${
-            currentSentenceIndex < totalSentences - 1
-              ? 'border-border bg-card hover:bg-muted text-foreground'
-              : 'border-border/30 text-muted-foreground/30 cursor-not-allowed'
-          }`}
-        >
-          <ChevronRight className="size-4" />
+          <Plus className="size-4 group-hover:rotate-90 transition-transform duration-300" />
+          <span>导入练习语句</span>
         </button>
       </div>
-    </header>
+    </div>
   )
 }

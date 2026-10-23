@@ -240,7 +240,8 @@ export interface TranslationBook {
   id: string;
   name: string;                  // 句库名称 (如 "经典五大基础句型", "日常高频情景交流")
   description?: string;
-  category: 'core' | 'daily' | 'business' | 'custom';
+  category: 'core' | 'daily' | 'business' | 'custom' | string;
+  scenario?: string;             // 场景分类 (如 "日常生活", "职场商务", "旅游出行" 等)
   isCustom?: boolean;
   totalSentences: number;
   sentences: TranslationSentenceItem[];

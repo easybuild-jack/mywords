@@ -23,11 +23,9 @@ interface RadioUploadModalProps {
 const COMMON_SCENARIOS = [
   '日常生活',
   '职场商务',
-  '机场出行',
+  '旅游出行',
   '餐饮美食',
   '购物消费',
-  '影视原声',
-  '播客访谈',
 ]
 
 export function RadioUploadModal({
