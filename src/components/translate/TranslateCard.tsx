@@ -443,15 +443,8 @@ export function TranslateCard({
       {/* 核心展示区 */}
       {stage === 'keyword' && currentKeyword ? (
         /* 阶段一：核心词单独拆分翻译 (正确后秒切下一词，无语法打扰) */
-        <div className="flex-1 flex flex-col justify-center items-center py-4 my-auto space-y-6 animate-fadeIn">
+        <div className="flex-1 flex flex-col justify-start items-center pt-6 sm:pt-8 xl:pt-10 space-y-6 animate-fadeIn">
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-muted-foreground">
-              <span>核心词汇 {currentKeywordIndex + 1} / {keywords.length}</span>
-              {currentKeyword.pos && (
-                <span className="text-primary font-bold">[{currentKeyword.pos}]</span>
-              )}
-            </div>
-
             {/* 译文字体增大 1 号，纯白且不粗 */}
             <div className="text-lg sm:text-xl xl:text-2xl font-normal text-white tracking-wide max-w-2xl mx-auto">
               {currentKeyword.meaningZh}
@@ -505,7 +498,7 @@ export function TranslateCard({
         </div>
       ) : (
         /* 阶段二：整句合龙翻译实战 */
-        <div className="flex-1 flex flex-col justify-center items-center py-4 my-auto space-y-6 animate-fadeIn">
+        <div className="flex-1 flex flex-col justify-start items-center pt-6 sm:pt-8 xl:pt-10 space-y-6 animate-fadeIn">
           <div className="text-center space-y-1.5">
             <p className="text-xs font-medium text-muted-foreground/50 tracking-wider">
               请根据译文输入对应的英文整句
