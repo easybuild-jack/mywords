@@ -19,11 +19,18 @@ import {
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
+interface NavItem {
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  href: string
+  comingSoon?: boolean
+}
+
 export function AppSidebar() {
   const pathname = usePathname()
   const setSettingsModalOpen = useWorkspaceStore((state) => state.setSettingsModalOpen)
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { label: '单词查询', icon: BookA, href: '/dictionary' },
     { label: '单词学习', icon: GraduationCap, href: '/learn' },
     { label: '单词默写', icon: PenLine, href: '/dictation' },
@@ -34,7 +41,7 @@ export function AppSidebar() {
     { label: '词根词缀', icon: Sprout, href: '/roots' },
     { label: '基础语法', icon: SpellCheck, href: '/grammar' },
     { label: '听力电台', icon: Radio, href: '/radio' },
-    { label: '句子翻译', icon: Languages, href: '/translate', comingSoon: true },
+    { label: '句子翻译', icon: Languages, href: '/translate' },
   ]
 
   return (
