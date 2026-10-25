@@ -1,10 +1,12 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
 import './globals.css'
-import { Sidebar } from '@/components/layout/Sidebar'
+import { AppSidebar } from '@/components/layout/AppSidebar'
 import { RouteProgressBar } from '@/components/layout/RouteProgressBar'
 import { PageTransitionWrapper } from '@/components/layout/PageTransitionWrapper'
 import { SkinApplier } from '@/components/layout/SkinApplier'
+import { PwaRegistrar } from '@/components/layout/PwaRegistrar'
+import { PwaInstallPrompt } from '@/components/layout/PwaInstallPrompt'
 import { ImportModal } from '@/components/modals/ImportModal'
 import { SettingsModal } from '@/components/modals/SettingsModal'
 import { AiApiKeyPromptModal } from '@/components/modals/AiApiKeyPromptModal'
@@ -16,9 +18,25 @@ import { InitialDictionaryDataLoader } from '@/components/layout/InitialDictiona
 export const metadata: Metadata = {
   title: 'LinguaLoop — 您的私人专属英语学习搭子',
   description: '打造属于您的专属英语学习闭环空间，结合音节拼读、构词法拆解与肌肉记忆的高效记忆系统。',
-  icons: {
-    icon: '/favicon.ico',
+  applicationName: 'LinguaLoop',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'LinguaLoop',
+    statusBarStyle: 'black-translucent',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icons/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icons/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: '/icons/icon-192.png',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0E1216',
 }
 
 export default function RootLayout({
@@ -35,7 +53,7 @@ export default function RootLayout({
         </Suspense>
 
         {/* 左侧全局常驻侧边栏 */}
-        <Sidebar />
+        <AppSidebar />
 
         {/* 右侧主内容区 */}
         <main className="flex-1 h-screen overflow-y-auto overflow-x-hidden flex flex-col relative custom-scrollbar">
@@ -48,6 +66,10 @@ export default function RootLayout({
 
         {/* 皮肤应用器（无 UI，挂载即生效） */}
         <SkinApplier />
+
+        {/* PWA：Service Worker 注册器 + 桌面安装提示浮窗 */}
+        <PwaRegistrar />
+        <PwaInstallPrompt />
 
         {/* 全局弹窗 */}
         <ImportModal />

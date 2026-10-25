@@ -13,15 +13,24 @@ export interface CollectedWordPayload {
   createdAt: number
 }
 
-// 检查是否具备 Upstash Redis 配置
-const hasRedisConfig = Boolean(
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-)
+// 检查是否具备 Redis 配置
+// 同时兼容两套环境变量名：
+//   - Upstash 原生：UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+//   - Vercel KV（底层同为 Upstash）：KV_REST_API_URL / KV_REST_API_TOKEN
+const REDIS_URL_ENV =
+  process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL
+const REDIS_TOKEN_ENV =
+  process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN
+
+const hasRedisConfig = Boolean(REDIS_URL_ENV && REDIS_TOKEN_ENV)
 
 let redisClient: Redis | null = null
 if (hasRedisConfig) {
   try {
-    redisClient = Redis.fromEnv()
+    redisClient = new Redis({
+      url: REDIS_URL_ENV as string,
+      token: REDIS_TOKEN_ENV as string,
+    })
   } catch (err) {
     console.warn('[CollectStore] Failed to initialize Redis from env:', err)
   }

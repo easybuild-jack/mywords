@@ -35,7 +35,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
                 <div className="size-16 rounded-full border-[2.5px] border-primary/20 border-t-primary animate-spin" />
                 <img
                   src="/logo111.png"
-                  alt="MyWords"
+                  alt="LinguaLoop"
                   className="size-9 object-contain absolute animate-pulse select-none pointer-events-none"
                 />
               </div>

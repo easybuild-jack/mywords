@@ -155,7 +155,7 @@ const INITIAL_MESSAGES: AiMessage[] = [
     id: 'welcome-msg',
     role: 'assistant',
     content:
-      '你好！我是你的专属 **MyWords Copilot** ✨\n\n你可以随时向我提问关于英语单词记忆、构词法拆解、语法疑难、长难句结构剖析或学术写作润色。\n\n> ⚠️ **温馨提示**：作为您的专属智能导师，我专注于英语学习与语言能力提升，会礼貌拒绝一切与英语学习无关的外部话题哦。',
+      '你好！我是你的专属 **LinguaLoop Copilot** ✨\n\n你可以随时向我提问关于英语单词记忆、构词法拆解、语法疑难、长难句结构剖析或学术写作润色。\n\n> ⚠️ **温馨提示**：作为您的专属智能导师，我专注于英语学习与语言能力提升，会礼貌拒绝一切与英语学习无关的外部话题哦。',
     timestamp: Date.now(),
   },
 ]
@@ -224,7 +224,7 @@ export const useAiAssistantStore = create<AiAssistantState>()(
               id: `welcome-${Date.now()}`,
               role: 'assistant',
               content:
-                '你好！我是你的专属 **MyWords Copilot** ✨\n新对话已开启，请问在英语学习、语法词汇或长难句方面有什么可以协助你？',
+                '你好！我是你的专属 **LinguaLoop Copilot** ✨\n新对话已开启，请问在英语学习、语法词汇或长难句方面有什么可以协助你？',
               timestamp: Date.now(),
             },
           ],

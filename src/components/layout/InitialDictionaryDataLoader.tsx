@@ -173,7 +173,7 @@ export function InitialDictionaryDataLoader() {
               <div className="size-13 flex items-center justify-center">
                 <img
                   src="/logo111.png"
-                  alt="MyWords Mascot"
+                  alt="LinguaLoop Mascot"
                   className="size-full object-contain"
                 />
               </div>

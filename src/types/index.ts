@@ -198,3 +198,62 @@ export interface ShortcutConfig {
   toggleStar: string;          // 加入/移出生词本 (默认 Alt+W)
 }
 
+// ==========================================
+// 5. 句子翻译与语法研习模型
+// ==========================================
+
+export interface SentenceTokenGrammar {
+  text: string;                  // 原始文本片段 (如 "fox", "over")
+  cleanText: string;             // 纯字母比对，无标点符号 (如 "fox")
+  roleZh?: string;               // 语法成分中文 (如 "主语", "谓语动词", "地点状语")
+  roleCode?: string;             // 语法成分代号 (如 "S", "V", "O", "P", "Adv", "Attr", "Comp")
+  pos?: string;                  // 词性 (如 "n.", "v.", "adj.", "prep.")
+  explanation?: string;          // 针对该单词在句中作用的点拨
+}
+
+export interface SentenceKeywordItem {
+  id: string;                    // 唯一标识 (如 "k1")
+  word: string;                  // 英文核心单词 (如 "Birds", "fly", "sky")
+  meaningZh: string;             // 中文含义提示 (如 "鸟儿", "飞翔", "天空")
+  pos?: string;                  // 词性 (如 "n.", "v.", "adj.")
+  explanation?: string;          // 词义或变形说明
+}
+
+export interface TranslationSentenceItem {
+  id: string;                    // 唯一标识
+  sentenceEn: string;            // 英文原句 (如 "The quick brown fox jumps over the lazy dog.")
+  sentenceZh: string;            // 中文翻译 (如 "敏捷的棕色狐狸跃过了懒狗。")
+  category?: string;             // 分类标签 (如 "基础句型", "日常交流", "商务职场")
+  difficulty?: 'easy' | 'medium' | 'hard';
+  keywords?: SentenceKeywordItem[]; // 该句子的关键核心词汇列表 (先热身词汇，通关后再翻译整句)
+  grammar?: {
+    patternZh: string;           // 句型中文 (如 "主谓状", "主系表", "主谓宾")
+    patternCode: string;         // 句型公式 (如 "S + V + A", "S + V-link + P")
+    summary: string;             // 句型核心要领点拨
+    tokens: SentenceTokenGrammar[]; // 逐词语法成分标注
+  };
+  isCustom?: boolean;            // 是否为用户导入
+  createdAt?: number;
+}
+
+export interface TranslationBook {
+  id: string;
+  name: string;                  // 句库名称 (如 "经典五大基础句型", "日常高频情景交流")
+  description?: string;
+  category: 'core' | 'daily' | 'business' | 'custom' | string;
+  scenario?: string;             // 场景分类 (如 "日常生活", "职场商务", "旅游出行" 等)
+  isCustom?: boolean;
+  totalSentences: number;
+  sentences: TranslationSentenceItem[];
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface TranslationRecord {
+  sentenceId: string;
+  bookId: string;
+  isCompleted: boolean;
+  errorCount: number;
+  lastPracticedAt: number;
+}
+

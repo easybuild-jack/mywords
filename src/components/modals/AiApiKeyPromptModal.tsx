@@ -66,7 +66,7 @@ export function AiApiKeyPromptModal() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[11px] font-semibold tracking-wider text-primary uppercase bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                MyWords Copilot
+                LinguaLoop Copilot
               </span>
             </div>
             <h3 id="ai-key-modal-title" className="text-lg font-bold text-white tracking-tight">
@@ -77,7 +77,7 @@ export function AiApiKeyPromptModal() {
 
         {/* 描述内容 */}
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6">
-          使用 <strong className="text-foreground">MyWords Copilot</strong> 智能问答与深度英语辅导功能，需要先配置大模型服务商密钥。
+          使用 <strong className="text-foreground">LinguaLoop Copilot</strong> 智能问答与深度英语辅导功能，需要先配置大模型服务商密钥。
         </p>
 
         {/* 支持的服务商徽标提示 */}

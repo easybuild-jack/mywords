@@ -938,7 +938,7 @@ export function SettingsModal() {
                       <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/20 text-primary border border-primary/30">
                         场景一：智能问答
                       </span>
-                      <h4 className="text-sm font-semibold text-white">MyWords Copilot 系统提示词 (System Prompt)</h4>
+                      <h4 className="text-sm font-semibold text-white">LinguaLoop Copilot 系统提示词 (System Prompt)</h4>
                     </div>
                     <button
                       type="button"
@@ -958,7 +958,7 @@ export function SettingsModal() {
                     value={aiConfig.systemPrompt}
                     onChange={(e) => updateAiConfig({ systemPrompt: e.target.value })}
                     className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-xs font-mono text-white/90 focus:outline-none focus:border-primary/60 leading-relaxed resize-none"
-                    placeholder="输入 MyWords Copilot 系统提示词..."
+                    placeholder="输入 LinguaLoop Copilot 系统提示词..."
                   />
                   <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/20 text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5">
                     <span className="text-primary font-bold text-sm">✨</span>
@@ -978,7 +978,7 @@ export function SettingsModal() {
                 <div>
                   <h3 className="text-base font-bold text-foreground uppercase tracking-wider">外部小工具生词收集 (External Sync)</h3>
                   <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                    在您的 AI 翻译小工具中点击收藏，即可通过 HTTP 接口实时将单词列表推送到 MyWords 生错词本。
+                    在您的 AI 翻译小工具中点击收藏，即可通过 HTTP 接口实时将单词列表推送到 LinguaLoop 生错词本。
                   </p>
                 </div>
 

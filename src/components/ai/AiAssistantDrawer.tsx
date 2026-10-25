@@ -550,10 +550,10 @@ export function AiAssistantDrawer() {
                   {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
                       <div className="size-14 rounded-2xl bg-card border border-border flex items-center justify-center p-2 mb-3 shadow-sm group/welcome cursor-pointer">
-                        <img src="/logo222.png" alt="MyWords Copilot" className="size-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.34,1.4,0.64,1)] group-hover/welcome:rotate-[360deg] group-hover/welcome:scale-110" />
+                        <img src="/logo222.png" alt="LinguaLoop Copilot" className="size-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.34,1.4,0.64,1)] group-hover/welcome:rotate-[360deg] group-hover/welcome:scale-110" />
                       </div>
                       <p className="text-sm font-medium text-foreground mb-1">
-                        我是你的专属 MyWords Copilot ✨
+                        我是你的专属 LinguaLoop Copilot ✨
                       </p>
                       <p className="text-xs text-muted-foreground max-w-[270px] leading-relaxed">
                         专注解答英语词汇构词、语法疑难、长难句结构拆解与学术写作润色。
@@ -576,7 +576,7 @@ export function AiAssistantDrawer() {
                   {isThinking && (
                     <div className="flex items-center gap-2.5 p-2.5 px-3 rounded-xl bg-card border border-border text-xs text-muted-foreground animate-pulse my-3 w-fit shadow-sm">
                       <img src="/logo222.png" alt="思考中" className="size-3.5 object-contain animate-spin" />
-                      <span>MyWords Copilot 正在深入分析并组织回复...</span>
+                      <span>LinguaLoop Copilot 正在深入分析并组织回复...</span>
                     </div>
                   )}
 
@@ -640,7 +640,7 @@ export function AiAssistantDrawer() {
                   value={inputPrompt}
                   onChange={(e) => setInputPrompt(e.target.value)}
                   onKeyDown={handleTextareaKeyDown}
-                  placeholder="向 MyWords Copilot 提问（语法、长难句、词根、写作），按 Enter 发送..."
+                  placeholder="向 LinguaLoop Copilot 提问（语法、长难句、词根、写作），按 Enter 发送..."
                   rows={2}
                   className="w-full bg-transparent px-3.5 pt-2.5 pb-9 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none resize-none caret-primary leading-relaxed"
                 />
