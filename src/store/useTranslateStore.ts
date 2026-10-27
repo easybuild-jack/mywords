@@ -13,6 +13,7 @@ interface TranslateState {
   isSentenceCompleted: boolean
   audioRate: number
   isSpeaking: boolean
+  isAutoPlayAudio: boolean
   completedSentenceIds: Record<string, boolean>
   isImportModalOpen: boolean
   isGrammarModalOpen: boolean
@@ -27,10 +28,13 @@ interface TranslateState {
   setPeeking: (peeking: boolean) => void
   setAudioRate: (rate: number) => void
   toggleAudioRate: () => void
+  setAutoPlayAudio: (enabled: boolean) => void
+  toggleAutoPlayAudio: () => void
   setSentenceCompleted: (completed: boolean) => void
   setGrammarModalOpen: (open: boolean) => void
   repeatCurrentSentence: () => void
-  playSentenceAudio: (rate?: number) => void
+  playSentenceAudio: (textOrRate?: string | number, customRate?: number) => void
+  playWordAudio: (word?: string, customRate?: number) => void
   stopSentenceAudio: () => void
   addCustomBook: (book: TranslationBook) => void
   deleteCustomBook: (bookId: string) => void
@@ -47,6 +51,7 @@ export const useTranslateStore = create<TranslateState>()(
       isSentenceCompleted: false,
       audioRate: 0.88,
       isSpeaking: false,
+      isAutoPlayAudio: true,
       completedSentenceIds: {},
       isImportModalOpen: false,
       isGrammarModalOpen: false,
@@ -146,6 +151,14 @@ export const useTranslateStore = create<TranslateState>()(
         set({ audioRate: nextRate })
       },
 
+      setAutoPlayAudio: (enabled: boolean) => {
+        set({ isAutoPlayAudio: enabled })
+      },
+
+      toggleAutoPlayAudio: () => {
+        set((state) => ({ isAutoPlayAudio: !state.isAutoPlayAudio }))
+      },
+
       setSentenceCompleted: (completed: boolean) => {
         const { books, currentBookId, currentSentenceIndex, completedSentenceIds } = get()
         const currentBook = books.find((b) => b.id === currentBookId) || books[0]
@@ -159,19 +172,54 @@ export const useTranslateStore = create<TranslateState>()(
         })
       },
 
-      playSentenceAudio: (customRate?: number) => {
-        const { books, currentBookId, currentSentenceIndex, audioRate } = get()
+      playWordAudio: (word?: string, customRate?: number) => {
+        const { books, currentBookId, currentSentenceIndex } = get()
         const currentBook = books.find((b) => b.id === currentBookId) || books[0]
         const currentSentence = currentBook.sentences[currentSentenceIndex]
-        if (!currentSentence?.sentenceEn) return
+
+        let targetWord = word?.trim()
+        if (!targetWord && currentSentence?.keywords?.length) {
+          targetWord = currentSentence.keywords[0]?.word
+        }
+        if (!targetWord) return
 
         const phoneticPreference =
           useWorkspaceStore.getState().phoneticPreference || 'us'
-        const rateToUse = customRate ?? audioRate
+        const rateToUse = customRate ?? 1.0
 
+        audioEngine.cancelPendingPlayback()
+        set({ isSpeaking: true })
+        audioEngine
+          .playPronunciationOnce(targetWord, phoneticPreference, rateToUse)
+          .finally(() => {
+            set({ isSpeaking: false })
+          })
+      },
+
+      playSentenceAudio: (textOrRate?: string | number, customRate?: number) => {
+        const { books, currentBookId, currentSentenceIndex, audioRate } = get()
+        const currentBook = books.find((b) => b.id === currentBookId) || books[0]
+        const currentSentence = currentBook.sentences[currentSentenceIndex]
+
+        let sentenceText = currentSentence?.sentenceEn
+        let rateToUse = audioRate
+
+        if (typeof textOrRate === 'string') {
+          sentenceText = textOrRate
+          if (typeof customRate === 'number') rateToUse = customRate
+        } else if (typeof textOrRate === 'number') {
+          rateToUse = textOrRate
+        }
+
+        if (!sentenceText?.trim()) return
+
+        const phoneticPreference =
+          useWorkspaceStore.getState().phoneticPreference || 'us'
+
+        audioEngine.cancelPendingPlayback()
         set({ isSpeaking: true })
         audioEngine.playSentence(
-          currentSentence.sentenceEn,
+          sentenceText,
           phoneticPreference,
           rateToUse,
           () => {
@@ -224,6 +272,7 @@ export const useTranslateStore = create<TranslateState>()(
       partialize: (state) => ({
         currentBookId: state.currentBookId,
         audioRate: state.audioRate,
+        isAutoPlayAudio: state.isAutoPlayAudio,
         completedSentenceIds: state.completedSentenceIds,
         books: state.books.filter((b) => b.isCustom),
       }),

@@ -268,6 +268,9 @@ class AudioEngine {
       this.currentPronunciation.pause()
       this.currentPronunciation.src = ''
     }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
   }
 
   /**

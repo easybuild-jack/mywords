@@ -4,8 +4,13 @@ import React from 'react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 
+interface PracticeStageFrameProps {
+  children: React.ReactNode
+  hasStarted?: boolean
+}
+
 /** 练习页共用的舞台框架：左右切词按钮与居中卡片容器 */
-export function PracticeStageFrame({ children }: { children: React.ReactNode }) {
+export function PracticeStageFrame({ children, hasStarted = true }: PracticeStageFrameProps) {
   const prevWord = useWorkspaceStore((s) => s.prevWord)
   const nextWord = useWorkspaceStore((s) => s.nextWord)
 
@@ -13,8 +18,13 @@ export function PracticeStageFrame({ children }: { children: React.ReactNode }) 
     <>
       <button
         onClick={prevWord}
-        className="shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 transition-all cursor-pointer"
-        title="上一词 (←)"
+        disabled={!hasStarted}
+        className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all ${
+          hasStarted
+            ? 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 cursor-pointer'
+            : 'text-[#9CA3AF]/40 border-white/5 opacity-40 cursor-not-allowed'
+        }`}
+        title={hasStarted ? '上一词 (←)' : '请先点击开始学习'}
       >
         <ArrowLeft className="size-5 xl:size-6" />
       </button>
@@ -27,8 +37,13 @@ export function PracticeStageFrame({ children }: { children: React.ReactNode }) 
 
       <button
         onClick={() => nextWord()}
-        className="shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 transition-all cursor-pointer"
-        title="下一词 (→)"
+        disabled={!hasStarted}
+        className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all ${
+          hasStarted
+            ? 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95 cursor-pointer'
+            : 'text-[#9CA3AF]/40 border-white/5 opacity-40 cursor-not-allowed'
+        }`}
+        title={hasStarted ? '下一词 (→)' : '请先点击开始学习'}
       >
         <ArrowRight className="size-5 xl:size-6" />
       </button>

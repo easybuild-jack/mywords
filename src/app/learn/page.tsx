@@ -19,6 +19,9 @@ export default function LearnPage() {
       !s.isUnitLoading
     )
   })
+  // 是否已点击「开始学习」进入流程 (从菜单切入时为 false，防止页面切换自动播放太突兀)
+  const [hasStarted, setHasStarted] = useState(false)
+
   const enterMode = useWorkspaceStore((s) => s.enterMode)
   const loadCurrentUnitWords = useWorkspaceStore((s) => s.loadCurrentUnitWords)
   const playCurrentWordAudio = useWorkspaceStore((s) => s.playCurrentWordAudio)
@@ -53,8 +56,7 @@ export default function LearnPage() {
           if (loadSequence === null && !useWorkspaceStore.getState().isErrorPracticeActive) return
         }
 
-        // 仅在当前加载的词表确认匹配目标单元且就绪时，才触发当前单词发音
-        playCurrentWordAudio()
+        // 不在此处自动播放语音，等待用户点击「开始学习」按钮后再开启发音，避免切页突兀！
       } finally {
         // 只有最后一次仍存活的初始化才能开放页面，旧请求不能发音或回写 ready。
         if (!cancelled) setIsReady(true)
@@ -64,14 +66,24 @@ export default function LearnPage() {
     return () => {
       cancelled = true
     }
-  }, [enterMode, loadCurrentUnitWords, playCurrentWordAudio, syncStarredWordIds])
+  }, [enterMode, loadCurrentUnitWords, syncStarredWordIds])
+
+  // 用户点击「开始学习」或按空格/回车进入流程
+  const handleStartLearning = React.useCallback(() => {
+    setHasStarted(true)
+    playCurrentWordAudio()
+  }, [playCurrentWordAudio])
 
   return (
     <div className="flex-1 min-h-full flex flex-col justify-between relative pb-1">
       <HeaderToolbar />
 
       <div className="flex-1 flex items-center justify-center relative w-full px-4 py-2 my-auto shrink-0">
-        <LearnStage isReady={isReady} />
+        <LearnStage
+          isReady={isReady}
+          hasStarted={hasStarted}
+          onStartLearning={handleStartLearning}
+        />
       </div>
 
       <PracticeFooter isReady={isReady} />

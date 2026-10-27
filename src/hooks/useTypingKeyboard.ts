@@ -7,6 +7,8 @@ import { isShortcutMatch, DEFAULT_SHORTCUTS } from '@/lib/shortcuts'
 interface UseTypingKeyboardOptions {
   /** 学习页的单词本来就摆在眼前，偷看没有意义，只有默写页需要 */
   enablePeek?: boolean
+  /** 处于未开始状态或暂停时禁用键盘监听 */
+  disabled?: boolean
 }
 
 /**
@@ -15,7 +17,7 @@ interface UseTypingKeyboardOptions {
  * 学习页与默写页都依赖这套逻辑，包括「按住 Tab 偷看、松手收起」的 keydown/keyup 配对，
  * 因此只能有一份实现，否则两个页面的键盘行为会随时间漂移。
  */
-export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptions = {}) {
+export function useTypingKeyboard({ enablePeek = false, disabled = false }: UseTypingKeyboardOptions = {}) {
   const shortcuts = useWorkspaceStore((s) => s.shortcuts)
   const isUnitFinished = useWorkspaceStore((s) => s.isUnitFinished)
   const handleCharacterInput = useWorkspaceStore((s) => s.handleCharacterInput)
@@ -32,7 +34,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (isUnitFinished) return
+      if (disabled || isUnitFinished) return
 
       // 忽略输入框/下拉框/模态框中的按键，否则方向键会同时改选项和切词
       const target = e.target as HTMLElement
@@ -102,6 +104,7 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
       }
     },
     [
+      disabled,
       enablePeek,
       isUnitFinished,
       isErrorPracticeActive,
@@ -122,11 +125,12 @@ export function useTypingKeyboard({ enablePeek = false }: UseTypingKeyboardOptio
   // 松开按键收起提示，实现「按住偷看」
   const handleKeyUp = useCallback(
     (e: KeyboardEvent) => {
+      if (disabled) return
       if (enablePeek && isShortcutMatch(e, shortcuts.peekHint)) {
         peekHint(false)
       }
     },
-    [enablePeek, peekHint, shortcuts.peekHint]
+    [disabled, enablePeek, peekHint, shortcuts.peekHint]
   )
 
   useEffect(() => {
