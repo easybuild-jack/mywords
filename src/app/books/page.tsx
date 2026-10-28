@@ -421,6 +421,17 @@ function BooksHubContent() {
     setLoadingUnitIndex(idx)
     startRouteProgressBar()
     try {
+      if (targetMode === 'learn') {
+        useWorkspaceStore.getState().setShouldAutoStartLearn(true)
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('mywords_auto_start_learn', 'true')
+        }
+      } else if (targetMode === 'dictation') {
+        useWorkspaceStore.getState().setShouldAutoStartDictation(true)
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+        }
+      }
       await commitBookAndUnit(activeBook.id, idx, targetMode)
       router.push(targetRoute)
     } catch (err) {

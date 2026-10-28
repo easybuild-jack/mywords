@@ -9,6 +9,7 @@ import { SentenceGrammarModal } from '@/components/translate/SentenceGrammarModa
 import { TranslateImportModal } from '@/components/translate/TranslateImportModal'
 import { useTranslateStore } from '@/store/useTranslateStore'
 import { SCENARIO_ICONS } from '@/resources/radioData'
+import { audioEngine } from '@/core/audioEngine'
 import {
   BookOpen,
   ArrowLeft,
@@ -184,7 +185,10 @@ export default function TranslatePage() {
             {/* Tab 1: 句库列表 (默认) */}
             <button
               type="button"
-              onClick={() => setActiveTab('list')}
+              onClick={() => {
+                audioEngine.cancelPendingPlayback()
+                setActiveTab('list')
+              }}
               className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                 activeTab === 'list'
                   ? 'bg-primary text-primary-foreground shadow-sm'
@@ -247,7 +251,10 @@ export default function TranslatePage() {
 
               <button
                 type="button"
-                onClick={() => setActiveTab('list')}
+                onClick={() => {
+                  audioEngine.cancelPendingPlayback()
+                  setActiveTab('list')
+                }}
                 className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card border border-border/70 transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="size-3.5" />
@@ -330,6 +337,7 @@ export default function TranslatePage() {
                     totalSentences={totalSentences}
                     onNext={nextSentence}
                     onPrev={prevSentence}
+                    isActive={activeTab === 'practice'}
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center select-none space-y-4">

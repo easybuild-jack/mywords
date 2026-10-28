@@ -233,6 +233,14 @@ interface WorkspaceState {
   commitBookAndUnit: (bookId: string, unitIndex: number, targetMode: PracticeMode) => Promise<void>
   _hasHydrated: boolean
   setHasHydrated: (hydrated: boolean) => void
+
+  /** 是否在进入单词跟学页时自动开始（例如从词库选章直达），跳过开始过渡层 */
+  shouldAutoStartLearn: boolean
+  setShouldAutoStartLearn: (val: boolean) => void
+
+  /** 是否在进入单词默写页时自动开始（例如从词库选章直达），跳过开始过渡层 */
+  shouldAutoStartDictation: boolean
+  setShouldAutoStartDictation: (val: boolean) => void
   
   // 单元与词库加载过渡控制
   isUnitLoading: boolean
@@ -506,6 +514,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
       isDictationPhoneticEnabled: false,
       isDictationMeaningEnabled: true,
+      shouldAutoStartLearn: false,
+      setShouldAutoStartLearn: (val: boolean) => set({ shouldAutoStartLearn: val }),
+      shouldAutoStartDictation: false,
+      setShouldAutoStartDictation: (val: boolean) => set({ shouldAutoStartDictation: val }),
       isUnitLoading: false,
       unitLoadingTarget: null,
       setIsUnitLoading: (loading: boolean, target = null) =>
@@ -665,7 +677,12 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           ? get().loopCounts
           : withLoopCount(get().loopCounts, get().mode, get().loopCountSetting)
 
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+        }
+
         set({
+          shouldAutoStartDictation: true,
           cursors: {
             ...saveActiveCursor(get),
             error: { ...EMPTY_CURSOR, activeWordIndex: entryIndex, hasLiveState: true },
@@ -704,7 +721,12 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         const learnLoop = loopCounts.learn
 
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('mywords_auto_start_learn', 'true')
+        }
+
         set({
+          shouldAutoStartLearn: true,
           cursors: {
             ...saveActiveCursor(get),
             error: { ...EMPTY_CURSOR, activeWordIndex: entryIndex, hasLiveState: true },
@@ -907,7 +929,16 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             unitIndex,
           }
 
+          if (targetMode === 'learn' && typeof window !== 'undefined') {
+            sessionStorage.setItem('mywords_auto_start_learn', 'true')
+          }
+          if (targetMode === 'dictation' && typeof window !== 'undefined') {
+            sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+          }
+
           set({
+            shouldAutoStartLearn: targetMode === 'learn',
+            shouldAutoStartDictation: targetMode === 'dictation',
             currentBookId: book.id,
             currentBook: book,
             mode: targetMode,
@@ -1119,10 +1150,10 @@ export const useWorkspaceStore = create<WorkspaceState>()(
       },
 
       playDictationCue: () => {
-        const { mode, dictationCueMode, isAutoPlayAudio, phoneticPreference, audioRate } = get()
+        const { mode, isAutoPlayAudio, phoneticPreference, audioRate } = get()
         const currentWord = get().getCurrentWord()
         if (!currentWord || !isAutoPlayAudio) return
-        if (mode !== 'dictation' || dictationCueMode !== 'listen') return
+        if (mode !== 'dictation') return
         audioEngine.playPronunciation(currentWord.name, phoneticPreference, audioRate)
       },
 

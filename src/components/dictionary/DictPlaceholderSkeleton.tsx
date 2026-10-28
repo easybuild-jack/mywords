@@ -1,15 +1,24 @@
 'use client'
 
 import React from 'react'
-import { Search, Quote, BookOpen, Volume2, Star } from 'lucide-react'
+import { Search, Quote, BookOpen, Star, History } from 'lucide-react'
+import type { DictHistoryItem } from '@/lib/dictHistory'
 
 /**
  * 单词查询页首次未查询时的占位骨架屏卡片
  * 与真实的 DictWordCard 采用 1:1 的几何分栏与尺寸规范：
- * 上半区：音标、大单词展示槽、释义槽
+ * 上半区：音标、大单词展示槽、释义槽（或最近搜索快捷入口）
  * 下半区：左侧 8/12 双语例句槽、右侧 4/12 词根助记槽
  */
-export function DictPlaceholderSkeleton() {
+interface DictPlaceholderSkeletonProps {
+  history?: DictHistoryItem[]
+  onQuickSearch?: (word: string) => void
+}
+
+export function DictPlaceholderSkeleton({
+  history = [],
+  onQuickSearch,
+}: DictPlaceholderSkeletonProps = {}) {
   return (
     <div className="relative w-full h-full flex flex-col justify-between pt-3 xl:pt-4 2xl:pt-5 pb-3.5 xl:pb-4 2xl:pb-5 px-5 sm:px-7 xl:px-9 2xl:px-11 text-center select-none overflow-hidden animate-in fade-in-50 duration-300">
       {/* 顶部左侧占位徽标 */}
@@ -47,10 +56,31 @@ export function DictPlaceholderSkeleton() {
           </div>
         </div>
 
-        {/* 单词释义骨架 */}
-        <div className="min-h-9 xl:min-h-11 flex items-center justify-center px-4">
-          <div className="h-5 xl:h-6 w-64 sm:w-80 rounded-xl bg-white/[0.03] border border-white/5 animate-pulse" />
-        </div>
+        {/* 单词释义骨架 / 最近搜索快捷入口 */}
+        {history.length > 0 ? (
+          <div className="flex flex-col items-center gap-1.5 pt-0.5">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60 font-medium">
+              <History className="size-3 text-primary/70" />
+              <span>最近查询记录</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-xl">
+              {history.slice(0, 8).map((item) => (
+                <button
+                  key={item.word}
+                  type="button"
+                  onClick={() => onQuickSearch?.(item.word)}
+                  className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] hover:text-primary hover:border-primary/30 border border-white/10 text-xs font-mono text-white/80 transition-all cursor-pointer pointer-events-auto"
+                >
+                  {item.word}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="min-h-9 xl:min-h-11 flex items-center justify-center px-4">
+            <div className="h-5 xl:h-6 w-64 sm:w-80 rounded-xl bg-white/[0.03] border border-white/5 animate-pulse" />
+          </div>
+        )}
       </div>
 
       {/* 下半区：左右分栏排版（左侧 8/12 例句区；右侧 4/12 词根区） */}

@@ -18,6 +18,15 @@ import { queryAiWordCore } from '@/lib/aiWordCore'
 import { getWordValidationError, isLikelyEnglishWord } from '@/lib/wordValidation'
 import { AiDictionaryLookupError } from '@/lib/aiPrompts'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
+import { formatMeaningText } from '@/lib/wordDisplay'
+import {
+  loadDictHistory,
+  addDictHistoryItem,
+  updateDictHistoryMeaning,
+  removeDictHistoryItem,
+  clearDictHistory,
+  type DictHistoryItem,
+} from '@/lib/dictHistory'
 
 const LAST_LOOKUP_STORAGE_KEY = 'mywords_last_dict_lookup_v1'
 
@@ -56,6 +65,9 @@ export default function DictionaryPage() {
   const [aiError, setAiError] = useState<string | null>(null)
   const [aiWordNotFound, setAiWordNotFound] = useState(false)
 
+  // 查词历史记录 (上限 20 条)
+  const [history, setHistory] = useState<DictHistoryItem[]>([])
+
   // 查词输入与状态
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
@@ -68,15 +80,23 @@ export default function DictionaryPage() {
   const aiAbortRef = useRef<AbortController | null>(null)
   const searchSequenceRef = useRef(0)
 
-  // 初始化：仅恢复用户上一次查询的有效单词缓存；若从未查过词，则不加载任何词，保持占位骨架展示
+  // 初始化：仅恢复用户上一次查询的有效单词缓存与历史记录
   useEffect(() => {
     syncStarredWordIds()
 
+    const initialHistory = loadDictHistory()
     const cached = loadLastLookup()
     if (cached?.word) {
       setCurrentResult(cached)
       setSearchQuery(cached.word.name)
       setNotFoundQuery(null)
+
+      if (initialHistory.length === 0 && cached.word.name) {
+        const seeded = addDictHistoryItem(cached.word.name, formatMeaningText(cached.word))
+        setHistory(seeded)
+      } else {
+        setHistory(initialHistory)
+      }
 
       // 异步读取本地数据库的最新状态（保证发音/释义/生词本状态完全与数据库同步）
       const sequence = searchSequenceRef.current
@@ -86,6 +106,11 @@ export default function DictionaryPage() {
             if (prev && prev.word.name.toLowerCase() === latest.name.toLowerCase()) {
               const updated = { ...prev, word: latest }
               saveLastLookup(updated)
+              const meaningText = formatMeaningText(latest)
+              if (meaningText) {
+                const updatedHist = updateDictHistoryMeaning(latest.name, meaningText)
+                setHistory(updatedHist)
+              }
               return updated
             }
             return prev
@@ -93,10 +118,11 @@ export default function DictionaryPage() {
         }
       })
     } else {
-      // 首次进入且从未查询过：不加载任何正在背诵的单词，保持占位骨架
+      // 首次进入且从未查询过：保持占位骨架
       setCurrentResult(null)
       setSearchQuery('')
       setNotFoundQuery(null)
+      setHistory(initialHistory)
     }
   }, [syncStarredWordIds])
 
@@ -142,6 +168,8 @@ export default function DictionaryPage() {
           }
           setCurrentResult(result)
           saveLastLookup(result)
+          const updatedHist = addDictHistoryItem(cachedWord.name, formatMeaningText(cachedWord))
+          setHistory(updatedHist)
           setNotFoundQuery(null)
           setIsSearching(false)
           // 单词查询页不自动发音，保留卡片右上角喇叭按钮与音标点击手动播放
@@ -172,6 +200,8 @@ export default function DictionaryPage() {
               }
               setCurrentResult(result)
               saveLastLookup(result)
+              const updatedHist = addDictHistoryItem(wordItem.name, formatMeaningText(wordItem))
+              setHistory(updatedHist)
               setIsAiSearching(false)
               setNotFoundQuery(null)
               setAiError(null)
@@ -195,6 +225,8 @@ export default function DictionaryPage() {
               setAiWordNotFound(true)
               setCurrentResult(null)
               setNotFoundQuery(trimmed)
+              const updatedHist = removeDictHistoryItem(trimmed)
+              setHistory(updatedHist)
               return
             }
             const isTimeout =
@@ -275,6 +307,27 @@ export default function DictionaryPage() {
     handleSearchSubmit(item.name)
   }
 
+  // 选择历史记录项进行查询
+  const handleSelectHistory = useCallback(
+    (word: string) => {
+      setSearchQuery(word)
+      handleSearchSubmit(word)
+    },
+    [handleSearchSubmit]
+  )
+
+  // 删除单条历史记录
+  const handleRemoveHistoryItem = useCallback((word: string) => {
+    const updated = removeDictHistoryItem(word)
+    setHistory(updated)
+  }, [])
+
+  // 清空所有历史记录
+  const handleClearHistory = useCallback(() => {
+    clearDictHistory()
+    setHistory([])
+  }, [])
+
   // 全局快捷键：Ctrl+J 发音
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -309,6 +362,10 @@ export default function DictionaryPage() {
         suggestions={suggestions}
         onSelectSuggestion={handleSelectSuggestion}
         validationError={searchValidationError}
+        history={history}
+        onSelectHistory={handleSelectHistory}
+        onRemoveHistoryItem={handleRemoveHistoryItem}
+        onClearHistory={handleClearHistory}
       />
 
       {/* 中部舞台：单词卡片展示区（尺寸与内边距与单词学习完全一致） */}
@@ -325,6 +382,16 @@ export default function DictionaryPage() {
                   if (!prev) return null
                   const updated = { ...prev, word: updatedWord }
                   saveLastLookup(updated)
+                  if (updatedWord?.name) {
+                    const meaningText = formatMeaningText(updatedWord)
+                    if (meaningText) {
+                      const updatedHist = updateDictHistoryMeaning(
+                        updatedWord.name,
+                        meaningText
+                      )
+                      setHistory(updatedHist)
+                    }
+                  }
                   return updated
                 })
               }}
@@ -342,7 +409,13 @@ export default function DictionaryPage() {
               wordNotFound={aiWordNotFound}
             />
           ) : (
-            <DictPlaceholderSkeleton />
+            <DictPlaceholderSkeleton
+              history={history}
+              onQuickSearch={(word) => {
+                setSearchQuery(word)
+                handleSearchSubmit(word)
+              }}
+            />
           )}
         </div>
       </div>

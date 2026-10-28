@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { RotateCcw, Flame, X, Headphones, Languages } from 'lucide-react'
+import { RotateCcw, Flame, X } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { SkinPicker } from '@/components/layout/SkinPicker'
 import { Select, type SelectOption } from '@/components/ui/Select'
@@ -33,8 +33,6 @@ export function HeaderToolbar() {
     loopCountSetting,
     setLoopCountSetting,
     mode,
-    dictationCueMode,
-    setDictationCueMode,
     phoneticPreference,
     setPhoneticPreference,
     restartUnit,
@@ -115,37 +113,6 @@ export function HeaderToolbar() {
 
         {/* 右区：控制项（shrink-0 不压缩，始终靠右对齐） */}
         <div className="flex items-center gap-4 xl:gap-5 shrink-0">
-          {/* 默写线索来源二选一（置前展示，默认「看译文默写」） */}
-          {mode === 'dictation' && (
-            <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg xl:rounded-xl border border-white/10">
-              <Tooltip content="只给中文释义，不自动发音（可手动点或按 Ctrl+J 听），需要写出拼写" side="bottom">
-                <button
-                  onClick={() => setDictationCueMode('meaning')}
-                  className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1 xl:py-1.5 rounded-md xl:rounded-lg text-xs xl:text-sm transition-all cursor-pointer ${
-                    dictationCueMode === 'meaning'
-                      ? 'bg-accent/20 text-accent font-bold'
-                      : 'text-muted-foreground hover:text-white'
-                  }`}
-                >
-                  <Languages className="size-3.5 xl:size-4" />
-                  <span>看译文默写</span>
-                </button>
-              </Tooltip>
-              <Tooltip content="只给发音，需要写出中文释义与拼写" side="bottom">
-                <button
-                  onClick={() => setDictationCueMode('listen')}
-                  className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1 xl:py-1.5 rounded-md xl:rounded-lg text-xs xl:text-sm transition-all cursor-pointer ${
-                    dictationCueMode === 'listen'
-                      ? 'bg-primary/20 text-primary font-bold'
-                      : 'text-muted-foreground hover:text-white'
-                  }`}
-                >
-                  <Headphones className="size-3.5 xl:size-4" />
-                  <span>听音默写</span>
-                </button>
-              </Tooltip>
-            </div>
-          )}
 
           {/* 发音口音下拉 */}
           <Select<'us' | 'uk'>

@@ -27,6 +27,7 @@ interface TranslateCardProps {
   totalSentences: number
   onNext: () => void
   onPrev: () => void
+  isActive?: boolean
 }
 
 export function TranslateCard({
@@ -35,6 +36,7 @@ export function TranslateCard({
   totalSentences,
   onNext,
   onPrev,
+  isActive = true,
 }: TranslateCardProps) {
   // 提取本句的核心词汇列表 (支持预置配置与智能提取)
   const keywords = useMemo(() => {
@@ -116,8 +118,16 @@ export function TranslateCard({
   const currentKeyword = keywords[currentKeywordIndex]
   const cleanTargetWord = currentKeyword ? currentKeyword.word.trim().toLowerCase() : ''
 
-  // 核心词阶段：自动播报当前核心词读音
+  // 当离开练习页 tab 时，立即终止正在播放或计划播放的语音
   useEffect(() => {
+    if (!isActive) {
+      audioEngine.cancelPendingPlayback()
+    }
+  }, [isActive])
+
+  // 核心词阶段：自动播报当前核心词读音 (仅在激活练习 tab 时)
+  useEffect(() => {
+    if (!isActive) return
     if (stage === 'keyword' && currentKeyword?.word && isAutoPlayAudio) {
       const timer = setTimeout(() => {
         playWordAudio(currentKeyword.word)
@@ -125,6 +135,7 @@ export function TranslateCard({
       return () => clearTimeout(timer)
     }
   }, [
+    isActive,
     stage,
     currentKeywordIndex,
     sentence.id,
@@ -134,8 +145,9 @@ export function TranslateCard({
     playWordAudio,
   ])
 
-  // 整句翻译阶段：进入整句时自动播报整句读音
+  // 整句翻译阶段：进入整句时自动播报整句读音 (仅在激活练习 tab 时)
   useEffect(() => {
+    if (!isActive) return
     if (
       stage === 'sentence' &&
       sentence?.sentenceEn &&
@@ -148,6 +160,7 @@ export function TranslateCard({
       return () => clearTimeout(timer)
     }
   }, [
+    isActive,
     stage,
     sentence.id,
     sentence.sentenceEn,
@@ -248,6 +261,9 @@ export function TranslateCard({
   // 核心键盘打字与流转逻辑
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 仅在练习页激活时响应键盘打字
+      if (!isActive) return
+
       // 忽略模态框与输入框中的敲击
       const target = e.target as HTMLElement
       if (
@@ -387,6 +403,7 @@ export function TranslateCard({
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (!isActive) return
       if (e.key === 'Tab') {
         e.preventDefault()
         setPeeking(false)
@@ -400,6 +417,7 @@ export function TranslateCard({
       window.removeEventListener('keyup', handleKeyUp)
     }
   }, [
+    isActive,
     stage,
     cleanTargetWord,
     keywordInput,
