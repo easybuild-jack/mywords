@@ -63,7 +63,7 @@ export function HeaderToolbar() {
 
   return (
     <header
-      className={`sticky top-0 z-30 w-full bg-background flex items-center justify-center px-6 pointer-events-auto shrink-0 border-b border-border transition-shadow ${
+      className={`sticky top-0 z-40 w-full bg-background flex items-center justify-center px-6 pointer-events-auto shrink-0 border-b border-border transition-shadow ${
         isScrolled ? 'shadow-[0_4px_16px_-8px_rgba(0,0,0,0.25)]' : ''
       }`}
     >
@@ -132,8 +132,6 @@ export function HeaderToolbar() {
             />
           )}
 
-          <SkinPicker />
-
           <Tooltip content="回到本单元第一个单词" side="bottom">
             <button
               onClick={restartUnit}
@@ -143,6 +141,8 @@ export function HeaderToolbar() {
               <span>从头开始</span>
             </button>
           </Tooltip>
+
+          <SkinPicker />
         </div>
       </div>
 
