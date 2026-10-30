@@ -4,12 +4,9 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   AlertCircle,
-  Flame,
   CheckCircle,
   Volume2,
   ArrowRight,
-  Play,
-  Swords,
   Trash2,
   GraduationCap,
   PenLine,
@@ -132,233 +129,196 @@ export default function TroubleWordsPage() {
     router.push('/dictation')
   }
 
+  const filterTabs: { id: 'all' | 'starred' | 'error' | 'severe'; label: string; count: number }[] = [
+    { id: 'all', label: '全部', count: troubleList.length },
+    { id: 'starred', label: '生词', count: starredCount },
+    { id: 'error', label: '错词', count: errorCount },
+    { id: 'severe', label: '高频错误 ≥3 次', count: severeCount },
+  ]
+  const rowActionClass =
+    'h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer whitespace-nowrap'
+  const pagerButtonClass =
+    'h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors cursor-pointer'
+
   return (
-    <div className="flex-1 min-h-full flex flex-col px-6 md:px-8 lg:px-10 py-3 md:py-3.5 max-w-[1440px] mx-auto w-full space-y-2.5 md:space-y-3 text-white">
-      {/* 1. 顶部标题与筛选 */}
-      <div className="flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="size-10 rounded-2xl bg-destructive/15 text-destructive flex items-center justify-center border border-destructive/30">
-            <Flame className="size-5" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
-              <span>生错词攻坚</span>
-              <span className="text-xs font-mono font-normal text-muted-foreground bg-white/[0.06] px-2 py-0.5 rounded-full border border-white/10">
-                Trouble Words
-              </span>
-            </h1>
-            <p className="text-xs text-[#9CA3AF]">收藏生词与拼写薄弱错词聚合攻坚池，单个单词连续 3 次无提示默写正确即自动攻克归档</p>
-          </div>
+    <div className="flex-1 min-h-full flex flex-col px-6 md:px-8 lg:px-10 pt-6 pb-4 max-w-[1440px] mx-auto w-full text-white">
+      {/* 标题、说明与批量练习入口 */}
+      <div className="flex flex-wrap items-end justify-between gap-4 shrink-0">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">生错词本</h1>
+          <p className="mt-1 text-[13px] text-muted-foreground">
+            收藏的生词与拼写出错的单词汇集在这里；在默写中连续 3 次无提示拼对，就会自动归档
+          </p>
         </div>
 
         {troubleList.length > 0 && (
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.04] border border-white/10">
+          <div className="flex items-center gap-2">
             <button
-              onClick={() => handleFilterChange('all')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'all'
-                  ? 'bg-destructive text-white'
-                  : 'text-[#9CA3AF] hover:text-white'
-              }`}
+              type="button"
+              onClick={() => handleStartPractice()}
+              className="h-9 px-3.5 rounded-md border border-border text-sm text-foreground hover:bg-muted inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
-              全部待攻克 ({troubleList.length})
+              <GraduationCap className="size-4" />
+              跟学这些词
             </button>
             <button
-              onClick={() => handleFilterChange('starred')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'starred'
-                  ? 'bg-amber-500 text-white'
-                  : 'text-[#9CA3AF] hover:text-white'
-              }`}
+              type="button"
+              onClick={() => handleStartAnnihilation()}
+              className="h-9 px-3.5 rounded-md bg-destructive hover:bg-destructive/90 text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
-              ⭐ 生词 ({starredCount})
-            </button>
-            <button
-              onClick={() => handleFilterChange('error')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'error'
-                  ? 'bg-destructive text-white'
-                  : 'text-[#9CA3AF] hover:text-white'
-              }`}
-            >
-              🔥 错词 ({errorCount})
-            </button>
-            <button
-              onClick={() => handleFilterChange('severe')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                filterType === 'severe'
-                  ? 'bg-red-600 text-white'
-                  : 'text-[#9CA3AF] hover:text-white'
-              }`}
-            >
-              高危 (≥3次) ({severeCount})
+              <PenLine className="size-4" />
+              默写这些词
             </button>
           </div>
         )}
       </div>
 
       {isLoading ? (
-        <div className="flex-1 flex items-center justify-center text-[#9CA3AF] text-sm">
-          正在检索本地生错词记录...
-        </div>
+        <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">正在读取本地生错词记录…</div>
       ) : troubleList.length === 0 ? (
-        /* 暂无生错词时的空状态 */
         <div className="flex-1 flex items-center justify-center">
-          <div className="glass-card p-12 rounded-3xl border border-white/10 text-center space-y-4 shadow-xl max-w-lg">
-            <div className="size-16 rounded-3xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary mx-auto">
-              <CheckCircle className="size-8" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-white">太棒了！当前没有待攻克的生错词 🎉</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                学习过程中主动标记的生词（快捷键加星），以及默写失误或按 Tab 偷看的错词，均会自动汇集于此开展专项练习与攻坚。
-              </p>
-            </div>
-            <div className="pt-2">
-              <button
-                onClick={() => {
-                  startRouteProgressBar()
-                  router.push('/learn')
-                }}
-                className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs btn-neon-glow transition-all cursor-pointer"
-              >
-                前往单词跟学继续练习 →
-              </button>
-            </div>
+          <div className="text-center max-w-md">
+            <CheckCircle className="size-8 text-primary mx-auto" />
+            <h3 className="mt-4 text-lg font-semibold text-white">没有待攻克的生错词</h3>
+            <p className="mt-2 text-[13px] text-muted-foreground leading-relaxed">
+              学习时加星的生词，以及默写出错或按 Tab 偷看过的单词，都会自动汇集到这里，方便集中练习。
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                startRouteProgressBar()
+                router.push('/learn')
+              }}
+              className="mt-5 h-9 px-4 rounded-md bg-primary hover:bg-primary/90 text-[#0B0C0E] text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              继续学习单词
+              <ArrowRight className="size-4" />
+            </button>
           </div>
         </div>
       ) : (
         <>
-          {/* 2. 攻坚统计总览卡片 */}
-          <div className="glass-card px-4 py-2.5 md:px-5 md:py-3 rounded-2xl border border-destructive/30 bg-destructive/5 flex items-center justify-between shrink-0">
-            <div className="space-y-1">
-              <span className="text-xs text-destructive font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <Swords className="size-3.5" />
-                生错词攻克机制 (3-Streak Rule)
-              </span>
-              <h2 className="text-lg md:text-xl font-bold text-white">
-                当前共有 <span className="text-destructive font-extrabold font-mono text-2xl">{filteredList.length}</span> 个生错词待彻底攻克
-              </h2>
-              <p className="text-xs text-[#9CA3AF]">
-                消除规则：只要该单词在默写模式下连续正确 3 次，系统立即自动将其攻克消除并归档。
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleStartPractice()}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary font-bold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap"
-              >
-                <GraduationCap className="size-4" />
-                <span>生错词跟学练习</span>
-              </button>
-              <button
-                onClick={() => handleStartAnnihilation()}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold text-xs sm:text-sm transition-all cursor-pointer whitespace-nowrap"
-              >
-                <Flame className="size-4" />
-                <span>🚀 开启生错词默写</span>
-              </button>
-            </div>
+          {/* 筛选标签（下划线指示） */}
+          <div className="mt-4 flex items-center gap-6 border-b border-border shrink-0">
+            {filterTabs.map((tab) => {
+              const active = filterType === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => handleFilterChange(tab.id)}
+                  className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
+                    active
+                      ? 'text-foreground font-medium border-destructive'
+                      : 'text-muted-foreground hover:text-foreground border-transparent'
+                  }`}
+                >
+                  {tab.label}
+                  <span className="ml-1.5 text-xs font-mono text-muted-foreground">{tab.count}</span>
+                </button>
+              )
+            })}
           </div>
 
-          {/* 3. 生错词详细明细表格及分页控制 */}
-          <div className="flex-1 min-h-0 flex flex-col glass-card rounded-2xl border border-white/10 shadow-lg overflow-hidden">
-            {/* 顶部独立固化表头：置于滚动条外部，贯穿卡片全宽，确保左右大圆角 100% 完整对称 */}
-            <div className="w-full bg-[#12141a]/95 backdrop-blur-md border-b border-white/10 text-muted-foreground font-mono text-xs select-none shadow-sm shrink-0 pr-1.5">
+          {/* 明细表：表头固定，表体独立滚动 */}
+          <div className="flex-1 min-h-0 flex flex-col mt-1">
+            <div className="shrink-0 border-b border-border text-xs text-muted-foreground select-none pr-1.5">
               <table className="w-full table-fixed text-left border-collapse">
                 <colgroup>
-                  <col className="w-52" />
+                  <col className="w-56" />
                   <col className="w-48" />
                   <col />
-                  <col className="w-44" />
+                  <col className="w-52" />
                 </colgroup>
                 <thead>
                   <tr>
-                    <th className="py-2.5 px-4 font-semibold">单词拼写与来源</th>
-                    <th className="py-2.5 px-4 font-semibold">音标</th>
-                    <th className="py-2.5 px-4 font-semibold">中文核心释义</th>
-                    <th className="py-2.5 px-4 text-right font-semibold">操作</th>
+                    <th className="py-2.5 pr-4 font-normal">单词</th>
+                    <th className="py-2.5 px-4 font-normal">音标</th>
+                    <th className="py-2.5 px-4 font-normal">释义</th>
+                    <th className="py-2.5 pl-4 text-right font-normal">操作</th>
                   </tr>
                 </thead>
               </table>
             </div>
 
-            {/* 表格滚动容器：仅在此区域内产生纵向滚动条 */}
             <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
               <table className="w-full table-fixed text-left border-collapse">
                 <colgroup>
-                  <col className="w-52" />
+                  <col className="w-56" />
                   <col className="w-48" />
                   <col />
-                  <col className="w-44" />
+                  <col className="w-52" />
                 </colgroup>
-                <tbody className="divide-y divide-white/5 font-mono">
+                <tbody>
                   {paginatedList.map((item, idx) => {
                     const globalIdx = (currentPage - 1) * PAGE_SIZE + idx
                     const w = item.word
 
                     return (
-                      <tr key={w.id || globalIdx} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="py-2 px-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-white text-base sm:text-lg tracking-wide">{w.name}</span>
+                      <tr key={w.id || globalIdx} className="group border-b border-border hover:bg-muted/30 transition-colors">
+                        <td className="py-2.5 pr-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2.5">
+                            <span className="font-serif text-lg text-white">{w.name}</span>
                             {item.record.isStarred && (
-                              <span className="text-[11px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 inline-flex items-center gap-0.5 font-sans font-medium">
-                                ⭐ 生词
+                              <span className="inline-flex items-center gap-0.5 text-[11px] text-amber-400" title="生词">
+                                <Star className="size-3 fill-current" />
+                                生词
                               </span>
                             )}
                             {item.record.isError && (
-                              <span className="text-[11px] px-1.5 py-0.5 rounded bg-destructive/15 text-destructive border border-destructive/30 inline-flex items-center gap-0.5 font-sans font-medium">
-                                🔥 错词
+                              <span className="inline-flex items-center gap-0.5 text-[11px] text-destructive" title="错词">
+                                <AlertCircle className="size-3" />
+                                错词
                               </span>
                             )}
                           </div>
                         </td>
-                        <td className="py-2 px-4 text-gray-300 font-sans text-base sm:text-lg whitespace-nowrap">
-                          <div className="inline-flex items-center gap-2">
-                            <span className="text-gray-300">{w.phoneticUs || '-'}</span>
+                        <td className="py-2.5 px-4 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-1">
+                            <span className="font-serif text-[15px] text-muted-foreground">{w.phoneticUs || '-'}</span>
                             <button
+                              type="button"
                               onClick={() => audioEngine.playPronunciation(w.name)}
-                              className="p-1 rounded-lg text-primary/80 hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                              className="size-7 rounded-md inline-flex items-center justify-center text-muted-foreground/70 hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
                               title="发音"
                             >
-                              <Volume2 className="size-4" />
+                              <Volume2 className="size-3.5" />
                             </button>
                           </div>
                         </td>
-                        <td className="py-2 px-4 text-white font-sans text-sm sm:text-base font-normal leading-snug">
-                          {w.posList?.[0]?.pos && (
-                            <span className="text-primary font-mono font-semibold mr-2 text-sm sm:text-base">
-                              {w.posList[0].pos}
-                            </span>
+                        <td className="py-2.5 px-4 text-sm text-gray-200 leading-snug">
+                          {w.posList?.[0]?.pos && w.posList[0].pos !== 'other' && (
+                            <span className="font-serif italic text-muted-foreground mr-1.5">{w.posList[0].pos}</span>
                           )}
-                          <span>{w.posList?.[0]?.means?.join('； ')}</span>
+                          <span>{w.posList?.[0]?.means?.join('；')}</span>
                         </td>
-                        <td className="py-2 px-4 text-right whitespace-nowrap">
-                          <div className="inline-flex items-center justify-end gap-1.5 whitespace-nowrap">
+                        <td className="py-2.5 pl-4 text-right whitespace-nowrap">
+                          <div className="inline-flex items-center justify-end gap-0.5">
                             <button
+                              type="button"
                               onClick={() => handleStartPractice(filteredList.map((i) => i.word), globalIdx)}
-                              className="px-2.5 py-1 rounded-lg bg-primary/15 text-primary hover:bg-primary/25 border border-primary/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
+                              className={rowActionClass}
                               title="从该词开始生错词跟学练习"
                             >
                               <GraduationCap className="size-3.5" />
-                              <span>练习</span>
+                              跟学
                             </button>
                             <button
+                              type="button"
                               onClick={() => handleStartAnnihilation(filteredList.map((i) => i.word), globalIdx)}
-                              className="px-2.5 py-1 rounded-lg bg-destructive/15 text-destructive hover:bg-destructive/25 border border-destructive/30 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap inline-flex items-center gap-1"
-                              title="从该词开始专项攻坚默写"
+                              className={rowActionClass}
+                              title="从该词开始专项默写"
                             >
                               <PenLine className="size-3.5" />
-                              <span>默写</span>
+                              默写
                             </button>
                             <button
+                              type="button"
                               onClick={() => handleDelete(w.id)}
-                              className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all cursor-pointer"
+                              className="size-7 rounded-md inline-flex items-center justify-center text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                               title="从生错词本中移除该词"
                             >
-                              <Trash2 className="size-4" />
+                              <Trash2 className="size-3.5" />
                             </button>
                           </div>
                         </td>
@@ -369,42 +329,36 @@ export default function TroubleWordsPage() {
               </table>
             </div>
 
-            {/* 底部紧凑分页栏 */}
-            <div className="shrink-0 px-4 py-2.5 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-xs text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <span>
-                  第 <strong className="text-white font-mono">{currentPage}</strong> / <strong className="text-white font-mono">{totalPages}</strong> 页
-                </span>
-                <span className="text-white/20">|</span>
-                <span>每页 <strong className="text-white font-mono">{PAGE_SIZE}</strong> 条</span>
-                <span className="text-white/20">|</span>
-                <span>共 <strong className="text-primary font-mono">{filteredList.length}</strong> 条待攻克</span>
-              </div>
+            {/* 分页 */}
+            <div className="shrink-0 pt-3 flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                共 <span className="font-mono text-foreground">{filteredList.length}</span> 个，每页 {PAGE_SIZE} 个
+              </span>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage <= 1}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-white/10 hover:bg-white/[0.06] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer font-sans text-xs"
+                  className={pagerButtonClass}
                 >
                   <ChevronLeft className="size-3.5" />
-                  <span>上一页</span>
+                  上一页
                 </button>
 
-                <div className="flex items-center gap-1 font-mono">
+                <div className="flex items-center gap-0.5 font-mono">
                   {getPageNumbers(currentPage, totalPages).map((pageNum, i) =>
                     pageNum === '...' ? (
-                      <span key={`ellipsis-${i}`} className="px-1 text-muted-foreground/60">...</span>
+                      <span key={`ellipsis-${i}`} className="px-1 text-muted-foreground/60">…</span>
                     ) : (
                       <button
                         key={pageNum}
                         type="button"
                         onClick={() => setCurrentPage(pageNum as number)}
-                        className={`size-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                        className={`size-7 rounded-md text-xs transition-colors cursor-pointer ${
                           currentPage === pageNum
-                            ? 'bg-destructive text-white font-bold'
-                            : 'hover:bg-white/[0.06] text-muted-foreground hover:text-white'
+                            ? 'bg-muted text-foreground font-medium'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                         }`}
                       >
                         {pageNum}
@@ -417,9 +371,9 @@ export default function TroubleWordsPage() {
                   type="button"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage >= totalPages}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-white/10 hover:bg-white/[0.06] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer font-sans text-xs"
+                  className={pagerButtonClass}
                 >
-                  <span>下一页</span>
+                  下一页
                   <ChevronRight className="size-3.5" />
                 </button>
               </div>
