@@ -92,7 +92,7 @@ export function DictWordCard({
         <WordHeadline word={word} isSplit={isSplit} />
         <WordPhonetics word={word} phoneticPreference={phoneticPreference} />
         <div className="min-h-[56px] xl:min-h-[64px] flex items-center justify-center px-6 mt-2">
-          <WordMeaning word={word} className="text-lg xl:text-xl" />
+          <WordMeaning word={word} className="text-lg xl:text-xl text-gray-200" />
         </div>
       </div>
 

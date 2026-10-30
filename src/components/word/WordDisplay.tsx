@@ -162,10 +162,10 @@ export function WordPhonetics({
   )
 }
 
-/** 释义行：词性用衬线斜体弱化，释义正文居中 */
+/** 释义行：词性用衬线斜体弱化，释义正文居中；字号与颜色由调用方给出 */
 export function WordMeaning({ word, className = '' }: { word: WordItem; className?: string }) {
   return (
-    <p className={`text-gray-200 line-clamp-2 leading-relaxed text-center max-w-3xl ${className}`}>
+    <p className={`line-clamp-2 leading-relaxed text-center max-w-3xl ${className}`}>
       {word.posList?.length
         ? word.posList.map((p, i) => (
             <span key={i} className={i > 0 ? 'ml-5' : undefined}>
