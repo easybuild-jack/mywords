@@ -93,17 +93,15 @@ export function TranslateImportModal() {
     <div
       role="dialog"
       aria-modal="true"
-      className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn overflow-y-auto custom-scrollbar"
+      className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fadeIn overflow-y-auto custom-scrollbar"
     >
-      <div className="relative w-full max-w-2xl rounded-3xl bg-sidebar border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] my-auto">
+      <div className="relative w-full max-w-2xl rounded-xl bg-sidebar border border-border shadow-xl overflow-hidden flex flex-col max-h-[90vh] my-auto">
         {/* 顶部标题栏 */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/20">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <div className="flex items-center gap-2.5">
-            <div className="size-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-              <BookPlus className="size-5" />
-            </div>
+            <BookPlus className="size-4 text-muted-foreground" />
             <div>
-              <h2 className="text-base font-bold text-foreground">导入自定义练习语句</h2>
+              <h2 className="text-base font-semibold tracking-tight text-foreground">导入自定义练习语句</h2>
               <p className="text-xs text-muted-foreground">
                 支持纯文本粘贴或上传文件，一键打造专属翻译题库
               </p>
@@ -113,9 +111,9 @@ export function TranslateImportModal() {
           <button
             type="button"
             onClick={() => setImportModalOpen(false)}
-            className="p-1.5 rounded-xl hover:bg-white/10 text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+            className="size-8 rounded-md inline-flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
         </div>
 
@@ -124,7 +122,7 @@ export function TranslateImportModal() {
           {/* 句库名称与场景归属 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 题库名称 (可选)
               </label>
               <input
@@ -132,24 +130,24 @@ export function TranslateImportModal() {
                 value={bookName}
                 onChange={(e) => setBookName(e.target.value)}
                 placeholder="例如：新概念英语第三册、考研长难句..."
-                className="w-full px-4 py-2.5 rounded-xl bg-muted/30 border border-border focus:border-primary focus:outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
+                className="w-full h-9 px-3 rounded-md bg-transparent border border-border focus:border-primary focus:outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 所属场景分类
               </label>
               <select
                 value={selectedScenario}
                 onChange={(e) => setSelectedScenario(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl bg-muted/30 border border-border focus:border-primary focus:outline-none text-sm text-foreground cursor-pointer"
+                className="w-full h-9 px-3 rounded-md bg-sidebar border border-border focus:border-primary focus:outline-none text-sm text-foreground cursor-pointer"
               >
-                <option value="日常生活">☕ 日常生活</option>
-                <option value="职场商务">💼 职场商务</option>
-                <option value="旅游出行">✈️ 旅游出行</option>
-                <option value="餐饮美食">🍽️ 餐饮美食</option>
-                <option value="购物消费">🛍️ 购物消费</option>
+                <option value="日常生活">日常生活</option>
+                <option value="职场商务">职场商务</option>
+                <option value="旅游出行">旅游出行</option>
+                <option value="餐饮美食">餐饮美食</option>
+                <option value="购物消费">购物消费</option>
               </select>
             </div>
           </div>
@@ -157,7 +155,7 @@ export function TranslateImportModal() {
           {/* 文本内容输入与文件上传 */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-semibold text-foreground">
+              <label className="text-xs font-medium text-muted-foreground">
                 粘贴句子文本 (一行一句，英文与中文以竖线 | 分隔)
               </label>
               <div className="flex items-center gap-2">
@@ -195,15 +193,15 @@ export function TranslateImportModal() {
                 setErrorMsg('')
               }}
               placeholder={`格式示例：\nThe quick brown fox jumps over the lazy dog. | 敏捷的棕色狐狸跃过了懒狗。\nKnowledge is power. | 知识就是力量。`}
-              className="w-full p-4 rounded-2xl bg-muted/20 border border-border/80 focus:border-primary focus:outline-none text-xs sm:text-sm font-mono leading-relaxed text-foreground placeholder:text-muted-foreground/50 resize-none custom-scrollbar"
+              className="w-full p-3 rounded-md bg-transparent border border-border focus:border-primary focus:outline-none text-xs sm:text-sm font-mono leading-relaxed text-foreground placeholder:text-muted-foreground/50 resize-none custom-scrollbar"
             />
           </div>
 
           {/* 解析统计与预览 */}
           {parsedSentences.length > 0 && (
-            <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-400 space-y-1">
-              <div className="flex items-center gap-1.5 font-bold">
-                <Check className="size-4" />
+            <div className="text-xs text-primary space-y-1">
+              <div className="flex items-center gap-1.5 font-medium">
+                <Check className="size-3.5" />
                 <span>成功识别 {parsedSentences.length} 条练习语句</span>
               </div>
               <p className="text-[11px] text-muted-foreground truncate">
@@ -213,17 +211,17 @@ export function TranslateImportModal() {
           )}
 
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/30 text-xs text-destructive flex items-center gap-2">
+            <div className="text-xs text-destructive flex items-center gap-2">
               <AlertCircle className="size-4 shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* 说明贴士 */}
-          <div className="text-[11px] text-muted-foreground/70 bg-muted/10 p-3 rounded-xl border border-border/40 space-y-1">
-            <p className="font-semibold text-muted-foreground flex items-center gap-1">
+          <div className="text-[11px] text-muted-foreground pt-3 border-t border-dashed border-border space-y-1">
+            <p className="font-medium text-foreground flex items-center gap-1">
               <HelpCircle className="size-3" />
-              <span>支持的格式说明:</span>
+              <span>支持的格式</span>
             </p>
             <p>1. 竖线分隔：<code>英文句子 | 中文翻译</code> (推荐)</p>
             <p>2. 制表符/破折号：<code>英文句子 ---- 中文翻译</code> 或 Excel 复制的 Tab 文本</p>
@@ -232,11 +230,11 @@ export function TranslateImportModal() {
         </form>
 
         {/* 底部按钮栏 */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/10 bg-black/20">
+        <div className="flex items-center justify-end gap-2 px-6 py-3 border-t border-border">
           <button
             type="button"
             onClick={() => setImportModalOpen(false)}
-            className="px-4 py-2 rounded-xl border border-border text-xs sm:text-sm font-medium hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+            className="h-8 px-3 rounded-md text-[13px] hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             取消
           </button>
@@ -244,15 +242,15 @@ export function TranslateImportModal() {
             type="button"
             onClick={handleSubmit}
             disabled={!parsedSentences.length}
-            className={`px-5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            className={`h-8 px-3 rounded-md text-[13px] font-medium inline-flex items-center gap-2 transition-colors cursor-pointer ${
               parsedSentences.length
-                ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_4px_16px_rgba(var(--primary-rgb),0.3)]'
-                : 'bg-muted/40 text-muted-foreground/40 cursor-not-allowed'
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                : 'bg-muted text-muted-foreground/50 cursor-not-allowed'
             }`}
           >
             <span>保存并立即练习</span>
             {parsedSentences.length > 0 && (
-              <span className="text-[11px] font-mono px-1.5 py-0.2 rounded bg-black/20">
+              <span className="text-[11px] font-mono opacity-70">
                 {parsedSentences.length}
               </span>
             )}

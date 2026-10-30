@@ -11,7 +11,6 @@ import {
   AlertCircle,
   FastForward,
   ArrowRight,
-  Check,
 } from 'lucide-react'
 import type { TranslationSentenceItem } from '@/types'
 import { parseSentenceIntoWords, extractAutoKeywords } from '@/lib/sentenceParser'
@@ -442,27 +441,27 @@ export function TranslateCard({
   return (
     <div className="w-full h-full flex flex-col justify-between p-6 sm:p-8 xl:p-10 select-none relative">
       {/* 顶部工具行 */}
-      <div className="relative z-10 flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
+      <div className="relative z-10 flex items-center justify-between pb-3 border-b border-border shrink-0">
         <div className="flex items-center gap-2.5">
-          <span className="text-xs font-mono font-bold text-muted-foreground bg-white/[0.04] px-3 py-1 rounded-lg border border-white/10">
+          <span className="text-xs font-mono text-muted-foreground">
             {sentenceIndex + 1} / {totalSentences}
           </span>
 
           {/* 阶段清晰指示器 */}
           {stage === 'keyword' && keywords.length > 0 ? (
-            <span className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs font-semibold flex items-center gap-1.5 animate-fadeIn">
-              <Sparkles className="size-3" />
+            <span className="text-xs text-foreground flex items-center gap-1.5 animate-fadeIn">
+              <span className="size-1.5 rounded-full bg-amber-500" />
               <span>核心词热身 · {currentKeywordIndex + 1}/{keywords.length}</span>
             </span>
           ) : (
-            <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-semibold flex items-center gap-1.5 animate-fadeIn">
-              <Check className="size-3" />
+            <span className="text-xs text-foreground flex items-center gap-1.5 animate-fadeIn">
+              <span className="size-1.5 rounded-full bg-primary" />
               <span>整句翻译实战</span>
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-2.5">
+        <div className="flex items-center gap-1">
           {/* 发音播报按钮 (手动点击重复播放当前单词或整句读音) */}
           <button
             type="button"
@@ -474,13 +473,11 @@ export function TranslateCard({
               }
             }}
             title={stage === 'keyword' ? '播放当前单词读音 (Ctrl+J)' : '播放当前句子读音 (Ctrl+J)'}
-            className={`flex items-center justify-center size-8 sm:size-8.5 rounded-xl border transition-all cursor-pointer ${
-              isSpeaking
-                ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)] scale-105'
-                : 'bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-primary hover:border-primary/40 border-white/10 active:scale-95'
+            className={`size-8 rounded-md inline-flex items-center justify-center transition-colors cursor-pointer ${
+              isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
-            <Volume2 className={`size-4 ${isSpeaking ? 'animate-bounce text-primary-foreground' : 'text-primary'}`} />
+            <Volume2 className={`size-4 ${isSpeaking ? 'animate-pulse' : ''}`} />
           </button>
 
           {/* 自动播报开关 */}
@@ -488,19 +485,17 @@ export function TranslateCard({
             type="button"
             onClick={toggleAutoPlayAudio}
             title={isAutoPlayAudio ? '自动播报已开启 (点击切换为手动)' : '自动播报已关闭 (点击开启切换词句时自动朗读)'}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-medium transition-all select-none cursor-pointer ${
-              isAutoPlayAudio
-                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]'
-                : 'bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground border-white/10'
+            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${
+              isAutoPlayAudio ? 'text-primary hover:bg-muted' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
             {isAutoPlayAudio ? (
-              <Volume2 className="size-3.5 text-emerald-400" />
+              <Volume2 className="size-3.5" />
             ) : (
-              <VolumeX className="size-3.5 text-muted-foreground" />
+              <VolumeX className="size-3.5" />
             )}
-            <span className="hidden sm:inline">自动播报:</span>
-            <span className="font-semibold">{isAutoPlayAudio ? '开' : '关'}</span>
+            <span className="hidden sm:inline">自动播报</span>
+            <span className="font-medium">{isAutoPlayAudio ? '开' : '关'}</span>
           </button>
 
           {/* 提示原文按钮 (支持点击切换显隐，或长按 Tab 键偷看) */}
@@ -508,21 +503,19 @@ export function TranslateCard({
             type="button"
             onClick={() => setPeeking(!isPeeking)}
             title="点击切换显示或长按键盘 Tab 键偷看英文提示"
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all select-none cursor-pointer ${
-              isPeeking
-                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                : 'bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground border-white/10'
+            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${
+              isPeeking ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             }`}
           >
             {isPeeking ? (
-              <EyeOff className="size-3.5 text-amber-400" />
+              <EyeOff className="size-3.5" />
             ) : (
-              <Eye className="size-3.5 text-muted-foreground" />
+              <Eye className="size-3.5" />
             )}
             <span>{isPeeking ? '隐藏提示' : '提示原文'}</span>
-            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-black/30 border border-white/10 opacity-70">
+            <kbd className="hidden sm:inline text-[10px] font-mono px-1 rounded border border-border text-muted-foreground">
               Tab
-            </span>
+            </kbd>
           </button>
 
           {/* 阶段性动作切换 */}
@@ -531,7 +524,7 @@ export function TranslateCard({
               type="button"
               onClick={() => setStage('sentence')}
               title="跳过单词热身，直接进入整句翻译"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground text-xs font-medium transition-all cursor-pointer"
+              className="h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer text-muted-foreground hover:text-foreground hover:bg-muted"
             >
               <FastForward className="size-3.5" />
               <span>跳过热身</span>
@@ -541,7 +534,7 @@ export function TranslateCard({
               type="button"
               onClick={handleRepeatSentence}
               title="清空当前句子并重新从热身开始练习"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground text-xs font-medium transition-all cursor-pointer"
+              className="h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer text-muted-foreground hover:text-foreground hover:bg-muted"
             >
               <RotateCcw className="size-3.5" />
               <span>重练本句</span>
@@ -553,7 +546,7 @@ export function TranslateCard({
       {/* 最上方独立提示展示区：位于工具栏正下方，固定高度且无边框，完全不越界且绝不产生任何布局抖动 */}
       <div className="w-full h-12 sm:h-14 flex items-center justify-center shrink-0 px-6">
         <div
-          className={`max-w-3xl text-center text-amber-400 font-mono text-lg sm:text-xl xl:text-2xl font-bold tracking-wide transition-opacity duration-150 ${
+          className={`max-w-3xl text-center text-muted-foreground font-serif italic text-lg sm:text-xl xl:text-2xl transition-opacity duration-150 ${
             isPeeking ? 'opacity-100' : 'opacity-0 select-none pointer-events-none'
           }`}
         >
@@ -567,10 +560,10 @@ export function TranslateCard({
         <div className="flex-1 flex flex-col justify-start items-center pt-6 sm:pt-8 xl:pt-10 space-y-6 animate-fadeIn">
           <div className="text-center space-y-2">
             {/* 译文字体增大 1 号，纯白且不粗 */}
-            <div className="text-lg sm:text-xl xl:text-2xl font-normal text-white tracking-wide max-w-2xl mx-auto">
+            <div className="text-lg sm:text-xl xl:text-2xl font-normal text-white max-w-2xl mx-auto">
               {currentKeyword.meaningZh}
             </div>
-            <p className="text-xs text-muted-foreground/50 font-mono">
+            <p className="text-xs text-muted-foreground">
               请拼写对应的核心英语单词（拼对后自动推进）
             </p>
           </div>
@@ -581,12 +574,12 @@ export function TranslateCard({
               style={{
                 width: `${Math.max(currentKeyword.word.length, keywordInput.length, 1)}ch`,
               }}
-              className={`relative h-14 sm:h-16 xl:h-20 flex items-end justify-start px-1 pb-1.5 bg-transparent border-b-2 font-mono text-3xl sm:text-4xl xl:text-5xl transition-colors ${
+              className={`relative h-14 sm:h-16 xl:h-20 flex items-end justify-start px-1 pb-1.5 bg-transparent border-b-2 font-serif text-3xl sm:text-4xl xl:text-5xl transition-colors ${
                 keywordError
-                  ? 'text-destructive font-black border-destructive animate-shake'
+                  ? 'text-destructive border-destructive animate-shake'
                   : isKeywordSuccess
-                  ? 'text-emerald-400 font-bold border-emerald-400'
-                  : 'text-primary font-bold border-primary'
+                  ? 'text-emerald-500 border-emerald-500'
+                  : 'text-foreground border-primary'
               }`}
             >
               {/* 用户输入 */}
@@ -594,10 +587,10 @@ export function TranslateCard({
                 <span
                   className={`leading-none ${
                     keywordError
-                      ? 'text-destructive font-black'
+                      ? 'text-destructive'
                       : isKeywordSuccess
-                      ? 'text-emerald-400 font-bold'
-                      : 'text-primary font-bold'
+                      ? 'text-emerald-500'
+                      : 'text-foreground'
                   }`}
                 >
                   {keywordInput}
@@ -610,7 +603,7 @@ export function TranslateCard({
                   keywordError
                     ? 'bg-destructive'
                     : isKeywordSuccess
-                    ? 'bg-emerald-400'
+                    ? 'bg-emerald-500'
                     : 'bg-primary'
                 }`}
               />
@@ -621,11 +614,11 @@ export function TranslateCard({
         /* 阶段二：整句合龙翻译实战 */
         <div className="flex-1 flex flex-col justify-start items-center pt-6 sm:pt-8 xl:pt-10 space-y-6 animate-fadeIn">
           <div className="text-center space-y-1.5">
-            <p className="text-xs font-medium text-muted-foreground/50 tracking-wider">
+            <p className="text-xs text-muted-foreground">
               请根据译文输入对应的英文整句
             </p>
             {/* 译文字体增大 1 号，纯白且不粗 */}
-            <div className="text-lg sm:text-xl xl:text-2xl font-normal text-white tracking-wide leading-relaxed max-w-2xl mx-auto">
+            <div className="text-lg sm:text-xl xl:text-2xl font-normal text-white leading-relaxed max-w-2xl mx-auto">
               {sentence.sentenceZh}
             </div>
           </div>
@@ -650,18 +643,18 @@ export function TranslateCard({
       )}
 
       {/* 底部打字辅助提示与操作栏 */}
-      <div className="shrink-0 pt-4 border-t border-white/10">
+      <div className="shrink-0 pt-4 border-t border-border">
         {stage === 'keyword' ? (
-          <div className="flex items-center justify-between min-h-[36px] text-xs text-muted-foreground/60 font-mono">
-            <div className="flex items-center gap-4">
-              <span>• 核心词输入正确即秒切下一词</span>
-              <span>• Ctrl+J 或点击喇叭可重复播放单词读音</span>
-              <span>• 长按 Tab 可透视原词</span>
+          <div className="flex items-center justify-between min-h-[36px] text-xs text-muted-foreground">
+            <div className="hidden md:flex items-center gap-4">
+              <span>核心词输入正确即切到下一词</span>
+              <span>Ctrl+J 重播读音</span>
+              <span>长按 Tab 偷看原词</span>
             </div>
             <button
               type="button"
               onClick={() => setStage('sentence')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-foreground hover:border-primary/40 text-xs font-semibold transition-all cursor-pointer"
+              className="h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ml-auto text-foreground hover:bg-muted"
             >
               <span>直接翻译整句</span>
               <ArrowRight className="size-3.5" />
@@ -670,44 +663,42 @@ export function TranslateCard({
         ) : !isCompleted ? (
           <div className="flex items-center justify-center min-h-[36px]">
             {errorIndices.length > 0 ? (
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-destructive font-mono font-bold animate-fadeIn">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-destructive animate-fadeIn">
                 <AlertCircle className="size-4 shrink-0" />
                 <span>
                   有 {errorIndices.length} 个单词拼写有误（已标红），修改后按 Enter 回车重新校验
                 </span>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground/60 font-mono">
-                <span>• 空格推进下一词（连续输入不卡死）</span>
-                <span>• Ctrl+J 或点击喇叭可重复朗读整句</span>
-                <span>• 整句敲完后敲 Enter 或空格统一校验</span>
-                <span>• 点击任意单词可随时跳转修改</span>
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                <span>空格推进下一词</span>
+                <span>Ctrl+J 重听整句</span>
+                <span>敲完后 Enter 校验</span>
+                <span>点击单词可跳转修改</span>
               </div>
             )}
           </div>
         ) : (
           /* 翻译成功后的卡片快捷操作条 */
           <div className="flex flex-wrap items-center justify-between gap-3 animate-fadeIn min-h-[36px]">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => setGrammarModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-xs"
+                className="h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] text-primary hover:bg-primary/10 transition-colors cursor-pointer"
               >
-                <Sparkles className="size-4" />
+                <Sparkles className="size-3.5" />
                 <span>查看句法分析</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => playSentenceAudio()}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                  isSpeaking
-                    ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)]'
-                    : 'bg-white/[0.04] hover:bg-white/[0.08] text-foreground border-white/10'
+                className={`h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer ${
+                  isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
               >
-                <Volume2 className={`size-3.5 ${isSpeaking ? 'animate-bounce' : 'text-primary'}`} />
+                <Volume2 className={`size-3.5 ${isSpeaking ? 'animate-pulse' : ''}`} />
                 <span>{isSpeaking ? '正在朗读...' : '重听原声'}</span>
               </button>
 
@@ -715,9 +706,9 @@ export function TranslateCard({
               <button
                 type="button"
                 onClick={handleRepeatSentence}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-foreground text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+                className="h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
               >
-                <RotateCcw className="size-3.5 text-primary" />
+                <RotateCcw className="size-3.5" />
                 <span>再练一次本句</span>
               </button>
             </div>
@@ -725,10 +716,10 @@ export function TranslateCard({
             <button
               type="button"
               onClick={onNext}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer ml-auto"
+              className="h-8 px-3 rounded-md inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground text-[13px] font-medium transition-colors cursor-pointer ml-auto"
             >
               <span>进入下一句</span>
-              <span className="text-[10px] opacity-75 font-mono px-1.5 py-0.5 rounded bg-black/20">
+              <span className="text-[10px] opacity-70 font-mono">
                 Enter ↵
               </span>
             </button>
