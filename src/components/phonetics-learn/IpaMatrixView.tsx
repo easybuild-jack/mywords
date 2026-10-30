@@ -1,12 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  Volume2,
-  Sparkles,
-  ExternalLink,
-  Check,
-} from 'lucide-react'
+import { Volume2 } from 'lucide-react'
 import { IpaSymbolItem, RepresentativeWord } from '@/resources/phoneticsData'
 import { audioEngine } from '@/core/audioEngine'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
@@ -17,27 +12,68 @@ interface IpaMatrixViewProps {
   onJumpToCombo?: (combo: string) => void
 }
 
-/** 辅助函数：根据 highlight 字母将单词拆分并对组合部分加色加粗显示 */
+/** 辅助函数：根据 highlight 字母将单词拆分，并对发音组合部分着色加下划线 */
 export function renderHighlightedWord(word: string, highlight?: string) {
-  if (!highlight) return <span className="font-black text-foreground">{word}</span>
+  if (!highlight) return <span className="text-foreground">{word}</span>
   const lowerWord = word.toLowerCase()
   const lowerHighlight = highlight.toLowerCase()
   const idx = lowerWord.indexOf(lowerHighlight)
-  if (idx === -1) return <span className="font-black text-foreground">{word}</span>
+  if (idx === -1) return <span className="text-foreground">{word}</span>
 
   const before = word.slice(0, idx)
   const matched = word.slice(idx, idx + highlight.length)
   const after = word.slice(idx + highlight.length)
 
   return (
-    <span className="text-foreground font-black">
+    <span className="text-foreground">
       {before}
-      <span className="phonics-highlight font-black underline underline-offset-[5px] decoration-amber-400 decoration-[2.5px] drop-shadow-[0_0_8px_rgba(253,224,71,0.45)]">
-        {matched}
-      </span>
+      <span className="phonics-highlight underline underline-offset-4 decoration-[1.5px]">{matched}</span>
       {after}
     </span>
   )
+}
+
+/** 音标 / 拼读页通用的代表词条目：点击朗读 */
+export function ExampleWordButton({
+  word,
+  phonetic,
+  meaning,
+  highlight,
+  isPlaying,
+  onClick,
+}: {
+  word: string
+  phonetic?: string
+  meaning: string
+  highlight?: string
+  isPlaying: boolean
+  onClick: (e: React.MouseEvent) => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={`朗读单词: ${word} ${phonetic ?? ''} (${meaning})`}
+      className={`group/word relative text-left -mx-2 px-2 py-1.5 rounded-md transition-colors cursor-pointer min-w-0 ${
+        isPlaying ? 'bg-primary/10' : 'hover:bg-muted'
+      }`}
+    >
+      <div className="flex items-baseline gap-2 min-w-0 pr-5">
+        <span className="font-serif text-lg leading-tight">{renderHighlightedWord(word, highlight)}</span>
+        {phonetic && <span className="font-serif text-[13px] text-muted-foreground truncate">{phonetic}</span>}
+      </div>
+      <div className="text-xs text-muted-foreground truncate mt-0.5">{meaning}</div>
+      <Volume2
+        className={`size-3.5 absolute right-2 top-2.5 transition-opacity pointer-events-none ${
+          isPlaying ? 'text-primary opacity-100 animate-pulse' : 'text-muted-foreground opacity-0 group-hover/word:opacity-100'
+        }`}
+      />
+    </button>
+  )
+}
+
+export function PhoneticsEmptyState({ text }: { text: string }) {
+  return <div className="w-full py-20 text-center text-sm text-muted-foreground">{text}</div>
 }
 
 export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatrixViewProps) {
@@ -64,131 +100,76 @@ export function IpaMatrixView({ items, onSelectSymbol, onJumpToCombo }: IpaMatri
   }
 
   if (items.length === 0) {
-    return (
-      <div className="w-full py-16 flex flex-col items-center justify-center text-center space-y-3 bg-white/[0.02] border border-white/10 rounded-2xl">
-        <Sparkles className="size-8 text-muted-foreground/40" />
-        <p className="text-base text-muted-foreground">没有找到匹配的国际音标，请尝试调整筛选或关键词</p>
-      </div>
-    )
+    return <PhoneticsEmptyState text="没有找到匹配的音标，试试调整筛选或关键词" />
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 pb-8">
       {items.map((item) => {
         const isSymbolPlaying = playingSymbol === item.symbol
 
         return (
-          <div
+          <article
             key={item.id}
             onClick={() => onSelectSymbol(item)}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-3.5 sm:p-4 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 cursor-pointer backdrop-blur-xl space-y-3.5"
+            className="group border-t border-border py-5 cursor-pointer"
+            title="查看详情"
           >
-            {/* 顶部：音标大字、分类徽章、发音按钮与精读详情 */}
-            <div className="space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="relative">
-                    <span className="font-mono text-3xl sm:text-4xl font-black tracking-wider text-primary group-hover:scale-[1.03] transition-transform origin-left inline-block">
-                      /{item.symbol}/
-                    </span>
-                  </div>
-
-                  <span className="text-xs sm:text-[13px] px-2.5 py-1 rounded-lg font-bold border shrink-0 bg-primary/10 text-primary border-primary/30">
-                    {item.subcategory}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  {/* 音标单音素试听按钮 */}
-                  <button
-                    type="button"
-                    onClick={(e) => handlePlaySymbol(e, item)}
-                    title="试听音标发音"
-                    className={`size-9 rounded-xl flex items-center justify-center border transition-colors ${
-                      isSymbolPlaying
-                        ? 'bg-primary text-black border-primary shadow-sm'
-                        : 'bg-white/[0.05] hover:bg-primary/20 text-gray-300 hover:text-primary border-white/10'
-                    }`}
-                  >
-                    <Volume2 className={`size-5 ${isSymbolPlaying ? 'animate-pulse' : ''}`} />
-                  </button>
-                </div>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-baseline gap-3 min-w-0">
+                <span className="font-serif text-4xl text-primary leading-none">/{item.symbol}/</span>
+                <span className="text-xs text-muted-foreground">{item.subcategory}</span>
               </div>
-
-              {/* 发音要诀简述 */}
-              <p className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-[13px] sm:text-sm text-foreground/85 leading-relaxed">
-                {item.articulationTip}
-              </p>
-
-              {/* 常见字母组合标签（显著加大英文字母与标签尺寸） */}
-              <div className="flex items-center flex-wrap gap-2 pt-0.5">
-                <span className="text-sm font-bold text-gray-200 mr-0.5">常见字母:</span>
-                {item.commonSpellings.map((sp) => (
-                  <span
-                    key={sp}
-                    onClick={(e) => {
-                      if (onJumpToCombo) {
-                        e.stopPropagation()
-                        onJumpToCombo(sp)
-                      }
-                    }}
-                    title={`点击查看 ${sp} 组合规则`}
-                    className="text-base sm:text-[17px] font-mono font-black px-3 py-1 rounded-lg bg-white/10 hover:bg-primary/25 hover:text-primary border border-white/20 text-white transition-all cursor-pointer shadow-xs"
-                  >
-                    {sp}
-                  </span>
-                ))}
-              </div>
+              <button
+                type="button"
+                onClick={(e) => handlePlaySymbol(e, item)}
+                title="试听音标发音"
+                className={`size-8 -mt-1 rounded-md flex items-center justify-center transition-colors cursor-pointer ${
+                  isSymbolPlaying ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                }`}
+              >
+                <Volume2 className={`size-4 ${isSymbolPlaying ? 'animate-pulse' : ''}`} />
+              </button>
             </div>
 
-            {/* 底部：6个代表性单词网格（英文字母加大加粗，释义清晰明亮） */}
-            <div className="space-y-2 pt-1 border-t border-border/40">
-              <div className="flex items-center justify-between text-sm px-0.5">
-                <span className="font-bold text-gray-200">6个代表性单词</span>
-                <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
-              </div>
+            <p className="mt-3 text-[13px] xl:text-sm text-gray-300 leading-relaxed group-hover:text-foreground transition-colors">
+              {item.articulationTip}
+            </p>
 
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
-                {item.words.map((repWord, index) => {
-                  const isWordPlaying = playingWord === repWord.word
-
-                  return (
-                    <button
-                      key={`${item.id}-${index}`}
-                      type="button"
-                      onClick={(e) => handlePlayWord(e, repWord)}
-                      title={`朗读单词: ${repWord.word} ${repWord.phonetic} (${repWord.meaning})`}
-                      className={`group/word relative text-left px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-xl border transition-all overflow-hidden ${
-                        isWordPlaying
-                          ? 'bg-primary/20 border-primary text-white shadow-sm'
-                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
-                      }`}
-                    >
-                      <div className="min-w-0">
-                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-foreground tracking-wide">
-                          {renderHighlightedWord(repWord.word, repWord.highlight)}
-                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground font-mono">
-                            {repWord.phonetic}
-                          </span>
-                        </div>
-                        <div className="text-xs sm:text-[13px] font-semibold text-foreground/80 truncate leading-snug mt-1">
-                          {repWord.meaning}
-                        </div>
-                      </div>
-
-                      <Volume2
-                        className={`size-3.5 absolute right-1.5 top-1.5 transition-opacity pointer-events-none ${
-                          isWordPlaying
-                            ? 'text-primary opacity-100 animate-pulse'
-                            : 'text-muted-foreground opacity-0 group-hover/word:opacity-100'
-                        }`}
-                      />
-                    </button>
-                  )
-                })}
-              </div>
+            <div className="mt-3 flex items-center flex-wrap gap-x-1 gap-y-1">
+              <span className="text-xs text-muted-foreground mr-1.5">常见拼写</span>
+              {item.commonSpellings.map((sp) => (
+                <button
+                  key={sp}
+                  type="button"
+                  onClick={(e) => {
+                    if (onJumpToCombo) {
+                      e.stopPropagation()
+                      onJumpToCombo(sp)
+                    }
+                  }}
+                  title={`查看 ${sp} 组合规则`}
+                  className="h-7 px-1.5 rounded-md font-serif text-base text-white hover:text-primary hover:bg-muted transition-colors cursor-pointer"
+                >
+                  {sp}
+                </button>
+              ))}
             </div>
-          </div>
+
+            <div className="mt-3 pt-3 border-t border-dashed border-border grid grid-cols-2 gap-x-4">
+              {item.words.map((repWord, index) => (
+                <ExampleWordButton
+                  key={`${item.id}-${index}`}
+                  word={repWord.word}
+                  phonetic={repWord.phonetic}
+                  meaning={repWord.meaning}
+                  highlight={repWord.highlight}
+                  isPlaying={playingWord === repWord.word}
+                  onClick={(e) => handlePlayWord(e, repWord)}
+                />
+              ))}
+            </div>
+          </article>
         )
       })}
     </div>
