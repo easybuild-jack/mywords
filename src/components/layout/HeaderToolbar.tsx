@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { RotateCcw, Flame, X } from 'lucide-react'
+import { RotateCcw, Flame, X, ChevronDown } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { SkinPicker } from '@/components/layout/SkinPicker'
 import { Select, type SelectOption } from '@/components/ui/Select'
@@ -58,26 +58,25 @@ export function HeaderToolbar() {
     }
   }, [])
 
+  const total = currentLoadedWords.length
+  const progress = total > 0 ? Math.min(100, ((activeWordIndex + 1) / total) * 100) : 0
+
   return (
     <header
-      className={`sticky top-0 z-30 w-full bg-background transition-[border-color,box-shadow,padding] duration-300 flex items-center justify-center px-4 xl:px-6 pointer-events-auto shrink-0 ${
-        isScrolled
-          ? 'py-2.5 xl:py-3 border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
-          : 'py-3.5 xl:py-5 border-b border-transparent shadow-none'
+      className={`sticky top-0 z-30 w-full bg-background flex items-center justify-center px-6 pointer-events-auto shrink-0 border-b border-border transition-shadow ${
+        isScrolled ? 'shadow-[0_4px_16px_-8px_rgba(0,0,0,0.25)]' : ''
       }`}
     >
-      {/* 宽度与单词卡（PracticeStageFrame）保持一致：w-[800px] xl:w-[940px] 2xl:w-[1060px] */}
-      <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-5 text-sm xl:text-base w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] justify-between shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 transition-all duration-300">
-        {/* 左区：词书 / 单元入口（flex-1 预留展示空间，长词书名、长单元名可完整显示） */}
+      <div className="h-14 xl:h-15 flex items-center gap-4 xl:gap-5 text-sm w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] justify-between">
         <div className="flex items-center flex-1 min-w-0">
           {isErrorPracticeActive ? (
-            <div className="flex items-center gap-2 px-3 xl:px-3.5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-destructive/15 border border-destructive/30 text-white font-medium">
-              <Flame className="size-4 xl:size-4.5 text-destructive animate-pulse" />
-              <span className="text-destructive font-bold text-xs xl:text-sm">
+            <div className="flex items-center gap-2 min-w-0">
+              <Flame className="size-4 text-destructive shrink-0" />
+              <span className="text-destructive font-medium shrink-0">
                 {mode === 'learn' ? '生错词练习' : '生错词攻坚'}
               </span>
-              <span className="text-muted-foreground">·</span>
-              <span className="text-xs xl:text-sm text-gray-300 font-mono">
+              <span className="text-muted-foreground/50 shrink-0">/</span>
+              <span className="text-muted-foreground tabular-nums truncate">
                 {mode === 'learn'
                   ? `第 ${activeWordIndex + 1} / ${currentLoadedWords.length} 词`
                   : `已消灭 ${conqueredErrorWordIds?.length || 0} / ${currentLoadedWords.length} 词`}
@@ -85,51 +84,45 @@ export function HeaderToolbar() {
               <Tooltip content="退出生错词练习，返回常规章节" side="bottom">
                 <button
                   onClick={exitErrorPractice}
-                  className="ml-1 p-0.5 rounded hover:bg-white/10 text-muted-foreground hover:text-white transition-all cursor-pointer"
+                  className="ml-1 size-6 inline-flex items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  aria-label="退出生错词练习"
                 >
-                  <X className="size-3.5 xl:size-4" />
+                  <X className="size-3.5" />
                 </button>
               </Tooltip>
             </div>
           ) : (
             <Link
               href={`/books?from=${mode}`}
-              className="flex items-center gap-2 px-3 xl:px-3.5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-white font-medium transition-all text-xs xl:text-sm min-w-0 max-w-full"
+              className="group flex items-center gap-2 min-w-0 max-w-full text-muted-foreground hover:text-foreground transition-colors"
+              title="切换词书与单元"
             >
-              <span className="text-primary font-bold shrink-0">{currentBook?.name || 'CET-4'}</span>
-              <span className="text-muted-foreground shrink-0">·</span>
+              <span className="text-foreground font-medium shrink-0">{currentBook?.name || 'CET-4'}</span>
+              <span className="text-muted-foreground/50 shrink-0">/</span>
               {currentUnitMeta ? (
-                <>
-                  <span className="font-mono shrink-0">Unit {currentUnitIndex + 1}</span>
-                  <span className="text-muted-foreground shrink-0">·</span>
-                  <span className="text-white/90 truncate min-w-0">{currentUnitMeta.name}</span>
-                </>
+                <span className="truncate min-w-0">
+                  Unit {currentUnitIndex + 1} · {currentUnitMeta.name}
+                </span>
               ) : (
                 <span className="shrink-0">第 {currentUnitIndex + 1} 章</span>
               )}
+              <ChevronDown className="size-3.5 shrink-0 opacity-60 group-hover:opacity-100" />
             </Link>
           )}
         </div>
 
-        {/* 右区：控制项（shrink-0 不压缩，始终靠右对齐） */}
-        <div className="flex items-center gap-4 xl:gap-5 shrink-0">
-
-          {/* 发音口音下拉 */}
+        <div className="flex items-center gap-1.5 xl:gap-2.5 shrink-0">
           <Select<'us' | 'uk'>
             value={phoneticPreference}
             onChange={setPhoneticPreference}
             options={ACCENT_OPTIONS}
           />
 
-          {/* 分隔线 */}
-          <div className="h-4 xl:h-5 w-px bg-white/10" />
-
-          {/* 单个单词循环次数配置 */}
           {isErrorPracticeActive && mode === 'dictation' ? (
             <Tooltip content="错词攻坚强制连续 3 次无误默写" side="bottom">
-              <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-md xl:rounded-lg h-8 xl:h-9 px-3 xl:px-3.5 inline-flex items-center text-xs xl:text-sm font-mono font-bold cursor-default">
-                循环 3次 (3-Streak)
-              </div>
+              <span className="h-8 px-2.5 inline-flex items-center text-sm text-destructive cursor-default">
+                循环 3 次
+              </span>
             </Tooltip>
           ) : (
             <Select<1 | 2 | 3 | 5>
@@ -139,21 +132,25 @@ export function HeaderToolbar() {
             />
           )}
 
-          {/* 皮肤切换（仅配色） */}
           <SkinPicker />
 
-          {/* Restart 按钮 */}
-          <Tooltip content="Restart (回到第一个单词)" side="bottom">
+          <Tooltip content="回到本单元第一个单词" side="bottom">
             <button
               onClick={restartUnit}
-              className="flex items-center gap-1.5 px-4 xl:px-5 py-1.5 xl:py-2 rounded-lg xl:rounded-xl bg-primary text-[#0B0C0E] font-bold text-xs xl:text-sm btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+              className="h-8 inline-flex items-center gap-1.5 px-2.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             >
-              <RotateCcw className="size-3.5 xl:size-4" />
-              <span>Restart</span>
+              <RotateCcw className="size-3.5" />
+              <span>从头开始</span>
             </button>
           </Tooltip>
         </div>
       </div>
+
+      {!isErrorPracticeActive && total > 0 && (
+        <div className="absolute left-0 right-0 -bottom-px h-0.5 pointer-events-none" aria-hidden="true">
+          <div className="h-full bg-primary transition-[width] duration-300" style={{ width: `${progress}%` }} />
+        </div>
+      )}
     </header>
   )
 }

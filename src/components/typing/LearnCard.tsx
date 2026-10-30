@@ -1,20 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import {
-  ArrowRight,
-  Scissors,
-  Combine,
-  BookOpen,
-  Volume2,
-  Sparkles,
-  Lightbulb,
-  Check,
-  Star,
-  Quote,
-  Pencil,
-} from 'lucide-react'
-import type { WordItem, WordExample } from '@/types'
+import React, { useState } from 'react'
+import { Scissors, Combine, Volume2, Star, Pencil } from 'lucide-react'
+import type { WordItem } from '@/types'
 import { splitIntoMorphemes, resolveSyllables } from '@/lib/syllables'
 import { splitIntoGraphemes, type GraphemeKind, type GraphemeSegment } from '@/lib/graphemes'
 import { listPhonetics, formatMeaningText } from '@/lib/wordDisplay'
@@ -37,11 +25,11 @@ interface LearnCardProps {
   remainingLoops?: number
 }
 
-/** 长单词按字数降档，避免撑破卡片，大屏下按比例自适应放大 */
+/** 长单词按字数降档，避免撑破版心，大屏下按比例自适应放大 */
 function wordSizeClass(length: number) {
-  if (length <= 8) return 'text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5rem]'
-  if (length <= 12) return 'text-4xl sm:text-5xl xl:text-6xl 2xl:text-[4rem]'
-  return 'text-3xl sm:text-4xl xl:text-5xl 2xl:text-[3.25rem]'
+  if (length <= 8) return 'text-6xl sm:text-7xl xl:text-8xl 2xl:text-[6.5rem]'
+  if (length <= 12) return 'text-5xl sm:text-6xl xl:text-7xl 2xl:text-[5rem]'
+  return 'text-4xl sm:text-5xl xl:text-6xl 2xl:text-[3.75rem]'
 }
 
 /** 四类字母组合在界面上共用一套黄色，不按类别再分色 */
@@ -66,7 +54,7 @@ function comboToneIndex(segments: GraphemeSegment[], index: number): number {
 function segmentClass(segments: GraphemeSegment[], index: number): string | undefined {
   const segment = segments[index]
   if (segment?.kind === 'silent-e' || segment?.kind === 'silent') {
-    return 'text-gray-400'
+    return 'text-gray-500'
   }
   if (!isCombo(segment)) {
     return segment.kind === 'vowel' ? 'text-primary' : undefined
@@ -74,7 +62,7 @@ function segmentClass(segments: GraphemeSegment[], index: number): string | unde
   return COMBO_TONES[comboToneIndex(segments, index)]
 }
 
-/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标绿，辅音沿用外层白色，不发音的哑音e及自定义哑音标灰 */
+/** 逐段渲染单词：固定发音的字母组合整组标黄，落单的元音标主色，辅音沿用正文色，不发音的哑音e及自定义哑音标灰 */
 function MarkedWord({ word }: { word: WordItem }) {
   const segments = splitIntoGraphemes(word.name, resolveSyllables(word), word.silentIndices)
   return (
@@ -113,7 +101,7 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
       {syllableGroups.map((group, sIdx) => (
         <React.Fragment key={sIdx}>
           {sIdx > 0 && (
-            <span className="text-gray-500 font-normal select-none px-1">·</span>
+            <span className="text-gray-500 select-none px-[0.08em]">·</span>
           )}
           <span
             className="inline-block syllable-font-light select-none"
@@ -133,8 +121,10 @@ function MarkedSplitWord({ word, syllables }: { word: WordItem; syllables: strin
   )
 }
 
+const HEADER_BUTTON_CLASS =
+  'h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer select-none'
 
-/** 跟学卡片：上半区专注跟打，下半区分栏展示词根词源与2条精选双语例句 */
+/** 跟学单词页：上半区专注跟打，下半区左右分栏展示例句/短语与构词 */
 export function LearnCard({
   word: sourceWord,
   currentInput,
@@ -182,6 +172,7 @@ export function LearnCard({
   const contextItems = contextTab === 'examples' ? examples : phrases
   const contextStatus =
     contextTab === 'examples' ? examplesStatus : phrasesStatus
+  const contextLabel = contextTab === 'examples' ? '例句' : '短语'
   const { origin, derivation } =
     !etymologyStatus || etymologyStatus === 'ready'
       ? getWordEtymologyExtras(word)
@@ -205,113 +196,73 @@ export function LearnCard({
     })
   }
 
-  const starButton = !isErrorPracticeActive ? (
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation()
-        starCurrentWord()
-      }}
-      className={`h-10 xl:h-11 px-3.5 xl:px-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center gap-2 text-xs xl:text-sm font-medium select-none active:scale-95 ${
-        isStarred
-          ? 'border-amber-400/60 bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 hover:border-amber-400/80'
-          : 'border-white/10 bg-white/5 text-gray-300 hover:text-amber-300 hover:border-amber-400/40 hover:bg-amber-400/10'
-      }`}
-      title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
-      aria-label={isStarred ? '移出生词本' : '加入生词本'}
-    >
-      <Star
-        className={`size-4 xl:size-4.5 transition-transform duration-200 ${
-          isStarred
-            ? 'fill-amber-400 text-amber-400 scale-105'
-            : 'text-gray-400 group-hover:text-amber-300'
+  const headerActions = (
+    <>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          toggleSplit()
+        }}
+        className={`${HEADER_BUTTON_CLASS} ${
+          isSplit ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
         }`}
-      />
-      <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
-    </button>
-  ) : null
+        title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
+        aria-label={isSplit ? '合并单词' : '音节切分'}
+        aria-pressed={isSplit}
+      >
+        {isSplit ? <Combine className="size-3.5" /> : <Scissors className="size-3.5" />}
+        <span>{isSplit ? '合并' : '音节'}</span>
+      </button>
+
+      {canEditWordSplit && (
+        <button
+          type="button"
+          onClick={() => setEditModalOpen(true)}
+          className={`${HEADER_BUTTON_CLASS} text-muted-foreground hover:text-foreground hover:bg-muted`}
+          title="修改单词切分与构词"
+          aria-label="修改单词切分与构词"
+        >
+          <Pencil className="size-3.5" />
+          <span>修改</span>
+        </button>
+      )}
+
+      {!isErrorPracticeActive && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            starCurrentWord()
+          }}
+          className={`${HEADER_BUTTON_CLASS} ${
+            isStarred ? 'text-amber-400 hover:text-amber-300' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+          }`}
+          title={isStarred ? `已在生词本（点击或 ${starShortcutText} 移出）` : `一键加入生词本 (${starShortcutText})`}
+          aria-label={isStarred ? '移出生词本' : '加入生词本'}
+          aria-pressed={isStarred}
+        >
+          <Star className={`size-3.5 ${isStarred ? 'fill-amber-400 text-amber-400' : ''}`} />
+          <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
+        </button>
+      )}
+    </>
+  )
 
   return (
     <WordCardShell
       word={word}
       phoneticPreference={phoneticPreference}
       remainingLoops={remainingLoops}
-      headerActions={starButton}
+      headerActions={headerActions}
       showAudioButton={false}
-      className="pt-1 sm:pt-1.5 xl:pt-2 pb-4 sm:pb-5 xl:pb-6 px-6 sm:px-7 xl:px-10 2xl:px-12"
+      className="pt-12 xl:pt-14 pb-2"
     >
-      {/* 上半区（音标 + 单词 + 释义 + 跟打槽） */}
-      <div className="space-y-0.5 sm:space-y-1">
-        {/* 音标栏：左侧音节切分/合并，中间音标发音，右侧切分与构词修改，高度以音标为准 */}
-        <div className="h-7 sm:h-8 flex items-center justify-center gap-2 sm:gap-2.5">
-          {/* 左侧：音节切分/合并切换按钮 */}
-          <button
-            type="button"
-            onClick={toggleSplit}
-            className={`h-7 w-7 sm:h-8 sm:w-8 rounded-lg border transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95 select-none ${
-              isSplit
-                ? 'border-primary/50 bg-primary/15 text-primary'
-                : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20'
-            }`}
-            title={isSplit ? `合并单词 (${splitShortcutText})` : `音节切分 (${splitShortcutText})`}
-            aria-label={isSplit ? '合并单词' : '音节切分'}
-          >
-            {isSplit ? <Combine className="size-3.5 sm:size-4" /> : <Scissors className="size-3.5 sm:size-4" />}
-          </button>
-
-          {/* 中间：音标（可点击播放发音） */}
-          <div className="flex items-center gap-x-2 sm:gap-x-3">
-            {phonetics.map((entry) => (
-              <button
-                key={entry.label ?? 'single'}
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  audioEngine.playPronunciation(
-                    word.name,
-                    entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
-                  )
-                }}
-                className="group h-7 sm:h-8 inline-flex items-center gap-1.5 px-2.5 sm:px-3 rounded-lg hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer select-none"
-                title={`点击播放 ${entry.label ? `${entry.label}音` : ''}读音 (Ctrl+J)`}
-              >
-                {entry.label && (
-                  <span className="font-sans text-xs xl:text-sm font-semibold text-[#6B7280] group-hover:text-primary transition-colors">
-                    {entry.label}
-                  </span>
-                )}
-                <span
-                  className={`font-mono tracking-wide text-gray-300 group-hover:text-white transition-colors flex items-center gap-1.5 leading-none ${
-                    phonetics.length > 1 ? 'text-base sm:text-lg xl:text-xl' : 'text-lg sm:text-xl xl:text-2xl'
-                  }`}
-                >
-                  <span>{entry.text}</span>
-                  <Volume2 className="size-3.5 text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* 右侧：修改单词切分与构词按钮（若无权限则保留等宽占位以保持绝对居中） */}
-          {canEditWordSplit ? (
-            <button
-              type="button"
-              onClick={() => setEditModalOpen(true)}
-              className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95 select-none"
-              title="修改单词切分与构词"
-              aria-label="修改单词切分与构词"
-            >
-              <Pencil className="size-3.5 sm:size-4" />
-            </button>
-          ) : (
-            <div className="w-7 sm:w-8 h-7 sm:h-8 shrink-0 invisible pointer-events-none" aria-hidden="true" />
-          )}
-        </div>
-
-        {/* 单词主体展示（紧凑排版，居中无按钮偏移） */}
-        <div className="h-13 sm:h-15 xl:h-17 flex items-center justify-center relative">
+      {/* 上半区：单词 + 音标 + 释义 + 跟打槽 */}
+      <div>
+        <div className="h-20 sm:h-24 xl:h-28 2xl:h-30 flex items-center justify-center">
           <h2
-            className={`${wordSizeClass(displayLength)} font-extrabold tracking-tight text-white font-mono leading-tight`}
+            className={`${wordSizeClass(displayLength)} font-serif font-normal tracking-tight text-white leading-none`}
           >
             {isSplit ? (
               <MarkedSplitWord word={word} syllables={syllables} />
@@ -321,321 +272,303 @@ export function LearnCard({
           </h2>
         </div>
 
-        {/* 单词释义：预留稳定的两行自适应空间，防止译文过多换两行时挤压跟打槽与下半区 */}
-        <div className="min-h-[44px] sm:min-h-[48px] xl:min-h-[52px] flex items-center justify-center px-4 py-0.5">
-          <p className="text-sm sm:text-base xl:text-lg 2xl:text-xl text-gray-300 font-medium line-clamp-2 leading-normal sm:leading-relaxed text-center max-w-2xl xl:max-w-3xl 2xl:max-w-4xl">
-            {meaningText}
+        {/* 音标：点击播放对应口音 */}
+        <div className="h-9 mt-2 flex items-center justify-center gap-x-4 xl:gap-x-6">
+          {phonetics.map((entry) => (
+            <button
+              key={entry.label ?? 'single'}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                audioEngine.playPronunciation(
+                  word.name,
+                  entry.label === '英' ? 'uk' : entry.label === '美' ? 'us' : phoneticPreference
+                )
+              }}
+              className="group h-9 inline-flex items-center gap-2 px-2.5 rounded-md hover:bg-muted transition-colors cursor-pointer select-none"
+              title={`点击播放 ${entry.label ? `${entry.label}音` : ''}读音 (Ctrl+J)`}
+            >
+              {entry.label && (
+                <span className="text-xs text-muted-foreground">{entry.label}</span>
+              )}
+              <span className="font-serif text-lg xl:text-xl text-gray-300 group-hover:text-white transition-colors leading-none">
+                {entry.text}
+              </span>
+              <Volume2 className="size-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+            </button>
+          ))}
+        </div>
+
+        {/* 释义：预留两行高度，避免释义换行时挤压跟打槽 */}
+        <div className="min-h-[48px] xl:min-h-[56px] flex items-center justify-center px-6 mt-1">
+          <p className="text-base xl:text-lg text-gray-200 line-clamp-2 leading-relaxed text-center max-w-3xl">
+            {word.posList?.length
+              ? word.posList.map((p, i) => (
+                  <span key={i} className={i > 0 ? 'ml-5' : undefined}>
+                    <i className="font-serif text-muted-foreground mr-1.5">{p.pos}</i>
+                    {p.means.join('；')}
+                  </span>
+                ))
+              : meaningText}
           </p>
         </div>
 
-        {/* 跟打输入槽：英语练习册 4 线格风格（无红线，4线三格，字母紧凑自然排版，光标贴合输入末尾） */}
-        <div className="relative w-full pt-1">
-          {(() => {
-            const wordLength = word.name.length
-            const totalSlots = Math.max(wordLength, currentInput.length)
-            const fontClass =
-              totalSlots <= 6
-                ? 'text-4xl sm:text-5xl xl:text-6xl'
-                : totalSlots <= 9
+        {/* 跟打区：练习册四线三格，无外框，字母紧凑排版，光标贴合输入末尾 */}
+        {(() => {
+          const wordLength = word.name.length
+          const totalSlots = Math.max(wordLength, currentInput.length)
+          const fontClass =
+            totalSlots <= 6
+              ? 'text-4xl sm:text-5xl xl:text-6xl'
+              : totalSlots <= 9
                 ? 'text-3xl sm:text-4xl xl:text-5xl'
                 : 'text-2xl sm:text-3xl xl:text-4xl'
+          const lineClass = hasTypo ? 'border-destructive/50' : 'border-foreground/15'
 
-            return (
-              <div
-                className={`relative flex items-center justify-center py-2.5 sm:py-3 xl:py-3.5 px-4 sm:px-6 overflow-hidden font-mono rounded-2xl border-2 transition-all shadow-inner ${
-                  hasTypo
-                    ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
-                    : 'border-primary/40 bg-white/[0.02]'
-                }`}
-              >
-                {/* 4 线格打字区与光标 */}
-                <div className="relative w-full h-16 sm:h-18 xl:h-20 flex items-center justify-center">
-                  {/* 4 线格参考线：顶线、中虚线、基准底线（同色软蓝无红线）、下延底线（最后的横线） */}
-                  <div className="absolute inset-x-4 inset-y-1.5 pointer-events-none flex flex-col justify-between opacity-70 z-0">
-                    {/* 第 1 线：顶线 */}
-                    <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
-                    {/* 第 2 线：中线（虚线） */}
-                    <div className="w-full border-b border-dashed border-sky-400/45 dark:border-sky-400/30" />
-                    {/* 第 3 线：基准线（实线，与参考线统一青蓝色，无红线） */}
-                    <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
-                    {/* 第 4 线：下延底线（最后的横线） */}
-                    <div className="w-full border-b border-sky-400/25 dark:border-sky-400/15" />
-                  </div>
+          return (
+            <div
+              className={`relative mx-auto mt-3 xl:mt-4 w-full max-w-xl h-16 sm:h-18 xl:h-20 flex items-center justify-center font-mono ${
+                hasTypo ? 'animate-shake' : ''
+              }`}
+            >
+              <div className="absolute inset-x-0 inset-y-1.5 pointer-events-none flex flex-col justify-between z-0">
+                <div className={`w-full border-b ${lineClass}`} />
+                <div className={`w-full border-b border-dashed ${hasTypo ? 'border-destructive/30' : 'border-foreground/10'}`} />
+                <div className={`w-full border-b ${lineClass}`} />
+                <div className={`w-full border-b ${hasTypo ? 'border-destructive/30' : 'border-foreground/10'}`} />
+              </div>
 
-                  {/* 字母与光标槽列表：字间距紧凑贴合，光标精确贴合在已输入字符末尾 */}
-                  <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
-                    {Array.from({ length: totalSlots }).map((_, idx) => {
-                      const targetChar = word.name[idx]
-                      const typedChar = currentInput[idx]
-                      const isTyped = idx < currentInput.length
-                      const isCurrent = idx === currentInput.length
-                      const isCorrect =
-                        isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
+              <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
+                {Array.from({ length: totalSlots }).map((_, idx) => {
+                  const targetChar = word.name[idx]
+                  const typedChar = currentInput[idx]
+                  const isTyped = idx < currentInput.length
+                  const isCurrent = idx === currentInput.length
+                  const isCorrect =
+                    isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
 
-                      return (
-                        <div
-                          key={idx}
-                          style={{ width: '1.05ch' }}
-                          className="relative w-[1.05ch] h-full flex items-center justify-center"
+                  return (
+                    <div
+                      key={idx}
+                      style={{ width: '1.05ch' }}
+                      className="relative w-[1.05ch] h-full flex items-center justify-center"
+                    >
+                      {isCurrent && (
+                        <span
+                          className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
+                            hasTypo ? 'bg-destructive' : 'bg-primary'
+                          }`}
+                        />
+                      )}
+
+                      {isTyped && (
+                        <span
+                          className={`${fontClass} -translate-y-1.5 sm:-translate-y-2 ${
+                            isCorrect
+                              ? 'text-white'
+                              : 'text-destructive font-semibold animate-error-flash rounded'
+                          }`}
+                          title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
                         >
-                          {/* 光标：精确处于当前未打字母的左边缘起始位置 */}
-                          {isCurrent && (
-                            <span
-                              className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
-                                hasTypo ? 'bg-destructive' : 'bg-primary'
-                              }`}
-                            />
-                          )}
+                          {typedChar}
+                        </span>
+                      )}
 
-                          {/* 已输入字符（坐落在基准线之上） */}
-                          {isTyped && (
-                            <span
-                              className={`${fontClass} font-extrabold -translate-y-1.5 sm:-translate-y-2 ${
-                                isCorrect
-                                  ? 'text-primary'
-                                  : 'text-destructive font-black animate-error-flash px-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]'
-                              }`}
-                              title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
-                            >
-                              {typedChar}
-                            </span>
-                          )}
-
-                          {/* 占位的 _ ：精确坐落在最后的横线（第 4 线）上 */}
-                          <span
-                            className={`absolute -bottom-1 sm:-bottom-1.5 font-mono text-xl sm:text-2xl xl:text-3xl font-black select-none pointer-events-none transition-opacity ${
-                              isTyped
-                                ? 'opacity-0'
-                                : hasTypo
-                                ? 'text-destructive/40'
-                                : 'text-primary/45'
-                            }`}
-                          >
-                            _
-                          </span>
-                        </div>
-                      )
-                    })}
-
-                    {/* 全部输入完成后，光标显示在末尾 */}
-                    {currentInput.length >= totalSlots && (
+                      {/* 未输入的占位短横：落在最下方的第 4 线上 */}
                       <span
-                        className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
-                          hasTypo ? 'bg-destructive' : 'bg-primary'
+                        className={`absolute bottom-1.5 left-[22%] right-[22%] h-0.5 rounded-full pointer-events-none transition-opacity ${
+                          isTyped
+                            ? 'opacity-0'
+                            : hasTypo
+                              ? 'bg-destructive/40'
+                              : 'bg-foreground/25'
                         }`}
                       />
-                    )}
-                  </div>
-                </div>
+                    </div>
+                  )
+                })}
+
+                {currentInput.length >= totalSlots && (
+                  <span
+                    className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
+                      hasTypo ? 'bg-destructive' : 'bg-primary'
+                    }`}
+                  />
+                )}
               </div>
-            )
-          })()}
-        </div>
+            </div>
+          )
+        })()}
       </div>
 
-      {/* 下半区：左右分栏排版（左侧占 8/12 宽幅双语例句；右侧占 4/12 词根词源/助记） */}
-      <div className="grid grid-cols-12 gap-3.5 xl:gap-5 pt-3 xl:pt-4 flex-1 min-h-0 text-left">
-        {/* 左栏：精选双语例句（col-span-8，宽幅排版，文字舒展） */}
-        <div className="col-span-8 rounded-2xl bg-white/[0.03] border border-white/10 p-3.5 xl:p-4 2xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
-          <div className="flex h-full min-h-0 flex-col gap-2.5 xl:gap-3.5">
-            {/* 顶栏小标题 */}
-            <div className="flex items-center justify-between pb-1.5 xl:pb-2 border-b border-white/5">
-              <div className="flex items-center gap-1.5 xl:gap-2">
-                <Quote className="size-3.5 xl:size-4 text-accent" />
-                <div className="flex items-center rounded-lg bg-white/5 p-0.5" role="tablist" aria-label="语境内容">
-                  {([
-                    ['examples', '例句'],
-                    ['phrases', '短语'],
-                  ] as const).map(([tab, label]) => (
-                    <button
-                      key={tab}
-                      type="button"
-                      role="tab"
-                      aria-selected={contextTab === tab}
-                      onClick={() => setContextTab(tab)}
-                      className={`rounded-md px-2.5 py-1 text-xs font-bold transition-colors cursor-pointer ${
-                        contextTab === tab
-                          ? 'bg-accent/15 text-accent'
-                          : 'text-gray-400 hover:text-white'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] xl:text-xs font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 font-semibold">
-                  {contextStatus === 'pending'
-                    ? 'LOADING'
-                    : contextStatus === 'error'
-                      ? 'FAILED'
-                      : `${contextItems.length} ${contextTab === 'examples' ? 'EXAMPLES' : 'PHRASES'}`}
-                </span>
-              </div>
+      {/* 下半区：左侧例句/短语，右侧构词；用细线分隔，不套卡片 */}
+      <div className="grid grid-cols-12 mt-5 xl:mt-7 border-t border-border flex-1 min-h-0 text-left">
+        <section className="col-span-8 pt-4 xl:pt-5 pr-6 xl:pr-8 flex flex-col min-h-0">
+          <div className="flex items-end justify-between gap-3">
+            <div className="flex items-center gap-5" role="tablist" aria-label="语境内容">
+              {([
+                ['examples', '例句'],
+                ['phrases', '短语'],
+              ] as const).map(([tab, label]) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={contextTab === tab}
+                  onClick={() => setContextTab(tab)}
+                  className={`pb-1.5 text-sm border-b-2 transition-colors cursor-pointer ${
+                    contextTab === tab
+                      ? 'border-foreground text-foreground font-medium'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-
-            {/* 示例句列表（宽幅排版，文字舒展） */}
-            <div className={`min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar ${
-              contextTab === 'phrases'
-                ? 'grid grid-cols-2 content-start gap-2.5 xl:gap-3.5'
-                : 'space-y-2.5 xl:space-y-3.5'
-            }`}>
-              {contextStatus === 'pending' ? (
-                <div className="col-span-2 space-y-3 animate-pulse" aria-label="AI 语境内容生成中">
-                  {[0, 1].map((item) => (
-                    <div key={item} className="h-24 rounded-xl border border-white/5 bg-white/[0.04]" />
-                  ))}
-                </div>
-              ) : contextStatus === 'error' ? (
-                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-2 py-6 text-center text-sm text-gray-400">
-                  <span>{contextTab === 'examples' ? '例句' : '短语'}生成失败</span>
-                </div>
-              ) : contextItems.length === 0 ? (
-                <div className="col-span-2 h-full flex flex-col items-center justify-center gap-3 py-6 text-center">
-                  <span className="text-sm text-gray-400">暂无{contextTab === 'examples' ? '例句' : '常用短语'}</span>
-                </div>
-              ) : contextItems.map((item, idx) => {
-                const isPlaying = speakingSentenceIdx === idx
-                return (
-                  <div
-                    key={idx}
-                    className={`p-3 xl:p-3.5 2xl:p-4 rounded-xl bg-white/[0.025] border transition-all duration-200 group ${
-                      isPlaying
-                        ? 'border-primary/40 bg-primary/[0.04]'
-                        : 'border-white/5 hover:bg-white/[0.05] hover:border-white/10'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3 xl:gap-3.5">
-                      <span className="size-5 xl:size-6 rounded-lg bg-accent/15 text-accent text-xs xl:text-sm font-mono font-bold flex items-center justify-center shrink-0 mt-0.5 border border-accent/25">
-                        0{idx + 1}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-2">
-                          <InteractiveSentence
-                            sentence={item.en}
-                            wordName={word.name}
-                            sentenceCn={item.cn}
-                            onWordClick={(clickedWord, en, cn, rect) => {
-                              setLookupWordInfo({ word: clickedWord, sentenceEn: en, sentenceCn: cn, targetRect: rect })
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handlePlaySentence(item.en, idx)
-                            }}
-                            className={`p-1.5 -mr-1 -mt-0.5 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
-                              isPlaying
-                                ? 'border-primary/50 bg-primary/20 text-primary animate-pulse'
-                                : 'border-transparent text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/15'
-                            }`}
-                            title={`朗读${contextTab === 'examples' ? '例句' : '短语'}`}
-                            aria-label={`朗读${contextTab === 'examples' ? '例句' : '短语'}`}
-                          >
-                            <Volume2 className="size-3.5 xl:size-4" />
-                          </button>
-                        </div>
-                        <div className="text-xs xl:text-sm text-gray-400 leading-relaxed mt-1 xl:mt-1.5">
-                          {item.cn}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            <span className="pb-1.5 text-xs text-muted-foreground">
+              {contextStatus === 'pending'
+                ? '生成中…'
+                : contextStatus === 'error'
+                  ? '生成失败'
+                  : contextItems.length > 0
+                    ? `${contextItems.length} 条 · 点击单词可查词`
+                    : null}
+            </span>
           </div>
-        </div>
 
-        {/* 右栏：词根词源与构词助记（col-span-4） */}
-        <div className="col-span-4 rounded-2xl bg-white/[0.03] border border-white/10 p-4 xl:p-5 flex flex-col justify-between overflow-hidden shadow-inner">
-          <div className="space-y-3 xl:space-y-4">
-            {/* 顶栏小标题 */}
-            <div className="flex items-center justify-between pb-2 border-b border-white/5">
-              <div className="flex items-center gap-2 min-w-0">
-                <BookOpen className="size-4 xl:size-4.5 text-primary shrink-0" />
-                <span className="text-sm xl:text-base font-bold text-white/90 truncate">词根 · 助记</span>
+          <div
+            className={`min-h-0 flex-1 overflow-y-auto pr-1 mt-2 custom-scrollbar ${
+              contextTab === 'phrases' ? 'grid grid-cols-2 content-start gap-x-8' : ''
+            }`}
+          >
+            {contextStatus === 'pending' ? (
+              <div className="col-span-2 space-y-4 pt-3 animate-pulse" aria-label="AI 语境内容生成中">
+                {[0, 1].map((item) => (
+                  <div key={item} className="space-y-2">
+                    <div className="h-5 w-11/12 rounded bg-muted" />
+                    <div className="h-4 w-2/3 rounded bg-muted" />
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-xs xl:text-sm font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20 font-semibold">
-                  {etymologyStatus === 'pending'
-                    ? 'LOADING'
-                    : etymologyStatus === 'error'
-                      ? 'FAILED'
-                      : 'ROOTS'}
-                </span>
+            ) : contextStatus === 'error' ? (
+              <div className="col-span-2 h-full flex items-center justify-center py-6 text-sm text-muted-foreground">
+                {contextLabel}生成失败
               </div>
-            </div>
-
-            {/* 词根拆解块或词源探究（字号全面放大） */}
-            {etymologyStatus === 'pending' ? (
-              <div className="space-y-3 animate-pulse" aria-label="AI 构词分析中">
-                <div className="h-5 w-4/5 rounded bg-white/[0.06]" />
-                <div className="h-5 w-3/5 rounded bg-white/[0.06]" />
-                <div className="h-16 rounded-lg bg-white/[0.04]" />
+            ) : contextItems.length === 0 ? (
+              <div className="col-span-2 h-full flex items-center justify-center py-6 text-sm text-muted-foreground">
+                暂无{contextTab === 'examples' ? '例句' : '常用短语'}
               </div>
-            ) : etymologyStatus === 'error' ? (
-              <div className="h-full flex items-center justify-center text-sm text-gray-400">
-                构词分析失败，下次进入时将重新补全
-              </div>
-            ) : morphemes.length > 0 ? (
-              <div className="space-y-3 xl:space-y-4">
-                <div className="text-sm xl:text-base leading-relaxed flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
-                  {morphemes.map((morpheme, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && (
-                        <span className="text-gray-500 font-mono font-bold">+</span>
-                      )}
-                      <span className="whitespace-nowrap">
-                        <span
-                          className={`font-mono text-base xl:text-lg font-bold ${morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
-                            }`}
-                        >
-                          {morpheme.text}
-                        </span>
-                        {morpheme.meaning && (
-                          <span className="text-sm xl:text-base text-gray-400">（{morpheme.meaning}）</span>
-                        )}
-                      </span>
-                    </React.Fragment>
-                  ))}
+            ) : contextItems.map((item, idx) => {
+              const isPlaying = speakingSentenceIdx === idx
+              return (
+                <div
+                  key={idx}
+                  className={`group grid grid-cols-[1.5rem_1fr_auto] gap-x-1 py-3 ${
+                    contextTab === 'examples' && idx > 0 ? 'border-t border-dashed border-border' : ''
+                  }`}
+                >
+                  <span className={`font-serif text-base pt-0.5 tabular-nums ${isPlaying ? 'text-primary' : 'text-muted-foreground/70'}`}>
+                    {idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <InteractiveSentence
+                      sentence={item.en}
+                      wordName={word.name}
+                      sentenceCn={item.cn}
+                      onWordClick={(clickedWord, en, cn, rect) => {
+                        setLookupWordInfo({ word: clickedWord, sentenceEn: en, sentenceCn: cn, targetRect: rect })
+                      }}
+                    />
+                    <p className="text-[13px] xl:text-sm text-muted-foreground leading-relaxed mt-1">
+                      {item.cn}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handlePlaySentence(item.en, idx)
+                    }}
+                    className={`size-8 -mt-1 rounded-md transition-colors cursor-pointer flex items-center justify-center ${
+                      isPlaying
+                        ? 'text-primary animate-pulse'
+                        : 'text-muted-foreground/60 hover:text-foreground hover:bg-muted'
+                    }`}
+                    title={`朗读${contextLabel}`}
+                    aria-label={`朗读${contextLabel}`}
+                  >
+                    <Volume2 className="size-4" />
+                  </button>
                 </div>
+              )
+            })}
+          </div>
+        </section>
 
-                {derivation && (
-                  <div className="flex items-start gap-2 text-sm xl:text-base text-gray-200 font-normal leading-relaxed pt-1">
-                    <ArrowRight className="size-4 xl:size-4.5 text-primary shrink-0 mt-0.5" />
-                    <span>{derivation}</span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-2 xl:space-y-3 text-left">
-                {origin && (
-                  <p className="text-sm xl:text-base text-gray-200 leading-relaxed">{origin}</p>
-                )}
-
-                {derivation && (
-                  <div className="flex items-start gap-2 text-sm xl:text-base text-gray-200 font-normal leading-relaxed pt-1">
-                    <ArrowRight className="size-4 xl:size-4.5 text-primary shrink-0 mt-0.5" />
-                    <span>{derivation}</span>
-                  </div>
-                )}
-              </div>
+        <section className="col-span-4 pt-4 xl:pt-5 pl-6 xl:pl-8 border-l border-border min-h-0 overflow-y-auto custom-scrollbar">
+          <div className="flex items-end justify-between pb-1.5">
+            <span className="text-sm text-muted-foreground">构词</span>
+            {etymologyStatus === 'pending' && (
+              <span className="text-xs text-muted-foreground">分析中…</span>
             )}
           </div>
-        </div>
+
+          {etymologyStatus === 'pending' ? (
+            <div className="space-y-3 pt-3 animate-pulse" aria-label="AI 构词分析中">
+              <div className="h-7 w-3/5 rounded bg-muted" />
+              <div className="h-4 w-4/5 rounded bg-muted" />
+              <div className="h-4 w-2/3 rounded bg-muted" />
+            </div>
+          ) : etymologyStatus === 'error' ? (
+            <p className="pt-3 text-sm text-muted-foreground">构词分析失败，下次进入时将重新补全</p>
+          ) : morphemes.length > 0 ? (
+            <div className="pt-3">
+              <div className="flex flex-wrap items-start gap-x-3 gap-y-3">
+                {morphemes.map((morpheme, index) => (
+                  <React.Fragment key={index}>
+                    {index > 0 && (
+                      <span className="font-serif text-2xl text-muted-foreground/60 leading-none pt-0.5">+</span>
+                    )}
+                    <span className="flex flex-col gap-1.5 min-w-0">
+                      <span
+                        className={`font-serif text-2xl xl:text-[1.75rem] leading-none ${
+                          morpheme.role === 'root' ? 'text-primary' : 'text-gray-100'
+                        }`}
+                      >
+                        {morpheme.text}
+                      </span>
+                      {morpheme.meaning && (
+                        <span className="text-xs text-muted-foreground">{morpheme.meaning}</span>
+                      )}
+                    </span>
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {derivation && (
+                <p className="mt-4 text-sm xl:text-[15px] text-gray-300 leading-relaxed">{derivation}</p>
+              )}
+            </div>
+          ) : (
+            <div className="pt-3 space-y-3">
+              {origin && (
+                <p className="text-sm xl:text-[15px] text-gray-300 leading-relaxed">{origin}</p>
+              )}
+              {derivation && (
+                <p className="text-sm xl:text-[15px] text-gray-300 leading-relaxed">{derivation}</p>
+              )}
+            </div>
+          )}
+        </section>
       </div>
 
-      {/* 修改单词切分与构词弹窗 */}
       <EditWordSplitModal
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
         word={word}
       />
 
-      {/* 例句单词点击查词浮层弹窗 */}
       {lookupWordInfo && (
         <WordLookupModal
           isOpen={Boolean(lookupWordInfo)}
@@ -649,5 +582,3 @@ export function LearnCard({
     </WordCardShell>
   )
 }
-
-

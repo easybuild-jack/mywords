@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Play, Sparkles } from 'lucide-react'
+import { Play } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { useTypingKeyboard } from '@/hooks/useTypingKeyboard'
 import { LearnCard } from '@/components/typing/LearnCard'
@@ -75,7 +75,7 @@ export function LearnStage({
               <p className="text-base text-muted-foreground mb-4">当前单元暂无单词或未能成功加载</p>
               <button
                 onClick={() => useWorkspaceStore.getState().loadCurrentUnitWords()}
-                className="px-4 py-2 rounded-xl bg-primary/20 text-primary hover:bg-primary/30 text-sm font-medium transition-all cursor-pointer"
+                className="h-9 px-4 rounded-lg border border-border text-foreground hover:bg-muted text-sm transition-colors cursor-pointer"
               >
                 重新加载
               </button>
@@ -92,38 +92,29 @@ export function LearnStage({
 
               {/* 未点击「开始学习」时的沉浸引导蒙层 */}
               {!hasStarted && (
-                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md p-6 text-center select-none animate-fadeIn">
-                  {/* 单元与进度微标 */}
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs sm:text-sm font-semibold mb-5 shadow-[0_0_16px_rgba(var(--primary-rgb),0.2)]">
-                    <Sparkles className="size-4" />
-                    <span>
-                      {currentUnitMeta?.name || `Unit ${(currentUnitMeta?.order ?? 0) + 1}`} · 第 {activeWordIndex + 1}/{totalWords || 20} 词已就绪
-                    </span>
-                  </div>
-
-                  {/* 引导文案 */}
-                  <h2 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold text-foreground tracking-tight mb-2.5">
-                    准备好开始学习了吗？
-                  </h2>
-                  <p className="text-xs sm:text-sm text-muted-foreground/80 max-w-md mx-auto mb-8 leading-relaxed">
-                    点击下方按钮进入本单元单词跟学流程，开启原声发音与智能拼打
+                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-background/85 backdrop-blur-sm p-6 text-center select-none animate-fadeIn">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {currentUnitMeta?.name || `Unit ${(currentUnitMeta?.order ?? 0) + 1}`} · 第 {activeWordIndex + 1} / {totalWords || 20} 词
                   </p>
 
-                  {/* 开始学习按钮 */}
+                  <h2 className="text-3xl xl:text-4xl font-medium text-foreground tracking-tight mb-3">
+                    准备好了就开始吧
+                  </h2>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto mb-8 leading-relaxed">
+                    开始后会自动播放发音，边听边把单词打出来
+                  </p>
+
                   <button
                     type="button"
                     onClick={() => onStartLearning?.()}
-                    className="group relative inline-flex items-center gap-3 px-8 py-3.5 sm:px-10 sm:py-4 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base sm:text-lg shadow-[0_4px_24px_rgba(var(--primary-rgb),0.45)] hover:shadow-[0_6px_36px_rgba(var(--primary-rgb),0.65)] hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+                    className="inline-flex items-center gap-2.5 h-11 px-6 rounded-lg bg-primary hover:bg-primary-hover text-primary-foreground font-medium text-base active:scale-[0.98] transition-colors cursor-pointer"
                   >
-                    <Play className="size-5 sm:size-6 fill-current transition-transform duration-200 group-hover:scale-110" />
+                    <Play className="size-4 fill-current" />
                     <span>开始学习</span>
-                    <span className="text-xs font-mono opacity-85 px-2 py-0.5 rounded-lg bg-black/25 border border-white/10">
-                      Space / Enter ↵
-                    </span>
                   </button>
 
-                  <p className="text-xs text-muted-foreground/60 font-mono mt-4">
-                    也可直接敲击键盘 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-foreground font-bold">Space</kbd> 或 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-foreground font-bold">Enter</kbd> 开启
+                  <p className="text-xs text-muted-foreground mt-4">
+                    或按 <kbd className="font-mono px-1.5 py-px rounded border border-border border-b-2 text-foreground/80">Space</kbd> / <kbd className="font-mono px-1.5 py-px rounded border border-border border-b-2 text-foreground/80">Enter</kbd>
                   </p>
                 </div>
               )}

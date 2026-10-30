@@ -53,18 +53,18 @@ export function Select<T extends string | number>({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="group inline-flex items-center gap-1.5 h-8 xl:h-9 pl-3 xl:pl-3.5 pr-2 xl:pr-2.5 rounded-md xl:rounded-lg border border-white/10 bg-white/[0.04] text-xs xl:text-sm text-white/90 hover:bg-white/[0.08] hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background cursor-pointer"
+        className="group inline-flex items-center gap-1 h-8 pl-2.5 pr-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer"
       >
         <span className="truncate">{current?.label ?? '—'}</span>
         <ChevronDown
-          className={`size-3.5 xl:size-4 opacity-60 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`size-3.5 opacity-60 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {open && (
         <div
           role="listbox"
-          className={`absolute top-[calc(100%+4px)] z-[80] min-w-full w-max rounded-md border border-white/10 bg-[#12141A] p-1 shadow-[0_8px_24px_rgba(0,0,0,0.55)] ring-1 ring-black/30 ${
+          className={`absolute top-[calc(100%+4px)] z-[80] min-w-full w-max rounded-lg border border-white/10 bg-[#12141A] p-1 shadow-[0_8px_24px_rgba(0,0,0,0.35)] ${
             align === 'end' ? 'right-0' : 'left-0'
           }`}
         >
@@ -80,9 +80,9 @@ export function Select<T extends string | number>({
                   onChange(opt.value)
                   setOpen(false)
                 }}
-                className={`w-full flex items-center justify-between gap-3 px-2.5 py-1.5 rounded text-xs text-left transition-colors cursor-pointer ${
+                className={`w-full flex items-center justify-between gap-3 px-2.5 py-1.5 rounded-md text-sm text-left transition-colors cursor-pointer ${
                   isSelected
-                    ? 'bg-primary/15 text-primary font-semibold'
+                    ? 'text-primary font-medium'
                     : 'text-white/85 hover:bg-white/[0.06] hover:text-white'
                 }`}
               >

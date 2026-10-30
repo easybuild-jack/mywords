@@ -42,7 +42,7 @@ export function InteractiveSentence({
 
   return (
     <span
-      className={`text-sm xl:text-base 2xl:text-[1.05rem] text-gray-100 leading-relaxed font-sans ${className}`}
+      className={`font-serif text-base xl:text-lg 2xl:text-xl text-gray-100 leading-snug ${className}`}
     >
       {tokens.map((token, idx) => {
         const isWord = /^[a-zA-Z0-9]/.test(token)
@@ -67,7 +67,7 @@ export function InteractiveSentence({
                   const rect = e.currentTarget.getBoundingClientRect()
                   onWordClick(token, sentence, sentenceCn, rect)
                 }}
-                className="inline-block mx-1 px-2 py-0.5 font-mono text-sm xl:text-base font-bold text-accent bg-accent/15 border border-accent/40 rounded-md animate-in fade-in duration-200 cursor-pointer hover:underline hover:bg-accent/25 transition-colors"
+                className="font-medium text-accent underline decoration-accent/60 decoration-2 underline-offset-4 animate-in fade-in duration-200 cursor-pointer"
               >
                 {token}
               </span>
@@ -78,10 +78,12 @@ export function InteractiveSentence({
           return (
             <span
               key={idx}
-              className="inline-flex items-center justify-center mx-1 px-2 py-0.5 font-mono text-xs xl:text-sm font-bold text-primary bg-primary/10 border border-dashed border-primary/40 rounded-md select-none tracking-widest"
+              className="inline-block align-baseline mx-0.5 border-b-2 border-primary/60 select-none"
+              style={{ width: `${underlineLen * 0.62}em` }}
               title="按 Tab 键可临时偷看答案"
+              aria-label="待默写的单词"
             >
-              [{'_'.repeat(underlineLen)}]
+              &nbsp;
             </span>
           )
         }
@@ -98,7 +100,7 @@ export function InteractiveSentence({
                 const rect = e.currentTarget.getBoundingClientRect()
                 onWordClick(token, sentence, sentenceCn, rect)
               }}
-              className="text-primary font-bold px-0.5 underline decoration-primary/60 decoration-2 underline-offset-2 cursor-pointer hover:bg-primary/15 rounded transition-colors"
+              className="font-medium underline decoration-primary decoration-2 underline-offset-4 cursor-pointer hover:text-primary transition-colors"
             >
               {token}
             </span>
@@ -116,7 +118,7 @@ export function InteractiveSentence({
               const rect = e.currentTarget.getBoundingClientRect()
               onWordClick(token, sentence, sentenceCn, rect)
             }}
-            className="cursor-pointer hover:text-primary hover:underline hover:bg-primary/10 rounded-sm px-0.5 transition-colors duration-150 inline-block"
+            className="cursor-pointer hover:text-primary hover:underline decoration-primary/50 underline-offset-4 transition-colors duration-150"
           >
             {token}
           </span>

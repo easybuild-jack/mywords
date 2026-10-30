@@ -5,6 +5,9 @@ import { Star } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { formatShortcutDisplay } from '@/lib/shortcuts'
 
+const KBD_CLASS =
+  'h-6 min-w-6 px-1.5 inline-flex items-center justify-center rounded border border-border border-b-2 font-mono text-[11px] text-foreground/70 transition-colors'
+
 interface PracticeFooterProps {
   /** 学习页单词常驻可见，不提示偷看键 */
   showPeekHint?: boolean
@@ -41,33 +44,30 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
   const isPreparing = !isReady || isUnitLoading
 
   return (
-    <footer className="w-full p-4 xl:p-6 flex items-center justify-center pointer-events-auto z-30 shrink-0">
-      {/* 尺寸以 HeaderToolbar 为准：同样的 px-5 py-2.5 到 xl:px-7 xl:py-3.5，两条工具栏等高并同步放大 */}
-      <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-primary font-bold text-sm xl:text-base">
+    <footer className="w-full px-6 py-3 xl:py-4 flex items-center justify-center pointer-events-auto z-30 shrink-0">
+      <div className="w-[800px] xl:w-[940px] 2xl:w-[1060px] max-w-[94vw] pt-3 xl:pt-4 border-t border-border flex items-center justify-between gap-4 text-[13px] text-muted-foreground flex-wrap">
+        <div className="flex items-baseline gap-1.5 tabular-nums">
+          <span className="text-foreground font-medium">
             {isPreparing
               ? '···'
               : isDictationError
               ? `${conqueredErrorWordIds?.length || 0} / ${total}`
               : `${currentNum} / ${total}`}
           </span>
-          <span className="text-gray-500 text-xs xl:text-sm">{isDictationError ? '已消灭' : '单词'}</span>
+          <span>{isDictationError ? '已消灭' : '单词'}</span>
         </div>
 
-        <div className="h-4 xl:h-5 w-px bg-white/10" />
-
-        <div className="flex items-center gap-4 xl:gap-5 font-mono text-xs xl:text-sm flex-wrap justify-center">
+        <div className="flex items-center gap-4 xl:gap-5 flex-wrap justify-end">
           {showPeekHint && (
             <button
               type="button"
               onPointerDown={() => useWorkspaceStore.getState().peekHint(true)}
               onPointerUp={() => useWorkspaceStore.getState().peekHint(false)}
               onPointerLeave={() => useWorkspaceStore.getState().peekHint(false)}
-              className="flex items-center gap-1.5 xl:gap-2 cursor-pointer select-none group focus:outline-none"
+              className="flex items-center gap-1.5 cursor-pointer select-none group focus:outline-none"
               title="按住鼠标或按 Tab 键偷看"
             >
-              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] group-hover:bg-accent/20 group-hover:text-accent text-white border border-white/10 font-bold transition-all">
+              <kbd className={`${KBD_CLASS} group-hover:text-accent`}>
                 {formatShortcutDisplay(shortcuts.peekHint)}
               </kbd>
               <span className="group-hover:text-accent transition-colors">偷看提示</span>
@@ -78,15 +78,15 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
             <button
               type="button"
               onClick={starCurrentWord}
-              className={`flex items-center gap-1.5 xl:gap-2 transition-colors cursor-pointer ${
-                isStarred ? 'text-amber-400 hover:text-amber-300 font-semibold' : 'hover:text-white'
+              className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
+                isStarred ? 'text-amber-400 hover:text-amber-300' : 'hover:text-foreground'
               }`}
               title={isStarred ? `已在生词本（点击或 ${formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')} 移出）` : `一键加入生词本 (${formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')})`}
             >
-              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+              <kbd className={KBD_CLASS}>
                 {formatShortcutDisplay(shortcuts.toggleStar || 'Alt+W')}
               </kbd>
-              <Star className={`size-3.5 xl:size-4 ${isStarred ? 'fill-amber-400 text-amber-400' : ''}`} />
+              <Star className={`size-3.5 ${isStarred ? 'fill-amber-400 text-amber-400' : ''}`} />
               <span>{isStarred ? '已在生词本' : '加入生词本'}</span>
             </button>
           )}
@@ -95,10 +95,10 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
             <button
               type="button"
               onClick={toggleCurrentWordSplit}
-              className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer"
               title={`音节拆分/合并 (${formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')})`}
             >
-              <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+              <kbd className={KBD_CLASS}>
                 {formatShortcutDisplay(shortcuts.toggleSplit || 'Alt+S')}
               </kbd>
               <span>音节切分</span>
@@ -108,22 +108,22 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
           <button
             type="button"
             onClick={replayAudio}
-            className="flex items-center gap-1.5 xl:gap-2 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer"
             title={`发音朗读 (${formatShortcutDisplay(shortcuts.replayAudio)})`}
           >
-            <kbd className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold">
+            <kbd className={KBD_CLASS}>
               {formatShortcutDisplay(shortcuts.replayAudio)}
             </kbd>
             <span>发音</span>
           </button>
 
-          <div className="flex items-center gap-1.5 xl:gap-2">
+          <div className="flex items-center gap-1.5">
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={prevWord}
                 title={`上一个单词 (${formatShortcutDisplay(shortcuts.prevWord)})`}
-                className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                className={`${KBD_CLASS} hover:text-foreground hover:border-foreground/30 cursor-pointer`}
               >
                 {formatShortcutDisplay(shortcuts.prevWord)}
               </button>
@@ -131,7 +131,7 @@ export function PracticeFooter({ showPeekHint = false, isReady = true }: Practic
                 type="button"
                 onClick={() => nextWord()}
                 title={`下一个单词 (${formatShortcutDisplay(shortcuts.nextWord)})`}
-                className="h-7 xl:h-8 px-2 xl:px-2.5 inline-flex items-center rounded-md xl:rounded-lg bg-white/[0.08] text-white border border-white/10 font-bold hover:bg-white/20 active:scale-95 transition-all cursor-pointer"
+                className={`${KBD_CLASS} hover:text-foreground hover:border-foreground/30 cursor-pointer`}
               >
                 {formatShortcutDisplay(shortcuts.nextWord)}
               </button>

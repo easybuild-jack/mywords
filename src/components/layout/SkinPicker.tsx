@@ -35,20 +35,20 @@ export function SkinPicker() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="p-1.5 xl:p-2 rounded-lg xl:rounded-xl text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background"
+          className="size-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           aria-label="切换皮肤"
         >
-          <Palette className="size-4 xl:size-4.5" />
+          <Palette className="size-4" />
         </button>
       </Tooltip>
 
       {open && (
         <div
-          className="absolute right-0 top-[calc(100%+8px)] z-[100] w-72 rounded-2xl bg-[#12141A] p-2 border border-white/15 shadow-[0_16px_48px_rgba(0,0,0,0.85)] ring-1 ring-black/40"
+          className="absolute right-0 top-[calc(100%+8px)] z-[100] w-72 rounded-xl bg-[#12141A] p-1.5 border border-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="px-3 py-2 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-            选择皮肤 · 仅配色
+          <div className="px-2.5 pt-1.5 pb-2 text-xs text-muted-foreground">
+            皮肤（仅配色）
           </div>
           <div className="space-y-1 max-h-[420px] overflow-y-auto pr-1">
             {SKINS.map((skin) => {
@@ -61,10 +61,8 @@ export function SkinPicker() {
                     setSkinId(skin.id)
                     setOpen(false)
                   }}
-                  className={`w-full flex items-center gap-3 px-2.5 py-2 rounded-xl text-left transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-primary/15 border border-primary/30'
-                      : 'hover:bg-white/[0.05] border border-transparent'
+                  className={`w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                    isActive ? 'bg-white/[0.05]' : 'hover:bg-white/[0.04]'
                   }`}
                 >
                   {/* 配色预览：用 skin 的 token 实时渲染两块小色块 */}
@@ -81,7 +79,7 @@ export function SkinPicker() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold ${isActive ? 'text-primary' : 'text-white'}`}>
+                    <div className={`text-sm font-medium ${isActive ? 'text-primary' : 'text-white'}`}>
                       {skin.name}
                     </div>
                     <div className="text-[11px] text-muted-foreground truncate">{skin.tagline}</div>
