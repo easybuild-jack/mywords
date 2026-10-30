@@ -229,7 +229,7 @@ export function ExternalSyncManager() {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl bg-gray-900/95 backdrop-blur-md border border-amber-500/40 shadow-2xl shadow-amber-500/10 text-white animate-in slide-in-from-bottom-5 duration-300 select-none"
+          className="pointer-events-auto flex items-start gap-3 p-4 rounded-lg bg-sidebar border border-border shadow-lg text-white animate-in slide-in-from-bottom-5 duration-300 select-none"
         >
           <div className="size-9 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0 text-amber-400 mt-0.5">
             <Sparkles className="size-4.5 animate-pulse" />
@@ -246,7 +246,7 @@ export function ExternalSyncManager() {
             </div>
 
             <div className="mt-1 flex items-baseline gap-2">
-              <span className="text-base font-bold tracking-tight text-white">{toast.word}</span>
+              <span className="text-sm font-semibold tracking-tight text-white">{toast.word}</span>
               {toast.meaning && (
                 <span className="text-xs text-gray-300 truncate max-w-[170px]">{toast.meaning}</span>
               )}

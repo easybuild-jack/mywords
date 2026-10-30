@@ -37,11 +37,11 @@ export function AiApiKeyPromptModal() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="ai-key-modal-title"
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in-50 duration-200"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in-50 duration-200"
       onClick={() => setApiKeyPromptOpen(false)}
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-sidebar border border-white/10 p-6 sm:p-7 shadow-2xl text-foreground flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200"
+        className="w-full max-w-md rounded-lg bg-sidebar border border-border p-6 sm:p-7 shadow-xl text-foreground flex flex-col relative overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 背景光晕装饰 */}
@@ -60,16 +60,14 @@ export function AiApiKeyPromptModal() {
 
         {/* 图标与标题 */}
         <div className="flex items-start gap-4 mb-4">
-          <div className="size-12 rounded-xl bg-primary/15 border border-primary/30 text-primary flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(var(--primary-rgb)/0.3)]">
-            <KeyRound className="size-6 text-primary" />
-          </div>
+          <KeyRound className="size-5 text-muted-foreground shrink-0 mt-1" />
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-semibold tracking-wider text-primary uppercase bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+              <span className="text-xs text-muted-foreground">
                 LinguaLoop Copilot
               </span>
             </div>
-            <h3 id="ai-key-modal-title" className="text-lg font-bold text-white tracking-tight">
+            <h3 id="ai-key-modal-title" className="text-lg font-semibold text-white tracking-tight">
               尚未配置 API Key
             </h3>
           </div>
@@ -81,22 +79,22 @@ export function AiApiKeyPromptModal() {
         </p>
 
         {/* 支持的服务商徽标提示 */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/10 p-3.5 mb-6 text-xs text-muted-foreground flex flex-col gap-2">
+        <div className="pt-4 border-t border-dashed border-border mb-6 text-xs text-muted-foreground flex flex-col gap-2">
           <div className="flex items-center gap-1.5 text-foreground font-medium">
             <Sparkles className="size-3.5 text-primary" />
             <span>支持各大主流大模型平台直连：</span>
           </div>
           <div className="flex flex-wrap gap-1.5 pt-0.5">
-            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-white/10 font-mono">
+            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-border font-mono">
               DeepSeek
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-white/10 font-mono">
+            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-border font-mono">
               豆包 (火山引擎)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-white/10 font-mono">
+            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-border font-mono">
               ChatGPT (OpenAI)
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-white/10 font-mono">
+            <span className="px-2 py-0.5 rounded-md bg-white/5 text-[11px] text-foreground/90 border border-border font-mono">
               通义千问 (百炼)
             </span>
           </div>
@@ -107,7 +105,7 @@ export function AiApiKeyPromptModal() {
           <button
             type="button"
             onClick={() => setApiKeyPromptOpen(false)}
-            className="px-4 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
+            className="h-8 px-3 rounded-md text-[13px] text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
           >
             暂不配置
           </button>
@@ -115,7 +113,7 @@ export function AiApiKeyPromptModal() {
           <button
             type="button"
             onClick={handleGoToSettings}
-            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1.5 hover:bg-primary-hover transition-all cursor-pointer shadow-sm btn-neon-glow"
+            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-[13px] font-medium inline-flex items-center gap-1.5 hover:bg-primary/90 transition-colors cursor-pointer"
           >
             <span>前往配置</span>
             <ArrowRight className="size-3.5" />

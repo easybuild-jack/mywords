@@ -264,10 +264,10 @@ compile v. 编译；编纂`
 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 p-6 space-y-6 shadow-2xl text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+      <div className="glass-panel w-full max-w-4xl rounded-xl border border-border p-6 space-y-6 shadow-xl text-white">
         {/* 顶部标题与关闭 */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30">
               <Upload className="size-5" />
@@ -293,7 +293,7 @@ compile v. 编译；编纂`
         </div>
 
         {/* 导入模式选项卡 */}
-        <div className="flex gap-2 p-1 bg-white/[0.04] rounded-xl border border-white/10">
+        <div className="flex gap-2 p-1 bg-white/[0.04] rounded-xl border border-border">
           <button
             onClick={() => { setActiveTab('text'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
@@ -318,7 +318,7 @@ compile v. 编译；编纂`
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label className="text-xs text-[#9CA3AF] font-medium">导入目标</label>
-            <div className="flex items-center gap-1 bg-white/[0.04] p-0.5 rounded-lg border border-white/10 text-xs">
+            <div className="flex items-center gap-1 bg-white/[0.04] p-0.5 rounded-lg border border-border text-xs">
               <button
                 onClick={() => setTargetMode('new')}
                 className={`px-3 py-1 rounded transition-all cursor-pointer ${
@@ -348,14 +348,14 @@ compile v. 编译；编纂`
               type="text"
               value={bookName}
               onChange={(e) => setBookName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-primary/50"
+              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-white text-sm focus:outline-none focus:border-primary/50"
               placeholder="例如: 我的考研阅读高频难词"
             />
           ) : (
             <select
               value={targetBookId}
               onChange={(e) => setTargetBookId(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:outline-none focus:border-primary/50 cursor-pointer"
+              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-white text-sm focus:outline-none focus:border-primary/50 cursor-pointer"
             >
               {customBooks.map((book) => (
                 <option key={book.id} value={book.id} className="bg-[#12141A] text-white">
@@ -421,7 +421,7 @@ compile v. 编译；编纂`
                   value={rawText}
                   onChange={(e) => setRawText(e.target.value)}
                   rows={6}
-                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-white/10 text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
+                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-border text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
                   placeholder={`resilient\nperspective n. 视角，观点\nkubernetes\ncompile`}
                 />
               </div>
@@ -442,7 +442,7 @@ compile v. 编译；编纂`
                 </div>
 
                 {/* 拆解两列的写法不说明用户猜不到，尤其是靠连字符位置区分前后缀这条 */}
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3 space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                <div className="rounded-xl border border-border bg-white/[0.02] p-3 space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
                   <p className="text-xs font-semibold text-gray-300">
                     列顺序：单词 → 释义 → 音标 → 音节拆分 → 词根词缀 → 语义推导（后五列均可留空，留空则自动推导）
                   </p>
@@ -462,7 +462,7 @@ compile v. 编译；编纂`
 
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-white/15 hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-2xl p-8 text-center cursor-pointer transition-all space-y-2 group"
+                  className="border-2 border-dashed border-border hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-lg p-8 text-center cursor-pointer transition-all space-y-2 group"
                 >
                   <input
                     ref={fileInputRef}
@@ -471,7 +471,7 @@ compile v. 编译；编纂`
                     onChange={handleFileUpload}
                     className="hidden"
                   />
-                  <div className="size-12 rounded-2xl bg-white/[0.06] group-hover:bg-primary/20 text-muted-foreground group-hover:text-primary flex items-center justify-center mx-auto transition-all">
+                  <div className="size-12 rounded-lg bg-white/[0.06] group-hover:bg-primary/20 text-muted-foreground group-hover:text-primary flex items-center justify-center mx-auto transition-all">
                     {isParsing ? <Loader2 className="size-6 animate-spin text-primary" /> : <Upload className="size-6" />}
                   </div>
                   <div className="space-y-1">
@@ -505,7 +505,7 @@ compile v. 编译；编纂`
             </div>
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.02] text-muted-foreground font-mono">
+                <tr className="border-b border-border bg-white/[0.02] text-muted-foreground font-mono">
                   <th className="py-2.5 px-3">单词</th>
                   <th className="py-2.5 px-2">数据来源</th>
                   <th className="py-2.5 px-3">音节拆分</th>
@@ -515,7 +515,7 @@ compile v. 编译；编纂`
                   <th className="py-2.5 px-2 text-right">操作</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 font-mono">
+              <tbody className="divide-y divide-border font-mono">
                 {parsedEntries.map((item, idx) => {
                   const w = item.word
                   return (
@@ -534,11 +534,11 @@ compile v. 编译；编纂`
                             className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 whitespace-nowrap max-w-[90px] truncate"
                             title={`来自词库: ${item.sourceBookName || item.sourceBookId} (原词库不受影响)`}
                           >
-                            📖 {item.sourceBookName || '已有词库'}
+                            {item.sourceBookName || '已有词库'}
                           </span>
                         ) : item.sourceBookId === 'dict_extended' ? (
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap">
-                            📚 标准词典
+                            标准词典
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] bg-white/10 text-gray-300 whitespace-nowrap">
@@ -576,7 +576,7 @@ compile v. 编译；编纂`
         )}
 
         {/* 底部功能开关与提交 */}
-        <div className="flex items-center justify-between pt-4 border-t border-white/10">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
           <label className="flex items-center gap-2 text-xs text-[#9CA3AF] cursor-pointer">
             <input
               type="checkbox"
@@ -597,7 +597,7 @@ compile v. 编译；编纂`
             <button
               onClick={handleConfirmImport}
               disabled={isParsing}
-              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold btn-neon-glow transition-all disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-xs font-bold transition-all disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
             >
               {isParsing ? (
                 <>

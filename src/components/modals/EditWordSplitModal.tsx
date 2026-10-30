@@ -80,7 +80,7 @@ function SyllablePreview({
           {sIdx > 0 && (
             <span className="text-gray-500 font-normal px-0.5">·</span>
           )}
-          <span className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 inline-flex items-center">
+          <span className="px-2 py-1 rounded-lg bg-white/5 border border-border inline-flex items-center">
             {group.map((segment, index) => (
               <span key={index} className={segmentClass(group, index)}>
                 {segment.text}
@@ -360,17 +360,17 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-3xl bg-[#131720] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-3xl bg-[#131720] border border-border rounded-lg shadow-xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 顶栏 Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-white/[0.02]">
           <div className="flex items-center gap-3">
             <div className="size-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary">
               <Scissors className="size-4.5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                 修改单词切分与构词
                 <span className="text-xs font-mono px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
                   {word.name}
@@ -391,7 +391,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
         </div>
 
         {/* 模式选项卡 Tab */}
-        <div className="flex border-b border-white/10 bg-white/[0.01] px-6">
+        <div className="flex border-b border-border bg-white/[0.01] px-6">
           <button
             type="button"
             onClick={() => setActiveTab('syllables')}
@@ -423,7 +423,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
           {activeTab === 'syllables' ? (
             <div className="space-y-5">
               {/* 实时切分渲染预览 */}
-              <div className="p-4 rounded-xl bg-black/40 border border-white/10 text-center">
+              <div className="p-4 rounded-xl bg-black/40 border border-border text-center">
                 <SyllablePreview
                   wordName={word.name}
                   syllables={currentSyllables}
@@ -448,7 +448,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   </button>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center flex-wrap gap-1">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-border flex items-center justify-center flex-wrap gap-1">
                   {wordChars.map((char, index) => {
                     const isCutAfter = cutPoints.has(index + 1)
                     const isSilent = silentIndices.has(index)
@@ -460,7 +460,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                           className={`size-10 sm:size-11 rounded-xl border font-mono text-xl sm:text-2xl font-bold flex items-center justify-center transition-all select-none ${
                             isSilent
                               ? 'bg-gray-800/80 border-gray-600 text-gray-400 shadow-inner'
-                              : 'bg-white/10 border-white/15 text-white shadow-sm'
+                              : 'bg-white/10 border-border text-white shadow-sm'
                           }`}
                         >
                           {char}
@@ -512,10 +512,10 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                         key={index}
                         type="button"
                         onClick={() => handleToggleSilentIndex(index)}
-                        className={`px-3 py-1.5 rounded-xl border font-mono text-sm sm:text-base font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-xl border font-mono text-sm sm:text-sm font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                           isSilent
                             ? 'border-gray-500 bg-gray-500/20 text-gray-300'
-                            : 'border-white/10 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
+                            : 'border-border bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
                         }`}
                         title={isSilent ? '点击取消不发音标记' : '点击标记为不发音字母（灰化）'}
                       >
@@ -549,7 +549,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                     placeholder="例如：dis-cov-er"
                     className={`w-full px-4 py-2.5 rounded-xl font-mono text-base bg-white/5 border text-white placeholder-gray-500 focus:outline-none focus:ring-2 ${
                       isTextValid
-                        ? 'border-white/10 focus:border-primary/60 focus:ring-primary/20'
+                        ? 'border-border focus:border-primary/60 focus:ring-primary/20'
                         : 'border-destructive/60 focus:border-destructive focus:ring-destructive/20'
                     }`}
                   />
@@ -580,14 +580,14 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   placeholder="如 dis-"
                   value={prefixForm}
                   onChange={(e) => setPrefixForm(e.target.value)}
-                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
                 <input
                   type="text"
                   placeholder="前缀释义 (如 否定/相反)"
                   value={prefixMeaning}
                   onChange={(e) => setPrefixMeaning(e.target.value)}
-                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -599,14 +599,14 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   placeholder="如 cover / spect"
                   value={rootForm}
                   onChange={(e) => setRootForm(e.target.value)}
-                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
                 <input
                   type="text"
                   placeholder="词根释义 (如 覆盖/看)"
                   value={rootMeaning}
                   onChange={(e) => setRootMeaning(e.target.value)}
-                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -618,14 +618,14 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   placeholder="如 -y / -ive"
                   value={suffixForm}
                   onChange={(e) => setSuffixForm(e.target.value)}
-                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-4 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm font-mono text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
                 <input
                   type="text"
                   placeholder="后缀释义 (如 形容词后缀)"
                   value={suffixMeaning}
                   onChange={(e) => setSuffixMeaning(e.target.value)}
-                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="col-span-5 px-3 py-1.5 rounded-lg bg-white/5 border border-border text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -637,7 +637,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   placeholder="如 去除覆盖 → 发现、发掘"
                   value={derivation}
                   onChange={(e) => setDerivation(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-border text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
               </div>
 
@@ -649,7 +649,7 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
                   placeholder="如 揭开盖子发现新大陆"
                   value={memoryHook}
                   onChange={(e) => setMemoryHook(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-border text-sm text-white placeholder-gray-600 focus:outline-none focus:border-primary/50"
                 />
               </div>
             </div>
@@ -664,19 +664,19 @@ export function EditWordSplitModal({ isOpen, onClose, word }: EditWordSplitModal
         </div>
 
         {/* 底部按钮栏 Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-white/[0.02]">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-white/[0.02]">
           <div className="text-xs text-gray-500">
             {currentBook?.isCustom
               ? '修改将保存至您的自定义词库 (本地存储)'
               : isAuthor
-              ? '👑 作者模式：修改将直接持久化写回官方词库源文件'
+              ? '作者模式：修改将直接持久化写回官方词库源文件'
               : '官方词库仅供作者维护，普通用户可在自定义词库中编辑'}
           </div>
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2 rounded-xl border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 text-sm font-medium transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border text-gray-300 hover:text-white hover:bg-white/5 text-sm font-medium transition-colors cursor-pointer"
             >
               取消
             </button>
