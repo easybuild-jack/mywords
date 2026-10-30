@@ -12,7 +12,7 @@ export function AiFloatingTrigger() {
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 pointer-events-auto">
       <button
         onClick={toggleDrawer}
-        className="group flex items-center justify-center w-12 h-12 rounded-l-2xl bg-card hover:bg-muted border border-r-0 border-border/80 shadow-[-4px_0_20px_rgba(0,0,0,0.18)] dark:shadow-[-4px_0_20px_rgba(0,0,0,0.6)] p-1.5 transition-all duration-200 hover:scale-105 cursor-pointer"
+        className="group flex items-center justify-center w-12 h-12 rounded-l-xl bg-card hover:bg-muted border border-r-0 border-border shadow-md p-1.5 transition-colors duration-200 cursor-pointer"
         aria-label="打开 LinguaLoop Copilot"
       >
         <img

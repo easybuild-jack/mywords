@@ -398,8 +398,8 @@ export function AiAssistantDrawer() {
           }}
           className={`fixed z-[150] flex flex-col text-foreground select-none overflow-hidden transition-[border-radius] ${
             isDockedRight
-              ? 'border-l border-border rounded-l-2xl rounded-r-none shadow-[-16px_0_40px_rgba(0,0,0,0.15)] dark:shadow-[-16px_0_40px_rgba(0,0,0,0.6)]'
-              : 'border border-border rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.7)] ring-1 ring-border/50'
+              ? 'border-l border-border rounded-l-xl rounded-r-none shadow-xl'
+              : 'border border-border rounded-xl shadow-xl'
           }`}
         >
           {/* 左边缘手动拖拽宽度手柄 */}
@@ -412,8 +412,8 @@ export function AiAssistantDrawer() {
             <div
               className={`w-1 rounded-full transition-all duration-150 ${
                 isResizing
-                  ? 'h-24 bg-primary shadow-[0_0_12px_rgba(var(--primary-rgb)/0.9)]'
-                  : 'h-12 bg-border group-hover:h-20 group-hover:bg-primary/80 group-hover:shadow-[0_0_8px_rgba(var(--primary-rgb)/0.6)]'
+                  ? 'h-24 bg-primary'
+                  : 'h-12 bg-border group-hover:h-20 group-hover:bg-primary/80'
               }`}
             />
           </div>
@@ -634,7 +634,7 @@ export function AiAssistantDrawer() {
               style={{ backgroundColor: 'var(--background)' }}
               className="p-3.5 shrink-0 border-t border-border"
             >
-              <div className="relative rounded-2xl bg-card border border-border focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+              <div className="relative rounded-xl bg-card border border-border focus-within:border-primary/60 transition-colors">
                 <textarea
                   ref={textareaRef}
                   value={inputPrompt}

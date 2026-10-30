@@ -84,24 +84,16 @@ export function RouteProgressBar() {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 h-[3.5px] z-[9999] pointer-events-none transition-opacity duration-200 ${
+      className={`fixed top-0 left-0 right-0 h-[2px] z-[9999] pointer-events-none transition-opacity duration-200 ${
         isBarVisible ? 'opacity-100' : 'opacity-0'
       }`}
       aria-hidden="true"
     >
       {/* 流光进度条主体 */}
       <div
-        className="h-full bg-gradient-to-r from-primary/40 via-primary to-primary-hover shadow-[0_0_14px_var(--primary)]"
+        className="h-full bg-primary"
         style={{
           width: `${progress}%`,
-          transition: progressTransition,
-        }}
-      />
-      {/* 头部微光光晕核 */}
-      <div
-        className="absolute top-0 bottom-0 w-32 -ml-32 pointer-events-none blur-[4px] bg-gradient-to-r from-transparent to-primary"
-        style={{
-          left: `${progress}%`,
           transition: progressTransition,
         }}
       />
