@@ -8,7 +8,6 @@ import {
   Search,
   X,
   CheckCircle2,
-  Play,
   ChevronLeft,
   ChevronRight,
   Trash2,
@@ -20,7 +19,6 @@ import {
   Globe,
   Terminal,
   Sparkles,
-  Library,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_BOOKS } from '@/resources/books'
@@ -31,7 +29,6 @@ import type { DictUnit, UnitProgressRecord, VocabularyBook, PracticeMode } from 
 
 interface BookTheme {
   icon: React.ComponentType<{ className?: string }>
-  gradient: string
   accentColor: string
   tag: string
   ribbonColor: string
@@ -42,7 +39,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     if (bookId === 'book_custom_sample') {
       return {
         icon: Sparkles,
-        gradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
         accentColor: 'text-amber-400',
         tag: '示例词库',
         ribbonColor: 'bg-amber-400',
@@ -50,7 +46,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     }
     return {
       icon: Sparkles,
-      gradient: 'from-fuchsia-500/20 via-pink-500/10 to-transparent',
       accentColor: 'text-fuchsia-400',
       tag: '专属定制',
       ribbonColor: 'bg-fuchsia-500',
@@ -61,7 +56,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     case 'book_basewords':
       return {
         icon: Compass,
-        gradient: 'from-emerald-500/25 via-teal-500/10 to-transparent',
         accentColor: 'text-emerald-400',
         tag: '核心打底',
         ribbonColor: 'bg-emerald-400',
@@ -69,7 +63,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     case 'book_cet4':
       return {
         icon: GraduationCap,
-        gradient: 'from-amber-500/25 via-yellow-500/10 to-transparent',
         accentColor: 'text-amber-400',
         tag: '大学考级',
         ribbonColor: 'bg-amber-400',
@@ -77,7 +70,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     case 'book_kaoyan':
       return {
         icon: Flame,
-        gradient: 'from-rose-500/25 via-red-500/10 to-transparent',
         accentColor: 'text-rose-400',
         tag: '考研攻坚',
         ribbonColor: 'bg-rose-500',
@@ -85,7 +77,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     case 'book_ielts':
       return {
         icon: Globe,
-        gradient: 'from-sky-500/25 via-blue-500/10 to-transparent',
         accentColor: 'text-sky-400',
         tag: '出国高阶',
         ribbonColor: 'bg-sky-400',
@@ -93,7 +84,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     case 'book_coder':
       return {
         icon: Terminal,
-        gradient: 'from-violet-500/25 via-purple-500/10 to-transparent',
         accentColor: 'text-violet-400',
         tag: '技术极客',
         ribbonColor: 'bg-violet-400',
@@ -101,7 +91,6 @@ function getBookTheme(bookId: string, isCustom?: boolean): BookTheme {
     default:
       return {
         icon: BookOpen,
-        gradient: 'from-primary/25 via-teal-500/10 to-transparent',
         accentColor: 'text-primary',
         tag: '精品词库',
         ribbonColor: 'bg-primary',
@@ -473,527 +462,394 @@ function BooksHubContent() {
     }
   }
 
+  const tabClass = (active: boolean) =>
+    `relative -mb-px pb-2.5 text-sm transition-colors cursor-pointer border-b-2 ${
+      active ? 'text-foreground font-medium border-primary' : 'text-muted-foreground hover:text-foreground border-transparent'
+    }`
+  const pagerButtonClass =
+    'size-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors cursor-pointer'
+
   return (
     <div className="w-full text-foreground min-h-full flex flex-col">
-      {/* 顶部吸顶固定区域：操作栏 + 选中词库看板卡片 */}
+      {/* 顶部吸顶区域：标题、分类、搜索与当前词库概览 */}
       <div
-        className={`sticky top-0 z-30 w-full bg-background transition-[border-color,box-shadow] duration-300 ${
-          isScrolled
-            ? 'border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]'
-            : 'border-b border-transparent shadow-none'
+        className={`sticky top-0 z-30 w-full bg-background border-b transition-colors duration-300 ${
+          isScrolled ? 'border-border' : 'border-transparent'
         }`}
       >
-        <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-5 pb-4 space-y-3.5">
-          {/* 1. 顶部操作栏 */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Tab 切换 */}
-            <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.04] border border-white/10 shrink-0">
-              <button
-                onClick={() => handleTabChange('official')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'official'
-                    ? 'bg-primary text-[#0B0C0E]'
-                    : 'text-[#9CA3AF] hover:text-white'
-                }`}
-              >
-                内置词库
-              </button>
-              <button
-                onClick={() => handleTabChange('custom')}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                  activeTab === 'custom'
-                    ? 'bg-primary text-[#0B0C0E]'
-                    : 'text-[#9CA3AF] hover:text-white'
-                }`}
-              >
-                自定义词库
-              </button>
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-6 pb-5">
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border">
+            <div className="flex items-end gap-8">
+              <h1 className="text-xl font-semibold tracking-tight pb-2">词库</h1>
+              <div className="flex items-center gap-6">
+                <button type="button" onClick={() => handleTabChange('official')} className={tabClass(activeTab === 'official')}>
+                  内置词库
+                </button>
+                <button type="button" onClick={() => handleTabChange('custom')} className={tabClass(activeTab === 'custom')}>
+                  自定义词库
+                </button>
+              </div>
             </div>
 
-            {/* 搜索与导入按钮 */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-2 pb-2">
               <div className="relative flex items-center">
-                <Search className="size-4 text-muted-foreground absolute left-3.5 pointer-events-none" />
+                <Search className="size-3.5 text-muted-foreground absolute left-2.5 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="搜索词库..."
-                  className="pl-9 pr-9 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 w-52 sm:w-72 md:w-88 transition-all"
+                  placeholder="搜索词库"
+                  className="h-8 pl-8 pr-8 rounded-md bg-white/[0.05] border border-transparent focus:border-border focus:bg-transparent text-[13px] text-white placeholder:text-muted-foreground/70 outline-none w-48 sm:w-64 transition-colors"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 p-0.5 rounded-full text-muted-foreground hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                    className="absolute right-2 p-0.5 rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                     title="清空搜索"
                   >
-                    <X className="size-4" />
+                    <X className="size-3.5" />
                   </button>
                 )}
               </div>
 
               <button
-                onClick={() => setImportModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all whitespace-nowrap cursor-pointer"
-              >
-                <Upload className="size-4" />
-                <span>+ 导入单词</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 2. 当前选中词库看板大卡片 */}
-          <div className="glass-card p-5 sm:p-6 rounded-2xl border border-white/10 flex items-center justify-between gap-6">
-            <div className="space-y-2.5">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{activeBook?.name}</h2>
-              <p className="text-xs sm:text-sm text-[#9CA3AF] max-w-2xl lg:max-w-3xl leading-relaxed">{activeBook?.description}</p>
-
-              <div className="flex flex-wrap items-center gap-6 sm:gap-8 pt-1 font-mono text-sm sm:text-base">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-muted-foreground text-xs sm:text-sm font-sans">总词量：</span>
-                  <span className="text-primary font-bold text-base sm:text-lg">{activeBook?.totalWords} 词</span>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-muted-foreground text-xs sm:text-sm font-sans">已学词量：</span>
-                  <span className="text-emerald-400 font-bold text-base sm:text-lg">
-                    {totalCompletedWords} <span className="text-xs font-normal text-muted-foreground font-sans">词</span>
-                  </span>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-muted-foreground text-xs sm:text-sm font-sans">总单元：</span>
-                  <span className="text-white font-bold text-base sm:text-lg">{totalUnits} 单元</span>
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-muted-foreground text-xs sm:text-sm font-sans">{activeUnits ? '平均每单元：' : '单章容量：'}</span>
-                  <span className="text-accent font-bold text-base sm:text-lg">
-                    {activeUnits
-                      ? `${Math.round((activeBook?.totalWords || 0) / Math.max(1, totalUnits))} 词`
-                      : `${unitSize} 词/章`}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 右侧动态真实进度环 */}
-            <div className="flex items-center gap-4 shrink-0">
-              <div className="relative size-24 sm:size-28 flex items-center justify-center">
-                <svg className="size-full -rotate-90" viewBox="0 0 96 96">
-                  {/* 背景底环 */}
-                  <circle
-                    cx="48"
-                    cy="48"
-                    r={strokeRadius}
-                    fill="transparent"
-                    strokeWidth="6"
-                    className="progress-ring-track transition-colors duration-300"
-                  />
-                  {/* 真实动态进度环 */}
-                  <circle
-                    cx="48"
-                    cy="48"
-                    r={strokeRadius}
-                    fill="transparent"
-                    stroke="var(--primary)"
-                    strokeWidth="6"
-                    strokeDasharray={strokeCircumference}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    className="transition-all duration-700 ease-out"
-                  />
-                </svg>
-
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                  <span className="text-xl sm:text-2xl font-extrabold font-mono text-primary leading-none">
-                    {formattedProgressPercent}%
-                  </span>
-                  <p className="text-[11px] text-muted-foreground uppercase font-medium mt-1">{progressTitle}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 主体滚动内容区 */}
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-8 lg:px-10 pt-6 pb-12 space-y-7">
-        {/* 3. 单元矩阵网格 (Unit Grid - 固定高度容器，防止切页或词书变化时高度跳动) */}
-        <div className="space-y-3.5">
-        <div className="flex items-center justify-between min-h-[32px]">
-          <h3 className="text-sm sm:text-base font-bold uppercase text-muted-foreground tracking-wider font-mono">
-            {activeUnits ? '语义单元列表' : '章节单元列表'} (第 {unitPage + 1}/{totalUnitPages} 页，共 {totalUnits} 单元)
-          </h3>
-          
-          {/* 翻页控制器 */}
-          {totalUnitPages > 1 && (
-            <div className="flex items-center gap-2.5">
-              <button
-                onClick={() => setUnitPage((p) => Math.max(0, p - 1))}
-                disabled={unitPage === 0}
-                className="p-1.5 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
-              >
-                <ChevronLeft className="size-4" />
-              </button>
-              <span className="text-sm font-mono text-muted-foreground">
-                {unitPage + 1} / {totalUnitPages}
-              </span>
-              <button
-                onClick={() => setUnitPage((p) => Math.min(totalUnitPages - 1, p + 1))}
-                disabled={unitPage === totalUnitPages - 1}
-                className="p-1.5 rounded-lg border border-white/10 hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
-              >
-                <ChevronRight className="size-4" />
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className={`min-h-[404px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 content-start p-1 -m-1 transition-all duration-200 ${
-          isPreviewSwitching ? 'opacity-40 scale-[0.995]' : 'opacity-100 scale-100'
-        }`}>
-          {currentUnits.map((idx) => {
-            const unitMeta = activeUnits?.[idx]
-            const unitId = unitMeta?.id ?? buildFixedUnitId(activeBook.id, idx)
-            const unitProgress = unitProgressById[unitId]
-            const expectedCount =
-              unitWordCountById[unitId] ??
-              unitMeta?.wordCount ??
-              Math.min(unitSize, activeBook.totalWords - idx * unitSize)
-            const isMastered = unitProgress?.status === 'completed'
-            const isStarted = unitProgress?.status === 'in_progress'
-            const isCurrent = idx === activeModeUnit
-            const isLoadingThisUnit = loadingUnitIndex === idx
-            const unitProgressPercent = isMastered
-              ? 100
-              : unitProgress
-                ? Math.min(99, Math.round((unitProgress.completedWordIds.length / Math.max(1, expectedCount)) * 100))
-                : 0
-
-            return (
-              <div
-                key={idx}
-                onClick={() => handleSelectUnit(idx)}
-                className={`p-3.5 sm:p-4 rounded-xl border transition-all duration-200 ease-out flex flex-col justify-between group h-[124px] transform-gpu hover:z-10 hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-md ${
-                  isLoadingThisUnit
-                    ? 'border-primary bg-primary/20 ring-2 ring-primary/40 shadow-[0_0_20px_rgba(var(--primary-rgb)/0.3)] animate-pulse cursor-wait scale-[1.02]'
-                    : isCurrent
-                    ? 'border-accent bg-accent/[0.09] ring-1 ring-accent/70 cursor-pointer hover:border-accent hover:shadow-[0_4px_16px_rgba(var(--accent-rgb,234_179_8)/0.15)]'
-                    : isMastered
-                    ? 'border-primary/30 bg-white/[0.025] hover:border-primary/60 hover:bg-white/[0.05] hover:shadow-[0_4px_16px_rgba(var(--primary-rgb)/0.12)] cursor-pointer'
-                    : 'border-white/10 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.05] hover:shadow-sm cursor-pointer'
-                } ${loadingUnitIndex !== null && !isLoadingThisUnit ? 'opacity-40 pointer-events-none' : ''}`}
-              >
-                {/* 顶部序号与状态标签 */}
-                <div className="flex items-center justify-between gap-1">
-                  <span className={`font-mono text-xs sm:text-sm font-bold shrink-0 ${isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-[#9CA3AF]'}`}>
-                    {unitMeta ? `UNIT ${idx + 1}` : `Unit ${idx + 1}`}
-                  </span>
-                  {isLoadingThisUnit ? (
-                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30 flex items-center gap-1 leading-none shrink-0">
-                      <Loader2 className="size-3 animate-spin text-primary" />
-                      准备中
-                    </span>
-                  ) : isMastered ? (
-                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-primary/15 text-primary font-bold border border-primary/25 flex items-center gap-1 leading-none shrink-0">
-                      <CheckCircle2 className="size-3.5 text-primary" />
-                      已完成
-                    </span>
-                  ) : isCurrent || isStarted ? (
-                    <span className="text-xs font-mono px-2 py-0.5 rounded bg-accent/20 text-accent font-bold border border-accent/30 flex items-center gap-1 leading-none shrink-0">
-                      进行中
-                    </span>
-                  ) : (
-                    <span className="text-xs font-mono text-muted-foreground/60 leading-none shrink-0">
-                      未开始
-                    </span>
-                  )}
-                </div>
-
-                {/* 中部：语义单元名称（仅按词义归类的词库有） */}
-                {unitMeta ? (
-                  <p
-                    className={`text-sm sm:text-[15px] font-bold leading-snug line-clamp-2 mt-1 ${
-                      isLoadingThisUnit ? 'text-primary' : isCurrent ? 'text-accent' : 'text-white'
-                    }`}
-                    title={unitMeta.name}
-                  >
-                    {unitMeta.name}
-                  </p>
-                ) : (
-                  <p className="text-sm font-semibold text-white/80 mt-1">
-                    第 {idx + 1} 单元
-                  </p>
-                )}
-
-                {/* 底部：词数、横条进度条与进度百分比 */}
-                <div className="space-y-1.5 pt-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#9CA3AF] text-xs sm:text-[13px] font-mono">
-                      {unitMeta ? `${unitMeta.wordCount} 词` : `${unitSize} 词`}
-                    </span>
-                    
-                    {isLoadingThisUnit ? (
-                      <span className="text-xs font-bold text-primary flex items-center gap-1 leading-none">
-                        <Loader2 className="size-3 animate-spin text-primary shrink-0" />
-                        <span>载入中...</span>
-                      </span>
-                    ) : (
-                      <span
-                        className={`text-xs sm:text-sm font-extrabold font-mono leading-none ${
-                          isMastered
-                            ? 'text-primary'
-                            : unitProgressPercent > 0
-                            ? 'text-accent'
-                            : 'text-muted-foreground/60'
-                        }`}
-                      >
-                        {unitProgressPercent}%
-                      </span>
-                    )}
-                  </div>
-
-                  {/* 横条进度条 */}
-                  <div className="w-full h-1.5 sm:h-2 progress-track rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        isMastered
-                          ? 'bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb)/0.5)]'
-                          : unitProgressPercent > 0
-                          ? 'bg-accent shadow-[0_0_8px_rgba(254,188,46,0.4)]'
-                          : 'bg-transparent'
-                      }`}
-                      style={{ width: `${unitProgressPercent}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* 4. 精选词库书架 (立式精装书本封面造型，打破纯长方形单调视觉) */}
-      <div className="space-y-4 pt-4 border-t border-white/10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Library className="size-4 text-primary" />
-            <h3 className="text-sm sm:text-base font-bold uppercase text-muted-foreground tracking-wider font-mono">
-              {activeTab === 'official' ? '精品词库书架 (VOCABULARY BOOKSHELF)' : '我的自定义词库书架'}
-            </h3>
-          </div>
-          <span className="text-xs font-mono text-muted-foreground">
-            共 {filteredBooks.length} 本词书
-          </span>
-        </div>
-
-        {filteredBooks.length === 0 ? (
-          <div className="py-12 px-4 rounded-2xl border border-dashed border-white/10 flex flex-col items-center justify-center text-center space-y-3 bg-white/[0.01]">
-            <div className="size-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-muted-foreground">
-              <BookOpen className="size-6 opacity-40" />
-            </div>
-            <div className="space-y-1.5">
-              <p className="text-base font-semibold text-white">
-                {searchQuery ? '未找到匹配的词库' : '暂无自定义词库'}
-              </p>
-              <p className="text-sm text-muted-foreground max-w-sm">
-                {searchQuery
-                  ? '请尝试其他关键词搜索，或点击右上角导入新单词创建词库。'
-                  : '您可以导入自定义单词文本或 CSV 文件，快速建立专属词库。'}
-              </p>
-            </div>
-            {!searchQuery && activeTab === 'custom' && (
-              <button
                 type="button"
                 onClick={() => setImportModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow transition-all mt-1 cursor-pointer"
+                className="h-8 px-3 rounded-md bg-primary hover:bg-primary/90 text-[#0B0C0E] text-[13px] font-medium inline-flex items-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer"
               >
-                <Upload className="size-4" />
-                <span>+ 立即导入单词</span>
+                <Upload className="size-3.5" />
+                导入单词
               </button>
+            </div>
+          </div>
+
+          {/* 当前浏览词库概览 */}
+          <div className="pt-5 flex items-center justify-between gap-8">
+            <div className="min-w-0">
+              <h2 className="text-2xl font-semibold text-white tracking-tight">{activeBook?.name}</h2>
+              <p className="mt-1.5 text-[13px] text-muted-foreground max-w-3xl leading-relaxed line-clamp-2">
+                {activeBook?.description}
+              </p>
+              <dl className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-1 text-[13px]">
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="text-muted-foreground">总词量</dt>
+                  <dd className="font-mono text-foreground">{activeBook?.totalWords}</dd>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="text-muted-foreground">已学</dt>
+                  <dd className="font-mono text-primary">{totalCompletedWords}</dd>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="text-muted-foreground">单元</dt>
+                  <dd className="font-mono text-foreground">{totalUnits}</dd>
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <dt className="text-muted-foreground">{activeUnits ? '平均每单元' : '每章'}</dt>
+                  <dd className="font-mono text-foreground">
+                    {activeUnits
+                      ? Math.round((activeBook?.totalWords || 0) / Math.max(1, totalUnits))
+                      : unitSize}{' '}
+                    <span className="font-sans text-muted-foreground">词</span>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* 全书进度环 */}
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="text-right">
+                <div className="font-mono text-2xl text-foreground leading-none">{formattedProgressPercent}%</div>
+                <div className="mt-1.5 text-xs text-muted-foreground">{progressTitle}</div>
+              </div>
+              <svg className="size-14 -rotate-90" viewBox="0 0 96 96">
+                <circle
+                  cx="48"
+                  cy="48"
+                  r={strokeRadius}
+                  fill="transparent"
+                  strokeWidth="7"
+                  className="progress-ring-track transition-colors duration-300"
+                />
+                <circle
+                  cx="48"
+                  cy="48"
+                  r={strokeRadius}
+                  fill="transparent"
+                  stroke="var(--primary)"
+                  strokeWidth="7"
+                  strokeDasharray={strokeCircumference}
+                  strokeDashoffset={strokeDashoffset}
+                  strokeLinecap="round"
+                  className="transition-all duration-700 ease-out"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-8 lg:px-10 pt-5 pb-12 space-y-10">
+        {/* 单元网格（固定最小高度，切页或换书时不跳动） */}
+        <section>
+          <div className="flex items-center justify-between min-h-8 mb-3">
+            <h3 className="text-sm font-medium text-foreground">
+              {activeUnits ? '语义单元' : '章节单元'}
+              <span className="ml-2 text-xs text-muted-foreground font-normal">共 {totalUnits} 个</span>
+            </h3>
+
+            {totalUnitPages > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setUnitPage((p) => Math.max(0, p - 1))}
+                  disabled={unitPage === 0}
+                  className={pagerButtonClass}
+                  aria-label="上一页"
+                >
+                  <ChevronLeft className="size-4" />
+                </button>
+                <span className="text-xs font-mono text-muted-foreground tabular-nums px-1">
+                  {unitPage + 1} / {totalUnitPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setUnitPage((p) => Math.min(totalUnitPages - 1, p + 1))}
+                  disabled={unitPage === totalUnitPages - 1}
+                  className={pagerButtonClass}
+                  aria-label="下一页"
+                >
+                  <ChevronRight className="size-4" />
+                </button>
+              </div>
             )}
           </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {filteredBooks.map((b) => {
-              const theme = getBookTheme(b.id, b.isCustom)
-              const ThemeIcon = theme.icon
-              const isSelected = activeBook?.id === b.id
+
+          <div
+            className={`min-h-[352px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 content-start transition-opacity duration-200 ${
+              isPreviewSwitching ? 'opacity-40' : 'opacity-100'
+            }`}
+          >
+            {currentUnits.map((idx) => {
+              const unitMeta = activeUnits?.[idx]
+              const unitId = unitMeta?.id ?? buildFixedUnitId(activeBook.id, idx)
+              const unitProgress = unitProgressById[unitId]
+              const expectedCount =
+                unitWordCountById[unitId] ??
+                unitMeta?.wordCount ??
+                Math.min(unitSize, activeBook.totalWords - idx * unitSize)
+              const isMastered = unitProgress?.status === 'completed'
+              const isStarted = unitProgress?.status === 'in_progress'
+              const isCurrent = idx === activeModeUnit
+              const isLoadingThisUnit = loadingUnitIndex === idx
+              const unitProgressPercent = isMastered
+                ? 100
+                : unitProgress
+                  ? Math.min(99, Math.round((unitProgress.completedWordIds.length / Math.max(1, expectedCount)) * 100))
+                  : 0
 
               return (
                 <div
-                  key={b.id}
-                  onClick={() => handleSelectPreviewBook(b.id)}
-                  className={`group relative rounded-2xl border transition-all duration-300 ease-out cursor-pointer flex flex-col justify-between overflow-hidden select-none p-5 h-[280px] transform-gpu hover:z-20 hover:scale-[1.04] hover:-translate-y-2 ${
-                    isSelected
-                      ? 'border-primary ring-2 ring-primary/40 bg-gradient-to-b ' +
-                        theme.gradient +
-                        ' shadow-[0_12px_32px_rgba(var(--primary-rgb)/0.25)] hover:shadow-[0_20px_45px_rgba(var(--primary-rgb)/0.35)]'
-                      : 'border-white/10 bg-white/[0.025] hover:border-white/30 hover:bg-white/[0.06] hover:shadow-[0_20px_45px_rgba(0,0,0,0.5)]'
-                  }`}
+                  key={idx}
+                  onClick={() => handleSelectUnit(idx)}
+                  className={`relative h-[110px] p-3 rounded-lg border flex flex-col justify-between transition-colors ${
+                    isLoadingThisUnit
+                      ? 'border-primary bg-primary/[0.06] cursor-wait'
+                      : isCurrent
+                        ? 'border-accent/70 bg-accent/[0.05] cursor-pointer'
+                        : 'border-border hover:border-foreground/25 hover:bg-muted/40 cursor-pointer'
+                  } ${loadingUnitIndex !== null && !isLoadingThisUnit ? 'opacity-40 pointer-events-none' : ''}`}
                 >
-                  {/* 书脊装订立体暗线与阴影 (Left book spine fold) */}
-                  <div className="absolute left-0 top-0 bottom-0 w-3.5 bg-gradient-to-r from-black/40 via-black/20 to-transparent pointer-events-none border-r border-white/5" />
-                  <div className="absolute left-3.5 top-0 bottom-0 w-[1px] bg-white/[0.06] pointer-events-none" />
-
-                  {/* 右侧立体书页切边层次 (Right paper edge texture) */}
-                  <div className="absolute right-1 top-2 bottom-2 w-1 rounded-r border-r-2 border-white/10 bg-white/[0.02] pointer-events-none" />
-
-                  {/* 顶部悬挂书签飘带 (Bookmark Ribbon) */}
-                  <div className="absolute top-0 right-3.5 flex flex-col items-center pointer-events-none z-10">
-                    <div
-                      className={`w-3.5 h-6.5 ${theme.ribbonColor} shadow-md rounded-b-[2px] transition-all duration-300 group-hover:h-8`}
-                    />
-                    <div className="w-0 h-0 border-x-[7px] border-x-transparent border-t-[5px] border-t-black/20" />
-                  </div>
-
-                  {/* 1. 卡片顶部：分类标签与在学状态 (固定 h-7，标签稍微放大) */}
-                  <div className="h-7 flex items-center justify-between pl-1.5 pr-6 shrink-0">
-                    <span
-                      className={`text-xs font-mono px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 ${theme.accentColor} font-bold flex items-center gap-1.5 leading-none shrink-0`}
-                    >
-                      <ThemeIcon className="size-3.5" />
-                      {theme.tag}
+                  <div className="flex items-center justify-between gap-1 text-xs">
+                    <span className={`font-mono ${isCurrent ? 'text-accent' : 'text-muted-foreground'}`}>
+                      Unit {idx + 1}
                     </span>
-                    {isSelected && (
-                      <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/40 font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(var(--primary-rgb)/0.4)] shrink-0">
-                        <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-                        在学
+                    {isLoadingThisUnit ? (
+                      <span className="text-primary flex items-center gap-1">
+                        <Loader2 className="size-3 animate-spin" />
+                        载入中
                       </span>
-                    )}
-                  </div>
-
-                  {/* 2. 封面中心：固定各层高度，彻底杜绝不同简介行数导致的错位 */}
-                  <div className="flex flex-col items-center text-center pl-1.5 my-auto">
-                    {/* 固定图标槽位 */}
-                    <div
-                      className={`size-13 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center ${theme.accentColor} shadow-inner group-hover:scale-105 transition-transform duration-300 group-hover:shadow-[0_0_20px_currentColor] shrink-0`}
-                    >
-                      <ThemeIcon className="size-6.5" />
-                    </div>
-
-                    {/* 固定书名槽位 (h-7) */}
-                    <div className="h-7 flex items-center justify-center w-full mt-2.5">
-                      <h4 className="text-base sm:text-lg font-extrabold text-white group-hover:text-primary transition-colors line-clamp-1 tracking-tight text-center">
-                        {b.name}
-                      </h4>
-                    </div>
-
-                    {/* 固定简介槽位 (h-9: 无论单行或双行，垂直高度锁定相同) */}
-                    <div className="h-9 flex items-center justify-center w-full mt-1">
-                      <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed text-center px-1">
-                        {b.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* 3. 卡片底部：词量标签与操作按钮 (固定 h-8) */}
-                  <div className="h-8 pt-2.5 border-t border-white/[0.06] flex items-center justify-between pl-1.5 shrink-0">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-sm font-mono font-bold text-white tracking-tight">
-                        {b.totalWords}
+                    ) : isMastered ? (
+                      <span className="text-primary flex items-center gap-1">
+                        <CheckCircle2 className="size-3.5" />
+                        已完成
                       </span>
-                      <span className="text-[11px] text-muted-foreground font-mono">词</span>
-                    </div>
-
-                    {b.isCustom ? (
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`text-xs font-mono font-semibold transition-all flex items-center gap-0.5 ${
-                            isSelected
-                              ? 'text-primary font-bold'
-                              : 'text-muted-foreground group-hover:text-white'
-                          }`}
-                        >
-                          <span>{isSelected ? '正在浏览' : '切换'}</span>
-                          {!isSelected && <span>→</span>}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setBookToDelete(b)
-                          }}
-                          className="p-1 rounded text-muted-foreground/60 hover:text-rose-400 hover:bg-rose-500/15 transition-all cursor-pointer"
-                          title="删除该词库"
-                        >
-                          <Trash2 className="size-3.5" />
-                        </button>
-                      </div>
+                    ) : isCurrent || isStarted ? (
+                      <span className="text-accent">进行中</span>
                     ) : (
-                      <span
-                        className={`text-xs font-mono font-semibold transition-all flex items-center gap-1 ${
-                          isSelected
-                            ? 'text-primary font-bold'
-                            : 'text-muted-foreground group-hover:text-white group-hover:translate-x-0.5'
-                        }`}
-                      >
-                        <span>{isSelected ? '正在浏览' : '切换'}</span>
-                        <span>→</span>
-                      </span>
+                      <span className="text-muted-foreground/60">未开始</span>
                     )}
+                  </div>
+
+                  <p
+                    className={`text-sm leading-snug line-clamp-2 ${
+                      unitMeta ? 'font-medium text-white' : 'text-gray-300'
+                    }`}
+                    title={unitMeta?.name}
+                  >
+                    {unitMeta ? unitMeta.name : `第 ${idx + 1} 单元`}
+                  </p>
+
+                  <div>
+                    <div className="flex items-center justify-between text-xs font-mono mb-1.5">
+                      <span className="text-muted-foreground">
+                        {unitMeta ? unitMeta.wordCount : unitSize} <span className="font-sans">词</span>
+                      </span>
+                      <span
+                        className={
+                          isMastered ? 'text-primary' : unitProgressPercent > 0 ? 'text-accent' : 'text-muted-foreground/60'
+                        }
+                      >
+                        {unitProgressPercent}%
+                      </span>
+                    </div>
+                    <div className="w-full h-1 progress-track rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          isMastered ? 'bg-primary' : unitProgressPercent > 0 ? 'bg-accent' : 'bg-transparent'
+                        }`}
+                        style={{ width: `${unitProgressPercent}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               )
             })}
           </div>
-        )}
-      </div>
+        </section>
 
-      {/* 5. 删除二次确认弹窗 */}
-      {bookToDelete && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-2xl bg-[#12141a] border border-white/10 shadow-2xl p-6 sm:p-7 space-y-5 text-left animate-in zoom-in-95 duration-200">
-            <div className="flex items-start gap-3.5">
-              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0 mt-0.5">
-                <AlertTriangle className="size-5" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-white">确认删除自定义词库？</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  您即将删除词库 <span className="font-bold text-white">「{bookToDelete.name}」</span>。
-                </p>
-              </div>
-            </div>
+        {/* 词库书架 */}
+        <section className="pt-6 border-t border-border">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-foreground">
+              {activeTab === 'official' ? '全部词库' : '我的自定义词库'}
+              <span className="ml-2 text-xs text-muted-foreground font-normal">共 {filteredBooks.length} 本</span>
+            </h3>
+          </div>
 
-            <div className="p-4 rounded-xl bg-rose-500/[0.06] border border-rose-500/20 text-sm text-rose-300/90 leading-relaxed space-y-1.5">
-              <p>• 该词库包含的 <strong className="text-rose-300 font-mono">{bookToDelete.totalWords}</strong> 个单词条目将被永久清除。</p>
-              <p>• 对应章节的学习进度数据将被一并删除。</p>
-              {currentBook?.id === bookToDelete.id && (
-                <p className="text-accent">• 当前正在学习该词库，删除后将自动为您切回默认内置词库。</p>
+          {filteredBooks.length === 0 ? (
+            <div className="py-14 rounded-lg border border-dashed border-border flex flex-col items-center justify-center text-center">
+              <p className="text-sm text-white">{searchQuery ? '没有找到匹配的词库' : '还没有自定义词库'}</p>
+              <p className="mt-1.5 text-[13px] text-muted-foreground max-w-sm">
+                {searchQuery
+                  ? '换个关键词试试，或者导入单词创建新的词库。'
+                  : '导入单词文本或 CSV 文件，就能建立专属词库。'}
+              </p>
+              {!searchQuery && activeTab === 'custom' && (
+                <button
+                  type="button"
+                  onClick={() => setImportModalOpen(true)}
+                  className="mt-4 h-9 px-4 rounded-md bg-primary hover:bg-primary/90 text-[#0B0C0E] text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Upload className="size-4" />
+                  立即导入单词
+                </button>
               )}
             </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {filteredBooks.map((b) => {
+                const theme = getBookTheme(b.id, b.isCustom)
+                const ThemeIcon = theme.icon
+                const isSelected = activeBook?.id === b.id
 
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setBookToDelete(null)}
-                disabled={isDeleting}
-                className="px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold text-[#9CA3AF] hover:text-white hover:bg-white/5 transition-all cursor-pointer disabled:opacity-50"
-              >
-                取消
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmDelete}
-                disabled={isDeleting}
-                className="flex items-center gap-2 px-4.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-sm font-bold transition-all cursor-pointer disabled:opacity-50"
-              >
-                {isDeleting ? (
-                  <>
-                    <Loader2 className="size-4 animate-spin" />
-                    <span>正在删除...</span>
-                  </>
-                ) : (
-                  <>
-                    <Trash2 className="size-4" />
-                    <span>确认删除</span>
-                  </>
-                )}
-              </button>
+                return (
+                  <div
+                    key={b.id}
+                    onClick={() => handleSelectPreviewBook(b.id)}
+                    className={`group relative h-[172px] rounded-lg border pl-5 pr-4 py-4 flex flex-col cursor-pointer select-none overflow-hidden transition-colors ${
+                      isSelected ? 'border-primary/70 bg-primary/[0.04]' : 'border-border hover:border-foreground/25 hover:bg-muted/40'
+                    }`}
+                  >
+                    {/* 书脊色条 */}
+                    <span className={`absolute left-0 top-0 bottom-0 w-1 ${theme.ribbonColor} opacity-80`} />
+
+                    <div className="flex items-center justify-between gap-2 text-xs">
+                      <span className={`flex items-center gap-1.5 ${theme.accentColor}`}>
+                        <ThemeIcon className="size-3.5" />
+                        {theme.tag}
+                      </span>
+                      {isSelected && <span className="text-primary">正在浏览</span>}
+                    </div>
+
+                    <h4 className="mt-3 text-base font-semibold text-white line-clamp-1 group-hover:text-primary transition-colors">
+                      {b.name}
+                    </h4>
+                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2 leading-relaxed">{b.description}</p>
+
+                    <div className="mt-auto pt-3 flex items-center justify-between text-xs">
+                      <span className="font-mono text-gray-300">
+                        {b.totalWords} <span className="font-sans text-muted-foreground">词</span>
+                      </span>
+                      <div className="flex items-center gap-1">
+                        {!isSelected && (
+                          <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                            切换 →
+                          </span>
+                        )}
+                        {b.isCustom && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setBookToDelete(b)
+                            }}
+                            className="ml-1 size-6 rounded-md flex items-center justify-center text-muted-foreground/60 hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                            title="删除该词库"
+                          >
+                            <Trash2 className="size-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* 删除二次确认弹窗 */}
+        {bookToDelete && (
+          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="w-full max-w-md rounded-xl bg-sidebar border border-border shadow-xl p-6 text-left animate-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-2.5">
+                <AlertTriangle className="size-5 text-destructive shrink-0" />
+                <h3 className="text-base font-semibold text-white">删除自定义词库</h3>
+              </div>
+              <p className="mt-3 text-sm text-gray-300 leading-relaxed">
+                确定要删除「<span className="text-white font-medium">{bookToDelete.name}</span>」吗？
+              </p>
+              <ul className="mt-3 space-y-1 text-[13px] text-muted-foreground leading-relaxed list-disc pl-5">
+                <li>
+                  其中的 <span className="font-mono text-foreground">{bookToDelete.totalWords}</span> 个单词将被永久清除
+                </li>
+                <li>对应单元的学习进度会一并删除</li>
+                {currentBook?.id === bookToDelete.id && <li className="text-accent">当前正在学习该词库，删除后会切回默认内置词库</li>}
+              </ul>
+
+              <div className="mt-6 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBookToDelete(null)}
+                  disabled={isDeleting}
+                  className="h-9 px-4 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDelete}
+                  disabled={isDeleting}
+                  className="h-9 px-4 rounded-md bg-destructive hover:bg-destructive/90 text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  {isDeleting ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+                  {isDeleting ? '正在删除…' : '确认删除'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   )
