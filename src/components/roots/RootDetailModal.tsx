@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useCallback } from 'react'
-import { X, ArrowLeft, ArrowRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { RootItem } from '@/types'
 import { RootCard } from './RootCard'
 
@@ -44,10 +44,10 @@ export function RootDetailModal({
       if (e.key === 'Escape') {
         e.preventDefault()
         onClose()
-      } else if (e.key === 'ArrowLeft') {
+      } else if (e.key === 'ChevronLeft') {
         e.preventDefault()
         handlePrev()
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === 'ChevronRight') {
         e.preventDefault()
         handleNext()
       }
@@ -62,7 +62,7 @@ export function RootDetailModal({
   return (
     <div
       onClick={onClose}
-      className="absolute inset-0 z-40 flex items-center justify-center p-3 sm:p-5 xl:p-6 bg-black/80 backdrop-blur-sm animate-fade-in"
+      className="absolute inset-0 z-40 flex items-center justify-center p-3 sm:p-5 xl:p-6 bg-background/80 backdrop-blur-sm animate-fade-in"
     >
       {/* 弹窗核心区域：左右翻页 + 居中自适应卡片 */}
       <div
@@ -74,24 +74,20 @@ export function RootDetailModal({
           type="button"
           onClick={handlePrev}
           disabled={currentIndex <= 0}
-          className={`shrink-0 size-9 sm:size-10 xl:size-12 rounded-full bg-sidebar flex items-center justify-center transition-all border ${
-            currentIndex <= 0
-              ? 'opacity-20 cursor-not-allowed text-gray-600 border-white/5'
-              : 'text-[#9CA3AF] hover:text-white border-white/15 hover:border-primary/50 hover:bg-white/[0.08] hover:scale-110 active:scale-95 cursor-pointer shadow-xl'
-          }`}
+          className="shrink-0 size-10 xl:size-11 rounded-full flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           title={`上一${tabLabel} (←)`}
           aria-label={`上一${tabLabel}`}
         >
-          <ArrowLeft className="size-5 xl:size-6" />
+          <ChevronLeft className="size-5 xl:size-6" />
         </button>
 
         {/* 详情卡片容器（实底不透明，杜绝透光干扰底层数据） */}
-        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[calc(100%-100px)] sm:max-w-[calc(100%-130px)] rounded-3xl overflow-hidden bg-sidebar border border-white/15 shadow-2xl transition-all duration-300">
+        <div className="relative w-[800px] h-[580px] xl:w-[940px] xl:h-[630px] 2xl:w-[1060px] 2xl:h-[680px] max-w-[calc(100%-100px)] sm:max-w-[calc(100%-130px)] rounded-xl overflow-hidden bg-sidebar border border-border shadow-xl">
           {/* 弹框卡片右上角关闭按钮 */}
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 sm:top-5 sm:right-5 xl:top-6 xl:right-6 size-9 sm:size-10 rounded-xl bg-white/[0.06] hover:bg-white/[0.14] border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-all cursor-pointer z-30 shadow-md hover:scale-105 active:scale-95"
+            className="absolute top-4 right-4 xl:top-5 xl:right-5 size-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted flex items-center justify-center transition-colors cursor-pointer z-30"
             title="关闭详情 (ESC)"
             aria-label="关闭详情"
           >
@@ -110,15 +106,11 @@ export function RootDetailModal({
           type="button"
           onClick={handleNext}
           disabled={currentIndex >= items.length - 1}
-          className={`shrink-0 size-9 sm:size-10 xl:size-12 rounded-full bg-sidebar flex items-center justify-center transition-all border ${
-            currentIndex >= items.length - 1
-              ? 'opacity-20 cursor-not-allowed text-gray-600 border-white/5'
-              : 'text-[#9CA3AF] hover:text-white border-white/15 hover:border-primary/50 hover:bg-white/[0.08] hover:scale-110 active:scale-95 cursor-pointer shadow-xl'
-          }`}
+          className="shrink-0 size-10 xl:size-11 rounded-full flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           title={`下一${tabLabel} (→)`}
           aria-label={`下一${tabLabel}`}
         >
-          <ArrowRight className="size-5 xl:size-6" />
+          <ChevronRight className="size-5 xl:size-6" />
         </button>
       </div>
     </div>

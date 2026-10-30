@@ -19,67 +19,62 @@ export function RootsHeaderToolbar() {
   const currentTabLabel = ROOT_TAB_LABELS[rootTab] || '词根'
 
   return (
-    <header className="w-full flex items-center justify-center py-2.5 xl:py-3 px-4 xl:px-6 relative z-30 pointer-events-auto shrink-0">
-      <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-3 xl:gap-4 text-sm xl:text-base shadow-[0_8px_30px_rgba(0,0,0,0.4)] border border-white/10 w-auto flex-wrap justify-center transition-all duration-300">
-        {/* 1. Tab 切换 (词根 / 前缀 / 后缀) */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/10 shrink-0">
-          {ROOT_TABS.map((tab) => {
-            const isActive = rootTab === tab.id
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setRootTab(tab.id)}
-                className={`px-3 xl:px-4 py-1 xl:py-1.5 rounded-lg text-xs xl:text-sm font-semibold transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-primary text-[#0B0C0E] font-bold'
-                    : 'text-[#9CA3AF] hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
+    <header className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-6 relative z-30 shrink-0">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border">
+        <div className="flex items-end gap-8">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground pb-2">词根词缀</h1>
+          <div className="flex items-center gap-6">
+            {ROOT_TABS.map((tab) => {
+              const isActive = rootTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setRootTab(tab.id)}
+                  className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
+                    isActive
+                      ? 'text-foreground font-medium border-primary'
+                      : 'text-muted-foreground hover:text-foreground border-transparent'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        {/* 分隔线 */}
-        <div className="h-4 xl:h-5 w-px bg-white/10 hidden sm:block" />
-
-        {/* 2. 页面直接输入搜索框 */}
-        <div className="relative w-[220px] sm:w-[320px] xl:w-[360px] flex items-center">
-          <Search className="absolute left-3 size-3.5 xl:size-4 text-primary pointer-events-none" />
-          <input
-            ref={inputRef}
-            type="text"
-            value={rootSearchQuery}
-            onChange={(e) => {
-              setRootSearchQuery(e.target.value)
-              setRootIndex(0)
-            }}
-            placeholder={`搜索${currentTabLabel}、释义或派生词...`}
-            className="w-full pl-8.5 pr-8 py-1.5 xl:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] focus:bg-white/[0.08] border border-white/10 focus:border-primary/50 text-white placeholder:text-gray-500 text-xs xl:text-sm transition-all outline-none"
-          />
-          {rootSearchQuery && (
-            <button
-              type="button"
-              onClick={() => {
-                setRootSearchQuery('')
+        <div className="flex items-center gap-2 pb-2">
+          <div className="relative w-[220px] sm:w-[300px] flex items-center">
+            <Search className="absolute left-2.5 size-3.5 text-muted-foreground pointer-events-none" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={rootSearchQuery}
+              onChange={(e) => {
+                setRootSearchQuery(e.target.value)
                 setRootIndex(0)
-                inputRef.current?.focus()
               }}
-              className="absolute right-2.5 p-0.5 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-              title="清空搜索"
-            >
-              <X className="size-3.5 xl:size-4" />
-            </button>
-          )}
+              placeholder={`搜索${currentTabLabel}、释义或派生词`}
+              className="w-full h-8 pl-8 pr-8 rounded-md bg-white/[0.05] border border-transparent focus:border-border focus:bg-transparent text-white placeholder:text-muted-foreground/70 text-[13px] transition-colors outline-none"
+            />
+            {rootSearchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setRootSearchQuery('')
+                  setRootIndex(0)
+                  inputRef.current?.focus()
+                }}
+                className="absolute right-2 p-0.5 rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                title="清空搜索"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+          <SkinPicker />
         </div>
-
-        {/* 分隔线 */}
-        <div className="h-4 xl:h-5 w-px bg-white/10" />
-
-        {/* 3. 皮肤配色选择器 */}
-        <SkinPicker />
       </div>
     </header>
   )
