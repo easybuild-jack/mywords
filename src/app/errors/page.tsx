@@ -111,6 +111,10 @@ export default function TroubleWordsPage() {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
     startRouteProgressBar()
+    useWorkspaceStore.getState().setShouldAutoStartLearn(true)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('mywords_auto_start_learn', 'true')
+    }
     startErrorLearnPractice(list, startIdx)
     router.push('/learn')
   }
@@ -120,6 +124,10 @@ export default function TroubleWordsPage() {
     const list = wordsToPractice || filteredList.map((item) => item.word)
     if (!list.length) return
     startRouteProgressBar()
+    useWorkspaceStore.getState().setShouldAutoStartDictation(true)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+    }
     startErrorPractice(list, startIdx)
     router.push('/dictation')
   }

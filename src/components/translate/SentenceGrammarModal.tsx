@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import type { TranslationSentenceItem } from '@/types'
 import { GRAMMAR_ROLE_STYLES } from '@/lib/sentenceParser'
+import { useTranslateStore } from '@/store/useTranslateStore'
 
 interface SentenceGrammarModalProps {
   isOpen: boolean
@@ -40,6 +41,7 @@ export function SentenceGrammarModal({
 }: SentenceGrammarModalProps) {
   const grammar = sentence.grammar
   const tokens = grammar?.tokens || []
+  const playWordAudio = useTranslateStore((s) => s.playWordAudio)
 
   // 快捷键支持：Enter 进入下一句，Esc 关闭弹窗
   useEffect(() => {
@@ -135,7 +137,12 @@ export function SentenceGrammarModal({
                 return (
                   <div
                     key={i}
-                    className={`p-3 sm:p-3.5 rounded-2xl border flex flex-col justify-between transition-all hover:scale-102 bg-secondary/30 ${roleStyle.bg} ${roleStyle.border}`}
+                    onClick={() => {
+                      const wordToPlay = (token.cleanText || token.text || '').replace(/[^a-zA-Z'-]/g, '')
+                      if (wordToPlay) playWordAudio(wordToPlay)
+                    }}
+                    title="点击播放该词读音"
+                    className={`p-3 sm:p-3.5 rounded-2xl border flex flex-col justify-between transition-all hover:scale-102 bg-secondary/30 ${roleStyle.bg} ${roleStyle.border} cursor-pointer group/card`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1.5">
                       <span
@@ -143,14 +150,17 @@ export function SentenceGrammarModal({
                       >
                         {token.roleZh || roleStyle.label}
                       </span>
-                      {token.pos && (
-                        <span className="text-xs font-mono text-muted-foreground/80">
-                          {token.pos}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1.5">
+                        {token.pos && (
+                          <span className="text-xs font-mono text-muted-foreground/80">
+                            {token.pos}
+                          </span>
+                        )}
+                        <Volume2 className="size-3 text-muted-foreground/40 group-hover/card:text-primary transition-colors" />
+                      </div>
                     </div>
 
-                    <div className="text-base sm:text-lg font-bold text-foreground font-mono break-words mb-0.5">
+                    <div className="text-base sm:text-lg font-bold text-foreground font-mono break-words mb-0.5 group-hover/card:text-primary transition-colors">
                       {token.text || token.cleanText}
                     </div>
 

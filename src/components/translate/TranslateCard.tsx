@@ -7,6 +7,7 @@ import {
   RotateCcw,
   Sparkles,
   Volume2,
+  VolumeX,
   AlertCircle,
   FastForward,
   ArrowRight,
@@ -16,6 +17,7 @@ import type { TranslationSentenceItem } from '@/types'
 import { parseSentenceIntoWords, extractAutoKeywords } from '@/lib/sentenceParser'
 import { SentenceUnderlineSlots } from '@/components/translate/SentenceUnderlineSlots'
 import { audioEngine } from '@/core/audioEngine'
+import { isShortcutMatch } from '@/lib/shortcuts'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { useTranslateStore } from '@/store/useTranslateStore'
 
@@ -25,6 +27,7 @@ interface TranslateCardProps {
   totalSentences: number
   onNext: () => void
   onPrev: () => void
+  isActive?: boolean
 }
 
 export function TranslateCard({
@@ -33,6 +36,7 @@ export function TranslateCard({
   totalSentences,
   onNext,
   onPrev,
+  isActive = true,
 }: TranslateCardProps) {
   // 提取本句的核心词汇列表 (支持预置配置与智能提取)
   const keywords = useMemo(() => {
@@ -78,12 +82,16 @@ export function TranslateCard({
   const isWrongBeepEnabled = useWorkspaceStore((s) => s.isWrongBeepEnabled)
   const isCorrectSoundEnabled = useWorkspaceStore((s) => s.isCorrectSoundEnabled)
   const feedbackVolume = useWorkspaceStore((s) => s.feedbackVolume)
+  const shortcuts = useWorkspaceStore((s) => s.shortcuts)
 
   // 翻译 Store
   const {
     isPeeking,
     setPeeking,
     isSpeaking,
+    isAutoPlayAudio,
+    toggleAutoPlayAudio,
+    playWordAudio,
     playSentenceAudio,
     setSentenceCompleted,
     setGrammarModalOpen,
@@ -106,16 +114,68 @@ export function TranslateCard({
     audioEngine.cancelPendingPlayback()
   }, [sentence.id, repeatSentenceKey, tokens, keywords.length, setSentenceCompleted])
 
+  // 当前进行中的核心词
+  const currentKeyword = keywords[currentKeywordIndex]
+  const cleanTargetWord = currentKeyword ? currentKeyword.word.trim().toLowerCase() : ''
+
+  // 当离开练习页 tab 时，立即终止正在播放或计划播放的语音
+  useEffect(() => {
+    if (!isActive) {
+      audioEngine.cancelPendingPlayback()
+    }
+  }, [isActive])
+
+  // 核心词阶段：自动播报当前核心词读音 (仅在激活练习 tab 时)
+  useEffect(() => {
+    if (!isActive) return
+    if (stage === 'keyword' && currentKeyword?.word && isAutoPlayAudio) {
+      const timer = setTimeout(() => {
+        playWordAudio(currentKeyword.word)
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [
+    isActive,
+    stage,
+    currentKeywordIndex,
+    sentence.id,
+    repeatSentenceKey,
+    isAutoPlayAudio,
+    currentKeyword?.word,
+    playWordAudio,
+  ])
+
+  // 整句翻译阶段：进入整句时自动播报整句读音 (仅在激活练习 tab 时)
+  useEffect(() => {
+    if (!isActive) return
+    if (
+      stage === 'sentence' &&
+      sentence?.sentenceEn &&
+      isAutoPlayAudio &&
+      !isCompleted
+    ) {
+      const timer = setTimeout(() => {
+        playSentenceAudio()
+      }, 120)
+      return () => clearTimeout(timer)
+    }
+  }, [
+    isActive,
+    stage,
+    sentence.id,
+    sentence.sentenceEn,
+    repeatSentenceKey,
+    isAutoPlayAudio,
+    isCompleted,
+    playSentenceAudio,
+  ])
+
   // 播放按键音
   const triggerKeySound = useCallback(() => {
     if (isKeySoundEnabled) {
       audioEngine.playKeySound(keySoundPack, keySoundVolume)
     }
   }, [isKeySoundEnabled, keySoundPack, keySoundVolume])
-
-  // 当前进行中的核心词
-  const currentKeyword = keywords[currentKeywordIndex]
-  const cleanTargetWord = currentKeyword ? currentKeyword.word.trim().toLowerCase() : ''
 
   // 核心词拼写正确推进机制
   const handleKeywordComplete = useCallback(() => {
@@ -201,6 +261,9 @@ export function TranslateCard({
   // 核心键盘打字与流转逻辑
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 仅在练习页激活时响应键盘打字
+      if (!isActive) return
+
       // 忽略模态框与输入框中的敲击
       const target = e.target as HTMLElement
       if (
@@ -216,6 +279,18 @@ export function TranslateCard({
       if (e.key === 'Tab') {
         e.preventDefault()
         setPeeking(true)
+        return
+      }
+
+      // 2. 播报/重播读音快捷键 (默认 Ctrl+J)
+      if (isShortcutMatch(e, shortcuts.replayAudio || 'Ctrl+J')) {
+        e.preventDefault()
+        triggerKeySound()
+        if (stage === 'keyword' && currentKeyword?.word) {
+          playWordAudio(currentKeyword.word)
+        } else {
+          playSentenceAudio()
+        }
         return
       }
 
@@ -328,6 +403,7 @@ export function TranslateCard({
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (!isActive) return
       if (e.key === 'Tab') {
         e.preventDefault()
         setPeeking(false)
@@ -341,6 +417,7 @@ export function TranslateCard({
       window.removeEventListener('keyup', handleKeyUp)
     }
   }, [
+    isActive,
     stage,
     cleanTargetWord,
     keywordInput,
@@ -356,6 +433,10 @@ export function TranslateCard({
     validateFullSentence,
     onNext,
     setPeeking,
+    shortcuts.replayAudio,
+    currentKeyword,
+    playWordAudio,
+    playSentenceAudio,
   ])
 
   return (
@@ -381,7 +462,47 @@ export function TranslateCard({
           )}
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* 发音播报按钮 (手动点击重复播放当前单词或整句读音) */}
+          <button
+            type="button"
+            onClick={() => {
+              if (stage === 'keyword' && currentKeyword?.word) {
+                playWordAudio(currentKeyword.word)
+              } else {
+                playSentenceAudio()
+              }
+            }}
+            title={stage === 'keyword' ? '播放当前单词读音 (Ctrl+J)' : '播放当前句子读音 (Ctrl+J)'}
+            className={`flex items-center justify-center size-8 sm:size-8.5 rounded-xl border transition-all cursor-pointer ${
+              isSpeaking
+                ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)] scale-105'
+                : 'bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-primary hover:border-primary/40 border-white/10 active:scale-95'
+            }`}
+          >
+            <Volume2 className={`size-4 ${isSpeaking ? 'animate-bounce text-primary-foreground' : 'text-primary'}`} />
+          </button>
+
+          {/* 自动播报开关 */}
+          <button
+            type="button"
+            onClick={toggleAutoPlayAudio}
+            title={isAutoPlayAudio ? '自动播报已开启 (点击切换为手动)' : '自动播报已关闭 (点击开启切换词句时自动朗读)'}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border text-xs font-medium transition-all select-none cursor-pointer ${
+              isAutoPlayAudio
+                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]'
+                : 'bg-white/[0.04] hover:bg-white/[0.08] text-muted-foreground hover:text-foreground border-white/10'
+            }`}
+          >
+            {isAutoPlayAudio ? (
+              <Volume2 className="size-3.5 text-emerald-400" />
+            ) : (
+              <VolumeX className="size-3.5 text-muted-foreground" />
+            )}
+            <span className="hidden sm:inline">自动播报:</span>
+            <span className="font-semibold">{isAutoPlayAudio ? '开' : '关'}</span>
+          </button>
+
           {/* 提示原文按钮 (支持点击切换显隐，或长按 Tab 键偷看) */}
           <button
             type="button"
@@ -534,6 +655,7 @@ export function TranslateCard({
           <div className="flex items-center justify-between min-h-[36px] text-xs text-muted-foreground/60 font-mono">
             <div className="flex items-center gap-4">
               <span>• 核心词输入正确即秒切下一词</span>
+              <span>• Ctrl+J 或点击喇叭可重复播放单词读音</span>
               <span>• 长按 Tab 可透视原词</span>
             </div>
             <button
@@ -557,6 +679,7 @@ export function TranslateCard({
             ) : (
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground/60 font-mono">
                 <span>• 空格推进下一词（连续输入不卡死）</span>
+                <span>• Ctrl+J 或点击喇叭可重复朗读整句</span>
                 <span>• 整句敲完后敲 Enter 或空格统一校验</span>
                 <span>• 点击任意单词可随时跳转修改</span>
               </div>

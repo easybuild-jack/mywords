@@ -173,6 +173,10 @@ export function UnitCompleteCard() {
                 ref={dictationButtonRef}
                 onClick={() => {
                   startRouteProgressBar()
+                  useWorkspaceStore.getState().setShouldAutoStartDictation(true)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+                  }
                   startErrorPractice(currentLoadedWords, 0)
                   router.push('/dictation')
                 }}
@@ -186,6 +190,17 @@ export function UnitCompleteCard() {
               onClick={async () => {
                 startRouteProgressBar()
                 await exitErrorPractice()
+                if (mode === 'learn') {
+                  useWorkspaceStore.getState().setShouldAutoStartLearn(true)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('mywords_auto_start_learn', 'true')
+                  }
+                } else {
+                  useWorkspaceStore.getState().setShouldAutoStartDictation(true)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+                  }
+                }
                 router.push(mode === 'learn' ? '/learn' : '/dictation')
               }}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
@@ -210,6 +225,10 @@ export function UnitCompleteCard() {
                 ref={dictationButtonRef}
                 onClick={() => {
                   startRouteProgressBar()
+                  useWorkspaceStore.getState().setShouldAutoStartDictation(true)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('mywords_auto_start_dictation', 'true')
+                  }
                   router.push('/dictation')
                 }}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}

@@ -56,6 +56,12 @@ export function AppSidebar() {
       <div className="shrink-0 pb-3.5 mb-3 border-b border-border/60">
         <Link
           href="/learn"
+          onClick={() => {
+            useWorkspaceStore.getState().setShouldAutoStartLearn(false)
+            if (typeof window !== 'undefined') {
+              sessionStorage.removeItem('mywords_auto_start_learn')
+            }
+          }}
           className="flex items-center gap-3 p-1.5 -m-1.5 rounded-xl hover:bg-card/50 transition-all duration-200 group"
         >
           <div className="size-10 shrink-0 rounded-xl bg-card border border-border shadow-xs flex items-center justify-center p-1.5 group-hover:scale-105 group-hover:border-primary/50 group-hover:shadow-[0_0_14px_rgba(var(--primary-rgb)/0.25)] transition-all">
@@ -99,6 +105,19 @@ export function AppSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => {
+                if (item.href === '/learn') {
+                  useWorkspaceStore.getState().setShouldAutoStartLearn(false)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem('mywords_auto_start_learn')
+                  }
+                } else if (item.href === '/dictation') {
+                  useWorkspaceStore.getState().setShouldAutoStartDictation(false)
+                  if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem('mywords_auto_start_dictation')
+                  }
+                }
+              }}
               className={`group relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? 'bg-primary text-primary-foreground font-semibold shadow-[0_4px_16px_rgba(var(--primary-rgb)/0.35),0_1px_3px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.35)] border border-white/20'

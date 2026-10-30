@@ -3,18 +3,11 @@
 import React from 'react'
 import {
   AlertTriangle,
-  Check,
-  ToggleLeft,
-  ToggleRight,
-  Keyboard,
-  FileText,
-  Lock,
   Quote,
   Volume2,
 } from 'lucide-react'
 import type { DictationCueMode, WordItem } from '@/types'
 import { formatMeaningText } from '@/lib/wordDisplay'
-import { isMeaningStepActive } from '@/lib/dictationCue'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { WordCardShell } from '@/components/typing/WordCardShell'
 import { getWordExamples } from '@/lib/wordExamples'
@@ -28,37 +21,24 @@ interface DictationCardProps {
   currentInput: string
   hasTypo: boolean
   isPeeking: boolean
-  cueMode: DictationCueMode
+  cueMode?: DictationCueMode
   phoneticPreference: 'us' | 'uk'
   remainingLoops?: number
 }
 
 const DICTATION_AI_SECTIONS = ['core', 'examples'] as const
 /**
- * 默写卡片：英文全部遮蔽，按「音标 → 译文 → 拼写」三级闯关推进。
- *
- * 顶部线索由 cueMode 决定：听音模式只给发音、隐藏中文；
- * 看译文模式只给中文、不自动发音（想听得自己点），下半区配备语境双语例句挖空辅助。
+ * 默写卡片：英文遮蔽，顶部提供中文释义与原声发音辅助，直接进行单词拼写盲打。
  */
 export function DictationCard({
   word: sourceWord,
   currentInput,
   hasTypo,
   isPeeking,
-  cueMode,
   phoneticPreference,
   remainingLoops = 1,
 }: DictationCardProps) {
   const word = useEnsureAiWordSections(sourceWord, DICTATION_AI_SECTIONS)
-  const {
-    isDictationMeaningEnabled,
-    toggleDictationMeaning,
-    dictationMeaningInput,
-    setDictationMeaningInput,
-    isMeaningPassed,
-    submitMeaning,
-    isMeaningError,
-  } = useWorkspaceStore()
 
   const [speakingSentenceIdx, setSpeakingSentenceIdx] = React.useState<number | null>(null)
   const [lookupWordInfo, setLookupWordInfo] = React.useState<{
@@ -84,28 +64,6 @@ export function DictationCard({
 
   const meaningText = formatMeaningText(word)
 
-  const isMeaningStepEnabled = isMeaningStepActive(cueMode, isDictationMeaningEnabled)
-
-  // 拼写槽激活条件：开启的前置译文环节必须通过
-  const isSpellingUnlocked = !isMeaningStepEnabled || isMeaningPassed
-
-  const meaningTextareaRef = React.useRef<HTMLTextAreaElement>(null)
-
-  // 听音默写开启译文环节时，切词或未通过状态下自动聚焦到译文输入框
-  React.useEffect(() => {
-    if (cueMode === 'listen' && isDictationMeaningEnabled && !isMeaningPassed) {
-      meaningTextareaRef.current?.focus()
-    }
-  }, [word.id, cueMode, isDictationMeaningEnabled, isMeaningPassed])
-
-  // 释义可能很长，输入框是多行文本域，但回车仍然是校验而不是换行。防范中文输入法合成阶段的回车冲突。
-  const handleMeaningSubmit = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.nativeEvent.isComposing && (e as any).keyCode !== 229) {
-      e.preventDefault()
-      submitMeaning()
-    }
-  }
-
   return (
     <WordCardShell
       word={word}
@@ -117,111 +75,28 @@ export function DictationCard({
         使看译文/听音线索与输入阶梯自然向上排布，消除上下过度空旷感。
       */}
       <div className="flex flex-col h-full justify-start pt-1.5 sm:pt-2.5 xl:pt-3.5 gap-2 sm:gap-2.5 xl:gap-3">
-        {/* 顶部线索槽：只在看译文模式出现，作为核心提示醒目呈现 */}
-        {cueMode === 'meaning' && (
-          <div className="min-h-12 max-h-20 shrink-0 flex items-center justify-center px-4 sm:px-6">
-            <p className="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl text-base sm:text-lg xl:text-xl font-bold text-white line-clamp-2 leading-relaxed text-center">
-              {meaningText}
-            </p>
-          </div>
-        )}
+        {/* 顶部线索槽：核心中文释义醒目呈现 */}
+        <div className="min-h-12 max-h-20 shrink-0 flex items-center justify-center px-4 sm:px-6">
+          <p className="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl text-base sm:text-lg xl:text-xl font-bold text-white line-clamp-2 leading-relaxed text-center">
+            {meaningText}
+          </p>
+        </div>
 
-        {/* 模式提示：常驻自己这一行，只有文案变化，高度不动 */}
+        {/* 模式提示 */}
         <div className="h-5 shrink-0 flex items-center justify-center px-4">
           <span className="text-xs text-muted-foreground/80 font-mono">
-            {cueMode === 'listen' ? '[ 听音默写 · 释义已隐藏 ]' : '[ 看译文默写 · 发音需手动触发 ]'}
+            [ 单词默写 · 原声发音与盲打拼写 ]
           </span>
         </div>
 
         {/* 中间主要输入阶梯区：宽度随着卡片自适应扩大 */}
         <div className="w-full max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto space-y-2 sm:space-y-2.5">
-          {/* 中文译文输入行。看译文模式下释义已摆在顶部，这一级整体撤掉 */}
-          {cueMode === 'listen' && (
-            <div className="flex items-center gap-2.5">
-              <div
-                className={`flex-1 h-24 rounded-2xl border px-3.5 py-2.5 flex items-start justify-between transition-all duration-200 ${!isDictationMeaningEnabled
-                  ? 'border-primary/10 bg-primary/[0.02] opacity-40 cursor-not-allowed'
-                  : isMeaningPassed
-                    ? 'border-primary/60 bg-primary/10'
-                    : isMeaningError
-                      ? 'border-destructive bg-destructive/15 animate-shake'
-                      : 'border-primary/20 bg-primary/[0.03] focus-within:border-primary focus-within:bg-primary/[0.06]'
-                  }`}
-              >
-                <div className="flex items-start gap-2 flex-1 min-w-0 mr-2 h-full">
-                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1 shrink-0 pt-0.5">
-                    <FileText className="size-3.5 text-accent/80" />
-                    <span>译文</span>
-                  </span>
-                  {isMeaningPassed ? (
-                    <span className="text-sm font-semibold text-primary text-left line-clamp-3 leading-relaxed">
-                      {dictationMeaningInput}
-                    </span>
-                  ) : (
-                    <textarea
-                      ref={meaningTextareaRef}
-                      rows={3}
-                      disabled={!isDictationMeaningEnabled}
-                      value={dictationMeaningInput}
-                      onChange={(e) => setDictationMeaningInput(e.target.value)}
-                      onKeyDown={handleMeaningSubmit}
-                      placeholder={
-                        isDictationMeaningEnabled ? '输入中文释义（部分即可），按回车校验...' : '已关闭译文输入'
-                      }
-                      className="w-full h-full resize-none bg-transparent border-none text-sm leading-relaxed text-white placeholder:text-muted-foreground/60 focus:outline-none font-sans"
-                    />
-                  )}
-                </div>
-
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {isMeaningPassed ? (
-                    <span className="flex items-center gap-1 text-[11px] font-bold text-primary bg-primary/20 px-2 py-0.5 rounded-md border border-primary/30">
-                      <Check className="size-3" />
-                      <span>通过</span>
-                    </span>
-                  ) : isDictationMeaningEnabled ? (
-                    <button
-                      type="button"
-                      onClick={() => submitMeaning()}
-                      className="text-[11px] font-semibold px-2 py-1 rounded-md bg-white/[0.08] hover:bg-primary hover:text-[#0B0C0E] text-gray-300 transition-all cursor-pointer"
-                    >
-                      回车/校验
-                    </button>
-                  ) : null}
-                </div>
-              </div>
-
-              {/* 译文环节独立开关 */}
-              <button
-                type="button"
-                onClick={() => toggleDictationMeaning()}
-                className={`h-12 px-2.5 rounded-2xl border flex items-center justify-center gap-1 text-xs transition-all cursor-pointer shrink-0 ${isDictationMeaningEnabled
-                  ? 'border-accent/40 bg-accent/10 text-accent'
-                  : 'border-white/10 bg-white/[0.04] text-muted-foreground hover:text-white'
-                  }`}
-                title={isDictationMeaningEnabled ? '点击关闭译文输入环节' : '点击开启译文输入环节'}
-              >
-                {isDictationMeaningEnabled ? (
-                  <ToggleRight className="size-5" />
-                ) : (
-                  <ToggleLeft className="size-5" />
-                )}
-              </button>
-            </div>
-          )}
-
-          {/* 单词拼写盲打槽，前置完成后激活。
-              样式与学习页的跟打槽保持一致（霓虹绿描边 + 48px 字号 + 剩余字母下划线），
-              只多一个未解锁态，改动要两边同步 */}
+          {/* 单词拼写盲打槽：直接开启拼写打字 */}
           <div
             className="relative w-full cursor-pointer"
             onClick={() => {
-              if (!isSpellingUnlocked) {
-                meaningTextareaRef.current?.focus()
-              } else {
-                if (typeof document !== 'undefined' && document.activeElement && document.activeElement !== document.body) {
-                  (document.activeElement as HTMLElement).blur()
-                }
+              if (typeof document !== 'undefined' && document.activeElement && document.activeElement !== document.body) {
+                (document.activeElement as HTMLElement).blur()
               }
             }}
           >
@@ -238,101 +113,90 @@ export function DictationCard({
               return (
                 <div
                   className={`relative flex items-center justify-center py-2.5 sm:py-3 xl:py-3.5 px-4 sm:px-6 overflow-hidden font-mono rounded-2xl border-2 transition-all shadow-inner ${
-                    !isSpellingUnlocked
-                      ? 'border-primary/15 bg-primary/[0.02] text-muted-foreground/50 opacity-60 min-h-[88px]'
-                      : hasTypo
+                    hasTypo
                       ? 'border-destructive/70 bg-destructive/[0.04] animate-error-box'
                       : 'border-primary/40 bg-white/[0.02]'
                   }`}
                 >
-                  {!isSpellingUnlocked ? (
-                    <div className="flex items-center justify-center gap-2 text-sm font-sans font-normal text-muted-foreground h-16">
-                      <Lock className="size-4 text-accent/80" />
-                      <span>请先完成上方译文输入后开启拼写</span>
+                  {/* 4 线格打字区与光标 */}
+                  <div className="relative w-full h-16 sm:h-18 xl:h-20 flex items-center justify-center">
+                    {/* 4 线格参考线：顶线、中虚线、基准底线（同色软蓝无红线）、下延底线（最后的横线） */}
+                    <div className="absolute inset-x-4 inset-y-1.5 pointer-events-none flex flex-col justify-between opacity-70 z-0">
+                      {/* 第 1 线：顶线 */}
+                      <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                      {/* 第 2 线：中线（虚线） */}
+                      <div className="w-full border-b border-dashed border-sky-400/45 dark:border-sky-400/30" />
+                      {/* 第 3 线：基准线（实线，与参考线统一青蓝色，无红线） */}
+                      <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
+                      {/* 第 4 线：下延底线（最后的横线） */}
+                      <div className="w-full border-b border-sky-400/25 dark:border-sky-400/15" />
                     </div>
-                  ) : (
-                    <>
-                      {/* 4 线格打字区与光标 */}
-                      <div className="relative w-full h-16 sm:h-18 xl:h-20 flex items-center justify-center">
-                        {/* 4 线格参考线：顶线、中虚线、基准底线（同色软蓝无红线）、下延底线（最后的横线） */}
-                        <div className="absolute inset-x-4 inset-y-1.5 pointer-events-none flex flex-col justify-between opacity-70 z-0">
-                          {/* 第 1 线：顶线 */}
-                          <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
-                          {/* 第 2 线：中线（虚线） */}
-                          <div className="w-full border-b border-dashed border-sky-400/45 dark:border-sky-400/30" />
-                          {/* 第 3 线：基准线（实线，与参考线统一青蓝色，无红线） */}
-                          <div className="w-full border-b border-sky-400/35 dark:border-sky-400/25" />
-                          {/* 第 4 线：下延底线（最后的横线） */}
-                          <div className="w-full border-b border-sky-400/25 dark:border-sky-400/15" />
-                        </div>
 
-                        {/* 字母与光标槽列表：字间距紧凑贴合，光标精确贴合在已输入字符末尾 */}
-                        <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
-                          {Array.from({ length: totalSlots }).map((_, idx) => {
-                            const targetChar = word.name[idx]
-                            const typedChar = currentInput[idx]
-                            const isTyped = idx < currentInput.length
-                            const isCurrent = idx === currentInput.length
-                            const isCorrect =
-                              isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
+                    {/* 字母与光标槽列表：字间距紧凑贴合，光标精确贴合在已输入字符末尾 */}
+                    <div className={`relative z-10 inline-flex items-center justify-center h-full font-mono ${fontClass}`}>
+                      {Array.from({ length: totalSlots }).map((_, idx) => {
+                        const targetChar = word.name[idx]
+                        const typedChar = currentInput[idx]
+                        const isTyped = idx < currentInput.length
+                        const isCurrent = idx === currentInput.length
+                        const isCorrect =
+                          isTyped && targetChar && typedChar.toLowerCase() === targetChar.toLowerCase()
 
-                            return (
-                              <div
-                                key={idx}
-                                style={{ width: '1.05ch' }}
-                                className="relative w-[1.05ch] h-full flex items-center justify-center"
+                        return (
+                          <div
+                            key={idx}
+                            style={{ width: '1.05ch' }}
+                            className="relative w-[1.05ch] h-full flex items-center justify-center"
+                          >
+                            {/* 光标：精确处于当前未打字母的左边缘起始位置 */}
+                            {isCurrent && (
+                              <span
+                                className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
+                                  hasTypo ? 'bg-destructive' : 'bg-primary'
+                                }`}
+                              />
+                            )}
+
+                            {/* 已输入字符（坐落在基准线之上） */}
+                            {isTyped && (
+                              <span
+                                className={`${fontClass} font-extrabold -translate-y-1.5 sm:-translate-y-2 ${
+                                  isCorrect
+                                    ? 'text-primary'
+                                    : 'text-destructive font-black animate-error-flash px-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]'
+                                }`}
+                                title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
                               >
-                                {/* 光标：精确处于当前未打字母的左边缘起始位置 */}
-                                {isCurrent && (
-                                  <span
-                                    className={`absolute left-0 top-2 bottom-5 w-0.5 animate-cursor ${
-                                      hasTypo ? 'bg-destructive' : 'bg-primary'
-                                    }`}
-                                  />
-                                )}
+                                {typedChar}
+                              </span>
+                            )}
 
-                                {/* 已输入字符（坐落在基准线之上） */}
-                                {isTyped && (
-                                  <span
-                                    className={`${fontClass} font-extrabold -translate-y-1.5 sm:-translate-y-2 ${
-                                      isCorrect
-                                        ? 'text-primary'
-                                        : 'text-destructive font-black animate-error-flash px-0.5 rounded-lg bg-destructive/20 border border-destructive/40 shadow-[0_0_12px_rgba(239,68,68,0.6)]'
-                                    }`}
-                                    title={!isCorrect ? '输入错误，请按退格键 (Backspace) 修正' : undefined}
-                                  >
-                                    {typedChar}
-                                  </span>
-                                )}
-
-                                {/* 占位的 _ ：精确坐落在最后的横线（第 4 线）上 */}
-                                <span
-                                  className={`absolute -bottom-1 sm:-bottom-1.5 font-mono text-xl sm:text-2xl xl:text-3xl font-black select-none pointer-events-none transition-opacity ${
-                                    isTyped
-                                      ? 'opacity-0'
-                                      : hasTypo
-                                      ? 'text-destructive/40'
-                                      : 'text-primary/45'
-                                  }`}
-                                >
-                                  _
-                                </span>
-                              </div>
-                            )
-                          })}
-
-                          {/* 全部输入完成后，光标显示在末尾 */}
-                          {currentInput.length >= totalSlots && (
+                            {/* 占位的 _ ：精确坐落在最后的横线（第 4 线）上 */}
                             <span
-                              className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
-                                hasTypo ? 'bg-destructive' : 'bg-primary'
+                              className={`absolute -bottom-1 sm:-bottom-1.5 font-mono text-xl sm:text-2xl xl:text-3xl font-black select-none pointer-events-none transition-opacity ${
+                                isTyped
+                                  ? 'opacity-0'
+                                  : hasTypo
+                                  ? 'text-destructive/40'
+                                  : 'text-primary/45'
                               }`}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </>
-                  )}
+                            >
+                              _
+                            </span>
+                          </div>
+                        )
+                      })}
+
+                      {/* 全部输入完成后，光标显示在末尾 */}
+                      {currentInput.length >= totalSlots && (
+                        <span
+                          className={`w-0.5 h-7 sm:h-9 xl:h-11 animate-cursor self-center -translate-y-1.5 ${
+                            hasTypo ? 'bg-destructive' : 'bg-primary'
+                          }`}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
               )
             })()}
