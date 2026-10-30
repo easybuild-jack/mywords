@@ -76,7 +76,7 @@ type GrowthSeriesId = (typeof SENTENCE_GROWTH_SERIES)[number]['id']
 /** 辅助函数：高亮本步新增的关键词，采用与音标例词一致的琥珀色 (#F59E0B)，无下划线 */
 function renderGrowthSentence(sentence: string, highlightWords: string[]) {
   if (!highlightWords || highlightWords.length === 0) {
-    return <span className="font-semibold text-foreground">{sentence}</span>
+    return <span className="text-foreground">{sentence}</span>
   }
 
   const sortedWords = [...highlightWords].sort((a, b) => b.length - a.length)
@@ -92,14 +92,14 @@ function renderGrowthSentence(sentence: string, highlightWords: string[]) {
   const parts = sentence.split(regex)
 
   return (
-    <span className="font-semibold text-foreground">
+    <span className="text-foreground">
       {parts.map((part, idx) => {
         const isMatch = sortedWords.some((w) => w.toLowerCase() === part.toLowerCase())
         if (isMatch) {
           return (
             <span
               key={idx}
-              className="grammar-keyword font-black"
+              className="grammar-keyword font-medium"
             >
               {part}
             </span>
@@ -128,7 +128,7 @@ function SentenceGrowthSeries({
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
         <div>
-          <h3 className="text-xl font-extrabold text-white">{title}</h3>
+          <h3 className="text-xl font-semibold text-white">{title}</h3>
           <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
         </div>
         <span className="text-sm font-mono text-primary font-bold">{steps.length} 阶生长</span>
@@ -139,15 +139,15 @@ function SentenceGrowthSeries({
           <article
             key={stepItem.step}
             id={`${idPrefix}-${stepItem.step}`}
-            className="glass-card rounded-2xl border border-white/10 p-5 sm:p-6 flex flex-col gap-4"
+            className="border-t border-border pt-5 flex flex-col gap-4"
           >
             <header className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-lg font-bold text-primary">
+                  <span className="font-serif italic text-lg text-primary">
                     Step 0{stepItem.step}
                   </span>
-                  <h3 className="text-2xl font-extrabold text-foreground">
+                  <h3 className="text-2xl font-semibold text-foreground">
                     {stepItem.titleZh}
                   </h3>
                   <span className="text-sm font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
@@ -168,16 +168,16 @@ function SentenceGrowthSeries({
                 type="button"
                 onClick={() => onSpeak(stepItem.sentenceEn)}
                 title="朗读本步例句"
-                className="size-10 shrink-0 rounded-xl border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
+                className="size-9 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
               >
                 <Volume2 className="size-5" />
               </button>
             </header>
 
-            <section className="border-t border-white/10 pt-4 space-y-3">
+            <section className="border-t border-border pt-4 space-y-3">
               {/* 句子与翻译紧随其后 */}
               <div className="flex items-baseline gap-3 flex-wrap">
-                <p className="text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                <p className="font-serif text-xl sm:text-2xl leading-relaxed text-foreground">
                   {renderGrowthSentence(stepItem.sentenceEn, stepItem.highlightWords)}
                 </p>
                 <span className="text-lg sm:text-xl text-muted-foreground">
@@ -194,7 +194,7 @@ function SentenceGrowthSeries({
                       <span
                         className={`font-mono text-lg sm:text-xl tracking-wide shrink-0 ${
                           token.isNew
-                            ? 'grammar-keyword font-black'
+                            ? 'grammar-keyword font-medium'
                             : 'text-foreground font-bold'
                         }`}
                       >
@@ -242,17 +242,17 @@ export function SentenceDerivationView() {
   return (
     <div className="space-y-8">
       {/* 模块导引条（与词性页风格完全一致） */}
-      <div className="glass-card rounded-2xl p-5 sm:p-6 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="pb-6 border-b border-border flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+            <span className="text-xs text-muted-foreground">
               Module 03 · 句子主干与成分演进
             </span>
-            <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
+            <span className="text-xs text-muted-foreground">
               吃苹果推导法
             </span>
           </div>
-          <h2 className="text-2xl font-extrabold text-white">
+          <h2 className="text-2xl font-semibold text-white tracking-tight">
             英语句子成分与结构演变：从“谁在干什么”开始
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
@@ -267,7 +267,7 @@ export function SentenceDerivationView() {
               const el = document.getElementById('sentence-foundation')
               el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
             }}
-            className="text-sm px-3 py-1.5 rounded-lg border bg-primary/20 text-primary border-primary/40 font-semibold cursor-pointer"
+            className="text-sm px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             句法核心认知
           </button>
@@ -279,10 +279,10 @@ export function SentenceDerivationView() {
                 el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
                 setActiveStepId(s.step)
               }}
-              className={`text-sm px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+              className={`text-sm px-3 py-1.5 rounded-md border transition-colors cursor-pointer ${
                 activeStepId === s.step
-                  ? 'bg-primary/20 text-primary border-primary/40 font-semibold'
-                  : 'bg-white/5 text-gray-400 border-white/5 hover:text-white hover:border-white/20'
+                  ? 'bg-primary/10 text-primary border-transparent font-medium'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
               步骤 0{s.step} <span className="font-mono text-xs text-muted-foreground">({s.tagZh.slice(0, 4)})</span>
@@ -294,12 +294,12 @@ export function SentenceDerivationView() {
       {/* 第一部分：通俗解释句子成分的作用（核心认知大卡片） */}
       <article
         id="sentence-foundation"
-        className="glass-card rounded-2xl border border-white/10 p-6 sm:p-7 space-y-7"
+        className="space-y-7"
       >
         <header className="space-y-2">
           <div className="flex items-center gap-2.5">
-            <span className="font-mono text-lg font-bold text-primary">01</span>
-            <h3 className="text-2xl font-extrabold text-foreground">
+            <span className="font-serif italic text-lg text-primary">01</span>
+            <h3 className="text-2xl font-semibold text-foreground">
               核心认知：英语句子到底在表达什么？
             </h3>
           </div>
@@ -309,11 +309,11 @@ export function SentenceDerivationView() {
         </header>
 
         {/* 两大核心主干 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border-t border-white/10 pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 border-t border-border pt-6">
           {SENTENCE_CORE_CONCEPTS.map((concept) => (
             <div
               key={concept.id}
-              className="rounded-xl bg-white/[0.02] border border-white/10 p-5 flex flex-col gap-4"
+              className="rounded-lg border border-border p-5 flex flex-col gap-4"
             >
               <div className="space-y-2.5">
                 <div className="space-y-1">
@@ -331,7 +331,7 @@ export function SentenceDerivationView() {
               </div>
 
               {/* 拆解项 */}
-              <div className="mt-auto border-t border-white/10 pt-4 space-y-2.5">
+              <div className="mt-auto border-t border-border pt-4 space-y-2.5">
                 <div className="flex items-baseline justify-between gap-3 text-base">
                   <span className="font-mono text-xl font-bold text-foreground">
                     {concept.exampleEn}
@@ -357,7 +357,7 @@ export function SentenceDerivationView() {
         </div>
 
         {/* 枝叶成分的作用 */}
-        <div className="border-t border-white/10 pt-6 space-y-4">
+        <div className="border-t border-border pt-6 space-y-4">
           <div className="flex items-baseline gap-3">
             <h4 className="text-lg font-bold text-foreground">枝叶成分：给句子穿衣服与添细节</h4>
             <span className="text-sm text-muted-foreground">剥离它们，句子依然成立；加上它们，意思更加丰富</span>
@@ -367,7 +367,7 @@ export function SentenceDerivationView() {
             {SENTENCE_MODIFIERS_DATA.map((mod) => (
               <div
                 key={mod.id}
-                className="rounded-xl bg-white/[0.02] border border-white/10 p-4 flex flex-col gap-3"
+                className="rounded-lg border border-border p-4 flex flex-col gap-3"
               >
                 <div className="space-y-1">
                   <span className="block font-bold text-base text-foreground">
@@ -380,7 +380,7 @@ export function SentenceDerivationView() {
                 <p className="text-sm leading-relaxed text-foreground/80">
                   {mod.plainExplanation}
                 </p>
-                <div className="mt-auto pt-3 border-t border-white/10 space-y-1">
+                <div className="mt-auto pt-3 border-t border-border space-y-1">
                   <p className="font-mono font-semibold text-sm text-foreground">
                     {mod.exampleEn}
                   </p>
@@ -400,7 +400,7 @@ export function SentenceDerivationView() {
         </aside>
       </article>
 
-      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-white/[0.04] border border-white/10 w-fit max-w-full overflow-x-auto custom-scrollbar">
+      <div className="flex items-center gap-1 w-fit max-w-full overflow-x-auto custom-scrollbar">
         {SENTENCE_GROWTH_SERIES.map((series) => {
           const isActive = activeSeriesId === series.id
           return (
@@ -410,7 +410,7 @@ export function SentenceDerivationView() {
               onClick={() => setActiveSeriesId(series.id)}
               className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
                 isActive
-                  ? 'bg-primary text-[#0B0C0E]'
+                  ? 'bg-primary/10 text-primary font-medium'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
