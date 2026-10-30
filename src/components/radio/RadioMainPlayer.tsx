@@ -73,10 +73,10 @@ export function RadioMainPlayer({
 }: RadioMainPlayerProps) {
   if (!item) {
     return (
-      <div className="h-96 rounded-[22px] bg-card/40 border border-border/80 flex flex-col items-center justify-center p-8 text-center text-muted-foreground shadow-sm">
-        <Disc3 className="size-14 text-muted-foreground/30 mb-3 animate-spin duration-3000" />
+      <div className="h-96 rounded-lg border border-dashed border-border flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+        <Disc3 className="size-10 text-muted-foreground/40 mb-3" />
         <p className="text-sm font-medium text-foreground">暂无选中的电台片段</p>
-        <p className="text-xs text-muted-foreground mt-1">请从右侧或下方列表选择一个片段开始磨耳朵</p>
+        <p className="text-xs text-muted-foreground mt-1">回到片段列表选择一个开始播放</p>
       </div>
     )
   }
@@ -124,16 +124,16 @@ export function RadioMainPlayer({
   }
 
   return (
-    <div className="relative rounded-[22px] bg-sidebar border border-border/80 shadow-lg p-5 space-y-4">
+    <div className="relative space-y-4">
       {/* 标题 */}
       <div className="min-w-0 relative z-10">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground leading-snug">
+        <h2 className="text-lg sm:text-xl font-semibold tracking-tight text-foreground leading-snug">
           {item.title}
         </h2>
       </div>
 
       {/* 超大影音主视听视窗 (Enlarged Player Screen) */}
-      <div className={`relative w-full aspect-video min-h-[360px] md:min-h-[460px] lg:min-h-[540px] max-h-[640px] rounded-2xl ${isVideo ? 'bg-black' : 'bg-card'} border border-border/80 overflow-hidden shadow-lg flex items-center justify-center group`}>
+      <div className={`relative w-full aspect-video min-h-[360px] md:min-h-[460px] lg:min-h-[540px] max-h-[640px] rounded-lg ${isVideo ? 'bg-black' : 'bg-card'} border border-border overflow-hidden flex items-center justify-center group`}>
         {isVideo ? (
           /* 大屏视频播放器视图 */
           <div className="relative size-full flex items-center justify-center bg-black">
@@ -149,17 +149,17 @@ export function RadioMainPlayer({
             {/* 视频中心播放/暂停大悬浮遮罩 */}
             <button
               onClick={onTogglePlay}
-              className={`absolute size-20 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-black/80 cursor-pointer shadow-2xl ${
+              className={`absolute size-16 rounded-full bg-black/55 text-white flex items-center justify-center transition-opacity duration-300 hover:bg-black/75 cursor-pointer ${
                 isPlaying ? 'opacity-0 group-hover:opacity-100' : 'opacity-100 scale-100'
               }`}
             >
-              {isPlaying ? <Pause className="size-8" /> : <Play className="size-8 ml-1 text-primary" />}
+              {isPlaying ? <Pause className="size-7" /> : <Play className="size-7 ml-1 fill-current" />}
             </button>
 
             {/* 全屏按钮 */}
             <button
               onClick={handleToggleFullscreen}
-              className="absolute right-4 bottom-4 p-2.5 rounded-xl bg-black/60 hover:bg-black/90 text-white/90 hover:text-white backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-md"
+              className="absolute right-3 bottom-3 p-2 rounded-md bg-black/55 hover:bg-black/80 text-white/90 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
               title="全屏播放"
             >
               <Maximize2 className="size-5" />
@@ -181,7 +181,7 @@ export function RadioMainPlayer({
       </div>
 
       {/* 底部控制中枢 (Integrated Bottom Control Deck) */}
-      <div className="rounded-2xl bg-card border border-border/70 p-3 sm:p-4 space-y-3.5 select-none shadow-sm">
+      <div className="pt-1 space-y-3 select-none">
         {/* 1. 进度拖拽寻道条 */}
         <div className="flex items-center gap-3">
           <span className="w-11 text-right text-xs font-mono text-muted-foreground tabular-nums shrink-0">
@@ -195,7 +195,7 @@ export function RadioMainPlayer({
               step="0.1"
               value={progressPercent}
               onChange={handleProgressChange}
-              className="w-full h-1.5 bg-muted/80 rounded-lg appearance-none cursor-pointer accent-primary group-hover:h-2 transition-all"
+              className="w-full h-1 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
             />
           </div>
           <span className="w-11 text-xs font-mono text-muted-foreground tabular-nums shrink-0">
@@ -210,10 +210,10 @@ export function RadioMainPlayer({
             <button
               onClick={cyclePlayMode}
               title={`当前模式: ${modeInfo.label}（点击切换）`}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs transition-colors cursor-pointer border shrink-0 ${
+              className={`flex items-center gap-1.5 h-8 px-2.5 rounded-md text-xs transition-colors cursor-pointer shrink-0 ${
                 playMode === 'single-loop'
-                  ? 'text-primary bg-primary/15 border-primary/30'
-                  : 'text-muted-foreground border-border/60 hover:text-foreground hover:bg-muted/60'
+                  ? 'text-primary bg-primary/10'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
               <ModeIcon className="size-4" />
@@ -221,15 +221,15 @@ export function RadioMainPlayer({
             </button>
 
             {/* 语速微调选择 */}
-            <div className="hidden md:flex items-center gap-1 text-xs font-mono ml-1 pl-2.5 border-l border-border/70">
+            <div className="hidden md:flex items-center gap-0.5 text-xs font-mono ml-1 pl-2.5 border-l border-border">
               {[0.75, 1.0, 1.25, 1.5].map((rate) => (
                 <button
                   key={rate}
                   onClick={() => onChangePlaybackRate(rate)}
-                  className={`px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors cursor-pointer ${
+                  className={`h-7 px-1.5 rounded-md text-[11px] font-mono transition-colors cursor-pointer ${
                     playbackRate === rate
-                      ? 'bg-primary text-primary-foreground font-bold'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                      ? 'bg-muted text-foreground font-medium'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
                   {rate}x
@@ -244,7 +244,7 @@ export function RadioMainPlayer({
             <button
               onClick={onPrev}
               title="上一片段 ([ 键)"
-              className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/70 transition-colors cursor-pointer shrink-0"
+              className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
             >
               <SkipBack className="size-5" />
             </button>
@@ -254,7 +254,7 @@ export function RadioMainPlayer({
               id="radio-main-play-btn"
               onClick={onTogglePlay}
               title={isPlaying ? '暂停 (空格键)' : '播放 (空格键)'}
-              className="size-11 sm:size-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
+              className="size-11 sm:size-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center transition-colors cursor-pointer shrink-0"
             >
               {isPlaying ? (
                 <Pause className="size-5 sm:size-6" />
@@ -267,7 +267,7 @@ export function RadioMainPlayer({
             <button
               onClick={onNext}
               title="下一片段 (] 键)"
-              className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted/70 transition-colors cursor-pointer shrink-0"
+              className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
             >
               <SkipForward className="size-5" />
             </button>
@@ -289,7 +289,7 @@ export function RadioMainPlayer({
               step="0.05"
               value={volume}
               onChange={(e) => onChangeVolume(parseFloat(e.target.value))}
-              className="w-14 sm:w-20 lg:w-24 h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+              className="w-14 sm:w-20 lg:w-24 h-1 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
               title={`音量: ${Math.round(volume * 100)}%`}
             />
             {/* 移动端语速快速切换按钮 */}

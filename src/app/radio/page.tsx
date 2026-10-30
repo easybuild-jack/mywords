@@ -13,7 +13,7 @@ import { RadioFilters } from '@/components/radio/RadioFilters'
 import { RadioMainPlayer } from '@/components/radio/RadioMainPlayer'
 import { RadioCardList } from '@/components/radio/RadioCardList'
 import { RadioUploadModal } from '@/components/radio/RadioUploadModal'
-import { ListMusic, PlayCircle, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 export default function RadioPage() {
   // 当前激活的 Tab：'list' (音视频列表页，默认) | 'player' (播放页)
@@ -320,7 +320,7 @@ export default function RadioPage() {
   return (
     <div className="radio-page flex-1 min-h-full w-full flex flex-col bg-background text-foreground animate-fadeIn pb-12">
       {/* 主工作舞台容器 */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-10 pt-6 space-y-6">
+      <div className="flex-1 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-10 pt-6 space-y-5">
         {/* 顶部标题、搜索与上传入口 */}
         <RadioHeader
           searchQuery={searchQuery}
@@ -331,75 +331,56 @@ export default function RadioPage() {
           onOpenUpload={() => setIsUploadOpen(true)}
         />
 
-        {/* Tab 导航切换栏 (默认第一个是列表签页，第二个是播放页) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
-          <div className="inline-flex p-1 rounded-xl bg-card border border-border/80 shadow-xs select-none">
-            {/* Tab 1: 音视频列表 (默认) */}
+        {/* Tab 导航：列表页（默认）与播放页 */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-border">
+          <div className="flex items-center gap-6 select-none">
             <button
+              type="button"
               onClick={() => setActiveTab('list')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
                 activeTab === 'list'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                  ? 'text-foreground font-medium border-primary'
+                  : 'text-muted-foreground hover:text-foreground border-transparent'
               }`}
             >
-              <ListMusic className="size-4" />
-              <span>音视频列表</span>
-              <span
-                className={`text-[11px] px-2 py-0.5 rounded-full font-mono transition-colors ${
-                  activeTab === 'list'
-                    ? 'bg-primary-foreground/20 text-primary-foreground font-bold'
-                    : 'bg-muted text-muted-foreground'
-                }`}
-              >
-                {filteredItems.length}
-              </span>
+              片段列表
+              <span className="ml-1.5 text-xs font-mono text-muted-foreground">{filteredItems.length}</span>
             </button>
-
-            {/* Tab 2: 播放页 */}
             <button
+              type="button"
               onClick={() => setActiveTab('player')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
                 activeTab === 'player'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                  ? 'text-foreground font-medium border-primary'
+                  : 'text-muted-foreground hover:text-foreground border-transparent'
               }`}
             >
-              <PlayCircle className="size-4" />
-              <span>播放页</span>
-              {isPlaying && (
-                <span className="flex items-center gap-1.5 ml-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono animate-pulse">
-                  <span className="size-1.5 rounded-full bg-emerald-400" />
-                  正在播放
-                </span>
-              )}
+              播放页
+              {isPlaying && <span className="size-1.5 rounded-full bg-primary animate-pulse" title="正在播放" />}
             </button>
           </div>
 
-          {/* 右侧微提示 / 快捷跳转 */}
           {activeTab === 'player' ? (
             <button
+              type="button"
               onClick={() => setActiveTab('list')}
-              className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card border border-border/70 transition-colors cursor-pointer"
+              className="mb-1.5 self-start sm:self-auto h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
             >
               <ArrowLeft className="size-3.5" />
-              <span>返回列表选片</span>
+              返回列表
             </button>
           ) : (
             currentItem && (
-              <div
+              <button
+                type="button"
                 onClick={() => setActiveTab('player')}
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card/60 hover:bg-card border border-border/60 hover:border-primary/40 text-xs text-muted-foreground transition-all cursor-pointer group"
-                title="点击前往播放页"
+                className="mb-1.5 hidden sm:inline-flex items-center gap-1.5 h-7 px-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                title="前往播放页"
               >
-                <span className="text-muted-foreground/80">当前就绪:</span>
-                <span className="font-medium text-foreground truncate max-w-[200px] md:max-w-[280px]">
-                  {currentItem.title}
-                </span>
-                <span className="text-primary group-hover:translate-x-0.5 transition-transform font-medium">
-                  前往播放页 &rarr;
-                </span>
-              </div>
+                当前：
+                <span className="text-foreground truncate max-w-[200px] md:max-w-[280px]">{currentItem.title}</span>
+                <span className="text-primary">→</span>
+              </button>
             )
           )}
         </div>
