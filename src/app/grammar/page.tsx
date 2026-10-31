@@ -12,7 +12,7 @@ export default function GrammarPage() {
   const [activeTab, setActiveTab] = useState<GrammarTabType>('partsOfSpeech')
 
   return (
-    <div className="grammar-page flex-1 min-h-full w-full flex flex-col bg-background text-foreground">
+    <div className="grammar-page w-full min-h-full shrink-0 flex flex-col bg-background text-foreground">
       {/* 顶部全局吸顶工具与导航栏 */}
       <GrammarHeader activeTab={activeTab} onTabChange={setActiveTab} />
 

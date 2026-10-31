@@ -73,7 +73,7 @@ export function PartsOfSpeechView() {
               共 10 大词类
             </span>
           </div>
-          <h2 className="text-2xl font-semibold text-white tracking-tight">英语十大词类：理解词性在句子中的作用</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">英语十大词类：理解词性在句子中的作用</h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
             通过核心句法功能、例句和句子成分解析，理解不同词性在真实句子中的位置与作用。
           </p>
@@ -89,7 +89,7 @@ export function PartsOfSpeechView() {
                 el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
                 setActiveSpeechId(item.id)
               }}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors cursor-pointer ${
+              className={`text-xs sm:text-sm px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md border transition-colors cursor-pointer ${
                 activeSpeechId === item.id
                   ? 'bg-primary/10 text-primary border-transparent font-medium'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted'
@@ -110,27 +110,27 @@ export function PartsOfSpeechView() {
           >
             <header>
               <div>
-                <div className="flex items-baseline gap-3">
-                  <span className="font-serif italic text-lg text-primary">{item.abbr}</span>
-                  <h3 className="text-2xl font-semibold text-foreground">{item.name}</h3>
-                  <span className="text-lg font-semibold text-muted-foreground">{item.nameZh}</span>
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <span className="font-serif italic text-base text-primary">{item.abbr}</span>
+                  <h3 className="text-xl font-bold text-foreground">{item.name}</h3>
+                  <span className="text-base font-medium text-muted-foreground">{item.nameZh}</span>
                 </div>
-                <p className="mt-4 text-lg leading-relaxed text-foreground">
+                <p className="mt-3 text-sm leading-relaxed text-foreground/90">
                   {item.plainDescription}
                 </p>
-                <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-                  <strong className="text-foreground">常见语法位置：</strong>
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                  <strong className="text-foreground font-medium">常见语法位置：</strong>
                   {item.positionRules}
                 </p>
               </div>
             </header>
 
-            <section className="border-t border-border pt-5 space-y-4">
-              <h4 className="text-lg font-bold text-foreground">核心句法功能</h4>
-              <ol className="space-y-3">
+            <section className="border-t border-border pt-4 space-y-3">
+              <h4 className="text-sm font-bold text-foreground">核心句法功能</h4>
+              <ol className="space-y-2.5">
                 {item.functions.map((fn, idx) => (
-                  <li key={idx} className="grid grid-cols-[2rem_1fr] gap-3 text-base leading-relaxed">
-                    <span className="font-mono font-bold text-primary">
+                  <li key={idx} className="grid grid-cols-[1.75rem_1fr] gap-2.5 text-sm leading-relaxed">
+                    <span className="font-mono font-bold text-xs text-primary pt-0.5">
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                     <span className="text-foreground/85">{fn}</span>
@@ -139,29 +139,29 @@ export function PartsOfSpeechView() {
               </ol>
             </section>
 
-            <section className="border-t border-border pt-5 space-y-4">
+            <section className="border-t border-border pt-4 space-y-3">
               <div className="flex items-center justify-between gap-3">
-                <h4 className="text-lg font-bold text-foreground">功能例句</h4>
-                <span className="text-base text-muted-foreground">高亮为当前词性</span>
+                <h4 className="text-sm font-bold text-foreground">功能例句</h4>
+                <span className="text-xs text-muted-foreground">高亮为当前词性</span>
               </div>
               <ul className="divide-y divide-border border-y border-border">
                 {item.examples.map((ex, idx) => (
-                  <li key={idx} className="py-4 space-y-2">
+                  <li key={idx} className="py-3 space-y-1.5">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-sm font-semibold text-primary">{ex.role}</span>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-primary/10 text-primary">{ex.role}</span>
                       <button
                         type="button"
                         onClick={() => speakText(ex.en)}
                         title="朗读例句"
-                        className="size-8 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
+                        className="size-7 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
                       >
-                        <Volume2 className="size-4" />
+                        <Volume2 className="size-3.5" />
                       </button>
                     </div>
-                    <p className="font-serif text-xl sm:text-2xl leading-relaxed text-foreground">
+                    <p className="font-serif text-base sm:text-lg leading-relaxed text-foreground">
                       {renderSentenceWithHighlights(ex.en, ex.highlightWords)}
                     </p>
-                    <p className="text-base sm:text-lg leading-relaxed text-muted-foreground">
+                    <p className="text-xs sm:text-sm leading-relaxed text-muted-foreground">
                       {ex.zh}
                     </p>
                   </li>
@@ -170,10 +170,10 @@ export function PartsOfSpeechView() {
             </section>
 
             {item.proTips && (
-              <aside className="mt-auto pt-4 border-l-2 border-primary pl-4 flex items-start gap-3 min-h-[5.5rem]">
-                <AlertTriangle className="size-5 shrink-0 text-primary mt-1" />
-                <p className="text-base leading-relaxed text-foreground/85 min-h-[4.875rem]">
-                  <strong className="text-primary">重点提醒：</strong>
+              <aside className="mt-auto pt-3 border-l-2 border-primary pl-3.5 flex items-start gap-2.5">
+                <AlertTriangle className="size-4 shrink-0 text-primary mt-0.5" />
+                <p className="text-xs sm:text-sm leading-relaxed text-foreground/85">
+                  <strong className="text-primary font-medium">重点提醒：</strong>
                   {item.proTips}
                 </p>
               </aside>

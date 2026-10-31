@@ -16,7 +16,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
   const loadingText = useNavigationStore((s) => s.loadingText) || '数据加载中...'
 
   return (
-    <div className="flex-1 min-h-full flex flex-col relative">
+    <div className="w-full min-h-full shrink-0 flex flex-col relative">
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -46,7 +46,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
       </AnimatePresence>
 
       {/* 真实页面内容：稳态渲染在底层，等遮罩淡出后已完全就绪 */}
-      <div className="flex-1 min-h-full flex flex-col relative">
+      <div className="w-full min-h-full shrink-0 flex flex-col relative">
         {children}
       </div>
     </div>

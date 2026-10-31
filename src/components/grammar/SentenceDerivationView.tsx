@@ -128,10 +128,10 @@ function SentenceGrowthSeries({
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
         <div>
-          <h3 className="text-xl font-semibold text-white">{title}</h3>
-          <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
+          <h3 className="text-lg sm:text-xl font-bold text-foreground">{title}</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">{description}</p>
         </div>
-        <span className="text-sm font-mono text-primary font-bold">{steps.length} 阶生长</span>
+        <span className="text-xs sm:text-sm font-mono text-primary font-bold">{steps.length} 阶生长</span>
       </div>
 
       <div className="space-y-4">
@@ -143,23 +143,23 @@ function SentenceGrowthSeries({
           >
             <header className="flex items-start justify-between gap-4">
               <div>
-                <div className="flex items-baseline gap-3">
-                  <span className="font-serif italic text-lg text-primary">
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <span className="font-serif italic text-sm text-primary">
                     Step 0{stepItem.step}
                   </span>
-                  <h3 className="text-2xl font-semibold text-foreground">
+                  <h3 className="text-xl font-bold text-foreground">
                     {stepItem.titleZh}
                   </h3>
-                  <span className="text-sm font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                     {stepItem.tagZh}
                   </span>
                 </div>
-                <p className="mt-3 text-lg leading-relaxed text-foreground">
-                  <strong className="text-primary">新增演进：</strong>
+                <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+                  <strong className="text-primary font-medium">新增演进：</strong>
                   {stepItem.addedElementDesc}
                 </p>
-                <p className="mt-1 text-base leading-relaxed text-muted-foreground">
-                  <strong className="text-foreground">为什么加这个成分：</strong>
+                <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                  <strong className="text-foreground font-medium">为什么加这个成分：</strong>
                   {stepItem.whyAddIt}
                 </p>
               </div>
@@ -168,31 +168,31 @@ function SentenceGrowthSeries({
                 type="button"
                 onClick={() => onSpeak(stepItem.sentenceEn)}
                 title="朗读本步例句"
-                className="size-9 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
+                className="size-7 sm:size-8 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
               >
-                <Volume2 className="size-5" />
+                <Volume2 className="size-3.5 sm:size-4" />
               </button>
             </header>
 
             <section className="border-t border-border pt-4 space-y-3">
               {/* 句子与翻译紧随其后 */}
-              <div className="flex items-baseline gap-3 flex-wrap">
-                <p className="font-serif text-xl sm:text-2xl leading-relaxed text-foreground">
+              <div className="flex items-baseline gap-2.5 flex-wrap">
+                <p className="font-serif text-base sm:text-lg leading-relaxed text-foreground">
                   {renderGrowthSentence(stepItem.sentenceEn, stepItem.highlightWords)}
                 </p>
-                <span className="text-lg sm:text-xl text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground">
                   （{stepItem.sentenceZh}）
                 </span>
               </div>
 
               {/* 分析直接放在例句下面，文字表述，不使用表格 */}
-              <div className="space-y-1.5 pt-1 text-base leading-relaxed">
-                <p className="text-sm font-semibold text-primary/90">成分分析：</p>
-                <div className="space-y-2">
+              <div className="space-y-1.5 pt-1 text-sm leading-relaxed">
+                <p className="text-xs font-semibold text-primary/90">成分分析：</p>
+                <div className="space-y-1.5">
                   {stepItem.breakdown.map((token, idx) => (
-                    <p key={idx} className="flex items-baseline gap-2.5">
+                    <p key={idx} className="flex items-baseline gap-2">
                       <span
-                        className={`font-mono text-lg sm:text-xl tracking-wide shrink-0 ${
+                        className={`font-mono text-sm sm:text-base tracking-wide shrink-0 ${
                           token.isNew
                             ? 'grammar-keyword font-medium'
                             : 'text-foreground font-bold'
@@ -200,17 +200,17 @@ function SentenceGrowthSeries({
                       >
                         {token.text}
                       </span>
-                      <span className="text-muted-foreground">：{token.role}</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">：{token.role}</span>
                     </p>
                   ))}
                 </div>
               </div>
             </section>
 
-            <aside className="mt-auto border-l-2 border-primary pl-4 flex items-start gap-3">
-              <Lightbulb className="size-5 shrink-0 text-primary mt-1" />
-              <p className="text-base leading-relaxed text-foreground/85">
-                <strong className="text-primary">演变心法：</strong>
+            <aside className="mt-auto border-l-2 border-primary pl-3.5 flex items-start gap-2.5 pt-1">
+              <Lightbulb className="size-4 shrink-0 text-primary mt-0.5" />
+              <p className="text-xs sm:text-sm leading-relaxed text-foreground/85">
+                <strong className="text-primary font-medium">演变心法：</strong>
                 {stepItem.takeaway}
               </p>
             </aside>
@@ -252,7 +252,7 @@ export function SentenceDerivationView() {
               吃苹果推导法
             </span>
           </div>
-          <h2 className="text-2xl font-semibold text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             英语句子成分与结构演变：从“谁在干什么”开始
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
@@ -267,7 +267,7 @@ export function SentenceDerivationView() {
               const el = document.getElementById('sentence-foundation')
               el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
             }}
-            className="text-sm px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+            className="text-xs sm:text-sm px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             句法核心认知
           </button>
@@ -279,7 +279,7 @@ export function SentenceDerivationView() {
                 el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
                 setActiveStepId(s.step)
               }}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors cursor-pointer ${
+              className={`text-xs sm:text-sm px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md border transition-colors cursor-pointer ${
                 activeStepId === s.step
                   ? 'bg-primary/10 text-primary border-transparent font-medium'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted'
@@ -294,17 +294,17 @@ export function SentenceDerivationView() {
       {/* 第一部分：通俗解释句子成分的作用（核心认知大卡片） */}
       <article
         id="sentence-foundation"
-        className="space-y-7"
+        className="space-y-6"
       >
-        <header className="space-y-2">
-          <div className="flex items-center gap-2.5">
-            <span className="font-serif italic text-lg text-primary">01</span>
-            <h3 className="text-2xl font-semibold text-foreground">
+        <header className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="font-serif italic text-base text-primary">01</span>
+            <h3 className="text-xl font-bold text-foreground">
               核心认知：英语句子到底在表达什么？
             </h3>
           </div>
-          <p className="text-base leading-relaxed text-muted-foreground">
-            任何英语句子，无论在考试中看起来多么冗长复杂，其核心本质永远只在回答两个问题：<strong className="text-foreground">“谁在干什么”（动作主干）</strong>，或者 <strong className="text-foreground">“谁是什么状态”（状态主干）</strong>。
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            任何英语句子，无论在考试中看起来多么冗长复杂，其核心本质永远只在回答两个问题：<strong className="text-foreground font-medium">“谁在干什么”（动作主干）</strong>，或者 <strong className="text-foreground font-medium">“谁是什么状态”（状态主干）</strong>。
           </p>
         </header>
 
@@ -315,33 +315,33 @@ export function SentenceDerivationView() {
               key={concept.id}
               className="rounded-lg border border-border p-5 flex flex-col gap-4"
             >
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 <div className="space-y-1">
-                  <h4 className="text-lg font-bold text-foreground">{concept.titleZh}</h4>
+                  <h4 className="text-base font-bold text-foreground">{concept.titleZh}</h4>
                   <p className="font-mono text-xs text-primary font-semibold">
                     {concept.formula}
                   </p>
                 </div>
-                <p className="text-sm font-semibold text-primary/90">
+                <p className="text-xs font-semibold text-primary/90">
                   {concept.coreQuestion}
                 </p>
-                <p className="text-base leading-relaxed text-foreground/85">
+                <p className="text-sm leading-relaxed text-foreground/85">
                   {concept.plainExplanation}
                 </p>
               </div>
 
               {/* 拆解项 */}
-              <div className="mt-auto border-t border-border pt-4 space-y-2.5">
-                <div className="flex items-baseline justify-between gap-3 text-base">
-                  <span className="font-mono text-xl font-bold text-foreground">
+              <div className="mt-auto border-t border-border pt-4 space-y-2">
+                <div className="flex items-baseline justify-between gap-3 text-sm">
+                  <span className="font-mono text-base sm:text-lg font-bold text-foreground">
                     {concept.exampleEn}
                   </span>
-                  <span className="text-muted-foreground">{concept.exampleZh}</span>
+                  <span className="text-xs sm:text-sm text-muted-foreground">{concept.exampleZh}</span>
                 </div>
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+                <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs sm:text-sm">
                   {concept.components.map((comp, idx) => (
                     <React.Fragment key={idx}>
-                      <span className="font-mono font-bold text-primary">
+                      <span className="font-mono font-bold text-xs text-primary pt-0.5">
                         {comp.code} ({comp.nameZh})
                       </span>
                       <span className="text-muted-foreground">
@@ -358,30 +358,30 @@ export function SentenceDerivationView() {
 
         {/* 枝叶成分的作用 */}
         <div className="border-t border-border pt-6 space-y-4">
-          <div className="flex items-baseline gap-3">
-            <h4 className="text-lg font-bold text-foreground">枝叶成分：给句子穿衣服与添细节</h4>
-            <span className="text-sm text-muted-foreground">剥离它们，句子依然成立；加上它们，意思更加丰富</span>
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <h4 className="text-base font-bold text-foreground">枝叶成分：给句子穿衣服与添细节</h4>
+            <span className="text-xs text-muted-foreground">剥离它们，句子依然成立；加上它们，意思更加丰富</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {SENTENCE_MODIFIERS_DATA.map((mod) => (
               <div
                 key={mod.id}
-                className="rounded-lg border border-border p-4 flex flex-col gap-3"
+                className="rounded-lg border border-border p-4 flex flex-col gap-2.5"
               >
-                <div className="space-y-1">
-                  <span className="block font-bold text-base text-foreground">
+                <div className="space-y-0.5">
+                  <span className="block font-bold text-sm text-foreground">
                     {mod.nameZh}
                   </span>
-                  <span className="block text-xs text-primary font-mono">
+                  <span className="block text-[11px] text-primary font-mono">
                     {mod.questionZh}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-foreground/80">
+                <p className="text-xs sm:text-sm leading-relaxed text-foreground/80">
                   {mod.plainExplanation}
                 </p>
-                <div className="mt-auto pt-3 border-t border-border space-y-1">
-                  <p className="font-mono font-semibold text-sm text-foreground">
+                <div className="mt-auto pt-2.5 border-t border-border space-y-0.5">
+                  <p className="font-mono font-medium text-xs sm:text-sm text-foreground">
                     {mod.exampleEn}
                   </p>
                   <p className="text-xs text-muted-foreground">{mod.exampleZh}</p>
@@ -391,10 +391,10 @@ export function SentenceDerivationView() {
           </div>
         </div>
 
-        <aside className="border-l-2 border-primary pl-4 flex items-start gap-3">
-          <Lightbulb className="size-5 shrink-0 text-primary mt-0.5" />
-          <p className="text-base leading-relaxed text-foreground/85">
-            <strong className="text-primary">初学者学习心法：</strong>
+        <aside className="border-l-2 border-primary pl-3.5 flex items-start gap-2.5 pt-1">
+          <Lightbulb className="size-4 shrink-0 text-primary mt-0.5" />
+          <p className="text-xs sm:text-sm leading-relaxed text-foreground/85">
+            <strong className="text-primary font-medium">初学者学习心法：</strong>
             阅读英语时，千万别把一句话当成零散的一堆单词。先找动词，顺藤摸瓜找到“谁发出的动作”和“对谁发出的”，把主干抓牢，再看其他修饰词，长句瞬间变简单！
           </p>
         </aside>
@@ -408,15 +408,15 @@ export function SentenceDerivationView() {
               key={series.id}
               type="button"
               onClick={() => setActiveSeriesId(series.id)}
-              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+              className={`px-4 py-1.5 sm:px-5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                 isActive
-                  ? 'bg-primary/10 text-primary font-medium'
+                  ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {series.tabLabel}
-              <span className={`ml-2 font-mono text-xs ${
-                isActive ? 'text-[#0B0C0E]/70' : 'text-muted-foreground/70'
+              <span className={`ml-1.5 font-mono text-xs ${
+                isActive ? 'text-primary/70' : 'text-muted-foreground/70'
               }`}>
                 {series.tabSublabel}
               </span>
