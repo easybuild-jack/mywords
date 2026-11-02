@@ -18,6 +18,7 @@ import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { getActiveTroubleWords, removeErrorWord } from '@/db'
 import { audioEngine } from '@/core/audioEngine'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 import type { WordMasteryRecord, WordItem } from '@/types'
 
 function getPageNumbers(currentPage: number, totalPages: number): (number | '...')[] {
@@ -151,26 +152,30 @@ export default function TroubleWordsPage() {
           </p>
         </div>
 
-        {troubleList.length > 0 && (
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleStartPractice()}
-              className="h-9 px-3.5 rounded-md border border-border text-sm text-foreground hover:bg-muted inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <GraduationCap className="size-4" />
-              跟学这些词
-            </button>
-            <button
-              type="button"
-              onClick={() => handleStartAnnihilation()}
-              className="h-9 px-3.5 rounded-md bg-destructive hover:bg-destructive/90 text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <PenLine className="size-4" />
-              默写这些词
-            </button>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {troubleList.length > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={() => handleStartPractice()}
+                className="h-9 px-3.5 rounded-md border border-border text-sm text-foreground hover:bg-muted inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <GraduationCap className="size-4" />
+                跟学这些词
+              </button>
+              <button
+                type="button"
+                onClick={() => handleStartAnnihilation()}
+                className="h-9 px-3.5 rounded-md bg-destructive hover:bg-destructive/90 text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <PenLine className="size-4" />
+                默写这些词
+              </button>
+            </>
+          )}
+
+          <SkinPicker sizeClassName="size-9" />
+        </div>
       </div>
 
       {isLoading ? (

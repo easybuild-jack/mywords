@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Plus, Search } from 'lucide-react'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 
 interface RadioHeaderProps {
   searchQuery: string
@@ -49,6 +50,8 @@ export function RadioHeader({
           <Plus className="size-3.5" />
           上传音视频
         </button>
+
+        <SkinPicker />
       </div>
     </div>
   )

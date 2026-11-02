@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Plus, Search } from 'lucide-react'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 
 interface TranslateHeaderProps {
   searchQuery: string
@@ -48,6 +49,8 @@ export function TranslateHeader({
           <Plus className="size-3.5" />
           导入练习语句
         </button>
+
+        <SkinPicker />
       </div>
     </div>
   )

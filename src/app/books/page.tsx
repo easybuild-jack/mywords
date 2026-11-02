@@ -25,6 +25,7 @@ import { BUILTIN_BOOKS } from '@/resources/books'
 import { db, getBookUnitProgressRecords, reconcileUnitProgressRecord, getCustomBooks } from '@/db'
 import { buildFixedUnitId, dictionaryLoader } from '@/core/dictionaryLoader'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 import type { DictUnit, UnitProgressRecord, VocabularyBook, PracticeMode } from '@/types'
 
 interface BookTheme {
@@ -521,6 +522,8 @@ function BooksHubContent() {
                 <Upload className="size-3.5" />
                 导入单词
               </button>
+
+              <SkinPicker />
             </div>
           </div>
 

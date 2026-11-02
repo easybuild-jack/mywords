@@ -10,7 +10,7 @@ import { Tooltip } from '@/components/ui/Tooltip'
  * 头部工具栏的皮肤切换按钮 + 下拉浮层。
  * 浮层定位于按钮下方，点击外部自动关闭，遵循现有 toolbar 风格。
  */
-export function SkinPicker() {
+export function SkinPicker({ sizeClassName = 'size-8' }: { sizeClassName?: string } = {}) {
   const skinId = useWorkspaceStore((s) => s.skinId)
   const setSkinId = useWorkspaceStore((s) => s.setSkinId)
 
@@ -35,7 +35,7 @@ export function SkinPicker() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="size-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          className={`${sizeClassName} inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50`}
           aria-label="切换皮肤"
         >
           <Palette className="size-4" />

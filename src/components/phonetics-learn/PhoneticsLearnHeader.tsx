@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Search, X, ArrowRight } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 
 export type MainTabType = 'ipa' | 'phonics'
 export type IpaFilterType = 'all' | 'monophthong' | 'diphthong' | 'plosive' | 'fricative' | 'affricate' | 'nasal_liquid'
@@ -121,6 +122,7 @@ export function PhoneticsLearnHeader({
             音标练习
             <ArrowRight className="size-3.5" />
           </Link>
+          <SkinPicker sizeClassName="size-7" />
         </div>
       </div>
 

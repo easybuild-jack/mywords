@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { GrammarTabType } from '@/resources/grammarData'
+import { SkinPicker } from '@/components/layout/SkinPicker'
 
 interface GrammarHeaderProps {
   activeTab: GrammarTabType
@@ -19,10 +20,15 @@ export function GrammarHeader({ activeTab, onTabChange }: GrammarHeaderProps) {
   return (
     <header className="sticky top-0 isolate z-30 w-full bg-background border-b border-border">
       <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-6">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">基础语法</h1>
-        <p className="text-[13px] text-muted-foreground mt-1">
-          从古英语源流到现代分析语，空间认知介词图解，递进式句型解构，16 种时态坐标
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">基础语法</h1>
+            <p className="text-[13px] text-muted-foreground mt-1">
+              从古英语源流到现代分析语，空间认知介词图解，递进式句型解构，16 种时态坐标
+            </p>
+          </div>
+          <SkinPicker />
+        </div>
 
         <nav className="mt-4 -mb-px flex items-center gap-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {TABS.map((tab) => {
