@@ -473,9 +473,8 @@ export function TranslateCard({
               }
             }}
             title={stage === 'keyword' ? '播放当前单词读音 (Ctrl+J)' : '播放当前句子读音 (Ctrl+J)'}
-            className={`size-8 rounded-md inline-flex items-center justify-center transition-colors cursor-pointer ${
-              isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-            }`}
+            className={`size-8 rounded-md inline-flex items-center justify-center transition-colors cursor-pointer ${isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
           >
             <Volume2 className={`size-4 ${isSpeaking ? 'animate-pulse' : ''}`} />
           </button>
@@ -485,9 +484,8 @@ export function TranslateCard({
             type="button"
             onClick={toggleAutoPlayAudio}
             title={isAutoPlayAudio ? '自动播报已开启 (点击切换为手动)' : '自动播报已关闭 (点击开启切换词句时自动朗读)'}
-            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${
-              isAutoPlayAudio ? 'text-primary hover:bg-muted' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-            }`}
+            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${isAutoPlayAudio ? 'text-primary hover:bg-muted' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
           >
             {isAutoPlayAudio ? (
               <Volume2 className="size-3.5" />
@@ -503,9 +501,8 @@ export function TranslateCard({
             type="button"
             onClick={() => setPeeking(!isPeeking)}
             title="点击切换显示或长按键盘 Tab 键偷看英文提示"
-            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${
-              isPeeking ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-            }`}
+            className={`h-8 px-2.5 rounded-md inline-flex items-center gap-1.5 text-xs transition-colors select-none cursor-pointer ${isPeeking ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+              }`}
           >
             {isPeeking ? (
               <EyeOff className="size-3.5" />
@@ -546,9 +543,8 @@ export function TranslateCard({
       {/* 最上方独立提示展示区：位于工具栏正下方，固定高度且无边框，完全不越界且绝不产生任何布局抖动 */}
       <div className="w-full h-12 sm:h-14 flex items-center justify-center shrink-0 px-6">
         <div
-          className={`max-w-3xl text-center text-muted-foreground font-serif italic text-lg sm:text-xl xl:text-2xl transition-opacity duration-150 ${
-            isPeeking ? 'opacity-100' : 'opacity-0 select-none pointer-events-none'
-          }`}
+          className={`max-w-3xl text-center text-muted-foreground font-serif italic text-lg sm:text-xl xl:text-2xl transition-opacity duration-150 ${isPeeking ? 'opacity-100' : 'opacity-0 select-none pointer-events-none'
+            }`}
         >
           {stage === 'keyword' ? currentKeyword?.word : sentence.sentenceEn}
         </div>
@@ -574,24 +570,22 @@ export function TranslateCard({
               style={{
                 width: `${Math.max(currentKeyword.word.length, keywordInput.length, 1)}ch`,
               }}
-              className={`relative h-14 sm:h-16 xl:h-20 flex items-end justify-start px-1 pb-1.5 bg-transparent border-b-2 font-serif text-3xl sm:text-4xl xl:text-5xl transition-colors ${
-                keywordError
+              className={`relative h-14 sm:h-16 xl:h-20 flex items-end justify-start px-1 pb-1.5 bg-transparent border-b-2 font-serif text-3xl sm:text-4xl xl:text-5xl transition-colors ${keywordError
                   ? 'text-destructive border-destructive animate-shake'
                   : isKeywordSuccess
-                  ? 'text-emerald-500 border-emerald-500'
-                  : 'text-foreground border-primary'
-              }`}
+                    ? 'text-emerald-500 border-emerald-500'
+                    : 'text-foreground border-primary'
+                }`}
             >
               {/* 用户输入 */}
               {keywordInput && (
                 <span
-                  className={`leading-none ${
-                    keywordError
+                  className={`leading-none ${keywordError
                       ? 'text-destructive'
                       : isKeywordSuccess
-                      ? 'text-emerald-500'
-                      : 'text-foreground'
-                  }`}
+                        ? 'text-emerald-500'
+                        : 'text-foreground'
+                    }`}
                 >
                   {keywordInput}
                 </span>
@@ -599,13 +593,12 @@ export function TranslateCard({
 
               {/* 闪烁光标 */}
               <span
-                className={`inline-block w-0.5 h-[1.15em] mb-0.5 animate-pulse shrink-0 ${
-                  keywordError
+                className={`inline-block w-0.5 h-[1.15em] mb-0.5 animate-pulse shrink-0 ${keywordError
                     ? 'bg-destructive'
                     : isKeywordSuccess
-                    ? 'bg-emerald-500'
-                    : 'bg-primary'
-                }`}
+                      ? 'bg-emerald-500'
+                      : 'bg-primary'
+                  }`}
               />
             </div>
           </div>
@@ -694,9 +687,8 @@ export function TranslateCard({
               <button
                 type="button"
                 onClick={() => playSentenceAudio()}
-                className={`h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer ${
-                  isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
+                className={`h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer ${isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
               >
                 <Volume2 className={`size-3.5 ${isSpeaking ? 'animate-pulse' : ''}`} />
                 <span>{isSpeaking ? '正在朗读...' : '重听原声'}</span>
