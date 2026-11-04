@@ -70,7 +70,7 @@ export function PwaInstallPrompt() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.96 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-xl border border-white/10 bg-background/90 px-4 py-3 shadow-2xl backdrop-blur-md"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-xl border border-border bg-sidebar px-4 py-3 shadow-lg"
         >
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5">
             {/* eslint-disable-next-line @next/next/no-img-element */}

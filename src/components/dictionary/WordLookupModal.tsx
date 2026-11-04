@@ -259,7 +259,7 @@ export function WordLookupModal({
         top: `${position.top}px`,
         left: `${position.left}px`,
       }}
-      className="word-lookup-card fixed z-[120] w-[340px] sm:w-[360px] rounded-2xl p-3.5 sm:p-4 border shadow-[0_16px_40px_rgba(0,0,0,0.55)] text-white select-text transition-all duration-150 animate-in fade-in zoom-in-95"
+      className="word-lookup-card fixed z-[120] w-[340px] sm:w-[360px] rounded-xl p-4 border shadow-[0_12px_32px_rgba(0,0,0,0.35)] text-white select-text transition-all duration-150 animate-in fade-in"
     >
       {/* 箭头指示角 */}
       {targetRect && (
@@ -285,7 +285,7 @@ export function WordLookupModal({
           {/* 顶栏：单词名 + 发音/收藏/关闭按钮 */}
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-baseline flex-wrap gap-x-2 min-w-0">
-              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white font-sans truncate">
+              <h3 className="font-serif text-2xl font-normal tracking-tight text-white truncate leading-tight">
                 {result.word.name}
               </h3>
             </div>
@@ -334,18 +334,18 @@ export function WordLookupModal({
 
           {/* 音标栏：如 美 /'rɛfərəns/ */}
           {displayPhonetic && (
-            <div className="text-xs text-gray-400 font-mono tracking-wide -mt-0.5">
+            <div className="font-serif text-sm text-gray-400 -mt-0.5">
               {displayPhonetic}
             </div>
           )}
 
           {/* 翻译提示小框：与例句组件中的单个句子小框完全保持一致 */}
-          <div className="mt-2.5 rounded-xl bg-white/[0.025] border border-white/5 p-2.5 sm:p-3 space-y-1.5 max-h-48 overflow-y-auto pr-1">
+          <div className="mt-3 pt-3 border-t border-white/10 space-y-1.5 max-h-48 overflow-y-auto pr-1">
             {result.word.posList && result.word.posList.length > 0 ? (
               result.word.posList.map((p, idx) => (
-                <div key={idx} className="flex items-baseline gap-2 text-xs sm:text-sm leading-relaxed">
+                <div key={idx} className="flex items-baseline gap-2 text-sm leading-relaxed">
                   {p.pos && p.pos !== 'other' && (
-                    <span className="italic font-serif font-semibold text-primary shrink-0 select-none">
+                    <span className="italic font-serif text-muted-foreground shrink-0 select-none">
                       {p.pos}
                     </span>
                   )}
@@ -373,8 +373,8 @@ export function WordLookupModal({
               <X className="size-3.5" />
             </button>
           </div>
-          <div className="rounded-xl bg-white/[0.025] border border-white/5 p-2.5 sm:p-3">
-            <p className="text-xs text-gray-400 leading-relaxed">
+          <div className="pt-3 border-t border-white/10">
+            <p className="text-sm text-gray-400 leading-relaxed">
               {lookupError || '暂未在现有词库中查询到该单词的释义。'}
             </p>
           </div>

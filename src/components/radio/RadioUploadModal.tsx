@@ -114,8 +114,8 @@ export function RadioUploadModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn select-none">
-      <div className="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-2xl bg-sidebar/95 border border-border/80 shadow-[0_24px_64px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.1)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fadeIn select-none">
+      <div className="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-xl bg-sidebar border border-border shadow-xl overflow-hidden">
         {/* 顶部标题栏 */}
         <div className="shrink-0 flex items-center justify-between px-6 py-4 border-b border-border/60">
           <div className="flex items-center gap-2.5">
@@ -280,7 +280,7 @@ export function RadioUploadModal({
           <button
             type="button"
             onClick={handleSubmit}
-            className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold bg-primary text-primary-foreground hover:bg-primary-hover shadow-[0_2px_10px_rgba(var(--primary-rgb)/0.4)] border border-white/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 h-9 px-4 rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
           >
             <Check className="size-3.5" />
             <span>保存并加入电台</span>

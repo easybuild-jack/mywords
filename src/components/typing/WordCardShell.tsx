@@ -39,25 +39,25 @@ export function WordCardShell({
       }`}
     >
       {/* 顶部左侧区域：词库来源徽标或循环剩余次数角标 */}
-      <div className="absolute top-4 left-4 xl:top-5 xl:left-5 2xl:top-6 2xl:left-6 flex items-center gap-2 z-20">
+      <div className="absolute top-3 left-0 xl:top-4 flex items-center gap-3 z-20 text-[13px] text-muted-foreground">
         {headerLeft}
         {remainingLoops > 1 && (
-          <span className="text-xs font-mono px-2.5 py-1 rounded-lg bg-primary/10 text-primary border border-primary/30 font-bold tracking-wider">
-            Again x{remainingLoops}
+          <span className="tabular-nums">
+            还需再打 <span className="text-primary font-medium">{remainingLoops}</span> 遍
           </span>
         )}
       </div>
 
-      {/* 顶部右侧区域：加星收藏与发音控件 */}
-      <div className="absolute top-4 right-4 xl:top-5 xl:right-5 2xl:top-6 2xl:right-6 flex items-center gap-2 xl:gap-2.5 z-20">
+      <div className="absolute top-2 right-0 xl:top-3 flex items-center gap-1 z-20">
         {headerActions}
         {showAudioButton && (
           <button
             onClick={speak}
-            className="size-10 xl:size-11 rounded-xl bg-primary/10 border border-primary/30 text-primary flex items-center justify-center hover:bg-primary/20 active:scale-95 transition-all cursor-pointer shadow-sm"
+            className="size-9 rounded-md text-muted-foreground hover:text-primary hover:bg-muted flex items-center justify-center transition-colors cursor-pointer"
             title="发音 (Ctrl+J)"
+            aria-label="发音"
           >
-            <Volume2 className="size-4.5 xl:size-5" />
+            <Volume2 className="size-4.5" />
           </button>
         )}
       </div>

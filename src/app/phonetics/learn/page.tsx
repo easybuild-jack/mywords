@@ -2,11 +2,7 @@
 
 import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
-import {
-  Keyboard,
-  ArrowRight,
-  CheckCircle2,
-} from 'lucide-react'
+import { Keyboard, ArrowRight } from 'lucide-react'
 import {
   PhoneticsLearnHeader,
   MainTabType,
@@ -112,8 +108,8 @@ export default function PhoneticsLearnPage() {
   return (
     <div className="w-full text-foreground">
       {/* 顶部吸顶区域始终使用实色背景，避免滚动内容穿透和模糊层重绘 */}
-      <div className="sticky top-0 isolate z-30 w-full bg-background border-b border-border/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-5 pb-4 space-y-3.5">
+      <div className="sticky top-0 isolate z-30 w-full bg-background">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 pt-6 pb-3">
           <PhoneticsLearnHeader
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -130,7 +126,7 @@ export default function PhoneticsLearnPage() {
       </div>
 
       {/* 主体滚动内容区：严格对齐词库管理页规范，自然流式延展，不限制高度 */}
-      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-8 lg:px-10 pt-4 pb-16 space-y-8">
+      <div className="max-w-[1440px] mx-auto w-full px-6 md:px-8 lg:px-10 pt-2 pb-16 space-y-8">
         <div className="w-full">
           {activeTab === 'ipa' ? (
             <IpaMatrixView
@@ -147,26 +143,19 @@ export default function PhoneticsLearnPage() {
         </div>
 
         {/* 底部状态与强化跳转栏 */}
-        <footer className="w-full border-t border-white/10 pt-6 pb-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1.5 text-gray-300">
-              <CheckCircle2 className="size-4 text-primary" />
-              <span className="font-medium">
-                48个国际音标 · 288个代表单词 · 35+组高频拼读组合
-              </span>
-            </div>
-            <span className="text-white/20 hidden sm:inline">•</span>
-            <span className="text-gray-400">
-              💡 提示：点击卡片可查看详情，按 <kbd className="px-1 py-0.5 rounded bg-white/10 font-mono text-[10px] text-gray-200">/</kbd> 快速搜索
-            </span>
-          </div>
+        <footer className="w-full border-t border-border pt-5 pb-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>
+            48 个国际音标 · 288 个代表单词 · 35+ 组高频拼读组合。点击音标查看详情，按{' '}
+            <kbd className="h-5 min-w-5 px-1 inline-flex items-center justify-center rounded border border-border border-b-2 font-mono text-[10px] text-foreground/70">/</kbd>{' '}
+            快速搜索
+          </span>
 
           <Link
             href="/phonetics"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 font-semibold transition-all hover:scale-[1.02] active:scale-95"
+            className="h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-primary hover:bg-primary/10 transition-colors"
           >
-            <Keyboard className="size-4" />
-            <span>前往音标强化练习</span>
+            <Keyboard className="size-3.5" />
+            前往音标练习
             <ArrowRight className="size-3.5" />
           </Link>
         </footer>

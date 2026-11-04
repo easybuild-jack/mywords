@@ -8,16 +8,8 @@ import { TranslateCard } from '@/components/translate/TranslateCard'
 import { SentenceGrammarModal } from '@/components/translate/SentenceGrammarModal'
 import { TranslateImportModal } from '@/components/translate/TranslateImportModal'
 import { useTranslateStore } from '@/store/useTranslateStore'
-import { SCENARIO_ICONS } from '@/resources/radioData'
 import { audioEngine } from '@/core/audioEngine'
-import {
-  BookOpen,
-  ArrowLeft,
-  ArrowRight,
-  Layers,
-  Languages,
-  Plus,
-} from 'lucide-react'
+import { BookOpen, ArrowLeft, ArrowRight, Plus } from 'lucide-react'
 
 export default function TranslatePage() {
   // 当前激活的 Tab：'list' (句库列表页，默认) | 'practice' (翻译练习页)
@@ -169,7 +161,7 @@ export default function TranslatePage() {
   return (
     <div className="translate-page flex-1 min-h-full w-full flex flex-col bg-background text-foreground animate-fadeIn pb-12 selection:bg-primary/20">
       {/* 主工作舞台容器：与听力电台一致的规范宽度与间距 */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-10 pt-6 space-y-6 flex flex-col">
+      <div className="flex-1 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-10 pt-6 space-y-5 flex flex-col">
         {/* 顶部标题、搜索与导入主入口 */}
         <TranslateHeader
           searchQuery={searchQuery}
@@ -179,103 +171,76 @@ export default function TranslatePage() {
           onOpenImport={() => setImportModalOpen(true)}
         />
 
-        {/* Tab 导航切换栏 (默认第一个是句库列表页，第二个是翻译练习页) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
-          <div className="inline-flex p-1 rounded-xl bg-card border border-border/80 shadow-xs select-none">
-            {/* Tab 1: 句库列表 (默认) */}
+        {/* Tab 导航：句库列表（默认）与翻译练习 */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-border">
+          <div className="flex items-center gap-6 select-none">
             <button
               type="button"
               onClick={() => {
                 audioEngine.cancelPendingPlayback()
                 setActiveTab('list')
               }}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
                 activeTab === 'list'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                  ? 'text-foreground font-medium border-primary'
+                  : 'text-muted-foreground hover:text-foreground border-transparent'
               }`}
             >
-              <Layers className="size-4" />
-              <span>句库列表</span>
-              <span
-                className={`text-[11px] px-2 py-0.5 rounded-full font-mono transition-colors ${
-                  activeTab === 'list'
-                    ? 'bg-primary-foreground/20 text-primary-foreground font-bold'
-                    : 'bg-muted text-muted-foreground'
-                }`}
-              >
-                {filteredBooks.length}
-              </span>
+              句库列表
+              <span className="ml-1.5 text-xs font-mono text-muted-foreground">{filteredBooks.length}</span>
             </button>
-
-            {/* Tab 2: 翻译练习 */}
             <button
               type="button"
               onClick={() => setActiveTab('practice')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
                 activeTab === 'practice'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                  ? 'text-foreground font-medium border-primary'
+                  : 'text-muted-foreground hover:text-foreground border-transparent'
               }`}
             >
-              <Languages className="size-4" />
-              <span>翻译练习</span>
+              翻译练习
               {currentBook && (
-                <span
-                  className={`text-[11px] px-2 py-0.5 rounded-full font-mono transition-colors ${
-                    activeTab === 'practice'
-                      ? 'bg-primary-foreground/20 text-primary-foreground font-bold'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
-                >
+                <span className="ml-1.5 text-xs font-mono text-muted-foreground">
                   {currentSentenceIndex + 1}/{totalSentences}
                 </span>
               )}
             </button>
           </div>
 
-          {/* 右侧：当前练习分组标识（靠右）与返回列表按钮 */}
           {activeTab === 'practice' ? (
-            <div className="flex items-center gap-4 sm:gap-6 ml-auto">
+            <div className="mb-1.5 flex items-center gap-3 ml-auto">
               {currentBook && (
-                <div className="flex items-center gap-2 select-none animate-fadeIn">
-                  <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-semibold text-xs">
-                    <span>{SCENARIO_ICONS[currentBook.scenario || '日常生活'] || '☕'}</span>
-                    <span>{currentBook.scenario || '日常生活'}</span>
-                  </span>
-                  <span className="font-semibold text-xs sm:text-sm text-foreground tracking-wide">
-                    {currentBook.name}
-                  </span>
-                </div>
+                <span className="text-xs text-muted-foreground select-none animate-fadeIn">
+                  {currentBook.scenario || '日常生活'} ·{' '}
+                  <span className="text-foreground">{currentBook.name}</span>
+                </span>
               )}
-
               <button
                 type="button"
                 onClick={() => {
                   audioEngine.cancelPendingPlayback()
                   setActiveTab('list')
                 }}
-                className="self-start sm:self-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card border border-border/70 transition-colors cursor-pointer shrink-0"
+                className="h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="size-3.5" />
-                <span>返回列表选组</span>
+                返回列表
               </button>
             </div>
           ) : (
             currentBook && (
-              <div
+              <button
+                type="button"
                 onClick={() => setActiveTab('practice')}
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card/60 hover:bg-card border border-border/60 hover:border-primary/40 text-xs text-muted-foreground transition-all cursor-pointer group"
-                title="点击前往翻译练习页"
+                className="mb-1.5 hidden sm:inline-flex items-center gap-1.5 h-7 px-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                title="前往翻译练习"
               >
-                <span className="text-muted-foreground/80">当前就绪:</span>
-                <span className="font-medium text-foreground truncate max-w-[200px] md:max-w-[280px]">
-                  {currentBook.name} (第 {currentSentenceIndex + 1}/{totalSentences} 句)
+                当前：
+                <span className="text-foreground truncate max-w-[200px] md:max-w-[280px]">
+                  {currentBook.name}（第 {currentSentenceIndex + 1}/{totalSentences} 句）
                 </span>
-                <span className="text-primary group-hover:translate-x-0.5 transition-transform font-medium">
-                  前往练习页 &rarr;
-                </span>
-              </div>
+                <span className="text-primary">→</span>
+              </button>
             )
           )}
         </div>
@@ -316,11 +281,7 @@ export default function TranslatePage() {
               type="button"
               onClick={prevSentence}
               disabled={currentSentenceIndex <= 0}
-              className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all cursor-pointer ${
-                currentSentenceIndex > 0
-                  ? 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95'
-                  : 'opacity-30 cursor-not-allowed text-[#9CA3AF]'
-              }`}
+              className="shrink-0 size-10 xl:size-11 rounded-full flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent"
               title="上一句 (←)"
             >
               <ArrowLeft className="size-5 xl:size-6" />
@@ -328,7 +289,7 @@ export default function TranslatePage() {
 
             {/* 居中固定尺寸卡片 */}
             <div className="relative flex flex-col items-center shrink-0">
-              <div className="relative w-[800px] h-[540px] xl:w-[940px] xl:h-[590px] 2xl:w-[1060px] 2xl:h-[640px] max-w-[94vw] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl transition-all duration-300 shrink-0 flex flex-col">
+              <div className="relative w-[800px] h-[540px] xl:w-[940px] xl:h-[590px] 2xl:w-[1060px] 2xl:h-[640px] max-w-[94vw] overflow-hidden shrink-0 flex flex-col">
                 {currentSentence ? (
                   <TranslateCard
                     key={`${currentBook.id}_${currentSentence.id}`}
@@ -341,17 +302,15 @@ export default function TranslatePage() {
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center select-none space-y-4">
-                    <div className="size-16 rounded-2xl bg-muted/40 border border-border flex items-center justify-center text-muted-foreground">
-                      <BookOpen className="size-8" />
-                    </div>
-                    <h3 className="text-lg font-bold text-foreground">该分组暂无练习语句</h3>
+                    <BookOpen className="size-8 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold text-foreground">该分组暂无练习语句</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
                       您可以点击下方按钮，导入自定义的英文句子与中文译文。
                     </p>
                     <button
                       type="button"
                       onClick={() => setImportModalOpen(true)}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-md transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 h-9 px-4 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm transition-colors cursor-pointer"
                     >
                       <Plus className="size-4" />
                       <span>导入练习语句</span>
@@ -366,11 +325,7 @@ export default function TranslatePage() {
               type="button"
               onClick={nextSentence}
               disabled={currentSentenceIndex >= totalSentences - 1}
-              className={`shrink-0 size-10 xl:size-12 rounded-full glass-card flex items-center justify-center transition-all cursor-pointer ${
-                currentSentenceIndex < totalSentences - 1
-                  ? 'text-[#9CA3AF] hover:text-white hover:border-primary/50 hover:scale-110 active:scale-95'
-                  : 'opacity-30 cursor-not-allowed text-[#9CA3AF]'
-              }`}
+              className="shrink-0 size-10 xl:size-11 rounded-full flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-transparent"
               title="下一句 (→)"
             >
               <ArrowRight className="size-5 xl:size-6" />

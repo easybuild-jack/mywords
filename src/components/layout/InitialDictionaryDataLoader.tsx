@@ -187,7 +187,7 @@ export function InitialDictionaryDataLoader() {
           <div className="relative w-full h-4 rounded-full bg-slate-900 border border-slate-700 p-0.5 overflow-hidden">
             {/* 动态进度填充条（宽度平滑过渡） */}
             <div
-              className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 ease-out relative"
+              className="h-full rounded-full bg-emerald-500 transition-all duration-500 ease-out relative"
               style={{ width: `${progressState.percentage}%` }}
             >
               {/* 斑马流动纹理 */}

@@ -1,17 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  Volume2,
-  ExternalLink,
-  Sparkles,
-  Layers,
-  HelpCircle,
-} from 'lucide-react'
+import { Volume2, ExternalLink } from 'lucide-react'
 import { PhonicsRuleItem, PhonicsExampleWord } from '@/resources/phonicsComboData'
 import { audioEngine } from '@/core/audioEngine'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
-import { renderHighlightedWord } from './IpaMatrixView'
+import { ExampleWordButton, PhoneticsEmptyState } from './IpaMatrixView'
 
 interface PhonicsComboViewProps {
   items: PhonicsRuleItem[]
@@ -44,137 +38,79 @@ export function PhonicsComboView({ items, onJumpToIpa }: PhonicsComboViewProps) 
   }
 
   if (items.length === 0) {
-    return (
-      <div className="w-full py-16 flex flex-col items-center justify-center text-center space-y-3 bg-white/[0.02] border border-white/10 rounded-2xl">
-        <Sparkles className="size-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">未找到匹配的字母组合规则，请尝试调整搜索词</p>
-      </div>
-    )
+    return <PhoneticsEmptyState text="没有找到匹配的字母组合，试试调整搜索词" />
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-8">
-      {items.map((rule) => {
-        return (
-          <div
-            key={rule.id}
-            className="group relative flex flex-col justify-between bg-sidebar/90 hover:bg-sidebar border border-white/10 hover:border-primary/60 rounded-2xl p-3.5 sm:p-4 transition-[background-color,border-color,box-shadow] duration-200 hover:shadow-lg hover:shadow-primary/10 backdrop-blur-xl space-y-3.5"
-          >
-            {/* 卡片头部：组合模式大字、分类徽标、对应发音音标徽章 */}
-            <div className="space-y-2.5">
-              {/* 第一行：左侧字母组合大字+分类标签，右侧音标发音按钮 */}
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <span className="phonics-pattern-title font-mono text-3xl sm:text-4xl font-black tracking-wide group-hover:scale-[1.03] transition-transform origin-left inline-block">
-                    {rule.pattern}
-                  </span>
-
-                  <span className="text-xs px-2.5 py-0.5 rounded-lg font-semibold border shrink-0 bg-primary/10 text-primary border-primary/30">
-                    {rule.categoryLabel}
-                  </span>
-                </div>
-
-                {/* 对应发音音标列表：右对齐、不被文本挤压、强制不折行 */}
-                <div className="flex items-center gap-1.5 flex-wrap justify-end shrink-0">
-                  {rule.phonetics.map((ipa) => {
-                    const isIpaPlaying = playingIpa === ipa
-                    const cleanIpa = ipa.replace(/[\/\[\]]/g, '').trim()
-
-                    return (
-                      <button
-                        key={ipa}
-                        type="button"
-                        onClick={(e) => handlePlayIpa(e, ipa)}
-                        title={`点击试听音标 ${ipa} 发音`}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded-xl border font-mono text-xs sm:text-sm font-bold whitespace-nowrap shrink-0 transition-colors ${
-                          isIpaPlaying
-                            ? 'bg-primary text-black border-primary shadow-sm'
-                            : 'bg-white/[0.06] hover:bg-primary/20 text-primary border-primary/30'
-                        }`}
-                      >
-                        <Volume2 className="size-3.5 shrink-0" />
-                        <span className="whitespace-nowrap select-none">{ipa}</span>
-                        {onJumpToIpa && (
-                          <span
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onJumpToIpa(cleanIpa)
-                            }}
-                            title="前往48音标图谱定位"
-                            className="ml-0.5 p-0.5 rounded hover:text-white shrink-0 flex items-center justify-center"
-                          >
-                            <ExternalLink className="size-2.5 opacity-60 hover:opacity-100 shrink-0" />
-                          </span>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* 第二行：位置规律说明（独占一行，不挤压发音按钮） */}
-              {rule.positionTip && (
-                <div className="text-xs text-muted-foreground leading-relaxed">
-                  位置规律: <span className="text-foreground/80 font-medium">{rule.positionTip}</span>
-                </div>
-              )}
-
-              {/* 规律说明与拼读诀窍 */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 text-[13px] sm:text-sm text-foreground/85 leading-relaxed">
-                {rule.ruleDescription}
-              </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-10 pb-8">
+      {items.map((rule) => (
+        <article key={rule.id} className="border-t border-border py-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-baseline gap-3 min-w-0">
+              <span className="phonics-pattern-title font-serif text-4xl leading-none">{rule.pattern}</span>
+              <span className="text-xs text-muted-foreground">{rule.categoryLabel}</span>
             </div>
 
-            {/* 代表例词列表 */}
-            <div className="space-y-2 pt-1 border-t border-border/40">
-              <div className="flex items-center justify-between text-sm px-0.5">
-                <span className="font-bold text-gray-200">代表性例词</span>
-                <span className="text-xs font-mono text-muted-foreground/80">点击朗读</span>
-              </div>
+            <div className="flex items-center gap-0.5 flex-wrap justify-end shrink-0 -mt-1">
+              {rule.phonetics.map((ipa) => {
+                const isIpaPlaying = playingIpa === ipa
+                const cleanIpa = ipa.replace(/[\/\[\]]/g, '').trim()
 
-              <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
-                {rule.examples.map((ex, index) => {
-                  const isWordPlaying = playingWord === ex.word
-
-                  return (
+                return (
+                  <span key={ipa} className="inline-flex items-center">
                     <button
-                      key={`${rule.id}-${index}`}
                       type="button"
-                      onClick={(e) => handlePlayWord(e, ex)}
-                      title={`朗读例词: ${ex.word} ${ex.phonetic} (${ex.meaning})`}
-                      className={`group/ex relative text-left px-2 py-1.5 sm:px-2.5 sm:py-2 rounded-xl border transition-all overflow-hidden ${
-                        isWordPlaying
-                          ? 'bg-primary/20 border-primary text-white shadow-sm'
-                          : 'bg-white/[0.04] hover:bg-white/[0.09] border-white/10 hover:border-primary/50 text-foreground'
+                      onClick={(e) => handlePlayIpa(e, ipa)}
+                      title={`试听音标 ${ipa}`}
+                      className={`h-8 pl-1.5 pr-2 rounded-md inline-flex items-center gap-1 font-serif text-base whitespace-nowrap transition-colors cursor-pointer ${
+                        isIpaPlaying ? 'text-primary bg-primary/10' : 'text-primary hover:bg-muted'
                       }`}
                     >
-                      <div className="min-w-0">
-                        <div className="text-base sm:text-lg font-black font-mono leading-tight flex items-baseline gap-1.5 flex-wrap text-foreground tracking-wide">
-                          {renderHighlightedWord(ex.word, ex.highlight)}
-                          <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground font-mono">
-                            {ex.phonetic}
-                          </span>
-                        </div>
-                        <div className="text-xs sm:text-[13px] font-semibold text-foreground/80 truncate leading-snug mt-1">
-                          {ex.meaning}
-                        </div>
-                      </div>
-
-                      <Volume2
-                        className={`size-3.5 absolute right-1.5 top-1.5 transition-opacity pointer-events-none ${
-                          isWordPlaying
-                            ? 'text-primary opacity-100 animate-pulse'
-                            : 'text-muted-foreground opacity-0 group-hover/ex:opacity-100'
-                        }`}
-                      />
+                      <Volume2 className={`size-3.5 ${isIpaPlaying ? 'animate-pulse' : 'opacity-60'}`} />
+                      {ipa}
                     </button>
-                  )
-                })}
-              </div>
+                    {onJumpToIpa && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onJumpToIpa(cleanIpa)
+                        }}
+                        title="前往 48 音标图谱定位"
+                        className="size-6 rounded-md inline-flex items-center justify-center text-muted-foreground/60 hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                      >
+                        <ExternalLink className="size-3" />
+                      </button>
+                    )}
+                  </span>
+                )
+              })}
             </div>
           </div>
-        )
-      })}
+
+          {rule.positionTip && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              位置规律：<span className="text-gray-300">{rule.positionTip}</span>
+            </p>
+          )}
+
+          <p className="mt-2 text-[13px] xl:text-sm text-gray-300 leading-relaxed">{rule.ruleDescription}</p>
+
+          <div className="mt-3 pt-3 border-t border-dashed border-border grid grid-cols-2 gap-x-4">
+            {rule.examples.map((ex, index) => (
+              <ExampleWordButton
+                key={`${rule.id}-${index}`}
+                word={ex.word}
+                phonetic={ex.phonetic}
+                meaning={ex.meaning}
+                highlight={ex.highlight}
+                isPlaying={playingWord === ex.word}
+                onClick={(e) => handlePlayWord(e, ex)}
+              />
+            ))}
+          </div>
+        </article>
+      ))}
     </div>
   )
 }

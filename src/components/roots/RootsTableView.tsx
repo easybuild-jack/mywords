@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Eye, SearchX, ChevronLeft, ChevronRight } from 'lucide-react'
+import { SearchX, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { RootItem } from '@/types'
 
 interface RootsTableViewProps {
@@ -58,203 +58,160 @@ export function RootsTableView({
 
   const paginatedItems = items.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
+  const pagerButtonClass =
+    'h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-colors cursor-pointer'
+  const colgroup = (
+    <colgroup>
+      <col className="w-[20%] min-w-[150px]" />
+      <col className="w-[24%] min-w-[180px]" />
+      <col className="w-[44%] min-w-[260px]" />
+      <col className="w-[12%] min-w-[90px]" />
+    </colgroup>
+  )
+
   return (
     <div className="flex-1 min-h-0 flex flex-col w-full h-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10">
-      {/* 现代化半透明毛玻璃大卡片容器：自适应宽幅展开并固定全高，杜绝查询时外框晃动 */}
-      <div className="flex-1 min-h-0 flex flex-col w-full h-full glass-card rounded-2xl xl:rounded-3xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden">
-        {/* 紧凑精致毛玻璃独立表头：置于滚动条外部，贯穿卡片全宽，确保左右大圆角 100% 完整对称 */}
-        <div className="w-full bg-[#12141a]/95 backdrop-blur-xl border-b border-white/10 text-xs font-semibold text-gray-300 select-none shadow-sm shrink-0 pr-1.5">
-          <table className="w-full table-fixed text-left border-collapse">
-            <colgroup>
-              <col className="w-[20%] min-w-[150px]" />
-              <col className="w-[24%] min-w-[180px]" />
-              <col className="w-[44%] min-w-[260px]" />
-              <col className="w-[12%] min-w-[90px]" />
-            </colgroup>
-            <thead>
+      {/* 表头固定在滚动区外，表体独立滚动 */}
+      <div className="shrink-0 border-b border-border text-xs text-muted-foreground select-none pr-1.5">
+        <table className="w-full table-fixed text-left border-collapse">
+          {colgroup}
+          <thead>
+            <tr>
+              <th className="py-2.5 pr-5 font-normal">形态与读音</th>
+              <th className="py-2.5 px-5 font-normal">本义</th>
+              <th className="py-2.5 px-5 font-normal">词源与构词</th>
+              <th className="py-2.5 pl-5 text-right font-normal">操作</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+        <table className="w-full table-fixed text-left border-collapse">
+          {colgroup}
+          <tbody>
+            {items.length === 0 ? (
               <tr>
-                <th className="py-2.5 px-5 sm:px-6">
-                  <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-primary shrink-0" />
-                    <span className="truncate">形态与读音</span>
+                <td colSpan={4} className="py-28 text-center">
+                  <div className="max-w-md mx-auto select-none">
+                    <SearchX className="size-6 mx-auto text-muted-foreground" />
+                    <h4 className="mt-3 text-sm text-white">没有找到匹配的{tabLabel}</h4>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      与「<span className="font-serif text-foreground">{searchQuery}</span>」相关的{tabLabel}或释义都没有找到
+                    </p>
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={onClearSearch}
+                        className="mt-4 h-8 px-3 rounded-md text-xs text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                      >
+                        清空搜索条件
+                      </button>
+                    )}
                   </div>
-                </th>
-                <th className="py-2.5 px-5 sm:px-6">
-                  <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-accent shrink-0" />
-                    <span className="truncate">核心本义</span>
-                  </div>
-                </th>
-                <th className="py-2.5 px-5 sm:px-6">
-                  <div className="flex items-center gap-2 text-gray-200 tracking-wide font-medium">
-                    <span className="size-2 rounded-full bg-amber-400 shrink-0" />
-                    <span className="truncate">词源溯源与构词逻辑</span>
-                  </div>
-                </th>
-                <th className="py-2.5 px-5 sm:px-6 text-right">
-                  <span className="text-gray-400 font-medium tracking-wide">操作</span>
-                </th>
+                </td>
               </tr>
-            </thead>
-          </table>
-        </div>
-
-        {/* 滚动表格区域：使用 table-fixed 强锁定列宽，检索数据只填充内容，滚动条始于表头下方，杜绝侵蚀顶部右上圆角 */}
-        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
-          <table className="w-full table-fixed text-left border-collapse">
-            {/* 固化列宽配比：杜绝字符长度变化导致表头与列水平窜动 */}
-            <colgroup>
-              <col className="w-[20%] min-w-[150px]" />
-              <col className="w-[24%] min-w-[180px]" />
-              <col className="w-[44%] min-w-[260px]" />
-              <col className="w-[12%] min-w-[90px]" />
-            </colgroup>
-
-            {/* 表格内容主体：保持结构不变，纯内容填充 */}
-            <tbody className="divide-y divide-white/[0.05] font-sans">
-              {items.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="py-28 text-center">
-                    <div className="flex flex-col items-center justify-center space-y-3.5 max-w-md mx-auto select-none">
-                      <div className="size-14 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-gray-400">
-                        <SearchX className="size-7 text-gray-400" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="text-base font-bold text-white">未找到匹配的{tabLabel}</h4>
-                        <p className="text-xs text-gray-400">
-                          未找到与 “<span className="text-primary font-mono font-bold">{searchQuery}</span>” 相关的{tabLabel}或释义
-                        </p>
-                      </div>
-                      {searchQuery && (
-                        <button
-                          type="button"
-                          onClick={onClearSearch}
-                          className="px-4 py-2 rounded-xl bg-primary/20 hover:bg-primary/30 border border-primary/40 text-primary text-xs font-bold transition-all cursor-pointer"
-                        >
-                          清空搜索条件
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                paginatedItems.map((item, index) => {
-                  const globalIndex = (currentPage - 1) * PAGE_SIZE + index
-                  return (
-                    <tr
-                      key={item.id || `${item.form}-${globalIndex}`}
-                      onClick={() => onViewDetail(globalIndex)}
-                      className="hover:bg-white/[0.035] transition-colors duration-150 cursor-pointer group"
-                    >
-                      {/* 1. 形态与音标 */}
-                      <td className="py-2.5 px-5 sm:px-6">
-                        <div className="flex items-baseline gap-2.5 truncate">
-                          <span className="font-mono text-base xl:text-lg font-bold text-white group-hover:text-primary transition-colors tracking-wide">
-                            {item.form}
-                          </span>
-                          {item.phonetic && (
-                            <span className="font-mono text-xs text-gray-400 bg-white/[0.04] px-2 py-0.5 rounded-md border border-white/5 truncate">
-                              {item.phonetic}
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* 2. 核心本义 */}
-                      <td className="py-2.5 px-5 sm:px-6 text-sm sm:text-[15px] font-semibold text-white leading-snug">
-                        <span className="line-clamp-2">{item.meaning}</span>
-                      </td>
-
-                      {/* 3. 词源出处 */}
-                      <td className="py-2.5 px-5 sm:px-6 text-xs sm:text-sm text-gray-300 leading-snug">
-                        <p className="line-clamp-2 text-gray-300 group-hover:text-gray-100 transition-colors">
-                          {item.origin}
-                        </p>
-                        {item.derivationNote && (
-                          <p className="text-primary/80 font-medium text-xs mt-0.5 line-clamp-1">
-                            → {item.derivationNote}
-                          </p>
-                        )}
-                      </td>
-
-                      {/* 4. 右侧操作栏：查看按钮 */}
-                      <td className="py-2.5 px-5 sm:px-6 text-right whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            onViewDetail(globalIndex)
-                          }}
-                          className="px-3 py-1 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30 text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
-                          title={`查看 ${item.form} 详情卡片`}
-                        >
-                          <Eye className="size-3.5" />
-                          <span>查看</span>
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* 底部紧凑分页控制栏：位置牢固置底，无论结果数量多少均绝不上下跳跃 */}
-        <div className="shrink-0 px-5 sm:px-6 py-2 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <span>
-              第 <strong className="text-white font-mono">{currentPage}</strong> / <strong className="text-white font-mono">{totalPages}</strong> 页
-            </span>
-            <span className="text-white/20">|</span>
-            <span>每页 <strong className="text-white font-mono">{PAGE_SIZE}</strong> 条</span>
-            <span className="text-white/20">|</span>
-            <span>共 <strong className="text-primary font-mono">{items.length}</strong> 条{tabLabel}</span>
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage <= 1 || items.length === 0}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-white/10 hover:bg-white/[0.06] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer font-sans text-xs"
-            >
-              <ChevronLeft className="size-3.5" />
-              <span>上一页</span>
-            </button>
-
-            <div className="flex items-center gap-1 font-mono">
-              {getPageNumbers(currentPage, totalPages).map((pageNum, i) =>
-                pageNum === '...' ? (
-                  <span key={`ellipsis-${i}`} className="px-1 text-muted-foreground/60">...</span>
-                ) : (
-                  <button
-                    key={pageNum}
-                    type="button"
-                    onClick={() => setCurrentPage(pageNum as number)}
-                    disabled={items.length === 0}
-                    className={`size-7 rounded-lg text-xs font-semibold transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
-                      currentPage === pageNum && items.length > 0
-                        ? 'bg-primary text-[#0B0C0E] font-bold'
-                        : 'hover:bg-white/[0.06] text-muted-foreground hover:text-white'
-                    }`}
+            ) : (
+              paginatedItems.map((item, index) => {
+                const globalIndex = (currentPage - 1) * PAGE_SIZE + index
+                return (
+                  <tr
+                    key={item.id || `${item.form}-${globalIndex}`}
+                    onClick={() => onViewDetail(globalIndex)}
+                    className="border-b border-border hover:bg-muted/30 transition-colors cursor-pointer group"
                   >
-                    {pageNum}
-                  </button>
-                )
-              )}
-            </div>
+                    <td className="py-3 pr-5">
+                      <div className="flex items-baseline gap-2.5 truncate">
+                        <span className="font-serif text-lg xl:text-xl text-white group-hover:text-primary transition-colors">
+                          {item.form}
+                        </span>
+                        {item.phonetic && (
+                          <span className="font-serif text-[13px] text-muted-foreground truncate">{item.phonetic}</span>
+                        )}
+                      </div>
+                    </td>
 
-            <button
-              type="button"
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage >= totalPages || items.length === 0}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-white/10 hover:bg-white/[0.06] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer font-sans text-xs"
-            >
-              <span>下一页</span>
-              <ChevronRight className="size-3.5" />
-            </button>
+                    <td className="py-3 px-5 text-sm text-gray-200 leading-snug">
+                      <span className="line-clamp-2">{item.meaning}</span>
+                    </td>
+
+                    <td className="py-3 px-5 text-[13px] leading-snug">
+                      <p className="line-clamp-2 text-gray-300">{item.origin}</p>
+                      {item.derivationNote && (
+                        <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">→ {item.derivationNote}</p>
+                      )}
+                    </td>
+
+                    <td className="py-3 pl-5 text-right whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onViewDetail(globalIndex)
+                        }}
+                        className="h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground group-hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                        title={`查看 ${item.form} 详情`}
+                      >
+                        查看
+                        <ChevronRight className="size-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* 分页：位置固定在底部 */}
+      <div className="shrink-0 pt-3 flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-2">
+        <span>
+          共 <span className="font-mono text-foreground">{items.length}</span> 条，每页 {PAGE_SIZE} 条
+        </span>
+
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage <= 1 || items.length === 0}
+            className={pagerButtonClass}
+          >
+            <ChevronLeft className="size-3.5" />
+            上一页
+          </button>
+
+          <div className="flex items-center gap-0.5 font-mono">
+            {getPageNumbers(currentPage, totalPages).map((pageNum, i) =>
+              pageNum === '...' ? (
+                <span key={`ellipsis-${i}`} className="px-1 text-muted-foreground/60">…</span>
+              ) : (
+                <button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => setCurrentPage(pageNum as number)}
+                  disabled={items.length === 0}
+                  className={`size-7 rounded-md text-xs transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
+                    currentPage === pageNum && items.length > 0
+                      ? 'bg-muted text-foreground font-medium'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              )
+            )}
           </div>
+
+          <button
+            type="button"
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage >= totalPages || items.length === 0}
+            className={pagerButtonClass}
+          >
+            下一页
+            <ChevronRight className="size-3.5" />
+          </button>
         </div>
       </div>
     </div>

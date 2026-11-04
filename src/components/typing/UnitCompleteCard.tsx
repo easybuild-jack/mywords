@@ -4,7 +4,7 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
-import { CheckCircle2, RotateCcw, ArrowRight, Sparkles } from 'lucide-react'
+import { CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { startRouteProgressBar } from '@/components/layout/RouteProgressBar'
 import { dictionaryLoader } from '@/core/dictionaryLoader'
@@ -116,22 +116,22 @@ export function UnitCompleteCard() {
 
   // 几个按钮共用的 focus 描边样式 —— 让左右键切换时每个按钮都能看见焦点
   const baseFocusRing =
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0C0E]'
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background'
+  const secondaryButtonClass = `flex items-center gap-2 h-10 px-4 rounded-lg border border-border text-foreground hover:bg-muted text-sm transition-colors cursor-pointer ${baseFocusRing}`
+  const primaryButtonClass = `flex items-center gap-2 h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary-hover transition-colors cursor-pointer ${baseFocusRing}`
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      className="glass-card max-w-lg w-full p-8 rounded-3xl border border-white/10 text-center space-y-6 shadow-2xl relative z-20"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="max-w-xl w-full py-10 text-center space-y-7 relative z-20"
     >
-      <div className="size-16 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary mx-auto">
-        <Sparkles className="size-8 animate-pulse" />
-      </div>
+      <CheckCircle2 className="size-10 text-primary mx-auto" strokeWidth={1.5} />
 
       {isErrorPracticeActive ? (
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">
-            {mode === 'learn' ? '🎉 生错词练习完成！' : '🎉 生错词攻坚圆满胜利！'}
+        <div className="space-y-3">
+          <h2 className="text-3xl font-medium text-white tracking-tight">
+            {mode === 'learn' ? '生错词练习完成' : '生错词攻坚完成'}
           </h2>
           <p className="text-sm text-[#9CA3AF] leading-relaxed">
             {mode === 'learn'
@@ -140,11 +140,11 @@ export function UnitCompleteCard() {
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">
+        <div className="space-y-3">
+          <h2 className="text-3xl font-medium text-white tracking-tight">
             {currentUnitMeta
-              ? `🎉 恭喜完成「${currentUnitMeta.name}」！`
-              : `🎉 恭喜完成第 ${currentUnitIndex + 1} 单元！`}
+              ? `完成「${currentUnitMeta.name}」`
+              : `完成第 ${currentUnitIndex + 1} 单元`}
           </h2>
           <p className="text-sm text-[#9CA3AF]">
             {mode === 'learn'
@@ -164,7 +164,7 @@ export function UnitCompleteCard() {
                 await exitErrorPractice()
                 router.push('/errors')
               }}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
+              className={secondaryButtonClass}
             >
               <span>返回生错词</span>
             </button>
@@ -180,7 +180,7 @@ export function UnitCompleteCard() {
                   startErrorPractice(currentLoadedWords, 0)
                   router.push('/dictation')
                 }}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
+                className={secondaryButtonClass}
               >
                 <span>去生错词默写</span>
               </button>
@@ -203,7 +203,7 @@ export function UnitCompleteCard() {
                 }
                 router.push(mode === 'learn' ? '/learn' : '/dictation')
               }}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
+              className={primaryButtonClass}
             >
               <span>{mode === 'learn' ? '继续常规章节跟学' : '继续常规章节默写'}</span>
               <ArrowRight className="size-4" />
@@ -214,9 +214,9 @@ export function UnitCompleteCard() {
             <button
               ref={restartButtonRef}
               onClick={restartUnit}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.12] text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
+              className={secondaryButtonClass}
             >
-              <RotateCcw className="size-4 text-accent" />
+              <RotateCcw className="size-4" />
               <span>重做本单元</span>
             </button>
 
@@ -231,7 +231,7 @@ export function UnitCompleteCard() {
                   }
                   router.push('/dictation')
                 }}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 text-sm font-medium transition-all cursor-pointer ${baseFocusRing}`}
+                className={secondaryButtonClass}
               >
                 <span>去默写检验</span>
               </button>
@@ -244,7 +244,7 @@ export function UnitCompleteCard() {
                   startRouteProgressBar()
                   router.push('/books')
                 }}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
+                className={primaryButtonClass}
               >
                 <span>已是最后一个单元 · 返回词库</span>
                 <ArrowRight className="size-4" />
@@ -253,7 +253,7 @@ export function UnitCompleteCard() {
               <button
                 ref={nextButtonRef}
                 onClick={() => setUnitIndex(currentUnitIndex + 1)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold btn-neon-glow hover:bg-primary-hover transition-all cursor-pointer ${baseFocusRing}`}
+                className={primaryButtonClass}
               >
                 <span>下一单元</span>
                 <ArrowRight className="size-4" />

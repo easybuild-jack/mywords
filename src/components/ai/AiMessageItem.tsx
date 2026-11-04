@@ -26,7 +26,7 @@ export function AiMessageItem({ message, isStreaming = false }: AiMessageItemPro
         <span className="text-[10px] text-muted-foreground font-mono">
           {formatTime(message.timestamp)}
         </span>
-        <div className="max-w-[88%] rounded-2xl rounded-tr-sm px-4 py-2.5 bg-primary/15 border border-primary/30 text-foreground text-sm leading-relaxed shadow-sm">
+        <div className="max-w-[88%] rounded-xl rounded-tr-sm px-3.5 py-2 bg-primary/10 text-foreground text-sm leading-relaxed">
           <p className="whitespace-pre-wrap select-text">{message.content}</p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export function AiMessageItem({ message, isStreaming = false }: AiMessageItemPro
       </div>
 
       {/* 主回复卡片：支持 html, markdown, json, shell，无标记时默认纯文本展示 */}
-      <div className="rounded-2xl rounded-tl-sm p-4 bg-card border border-border text-foreground text-sm leading-relaxed shadow-sm select-text">
+      <div className="rounded-xl rounded-tl-sm p-4 bg-card border border-border text-foreground text-sm leading-relaxed select-text">
         <AiContentRenderer content={message.content} />
         {isStreaming && (
           <span

@@ -16,7 +16,7 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
   const loadingText = useNavigationStore((s) => s.loadingText) || '数据加载中...'
 
   return (
-    <div className="flex-1 min-h-full flex flex-col relative">
+    <div className="w-full min-h-full shrink-0 flex flex-col relative">
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -27,28 +27,26 @@ export function PageTransitionWrapper({ children }: { children: React.ReactNode 
               opacity: 0,
               transition: { duration: 0.28, ease: 'easeOut' },
             }}
-            className="fixed top-0 bottom-0 left-0 md:left-72 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
+            className="fixed top-0 bottom-0 left-0 md:left-56 right-0 z-50 flex items-center justify-center select-none pointer-events-auto"
             style={{ backgroundColor: 'var(--background)', willChange: 'opacity' }}
           >
-            <div className="px-10 py-7 rounded-2xl bg-sidebar border border-white/10 shadow-2xl shadow-black/30 flex flex-col items-center gap-4.5 min-w-[180px]">
+            <div className="flex flex-col items-center gap-4">
               <div className="relative flex items-center justify-center">
-                <div className="size-16 rounded-full border-[2.5px] border-primary/20 border-t-primary animate-spin" />
+                <div className="size-14 rounded-full border-2 border-border border-t-primary animate-spin" />
                 <img
                   src="/logo111.png"
                   alt="LinguaLoop"
-                  className="size-9 object-contain absolute animate-pulse select-none pointer-events-none"
+                  className="size-7 object-contain absolute select-none pointer-events-none"
                 />
               </div>
-              <span className="text-foreground text-[15px] font-semibold tracking-wide">
-                {loadingText}
-              </span>
+              <span className="text-muted-foreground text-sm">{loadingText}</span>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* 真实页面内容：稳态渲染在底层，等遮罩淡出后已完全就绪 */}
-      <div className="flex-1 min-h-full flex flex-col relative">
+      <div className="w-full min-h-full shrink-0 flex flex-col relative">
         {children}
       </div>
     </div>

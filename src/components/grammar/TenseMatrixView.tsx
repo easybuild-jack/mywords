@@ -22,7 +22,7 @@ function renderSentenceWithVerbHighlight(sentence: string, verbPart?: string) {
       {parts.map((part, idx) => {
         if (part.toLowerCase() === verbPart.toLowerCase()) {
           return (
-            <span key={idx} className="grammar-keyword font-black">
+            <span key={idx} className="grammar-keyword font-medium">
               {part}
             </span>
           )
@@ -69,17 +69,17 @@ export function TenseMatrixView() {
   return (
     <div className="space-y-6">
       {/* 模块导引 */}
-      <div className="glass-card rounded-2xl p-5 sm:p-6 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="pb-6 border-b border-border flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+            <span className="text-xs text-muted-foreground">
               Module 04 · 时空坐标与矩阵
             </span>
-            <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-primary/10 text-primary border border-primary/20">
+            <span className="text-xs text-muted-foreground">
               4 时间 × 4 动作体态 = 16 态
             </span>
           </div>
-          <h2 className="text-2xl font-extrabold text-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             英语时态全景矩阵与时间轴：时空二维交汇的坐标系
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
@@ -88,23 +88,23 @@ export function TenseMatrixView() {
         </div>
 
         {/* 高频 8 态 vs 全部 16 态切换 */}
-        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/10 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={() => setOnlyHighFrequency(false)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            className={`h-8 px-3 rounded-md text-xs sm:text-sm transition-colors cursor-pointer ${
               !onlyHighFrequency
-                ? 'bg-primary text-[#0B0C0E] border border-primary font-semibold'
-                : 'text-muted-foreground hover:text-white'
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             16 时态全景表
           </button>
           <button
             onClick={() => setOnlyHighFrequency(true)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            className={`h-8 px-3 rounded-md text-xs sm:text-sm transition-colors cursor-pointer ${
               onlyHighFrequency
-                ? 'bg-primary text-[#0B0C0E] border border-primary font-semibold'
-                : 'text-muted-foreground hover:text-white'
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             日常核心高频 8 态
@@ -113,15 +113,15 @@ export function TenseMatrixView() {
       </div>
 
       {/* 4x4 矩阵交互图谱 */}
-      <div className="glass-card rounded-2xl border border-white/10 overflow-x-auto custom-scrollbar">
+      <div className="border-y border-border overflow-x-auto custom-scrollbar">
         <table className="w-full text-left border-collapse min-w-[840px]">
           <thead>
-            <tr className="border-b border-white/10 bg-white/[0.02]">
-              <th className="p-4 text-muted-foreground font-medium w-40 text-sm">
-                时间 \ 体貌 <span className="text-xs font-mono font-normal opacity-80">(Aspect)</span>
+            <tr className="border-b border-border">
+              <th className="p-3.5 text-muted-foreground font-medium w-40 text-xs sm:text-sm">
+                时间 \ 体貌 <span className="text-[11px] font-mono font-normal opacity-80">(Aspect)</span>
               </th>
               {aspectCols.map((col) => (
-                <th key={col.key} className="p-4 text-foreground font-semibold text-sm">
+                <th key={col.key} className="p-3.5 text-foreground font-semibold text-xs sm:text-sm">
                   <div className="flex items-baseline gap-1.5">
                     <span>{col.labelZh}</span>
                     <span className="text-xs font-mono text-muted-foreground font-normal">
@@ -132,13 +132,13 @@ export function TenseMatrixView() {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-border">
             {timeRows.map((row) => (
-              <tr key={row.key} className="hover:bg-white/[0.02] transition-colors">
-                <td className="p-4 font-semibold text-foreground bg-white/[0.02] border-r border-white/10">
+              <tr key={row.key}>
+                <td className="p-3.5 font-semibold text-foreground border-r border-border">
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold">{row.labelZh}</span>
-                    <span className="text-xs text-muted-foreground font-mono mt-0.5">
+                    <span className="text-xs sm:text-sm font-bold">{row.labelZh}</span>
+                    <span className="text-[11px] text-muted-foreground font-mono mt-0.5">
                       {row.labelEn}
                     </span>
                   </div>
@@ -156,33 +156,33 @@ export function TenseMatrixView() {
                     <td
                       key={col.key}
                       onClick={() => setSelectedTenseId(tense.id)}
-                      className={`p-3.5 transition-all cursor-pointer relative ${
+                      className={`p-3 transition-all cursor-pointer relative ${
                         isSelected
-                          ? 'bg-primary/15 ring-1 ring-primary/40'
-                          : 'hover:bg-white/[0.03]'
+                          ? 'bg-primary/[0.08] shadow-[inset_0_-2px_0_var(--primary)]'
+                          : 'hover:bg-muted/40'
                       } ${isDimmed ? 'opacity-25 grayscale' : ''}`}
                     >
-                      <div className="space-y-1.5">
+                      <div className="space-y-1">
                         <div className="flex items-center justify-between gap-1">
                           <span
-                            className={`text-sm ${
+                            className={`text-xs sm:text-sm ${
                               isSelected ? 'text-primary font-bold' : 'text-foreground font-semibold'
                             }`}
                           >
                             {tense.nameZh}
                           </span>
                           {tense.isHighFrequency && (
-                            <span className="text-xs px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-medium font-sans">
+                            <span className="text-[10px] text-primary font-sans font-medium">
                               高频
                             </span>
                           )}
                         </div>
-                        <p className={`font-mono text-sm leading-normal ${
+                        <p className={`font-mono text-xs sm:text-sm leading-normal ${
                           isSelected ? 'text-primary/95 font-medium' : 'text-foreground/80'
                         }`}>
                           {tense.formula}
                         </p>
-                        <p className="text-sm font-mono text-muted-foreground/85 truncate">
+                        <p className="text-xs font-mono text-muted-foreground/85 truncate">
                           {tense.examples[0]?.verbPart}
                         </p>
                       </div>
@@ -196,41 +196,41 @@ export function TenseMatrixView() {
       </div>
 
       {/* 选定时态深度研读舞台 */}
-      <div className="glass-card rounded-2xl border border-white/10 p-6 md:p-8 space-y-6">
+      <div className="border-t border-border pt-6 space-y-6">
         {/* 顶部标题与时态公式 */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-5">
           <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <span className="text-sm font-mono font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                 {selectedTense.timeZh} · {selectedTense.aspectZh}
               </span>
-              <span className="text-sm text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-mono">
                 {selectedTense.nameEn}
               </span>
             </div>
-            <h3 className="text-2xl font-extrabold text-foreground tracking-tight">
+            <h3 className="text-xl font-bold text-foreground tracking-tight">
               {selectedTense.nameZh}
             </h3>
           </div>
 
-          <div className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10">
-            <span className="text-xs uppercase text-muted-foreground block font-mono">
+          <div className="px-3.5 py-1.5 rounded-md border border-border">
+            <span className="text-[11px] text-muted-foreground block">
               结构公式 (Grammar Formula)
             </span>
-            <span className="text-base font-mono font-bold text-primary">
+            <span className="text-sm sm:text-base font-mono font-bold text-primary">
               {selectedTense.formula}
             </span>
           </div>
         </div>
 
         {/* 动态时间轴可视化模型 */}
-        <div className="rounded-2xl p-5 bg-white/[0.02] border border-white/10 space-y-4">
+        <div className="rounded-lg p-5 border border-border space-y-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+            <span className="text-xs sm:text-sm font-semibold text-foreground flex items-center gap-2">
               <Clock className="size-4 text-primary" />
               时空坐标轴解构 (Spatiotemporal Coordinate)
             </span>
-            <span className="text-sm font-mono text-primary">
+            <span className="text-xs font-mono text-primary">
               {selectedTense.timelineVisual.coordinateHint}
             </span>
           </div>
@@ -248,7 +248,7 @@ export function TenseMatrixView() {
               {/* 现在刻度 (NOW - 焦点中轴) */}
               <div className="absolute left-[50%] top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center">
                 <div className="size-4 rounded-full bg-primary border-2 border-white/80 shadow-md shadow-primary/30" />
-                <span className="text-sm font-mono font-bold text-primary mt-2">NOW (现在)</span>
+                <span className="text-xs sm:text-sm font-mono font-bold text-primary mt-2">NOW (现在)</span>
               </div>
 
               {/* 将来刻度 */}
@@ -262,10 +262,10 @@ export function TenseMatrixView() {
                 <div className="absolute left-[15%] right-[15%] -top-1 h-3 bg-primary/20 rounded-full border border-primary/40" />
               )}
               {selectedTense.time === 'present' && selectedTense.aspect === 'continuous' && (
-                <div className="absolute left-[44%] right-[44%] -top-1.5 h-4 bg-primary/30 rounded-full border-2 border-primary shadow-sm shadow-primary/30" />
+                <div className="absolute left-[44%] right-[44%] -top-1.5 h-4 bg-primary/30 rounded-full border-2 border-primary " />
               )}
               {selectedTense.time === 'present' && selectedTense.aspect === 'perfect' && (
-                <div className="absolute left-[20%] w-[30%] -top-1 h-3 bg-gradient-to-r from-primary/10 via-primary/30 to-primary/60 rounded-full border border-primary/40 shadow-sm shadow-primary/20" />
+                <div className="absolute left-[20%] w-[30%] -top-1 h-3 bg-gradient-to-r from-primary/10 via-primary/30 to-primary/60 rounded-full border border-primary/40 " />
               )}
               {selectedTense.time === 'past' && selectedTense.aspect === 'simple' && (
                 <div className="absolute left-[25%] -top-2 size-5 rounded-full bg-primary border-2 border-white/80 shadow-md shadow-primary/30" />
@@ -279,42 +279,42 @@ export function TenseMatrixView() {
             </div>
           </div>
 
-          <p className="text-base text-foreground/90 leading-relaxed pt-3 border-t border-white/10">
+          <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed pt-3 border-t border-border">
             💡 <span className="font-semibold text-primary">认知内核：</span>
             {selectedTense.coreConcept}
           </p>
         </div>
 
         {/* 例句 */}
-        <section className="border-t border-white/10 pt-5 space-y-4">
+        <section className="border-t border-border pt-4 space-y-3.5">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h4 className="text-base font-bold text-foreground">例句</h4>
-            <span className="text-sm font-semibold text-primary">
+            <h4 className="text-sm font-bold text-foreground">例句</h4>
+            <span className="text-xs font-semibold text-primary">
               {selectedTense.nameZh} · {selectedTense.nameEn}
             </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             {selectedTense.examples.map((example, idx) => (
-              <div key={idx} className="flex items-start gap-3.5">
-                <span className="font-mono text-sm font-bold text-primary pt-1 shrink-0">
+              <div key={idx} className="flex items-start gap-3">
+                <span className="font-mono text-xs font-bold text-primary pt-1 shrink-0">
                   {String(idx + 1).padStart(2, '0')}
                 </span>
-                <div className="min-w-0 flex-1 space-y-1.5">
+                <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="font-mono text-xl sm:text-2xl font-semibold leading-relaxed text-foreground tracking-wide">
+                    <p className="font-serif text-base sm:text-lg leading-relaxed text-foreground">
                       {renderSentenceWithVerbHighlight(example.en, example.verbPart)}
                     </p>
                     <button
                       type="button"
                       onClick={() => speakText(example.en)}
                       title="朗读例句"
-                      className="mt-1.5 size-8 shrink-0 rounded-lg border border-white/10 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center cursor-pointer"
+                      className="mt-0.5 size-7 shrink-0 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors flex items-center justify-center cursor-pointer"
                     >
-                      <Volume2 className="size-4" />
+                      <Volume2 className="size-3.5" />
                     </button>
                   </div>
-                  <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     {example.zh}
                   </p>
                 </div>
@@ -324,15 +324,15 @@ export function TenseMatrixView() {
         </section>
 
         {/* 典型时间状语标志词 */}
-        <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
-          <span className="text-base font-bold text-foreground block">
+        <div className="rounded-lg p-4 border border-border space-y-2.5">
+          <span className="text-sm font-bold text-foreground block">
             典型时间标志词 (Time Signals)
           </span>
           <div className="flex items-center gap-2 flex-wrap">
             {selectedTense.signalWords.map((word, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 rounded-lg bg-white/5 text-foreground/90 text-base font-mono border border-white/10"
+                className="px-2 py-0.5 rounded bg-muted text-foreground/90 font-serif text-xs sm:text-sm"
               >
                 {word}
               </span>
@@ -342,30 +342,30 @@ export function TenseMatrixView() {
 
         {/* 经典混淆辨析擂台 */}
         {selectedTense.contrastTrap && (
-          <div className="rounded-xl p-5 bg-white/[0.02] border border-white/10 space-y-3">
+          <div className="rounded-lg p-4 border border-border space-y-2.5">
             <div className="flex items-center gap-2">
               <AlertTriangle className="size-4 text-primary" />
-              <h4 className="text-base font-bold text-foreground tracking-wide">
+              <h4 className="text-sm font-bold text-foreground tracking-wide">
                 经典辨析：{selectedTense.nameZh} VS {selectedTense.contrastTrap.vsTenseName}
               </h4>
             </div>
-            <p className="text-base text-muted-foreground leading-relaxed">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {selectedTense.contrastTrap.differenceZh}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-              <div className="p-3.5 rounded-lg bg-white/[0.03] border border-white/10 space-y-1">
-                <span className="text-sm font-mono font-bold text-primary block">
+              <div className="border-l-2 border-border pl-3 py-1 space-y-1">
+                <span className="text-xs font-mono font-bold text-primary block">
                   {selectedTense.contrastTrap.examplePair.tenseA}
                 </span>
-                <p className="text-base text-foreground font-medium">
+                <p className="text-xs sm:text-sm text-foreground font-medium">
                   {selectedTense.contrastTrap.examplePair.sentenceA}
                 </p>
               </div>
-              <div className="p-3.5 rounded-lg bg-white/[0.03] border border-white/10 space-y-1">
-                <span className="text-sm font-mono font-bold text-muted-foreground block">
+              <div className="border-l-2 border-border pl-3 py-1 space-y-1">
+                <span className="text-xs font-mono font-bold text-muted-foreground block">
                   {selectedTense.contrastTrap.examplePair.tenseB}
                 </span>
-                <p className="text-base text-foreground font-medium">
+                <p className="text-xs sm:text-sm text-foreground font-medium">
                   {selectedTense.contrastTrap.examplePair.sentenceB}
                 </p>
               </div>

@@ -5,7 +5,7 @@ import {
   X,
   Volume2,
   Mic,
-  Sliders,
+  GraduationCap,
   Keyboard,
   RotateCcw,
   Palette,
@@ -185,17 +185,14 @@ export function SettingsModal() {
   if (!isSettingsModalOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md">
-      <div className="w-full max-w-5xl xl:max-w-6xl h-[680px] xl:h-[760px] 2xl:h-[820px] max-h-[92vh] min-h-[560px] rounded-3xl bg-sidebar border border-white/10 p-6 sm:p-8 shadow-2xl text-white flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 sm:p-6 bg-background/80 backdrop-blur-sm">
+      <div className="w-full max-w-5xl xl:max-w-6xl h-[680px] xl:h-[760px] 2xl:h-[820px] max-h-[92vh] min-h-[560px] rounded-xl bg-sidebar border border-border p-6 sm:p-8 shadow-xl text-white flex flex-col overflow-hidden">
         {/* 顶部标题与关闭 */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 shrink-0">
+        <div className="flex items-center justify-between border-b border-border pb-4 shrink-0">
           <div className="flex items-center gap-3.5">
-            <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
-              <Sliders className="size-5.5" />
-            </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">偏好设置 (Preferences & Sound Studio)</h2>
-              <p className="text-sm text-muted-foreground mt-1">个性化定制击键音效、外观皮肤、发音、快捷键与 AI 模型</p>
+              <h2 className="text-xl font-semibold tracking-tight text-white">偏好设置</h2>
+              <p className="text-[13px] text-muted-foreground mt-0.5">个性化定制击键音效、外观皮肤、发音、快捷键与 AI 模型</p>
             </div>
           </div>
           <button
@@ -203,94 +200,94 @@ export function SettingsModal() {
               setRecordingAction(null)
               setSettingsModalOpen(false)
             }}
-            className="p-2.5 rounded-xl hover:bg-white/[0.08] text-muted-foreground hover:text-white transition-all cursor-pointer"
+            className="size-8 rounded-md inline-flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-white transition-colors cursor-pointer"
             aria-label="关闭设置"
           >
-            <X className="size-5.5" />
+            <X className="size-4" />
           </button>
         </div>
 
         {/* 主体两栏布局：左侧导航固定宽度，右侧内容区充分舒展 */}
         <div className="flex gap-7 flex-1 min-h-0 pt-6 pb-2 overflow-hidden">
           {/* 左侧竖向导航 */}
-          <div className="w-56 xl:w-64 shrink-0 space-y-2 border-r border-white/10 pr-5 h-full overflow-y-auto custom-scrollbar">
+          <div className="w-52 xl:w-56 shrink-0 space-y-0.5 border-r border-border pr-5 h-full overflow-y-auto custom-scrollbar">
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('audio') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'audio' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'audio' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Volume2 className="size-4.5 shrink-0" />
+              <Volume2 className="size-4 shrink-0" />
               <span>音效与机械键盘</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('voice') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'voice' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'voice' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Mic className="size-4.5 shrink-0" />
+              <Mic className="size-4 shrink-0" />
               <span>音标与真人发音</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('appearance') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'appearance' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'appearance' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Palette className="size-4.5 shrink-0" />
+              <Palette className="size-4 shrink-0" />
               <span>外观皮肤</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('shortcuts') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'shortcuts' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'shortcuts' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Keyboard className="size-4.5 shrink-0" />
+              <Keyboard className="size-4 shrink-0" />
               <span>快捷键设置</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('learn') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'learn' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'learn' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <span className="text-lg shrink-0">📚</span>
+              <GraduationCap className="size-4 shrink-0" />
               <span>学习参数</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('ai') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'ai' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'ai' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Bot className="size-4.5 shrink-0" />
+              <Bot className="size-4 shrink-0" />
               <span>AI 模型配置</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('sync') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'sync' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'sync' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Link2 className="size-4.5 shrink-0" />
+              <Link2 className="size-4 shrink-0" />
               <span>外部工具同步</span>
             </button>
 
             <button
               onClick={() => { setRecordingAction(null); setActiveTab('dictionary') }}
-              className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'dictionary' ? 'bg-primary text-[#0B0C0E]' : 'text-muted-foreground hover:text-white hover:bg-white/[0.05]'
+              className={`w-full flex items-center gap-2.5 h-9 px-3 rounded-md text-[13px] transition-colors cursor-pointer ${
+                activeTab === 'dictionary' ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:text-white hover:bg-muted'
               }`}
             >
-              <Database className="size-4.5 shrink-0" />
+              <Database className="size-4 shrink-0" />
               <span>离线词库与缓存</span>
             </button>
           </div>
@@ -300,7 +297,7 @@ export function SettingsModal() {
             {activeTab === 'audio' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-white uppercase tracking-wider text-muted-foreground">
+                  <h3 className="text-sm font-semibold text-white text-muted-foreground">
                     {MECHANICAL_SWITCHES.length} 款经典机械键盘轴体选择
                   </h3>
                   <label className="flex items-center gap-2.5 text-base font-medium cursor-pointer text-primary">
@@ -327,12 +324,12 @@ export function SettingsModal() {
                         }}
                         className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? 'border-primary bg-primary/10'
-                            : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                            ? 'border-primary bg-primary/5'
+                            : 'border-border bg-transparent hover:border-primary/40'
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2 min-w-0">
-                          <span className="text-sm sm:text-base font-bold text-white truncate" title={sw.name}>
+                          <span className="text-sm sm:text-sm font-semibold text-white truncate" title={sw.name}>
                             {sw.name}
                           </span>
                           {isSelected && (
@@ -381,10 +378,10 @@ export function SettingsModal() {
             {activeTab === 'voice' && (
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <h3 className="text-base font-bold text-muted-foreground uppercase tracking-wider">音标口音偏好</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground">音标口音偏好</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                      phoneticPreference === 'us' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    <label className={`p-5 rounded-lg border flex items-start gap-3.5 cursor-pointer transition-all ${
+                      phoneticPreference === 'us' ? 'border-primary bg-primary/10' : 'border-border bg-transparent hover:border-primary/40'
                     }`}>
                       <input
                         type="radio"
@@ -395,13 +392,13 @@ export function SettingsModal() {
                         className="size-5 mt-0.5 accent-primary cursor-pointer"
                       />
                       <div className="space-y-1.5">
-                        <div className="text-base font-bold text-white">美式发音 (US - K.K. 音标)</div>
+                        <div className="text-sm font-semibold text-white">美式发音 (US - K.K. 音标)</div>
                         <div className="text-sm text-muted-foreground leading-relaxed">美式常用自然拼读规则与当代流行口音</div>
                       </div>
                     </label>
 
-                    <label className={`p-5 rounded-2xl border flex items-start gap-3.5 cursor-pointer transition-all ${
-                      phoneticPreference === 'uk' ? 'border-primary bg-primary/10' : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    <label className={`p-5 rounded-lg border flex items-start gap-3.5 cursor-pointer transition-all ${
+                      phoneticPreference === 'uk' ? 'border-primary bg-primary/10' : 'border-border bg-transparent hover:border-primary/40'
                     }`}>
                       <input
                         type="radio"
@@ -412,17 +409,17 @@ export function SettingsModal() {
                         className="size-5 mt-0.5 accent-primary cursor-pointer"
                       />
                       <div className="space-y-1.5">
-                        <div className="text-base font-bold text-white">英式发音 (UK - DJ 音标)</div>
+                        <div className="text-sm font-semibold text-white">英式发音 (UK - DJ 音标)</div>
                         <div className="text-sm text-muted-foreground leading-relaxed">标准牛津剑桥英式发音与国际音标呈现</div>
                       </div>
                     </label>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 space-y-4">
+                <div className="pt-4 border-t border-border space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-base font-bold text-white uppercase tracking-wider">
+                      <h3 className="text-sm font-semibold text-white">
                         音标键盘真人单音素发音
                       </h3>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -440,7 +437,7 @@ export function SettingsModal() {
                     </label>
                   </div>
 
-                  <div className="space-y-3 rounded-2xl bg-white/[0.03] border border-white/10 p-5">
+                  <div className="space-y-3 rounded-lg border border-border p-5">
                     <div className="flex justify-between items-center text-base text-muted-foreground">
                       <span>音标发音音量 (Phonetic Sound Volume)</span>
                       <div className="flex items-center gap-3">
@@ -448,7 +445,7 @@ export function SettingsModal() {
                         <button
                           type="button"
                           onClick={() => audioEngine.playPhoneticSound('iː', phoneticSoundVolume)}
-                          className="px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-primary/20 text-sm font-semibold text-primary hover:text-white border border-white/10 transition-all cursor-pointer"
+                          className="px-3 py-1.5 rounded-lg bg-white/[0.08] hover:bg-primary/20 text-sm font-semibold text-primary hover:text-white border border-border transition-all cursor-pointer"
                         >
                           试听 /iː/
                         </button>
@@ -471,7 +468,7 @@ export function SettingsModal() {
             {activeTab === 'appearance' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-muted-foreground uppercase tracking-wider">外观皮肤</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground">外观皮肤</h3>
                   <span className="text-sm text-muted-foreground/70">选择后立即生效，自动持久化</span>
                 </div>
 
@@ -488,15 +485,15 @@ export function SettingsModal() {
                         key={skin.id}
                         type="button"
                         onClick={() => setSkinId(skin.id)}
-                        className={`group relative flex flex-col gap-3 p-3.5 rounded-2xl text-left transition-all cursor-pointer ${
+                        className={`group relative flex flex-col gap-3 p-3.5 rounded-lg text-left transition-all cursor-pointer ${
                           isActive
                             ? 'bg-primary/10 border-2 border-primary'
-                            : 'bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] hover:border-white/25'
+                            : 'bg-transparent border border-border hover:bg-muted hover:border-white/25'
                         }`}
                       >
                         {/* 配色预览：迷你版应用界面 */}
                         <div
-                          className="relative h-22 rounded-xl overflow-hidden border border-white/10"
+                          className="relative h-22 rounded-xl overflow-hidden border border-border"
                           style={{ background: skin.tokens.background }}
                         >
                           {/* 模拟侧栏 */}
@@ -527,22 +524,22 @@ export function SettingsModal() {
                         {/* 色块预览行 */}
                         <div className="flex items-center gap-2">
                           <span
-                            className="size-4.5 rounded-md border border-white/15"
+                            className="size-4.5 rounded-md border border-border"
                             style={{ background: skin.tokens.background }}
                             aria-hidden
                           />
                           <span
-                            className="size-4.5 rounded-md border border-white/15"
+                            className="size-4.5 rounded-md border border-border"
                             style={{ background: skin.tokens.sidebarBg }}
                             aria-hidden
                           />
                           <span
-                            className="size-4.5 rounded-md border border-white/15"
+                            className="size-4.5 rounded-md border border-border"
                             style={{ background: skin.tokens.primary }}
                             aria-hidden
                           />
                           <span
-                            className="size-4.5 rounded-md border border-white/15"
+                            className="size-4.5 rounded-md border border-border"
                             style={{ background: skin.tokens.primaryHover }}
                             aria-hidden
                           />
@@ -569,8 +566,8 @@ export function SettingsModal() {
                   })}
                 </div>
 
-                <div className="p-5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-muted-foreground leading-relaxed">
-                  💡 皮肤会持久化到本地（<code className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">mywords-workspace-storage</code>），
+                <div className="p-5 rounded-xl bg-transparent border border-border text-sm text-muted-foreground leading-relaxed">
+                  皮肤会持久化到本地（<code className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">mywords-workspace-storage</code>），
                   下次打开仍然生效。头部工具栏的调色板按钮可作为快捷切换入口。
                 </div>
               </div>
@@ -579,17 +576,17 @@ export function SettingsModal() {
             {activeTab === 'shortcuts' && (
               <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-muted-foreground uppercase tracking-wider">快捷键设置</h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground">快捷键设置</h3>
                   <button
                     onClick={resetShortcuts}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-sm font-medium text-white transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-transparent hover:bg-white/[0.12] text-sm font-medium text-white transition-all cursor-pointer"
                   >
                     <RotateCcw className="size-4" />
                     <span>恢复默认</span>
                   </button>
                 </div>
 
-                <div className="divide-y divide-white/5 rounded-2xl bg-white/[0.02] border border-white/10 overflow-hidden">
+                <div className="divide-y divide-border rounded-lg border border-border overflow-hidden">
                   {SHORTCUT_DEFINITIONS.map((def) => {
                     const currentKey = shortcuts[def.key] || def.defaultKey
                     const isRecording = recordingAction === def.key
@@ -610,7 +607,7 @@ export function SettingsModal() {
                           className={`px-4 py-2.5 rounded-xl font-mono font-bold text-sm transition-all cursor-pointer ${
                             isRecording
                               ? 'bg-primary text-[#0B0C0E] animate-pulse'
-                              : 'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 hover:border-primary/50'
+                              : 'bg-transparent hover:bg-white/[0.12] text-white border border-border hover:border-primary/50'
                           }`}
                           title="点击录制新快捷键"
                         >
@@ -622,15 +619,15 @@ export function SettingsModal() {
                 </div>
 
                 <div className="p-5 rounded-xl bg-primary/5 border border-primary/20 text-sm text-muted-foreground leading-relaxed">
-                  💡 支持单键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Tab</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Space</kbd>、方向键）及组合键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Ctrl+J</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Alt+K</kbd>），修改后即刻生效并持久化保存。
+                  支持单键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Tab</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Space</kbd>、方向键）及组合键（如 <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Ctrl+J</kbd>、<kbd className="px-1.5 py-0.5 rounded bg-white/10 text-white font-mono">Alt+K</kbd>），修改后即刻生效并持久化保存。
                 </div>
               </div>
             )}
 
             {activeTab === 'learn' && (
               <div className="space-y-5">
-                <h3 className="text-base font-bold text-muted-foreground uppercase tracking-wider">单元与学习设置</h3>
-                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3.5">
+                <h3 className="text-sm font-semibold text-muted-foreground">单元与学习设置</h3>
+                <div className="p-6 rounded-lg border border-border space-y-3.5">
                   <div className="flex items-center justify-between">
                     <span className="text-base text-white font-medium">每单元单词容量 (Unit Size)</span>
                     <span className="font-bold text-base text-primary">默认 20 词 / 单元</span>
@@ -647,7 +644,7 @@ export function SettingsModal() {
                 {/* 顶部标题与快速重置 */}
                 <div>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2.5">
+                    <h3 className="text-sm font-semibold text-white flex items-center gap-2.5">
                       <Bot className="size-4.5 text-primary" />
                       <span>AI 大模型与智能副驾配置</span>
                     </h3>
@@ -671,7 +668,7 @@ export function SettingsModal() {
                   </p>
                 </div>
 
-                <label className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10 cursor-pointer">
+                <label className="flex items-center justify-between gap-4 p-4 rounded-lg border border-border cursor-pointer">
                   <div>
                     <div className="text-sm font-semibold text-white">启用 AI 功能</div>
                     <div className="text-xs text-muted-foreground mt-1">关闭后不会发起任何自动补全或智能问答请求</div>
@@ -686,7 +683,7 @@ export function SettingsModal() {
 
                 {/* 供应商预设网格选择 */}
                 <div className="space-y-3">
-                  <label className="text-sm font-semibold text-muted-foreground tracking-wider uppercase">
+                  <label className="text-sm font-semibold text-muted-foreground">
                     选择模型提供商 (Provider Preset)
                   </label>
                   <div className="grid grid-cols-2 gap-3.5">
@@ -702,14 +699,14 @@ export function SettingsModal() {
                               setAiProvider(p.id)
                               setAiTestResult(null)
                             }}
-                            className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                            className={`p-4 rounded-lg border text-left transition-all cursor-pointer flex flex-col justify-between ${
                               isSelected
-                                ? 'border-primary bg-primary/10 shadow-sm'
-                                : 'border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-border bg-transparent hover:border-primary/40 hover:bg-muted'
                             }`}
                           >
                             <div className="flex items-center justify-between mb-1.5">
-                              <span className={`text-base font-bold truncate ${isSelected ? 'text-primary' : 'text-white'}`}>
+                              <span className={`text-sm font-semibold truncate ${isSelected ? 'text-primary' : 'text-white'}`}>
                                 {p.name}
                               </span>
                               {isSelected && (
@@ -728,7 +725,7 @@ export function SettingsModal() {
                 </div>
 
                 {/* API Key 与 端点设置卡片 */}
-                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 space-y-5">
+                <div className="p-6 rounded-lg border border-border space-y-5">
                   {/* API Key */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -757,7 +754,7 @@ export function SettingsModal() {
                           setAiTestResult(null)
                         }}
                         placeholder={currentPreset.keyPlaceholder}
-                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 pr-11 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
+                        className="w-full bg-black/20 border border-border rounded-md px-4 py-3 pr-11 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
                       />
                       <button
                         type="button"
@@ -769,7 +766,7 @@ export function SettingsModal() {
                       </button>
                     </div>
                     <p className="text-sm text-muted-foreground/80 leading-relaxed">
-                      🔒 密钥仅加密保存在您本地浏览器的 LocalStorage 中，直接向配置的模型端点发起请求，绝不经过任何第三方服务器。
+                      密钥仅加密保存在您本地浏览器的 LocalStorage 中，直接向配置的模型端点发起请求，绝不经过任何第三方服务器。
                     </p>
                   </div>
 
@@ -799,7 +796,7 @@ export function SettingsModal() {
                         setAiTestResult(null)
                       }}
                       placeholder={currentPreset.defaultEndpoint}
-                      className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
+                      className="w-full bg-black/20 border border-border rounded-md px-4 py-3 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
                     />
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       兼容标准 OpenAI /chat/completions 路由规范，末尾路由将由系统自动智能兼容补齐。
@@ -833,7 +830,7 @@ export function SettingsModal() {
                         setAiTestResult(null)
                       }}
                       placeholder={currentPreset.modelPlaceholder || currentPreset.defaultModel}
-                      className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
+                      className="w-full bg-black/20 border border-border rounded-md px-4 py-3 text-sm font-mono text-white placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/60"
                     />
                     {/* 常用推荐模型快捷标签 */}
                     {RECOMMENDED_MODELS[aiConfig.provider] && (
@@ -850,7 +847,7 @@ export function SettingsModal() {
                             className={`px-2 py-0.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
                               aiConfig.model === m
                                 ? 'bg-primary/20 text-primary border border-primary/40 font-bold'
-                                : 'bg-white/5 text-muted-foreground hover:text-white hover:bg-white/10 border border-white/10'
+                                : 'bg-transparent text-muted-foreground hover:text-white hover:bg-white/10 border border-border'
                             }`}
                           >
                             {m}
@@ -862,7 +859,7 @@ export function SettingsModal() {
                       <span>
                         {aiConfig.provider === 'doubao' ? (
                           <span className="text-amber-300/90">
-                            💡 火山引擎豆包：可填官方模型名称或您的专属接入点 ID（如 <code className="font-mono text-amber-200">ep-2024xxxxxx-xxxx</code>）。
+                            火山引擎豆包：可填官方模型名称或您的专属接入点 ID（如 <code className="font-mono text-amber-200">ep-2024xxxxxx-xxxx</code>）。
                           </span>
                         ) : (
                           <span>大模型版本更新迭代较快，建议点击右上角官方文档链接获取最新模型代号。</span>
@@ -883,12 +880,12 @@ export function SettingsModal() {
                   </div>
 
                   {/* Connection Test Action & Feedback */}
-                  <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+                  <div className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
                     <button
                       type="button"
                       onClick={handleTestAi}
                       disabled={isTestingAi}
-                      className="shrink-0 whitespace-nowrap px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white text-sm font-semibold flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="shrink-0 whitespace-nowrap px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-border text-white text-sm font-semibold flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isTestingAi ? (
                         <>
@@ -932,7 +929,7 @@ export function SettingsModal() {
                 </div>
 
                 {/* AI 核心应用场景与提示词卡片 */}
-                <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
+                <div className="p-6 rounded-lg border border-border space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/20 text-primary border border-primary/30">
@@ -957,11 +954,11 @@ export function SettingsModal() {
                     rows={5}
                     value={aiConfig.systemPrompt}
                     onChange={(e) => updateAiConfig({ systemPrompt: e.target.value })}
-                    className="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-xs font-mono text-white/90 focus:outline-none focus:border-primary/60 leading-relaxed resize-none"
+                    className="w-full bg-black/20 border border-border rounded-xl p-3 text-xs font-mono text-white/90 focus:outline-none focus:border-primary/60 leading-relaxed resize-none"
                     placeholder="输入 LinguaLoop Copilot 系统提示词..."
                   />
                   <div className="p-3.5 rounded-xl bg-primary/5 border border-primary/20 text-xs text-muted-foreground leading-relaxed flex items-start gap-2.5">
-                    <span className="text-primary font-bold text-sm">✨</span>
+                    
                     <div>
                       <strong className="text-white">场景二：AI 字典（结构化单词数据查询）</strong>
                       <p className="mt-0.5 text-muted-foreground/90">
@@ -976,14 +973,14 @@ export function SettingsModal() {
             {activeTab === 'sync' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-bold text-foreground uppercase tracking-wider">外部小工具生词收集 (External Sync)</h3>
+                  <h3 className="text-sm font-semibold text-foreground">外部小工具生词收集 (External Sync)</h3>
                   <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
                     在您的 AI 翻译小工具中点击收藏，即可通过 HTTP 接口实时将单词列表推送到 LinguaLoop 生错词本。
                   </p>
                 </div>
 
                 {/* 专属同步密钥 */}
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
+                <div className="p-6 rounded-lg border border-border space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                       <label className="text-base font-semibold text-foreground block">
@@ -997,7 +994,7 @@ export function SettingsModal() {
                       className={`shrink-0 self-start sm:self-center px-3 py-1 rounded-full text-xs font-semibold border ${
                         syncToken.trim()
                           ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
-                          : 'bg-white/5 text-muted-foreground border-white/10'
+                          : 'bg-transparent text-muted-foreground border-border'
                       }`}
                     >
                       {syncToken.trim() ? '● 已启动同步拉取' : '○ 未配置（未启动同步）'}
@@ -1008,12 +1005,11 @@ export function SettingsModal() {
                     value={syncToken}
                     onChange={(e) => handleUpdateToken(e.target.value)}
                     placeholder="请输入同步密钥以启动实时同步拉取（未配置时不拉取）"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
+                    className="w-full bg-transparent border border-border rounded-md px-4 py-3 text-sm font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
                   />
                   {isAuthorSyncToken(syncToken) && (
                     <div className="flex items-center gap-2 p-3.5 rounded-xl bg-primary/10 border border-primary/25 text-sm text-primary font-medium">
-                      <span className="text-base">👑</span>
-                      <span>已识别为系统作者身份（享有官方词库音节切分与词根构词维护权限）</span>
+                                            <span>已识别为系统作者身份（享有官方词库音节切分与词根构词维护权限）</span>
                     </div>
                   )}
                 </div>
@@ -1023,7 +1019,7 @@ export function SettingsModal() {
             {activeTab === 'dictionary' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-base font-bold text-foreground uppercase tracking-wider">
+                  <h3 className="text-sm font-semibold text-foreground">
                     离线大词库与本地缓存 (Offline Dictionary & Cache)
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
@@ -1033,12 +1029,12 @@ export function SettingsModal() {
 
                 {/* 词库概况状态卡片 */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="p-5 rounded-lg border border-border flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground">
                       本地常驻核心词汇
                     </span>
                     <div className="flex items-baseline gap-2 mt-3">
-                      <span className="text-3xl font-black font-mono text-primary">
+                      <span className="text-3xl font-semibold font-mono text-primary">
                         {isLoadingWordCount ? (
                           <Loader2 className="size-6 animate-spin text-primary inline-block" />
                         ) : (
@@ -1047,17 +1043,17 @@ export function SettingsModal() {
                       </span>
                       <span className="text-xs text-muted-foreground">词</span>
                     </div>
-                    <div className="mt-2 text-xs text-emerald-400/90 flex items-center gap-1.5 font-medium">
+                    <div className="mt-2 text-xs text-primary flex items-center gap-1.5">
                       <CheckCircle className="size-3.5" />
                       <span>跨词库智能去重与聚合</span>
                     </div>
                   </div>
 
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="p-5 rounded-lg border border-border flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground">
                       内置词库覆盖体系
                     </span>
-                    <div className="text-2xl font-black font-mono text-foreground mt-3">
+                    <div className="text-2xl font-semibold font-mono text-foreground mt-3">
                       5 <span className="text-xs font-normal text-muted-foreground">套权威大词典</span>
                     </div>
                     <div className="mt-2 text-xs text-muted-foreground">
@@ -1065,30 +1061,30 @@ export function SettingsModal() {
                     </div>
                   </div>
 
-                  <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <div className="p-5 rounded-lg border border-border flex flex-col justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground">
                       离线查询响应延迟
                     </span>
-                    <div className="text-2xl font-black font-mono text-foreground mt-3">
+                    <div className="text-2xl font-semibold font-mono text-foreground mt-3">
                       &lt; 5 <span className="text-xs font-normal text-muted-foreground">毫秒</span>
                     </div>
-                    <div className="mt-2 text-xs text-emerald-400/90 flex items-center gap-1.5 font-medium">
-                      <span>⚡ 本地 IndexedDB 事务级检索</span>
+                    <div className="mt-2 text-xs text-primary flex items-center gap-1.5">
+                      <span>本地 IndexedDB 事务级检索</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 词库详细覆盖说明 */}
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 space-y-4">
+                <div className="p-6 rounded-lg border border-border space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <BookOpen className="size-5 text-primary" />
-                      <h4 className="text-base font-bold text-foreground">融合词典特色与构成</h4>
+                      <h4 className="text-sm font-semibold text-foreground">融合词典特色与构成</h4>
                     </div>
                     <button
                       onClick={refreshWordCount}
                       disabled={isLoadingWordCount}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-muted-foreground hover:text-white transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-transparent hover:bg-white/10 text-xs text-muted-foreground hover:text-white transition-all cursor-pointer"
                     >
                       <RefreshCw className={`size-3.5 ${isLoadingWordCount ? 'animate-spin' : ''}`} />
                       <span>刷新统计</span>
@@ -1111,18 +1107,18 @@ export function SettingsModal() {
                 </div>
 
                 {/* 重新构建/修复离线词库操作 */}
-                <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="p-5 rounded-lg border border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <h4 className="text-base font-bold text-white flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-white flex items-center gap-2">
                       <span>重新同步与构建离线词库</span>
                     </h4>
-                    <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-relaxed">
                       如果内置词库有更新，或本地缓存出现缺失，可随时触发全量重新构建。这不会清空您的错词本和已学数据。
                     </p>
                   </div>
                   <button
                     onClick={handleRebuildDictionaryCache}
-                    className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-[#0B0C0E] text-sm font-bold transition-all cursor-pointer hover:bg-primary-hover active:scale-95 shadow-md shadow-primary/20"
+                    className="shrink-0 inline-flex items-center gap-2 h-8 px-3 rounded-md bg-primary text-[#0B0C0E] text-[13px] font-medium transition-colors cursor-pointer hover:bg-primary/90"
                   >
                     <RefreshCw className="size-4" />
                     <span>立即重构离线词库</span>
@@ -1134,13 +1130,13 @@ export function SettingsModal() {
         </div>
 
         {/* 底部完成按钮 */}
-        <div className="flex justify-end pt-4 border-t border-white/10 shrink-0">
+        <div className="flex justify-end pt-4 border-t border-border shrink-0">
           <button
             onClick={() => {
               setRecordingAction(null)
               setSettingsModalOpen(false)
             }}
-            className="px-8 py-3 rounded-xl bg-primary text-[#0B0C0E] text-base font-bold transition-all cursor-pointer hover:bg-primary-hover active:scale-95"
+            className="h-9 px-4 rounded-md bg-primary text-[#0B0C0E] text-[13px] font-medium transition-colors cursor-pointer hover:bg-primary/90"
           >
             完成并保存
           </button>

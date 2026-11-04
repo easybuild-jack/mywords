@@ -5,7 +5,6 @@ import {
   X,
   Volume2,
   ArrowRight,
-  Sparkles,
   BookOpen,
   CheckCircle2,
   Gauge,
@@ -67,26 +66,21 @@ export function SentenceGrammarModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn overflow-y-auto custom-scrollbar"
+      className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fadeIn overflow-y-auto custom-scrollbar"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="relative w-full max-w-5xl 2xl:max-w-6xl rounded-3xl bg-sidebar border border-border shadow-[0_24px_64px_rgba(0,0,0,0.85),0_0_32px_rgba(var(--primary-rgb),0.15)] overflow-hidden flex flex-col max-h-[92vh] my-auto animate-scaleUp">
+      <div className="relative w-full max-w-5xl 2xl:max-w-6xl rounded-xl bg-sidebar border border-border shadow-xl overflow-hidden flex flex-col max-h-[92vh] my-auto animate-scaleUp">
         {/* 顶部标题栏 */}
-        <div className="flex items-center justify-between px-6 sm:px-8 py-3.5 sm:py-4 border-b border-border bg-secondary/30 shrink-0">
+        <div className="flex items-center justify-between px-6 sm:px-8 py-3.5 sm:py-4 border-b border-border shrink-0">
           <div className="flex items-center gap-3">
-            <div className="size-9 sm:size-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)]">
-              <CheckCircle2 className="size-5 sm:size-6" />
-            </div>
-            <div>
+                        <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-400">
-                  翻译通关 · 句法分析
-                </span>
-                <Sparkles className="size-3.5 text-amber-400" />
+                <CheckCircle2 className="size-3.5 text-primary" />
+                <span className="text-xs text-muted-foreground">翻译通关 · 句法分析</span>
               </div>
-              <h2 className="text-base sm:text-lg xl:text-xl font-bold text-foreground">
+              <h2 className="mt-0.5 text-base sm:text-lg font-semibold tracking-tight text-foreground">
                 {grammar?.patternZh || '标准英语句型分析'}
               </h2>
             </div>
@@ -94,7 +88,7 @@ export function SentenceGrammarModal({
 
           <div className="flex items-center gap-3">
             {grammar?.patternCode && (
-              <span className="px-3 py-1 rounded-xl bg-primary/10 border border-primary/30 text-primary text-xs sm:text-sm font-mono font-bold tracking-wide">
+              <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-xs font-mono">
                 {grammar.patternCode}
               </span>
             )}
@@ -102,33 +96,33 @@ export function SentenceGrammarModal({
               type="button"
               onClick={onClose}
               title="关闭弹窗 (Esc)"
-              className="p-1.5 sm:p-2 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+              className="size-8 rounded-md inline-flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
-              <X className="size-5" />
+              <X className="size-4" />
             </button>
           </div>
         </div>
 
         {/* 弹窗内容区 */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 sm:px-8 sm:py-4.5 space-y-3.5 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-6 py-5 sm:px-8 space-y-5 custom-scrollbar">
           {/* 原文与译文展示卡片（紧凑纵向间距，节省空间给下方内容） */}
-          <div className="px-5 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-secondary/40 border border-border space-y-1">
-            <div className="text-xl sm:text-2xl xl:text-[24px] font-bold font-mono text-foreground tracking-wide leading-snug">
+          <div className="space-y-1.5">
+            <div className="text-xl sm:text-2xl font-serif text-foreground leading-snug">
               {sentence.sentenceEn}
             </div>
-            <div className="text-sm sm:text-base font-normal text-white leading-snug">
+            <div className="text-sm sm:text-base font-normal text-gray-300 leading-snug">
               {sentence.sentenceZh}
             </div>
           </div>
 
           {/* 核心亮点：逐词语法成分彩色卡片拆解 */}
           <div className="space-y-2.5">
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-foreground/80 uppercase tracking-wider">
-              <BookOpen className="size-4 text-primary" />
+            <div className="flex items-center gap-2 text-[13px] font-medium text-foreground">
+              <BookOpen className="size-3.5 text-muted-foreground" />
               <span>逐词语法成分映射 (主谓宾 / 主系表 / 定状补等)</span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
               {tokens.map((token, i) => {
                 const roleStyle =
                   (token.roleCode && GRAMMAR_ROLE_STYLES[token.roleCode]) ||
@@ -142,17 +136,17 @@ export function SentenceGrammarModal({
                       if (wordToPlay) playWordAudio(wordToPlay)
                     }}
                     title="点击播放该词读音"
-                    className={`p-3 sm:p-3.5 rounded-2xl border flex flex-col justify-between transition-all hover:scale-102 bg-secondary/30 ${roleStyle.bg} ${roleStyle.border} cursor-pointer group/card`}
+                    className={`p-3 rounded-lg border border-border flex flex-col justify-between transition-colors hover:bg-muted cursor-pointer group/card`}
                   >
                     <div className="flex items-center justify-between gap-1 mb-1.5">
                       <span
-                        className={`text-xs font-bold px-2 py-0.5 rounded-lg border ${roleStyle.bg} ${roleStyle.text} ${roleStyle.border}`}
+                        className={`text-xs font-medium px-1.5 py-0.5 rounded ${roleStyle.bg} ${roleStyle.text}`}
                       >
                         {token.roleZh || roleStyle.label}
                       </span>
                       <div className="flex items-center gap-1.5">
                         {token.pos && (
-                          <span className="text-xs font-mono text-muted-foreground/80">
+                          <span className="text-xs font-mono text-muted-foreground">
                             {token.pos}
                           </span>
                         )}
@@ -160,12 +154,12 @@ export function SentenceGrammarModal({
                       </div>
                     </div>
 
-                    <div className="text-base sm:text-lg font-bold text-foreground font-mono break-words mb-0.5 group-hover/card:text-primary transition-colors">
+                    <div className="text-base sm:text-lg text-foreground font-serif break-words mb-0.5 group-hover/card:text-primary transition-colors">
                       {token.text || token.cleanText}
                     </div>
 
                     {token.explanation && (
-                      <p className="text-xs sm:text-[13px] text-muted-foreground/90 mt-1 line-clamp-3 leading-snug">
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-3 leading-snug">
                         {token.explanation}
                       </p>
                     )}
@@ -177,10 +171,10 @@ export function SentenceGrammarModal({
 
           {/* 句法语义精解点拨 */}
           {grammar?.summary && (
-            <div className="px-5 py-3 sm:px-6 sm:py-3.5 rounded-2xl bg-secondary/40 border border-border text-xs sm:text-sm text-foreground/90 leading-relaxed flex items-start gap-2.5">
-              <Lightbulb className="size-4.5 text-amber-400 shrink-0 mt-0.5" />
+            <div className="pt-4 border-t border-dashed border-border text-[13px] text-gray-300 leading-relaxed flex items-start gap-2">
+              <Lightbulb className="size-4 text-muted-foreground shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold text-foreground mr-1.5">句法要领:</span>
+                <span className="font-medium text-foreground mr-1.5">句法要领</span>
                 {grammar.summary}
               </div>
             </div>
@@ -188,20 +182,18 @@ export function SentenceGrammarModal({
         </div>
 
         {/* 底部控制器与按钮栏 */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-6 sm:px-8 py-3.5 sm:py-4 border-t border-border bg-secondary/30 shrink-0">
-          <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-6 sm:px-8 py-3 border-t border-border shrink-0">
+          <div className="flex items-center gap-1">
             {/* 重听整句原声 */}
             <button
               type="button"
               onClick={onPlayAudio}
-              className={`flex items-center gap-2 px-4.5 py-2.5 rounded-xl border text-sm sm:text-base font-semibold transition-all cursor-pointer ${
-                isSpeaking
-                  ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_14px_rgba(var(--primary-rgb),0.5)]'
-                  : 'bg-secondary/60 hover:bg-secondary text-foreground border-border hover:border-primary/50'
+              className={`h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer ${
+                isSpeaking ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
               }`}
             >
               <Volume2
-                className={`size-4.5 ${isSpeaking ? 'animate-bounce text-primary-foreground' : 'text-primary'}`}
+                className={`size-3.5 ${isSpeaking ? 'animate-pulse' : ''}`}
               />
               <span>{isSpeaking ? '正在朗读原声...' : '重听整句原声'}</span>
             </button>
@@ -211,22 +203,22 @@ export function SentenceGrammarModal({
               type="button"
               onClick={onToggleAudioRate}
               title="点击切换朗读倍速"
-              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-secondary/50 hover:bg-secondary text-xs sm:text-sm font-mono font-bold text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+              className="h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer font-mono text-muted-foreground hover:text-foreground hover:bg-muted"
             >
-              <Gauge className="size-4 text-accent" />
+              <Gauge className="size-3.5" />
               <span>{audioRate}x</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-1 ml-auto">
             {/* 再练一次本句 */}
             {onRepeat && (
               <button
                 type="button"
                 onClick={onRepeat}
-                className="flex items-center gap-1.5 px-4.5 py-2.5 rounded-xl border border-border bg-secondary/60 hover:bg-secondary text-foreground text-sm sm:text-base font-semibold transition-all cursor-pointer"
+                className="h-8 px-3 rounded-md inline-flex items-center gap-1.5 text-[13px] transition-colors cursor-pointer text-muted-foreground hover:text-foreground hover:bg-muted"
               >
-                <RotateCcw className="size-4 text-primary" />
+                <RotateCcw className="size-3.5" />
                 <span>再练一次本句</span>
               </button>
             )}
@@ -235,13 +227,13 @@ export function SentenceGrammarModal({
             <button
               type="button"
               onClick={onNext}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(var(--primary-rgb),0.35)] transition-all hover:scale-102 cursor-pointer"
+              className="ml-1 h-8 px-3 rounded-md inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground text-[13px] font-medium transition-colors cursor-pointer"
             >
               <span>进入下一句</span>
-              <span className="text-xs opacity-80 font-mono px-2 py-0.5 rounded bg-black/20">
+              <span className="text-[10px] opacity-70 font-mono">
                 Enter ↵
               </span>
-              <ArrowRight className="size-4.5" />
+              <ArrowRight className="size-3.5" />
             </button>
           </div>
         </div>

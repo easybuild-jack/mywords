@@ -37,7 +37,7 @@ export function SentenceUnderlineSlots({
           <div
             key={token.id}
             onClick={() => onWordClick?.(idx)}
-            className="relative inline-flex items-end h-12 sm:h-14 xl:h-16 font-mono text-2xl sm:text-3xl xl:text-4xl cursor-pointer bg-transparent"
+            className="relative inline-flex items-end h-12 sm:h-14 xl:h-16 font-serif text-2xl sm:text-3xl xl:text-4xl cursor-pointer bg-transparent"
           >
             {/* 前置标点 (自动放置，不需输入) */}
             {token.leadingPunct && (
@@ -59,10 +59,10 @@ export function SentenceUnderlineSlots({
               }}
               className={`relative h-full flex items-end justify-start px-0.5 pb-1.5 bg-transparent transition-colors ${
                 hasError
-                  ? 'text-destructive font-black border-b-2 border-destructive animate-shake'
+                  ? 'text-destructive border-b-2 border-destructive animate-shake'
                   : isCompleted || isCurrent || typedText.length > 0
-                  ? 'text-primary font-bold border-b-2 border-primary'
-                  : 'text-primary/40 border-b-2 border-primary/30 hover:border-primary/50'
+                  ? 'text-foreground border-b-2 border-primary'
+                  : 'text-muted-foreground border-b-2 border-border hover:border-primary/50'
               }`}
             >
               <div className="relative w-full h-full flex items-end justify-start tracking-normal bg-transparent">
@@ -70,7 +70,7 @@ export function SentenceUnderlineSlots({
                 {typedText && (
                   <span
                     className={`leading-none ${
-                      hasError ? 'text-destructive font-black' : 'text-primary font-bold'
+                      hasError ? 'text-destructive' : 'text-foreground'
                     }`}
                   >
                     {typedText}

@@ -71,13 +71,6 @@ export function AiAssistantDrawer() {
   // 窗口自由定位 (x, y) 坐标，null 表示默认靠在屏幕最右侧贴边
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null)
 
-  // 每次关闭抽屉后，重置定位状态，确保下次默认打开时始终靠在最右侧
-  useEffect(() => {
-    if (!isOpen) {
-      setPosition(null)
-    }
-  }, [isOpen])
-
   // 打开或窗口大小变化时，若未自定义拉伸过宽度，维持 1/3 屏宽
   useEffect(() => {
     if (!isOpen) return
@@ -381,25 +374,60 @@ export function AiAssistantDrawer() {
   }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={() => setPosition(null)}>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.98, x: isDockedRight ? 60 : 0 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
-          exit={{ opacity: 0, scale: 0.98, x: isDockedRight ? 60 : 0 }}
-          transition={{ duration: 0.16, ease: 'easeOut' }}
+          key="ai-assistant-drawer"
+          initial={
+            isDockedRight
+              ? { x: '100%', opacity: 0.85 }
+              : { opacity: 0, scale: 0.96, y: 12 }
+          }
+          animate={{
+            x: 0,
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            transition: {
+              type: 'spring',
+              stiffness: 380,
+              damping: 36,
+              mass: 0.85,
+            },
+          }}
+          exit={
+            isDockedRight
+              ? {
+                  x: '100%',
+                  opacity: 0.85,
+                  transition: {
+                    duration: 0.26,
+                    ease: [0.32, 0.72, 0, 1],
+                  },
+                }
+              : {
+                  opacity: 0,
+                  scale: 0.95,
+                  y: 10,
+                  transition: {
+                    duration: 0.2,
+                    ease: [0.32, 0.72, 0, 1],
+                  },
+                }
+          }
           style={{
             width: `${drawerWidth}px`,
             height: isDockedRight ? '100vh' : `${drawerHeight}px`,
-            left: `${currentPos.x}px`,
-            top: `${currentPos.y}px`,
+            ...(isDockedRight
+              ? { right: 0, top: 0 }
+              : { left: `${currentPos.x}px`, top: `${currentPos.y}px` }),
             backgroundColor: 'var(--background)',
-            opacity: 1,
+            willChange: 'transform, opacity',
           }}
-          className={`fixed z-[150] flex flex-col text-foreground select-none overflow-hidden transition-[border-radius] ${
+          className={`fixed z-[150] flex flex-col text-foreground select-none overflow-hidden transition-[border-radius,box-shadow] duration-200 ${
             isDockedRight
-              ? 'border-l border-border rounded-l-2xl rounded-r-none shadow-[-16px_0_40px_rgba(0,0,0,0.15)] dark:shadow-[-16px_0_40px_rgba(0,0,0,0.6)]'
-              : 'border border-border rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_64px_rgba(0,0,0,0.7)] ring-1 ring-border/50'
+              ? 'border-l border-border rounded-l-2xl rounded-r-none shadow-[-20px_0_48px_-12px_rgba(0,0,0,0.36)]'
+              : 'border border-border rounded-2xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45)]'
           }`}
         >
           {/* 左边缘手动拖拽宽度手柄 */}
@@ -412,8 +440,8 @@ export function AiAssistantDrawer() {
             <div
               className={`w-1 rounded-full transition-all duration-150 ${
                 isResizing
-                  ? 'h-24 bg-primary shadow-[0_0_12px_rgba(var(--primary-rgb)/0.9)]'
-                  : 'h-12 bg-border group-hover:h-20 group-hover:bg-primary/80 group-hover:shadow-[0_0_8px_rgba(var(--primary-rgb)/0.6)]'
+                  ? 'h-24 bg-primary'
+                  : 'h-12 bg-border group-hover:h-20 group-hover:bg-primary/80'
               }`}
             />
           </div>
@@ -528,7 +556,15 @@ export function AiAssistantDrawer() {
           </div>
 
           {/* ===================== 主体内容展示区 ===================== */}
-          <div className="flex-1 min-h-0 flex flex-col">
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 0.28, delay: 0.04, ease: [0.22, 1, 0.36, 1] },
+            }}
+            className="flex-1 min-h-0 flex flex-col"
+          >
             {activeTab === 'chat' ? (
               /* 当前对话模式 */
               <>
@@ -625,7 +661,7 @@ export function AiAssistantDrawer() {
                 )}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* ===================== 底部输入与操作区域 ===================== */}
           {activeTab === 'chat' ? (
@@ -634,7 +670,7 @@ export function AiAssistantDrawer() {
               style={{ backgroundColor: 'var(--background)' }}
               className="p-3.5 shrink-0 border-t border-border"
             >
-              <div className="relative rounded-2xl bg-card border border-border focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+              <div className="relative rounded-xl bg-card border border-border focus-within:border-primary/60 transition-colors">
                 <textarea
                   ref={textareaRef}
                   value={inputPrompt}

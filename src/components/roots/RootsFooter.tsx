@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { Eye } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
 import { BUILTIN_ROOTS, ROOT_DATA_MAP, ROOT_TAB_LABELS } from '@/resources/roots'
 
@@ -24,33 +23,13 @@ export function RootsFooter() {
     })
   }, [rootSearchQuery, currentDataset])
 
-  const totalFiltered = filteredRoots.length
-
   return (
-    <footer className="w-full py-2 xl:py-2.5 px-4 xl:px-6 flex items-center justify-center pointer-events-auto z-30 shrink-0">
-      <div className="glass-card rounded-2xl xl:rounded-3xl px-5 xl:px-7 py-2.5 xl:py-3.5 flex items-center gap-4 xl:gap-6 text-sm xl:text-base text-[#9CA3AF] border border-white/10 shadow-lg flex-wrap justify-center transition-all duration-300">
-        {/* 当前数量统计 */}
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-primary font-bold text-sm xl:text-base">
-            共 {totalFiltered} 条
-          </span>
-          <span className="text-gray-500 text-xs xl:text-sm">
-            {rootSearchQuery ? `匹配的${tabLabel}` : tabLabel}
-          </span>
-        </div>
-
-        <div className="h-4 xl:h-5 w-px bg-white/10" />
-
-        {/* 交互提示 */}
-        <div className="flex items-center gap-3 font-mono text-xs xl:text-sm text-gray-400">
-          <span className="inline-flex items-center gap-1">
-            <Eye className="size-3.5 text-primary" />
-            <span>点击行或【查看】弹出详情卡片</span>
-          </span>
-          <span className="text-gray-600 hidden sm:inline">·</span>
-          <span className="hidden sm:inline">弹窗支持 ESC 关闭及 ← → 翻阅</span>
-        </div>
-      </div>
+    <footer className="w-full max-w-[1440px] mx-auto px-6 md:px-8 lg:px-10 py-3 flex items-center justify-between gap-4 text-xs text-muted-foreground shrink-0">
+      <span>
+        {rootSearchQuery ? `匹配的${tabLabel}` : tabLabel}
+        <span className="ml-1.5 font-mono text-foreground">{filteredRoots.length}</span> 条
+      </span>
+      <span className="hidden sm:inline">点击任意一行查看详情，详情中可用 ESC 关闭、← → 翻阅</span>
     </footer>
   )
 }
