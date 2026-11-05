@@ -2,10 +2,16 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 import { useAiAssistantStore } from '@/store/useAiAssistantStore'
+import { isChromelessRoute } from '@/lib/chromelessRoutes'
 
 export function AiFloatingTrigger() {
   const { isOpen, toggleDrawer } = useAiAssistantStore()
+  const pathname = usePathname()
+
+  // 登录页等独立页面不展示 AI 悬浮入口
+  if (isChromelessRoute(pathname)) return null
 
   return (
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 pointer-events-none">

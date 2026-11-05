@@ -18,6 +18,7 @@ import {
   Radio,
 } from 'lucide-react'
 import { useWorkspaceStore } from '@/store/useWorkspaceStore'
+import { isChromelessRoute } from '@/lib/chromelessRoutes'
 
 interface NavItem {
   label: string
@@ -43,6 +44,9 @@ export function AppSidebar() {
     { label: '听力电台', icon: Radio, href: '/radio' },
     { label: '句子翻译', icon: Languages, href: '/translate' },
   ]
+
+  // 登录页等独立页面不展示侧边栏
+  if (isChromelessRoute(pathname)) return null
 
   return (
     <aside

@@ -682,7 +682,7 @@ export function AiAssistantDrawer() {
                 />
 
                 <div className="absolute left-3 bottom-2 right-2 flex items-center justify-between pointer-events-auto">
-                  <span className="text-[10px] text-muted-foreground font-mono">
+                  <span className="text-xs text-muted-foreground font-mono">
                     Enter 发送 · Shift+Enter 换行
                   </span>
 
