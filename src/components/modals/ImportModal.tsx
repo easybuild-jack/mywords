@@ -265,20 +265,15 @@ compile v. 编译；编纂`
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
-      <div className="glass-panel w-full max-w-4xl rounded-xl border border-border p-6 space-y-6 shadow-xl text-white">
+      <div className="glass-panel w-full max-w-4xl h-[700px] max-h-[92vh] rounded-xl border border-border p-6 flex flex-col gap-5 shadow-xl text-white overflow-hidden">
         {/* 顶部标题与关闭 */}
-        <div className="flex items-center justify-between border-b border-border pb-4">
+        <div className="shrink-0 flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center border border-primary/30">
               <Upload className="size-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                单词批量导入中心
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-primary/15 text-primary border border-primary/30">
-                  智能解析补全
-                </span>
-              </h2>
+              <h2 className="text-lg font-bold text-white">单词批量导入中心</h2>
               <p className="text-xs text-muted-foreground">
                 支持纯文本快速粘贴与 CSV / TXT / JSON 文件批量模板导入
               </p>
@@ -293,7 +288,7 @@ compile v. 编译；编纂`
         </div>
 
         {/* 导入模式选项卡 */}
-        <div className="flex gap-2 p-1 bg-white/[0.04] rounded-xl border border-border">
+        <div className="shrink-0 flex gap-2 p-1 bg-white/[0.04] rounded-xl border border-border">
           <button
             onClick={() => { setActiveTab('text'); setIsParsed(false) }}
             className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-2 ${
@@ -315,7 +310,7 @@ compile v. 编译；编纂`
         </div>
 
         {/* 导入目标：新建词库 或 并入已有词库 */}
-        <div className="space-y-1.5">
+        <div className="shrink-0 space-y-1.5">
           <div className="flex items-center justify-between">
             <label className="text-xs text-[#9CA3AF] font-medium">导入目标</label>
             <div className="flex items-center gap-1 bg-white/[0.04] p-0.5 rounded-lg border border-border text-xs">
@@ -393,11 +388,11 @@ compile v. 编译；编纂`
 
         {/* 对应 Tab 的内容区 */}
         {!isParsed ? (
-          <div className="space-y-3">
+          <div className="flex-1 min-h-0 flex flex-col">
             {/* Tab 1: 文本粘贴 */}
             {activeTab === 'text' && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+              <div className="flex-1 min-h-0 flex flex-col gap-2">
+                <div className="shrink-0 flex items-center justify-between text-xs text-[#9CA3AF]">
                   <span>每行一个单词（可只给英文，系统将自动从 5 万词库中秒级检索释义）</span>
                   <button
                     onClick={handleParseText}
@@ -420,8 +415,7 @@ compile v. 编译；编纂`
                 <textarea
                   value={rawText}
                   onChange={(e) => setRawText(e.target.value)}
-                  rows={6}
-                  className="w-full p-4 rounded-xl bg-white/[0.04] border border-border text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50"
+                  className="flex-1 min-h-0 w-full p-4 rounded-xl bg-white/[0.04] border border-border text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-primary/50 resize-none"
                   placeholder={`resilient\nperspective n. 视角，观点\nkubernetes\ncompile`}
                 />
               </div>
@@ -429,8 +423,8 @@ compile v. 编译；编纂`
 
             {/* Tab 2: 文件上传 */}
             {activeTab === 'file' && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
+              <div className="flex-1 min-h-0 flex flex-col gap-3">
+                <div className="shrink-0 flex items-center justify-between">
                   <span className="text-xs text-[#9CA3AF]">支持上传 `.csv`、`.txt` 或 `.json` 文件</span>
                   <button
                     onClick={handleDownloadCsvTemplate}
@@ -442,7 +436,7 @@ compile v. 编译；编纂`
                 </div>
 
                 {/* 拆解两列的写法不说明用户猜不到，尤其是靠连字符位置区分前后缀这条 */}
-                <div className="rounded-xl border border-border bg-white/[0.02] p-3 space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
+                <div className="shrink-0 rounded-xl border border-border bg-white/[0.02] p-3 space-y-1.5 text-[11px] leading-relaxed text-muted-foreground">
                   <p className="text-xs font-semibold text-gray-300">
                     列顺序：单词 → 释义 → 音标 → 音节拆分 → 词根词缀 → 语义推导（后五列均可留空，留空则自动推导）
                   </p>
@@ -462,7 +456,7 @@ compile v. 编译；编纂`
 
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-border hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-lg p-8 text-center cursor-pointer transition-all space-y-2 group"
+                  className="flex-1 min-h-0 flex flex-col items-center justify-center border-2 border-dashed border-border hover:border-primary/50 bg-white/[0.02] hover:bg-white/[0.04] rounded-lg p-6 text-center cursor-pointer transition-all space-y-2 group"
                 >
                   <input
                     ref={fileInputRef}
@@ -488,7 +482,7 @@ compile v. 编译；编纂`
           </div>
         ) : (
           /* 结构化智能补全预览表格 */
-          <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+          <div className="flex-1 min-h-0 flex flex-col gap-2 overflow-y-auto pr-1 custom-scrollbar">
             <div className="flex items-center justify-between text-xs">
               <span className="text-primary font-semibold flex items-center gap-1.5 flex-wrap">
                 <CheckCircle2 className="size-4 text-primary shrink-0" />
@@ -576,7 +570,7 @@ compile v. 编译；编纂`
         )}
 
         {/* 底部功能开关与提交 */}
-        <div className="flex items-center justify-between pt-4 border-t border-border">
+        <div className="shrink-0 flex items-center justify-between pt-4 border-t border-border">
           <label className="flex items-center gap-2 text-xs text-[#9CA3AF] cursor-pointer">
             <input
               type="checkbox"
