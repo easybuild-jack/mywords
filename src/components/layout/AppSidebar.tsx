@@ -41,7 +41,7 @@ export function AppSidebar() {
     { label: '生错词本', icon: AlertCircle, href: '/errors' },
     { label: '词根词缀', icon: Sprout, href: '/roots' },
     { label: '基础语法', icon: SpellCheck, href: '/grammar' },
-    { label: '听力电台', icon: Radio, href: '/radio' },
+    { label: '听力广场', icon: Radio, href: '/radio' },
     { label: '句子翻译', icon: Languages, href: '/translate' },
   ]
 

@@ -3,9 +3,11 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import {
   type RadioItem,
+  type RadioCategory,
   type RadioScenario,
-  type RadioMediaType,
   type PlayMode,
+  RADIO_CATEGORY_LABELS,
+  DEFAULT_RADIO_SCENARIOS,
   DEFAULT_SAMPLE_RADIO_ITEMS,
 } from '@/resources/radioData'
 import { RadioHeader } from '@/components/radio/RadioHeader'
@@ -15,11 +17,17 @@ import { RadioCardList } from '@/components/radio/RadioCardList'
 import { RadioUploadModal } from '@/components/radio/RadioUploadModal'
 import { ArrowLeft } from 'lucide-react'
 
-export default function RadioPage() {
-  // 当前激活的 Tab：'list' (音视频列表页，默认) | 'player' (播放页)
-  const [activeTab, setActiveTab] = useState<'list' | 'player'>('list')
+type ActiveTab = RadioCategory | 'player'
 
-  // 电台媒体库列表（初始化为高质量内置原声范例）
+const CATEGORY_TABS: RadioCategory[] = ['phrases', 'dialogue', 'radio']
+
+export default function RadioPage() {
+  // 当前激活的 Tab：'phrases' (日常短语) | 'dialogue' (场景对话) | 'radio' (英语电台) | 'player' (共用播放页)
+  const [activeTab, setActiveTab] = useState<ActiveTab>('phrases')
+  // 记录最近一次浏览的列表分类 Tab，用于从共用播放页点击「返回列表」及上传默认分类
+  const [lastCategoryTab, setLastCategoryTab] = useState<RadioCategory>('phrases')
+
+  // 视频列表（三个模块初始各有 1 个示例视频）
   const [items, setItems] = useState<RadioItem[]>(() => DEFAULT_SAMPLE_RADIO_ITEMS)
   const [currentId, setCurrentId] = useState<string>(() => DEFAULT_SAMPLE_RADIO_ITEMS[0]?.id || '')
 
@@ -34,7 +42,6 @@ export default function RadioPage() {
   // 筛选与检索状态
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedScenario, setSelectedScenario] = useState<RadioScenario | 'all'>('all')
-  const [selectedMediaType, setSelectedMediaType] = useState<RadioMediaType | 'all'>('all')
 
   // 弹窗状态
   const [isUploadOpen, setIsUploadOpen] = useState(false)
@@ -48,32 +55,52 @@ export default function RadioPage() {
     return items.find((i) => i.id === currentId) || items[0] || null
   }, [items, currentId])
 
-  // 所有出现过的场景标签池
+  // 当前处于的模块分类（如果在播放页，则以当前播放视频所属分类或最近浏览的分类为准）
+  const activeCategory: RadioCategory =
+    activeTab === 'player' ? currentItem?.category || lastCategoryTab : activeTab
+
+  // 「场景对话」模块下的场景标签池（内置五大默认场景 + 用户自定义新增的场景）
   const availableScenarios = useMemo(() => {
-    const set = new Set<string>()
+    const set = new Set<string>(DEFAULT_RADIO_SCENARIOS)
     items.forEach((item) => {
-      if (item.scenario) set.add(item.scenario)
+      if (item.category === 'dialogue' && item.scenario) {
+        set.add(item.scenario)
+      }
     })
     return Array.from(set)
   }, [items])
 
-  // 筛选后的结果列表
+  // 各模块下的视频数量统计
+  const categoryCounts = useMemo(() => {
+    const counts: Record<RadioCategory, number> = { phrases: 0, dialogue: 0, radio: 0 }
+    items.forEach((item) => {
+      counts[item.category] = (counts[item.category] || 0) + 1
+    })
+    return counts
+  }, [items])
+
+  // 当前分类筛选后的列表
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
-      if (selectedScenario !== 'all' && item.scenario !== selectedScenario) return false
-      if (selectedMediaType !== 'all' && item.type !== selectedMediaType) return false
+      if (item.category !== activeCategory) return false
+      if (activeCategory === 'dialogue' && selectedScenario !== 'all' && item.scenario !== selectedScenario) {
+        return false
+      }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase()
         const matchTitle = item.title.toLowerCase().includes(q)
-        const matchScenario = item.scenario.toLowerCase().includes(q)
-        const matchDesc = item.description?.toLowerCase().includes(q)
-        if (!matchTitle && !matchScenario && !matchDesc) return false
+        const matchScenario = activeCategory === 'dialogue' && item.scenario.toLowerCase().includes(q)
+        if (!matchTitle && !matchScenario) return false
       }
       return true
     })
-  }, [items, selectedScenario, selectedMediaType, searchQuery])
+  }, [items, activeCategory, selectedScenario, searchQuery])
 
-
+  // 切换分类 Tab
+  const handleSelectCategoryTab = (cat: RadioCategory) => {
+    setActiveTab(cat)
+    setLastCategoryTab(cat)
+  }
 
   // 同步媒体源切换
   useEffect(() => {
@@ -108,41 +135,6 @@ export default function RadioPage() {
     }
   }, [currentItem?.id, currentItem?.src, currentItem?.type])
 
-  // 监听当前活跃媒体元素的时间更新与结束事件
-  useEffect(() => {
-    if (!currentItem) return
-
-    const media = currentItem.type === 'video' ? videoRef.current : audioRef.current
-    if (!media) return
-
-    const handleTimeUpdate = () => {
-      const cur = media.currentTime
-      setCurrentTime(cur)
-    }
-
-    const handleLoadedMetadata = () => {
-      if (media.duration && !isNaN(media.duration)) {
-        setDuration(media.duration)
-      } else if (currentItem.duration) {
-        setDuration(currentItem.duration)
-      }
-    }
-
-    const handleEnded = () => {
-      handleAutoPlayNext()
-    }
-
-    media.addEventListener('timeupdate', handleTimeUpdate)
-    media.addEventListener('loadedmetadata', handleLoadedMetadata)
-    media.addEventListener('ended', handleEnded)
-
-    return () => {
-      media.removeEventListener('timeupdate', handleTimeUpdate)
-      media.removeEventListener('loadedmetadata', handleLoadedMetadata)
-      media.removeEventListener('ended', handleEnded)
-    }
-  }, [currentItem, playMode, filteredItems])
-
   // 播放 / 暂停切换
   const handleTogglePlay = useCallback(() => {
     if (!currentItem) return
@@ -159,7 +151,6 @@ export default function RadioPage() {
         .play()
         .then(() => {
           setIsPlaying(true)
-          // 增加该片段播放热度计数
           setItems((prev) =>
             prev.map((it) => (it.id === currentItem.id ? { ...it, playCount: it.playCount + 1 } : it))
           )
@@ -250,23 +241,64 @@ export default function RadioPage() {
 
     const currentIndex = filteredItems.findIndex((i) => i.id === currentId)
     if (currentIndex < filteredItems.length - 1) {
-      // 还有下一首
       setCurrentId(filteredItems[currentIndex + 1].id)
       setIsPlaying(true)
-    } else if (playMode === 'list-loop') {
-      // 列表循环，回到第一首
-      setCurrentId(filteredItems[0].id)
-      setIsPlaying(true)
+    } else if (playMode === 'list-loop' && filteredItems.length > 0) {
+      if (filteredItems.length === 1) {
+        if (media) {
+          media.currentTime = 0
+          media.play().catch(() => {})
+        }
+      } else {
+        setCurrentId(filteredItems[0].id)
+        setIsPlaying(true)
+      }
     } else {
-      // 顺序播放到达末尾
       setIsPlaying(false)
     }
   }, [currentItem, playMode, filteredItems, currentId])
 
+  // 监听当前活跃媒体元素的时间更新与结束事件
+  useEffect(() => {
+    if (!currentItem) return
+
+    const media = currentItem.type === 'video' ? videoRef.current : audioRef.current
+    if (!media) return
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(media.currentTime)
+    }
+
+    const handleLoadedMetadata = () => {
+      if (media.duration && !isNaN(media.duration)) {
+        const realDuration = media.duration
+        setDuration(realDuration)
+        setItems((prev) =>
+          prev.map((it) => (it.id === currentItem.id ? { ...it, duration: Math.round(realDuration) } : it))
+        )
+      } else if (currentItem.duration) {
+        setDuration(currentItem.duration)
+      }
+    }
+
+    const handleEnded = () => {
+      handleAutoPlayNext()
+    }
+
+    media.addEventListener('timeupdate', handleTimeUpdate)
+    media.addEventListener('loadedmetadata', handleLoadedMetadata)
+    media.addEventListener('ended', handleEnded)
+
+    return () => {
+      media.removeEventListener('timeupdate', handleTimeUpdate)
+      media.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      media.removeEventListener('ended', handleEnded)
+    }
+  }, [currentItem, handleAutoPlayNext])
+
   // 键盘快捷键监听：空格暂停/播放，方向键快退/快进 5s，中括号切曲
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // 如果正在输入框中打字，不拦截快捷键
       if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
         return
       }
@@ -293,14 +325,16 @@ export default function RadioPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleTogglePlay, currentTime, duration, handlePrev, handleNext])
 
-  // 添加用户自定义片段
+  // 添加用户自定义视频
   const handleAddItem = (newItem: RadioItem) => {
     setItems((prev) => [newItem, ...prev])
+    setLastCategoryTab(newItem.category)
     setCurrentId(newItem.id)
     setIsPlaying(true)
+    setActiveTab('player')
   }
 
-  // 删除片段
+  // 删除视频
   const handleDeleteItem = (id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id))
     if (currentId === id) {
@@ -314,9 +348,6 @@ export default function RadioPage() {
     }
   }
 
-  const videoCount = items.filter((i) => i.type === 'video').length
-  const audioCount = items.filter((i) => i.type === 'audio').length
-
   return (
     <div className="radio-page flex-1 min-h-full w-full flex flex-col bg-background text-foreground animate-fadeIn pb-12">
       {/* 主工作舞台容器 */}
@@ -326,30 +357,32 @@ export default function RadioPage() {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           totalCount={items.length}
-          videoCount={videoCount}
-          audioCount={audioCount}
           onOpenUpload={() => setIsUploadOpen(true)}
         />
 
-        {/* Tab 导航：列表页（默认）与播放页 */}
+        {/* Tab 导航：常用短语 / 场景对话 / 英语电台 / 共用播放页 */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-border">
           <div className="flex items-center gap-6 select-none">
-            <button
-              type="button"
-              onClick={() => setActiveTab('list')}
-              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer ${
-                activeTab === 'list'
-                  ? 'text-foreground font-medium border-primary'
-                  : 'text-muted-foreground hover:text-foreground border-transparent'
-              }`}
-            >
-              片段列表
-              <span className="ml-1.5 text-xs font-mono text-muted-foreground">{filteredItems.length}</span>
-            </button>
+            {CATEGORY_TABS.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => handleSelectCategoryTab(cat)}
+                className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer whitespace-nowrap ${
+                  activeTab === cat
+                    ? 'text-foreground font-medium border-primary'
+                    : 'text-muted-foreground hover:text-foreground border-transparent'
+                }`}
+              >
+                {RADIO_CATEGORY_LABELS[cat]}
+                <span className="ml-1.5 text-xs font-mono text-muted-foreground">{categoryCounts[cat]}</span>
+              </button>
+            ))}
+
             <button
               type="button"
               onClick={() => setActiveTab('player')}
-              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+              className={`-mb-px pb-2.5 text-sm border-b-2 transition-colors cursor-pointer inline-flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === 'player'
                   ? 'text-foreground font-medium border-primary'
                   : 'text-muted-foreground hover:text-foreground border-transparent'
@@ -363,7 +396,7 @@ export default function RadioPage() {
           {activeTab === 'player' ? (
             <button
               type="button"
-              onClick={() => setActiveTab('list')}
+              onClick={() => setActiveTab(currentItem?.category || lastCategoryTab)}
               className="mb-1.5 self-start sm:self-auto h-7 px-2 rounded-md inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
             >
               <ArrowLeft className="size-3.5" />
@@ -385,23 +418,25 @@ export default function RadioPage() {
           )}
         </div>
 
-        {/* Tab 1 页面内容：音视频列表页 (默认展示) */}
-        <div className={activeTab === 'list' ? 'space-y-6 animate-fadeIn' : 'hidden'}>
-          {/* 场景分类与媒体类型筛选 */}
-          <RadioFilters
-            selectedScenario={selectedScenario}
-            onSelectScenario={setSelectedScenario}
-            selectedMediaType={selectedMediaType}
-            onSelectMediaType={setSelectedMediaType}
-            availableScenarios={availableScenarios}
-          />
+        {/* 列表 Tab 内容区：日常短语 / 场景对话 / 英语电台 */}
+        <div className={activeTab !== 'player' ? 'space-y-6 animate-fadeIn' : 'hidden'}>
+          {/* 仅「场景对话」显示场景分类筛选 */}
+          {activeTab === 'dialogue' && (
+            <RadioFilters
+              selectedScenario={selectedScenario}
+              onSelectScenario={setSelectedScenario}
+              availableScenarios={availableScenarios}
+            />
+          )}
 
-          {/* 媒体片段曲库卡片列表 */}
+          {/* 视频列表：仅「场景对话」显示场景副标题，日常短语和英语电台只显示名称 */}
           <RadioCardList
             items={filteredItems}
             currentId={currentId}
             isPlaying={isPlaying}
+            showMetadata={activeTab === 'dialogue'}
             onSelectItem={(item) => {
+              setLastCategoryTab(item.category)
               setCurrentId(item.id)
               setIsPlaying(true)
               setActiveTab('player')
@@ -411,7 +446,7 @@ export default function RadioPage() {
           />
         </div>
 
-        {/* Tab 2 页面内容：播放页 (独立剧场视听) */}
+        {/* 共用播放页 (日常短语 / 场景对话 / 英语电台 共用) */}
         <div className={activeTab === 'player' ? 'space-y-6 animate-fadeIn' : 'hidden'}>
           <RadioMainPlayer
             item={currentItem}
@@ -434,9 +469,10 @@ export default function RadioPage() {
         </div>
       </div>
 
-      {/* 上传自定义音视频弹窗 */}
+      {/* 上传自定义视频弹窗 */}
       <RadioUploadModal
         isOpen={isUploadOpen}
+        defaultCategory={activeCategory}
         onClose={() => setIsUploadOpen(false)}
         onAddItem={handleAddItem}
       />
